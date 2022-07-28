@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "511742883321",
+    "project_id": "evie-testing",
+    "storage_bucket": "evie-testing.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:511742883321:android:0752cfb7e8170c56a7f928",
+        "android_client_info": {
+          "package_name": "com.example.evie_test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "511742883321-s55mhmoo0u1am93ke5jeb4hjdqjlmvql.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB53e09l_stCaHWyG_mGsgiHNpIeloVHog"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "511742883321-s55mhmoo0u1am93ke5jeb4hjdqjlmvql.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
