@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:evie_test/main.dart';
+import 'package:evie_test/profile/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/firebase.dart';
+import 'package:provider/provider.dart';
+import 'package:evie_test/widgets/widgets.dart';
 
 
 ///Firebase auth
@@ -20,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen>{
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  //For user input password visibility rue/false
+  //For user input password visibility true/false
   bool _isObscure = true;
 
   ///Login function, login if user exists in firebase
@@ -35,10 +39,15 @@ class _LoginScreenState extends State<LoginScreen>{
 
       //If user input not equal to empty, proceed
       if (firebaseUser != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginSuccessful()),
-        );
+
+        //Provider save data
+
+
+        //Should navigate to bluetooth pairing first if no bike detect
+
+
+        //Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()),);
+        Navigator.pushReplacementNamed(context, '/userHomePage');
       }
     }).catchError((error) => print(error));
   }
@@ -151,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen>{
             ),
 
             const SizedBox(
-              height:20.0,
+              height:5.0,
             ),
 
             Container(
@@ -171,33 +180,25 @@ class _LoginScreenState extends State<LoginScreen>{
             ),
 
             const SizedBox(
-              height:40.0,
+              height:30.0,
             ),
 
-            Container(
+            EvieButton_DarkBlue(
               width: double.infinity,
-              child: ElevatedButton(
-                child: const Text("Login",
-                  style: TextStyle(color: Colors.white,
-                    fontSize: 12.0,),
-                ),
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0)),
-                    primary: const Color(0xFF00B6F1),
-                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                    textStyle: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold)),
-
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // If the form is valid, display a snackbar. In the real world,
-                    // you'd often call a server or save the information in a database
-                  }
-                  _login();
-                },
+              child: const Text("Login",
+                style: TextStyle(color: Colors.white,
+                  fontSize: 12.0,),
               ),
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  // If the form is valid, display a snackbar. In the real world,
+                  // you'd often call a server or save the information in a database
+                }
+                //Save to provider
+                //final uid = await Provider.of(context).auth.getCurrentUID();
+
+                _login();
+              },
             ),
 
             const SizedBox(
@@ -248,60 +249,5 @@ class _LoginScreenState extends State<LoginScreen>{
       ),
     ))
     ));
-  }
-}
-
-
-class LoginSuccessful extends StatelessWidget {
-
-
-  const LoginSuccessful({Key? key}) : super(key: key);
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-        title: Text("Welcome!"),
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('users').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          return ListView(
-            children: snapshot.data!.docs.map((document) {
-              return
-                Container(
-                  child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-
-                  children: [
-                  Container(
-                  child: Center(child: Text(document['name'])),
-                  ),
-
-
-                  Container(
-                  child: Center(child: Text(document['email'])),
-                  ),
-
-                    Container(
-                      child: Center(child: Text(document['phoneNumber'])),
-                    ),
-                  ])
-              );
-            }).toList(),
-          );
-        },
-      ),
-    );
   }
 }

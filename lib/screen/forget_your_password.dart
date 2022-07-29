@@ -35,6 +35,15 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
+            IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.grey,
+                ),
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/home');
+                  }
+            ),
             Container(
               child: const Center(
                   child: Text(
@@ -90,7 +99,7 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
             ),
 
             const SizedBox(
-              height: 60.0,
+              height: 100.0,
             ),
 
             Container(

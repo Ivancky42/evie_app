@@ -4,6 +4,7 @@ import 'package:evie_test/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/intl.dart';
+import 'package:evie_test/widgets/widgets.dart';
 
 ///Firebase auth
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -39,7 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   late bool _success;
 
-  //For user input password visibility rue/false
+  //For user input password visibility true/false
   bool _isObscure = true;
 
   ///Register user account on firebase and save data in firestore while sign up
@@ -243,33 +244,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 50.0,
               ),
 
-              Container(
-                width: double.infinity,
-                child: ElevatedButton(
-                    child: const Text("Sign Up",
+              EvieButton_DarkBlue(
+                  width: double.infinity,
+                  child: const Text("Sign Up",
                     style: TextStyle(color: Colors.white,
-                    fontSize: 12.0,),
-                    ),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0)),
-                      primary: const Color(0xFF00B6F1),
-                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                      textStyle: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold)),
-
-                  onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                    // If the form is valid, display a snackbar. In the real world,
-                    // you'd often call a server or save the information in a database.
-                    ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Registration success!')),
-                    );
-                    }
-                    _signUp();
-                  },
-                ),
+                       fontSize: 12.0,),
+                  ),
+                onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Registration success!')),
+                  );
+                  }
+                  _signUp();
+                },
               ),
 
               const SizedBox(

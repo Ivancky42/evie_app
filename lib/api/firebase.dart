@@ -1,5 +1,43 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+
+class FirebaseAuthService{
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+
+  //Get uid
+  Future<String?> getCurrentUID() async{
+    final currentUser = _firebaseAuth.currentUser?.uid;
+    return currentUser;
+  }
+
+  //Get user
+  Future getCurrentUser() async {
+    final currentUser = _firebaseAuth.currentUser;
+    return currentUser;
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class LoadDataFromFirestore extends StatefulWidget {
   @override

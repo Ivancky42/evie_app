@@ -1,11 +1,14 @@
+import 'package:evie_test/profile/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:evie_test/screen/signup_page.dart';
 import 'package:evie_test/screen/login_page.dart';
+import 'package:evie_test/profile/user_profile.dart';
 import 'package:evie_test/screen/forget_your_password.dart';
 import 'package:evie_test/theme/AppTheme.dart';
 import 'package:evie_test/api/routes.dart';
+import 'package:evie_test/profile/user_home_page.dart';
 
 
 ///Main function execution
@@ -35,6 +38,8 @@ class MyApp extends StatelessWidget {
         "/login": (context) => const LoginScreen(),
         "/signup": (context) => const SignUpPage(),
         "/forgetPassword": (context) => const ForgetYourPasswordPage(),
+        "/userProfile": (context) => const UserProfile(),
+        "/userHomePage": (context) => const UserHomePage(),
       },
     );
   }
