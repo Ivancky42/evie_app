@@ -9,6 +9,8 @@ import 'package:evie_test/screen/forget_your_password.dart';
 import 'package:evie_test/theme/AppTheme.dart';
 import 'package:evie_test/api/routes.dart';
 import 'package:evie_test/profile/user_home_page.dart';
+import 'package:provider/provider.dart';
+import 'package:evie_test/api/current_user_provider.dart';
 
 
 ///Main function execution
@@ -16,7 +18,12 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => CurrentUserProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

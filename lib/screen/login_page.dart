@@ -1,3 +1,4 @@
+import 'package:evie_test/api/current_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/main.dart';
 import 'package:evie_test/profile/user_profile.dart';
@@ -28,7 +29,28 @@ class _LoginScreenState extends State<LoginScreen>{
   bool _isObscure = true;
 
   ///Login function, login if user exists in firebase
-  void _login() async{
+  void _login(String email, String password, BuildContext context) async{
+
+    //User Provider
+    CurrentUserProvider _currentUser = Provider.of<CurrentUserProvider>(context, listen: false);
+    try{
+      if(await _currentUser.loginUser(email, password)){
+        Navigator.pushReplacementNamed(context, '/userHomePage');
+
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Incorrect Login Info'),
+              duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    }catch(e){
+      print(e);
+    }
+
+
+    /*
     User? firebaseUser;
 
     await _auth.signInWithEmailAndPassword(
@@ -50,6 +72,8 @@ class _LoginScreenState extends State<LoginScreen>{
         Navigator.pushReplacementNamed(context, '/userHomePage');
       }
     }).catchError((error) => print(error));
+
+    */
   }
 
   ///Create form for later form validation
@@ -197,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen>{
                 //Save to provider
                 //final uid = await Provider.of(context).auth.getCurrentUID();
 
-                _login();
+                _login(_emailController.text, _passwordController.text, context);
               },
             ),
 

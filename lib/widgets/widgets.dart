@@ -85,3 +85,61 @@ class EvieButton_LightBlue extends StatelessWidget {
 }
 
 
+
+
+class EvieTextForm extends StatelessWidget {
+
+  //final double width;
+  //final double height;
+  //final double fontSize;
+  final String hintText;
+  final bool isObscureText;
+  final TextEditingController? controller;
+
+
+  const EvieTextForm({
+    Key? key,
+    required this.hintText,
+    required this.controller,
+    required this.isObscureText,
+    //required this.width,
+    //required this.height,
+    //required this.fontSize,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      /*width: width,
+        height: height,
+        decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: ReevoColors.secondaryColor,
+      ),*/
+      child: Padding(padding: EdgeInsets.only(left: 17),
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            alignment: Alignment.center,
+            child: TextFormField(
+              //textAlignVertical : TextAlignVertical.center,
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+              controller: controller,
+              obscureText: isObscureText,
+              decoration: InputDecoration(
+                  hintStyle: const TextStyle(
+                    //fontSize: fontSize,
+                  ),
+                  border: InputBorder.none,
+                  hintText: hintText
+              ),
+            ),
+          )
+      ),
+    );
+  }
+}
+
+
