@@ -24,17 +24,23 @@ class _LoginScreenState extends State<LoginScreen>{
   //To read data from user input
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  late CurrentUserProvider _currentUser;
 
   //For user input password visibility true/false
   bool _isObscure = true;
 
   ///Login function, login if user exists in firebase
-  void _login(String email, String password, BuildContext context) async{
+  void _login(String email, String password, BuildContext context, CurrentUserProvider _currentUser) async{
 
+    ///From widget function, show loading dialog screen
+    showAlertDialog(context);
     //User Provider
-    CurrentUserProvider _currentUser = Provider.of<CurrentUserProvider>(context, listen: false);
     try{
       if(await _currentUser.loginUser(email, password)){
+
+
+        ///Quit loading and go to user home page
+        Navigator.pop(context);
         Navigator.pushReplacementNamed(context, '/userHomePage');
 
       }else{
@@ -81,6 +87,7 @@ class _LoginScreenState extends State<LoginScreen>{
 
   @override
   Widget build(BuildContext context) {
+    _currentUser = Provider.of<CurrentUserProvider>(context);
     return Form(
       key: _formKey,
       child: Padding(
@@ -92,9 +99,10 @@ class _LoginScreenState extends State<LoginScreen>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children:[
             Container(
-              child: const Center(
+              child:  const Center(
                 child: Text(
-                    "Welcome Back",
+                  "Hello ",
+                  //    +_currentUser.getEmail,
                     style:TextStyle(
                       fontFamily: 'Raleway',
                       fontSize:24.0,
@@ -221,7 +229,7 @@ class _LoginScreenState extends State<LoginScreen>{
                 //Save to provider
                 //final uid = await Provider.of(context).auth.getCurrentUID();
 
-                _login(_emailController.text, _passwordController.text, context);
+                _login(_emailController.text, _passwordController.text, context, _currentUser);
               },
             ),
 

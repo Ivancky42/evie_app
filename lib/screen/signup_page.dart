@@ -73,6 +73,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           'email': fireBaseUser.email,
           "name": _nameController.value.text,
           "phoneNumber": _phoneNoController.value.text,
+          "profileIMG": "https://firebasestorage.googleapis.com/v0/b/evie-testing."
+              "appspot.com/o/UserProfilePic%2FDefaultProfilePicCats.jpeg?"
+              "alt=media&token=751d024e-8597-439c-8a57-58f0c76ecae0",
           "timeStamp": Timestamp.now(),
         }
     );}

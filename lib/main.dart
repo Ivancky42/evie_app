@@ -32,13 +32,43 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+
+
+    CurrentUserProvider _currentUser = Provider.of<CurrentUserProvider>(context);
+
+    String checkCurrentUserEmail = _currentUser.getUid;
+
+    //String currentUserUID = CurrentUserProvider().getUidVal.toString();
+
+    print("!!!!"+checkCurrentUserEmail);
+
+
+
+
+
+
     return MaterialApp(
       title: 'Evie_Test',
       //Theme data are store in lib/screen/theme.AppTheme.dart
       theme: AppTheme.lightTheme,
       //Change the app to dark theme when user's phone is set to dark mode
       darkTheme: AppTheme.darkTheme,
-      initialRoute: "/home",
+
+      //initialRoute: "/home",
+
+      //initialRoute:
+      //currentUserUID != "" ? '/userHomePage' : '/home',
+
+      onGenerateRoute: (RouteSettings settings) {
+      return MaterialPageRoute(builder: (context) {
+        if(checkCurrentUserEmail == "nullValue") return HomePage();
+        if(checkCurrentUserEmail != "") return UserHomePage();
+        else return HomePage();
+        });
+      },
+
+
       //Routes setting for page navigation
       routes: {
         "/home": (context) => const HomePage(),
@@ -61,8 +91,11 @@ class HomePage extends StatefulWidget{
 class _HomePageState extends State<HomePage>{
   @override
   Widget build(BuildContext context) {
+
     return const Scaffold(
       body:LoginScreen(),
     );
   }
 }
+
+

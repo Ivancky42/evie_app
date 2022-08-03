@@ -20,6 +20,14 @@ class FirebaseAuthService{
     return currentUser;
   }
 
+
+  //Not in use, in provider
+  /*
+  Future signOut() async {
+    await FirebaseAuth.instance.signOut();
+    return Future.delayed(Duration.zero);
+  }
+   */
 }
 
 

@@ -1,17 +1,142 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:evie_test/widgets/widgets.dart';
+import 'package:evie_test/api/firebase.dart';
+import '../api/current_user_provider.dart';
+import 'package:image_picker/image_picker.dart';
 
-class UserProfile extends StatelessWidget{
-  const UserProfile({Key? key}) : super(key: key);
+
+class UserProfile extends StatefulWidget{
+  const UserProfile({ Key? key }) : super(key: key);
+  @override
+  _UserProfileState createState() => _UserProfileState();
+
+}
+
+class _UserProfileState extends State<UserProfile>{
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _phoneNoController = TextEditingController();
+  late CurrentUserProvider _currentUser;
+  String uploadimageUrl = " ";
+
+  bool _isInputEnable = false;
+
+  Future<void> pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+
+    ///From widget function, show loading dialog screen
+    showAlertDialog(context);
+    var picName = _currentUser.getEmail;
+    Reference ref = FirebaseStorage.instance.ref().child("UserProfilePic/"+picName);
+
+    await ref.putFile(File(image!.path));
+    ref.getDownloadURL().then((value){
+      print(value);
+      uploadimageUrl = value;
+      setState(() {
+        uploadimageUrl = value;
+        print(uploadimageUrl);
+      });
+
+      ///Quit loading dialog
+      Navigator.pop(context);
+    });
+
+  }
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
+    _currentUser = Provider.of<CurrentUserProvider>(context);
     return Scaffold(
-       //appBar: AppBar(
-       // title: const Text("Welcome!"),
-      //),
+       appBar: AppBar(
+         centerTitle: true,
+        title: Row(
+          children: <Widget>[
+            IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.grey,
+                ),
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/userHomePage');
+                }
+            ),
+
+            const Text('Profile'),
+
+          ],
+        ),
+         actions: <Widget>[
+           IconButton(
+               tooltip: 'Edit',
+               icon: Icon(
+                 _isInputEnable ? Icons.edit_off : Icons.edit,
+               ),
+               onPressed: () {
+                 setState(() {
+                   _isInputEnable = !_isInputEnable;
+                 });}
+           ),
+       IconButton(
+       iconSize: 25,
+         icon: const Icon(Icons.save),
+         tooltip: 'Save',
+         onPressed: () {
+
+         ///Get current user id, might get from provider
+           final FirebaseAuth auth = FirebaseAuth.instance;
+           final User? user = auth.currentUser;
+           final uid = user?.uid;
+
+           //Update
+           var docUser = FirebaseFirestore.instance.collection('users');
+           docUser
+               .doc(uid)
+               .update({
+                 'name' : _nameController.text.trim(),
+                 'profileIMG' : uploadimageUrl,
+                 'phoneNumber' : _phoneNoController.text.trim(),})
+                    .then((_)  {
+                           setState(() {
+                             _isInputEnable = false;
+                             showDialog(
+                               context: context,
+                               builder: (context) => AlertDialog(
+                                 title: const Text('Update Successful'),
+                                 actions:[
+                                   TextButton(
+                                       child: const Text('OK'),
+                                       onPressed: () {
+                                         Navigator.pop(context);
+                                       }
+                                   ),
+                                 ],
+                               ),
+                             );
+                           });
+               }
+           )
+               .catchError((error) => print('Update failed: $error'));
+
+         },
+       ),
+      ],
+
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore
             .instance
@@ -29,62 +154,177 @@ class UserProfile extends StatelessWidget{
 
           return ListView(
             children: snapshot.data!.docs.map((document) {
+
+              if (uploadimageUrl == " "){
+                uploadimageUrl = document['profileIMG'];
+              };
+
+
               return
-                Container(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
 
-                        children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+              child: Center(
+              child: SingleChildScrollView(
+              child: Column(
 
-                          IconButton(
-                              icon: const Icon(
-                                Icons.arrow_back,
-                                color: Colors.grey,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: <Widget>[
+
+
+
+                    const SizedBox(
+                      height:40.0,
+                    ),
+
+                    Stack(
+                      children: [
+                        Center(child: ClipOval(
+                          child: CachedNetworkImage(
+                            //imageUrl: document['profileIMG'],
+                            imageUrl: uploadimageUrl,
+                            placeholder: (context, url) => CircularProgressIndicator(),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        ),
+
+                        Positioned(
+                            bottom:0,
+                            right:110,
+                            child: Container(
+                              height:40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                shape:BoxShape.circle,
+                                border: Border.all(
+                                  width: 2,
+                                  color: Colors.white,
+                                ),
+                                color: Colors.green,
                               ),
-                              onPressed: () {
-                                Navigator.pushReplacementNamed(context, '/userHomePage');
-                              }
+                          child: IconButton(
+                            color: Colors.white70,
+                            iconSize: 20,
+                            icon: const Icon(Icons.camera_alt_outlined),
+                            tooltip: 'Upload Image',
+                            onPressed: () async{
+                              pickImage();
+                              //Image
+                            },
                           ),
 
-                          const SizedBox(
-                            height:50.0,
+                        ))
+                      ],
+
+                    ),
+
+
+
+
+                    const SizedBox(
+                      height:20.0,
+                    ),
+
+                    TextFormField(
+                      enabled: false,
+                      initialValue: document['email'],
+                      decoration: InputDecoration(
+                        labelText: 'Email Address',
+                        filled: true,
+                        fillColor: const Color(0xFFFFFFFF).withOpacity(0.2),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(
+                              width: 0.1, color: const Color(0xFFFFFFFF).withOpacity(0.2)),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(
+                      height:20.0,
+                    ),
+
+                    TextFormField(
+                      controller: _nameController..text = document['name'],
+                      enabled: _isInputEnable,
+                      //initialValue: document['name'],
+                      decoration: InputDecoration(
+                        labelText: 'Username',
+                        filled: true,
+                        fillColor: const Color(0xFFFFFFFF).withOpacity(0.2),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(
+                              width: 0.1, color: const Color(0xFFFFFFFF).withOpacity(0.2)),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+
+                    ),
+
+                    const SizedBox(
+                      height:20.0,
+                    ),
+
+
+                    TextFormField(
+                      controller: _phoneNoController..text = document['phoneNumber'],
+                      enabled: _isInputEnable,
+                      //initialValue: document['phoneNumber'],
+                      decoration: InputDecoration(
+                        labelText: 'Phone Number',
+                        filled: true,
+                        fillColor: const Color(0xFFFFFFFF).withOpacity(0.2),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(
+                              width: 0.1, color: const Color(0xFFFFFFFF).withOpacity(0.2)),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                    ),
+
+
+                    const SizedBox(
+                      height:60.0,
+                    ),
+
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: EvieButton_DarkBlue(
+                        width: double.infinity,
+                        onPressed: () async{
+
+                         try{
+                           CurrentUserProvider().signOut();
+                           ScaffoldMessenger.of(context).showSnackBar(
+                             const SnackBar(
+                               content: Text('Signed out'),
+                               duration: Duration(seconds: 2),),
+
+                           );
+                           //await Provider.of(context).auth.signOut();
+                           Navigator.pushReplacementNamed(context, '/home');}
+                             catch(e){print(e);}
+                        },
+                        child: const Text("Sign Out",
+                          style: TextStyle(color: Colors.white,
+                            fontSize: 12.0,
                           ),
-
-                          Container(
-                            child: Center(child: Text(document['name'])),
-                          ),
-
-
-                          Container(
-                            child: Center(child: Text(document['email'])),
-                          ),
-
-                          Container(
-                            child: Center(child: Text(document['phoneNumber'])),
-                          ),
-                          Container(
-                            width: double.infinity,
-                            child: RawMaterialButton(
-                              elevation: 0.0,
-                              padding: const EdgeInsets.symmetric(vertical: 20.0),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0)),
-                              onPressed: () async{
-                               try{
-                                 //await Provider.of(context).auth.signOut();
-                                 Navigator.pushReplacementNamed(context, '/home');}
-                                   catch(e){print(e);}
-                              },
-                              child: const Text("Sign Out",
-                                style: TextStyle(color: Color(0xFF00B6F1),
-                                  fontSize: 12.0,),
-                              ),
-                            ),
-                          ),
-
-
-                        ])
+                        ),
+                      ),
+                    )
+                  ]
+                )
+               )
+               )
                 );
             }).toList(),
           );
@@ -92,5 +332,7 @@ class UserProfile extends StatelessWidget{
       ),
     );
   }
+
+
 
 }

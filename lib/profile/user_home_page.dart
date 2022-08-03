@@ -23,7 +23,7 @@ class _UserHomePageState extends State<UserHomePage>{
           title: const Text(
             "Home",
             style: TextStyle(
-              fontSize: 24.0,
+              //fontSize: 24.0,
             ),
           ),
           actions: <Widget>[

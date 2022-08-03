@@ -30,6 +30,10 @@ dependencies:
   firebase_core: ^1.20.0
   firebase_auth: ^3.4.2
   cloud_firestore: ^3.1.5
+  cached_network_image: ^3.2.1
+  image_picker: ^0.8.5+3
+  firebase_storage: ^10.3.4
+  shared_preferences: ^2.0.15
   #flutter_facebook_auth: ^3.5.0
   #twitter_login: ^4.0.1
   #sign_in_with_apple: ^3.0.0
