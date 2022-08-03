@@ -39,14 +39,6 @@ class MyApp extends StatelessWidget {
 
     String checkCurrentUserEmail = _currentUser.getUid;
 
-    //String currentUserUID = CurrentUserProvider().getUidVal.toString();
-
-    print("!!!!"+checkCurrentUserEmail);
-
-
-
-
-
 
     return MaterialApp(
       title: 'Evie_Test',
