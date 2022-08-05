@@ -1,13 +1,14 @@
-import 'package:evie_test/api/current_user_provider.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:evie_test/main.dart';
-import 'package:evie_test/profile/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evie_test/api/firebase.dart';
 import 'package:provider/provider.dart';
+import 'package:evie_test/api/firebase.dart';
 import 'package:evie_test/widgets/widgets.dart';
+import 'package:evie_test/main.dart';
+import 'package:evie_test/profile/user_profile.dart';
+import 'package:evie_test/api/provider/current_user_provider.dart';
 
 
 ///Firebase auth
@@ -21,6 +22,7 @@ class LoginScreen extends StatefulWidget{
 
 class _LoginScreenState extends State<LoginScreen>{
 
+
   //To read data from user input
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -30,30 +32,7 @@ class _LoginScreenState extends State<LoginScreen>{
   bool _isObscure = true;
 
   ///Login function, login if user exists in firebase
-  void _login(String email, String password, BuildContext context, CurrentUserProvider _currentUser) async{
 
-    ///From widget function, show loading dialog screen
-    showAlertDialog(context);
-    //User Provider
-    try{
-      if(await _currentUser.loginUser(email, password)){
-
-
-        ///Quit loading and go to user home page
-        Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, '/userHomePage');
-
-      }else{
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Incorrect Login Info'),
-              duration: Duration(seconds: 2),
-          ),
-        );
-      }
-    }catch(e){
-      print(e);
-    }
 
 
     /*
@@ -80,24 +59,26 @@ class _LoginScreenState extends State<LoginScreen>{
     }).catchError((error) => print(error));
 
     */
-  }
+
 
   ///Create form for later form validation
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+
     _currentUser = Provider.of<CurrentUserProvider>(context);
+
     return Form(
       key: _formKey,
       child: Padding(
       padding: const EdgeInsets.all(16.0),
       child: Center(
-      child: SingleChildScrollView(
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:[
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children:[
             Container(
               child:  const Center(
                 child: Text(
@@ -192,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen>{
             ),
 
             const SizedBox(
-              height:5.0,
+              height:1.0,
             ),
 
             Container(
@@ -212,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen>{
             ),
 
             const SizedBox(
-              height:30.0,
+              height:20.0,
             ),
 
             EvieButton_DarkBlue(
@@ -223,31 +204,128 @@ class _LoginScreenState extends State<LoginScreen>{
               ),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  // If the form is valid, display a snackbar. In the real world,
-                  // you'd often call a server or save the information in a database
+                  // If the form is valid, display a snackbar.
                 }
-                //Save to provider
-                //final uid = await Provider.of(context).auth.getCurrentUID();
 
-                _login(_emailController.text, _passwordController.text, context, _currentUser);
+                //Save to provider
+                _currentUser.login(_emailController.text.trim(),
+                    _passwordController.text.trim(),
+                    context, _currentUser);
               },
             ),
 
             const SizedBox(
-              height:40.0,
+              height:20.0,
             ),
 
-            ///For button, facebook, apple, twitter login
-           /* const Text(
-              "Facebook...........apple...........bird",
-              style:TextStyle(
-                color:Colors.grey,
-                fontSize:12.0,
+
+              ///IOS
+              Platform.isIOS ?
+              Center(
+            child:ButtonBar(
+            mainAxisSize: MainAxisSize.min, // this will take space as minimum as posible(to center)
+            children: <Widget>[
+              Spacer(),
+              EvieButton_Square(
+                width: 60,
+                height: 60,
+                icon: const Icon(
+                  Icons.facebook,
+                  color: Colors.black54,
+                ),
+                  onPressed: (){
+
+                  }
               ),
-            ), */
+              Spacer(),
+              EvieButton_Square(
+                  width: 60,
+                  height: 60,
+                icon: const Icon(
+                  Icons.g_mobiledata,
+                  color: Colors.black54,
+                ),
+                onPressed: (){
+                  _currentUser.signInWithGoogle(context);
+                }
+              ),
+              Spacer(),
+              EvieButton_Square(
+                  width: 60,
+                  height: 60,
+                  icon: const Icon(
+                    Icons.apple,
+                    color: Colors.black54,
+                  ),
+                  onPressed: (){
+
+                  }
+              ),
+              Spacer(),
+              EvieButton_Square(
+                  width: 60,
+                  height: 60,
+                  icon: const Icon(
+                    Icons.adb,
+                    color: Colors.black54,
+                  ),
+                  onPressed: (){
+
+                  }
+              ),
+            ],
+        ),
+              ):
+
+                  ///Android
+              Center(
+                child:ButtonBar(
+                  mainAxisSize: MainAxisSize.min, // this will take space as minimum as posible(to center)
+                  children: <Widget>[
+                    Spacer(),
+                    EvieButton_Square(
+                        width: 60,
+                        height: 60,
+                        icon: const Icon(
+                          Icons.facebook,
+                          color: Colors.black54,
+                        ),
+                        onPressed: (){
+
+                        }
+                    ),
+                    Spacer(),Spacer(),
+                    EvieButton_Square(
+                        width: 60,
+                        height: 60,
+                        icon: const Icon(
+                          Icons.g_mobiledata,
+                          color: Colors.black54,
+                        ),
+                        onPressed: (){
+                          _currentUser.signInWithGoogle(context);
+                        }
+                    ),
+                    Spacer(),Spacer(),
+                    EvieButton_Square(
+                        width: 60,
+                        height: 60,
+                        icon: const Icon(
+                          Icons.adb,
+                          color: Colors.black54,
+                        ),
+                        onPressed: (){
+
+                        }
+                    ),
+                  ],
+                ),
+              ),
+
+
 
             const SizedBox(
-              height:40.0,
+              height:20.0,
             ),
 
             Container(

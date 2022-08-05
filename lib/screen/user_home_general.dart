@@ -5,7 +5,6 @@ class UserHomeGeneral extends StatefulWidget{
   const UserHomeGeneral({ Key? key }) : super(key: key);
   @override
   _UserHomeGeneralState createState() => _UserHomeGeneralState();
-
 }
 
 class _UserHomeGeneralState extends State<UserHomeGeneral> {
@@ -14,7 +13,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Home"),centerTitle: true,),
+      //appBar: AppBar(title: const Text("Home"),centerTitle: true,),
       //Body should change when bottom navigation bar state change
       body: Padding(
         padding: const EdgeInsets.all(16.0),

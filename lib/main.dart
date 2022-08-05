@@ -10,7 +10,7 @@ import 'package:evie_test/theme/AppTheme.dart';
 import 'package:evie_test/api/routes.dart';
 import 'package:evie_test/profile/user_home_page.dart';
 import 'package:provider/provider.dart';
-import 'package:evie_test/api/current_user_provider.dart';
+import 'package:evie_test/api/provider/current_user_provider.dart';
 
 
 ///Main function execution
@@ -33,33 +33,31 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-
-
     CurrentUserProvider _currentUser = Provider.of<CurrentUserProvider>(context);
-
-    String checkCurrentUserEmail = _currentUser.getUid;
-
+    String checkCurrentUserID = _currentUser.getUid;
 
     return MaterialApp(
-      title: 'Evie_Test',
-      //Theme data are store in lib/screen/theme.AppTheme.dart
+      title: 'Evie',
+      //Light theme data
       theme: AppTheme.lightTheme,
       //Change the app to dark theme when user's phone is set to dark mode
       darkTheme: AppTheme.darkTheme,
 
-      //initialRoute: "/home",
-
       //initialRoute:
-      //currentUserUID != "" ? '/userHomePage' : '/home',
+      // "/home",
+      //checkCurrentUserEmail != "" ? '/userHomePage' : '/home',
 
       onGenerateRoute: (RouteSettings settings) {
       return MaterialPageRoute(builder: (context) {
-        if(checkCurrentUserEmail == "nullValue") return HomePage();
-        if(checkCurrentUserEmail != "") return UserHomePage();
-        else return HomePage();
+        if(checkCurrentUserID == "nullValue") {
+          return const HomePage();
+        } else if(checkCurrentUserID != "") {
+          return const UserHomePage();
+        } else {
+          return const HomePage();
+        }
         });
       },
-
 
       //Routes setting for page navigation
       routes: {
@@ -81,6 +79,7 @@ class HomePage extends StatefulWidget{
 }
 
 class _HomePageState extends State<HomePage>{
+
   @override
   Widget build(BuildContext context) {
 

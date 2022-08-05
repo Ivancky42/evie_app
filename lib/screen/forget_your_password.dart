@@ -30,6 +30,7 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
+
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,6 +45,7 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
                   Navigator.pushReplacementNamed(context, '/home');
                   }
             ),
+
             Container(
               child: const Center(
                   child: Text(
@@ -56,6 +58,7 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
                   )
               ),
             ),
+
             const SizedBox(
               height: 8.0,
             ),
@@ -124,7 +127,7 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
               ),
             )
           ]
-      ),
+       ),
     );
   }
 }

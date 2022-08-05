@@ -1,10 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/main.dart';
+import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:intl/intl.dart';
+import 'package:evie_test/main.dart';
 import 'package:evie_test/widgets/widgets.dart';
+import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:provider/provider.dart';
 
 ///Firebase auth
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -37,51 +39,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneNoController = TextEditingController();
-
-  late bool _success;
+  late CurrentUserProvider _currentUser = Provider.of<CurrentUserProvider>(context);
 
   //For user input password visibility true/false
   bool _isObscure = true;
 
-  ///Register user account on firebase and save data in firestore while sign up
-  void _signUp() async {
-    User? firebaseUser;
-
-    await _auth.createUserWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
-
-    ).then((auth) {
-      firebaseUser = auth.user!;
-      if (firebaseUser != null) {
-        saveToFirestore(firebaseUser!).then((value) {
-          FirebaseFirestore.instance.collection('UserData')
-              .doc(value.user.uid)
-              .set({"email": value.user.email});
-        });
-        Navigator.pushReplacementNamed(context, '/home');
-      }
-    }).catchError((error) => print(error));
-  }
-
-
-  ///Upload the registered data to firestore
-  saveToFirestore(User fireBaseUser) async {
-    FirebaseFirestore.instance.collection('users').doc(fireBaseUser.uid).set(
-        {
-          'uid': fireBaseUser.uid,
-          'email': fireBaseUser.email,
-          "name": _nameController.value.text,
-          "phoneNumber": _phoneNoController.value.text,
-          "profileIMG": "https://firebasestorage.googleapis.com/v0/b/evie-testing."
-              "appspot.com/o/UserProfilePic%2FDefaultProfilePicCats.jpeg?"
-              "alt=media&token=751d024e-8597-439c-8a57-58f0c76ecae0",
-          "timeStamp": Timestamp.now(),
-        }
-    );}
-
   ///Create form for later form validation
   final _formKey = GlobalKey<FormState>();
+
+
 
     @override
     Widget build(BuildContext context) {
@@ -89,12 +55,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
         key: _formKey,
         child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Center(
-        child: SingleChildScrollView(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+         child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               Container(
                 child: const Center(
                   child: Text(
@@ -141,8 +107,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: 0.1, color: const Color(0xFFFFFFFF).withOpacity(0.2)),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-
                 ),
+
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your name';
@@ -258,8 +224,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Registration success!')),
                   );
+                  _currentUser.signUp(_emailController.text.trim(),_passwordController.text.trim(),
+                      _nameController.value.text, _phoneNoController.value.text);
+                  Navigator.pushReplacementNamed(context, '/home');
                   }
-                  _signUp();
                 },
               ),
 
@@ -278,6 +246,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
+
               Container(
                 width: double.infinity,
                 child: RawMaterialButton(
@@ -295,7 +264,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
             ]
-        ),
+          ),
         ))
       ));
     }

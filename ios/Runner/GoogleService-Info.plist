@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>511742883321-td872oedsdoi16njf96snf5ie2al2907.apps.googleusercontent.com</string>
+	<string>214110477774-kfhm26bsh97d53ojd2ol3lmsom2dupju.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.511742883321-td872oedsdoi16njf96snf5ie2al2907</string>
+	<string>com.googleusercontent.apps.214110477774-kfhm26bsh97d53ojd2ol3lmsom2dupju</string>
 	<key>API_KEY</key>
-	<string>AIzaSyANLd7kiijNpSS7CD_IsxX36b16S5xQ5tE</string>
+	<string>AIzaSyD-c6LY9UrBxdo68xHgjNWTS1KEeSsQlZc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>511742883321</string>
+	<string>214110477774</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.evieTest</string>
 	<key>PROJECT_ID</key>
-	<string>evie-testing</string>
+	<string>evie-6952d</string>
 	<key>STORAGE_BUCKET</key>
-	<string>evie-testing.appspot.com</string>
+	<string>evie-6952d.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:511742883321:ios:843952ae6c7f9e14a7f928</string>
+	<string>1:214110477774:ios:880970df7ca3fa958b5f9f</string>
 </dict>
 </plist>

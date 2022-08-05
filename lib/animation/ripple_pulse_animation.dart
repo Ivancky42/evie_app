@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
+///Animation page for ripple pulse
+
 class RipplePulseAnimation extends StatefulWidget{
   const RipplePulseAnimation({ Key? key }) : super(key: key);
   @override
   _RipplePulseAnimationState createState() => _RipplePulseAnimationState();
-
 }
 
 class _RipplePulseAnimationState extends State<RipplePulseAnimation>
@@ -18,6 +19,8 @@ class _RipplePulseAnimationState extends State<RipplePulseAnimation>
     _controller = AnimationController(
       vsync: this,
       lowerBound: 0.5,
+
+      //Duration of the animation, then repeat
       duration: Duration(seconds: 3),
     )..repeat();
   }
@@ -54,6 +57,8 @@ class _RipplePulseAnimationState extends State<RipplePulseAnimation>
       height: radius,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
+
+        //Colour of the nipple pulse
         color: Colors.lightBlue[200]?.withOpacity(1 - _controller.value),
       ),
     );

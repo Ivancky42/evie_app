@@ -5,7 +5,6 @@ class UserHomeBluetooth extends StatefulWidget{
   const UserHomeBluetooth({ Key? key }) : super(key: key);
   @override
   _UserHomeBluetoothState createState() => _UserHomeBluetoothState();
-
 }
 
 class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
@@ -15,42 +14,19 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Connect To Bluetooth"), centerTitle: true,),
-      body:
-      InkWell(
-          child:Container(
+      body: Container(
             child:Stack(
             alignment: Alignment.center,
-            children: <Widget>[
+            children: const <Widget>[
               RipplePulseAnimation(),
-              IconButton(
-                iconSize: 35,
-                icon: Icon(Icons.bluetooth),
+              Icon(
+                Icons.bluetooth,
                 color: Colors.black54,
-                tooltip: 'Connect your bike',
-                onPressed: () {
-                },
+                size: 30.0,
               ),
             ],
           ),
         ),
-
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Hello'),
-              actions:[
-                TextButton(
-                  child: const Text('OK'),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            ),
-          );
-        },
-
-      )
     );
   }
-
 }

@@ -43,7 +43,7 @@ class EvieButton_DarkBlue extends StatelessWidget {
 }
 
 
-
+///Button widget
 class EvieButton_LightBlue extends StatelessWidget {
 
   final VoidCallback onPressed;
@@ -86,7 +86,48 @@ class EvieButton_LightBlue extends StatelessWidget {
 
 
 
+class EvieButton_Square extends StatelessWidget {
 
+  final VoidCallback onPressed;
+  final double width;
+  final double height;
+  final Widget icon;
+
+  const EvieButton_Square({
+    Key? key,
+    required this.onPressed,
+    required this.width,
+    required this.height,
+    required this.icon,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+        width: width,
+          child: Container(
+            width: width,
+            child: ElevatedButton.icon(
+              onPressed: onPressed,
+              icon: icon,
+              label: const Text(''),
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0)),
+                  backgroundColor: Colors.white,
+                  textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold)),
+            ),
+          ),
+    );
+  }
+}
+
+
+
+///Textform widget
 class EvieTextForm extends StatelessWidget {
 
   //final double width;
@@ -142,10 +183,11 @@ class EvieTextForm extends StatelessWidget {
   }
 }
 
-///Show loading
+
+///Loading dialog widget
 showAlertDialog(BuildContext context){
   AlertDialog alert=AlertDialog(
-    content: new Row(
+    content: Row(
       children: [
         const CircularProgressIndicator(),
         Container(margin: EdgeInsets.only(left: 5),child:Text("Loading" )),
