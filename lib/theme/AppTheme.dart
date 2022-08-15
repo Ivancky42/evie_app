@@ -24,6 +24,8 @@ class AppTheme{
     //Default background colour for application
     scaffoldBackgroundColor: const Color(0xFFD7E9EF),
 
+    //suggest grey color: 0xFFc5c6d0
+
     //Default App bar theme setting
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent, elevation: 0.0,

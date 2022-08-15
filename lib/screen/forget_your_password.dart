@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:evie_test/api/provider/current_user_provider.dart';
+import '../widgets/widgets.dart';
+import 'package:evie_test/widgets/evie_button.dart';
+
+
+///Forget your password? Send an email using firebase api to reset it.
+/// >>>> Try to remember it this time <<<<
 
 class ForgetYourPasswordPage extends StatefulWidget{
   const ForgetYourPasswordPage({ Key? key }) : super(key: key);
@@ -23,12 +30,15 @@ class ForgetYourPasswordScreen extends StatefulWidget{
 
 class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
 
-  //Read user input phone number
-  final TextEditingController _phoneNoController = TextEditingController();
+  //Read user input email address
+  final TextEditingController _emailController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Form(
+        key: _formKey,
+      child:Padding(
       padding: const EdgeInsets.all(16.0),
 
       child: Column(
@@ -66,7 +76,7 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
             Container(
               child: const Center(
                 child: Text(
-                  "Enter your Phone Number to recover",
+                  "Enter your Email Address to recover",
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14.0,
@@ -80,9 +90,10 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
             ),
 
             TextFormField(
-              controller: _phoneNoController,
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                hintText: "Phone Number",
+                hintText: "Email Address",
                 hintStyle: const TextStyle(fontSize: 12, color: Colors.grey),
                 filled: true,
                 fillColor: const Color(0xFFFFFFFF).withOpacity(0.2),
@@ -94,9 +105,11 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
                 ),
               ),
               validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your phone number';
+                if (value == null || value.isEmpty || !value.contains("@") ) {
+                  return 'Please enter your email';
                 }
+                //Check if email is in database
+
                 return null;
               },
             ),
@@ -106,28 +119,28 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
             ),
 
             Container(
-              width: double.infinity,
-              child: ElevatedButton(
+              child: EvieButton_DarkBlue(
+                width: double.infinity,
                 child: const Text("Recover",
                   style: TextStyle(color: Colors.white,
                     fontSize: 12.0,),
                 ),
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0)),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 20),
-                    textStyle: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold)),
 
                 onPressed: () {
-                  print("null");
+                  if (_formKey.currentState!.validate()) {
+                    CurrentUserProvider().resetPassword(_emailController.text.trim());
+                    Navigator.pushReplacementNamed(context, '/home');
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Sent')),
+                    );
+                  }
                 },
               ),
             )
           ]
        ),
+      )
     );
   }
 }

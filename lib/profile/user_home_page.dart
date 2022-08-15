@@ -1,22 +1,20 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:evie_test/widgets/widgets.dart';
 import 'package:evie_test/screen/user_home_general.dart';
 import 'package:evie_test/screen/user_home_bluetooth.dart';
 import 'package:evie_test/screen/user_home_setting.dart';
 
 
+///User default home page when login condition is true
+
 class UserHomePage extends StatefulWidget{
   const UserHomePage({ Key? key }) : super(key: key);
   @override
   _UserHomePageState createState() => _UserHomePageState();
-
 }
 
 class _UserHomePageState extends State<UserHomePage>{
 
+  //Current index is 0, init state body[screen] is user home page general screen
   int currentIndex = 0;
 
   ///Body Screen navigation by bottom navigation bar
@@ -24,7 +22,6 @@ class _UserHomePageState extends State<UserHomePage>{
     UserHomeGeneral(),
     UserHomeBluetooth(),
     UserHomeSetting(),
-
   ];
 
   @override
@@ -50,12 +47,9 @@ class _UserHomePageState extends State<UserHomePage>{
               icon: const Icon(Icons.notifications),
               tooltip: 'Notification',
               onPressed: () {
-
               },
             ),
           ],
-
-
         ),
 
       //Body should change when bottom navigation bar state change
@@ -85,10 +79,7 @@ class _UserHomePageState extends State<UserHomePage>{
             label: '',
           ),
         ],
-
       ),
     );
   }
-
-
 }

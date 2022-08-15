@@ -1,3 +1,9 @@
+#Environment file
+*.env
+
+#APK file
+*.apk
+
 # Miscellaneous
 *.class
 *.log

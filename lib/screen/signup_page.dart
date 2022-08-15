@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sizer/sizer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:evie_test/main.dart';
-import 'package:evie_test/widgets/widgets.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:evie_test/widgets/evie_button.dart';
 
 ///Firebase auth
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -37,17 +34,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   //To read data from user input
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordConfirmController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneNoController = TextEditingController();
-  late CurrentUserProvider _currentUser = Provider.of<CurrentUserProvider>(context);
 
   //For user input password visibility true/false
   bool _isObscure = true;
 
   ///Create form for later form validation
   final _formKey = GlobalKey<FormState>();
-
-
 
     @override
     Widget build(BuildContext context) {
@@ -179,6 +174,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your password';
                   }
+                  if (value.length < 8 ) {
+                    return 'Password must have at least 8 character';
+                  }
                   return null;
                 },
               ),
@@ -188,9 +186,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
 
               TextFormField(
-                controller: _phoneNoController,
+                controller: _passwordConfirmController,
+                obscureText: _isObscure,
                 decoration: InputDecoration(
-                  hintText: "Phone Number",
+                  hintText: "Confirm your password",
                   hintStyle: const TextStyle(fontSize: 12, color: Colors.grey),
                   filled: true,
                   fillColor: const Color(0xFFFFFFFF).withOpacity(0.2),
@@ -200,10 +199,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: 0.1, color: const Color(0xFFFFFFFF).withOpacity(0.2)),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
+                    suffixIcon: IconButton(
+                        icon: Icon(
+                          _isObscure ? Icons.visibility : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure;
+                          });}
+                    )
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your phone number';
+                    return 'Please enter your password';
+                  }
+                  if (_passwordController.value.text != _passwordConfirmController.value.text) {
+                    return 'Passwords do not match';
                   }
                   return null;
                 },
@@ -221,13 +232,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 onPressed: () {
                     if (_formKey.currentState!.validate()) {
+                      try{
+                      CurrentUserProvider().signUp(_emailController.text.trim(),_passwordController.text.trim(),
+                      _nameController.value.text, "empty");  //Last value field is phone number
+                      Navigator.pushReplacementNamed(context, '/home');
                   ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Registration success!')),
-                  );
-                  _currentUser.signUp(_emailController.text.trim(),_passwordController.text.trim(),
-                      _nameController.value.text, _phoneNoController.value.text);
-                  Navigator.pushReplacementNamed(context, '/home');
-                  }
+                  );}catch(signUpError) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Email already in use!')),
+                            );
+                      }
+                  }else{
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Registration not success!')),
+                      );
+                    }
                 },
               ),
 

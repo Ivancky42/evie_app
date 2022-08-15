@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:sizer/sizer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -6,16 +7,17 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/widgets/widgets.dart';
-import 'package:evie_test/api/firebase.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:evie_test/widgets/evie_double_button_dialog.dart';
+import 'package:evie_test/widgets/evie_button.dart';
 
+///User profile page with user account information
 
 class UserProfile extends StatefulWidget{
   const UserProfile({ Key? key }) : super(key: key);
   @override
   _UserProfileState createState() => _UserProfileState();
-
 }
 
 class _UserProfileState extends State<UserProfile> {
@@ -23,14 +25,16 @@ class _UserProfileState extends State<UserProfile> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneNoController = TextEditingController();
   late CurrentUserProvider _currentUser;
+
+  //Create string for image
   String uploadimageUrl = " ";
 
   bool _isInputEnable = false;
 
+  //Image picker from phone gallery
   Future<void> pickImage() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-
 
     ///From widget function, show loading dialog screen
     showAlertDialog(context);
@@ -38,6 +42,7 @@ class _UserProfileState extends State<UserProfile> {
     Reference ref = FirebaseStorage.instance.ref().child(
         "UserProfilePic/" + picName!);
 
+   //Upload to firebase storage
     await ref.putFile(File(image!.path));
     ref.getDownloadURL().then((value) {
       uploadimageUrl = value;
@@ -56,15 +61,14 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     _currentUser = Provider.of<CurrentUserProvider>(context);
 
+    //Set image url
     if (uploadimageUrl == " "){
       uploadimageUrl = _currentUser.getProfileImageURL;
     }
 
-    String testingName = _currentUser.getName;
-
     return Scaffold(
         appBar: AppBar(
-          centerTitle: true,
+          centerTitle: false,
           title: Row(
             children: <Widget>[
               IconButton(
@@ -82,6 +86,13 @@ class _UserProfileState extends State<UserProfile> {
             ],
           ),
           actions: <Widget>[
+            IconButton(
+                tooltip: 'Change Password',
+                icon: const Icon(Icons.key),
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/userChangePassword');
+                }
+            ),
             IconButton(
                 tooltip: 'Edit',
                 icon: Icon(
@@ -117,9 +128,8 @@ class _UserProfileState extends State<UserProfile> {
                         ),
                       );
                     });
-              })
+              }),
           ],
-
         ),
 
         body: Scaffold(
@@ -135,14 +145,11 @@ class _UserProfileState extends State<UserProfile> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
 
                                 children: <Widget>[
-
-
                                   const SizedBox(
-                                    height: 40.0,
+                                    height: 20.0,
                                   ),
 
                                   Stack(
-
                                     children: [
                                       Center(child: ClipOval(
                                         child: CachedNetworkImage(
@@ -184,15 +191,13 @@ class _UserProfileState extends State<UserProfile> {
                                                 //Image
                                               },
                                             ),
-
                                           ))
                                     ],
-
                                   ),
 
 
                                   const SizedBox(
-                                    height: 20.0,
+                                    height: 30.0,
                                   ),
 
                                   TextFormField(
@@ -281,6 +286,8 @@ class _UserProfileState extends State<UserProfile> {
                                           width: double.infinity,
                                           onPressed: () async {
                                             try {
+                                              Navigator.of(context)
+                                                  .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
                                               _currentUser.signOut();
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -291,8 +298,6 @@ class _UserProfileState extends State<UserProfile> {
 
                                               );
                                               //await Provider.of(context).auth.signOut();
-                                              Navigator.pushReplacementNamed(
-                                                  context, '/home');
                                             }
                                             catch (e) {
                                               print(e);
@@ -306,7 +311,6 @@ class _UserProfileState extends State<UserProfile> {
                                           )
                                       )
                                   )
-
                                 ])
                         )
                     )

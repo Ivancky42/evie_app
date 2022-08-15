@@ -1,14 +1,10 @@
 import 'dart:io';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
-import 'package:evie_test/api/firebase.dart';
-import 'package:evie_test/widgets/widgets.dart';
-import 'package:evie_test/main.dart';
-import 'package:evie_test/profile/user_profile.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:evie_test/widgets/evie_button.dart';
 
 
 ///Firebase auth
@@ -31,36 +27,6 @@ class _LoginScreenState extends State<LoginScreen>{
   //For user input password visibility true/false
   bool _isObscure = true;
 
-  ///Login function, login if user exists in firebase
-
-
-
-    /*
-    User? firebaseUser;
-
-    await _auth.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
-    ).then((auth) {
-      firebaseUser = auth.user!;
-
-      //If user input not equal to empty, proceed
-      if (firebaseUser != null) {
-
-        //Provider save data
-
-
-        //Should navigate to bluetooth pairing first if no bike detect
-
-
-        //Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()),);
-        Navigator.pushReplacementNamed(context, '/userHomePage');
-      }
-    }).catchError((error) => print(error));
-
-    */
-
-
   ///Create form for later form validation
   final _formKey = GlobalKey<FormState>();
 
@@ -82,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen>{
             Container(
               child:  const Center(
                 child: Text(
-                  "Hello ",
+                  "Welcome Back",
                   //    +_currentUser.getEmail,
                     style:TextStyle(
                       fontFamily: 'Raleway',
@@ -223,54 +189,54 @@ class _LoginScreenState extends State<LoginScreen>{
               Platform.isIOS ?
               Center(
             child:ButtonBar(
-            mainAxisSize: MainAxisSize.min, // this will take space as minimum as posible(to center)
+            mainAxisSize: MainAxisSize.min, // this will take space as minimum as possible(to center)
             children: <Widget>[
               Spacer(),
               EvieButton_Square(
-                width: 60,
-                height: 60,
-                icon: const Icon(
-                  Icons.facebook,
-                  color: Colors.black54,
-                ),
+                  width: 50,
+                  height: 50,
+                  child: const Image(
+                    image: AssetImage("assets/icons/facebook_icon_black.png"),
+                    height: 20.0,
+                  ),
                   onPressed: (){
-
+                    _currentUser.signInWithFacebook(context);
                   }
               ),
               Spacer(),
               EvieButton_Square(
-                  width: 60,
-                  height: 60,
-                icon: const Icon(
-                  Icons.g_mobiledata,
-                  color: Colors.black54,
-                ),
+                  width: 50,
+                  height: 50,
+                  child: const Image(
+                    image: AssetImage("assets/icons/google_icon_colour.png"),
+                    height: 20.0,
+                  ),
                 onPressed: (){
                   _currentUser.signInWithGoogle(context);
                 }
               ),
               Spacer(),
               EvieButton_Square(
-                  width: 60,
-                  height: 60,
-                  icon: const Icon(
-                    Icons.apple,
-                    color: Colors.black54,
+                  width: 50,
+                  height: 50,
+                  child: const Image(
+                    image: AssetImage("assets/icons/apple_icon_black.png"),
+                    height: 20.0,
                   ),
                   onPressed: (){
-
+                    _currentUser.signInWithAppleID(context);
                   }
               ),
               Spacer(),
               EvieButton_Square(
-                  width: 60,
-                  height: 60,
-                  icon: const Icon(
-                    Icons.adb,
-                    color: Colors.black54,
+                  width: 50,
+                  height: 50,
+                  child: const Image(
+                    image: AssetImage("assets/icons/twitter_icon_black.png"),
+                    height: 20.0,
                   ),
                   onPressed: (){
-
+                    _currentUser.signInWithTwitter(context);
                   }
               ),
             ],
@@ -280,27 +246,27 @@ class _LoginScreenState extends State<LoginScreen>{
                   ///Android
               Center(
                 child:ButtonBar(
-                  mainAxisSize: MainAxisSize.min, // this will take space as minimum as posible(to center)
+                  mainAxisSize: MainAxisSize.min, // this will take space as minimum as possible(to center)
                   children: <Widget>[
                     Spacer(),
                     EvieButton_Square(
-                        width: 60,
-                        height: 60,
-                        icon: const Icon(
-                          Icons.facebook,
-                          color: Colors.black54,
+                        width: 50,
+                        height: 50,
+                        child: const Image(
+                          image: AssetImage("assets/icons/facebook_icon_black.png"),
+                          height: 20.0,
                         ),
                         onPressed: (){
-
+                          _currentUser.signInWithFacebook(context);
                         }
                     ),
                     Spacer(),Spacer(),
                     EvieButton_Square(
-                        width: 60,
-                        height: 60,
-                        icon: const Icon(
-                          Icons.g_mobiledata,
-                          color: Colors.black54,
+                        width: 50,
+                        height: 50,
+                        child: const Image(
+                          image: AssetImage("assets/icons/google_icon_colour.png"),
+                          height: 20.0,
                         ),
                         onPressed: (){
                           _currentUser.signInWithGoogle(context);
@@ -308,21 +274,19 @@ class _LoginScreenState extends State<LoginScreen>{
                     ),
                     Spacer(),Spacer(),
                     EvieButton_Square(
-                        width: 60,
-                        height: 60,
-                        icon: const Icon(
-                          Icons.adb,
-                          color: Colors.black54,
+                        width: 50,
+                        height: 50,
+                        child: const Image(
+                          image: AssetImage("assets/icons/twitter_icon_black.png"),
+                          height: 20.0,
                         ),
                         onPressed: (){
-
+                          _currentUser.signInWithTwitter(context);
                         }
                     ),
                   ],
                 ),
               ),
-
-
 
             const SizedBox(
               height:20.0,

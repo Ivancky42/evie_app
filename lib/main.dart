@@ -1,4 +1,5 @@
 import 'package:evie_test/profile/user_profile.dart';
+import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,14 +11,24 @@ import 'package:evie_test/theme/AppTheme.dart';
 import 'package:evie_test/api/routes.dart';
 import 'package:evie_test/profile/user_home_page.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:evie_test/profile/user_change_password.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:evie_test/screen/connect_bluetooth_device_page.dart';
+import 'package:evie_test/screen/user_home_bluetooth.dart';
 
 
 ///Main function execution
 Future main() async {
+
+  ///Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
+  ///Dotnet file loading
+  await dotenv.load(fileName: ".env");
+
+  ///Provider
   runApp(
     ChangeNotifierProvider(
       create: (context) => CurrentUserProvider(),
@@ -36,16 +47,14 @@ class MyApp extends StatelessWidget {
     CurrentUserProvider _currentUser = Provider.of<CurrentUserProvider>(context);
     String checkCurrentUserID = _currentUser.getUid;
 
+
     return MaterialApp(
       title: 'Evie',
       //Light theme data
       theme: AppTheme.lightTheme,
+
       //Change the app to dark theme when user's phone is set to dark mode
       darkTheme: AppTheme.darkTheme,
-
-      //initialRoute:
-      // "/home",
-      //checkCurrentUserEmail != "" ? '/userHomePage' : '/home',
 
       onGenerateRoute: (RouteSettings settings) {
       return MaterialPageRoute(builder: (context) {
@@ -67,6 +76,9 @@ class MyApp extends StatelessWidget {
         "/forgetPassword": (context) => const ForgetYourPasswordPage(),
         "/userProfile": (context) => const UserProfile(),
         "/userHomePage": (context) => const UserHomePage(),
+        "/userBluetooth": (context) => const UserHomeBluetooth(),
+        "/userChangePassword": (context) => const UserChangePassword(),
+        "/connectBTDevice": (context) => const ConnectBluetoothDevice(),
       },
     );
   }
@@ -82,6 +94,11 @@ class _HomePageState extends State<HomePage>{
 
   @override
   Widget build(BuildContext context) {
+
+    ///Disable phone rotation
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
 
     return const Scaffold(
       body:LoginScreen(),

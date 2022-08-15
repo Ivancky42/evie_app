@@ -58,7 +58,7 @@ class _RipplePulseAnimationState extends State<RipplePulseAnimation>
       decoration: BoxDecoration(
         shape: BoxShape.circle,
 
-        //Colour of the nipple pulse
+        //Colour of the ripple pulse
         color: Colors.lightBlue[200]?.withOpacity(1 - _controller.value),
       ),
     );
