@@ -15,8 +15,6 @@ class UserHomeBluetooth extends StatefulWidget{
 
 class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
 
-
-
   FlutterBlue flutterBlue = FlutterBlue.instance;
   List<ScanResult> scanResultList = [];
   final bool _isScanning = false;
@@ -106,7 +104,18 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Connect To Bluetooth"), centerTitle: true,),
+      appBar: AppBar(title: const Text("Connect Your Bike",
+        style: TextStyle(fontSize: 24.0),
+      ),
+        centerTitle: true,
+        bottom: const PreferredSize(
+          child: Text("Tap bluetooth icon to search",
+          style:TextStyle(
+            color: Colors.grey,
+            fontSize: 14.0,
+          ),),
+          preferredSize: Size.fromHeight(0),
+        ),),
       body: Container(
         child:Stack(
           alignment: Alignment.center,
@@ -129,8 +138,9 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
 
   showDeviceList() {
     showModalBottomSheet(
+
         context: context,
-        backgroundColor: Colors.transparent,
+  ///      backgroundColor: Colors.transparent,
         builder: (BuildContext context) {
 
           ///Delete list item where the name is NA
@@ -143,7 +153,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
                     topLeft: Radius.circular(16.0),
                     topRight: Radius.circular(16.0),
                   ),
-                  color: Color(0xffD7E9EF),
+   ///               color: Color(0xffD7E9EF),
                 ),
                 child: Center(
                   child: ListView.separated(

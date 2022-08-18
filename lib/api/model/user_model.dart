@@ -55,25 +55,3 @@ class UserModel {
   }
 
 }
-
-/*
-UserModel _$UserBikeModelFromJson(Map<String, dynamic> json) =>
-    UserModel(
-      bluetoothName: json['bluetoothName'] as String,
-      model: json['model'] as String,
-      macAddr: json['macAddr'] as String,
-      created: UserModel._fromJsonCreated(json['created'] as Timestamp?),
-      updated: UserModel._fromJsonUpdated(json['updated'] as Timestamp?),
-    );
-
-Map<String, dynamic> _$UserBikeModelToJson(UserModel instance) =>
-    <String, dynamic>{
-      'bluetoothName': instance.bluetoothName,
-      'model': instance.model,
-      'macAddr': instance.macAddr,
-      'created': UserModel._toJsonCreated(instance.created),
-      'updated': UserModel._toJsonUpdated(instance.updated),
-    };
-
-
- */

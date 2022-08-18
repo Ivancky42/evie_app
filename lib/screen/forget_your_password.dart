@@ -36,26 +36,37 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
+    return Scaffold(
+
+        appBar: AppBar(
+          centerTitle: false,
+          title: Row(
+            children: <Widget>[
+              IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, '/home');
+                  }
+              ),
+
+
+            ],
+          ),
+        ),
+
+      body: Form(
         key: _formKey,
       child:Padding(
-      padding: const EdgeInsets.all(16.0),
-
-      child: Column(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-            IconButton(
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.grey,
-                ),
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/home');
-                  }
-            ),
-
             Container(
               child: const Center(
                   child: Text(
@@ -115,7 +126,7 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
             ),
 
             const SizedBox(
-              height: 100.0,
+              height: 70.0,
             ),
 
             Container(
@@ -137,10 +148,13 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
                   }
                 },
               ),
-            )
+            ),
+
           ]
+        )
        ),
       )
+    )
     );
   }
 }

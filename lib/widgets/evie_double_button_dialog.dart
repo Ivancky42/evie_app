@@ -35,7 +35,7 @@ class EvieDoubleButtonDialog extends StatelessWidget{
             borderRadius: BorderRadius.circular(20),
           ),
           elevation: 0.0,
-          backgroundColor: Colors.transparent,
+          //backgroundColor: Colors.transparent,
           child: Container(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -129,33 +129,24 @@ class EvieDoubleButtonDialog extends StatelessWidget{
               bottom: 20,
             ),
             margin: const EdgeInsets.only(top: 45),
-            decoration: BoxDecoration(
-              boxShadow: const [
-                BoxShadow(
-                    color: Colors.black26, offset: Offset(0, 4), blurRadius: 5.0)
-              ],
-              gradient: const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomLeft,
-                stops: [0.0, 1.0],
-                colors: [
-                  Color(0xffD7E9EF),
-                  Color(0xffD7E9EF),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(16),
+          //  decoration: BoxDecoration(
+          //    boxShadow: const [
+          //      BoxShadow(
+          //          color: Colors.black26, offset: Offset(0, 4), blurRadius: 5.0)
+          //    ],
+          //    gradient: const LinearGradient(
+          //      begin: Alignment.topLeft,
+          //      end: Alignment.bottomLeft,
+          //     stops: [0.0, 1.0],
+          //      colors: [
+          //        Color(0xffD7E9EF),
+          //        Color(0xffD7E9EF),
+          //      ],
+          //    ),
+          //    borderRadius: BorderRadius.circular(16),
               //border: Border.all(color: ReevoColors.blue),
-            ),
-            // decoration: BoxDecoration(
-            //     shape: BoxShape.rectangle,
-            //     color: ReevoColors.secondaryColor,
-            //     borderRadius: BorderRadius.circular(Constants.padding),
-            //     boxShadow: [
-            //       BoxShadow(color: Colors.black,offset: Offset(0,10),
-            //           blurRadius: 10
-            //       ),
-            //     ]
-            // ),
+          //  ),
+
           )
       );
     },);

@@ -21,6 +21,12 @@ class AppTheme{
       displayColor: Colors.black,
     ),
 
+    //Hint text colour
+    inputDecorationTheme: const InputDecorationTheme(
+      hintStyle: TextStyle(color: Colors.black),
+    ),
+
+
     //Default background colour for application
     scaffoldBackgroundColor: const Color(0xFFD7E9EF),
 
@@ -33,6 +39,11 @@ class AppTheme{
       iconTheme: IconThemeData(color: Colors.black),
     ),
 
+    //Bottom app bar colours
+    bottomAppBarTheme: const BottomAppBarTheme(
+      color: Color(0xffffffff),
+    ),
+
     //Bottom navigation bar theme setting
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
@@ -40,6 +51,16 @@ class AppTheme{
       selectedItemColor: Colors.blueAccent,
       unselectedItemColor: Colors.grey,
     ),
+
+    //Bottom drawer
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: Color(0xffD7E9EF),
+    ),
+
+      dialogTheme: const DialogTheme(
+        backgroundColor: Color(0xffD7E9EF),
+      ),
+
 
   );
 
@@ -64,6 +85,11 @@ class AppTheme{
       bodyColor: Colors.white,
       displayColor: Colors.white,
     ),
+
+    //Hint text colour
+    inputDecorationTheme: const InputDecorationTheme(
+      hintStyle: TextStyle(color: Colors.white),
+    ),
     
     //Default background colour for application
     scaffoldBackgroundColor: const Color(0xFF0F191D),
@@ -75,6 +101,11 @@ class AppTheme{
       iconTheme: IconThemeData(color: Colors.white),
     ),
 
+    //Bottom app bar colours
+    bottomAppBarTheme: const BottomAppBarTheme(
+      color: Color(0xff162429),
+    ),
+
     //Bottom navigation bar theme setting
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
@@ -82,6 +113,15 @@ class AppTheme{
       selectedItemColor: Colors.blueAccent,
       unselectedItemColor: Colors.grey,
     ),
+
+    //Bottom drawer
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: Color(0xff0F191D),
+    ),
+
+    dialogTheme: const DialogTheme(
+      backgroundColor: Color(0xff0F191D),
+    )
 
   );
 

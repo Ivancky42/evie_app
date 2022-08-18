@@ -48,12 +48,14 @@ class EvieButton_LightBlue extends StatelessWidget {
   final VoidCallback onPressed;
   final Widget child;
   final double width;
+  final double height;
 
   const EvieButton_LightBlue({
     Key? key,
     required this.onPressed,
     required this.child,
     required this.width,
+    required this.height,
   }) : super(key: key);
 
   @override
@@ -124,6 +126,53 @@ class EvieButton_Square extends StatelessWidget {
                   fontWeight: FontWeight.bold)),
         ),
       ),
+    );
+  }
+}
+
+
+
+
+///Button widget
+class EvieButton_White extends StatelessWidget {
+
+  final VoidCallback onPressed;
+  final Widget child;
+  final double width;
+  final double height;
+
+  const EvieButton_White({
+    Key? key,
+    required this.onPressed,
+    required this.child,
+    required this.width,
+    required this.height,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: width,
+        height: height,
+        child: Padding(
+          padding: const EdgeInsets.all(2),
+          child: Container(
+            width: width,
+            child: ElevatedButton(
+              child: child,
+              onPressed: onPressed,
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0)),
+                  elevation: 0.0,
+                  backgroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                  textStyle: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold)),
+            ),
+          ),
+        )
     );
   }
 }

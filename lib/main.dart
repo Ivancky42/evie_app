@@ -10,12 +10,14 @@ import 'package:evie_test/screen/forget_your_password.dart';
 import 'package:evie_test/theme/AppTheme.dart';
 import 'package:evie_test/api/routes.dart';
 import 'package:evie_test/profile/user_home_page.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:evie_test/profile/user_change_password.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/screen/connect_bluetooth_device_page.dart';
 import 'package:evie_test/screen/user_home_bluetooth.dart';
+import 'package:sizer/sizer.dart';
 
 
 ///Main function execution
@@ -48,6 +50,8 @@ class MyApp extends StatelessWidget {
     String checkCurrentUserID = _currentUser.getUid;
 
 
+   return Sizer(
+        builder: (context, orientation, deviceType) {
     return MaterialApp(
       title: 'Evie',
       //Light theme data
@@ -80,7 +84,13 @@ class MyApp extends StatelessWidget {
         "/userChangePassword": (context) => const UserChangePassword(),
         "/connectBTDevice": (context) => const ConnectBluetoothDevice(),
       },
+
+      navigatorObservers: [FlutterSmartDialog.observer],
+      builder: FlutterSmartDialog.init(),
+
     );
+        }
+   );
   }
 }
 

@@ -66,6 +66,13 @@ class _UserProfileState extends State<UserProfile> {
       uploadimageUrl = _currentUser.getProfileImageURL;
     }
 
+    bool _isEmail = false;
+    if(_currentUser.getCredentialProvider == "email"){
+      _isEmail = true;
+    }else {
+      _isEmail = false;
+    }
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -86,13 +93,19 @@ class _UserProfileState extends State<UserProfile> {
             ],
           ),
           actions: <Widget>[
-            IconButton(
+
+        Visibility(
+          visible: _isEmail,
+            child:IconButton(
                 tooltip: 'Change Password',
                 icon: const Icon(Icons.key),
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, '/userChangePassword');
                 }
             ),
+        ),
+
+
             IconButton(
                 tooltip: 'Edit',
                 icon: Icon(
@@ -191,7 +204,8 @@ class _UserProfileState extends State<UserProfile> {
                                                 //Image
                                               },
                                             ),
-                                          ))
+                                          )
+                                      )
                                     ],
                                   ),
 

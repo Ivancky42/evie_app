@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/widgets/widgets.dart';
@@ -10,6 +12,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:twitter_login/twitter_login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../../widgets/evie_single_button_dialog.dart';
 
 class CurrentUserProvider extends ChangeNotifier {
 
@@ -22,12 +25,14 @@ class CurrentUserProvider extends ChangeNotifier {
   late String _name;
   late String _phoneNo;
   late String _profileImageURL;
+  late String _credentialProvider;
 
   String get getUid => _uid;
   String get getEmail => _email;
   String get getName => _name;
   String get getPhoneNo => _phoneNo;
   String get getProfileImageURL => _profileImageURL;
+  String get getCredentialProvider => _credentialProvider;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -53,7 +58,7 @@ class CurrentUserProvider extends ChangeNotifier {
   }
 
 
-  ///Data for user login
+  ///Data for user login by email
   Future<bool> loginUser(String email, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool retVal = false;
@@ -85,6 +90,7 @@ class CurrentUserProvider extends ChangeNotifier {
         _name = event.get('name');
         _phoneNo = event.get('phoneNumber');
         _profileImageURL = event.get('profileIMG');
+        _credentialProvider = event.get('credentialProvider');
 
         notifyListeners();
       } on Exception catch (exception) {
@@ -98,7 +104,7 @@ class CurrentUserProvider extends ChangeNotifier {
 
 
   ///Data for user email sign up
-  void signUp(String email, String password, String name,
+  Future signUp(BuildContext context, String email, String password, String name,
       String phoneNo) async {
     User? firebaseUser;
     credentialProvider = "email";
@@ -117,22 +123,35 @@ class CurrentUserProvider extends ChangeNotifier {
             phoneNo, profileIMG, credentialProvider).then((value) {
         });
       }
-    }).catchError((error) => print(error));
+    }).catchError((e) {
+      SmartDialog.show(
+        widget: EvieSingleButtonDialog(
+            title: "Error",
+            content: e.toString(),
+            rightContent: "Ok",
+            image: Image.asset("assets/images/error.png", width: 36,height: 36,),
+            onPressedRight: (){
+              SmartDialog.dismiss();
+            }),
+      );
+      debugPrint("false");
+    });
   }
 
 
   ///Upload the registered data to firestore
-  createFirestoreUser(uid, email, name, phoneNo, profileIMG, credentialProvider) async {
+  Future createFirestoreUser(uid, email, name, phoneNo, profileIMG, credentialProvider) async {
     FirebaseFirestore.instance.collection(usersCollection).doc(uid).set(
         {
           'uid': uid,
           'email': email,
-          "name": name,
-          "phoneNumber": phoneNo,
+          'name': name,
+          'phoneNumber': phoneNo,
           //Assign default profile image
-          "profileIMG": profileIMG,
-          "credentialProvider": credentialProvider,
-          "timeStamp": Timestamp.now(),
+          'profileIMG': profileIMG,
+          'credentialProvider': credentialProvider,
+          'created': Timestamp.now(),
+          'updated': Timestamp.now(),
         }
     );
   }
@@ -185,6 +204,7 @@ class CurrentUserProvider extends ChangeNotifier {
         'name': name,
         'profileIMG': imageURL,
         'phoneNumber': phoneNo,
+        'updated': Timestamp.now(),
       });
 
       notifyListeners();
@@ -260,7 +280,16 @@ class CurrentUserProvider extends ChangeNotifier {
 
           Navigator.pushReplacementNamed(context, '/userHomePage');
         } catch (error) {
-          print(error);
+          SmartDialog.show(
+            widget: EvieSingleButtonDialog(
+                title: "Error",
+                content: error.toString(),
+                rightContent: "Ok",
+                image: Image.asset("assets/images/error.png", width: 36,height: 36,),
+                onPressedRight: (){
+                  SmartDialog.dismiss();
+                }),
+          );
         }
       }
     } catch (error) {
@@ -316,7 +345,16 @@ class CurrentUserProvider extends ChangeNotifier {
 
       Navigator.pushReplacementNamed(context, '/userHomePage');
     } catch (error) {
-      print(error);
+      SmartDialog.show(
+        widget: EvieSingleButtonDialog(
+            title: "Error",
+            content: error.toString(),
+            rightContent: "Ok",
+            image: Image.asset("assets/images/error.png", width: 36,height: 36,),
+            onPressedRight: (){
+              SmartDialog.dismiss();
+            }),
+      );
     }
   }
 
@@ -325,7 +363,6 @@ class CurrentUserProvider extends ChangeNotifier {
   Future<void> signInWithTwitter(BuildContext context) async {
     try {
       final twitterLogin = TwitterLogin(
-        //App id: 25102994
         apiKey: dotenv.env['TWITTER_API_KEY'] ?? 'TWITTER_API_KEY not found',
         apiSecretKey: dotenv.env['TWITTER_API_SECRET'] ?? 'TWITTER_API_SECRET not found',
         redirectURI: dotenv.env['TWITTER_REDIRECT_URI'] ?? 'Redirect URI not found',
@@ -372,7 +409,16 @@ class CurrentUserProvider extends ChangeNotifier {
             Navigator.pushReplacementNamed(context, '/userHomePage');
 
           }catch (error) {
-            print(error);
+            SmartDialog.show(
+              widget: EvieSingleButtonDialog(
+                  title: "Error",
+                  content: error.toString(),
+                  rightContent: "Ok",
+                  image: Image.asset("assets/images/error.png", width: 36,height: 36,),
+                  onPressedRight: (){
+                    SmartDialog.dismiss();
+                  }),
+            );
           }
       }
     } catch (error) {
@@ -387,15 +433,68 @@ class CurrentUserProvider extends ChangeNotifier {
       credentialProvider = "apple";
 
     } catch (error) {
-      print(error);
+      SmartDialog.show(
+        widget: EvieSingleButtonDialog(
+            title: "Error",
+            content: error.toString(),
+            rightContent: "Ok",
+            image: Image.asset("assets/images/error.png", width: 36,height: 36,),
+            onPressedRight: (){
+              SmartDialog.dismiss();
+            }),
+      );
+    }
+  }
+
+
+  ///ReAuthentication
+  Future<bool> reauthentication(originalpassword) async{
+    var firebaseUser = _auth.currentUser!;
+    AuthCredential credential = EmailAuthProvider.credential(email: getEmail!, password: originalpassword);
+
+    try {
+      await firebaseUser.reauthenticateWithCredential(credential);
+        debugPrint("true");
+        return true;
+
+    }on FirebaseAuthException catch (e){
+      SmartDialog.show(
+        widget: EvieSingleButtonDialog(
+            title: "Error",
+            content: e.toString(),
+            rightContent: "Ok",
+            image: Image.asset("assets/images/error.png", width: 36,height: 36,),
+            onPressedRight: (){
+              SmartDialog.dismiss();
+            }),
+      );
+
+      debugPrint("false");
+      return false;
     }
   }
 
 
   ///Change user password
-  Future<void> changeUserPassword(password) async {
+  Future<void> changeUserPassword(BuildContext context, password, originalpassword) async {
     var firebaseUser = _auth.currentUser!;
-    firebaseUser.updatePassword(password);
+    if(firebaseUser != null) {
+      try {
+        await firebaseUser.updatePassword(password);
+      } on FirebaseAuthException catch (e){
+        SmartDialog.show(
+          widget: EvieSingleButtonDialog(
+              title: "Error",
+              content: e.toString(),
+              rightContent: "Ok",
+              image: Image.asset("assets/images/error.png", width: 36,height: 36,),
+              onPressedRight: (){
+                SmartDialog.dismiss();
+              }),
+        );
+        print(e);
+      }
+    }
   }
 
 
@@ -409,6 +508,7 @@ class CurrentUserProvider extends ChangeNotifier {
       _phoneNo = "";
       _profileImageURL = "";
       await FirebaseAuth.instance.signOut();
+      await _auth.signOut();
       if(credentialProvider == "google"){
         await googleSignIn.signOut();
         await googleSignIn.disconnect();
@@ -420,8 +520,17 @@ class CurrentUserProvider extends ChangeNotifier {
         //twitter sign out
       }
       return Future.delayed(Duration.zero);
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      SmartDialog.show(
+        widget: EvieSingleButtonDialog(
+            title: "Error",
+            content: error.toString(),
+            rightContent: "Ok",
+            image: Image.asset("assets/images/error.png", width: 36,height: 36,),
+            onPressedRight: (){
+              SmartDialog.dismiss();
+            }),
+      );
     }
   }
 }
