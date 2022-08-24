@@ -26,6 +26,16 @@ class _RipplePulseAnimationState extends State<RipplePulseAnimation>
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    // ignore: avoid_print
+    print('Dispose used');
+    super.dispose();
+  }
+
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _buildBody(),

@@ -1,57 +1,55 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'user_model.g.dart';
-
-@JsonSerializable(explicitToJson: true)
 class UserModel {
-  String id;
+  String uid;
   String email;
   String name;
   String credentialProvider;
   String profileIMG;
-  String phoneNumber;
-
-  @JsonKey(fromJson: _fromJsonCreated, toJson: _toJsonCreated)
+  String? phoneNumber;
   Timestamp? created;
-  @JsonKey(fromJson: _fromJsonUpdated, toJson: _toJsonUpdated)
   Timestamp? updated;
 
   UserModel({
-    required this.id,
+    required this.uid,
     required this.email,
     required this.name,
     required this.credentialProvider,
     required this.profileIMG,
-    required this.phoneNumber,
-    required this.created,
-    required this.updated,
+    this.phoneNumber,
+    this.created,
+    this.updated,
   });
 
-  /// A necessary factory constructor for creating a new User instance
-  /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.
-  /// The constructor is named after the source class, in this case, User.
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  Map<String, dynamic> toJson() => {
+    "uid" : uid,
+    "email": email,
+    "name": name,
+    "credentialProvider": credentialProvider,
+    "profileIMG": profileIMG,
+    "phoneNumber" : phoneNumber,
+    "created": timestampToJson(created),
+    "updated": timestampToJson(updated)
+  };
 
-  /// `toJson` is the convention for a class to declare support for serialization
-  /// to JSON. The implementation simply calls the private, generated
-  /// helper method `_$UserToJson`.
-  Map<String, dynamic> toJson() => _$UserModelToJson(this);
-
-  static Timestamp? _fromJsonCreated(Timestamp? created) {
-    return created;
+  factory UserModel.fromJson(Map json) {
+    return UserModel(
+      uid: json['uid'],
+      email: json['email'],
+      name: json['name'],
+      credentialProvider: json['credentialProvider'],
+      profileIMG: json['profileIMG'],
+      phoneNumber: json['phoneNumber'],
+    //  created: timestampFromJson(json['created'] as Timestamp?),
+    //  updated: timestampFromJson(json['updated'] as Timestamp?),
+    );
   }
 
-  static Timestamp? _toJsonCreated(Timestamp? created) {
-    return created;
+  Timestamp? timestampToJson(Timestamp? timestamp) {
+    return timestamp;
   }
 
-  static Timestamp? _fromJsonUpdated(Timestamp? updated) {
-    return updated;
+  static Timestamp? timestampFromJson(Timestamp? timestamp) {
+    return timestamp;
   }
-
-  static Timestamp? _toJsonUpdated(Timestamp? updated) {
-    return updated;
-  }
-
 }

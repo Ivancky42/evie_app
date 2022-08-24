@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:evie_test/animation/ripple_pulse_animation.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
+import '../theme/ThemeChangeNotifier.dart';
+
 
 ///Cannot use when user bluetooth is off, should check user bluetooth
 ///then request turn on bluetooth
@@ -19,15 +21,18 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
   List<ScanResult> scanResultList = [];
   final bool _isScanning = false;
 
+  ///Start scanning while user enter this page
+  /*
   @override
   initState() {
-    super.initState();
     init();
+    super.initState();
   }
 
   void init() {
     scan();
   }
+  */
 
 
   scan() async {
@@ -37,7 +42,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
       flutterBlue.scanResults.listen((results) {
 
         scanResultList = results;
-        setState(() {});
+      //  setState(() {});
       });
     } else {
       flutterBlue.stopScan();
@@ -101,8 +106,13 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
   }
 
 
+
+
   @override
   Widget build(BuildContext context) {
+
+    scan();
+
     return Scaffold(
       appBar: AppBar(title: const Text("Connect Your Bike",
         style: TextStyle(fontSize: 24.0),
@@ -139,8 +149,10 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
   showDeviceList() {
     showModalBottomSheet(
 
+        barrierColor: ThemeChangeNotifier().isDarkMode(context) == true ? Colors.white .withOpacity(0.2)
+            : Colors.black .withOpacity(0.2),
         context: context,
-  ///      backgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
         builder: (BuildContext context) {
 
           ///Delete list item where the name is NA
@@ -148,12 +160,12 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
 
           return
             Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(16.0),
                     topRight: Radius.circular(16.0),
                   ),
-   ///               color: Color(0xffD7E9EF),
+                  color: ThemeChangeNotifier().isDarkMode(context) == true ? Color(0xff0F191D) : Color(0xffD7E9EF),
                 ),
                 child: Center(
                   child: ListView.separated(

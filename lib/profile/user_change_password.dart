@@ -5,10 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
-
+import '../api/navigator.dart';
+import '../api/provider/auth_provider.dart';
 import '../widgets/evie_single_button_dialog.dart';
-
-
 
 ///User change password screen
 
@@ -23,7 +22,7 @@ class _UserChangePasswordState extends State<UserChangePassword> {
   final TextEditingController _passwordOriginalController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmController = TextEditingController();
-  late CurrentUserProvider _currentUser;
+  late AuthProvider _authProvider;late CurrentUserProvider _currentUser;
 
   bool _isObscure = true;
   bool _isObscure2 = true;
@@ -34,6 +33,7 @@ class _UserChangePasswordState extends State<UserChangePassword> {
   @override
   Widget build(BuildContext context) {
     _currentUser = Provider.of<CurrentUserProvider>(context);
+    _authProvider = Provider.of<AuthProvider>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -46,7 +46,7 @@ class _UserChangePasswordState extends State<UserChangePassword> {
                     color: Colors.grey,
                   ),
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/userProfile');
+                    changeToUserProfileScreen(context);
                   }
               ),
 
@@ -226,6 +226,7 @@ class _UserChangePasswordState extends State<UserChangePassword> {
 
                                   EvieButton_DarkBlue(
                                     width: double.infinity,
+                                    height: double.infinity,
                                     child: const Text("Update Password",
                                       style: TextStyle(color: Colors.white,
                                         fontSize: 12.0,),
@@ -233,7 +234,7 @@ class _UserChangePasswordState extends State<UserChangePassword> {
                                     onPressed: () async {
                                       if (_formKey.currentState!.validate()) {
 
-                                  if (!await _currentUser.reauthentication(_passwordOriginalController.text.trim())) {
+                                  if (!await _authProvider.reauthentication(_passwordOriginalController.text.trim())) {
                                    /* SmartDialog.show(
                                       widget: EvieSingleButtonDialog(
                                           title: "Error",
@@ -249,12 +250,11 @@ class _UserChangePasswordState extends State<UserChangePassword> {
 
                                     debugPrint("authentication failed");
                                       }else{
-                                        _currentUser.changeUserPassword(
+                                        _authProvider.changeUserPassword(
                                         context,
                                         _passwordController.text.trim(),
                                         _passwordOriginalController.text.trim()); //Last value field is phone number
-                                    Navigator.pushReplacementNamed(
-                                        context, '/userProfile');
+                                        changeToUserProfileScreen(context);
 
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(

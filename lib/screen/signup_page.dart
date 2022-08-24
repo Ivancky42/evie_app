@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:sizer/sizer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
+import '../api/navigator.dart';
+import '../api/provider/auth_provider.dart';
 import '../widgets/evie_single_button_dialog.dart';
 
 ///Firebase auth
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+class SignUp extends StatefulWidget {
+  const SignUp({Key? key}) : super(key: key);
   @override
   _SignUpState createState() => _SignUpState();
 }
 
-class _SignUpState extends State<SignUpPage> {
+class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
@@ -38,8 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordConfirmController =
       TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _phoneNoController = TextEditingController();
-  late CurrentUserProvider _currentUser;
+  late AuthProvider _authProvider;
 
   //For user input password visibility true/false
   bool _isObscure = true;
@@ -50,7 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _currentUser = Provider.of<CurrentUserProvider>(context);
+    _authProvider = Provider.of<AuthProvider>(context);
 
     return Form(
         key: _formKey,
@@ -222,7 +224,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     const SizedBox(
                       height: 50.0,
                     ),
-                    EvieButton_DarkBlue(
+                    EvieButton_DarkBlue(height: 12,
                       width: double.infinity,
                       child: const Text(
                         "Sign Up",
@@ -234,20 +236,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           try {
-                            if (await _currentUser.signUp(
-                                context,
+                            if (await _authProvider.signUp(
                                 _emailController.text.trim(),
                                 _passwordController.text.trim(),
                                 _nameController.value.text,
-                                "empty")) {
+                                "empty")?? true) {
                               //Last value field is phone number
-                              Navigator.pushReplacementNamed(context, '/home');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Registration success!')),
+                              SmartDialog.show(
+                                widget: EvieSingleButtonDialog(
+                                    title: "Success",
+                                    content: "Registration success",
+                                    rightContent: "Ok",
+                                    //image: Image.asset("assets/images/error.png", width: 36,height: 36,),
+                                    onPressedRight: (){
+                                      changeToSignInScreen(context);
+                                      SmartDialog.dismiss();
+                                    }),
                               );
                             } else {
                               debugPrint("Sign Up Error");
+                              SmartDialog.show(
+                                widget: EvieSingleButtonDialog(
+                                    title: "Error",
+                                    content: "Try again",
+                                    rightContent: "Ok",
+                                    image: Image.asset("assets/images/error.png", width: 36,height: 36,),
+                                    onPressedRight: (){
+                                      SmartDialog.dismiss();
+                                    }),
+                              );
                             }
                           } catch (error) {
                             debugPrint(error.toString());
@@ -277,7 +294,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0)),
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/home');
+                          changeToSignInScreen(context);
                         },
                         child: const Text(
                           "Login",

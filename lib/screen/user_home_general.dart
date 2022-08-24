@@ -34,6 +34,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       //Body should change when bottom navigation bar state change
       body: Padding(
         padding: const EdgeInsets.all(16.0),
+    child: SingleChildScrollView(
         child: Column(
             //mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,7 +99,9 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
               const SizedBox(
                 height: 5.0,
               ),
-            ]),
+            ]
+        ),
+    ),
       ),
     );
   }

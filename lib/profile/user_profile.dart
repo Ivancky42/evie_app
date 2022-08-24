@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -12,6 +13,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
+import '../api/navigator.dart';
+import '../theme/ThemeChangeNotifier.dart';
+
 ///User profile page with user account information
 
 class UserProfile extends StatefulWidget{
@@ -24,7 +28,7 @@ class _UserProfileState extends State<UserProfile> {
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneNoController = TextEditingController();
-  late CurrentUserProvider _currentUser;
+  late CurrentUserProvider _currentUser;late AuthProvider _authProvider;
 
   //Create string for image
   String uploadimageUrl = " ";
@@ -38,7 +42,7 @@ class _UserProfileState extends State<UserProfile> {
 
     ///From widget function, show loading dialog screen
     showAlertDialog(context);
-    var picName = _currentUser.getEmail;
+    var picName = _currentUser.currentUserModel!.email;
     Reference ref = FirebaseStorage.instance.ref().child(
         "UserProfilePic/" + picName!);
 
@@ -48,7 +52,7 @@ class _UserProfileState extends State<UserProfile> {
       uploadimageUrl = value;
       setState(() {
         uploadimageUrl = value;
-        print(uploadimageUrl);
+        debugPrint(uploadimageUrl);
       });
 
       ///Quit loading dialog
@@ -60,14 +64,15 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     _currentUser = Provider.of<CurrentUserProvider>(context);
+    _authProvider = Provider.of<AuthProvider>(context);
 
     //Set image url
     if (uploadimageUrl == " "){
-      uploadimageUrl = _currentUser.getProfileImageURL;
+      uploadimageUrl = _currentUser.currentUserModel!.profileIMG;
     }
 
     bool _isEmail = false;
-    if(_currentUser.getCredentialProvider == "email"){
+    if(_currentUser.currentUserModel!.credentialProvider == "email"){
       _isEmail = true;
     }else {
       _isEmail = false;
@@ -84,7 +89,7 @@ class _UserProfileState extends State<UserProfile> {
                     color: Colors.grey,
                   ),
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/userHomePage');
+                    changeToUserHomePageScreen(context);
                   }
               ),
 
@@ -100,7 +105,7 @@ class _UserProfileState extends State<UserProfile> {
                 tooltip: 'Change Password',
                 icon: const Icon(Icons.key),
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/userChangePassword');
+                  changeToChangePasswordScreen(context);
                 }
             ),
         ),
@@ -213,12 +218,15 @@ class _UserProfileState extends State<UserProfile> {
                                   const SizedBox(
                                     height: 30.0,
                                   ),
-
                                   TextFormField(
                                     enabled: false,
-                                    initialValue: _currentUser.getEmail,
+                                    initialValue: _currentUser.currentUserModel!.email,
                                     decoration: InputDecoration(
                                       labelText: 'Email Address',
+                                      labelStyle: TextStyle(
+                                          color: ThemeChangeNotifier().isDarkMode(context)
+                                              == true ? Colors.white70 : Colors.black,
+                                      ),
                                       filled: true,
                                       fillColor: const Color(0xFFFFFFFF)
                                           .withOpacity(0.2),
@@ -240,11 +248,15 @@ class _UserProfileState extends State<UserProfile> {
 
                                   TextFormField(
                                     //controller: _nameController..text = document['name'],
-                                    controller: _nameController..text = _currentUser.getName,
+                                    controller: _nameController..text = _currentUser.currentUserModel!.name,
                                     enabled: _isInputEnable,
                                     //initialValue: document['name'],
                                     decoration: InputDecoration(
                                       labelText: 'Username',
+                                      labelStyle: TextStyle(
+                                        color: ThemeChangeNotifier().isDarkMode(context)
+                                            == true ? Colors.white70 : Colors.black,
+                                      ),
                                       hintText: 'Type your name here',
                                       filled: true,
                                       fillColor: const Color(0xFFFFFFFF)
@@ -268,11 +280,15 @@ class _UserProfileState extends State<UserProfile> {
 
 
                                   TextFormField(
-                                    controller: _phoneNoController..text = _currentUser.getPhoneNo,
+                                    controller: _phoneNoController..text = _currentUser.currentUserModel!.phoneNumber!,
                                     enabled: _isInputEnable,
                                     //initialValue: document['phoneNumber'],
                                     decoration: InputDecoration(
                                       labelText: 'Phone Number',
+                                      labelStyle: TextStyle(
+                                        color: ThemeChangeNotifier().isDarkMode(context)
+                                            == true ? Colors.white70 : Colors.black,
+                                      ),
                                       hintText: 'Type your phone number here',
                                       filled: true,
                                       fillColor: const Color(0xFFFFFFFF)
@@ -296,25 +312,25 @@ class _UserProfileState extends State<UserProfile> {
 
                                   Align(
                                       alignment: Alignment.bottomCenter,
-                                      child: EvieButton_DarkBlue(
+                                      child: EvieButton_DarkBlue(height: 12,
                                           width: double.infinity,
                                           onPressed: () async {
                                             try {
-                                              Navigator.of(context)
-                                                  .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
-                                              _currentUser.signOut();
+
+                                              _authProvider.signOut();
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
                                                 const SnackBar(
                                                   content: Text('Signed out'),
                                                   duration: Duration(
                                                       seconds: 2),),
-
                                               );
-                                              //await Provider.of(context).auth.signOut();
+
+                                              changeToSignInScreen(context);
+
                                             }
                                             catch (e) {
-                                              print(e);
+                                              debugPrint(e.toString());
                                             }
                                           },
                                           child: const Text("Sign Out",

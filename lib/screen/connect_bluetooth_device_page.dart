@@ -75,7 +75,6 @@ class _ConnectBluetoothDeviceState extends State<ConnectBluetoothDevice> {
     );
   }
 
-
   Widget listItem(ScanResult r) {
 
     return ListTile(
@@ -103,8 +102,6 @@ class _ConnectBluetoothDeviceState extends State<ConnectBluetoothDevice> {
     showDeviceList();
     throw UnimplementedError();
   }
-
-
 
   showDeviceList() {
     showModalBottomSheet(
