@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/ThemeChangeNotifier.dart';
+
 ///Button Widget
 class EvieButton_TextForm_Constant extends StatelessWidget {
 
@@ -26,8 +28,10 @@ class EvieButton_TextForm_Constant extends StatelessWidget {
                 contentPadding: const EdgeInsets.symmetric(vertical: 17.0, horizontal: 10.0),
                 enabled: false,
                 hintText: hintText,
-                hintStyle: const TextStyle(
-                    fontSize: 13, color: Colors.black54),
+                hintStyle: TextStyle(
+                    fontSize: 13,
+                  color: ThemeChangeNotifier().isDarkMode(context) == true ? Colors.white70 : Colors.black,
+                ),
                 filled: true,
                 //<-- SEE HERE
                 fillColor: Color(0xFFFFFFFF).withOpacity(0.3),

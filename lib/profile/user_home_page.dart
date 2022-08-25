@@ -4,6 +4,9 @@ import 'package:evie_test/screen/user_home_bluetooth.dart';
 import 'package:evie_test/screen/user_home_setting.dart';
 import 'package:evie_test/screen/user_home_history.dart';
 
+import '../api/navigator.dart';
+import '../theme/ThemeChangeNotifier.dart';
+
 ///User default home page when login condition is true
 
 class UserHomePage extends StatefulWidget {
@@ -20,6 +23,8 @@ class _UserHomePageState extends State<UserHomePage> {
   ///Appbar title
   String _title = 'Home';
 
+  bool _unlock = false;
+
   ///Body Screen navigation by bottom navigation bar
   final screen = [
     UserHomeGeneral(),
@@ -30,6 +35,31 @@ class _UserHomePageState extends State<UserHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    Color lockColour = const Color(0xff00B6F1);
+    Image lockImage = const Image(
+      image: AssetImage("assets/buttons/lock_unlock.png"),
+      height: 20,
+      fit: BoxFit.fitWidth,
+    );
+
+    if(_unlock == false){
+      lockImage = const Image(
+        image: AssetImage("assets/buttons/lock_lock.png"),
+        height: 20,
+        fit: BoxFit.fitWidth,
+      );
+      lockColour = const Color(0xff00B6F1);
+    }else if(_unlock == true){
+
+      lockImage = const Image(
+        image: AssetImage("assets/buttons/lock_unlock.png"),
+        height: 20,
+        fit: BoxFit.fitWidth,
+      );
+      lockColour = const Color(0xff404E53);
+    }
+
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 100,
@@ -39,21 +69,34 @@ class _UserHomePageState extends State<UserHomePage> {
           ),
           centerTitle: false,
           actions: <Widget>[
-        Align(
+            if (currentIndex == 0) ... [
+            Align(
             child: Container(
               height: 40,
               width: 40,
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withOpacity(0.3),
                 borderRadius: const BorderRadius.all(Radius.circular(10),
               )),
               child: IconButton(
                 iconSize: 25,
-                icon: const Icon(Icons.person),
+
+                icon: ThemeChangeNotifier().isDarkMode(context) == true ?
+                const Image(
+                  image: AssetImage(
+                      "assets/buttons/user_white.png"),
+                  height: 17.0,
+                ) :
+                const Image(
+                  image: AssetImage(
+                      "assets/buttons/user.png"),
+                  height: 17.0,
+                ),
+
                 tooltip: 'User Profile',
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/userProfile');
+                  changeToUserProfileScreen(context);
 
                   //    ScaffoldMessenger.of(context).showSnackBar(
                   //        const SnackBar(content: Text('User Profile')));
@@ -63,7 +106,7 @@ class _UserHomePageState extends State<UserHomePage> {
         ),
 
             const SizedBox(
-              width: 20, //<-- SEE HERE
+              width: 20,
             ),
 
             Align(
@@ -72,12 +115,22 @@ class _UserHomePageState extends State<UserHomePage> {
               width: 40,
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withOpacity(0.3),
                   borderRadius: const BorderRadius.all(Radius.circular(10),
                   )),
               child: IconButton(
                 iconSize: 25,
-                icon: const Icon(Icons.notifications),
+                icon: ThemeChangeNotifier().isDarkMode(context) == true ?
+                const Image(
+                  image: AssetImage(
+                      "assets/buttons/notification_white.png"),
+                  height: 17.0,
+                ) :
+                const Image(
+                  image: AssetImage(
+                      "assets/buttons/notification.png"),
+                  height: 17.0,
+                ),
                 tooltip: 'Notification',
                 onPressed: () {},
               ),
@@ -85,22 +138,27 @@ class _UserHomePageState extends State<UserHomePage> {
            ),
 
             const SizedBox(
-              width: 10, //<-- SEE HERE
+              width: 20,
             ),
-
+          ],
           ],
         ),
 
         //Body should change when bottom navigation bar state change
         body: screen[currentIndex],
+
         floatingActionButton: FloatingActionButton(
           elevation: 0,
-          backgroundColor: const Color(0xff00B6F1),
+          backgroundColor: lockColour,
           onPressed: () {
-            Icon(Icons.lock);
-            //code to execute on button press
+            setState(() {
+              _unlock = !_unlock;
+            });
           },
-          child: Icon(Icons.lock_open), //icon inside button
+
+          //icon inside button
+          child: lockImage,
+
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomAppBar(

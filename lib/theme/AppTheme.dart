@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:evie_test/theme/ThemeChangeNotifier.dart';
 
 class AppTheme{
 
@@ -54,17 +55,14 @@ class AppTheme{
 
     //Bottom drawer
     bottomSheetTheme: const BottomSheetThemeData(
-      backgroundColor: Color(0xffD7E9EF),
+      backgroundColor: Colors.transparent,
     ),
 
       dialogTheme: const DialogTheme(
         backgroundColor: Color(0xffD7E9EF),
       ),
 
-
   );
-
-
 
 
 
@@ -103,7 +101,7 @@ class AppTheme{
 
     //Bottom app bar colours
     bottomAppBarTheme: const BottomAppBarTheme(
-      color: Color(0xff162429),
+      color: Colors.transparent,
     ),
 
     //Bottom navigation bar theme setting

@@ -1,5 +1,7 @@
+import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import '../api/navigator.dart';
 import '../widgets/widgets.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
@@ -7,13 +9,13 @@ import 'package:evie_test/widgets/evie_button.dart';
 ///Forget your password? Send an email using firebase api to reset it.
 /// >>>> Try to remember it this time <<<<
 
-class ForgetYourPasswordPage extends StatefulWidget{
-  const ForgetYourPasswordPage({ Key? key }) : super(key: key);
+class ForgetYourPassword extends StatefulWidget{
+  const ForgetYourPassword({ Key? key }) : super(key: key);
   @override
   _ForgetYourPasswordState createState() => _ForgetYourPasswordState();
 }
 
-class _ForgetYourPasswordState extends State<ForgetYourPasswordPage>{
+class _ForgetYourPasswordState extends State<ForgetYourPassword>{
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
@@ -131,7 +133,7 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
 
             Container(
               child: EvieButton_DarkBlue(
-                width: double.infinity,
+                width: double.infinity,height: 12,
                 child: const Text("Recover",
                   style: TextStyle(color: Colors.white,
                     fontSize: 12.0,),
@@ -139,8 +141,8 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
 
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    CurrentUserProvider().resetPassword(_emailController.text.trim());
-                    Navigator.pushReplacementNamed(context, '/home');
+                    AuthProvider().resetPassword(_emailController.text.trim());
+                    changeToSignInScreen(context);
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Sent')),

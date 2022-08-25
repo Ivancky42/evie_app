@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,21 +8,42 @@ import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
-///Firebase auth
-final FirebaseAuth _auth = FirebaseAuth.instance;
+import '../api/navigator.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+
+class SignIn extends StatefulWidget {
+  const SignIn({Key? key}) : super(key: key);
+
+  @override
+  _SignInState createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
+  @override
+  Widget build(BuildContext context) {
+    ///Disable phone rotation
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+
+    return const Scaffold(
+      body: Login(),
+    );
+  }
+}
+
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<Login> {
   //To read data from user input
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  late CurrentUserProvider _currentUser;
+  late AuthProvider _authProvider;
 
   //For user input password visibility true/false
   bool _isObscure = true;
@@ -30,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _currentUser = Provider.of<CurrentUserProvider>(context);
+    _authProvider = Provider.of<AuthProvider>(context);
 
     return Form(
         key: _formKey,
@@ -151,8 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontSize: 12, fontWeight: FontWeight.w600),
                           ),
                           onPressed: () {
-                            Navigator.pushReplacementNamed(
-                                context, '/forgetPassword');
+                            changeToForgetPasswordScreen(context);
                           }),
                     ),
 
@@ -162,6 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     EvieButton_DarkBlue(
                       width: double.infinity,
+                      height: double.infinity,
                       child: const Text(
                         "Login",
                         style: TextStyle(
@@ -175,11 +198,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
 
                         //Save to provider
-                        _currentUser.login(
+                        _authProvider.login(
                             _emailController.text.trim(),
                             _passwordController.text.trim(),
-                            context,
-                            _currentUser);
+                            context);
                       },
                     ),
 
@@ -194,7 +216,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               mainAxisSize: MainAxisSize.min,
                               // this will take space as minimum as possible(to center)
                               children: <Widget>[
-                                Spacer(),
                                 EvieButton_Square(
                                     width: 50,
                                     height: 50,
@@ -204,9 +225,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       height: 20.0,
                                     ),
                                     onPressed: () {
-                                      _currentUser.signInWithFacebook(context);
+                                      _authProvider.signInWithFacebook(context);
                                     }),
-                                Spacer(),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
                                 EvieButton_Square(
                                     width: 50,
                                     height: 50,
@@ -216,9 +239,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       height: 20.0,
                                     ),
                                     onPressed: () {
-                                      _currentUser.signInWithGoogle(context);
+                                      _authProvider.signInWithGoogle(context);
                                     }),
-                                Spacer(),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
                                 EvieButton_Square(
                                     width: 50,
                                     height: 50,
@@ -228,9 +253,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       height: 20.0,
                                     ),
                                     onPressed: () {
-                                      _currentUser.signInWithAppleID(context);
+                                      _authProvider.signInWithAppleID(context);
                                     }),
-                                Spacer(),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
                                 EvieButton_Square(
                                     width: 50,
                                     height: 50,
@@ -240,7 +267,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       height: 20.0,
                                     ),
                                     onPressed: () {
-                                      _currentUser.signInWithTwitter(context);
+                                      _authProvider.signInWithTwitter(context);
                                     }),
                               ],
                             ),
@@ -253,7 +280,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               mainAxisSize: MainAxisSize.min,
                               // this will take space as minimum as possible(to center)
                               children: <Widget>[
-                                Spacer(),
                                 EvieButton_Square(
                                     width: 50,
                                     height: 50,
@@ -263,10 +289,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       height: 20.0,
                                     ),
                                     onPressed: () {
-                                      _currentUser.signInWithFacebook(context);
+                                      _authProvider.signInWithFacebook(context);
                                     }),
-                                Spacer(),
-                                Spacer(),
+                                const SizedBox(
+                                  height: 30.0,
+                                ),
                                 EvieButton_Square(
                                     width: 50,
                                     height: 50,
@@ -276,10 +303,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       height: 20.0,
                                     ),
                                     onPressed: () {
-                                      _currentUser.signInWithGoogle(context);
+                                      _authProvider.signInWithGoogle(context);
                                     }),
-                                Spacer(),
-                                Spacer(),
+                                const SizedBox(
+                                  height: 30.0,
+                                ),
                                 EvieButton_Square(
                                     width: 50,
                                     height: 50,
@@ -289,7 +317,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       height: 20.0,
                                     ),
                                     onPressed: () {
-                                      _currentUser.signInWithTwitter(context);
+                                      _authProvider.signInWithTwitter(context);
                                     }),
                               ],
                             ),
@@ -318,7 +346,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0)),
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/signup');
+                          changeToSignUpScreen(context);
                         },
                         child: const Text(
                           "Sign Up",
