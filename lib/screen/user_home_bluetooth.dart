@@ -1,6 +1,8 @@
+import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/animation/ripple_pulse_animation.dart';
-import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:provider/provider.dart';
 
 
 ///Cannot use when user bluetooth is off, should check user bluetooth
@@ -15,52 +17,31 @@ class UserHomeBluetooth extends StatefulWidget{
 
 class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
 
-  FlutterBlue flutterBlue = FlutterBlue.instance;
-  List<ScanResult> scanResultList = [];
   final bool _isScanning = false;
+  late BluetoothProvider bluetoothProvider;
 
   @override
   initState() {
     super.initState();
-    init();
+    bluetoothProvider = context.read<BluetoothProvider>();
+    bluetoothProvider.startScan();
   }
 
-  void init() {
-    scan();
-  }
-
-
-  scan() async {
-    if (!_isScanning) {
-      scanResultList.clear();
-      flutterBlue.startScan(timeout: Duration(seconds: 5));
-      flutterBlue.scanResults.listen((results) {
-
-        scanResultList = results;
-        setState(() {});
-      });
-    } else {
-      flutterBlue.stopScan();
-    }
-  }
-
-  Widget deviceSignal(ScanResult r) {
-    return Text(r.rssi.toString());
+  Widget deviceSignal(String rssi) {
+    return Text("rssi : " + rssi);
   }
 
 
-  Widget deviceMacAddress(ScanResult r) {
-    return Text(r.device.id.id);
+  Widget deviceMacAddress(String deviceId) {
+    return Text(deviceId);
   }
 
 
-  Widget deviceName(ScanResult r) {
+  Widget deviceName(String deviceName) {
     String name = '';
 
-    if (r.device.name.isNotEmpty) {
-      name = r.device.name;
-    } else if (r.advertisementData.localName.isNotEmpty) {
-      name = r.advertisementData.localName;
+    if (deviceName.isNotEmpty) {
+      name = deviceName;
     } else {
       name = 'N/A';
     }
@@ -68,7 +49,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
     return Text(name);
   }
 
-  Widget leading(ScanResult r) {
+  Widget leading() {
     return const CircleAvatar(
       child: Icon(
         Icons.bluetooth,
@@ -79,30 +60,35 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
   }
 
 
-  Widget listItem(ScanResult r) {
-
-    return ListTile(
-      leading: leading(r),
-      title: deviceName(r),
-      //subtitle: deviceMacAddress(r),
-      //trailing: deviceSignal(r),
-      trailing: IconButton(
-        iconSize: 25,
-        icon: const Image(
-          image: AssetImage("assets/buttons/arrow_right.png"),
-          height: 20.0,
+  Widget listItem(DiscoveredDevice? discoveredDevice) {
+    if (discoveredDevice != null) {
+      return ListTile(
+        leading: leading(),
+        title: deviceName(discoveredDevice!.name),
+        subtitle: deviceSignal(discoveredDevice.rssi.toString()),
+        trailing: IconButton(
+          iconSize: 25,
+          icon: const Image(
+            image: AssetImage("assets/buttons/arrow_right.png"),
+            height: 20.0,
+          ),
+          tooltip: 'Connect',
+          onPressed: () {
+            bluetoothProvider.connectDevice(discoveredDevice.id);
+            Navigator.of(context).pushNamed('/testBle');
+          },
         ),
-        tooltip: 'Connect',
-        onPressed: () {
-          //
-        },
-      ),
-    );
+      );
+    }
+    else {
+      return Container();
+    }
   }
 
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(title: const Text("Connect Your Bike",
         style: TextStyle(fontSize: 24.0),
@@ -142,9 +128,9 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
         context: context,
   ///      backgroundColor: Colors.transparent,
         builder: (BuildContext context) {
-
           ///Delete list item where the name is NA
-          scanResultList.removeWhere((item) => item.device.name.isEmpty);
+          //scanResultList.removeWhere((item) => item.device.name.isEmpty);
+          bluetoothProvider = context.watch<BluetoothProvider>();
 
           return
             Container(
@@ -158,10 +144,10 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
                 child: Center(
                   child: ListView.separated(
 
-                    itemCount: scanResultList.length,
+                    itemCount: bluetoothProvider.discoverDeviceList.length,
                     itemBuilder: (context, index) {
-
-                      return listItem(scanResultList[index]);
+                      String key = bluetoothProvider.discoverDeviceList.keys.elementAt(index);
+                      return listItem(bluetoothProvider.discoverDeviceList[key]);
                     },
                     separatorBuilder: (BuildContext context, int index) {
                       return Divider();

@@ -1,4 +1,6 @@
+import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/profile/user_profile.dart';
+import 'package:evie_test/screen/test_ble.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -28,14 +30,21 @@ Future main() async {
   await Firebase.initializeApp();
 
   ///Dotnet file loading
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: "env");
 
   ///Provider
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => CurrentUserProvider(),
+    MultiProvider(
+        providers: [
+          ChangeNotifierProvider<CurrentUserProvider>.value(
+            value: CurrentUserProvider(),
+          ),
+          ChangeNotifierProvider<BluetoothProvider>.value(
+            value: BluetoothProvider(),
+          ),
+        ],
       child: const MyApp(),
-    ),
+    )
   );
 }
 
@@ -80,9 +89,10 @@ class MyApp extends StatelessWidget {
         "/forgetPassword": (context) => const ForgetYourPasswordPage(),
         "/userProfile": (context) => const UserProfile(),
         "/userHomePage": (context) => const UserHomePage(),
-        "/userBluetooth": (context) => const UserHomeBluetooth(),
+        // "/userBluetooth": (context) => const UserHomeBluetooth(),
         "/userChangePassword": (context) => const UserChangePassword(),
-        "/connectBTDevice": (context) => const ConnectBluetoothDevice(),
+        "/testBle": (context) => const TestBle(),
+        // "/connectBTDevice": (context) => const ConnectBluetoothDevice(),
       },
 
       navigatorObservers: [FlutterSmartDialog.observer],

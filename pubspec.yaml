@@ -41,8 +41,11 @@ dependencies:
   json_annotation: ^4.6.0
   flutter_dotenv: ^5.0.2
   json_serializable: ^6.3.1
-  flutter_blue: ^0.8.0
   flutter_smart_dialog: ^3.0.2
+  flutter_reactive_ble: ^5.0.2
+  permission_handler: ^10.0.0
+  crclib: ^3.0.0
+  hex: ^0.2.0
   #crypto: ^3.0.1
 
 dev_dependencies:
@@ -75,7 +78,7 @@ flutter:
     - assets/logo/
     - assets/buttons/
     - assets/images/
-    - .env
+    - env
   uses-material-design: true
 
   fonts:
