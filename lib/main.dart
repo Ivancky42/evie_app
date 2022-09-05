@@ -1,4 +1,6 @@
+import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/profile/user_profile.dart';
+import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/theme/ThemeChangeNotifier.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,7 +31,7 @@ Future main() async {
   await Firebase.initializeApp();
 
   ///Dotnet file loading
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: "env");
 
   ///Provider
   runApp(const AppProviders(
@@ -56,6 +58,9 @@ class AppProviders extends StatelessWidget {
           ),
           ChangeNotifierProvider<CurrentUserProvider>.value(
             value: CurrentUserProvider(),
+          ),
+          ChangeNotifierProvider<BluetoothProvider>.value(
+            value: BluetoothProvider(),
           ),
           ChangeNotifierProxyProvider<AuthProvider, CurrentUserProvider>(
               lazy: false,
@@ -105,6 +110,7 @@ class MyApp extends StatelessWidget {
           "/userHomePage": (context) => const UserHomePage(),
           "/userBluetooth": (context) => const UserHomeBluetooth(),
           "/userChangePassword": (context) => const UserChangePassword(),
+          "/testBle": (context) => const TestBle(),
         },
 
         navigatorObservers: [FlutterSmartDialog.observer],

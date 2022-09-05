@@ -139,7 +139,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
                     topLeft: Radius.circular(16.0),
                     topRight: Radius.circular(16.0),
                   ),
-   ///               color: Color(0xffD7E9EF),
+               color: Color(0xffD7E9EF),
                 ),
                 child: Center(
                   child: ListView.separated(
