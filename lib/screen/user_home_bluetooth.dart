@@ -1,3 +1,4 @@
+import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/animation/ripple_pulse_animation.dart';
@@ -24,7 +25,9 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
   initState() {
     super.initState();
     bluetoothProvider = context.read<BluetoothProvider>();
+    ///Start scanning for bluetooth device
     bluetoothProvider.startScan();
+
   }
 
   Widget deviceSignal(String rssi) {
@@ -75,7 +78,8 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
           tooltip: 'Connect',
           onPressed: () {
             bluetoothProvider.connectDevice(discoveredDevice.id);
-            Navigator.of(context).pushNamed('/testBle');
+           // Navigator.of(context).pushNamed('/testBle');
+            changeToUserHomePageScreen(context);
           },
         ),
       );
@@ -113,7 +117,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
               tooltip: 'Bluetooth',
               onPressed: () {
                 showDeviceList();
-                //Navigator.pushReplacementNamed(context, '/connectBTDevice');
+
               },
             ),
           ],
@@ -158,5 +162,3 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
         });
   }
 }
-
-

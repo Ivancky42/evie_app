@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/model/bike_model.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../widgets/evie_single_button_dialog.dart';
 import '../model/user_model.dart';
 import '../navigator.dart';
+import 'bike_provider.dart';
 
 class AuthProvider extends ChangeNotifier {
 
@@ -193,40 +195,6 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-
-  ///User sign out
-  Future signOut() async {
-    try {
-
-      await FirebaseAuth.instance.signOut();
-      notifyListeners();
-      await _auth.signOut();
-      if(credentialProvider == "google"){
-        await googleSignIn.signOut();
-        await googleSignIn.disconnect();
-      }
-      if(credentialProvider == "facebook"){
-        await FacebookAuth.instance.logOut();
-      }
-      if(credentialProvider == "twitter"){
-        //twitter sign out
-      }
-
-
-      return Future.delayed(Duration.zero);
-    } catch (error) {
-      SmartDialog.show(
-        widget: EvieSingleButtonDialog(
-            title: "Error",
-            content: error.toString(),
-            rightContent: "Ok",
-            image: Image.asset("assets/images/error.png", width: 36,height: 36,),
-            onPressedRight: (){
-              SmartDialog.dismiss();
-            }),
-      );
-    }
-  }
 
 
   final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -484,4 +452,38 @@ class AuthProvider extends ChangeNotifier {
         .sendPasswordResetEmail(email: email)
         .catchError((e) => debugPrint(e));
   }
+
+
+  ///User sign out
+  Future signOut(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      BikeProvider().clear();
+      notifyListeners();
+      await _auth.signOut();
+      if(credentialProvider == "google"){
+        await googleSignIn.signOut();
+        await googleSignIn.disconnect();
+      }
+      if(credentialProvider == "facebook"){
+        await FacebookAuth.instance.logOut();
+      }
+      if(credentialProvider == "twitter"){
+        //twitter sign out
+      }
+      return Future.delayed(Duration.zero);
+    } catch (error) {
+      SmartDialog.show(
+        widget: EvieSingleButtonDialog(
+            title: "Error",
+            content: error.toString(),
+            rightContent: "Ok",
+            image: Image.asset("assets/images/error.png", width: 36,height: 36,),
+            onPressedRight: (){
+              SmartDialog.dismiss();
+            }),
+      );
+    }
+  }
+
 }

@@ -14,6 +14,7 @@ import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../api/navigator.dart';
+import '../api/provider/bike_provider.dart';
 import '../theme/ThemeChangeNotifier.dart';
 
 ///User profile page with user account information
@@ -29,6 +30,7 @@ class _UserProfileState extends State<UserProfile> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneNoController = TextEditingController();
   late CurrentUserProvider _currentUser;late AuthProvider _authProvider;
+  late BikeProvider _bikeProvider;
 
   //Create string for image
   String uploadimageUrl = " ";
@@ -65,6 +67,7 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     _currentUser = Provider.of<CurrentUserProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
+    _bikeProvider = Provider.of<BikeProvider>(context);
 
     //Set image url
     if (uploadimageUrl == " "){
@@ -317,7 +320,7 @@ class _UserProfileState extends State<UserProfile> {
                                           onPressed: () async {
                                             try {
 
-                                              _authProvider.signOut();
+                                              _authProvider.signOut(context);
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
                                                 const SnackBar(

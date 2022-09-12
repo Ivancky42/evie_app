@@ -12,10 +12,9 @@ class ThemeChangeNotifier with ChangeNotifier {
     var darkMode = MediaQuery.of(context).platformBrightness;
     if(darkMode == Brightness.dark){
       return true;
-
     }else if(darkMode == Brightness.light)
-    {return false;
-
+    {
+      return false;
     }
     else {
       return false;

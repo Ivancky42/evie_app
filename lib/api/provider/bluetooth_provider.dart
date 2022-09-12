@@ -1,19 +1,34 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/model/bike_model.dart';
 import 'package:evie_test/bluetooth/command.dart';
+import 'package:evie_test/widgets/widgets.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../bluetooth/model.dart';
+import '../../widgets/evie_double_button_dialog.dart';
+import 'package:open_settings/open_settings.dart';
 
+import '../model/bike_user_model.dart';
+import '../navigator.dart';
 
 class BluetoothProvider extends ChangeNotifier {
   final flutterReactiveBle = FlutterReactiveBle();
   final bluetoothCommand = BluetoothCommand();
-  static Uuid serviceUUID = Uuid.parse("49535343-fe7d-4ae5-8fa9-9fafd205e455");
-  static Uuid notifyingUUID = Uuid.parse("49535343-1e4d-4bd9-ba61-23c647249616");
-  static Uuid writeUUID = Uuid.parse("49535343-8841-43f4-a8d4-ecbe34729bb3");
+
+  static Uuid serviceUUID =
+      Uuid.parse(dotenv.env['BLE_SERVICE_UUID'] ?? 'UUID not found');
+  static Uuid notifyingUUID =
+      Uuid.parse(dotenv.env['BLE_NOTIFY_UUID'] ?? 'UUID not found');
+  static Uuid writeUUID =
+      Uuid.parse(dotenv.env['BLE_WRITE_UUID'] ?? 'UUID not found');
+  String? mainBatteryLevel = "Unknown";
 
   StreamSubscription? scanSubscription;
   StreamSubscription? connectSubscription;
@@ -23,21 +38,28 @@ class BluetoothProvider extends ChangeNotifier {
   BleStatus? bleStatus;
   String? selectedDeviceId;
 
-  LinkedHashMap<String, DiscoveredDevice> discoverDeviceList = LinkedHashMap<String, DiscoveredDevice>();
+  LinkedHashMap<String, DiscoveredDevice> discoverDeviceList =
+      LinkedHashMap<String, DiscoveredDevice>();
 
   RequestComKeyResult? requestComKeyResult;
   late ErrorPromptResult errorPromptResult;
   late UnlockResult unlockResult;
+  String? currentUserUID;
 
   /// * Command Listener ***/
-  StreamController<UnlockResult> unlockResultListener = StreamController.broadcast();
-  StreamController<ChangeBleKeyResult> chgBleKeyResultListener = StreamController.broadcast();
+  StreamController<UnlockResult> unlockResultListener =
+      StreamController.broadcast();
+  StreamController<ChangeBleKeyResult> chgBleKeyResultListener =
+      StreamController.broadcast();
 
-  BluetoothProvider() {
-    init();
+  Future<void> init(uid) async {
+    if (uid != null) {
+      currentUserUID = uid;
+      notifyListeners();
+    }
   }
 
-  void init() {
+  void checkBLEStatus() async {
     flutterReactiveBle.statusStream.listen((status) async {
       bleStatus = status;
       printLog("BLE Status", bleStatus.toString());
@@ -53,32 +75,42 @@ class BluetoothProvider extends ChangeNotifier {
           handlePermission();
           break;
         case BleStatus.poweredOff:
-          // TODO: Handle this case.
+          askForBLEOn();
           break;
         case BleStatus.locationServicesDisabled:
           // TODO: Handle this case.
           break;
         case BleStatus.ready:
-          // TODO: Handle this case.
+          SmartDialog.dismiss();
           break;
         default:
           break;
       }
-
       notifyListeners();
     });
   }
 
   void startScan() {
     discoverDeviceList.clear();
-    scanSubscription = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
+    scanSubscription = flutterReactiveBle.scanForDevices(
+        scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
       if (device.name.contains("REEVO")) {
-        discoverDeviceList.update(device.id, (existingDevice) => device, ifAbsent: () => device,);
+        ///
+        discoverDeviceList.update(
+          device.id,
+          (existingDevice) => device,
+          ifAbsent: () => device,
+        );
         notifyListeners();
       }
     }, onError: (error) {
       discoverDeviceList.clear();
-      print(error);
+      debugPrint(error.toString());
+
+      ///Ask user to turn on bluetooth setting if bluetooth status in user phone is power off
+      if (error.toString().contains("Bluetooth disabled")) {
+        askForBLEOn();
+      }
     });
   }
 
@@ -87,22 +119,25 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   void connectDevice(String deviceId) async {
-
     if (selectedDeviceId != null) {
       await disconnectDevice(selectedDeviceId!);
     }
 
     selectedDeviceId = deviceId;
 
-    connectSubscription = flutterReactiveBle.connectToDevice(id: selectedDeviceId!, connectionTimeout: const Duration(seconds: 10),).listen((event) {
-
+    connectSubscription = flutterReactiveBle
+        .connectToDevice(
+      id: selectedDeviceId!,
+      connectionTimeout: const Duration(seconds: 10),
+    )
+        .listen((event) {
       connectionStateUpdate = event;
 
       printLog("Connect State", connectionStateUpdate!.deviceId);
       printLog("Connect State", connectionStateUpdate!.connectionState.name);
       printLog("Connect State", connectionStateUpdate!.failure.toString());
 
-      switch(connectionStateUpdate?.connectionState) {
+      switch (connectionStateUpdate?.connectionState) {
         case DeviceConnectionState.connecting:
           // TODO: Handle this case.
           break;
@@ -125,7 +160,6 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   disconnectDevice(String deviceId) async {
-
     if (notifySubscription != null) {
       await notifySubscription!.cancel();
     }
@@ -134,20 +168,66 @@ class BluetoothProvider extends ChangeNotifier {
       await connectSubscription!.cancel();
     }
 
-    connectionStateUpdate = ConnectionStateUpdate(deviceId: deviceId, connectionState: DeviceConnectionState.disconnected, failure: null);
+    connectionStateUpdate = ConnectionStateUpdate(
+        deviceId: deviceId,
+        connectionState: DeviceConnectionState.disconnected,
+        failure: null);
     notifyListeners();
   }
 
+  ///Discover device service and characteristic
   void discoverServices() async {
-    final notifyCharacteristic = QualifiedCharacteristic(serviceId: serviceUUID, characteristicId: notifyingUUID, deviceId: connectionStateUpdate!.deviceId);
-    notifySubscription = flutterReactiveBle.subscribeToCharacteristic(notifyCharacteristic).listen((data) {
-      printLog("Notify Value", connectionStateUpdate!.deviceId + " " + utf8.decode(data));
+    final notifyCharacteristic = QualifiedCharacteristic(
+        serviceId: serviceUUID,
+        characteristicId: notifyingUUID,
+        deviceId: connectionStateUpdate!.deviceId);
+    notifySubscription = flutterReactiveBle
+        .subscribeToCharacteristic(notifyCharacteristic)
+        .listen((data) {
+      printLog("Notify Value",
+          connectionStateUpdate!.deviceId + " " + utf8.decode(data));
       handleNotifyData(data);
+
+      ///==========================REEVO START=============================
+      /*
+      String? mainBatteryLevel = "Unknown";
+
+      Uint8List bytes = Uint8List.fromList(data);
+      String notifyValue = String.fromCharCodes(bytes);
+      //print(notifyValue);
+
+      if (notifyValue.contains('R-1-1')) {
+        var data = notifyValue.split(",");
+        mainBatteryLevel = data[1].trim();
+      } else if (notifyValue.contains('R-0-1')) {
+        if (notifyValue.contains(':R-0-1')) {
+          var data = notifyValue.split(",");
+          if (data[7].toString().length == 12) {
+            print(data[7].toString());
+            uploadBikeToFireStore(data[7].toString());
+            uploadBikeToUserFireStore(data[7].toString());
+            uploadUserToBikeFireStore(data[7].toString());
+          } else {
+            print("Warning... " + data[7].toString());
+            //showWarningDialog();
+          }
+        }
+      }
+
+      notifyListeners();
+
+      // changeToUserHomePageScreen(context);
+
+       */
+      ///==========================REEVO END=============================
+
     }, onError: (dynamic error) {
       printLog("Notify Error", error.toString());
     });
 
-    sendCommand(bluetoothCommand.getComKey('yOTmK50z')); /// Get communication key from device.
+    sendCommand(bluetoothCommand.getComKey('yOTmK50z'));
+
+    /// Get communication key from device.
   }
 
   void stopServices() async {
@@ -156,42 +236,42 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   bool sendCommand(List<int> command) {
-    if (connectionStateUpdate?.connectionState == DeviceConnectionState.connected) {
+    if (connectionStateUpdate?.connectionState ==
+        DeviceConnectionState.connected) {
       final writeCharacteristic = QualifiedCharacteristic(
           serviceId: serviceUUID,
           characteristicId: writeUUID,
           deviceId: selectedDeviceId!);
-      flutterReactiveBle.writeCharacteristicWithoutResponse(
-          writeCharacteristic, value: command);
+      flutterReactiveBle.writeCharacteristicWithoutResponse(writeCharacteristic,
+          value: command);
 
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
 
   void handleNotifyData(List<int> data) {
     //List<int> decodedData = [0xA3, 0xA4, 0x09, 0xB0, 0x27, 0x32, 0x01, 0x0C, 0x0A, 0x0B, 0x01, 0x02, 0x02, 0x02, 0x02];
-    List<int> decodedData = bluetoothCommand.decodeData(data); //Decode data and get actual data
+    List<int> decodedData =
+        bluetoothCommand.decodeData(data); //Decode data and get actual data
     if (decodedData.isEmpty) {
       /// CRC value not valid. Failed decoded. Ignore invalid data.
-    }
-    else {
+    } else {
       var command = decodedData[5];
-      switch(command) {
-        case BluetoothCommand.requestComKeyCmd :
+      switch (command) {
+        case BluetoothCommand.requestComKeyCmd:
           requestComKeyResult = RequestComKeyResult(decodedData);
           notifyListeners();
           break;
-        case BluetoothCommand.errorPromptInstruction :
+        case BluetoothCommand.errorPromptInstruction:
           errorPromptResult = ErrorPromptResult(decodedData);
           notifyListeners();
           break;
-        case BluetoothCommand.unlockBikeCmd :
+        case BluetoothCommand.unlockBikeCmd:
           unlockResultListener.add(UnlockResult(decodedData));
           break;
-        case BluetoothCommand.changeBleKeyCmd :
+        case BluetoothCommand.changeBleKeyCmd:
           chgBleKeyResultListener.add(ChangeBleKeyResult(decodedData));
           break;
         default:
@@ -203,8 +283,7 @@ class BluetoothProvider extends ChangeNotifier {
   bool checkIsBluetoothOn() {
     if (bleStatus == BleStatus.ready) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -232,6 +311,87 @@ class BluetoothProvider extends ChangeNotifier {
     }
   }
 
+  ///=================================REEVO START====================================
+  void askForBLEOn() async {
+    SmartDialog.show(
+        widget: EvieDoubleButtonDialog(
+            title: "Bluetooth Required",
+            content: "Please turn on your bluetooth in phone setting",
+            leftContent: "Cancel",
+            rightContent: "Setting",
+            image: Image.asset(
+              "assets/icons/bluetooth_logo.png",
+              width: 36,
+              height: 36,
+            ),
+            onPressedLeft: () {
+              SmartDialog.dismiss();
+            },
+            onPressedRight: () {
+              OpenSettings.openBluetoothSetting();
+            }));
+  }
+
+  ///Bike not in firestore while testing
+  void uploadBikeToFireStore(String? selectedDeviceId) {
+    ///User name = provider current user
+    FirebaseFirestore.instance
+        .collection('bikes')
+        .doc(selectedDeviceId)
+        .set(BikeModel(
+          deviceType: "Reevo",
+          deviceIMEI: selectedDeviceId!,
+          isLocked: false,
+          bikeName: "ReevoBike",
+          created: Timestamp.now(),
+          updated: Timestamp.now(),
+        ).toJson());
+  }
+
+  void uploadBikeToUserFireStore(String? selectedDeviceId) {
+    ///User name = provider current user
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUserUID)
+        .collection('bikes')
+        .doc(selectedDeviceId)
+        .set({
+      "deviceType": "Reevo",
+      'deviceIMEI': selectedDeviceId!,
+    });
+  }
+
+  Future<void> uploadUserToBikeFireStore(String? selectedDeviceId) async {
+    String role = "";
+
+    ///check if first registration. Role is owner/rider
+    final snapshot = await FirebaseFirestore.instance
+        .collection('bikes')
+        .doc(selectedDeviceId)
+        .collection('users')
+        .get();
+
+    if (snapshot.size == 0) {
+      role = "owner";
+    } else if (snapshot.size == 0) {
+      role = "user";
+    }
+
+    FirebaseFirestore.instance
+        .collection('bikes')
+        .doc(selectedDeviceId)
+        .collection('users')
+        .doc(currentUserUID!)
+        .set(BikeUserModel(
+          uid: currentUserUID!,
+          role: role,
+          created: Timestamp.now(),
+        ).toJson());
+  }
+
+  ///================================REEVO END==================================
+
+
   /// **********************/
   /// *** Command Action ***/
   /// **********************/
@@ -239,21 +399,22 @@ class BluetoothProvider extends ChangeNotifier {
   /// 1). Function for unlock bike and listening for acknowledge status from bike.
   Stream<UnlockResult> unlockBike(int userId, int timestamp) {
     if (requestComKeyResult != null) {
-      bool isConnected = sendCommand(bluetoothCommand.unlockBike(requestComKeyResult!.communicationKey, userId, timestamp));
+      bool isConnected = sendCommand(bluetoothCommand.unlockBike(
+          requestComKeyResult!.communicationKey, userId, timestamp));
       if (isConnected) {
-        return unlockResultListener.stream.timeout(
-            const Duration(seconds: 6), onTimeout: (sink) {
+        return unlockResultListener.stream.timeout(const Duration(seconds: 6),
+            onTimeout: (sink) {
           sink.addError("Operation timeout");
         });
-      }
-      else {
-        return unlockResultListener.stream.timeout(const Duration(milliseconds: 500), onTimeout: (sink){
+      } else {
+        return unlockResultListener.stream
+            .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
           sink.addError("Bike is not connected");
         });
       }
-    }
-    else {
-      return unlockResultListener.stream.timeout(const Duration(milliseconds: 500), onTimeout: (sink){
+    } else {
+      return unlockResultListener.stream
+          .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
         sink.addError("Communication key is empty value");
       });
     }
@@ -261,38 +422,40 @@ class BluetoothProvider extends ChangeNotifier {
 
   /// 2). Function for change BLE Key and listening for acknowledge status from bike.
   Stream<ChangeBleKeyResult> changeBleKey() {
-    requestComKeyResult = RequestComKeyResult([0x01, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01]);
+    requestComKeyResult =
+        RequestComKeyResult([0x01, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01]);
     if (requestComKeyResult != null) {
-      bool isConnected = sendCommand(bluetoothCommand.changeBleKey(requestComKeyResult!.communicationKey));
+      bool isConnected = sendCommand(
+          bluetoothCommand.changeBleKey(requestComKeyResult!.communicationKey));
       if (isConnected) {
-        return chgBleKeyResultListener.stream.timeout(
-            const Duration(seconds: 6), onTimeout: (sink) {
+        return chgBleKeyResultListener.stream
+            .timeout(const Duration(seconds: 6), onTimeout: (sink) {
           sink.addError("Operation timeout");
         });
-      }
-      else {
-        return chgBleKeyResultListener.stream.timeout(const Duration(milliseconds: 500), onTimeout: (sink){
+      } else {
+        return chgBleKeyResultListener.stream
+            .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
           sink.addError("Bike is not connected.");
         });
       }
-    }
-    else {
-      return chgBleKeyResultListener.stream.timeout(const Duration(milliseconds: 500), onTimeout: (sink){
+    } else {
+      return chgBleKeyResultListener.stream
+          .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
         sink.addError("Communication key is empty value");
       });
     }
   }
 
   /// 3). Function for change MQTT login password and listening for acknowledge status from bike. *4.5.9
-  // TODO: Handle this case.
+// TODO: Handle this case.
 
   /// 4). Function for enable/disable GPS tracking and listening for acknowledge status from bike. *4.5.10
-  // TODO: Handle this case.
+// TODO: Handle this case.
 
   /// 5). Function for add RFID card and listening for acknowledge status from bike. *4.5.11
-  // TODO: Handle this case.
+// TODO: Handle this case.
 
   /// 6). Function for delete RFID card and listening for acknowledge status from bike. *4.5.11
-  // TODO: Handle this case.
+// TODO: Handle this case.
 
 }

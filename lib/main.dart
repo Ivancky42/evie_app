@@ -23,6 +23,7 @@ import 'package:sizer/sizer.dart';
 
 import 'api/model/user_model.dart';
 import 'api/provider/auth_provider.dart';
+import 'api/provider/bike_provider.dart';
 
 ///Main function execution
 Future main() async {
@@ -56,17 +57,27 @@ class AppProviders extends StatelessWidget {
           ChangeNotifierProvider<ThemeChangeNotifier>(
             create: (context) => ThemeChangeNotifier(),
           ),
-          ChangeNotifierProvider<CurrentUserProvider>.value(
-            value: CurrentUserProvider(),
-          ),
-          ChangeNotifierProvider<BluetoothProvider>.value(
-            value: BluetoothProvider(),
-          ),
           ChangeNotifierProxyProvider<AuthProvider, CurrentUserProvider>(
               lazy: false,
               create: (_) => CurrentUserProvider(),
               update: (_, authProvider, currentUserProvider) {
                 return currentUserProvider!
+                  ..init(authProvider.getUid);
+              }
+          ),
+          ChangeNotifierProxyProvider<AuthProvider, BikeProvider>(
+              lazy: true,
+              create: (_) => BikeProvider(),
+              update: (_, authProvider, bikeProvider) {
+                return bikeProvider!
+                  ..init(authProvider.getUid);
+              }
+          ),
+          ChangeNotifierProxyProvider<AuthProvider, BluetoothProvider>(
+              lazy: true,
+              create: (_) => BluetoothProvider(),
+              update: (_, authProvider, bluetoothProvider) {
+                return bluetoothProvider!
                   ..init(authProvider.getUid);
               }
           ),
@@ -85,7 +96,6 @@ class MyApp extends StatelessWidget {
     AuthProvider _authProvider = Provider.of<AuthProvider>(context);
 
     return Sizer(builder: (context, orientation, deviceType) {
-
 
       return MaterialApp(
         title: 'Evie',

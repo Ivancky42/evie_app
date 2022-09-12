@@ -65,7 +65,8 @@ class _UserHomePageState extends State<UserHomePage> {
           toolbarHeight: 100,
           title: Text(
             _title,
-            style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                fontFamily:'Raleway-Bold',fontSize: 24.0),
           ),
           centerTitle: false,
           actions: <Widget>[

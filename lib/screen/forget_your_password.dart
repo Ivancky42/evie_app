@@ -50,11 +50,9 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
                     color: Colors.grey,
                   ),
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/home');
+                    changeToSignInScreen(context);
                   }
               ),
-
-
             ],
           ),
         ),

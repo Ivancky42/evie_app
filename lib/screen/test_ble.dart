@@ -178,7 +178,6 @@ class _TestBleState extends State<TestBle> {
                 ),
               ),
             ),
-
           ],
         ),
       )
