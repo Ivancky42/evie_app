@@ -320,17 +320,31 @@ class _UserProfileState extends State<UserProfile> {
                                           onPressed: () async {
                                             try {
 
-                                              _authProvider.signOut(context);
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                  content: Text('Signed out'),
-                                                  duration: Duration(
-                                                      seconds: 2),),
-                                              );
+                                              _authProvider.signOut(context).then((result){
+                                                if(result == true){
 
-                                              changeToSignInScreen(context);
+                                                 // _authProvider.clear();
 
+                                                  changeToSignInScreen(context);
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text('Signed out'),
+                                                      duration: Duration(
+                                                          seconds: 2),),
+                                                  );
+                                                }else{
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text('Error, Try Again'),
+                                                      duration: Duration(
+                                                          seconds: 4),),
+                                                  );
+
+                                                }
+
+                                              });
                                             }
                                             catch (e) {
                                               debugPrint(e.toString());

@@ -28,14 +28,14 @@ class BikeModel {
     "updated": timestampToJson(updated)
   };
 
-  factory BikeModel.fromJson(Map json, imei) {
+  factory BikeModel.fromJson(Map json) {
     return BikeModel(
       deviceType: (json['deviceType']?? '').toString(),
-      deviceIMEI: imei,
-      isLocked: json['isLocked']?? '',
+      deviceIMEI: (json['deviceIMEI']?? '').toString(),
       bikeName: (json['bikeName']?? '').toString(),
-    //  created: timestampFromJson(json['created']),
-    //  updated: timestampFromJson(json['updated']),
+      isLocked: json['isLocked']?? '',
+      created: timestampFromJson(json['created']),
+      updated: timestampFromJson(json['updated']),
     );
   }
 

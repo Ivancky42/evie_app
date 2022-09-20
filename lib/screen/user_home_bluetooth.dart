@@ -3,7 +3,13 @@ import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/animation/ripple_pulse_animation.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:open_settings/open_settings.dart';
 import 'package:provider/provider.dart';
+
+import '../api/provider/bike_provider.dart';
+import '../widgets/evie_double_button_dialog.dart';
+import '../widgets/evie_single_button_dialog.dart';
 
 
 ///Cannot use when user bluetooth is off, should check user bluetooth
@@ -18,16 +24,18 @@ class UserHomeBluetooth extends StatefulWidget{
 
 class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
 
-  final bool _isScanning = false;
-  late BluetoothProvider bluetoothProvider;
+  late BluetoothProvider bluetoothProvider = context.watch<BluetoothProvider>();
+  late BikeProvider bikeProvider = context.watch<BikeProvider>();
 
   @override
   initState() {
     super.initState();
-    bluetoothProvider = context.read<BluetoothProvider>();
-    ///Start scanning for bluetooth device
-    bluetoothProvider.startScan();
+  }
 
+  @override
+  void dispose() {
+    bluetoothProvider.stopScan();
+    super.dispose();
   }
 
   Widget deviceSignal(String rssi) {
@@ -38,7 +46,6 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
   Widget deviceMacAddress(String deviceId) {
     return Text(deviceId);
   }
-
 
   Widget deviceName(String deviceName) {
     String name = '';
@@ -77,9 +84,35 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
           ),
           tooltip: 'Connect',
           onPressed: () {
-            bluetoothProvider.connectDevice(discoveredDevice.id);
-           // Navigator.of(context).pushNamed('/testBle');
-            changeToUserHomePageScreen(context);
+
+            SmartDialog.show(
+              tag: "ConnectBike",
+                widget: EvieDoubleButtonDialog(
+                  //buttonNumber: "2",
+                    title: "Connect Bike",
+                    content:
+                    "Connect to this bike?",
+                    leftContent: "Cancel",
+                    rightContent: "Connect",
+                    image: Image.asset(
+                      "assets/evieBike.png",
+                      width: 36,
+                      height: 36,
+                    ),
+                    onPressedLeft: () {
+                      SmartDialog.dismiss(tag: "ConnectBike");
+                    },
+                    onPressedRight: () {
+                      SmartDialog.dismiss(tag: "ConnectBike");
+                      bluetoothProvider.stopScan();
+                      Navigator.pop(context);
+                      SmartDialog.showLoading(backDismiss: false);
+                      try {
+                        bluetoothProvider.connectDevice(discoveredDevice.id);
+                      } catch (e) {
+                        debugPrint(e.toString());
+                      }
+                    }));
           },
         ),
       );
@@ -92,15 +125,83 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration.zero, ()  {
+    if (bluetoothProvider.bleStatus == BleStatus.ready) {
+      SmartDialog.dismiss(
+    //      tag: "bluetoothOff"
+      );
+      if (bluetoothProvider.scanSubscription == null) {
+        bluetoothProvider.startScan();
+      }
+    }
+    else if(bluetoothProvider.bleStatus == BleStatus.poweredOff){
+      SmartDialog.show(
+        keepSingle: true,
+        //  tag: "bluetoothOff",
+          widget: EvieDoubleButtonDialog(
+              title: "Bluetooth Required",
+              content: "Please turn on your bluetooth in phone setting",
+              leftContent: "Cancel",
+              rightContent: "Setting",
+              image: Image.asset(
+                "assets/icons/bluetooth_logo.png",
+                width: 36,
+                height: 36,
+              ),
+              onPressedLeft: () {
+                SmartDialog.dismiss();
+              },
+              onPressedRight: () {
+                OpenSettings.openBluetoothSetting();
+              })
+      );
+    }
+    });
+
+
+    if(bluetoothProvider.isPaired == true){
+      bluetoothProvider.setIsPairedResult(false);
+      if(bluetoothProvider.deviceID != null) {
+        bikeProvider.uploadToFireStore(
+            bluetoothProvider.deviceID)
+            .then((result) {
+          if (result == true) {
+            SmartDialog.dismiss(status: SmartStatus.loading);
+            SmartDialog.show(
+                tag: "ConnectSuccess",
+                widget:EvieSingleButtonDialog(
+                    title: "Success",
+                    content: "Connected",
+                    rightContent: "OK",
+                    onPressedRight: () {
+                      SmartDialog.dismiss(tag:"ConnectSuccess");
+                      changeToUserHomePageScreen(context);
+                    }));
+
+          } else {
+            SmartDialog.show(
+                widget:EvieSingleButtonDialog(
+                    title: "Error",
+                    content: "Error connect bike, try again",
+                    rightContent: "OK",
+                    onPressedRight: () {SmartDialog.dismiss();}
+                )
+            );
+          }
+        }
+        );
+      }
+    }
+
 
     return Scaffold(
       appBar: AppBar(title: const Text("Connect Your Bike",
         style: TextStyle(fontSize: 24.0),
       ),
         centerTitle: true,
-        bottom: const PreferredSize(
-          child: Text("Tap bluetooth icon to search",
-          style:TextStyle(
+        bottom: PreferredSize(
+          child: Text("Tap bluetooth icon to search \nBluetooth Status : " + bluetoothProvider.bleStatus.toString(),
+          style:const TextStyle(
             color: Colors.grey,
             fontSize: 14.0,
           ),),
@@ -116,7 +217,8 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
               icon: Image.asset("assets/icons/bluetooth_logo.png"),
               tooltip: 'Bluetooth',
               onPressed: () {
-                showDeviceList();
+
+               showDeviceList();
 
               },
             ),

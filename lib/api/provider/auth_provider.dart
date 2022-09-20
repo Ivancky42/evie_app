@@ -457,32 +457,16 @@ class AuthProvider extends ChangeNotifier {
   ///User sign out
   Future signOut(BuildContext context) async {
     try {
-      await FirebaseAuth.instance.signOut();
+      //await FirebaseAuth.instance.signOut();
       BikeProvider().clear();
-      notifyListeners();
       await _auth.signOut();
-      if(credentialProvider == "google"){
-        await googleSignIn.signOut();
-        await googleSignIn.disconnect();
-      }
-      if(credentialProvider == "facebook"){
-        await FacebookAuth.instance.logOut();
-      }
-      if(credentialProvider == "twitter"){
-        //twitter sign out
-      }
-      return Future.delayed(Duration.zero);
+      _uid = "";
+      isLogin = false;
+      notifyListeners();
+      return true;
     } catch (error) {
-      SmartDialog.show(
-        widget: EvieSingleButtonDialog(
-            title: "Error",
-            content: error.toString(),
-            rightContent: "Ok",
-            image: Image.asset("assets/images/error.png", width: 36,height: 36,),
-            onPressedRight: (){
-              SmartDialog.dismiss();
-            }),
-      );
+      debugPrint(error.toString());
+      return false;
     }
   }
 

@@ -1,28 +1,28 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class BikeUserModel {
-  String uid;
-  String role;
+class UserBikeModel {
+  String deviceIMEI;
+  String deviceType;
   Timestamp? created;
   Timestamp? updated;
 
-  BikeUserModel({
-    required this.role,
-    required this.uid,
+  UserBikeModel({
+    required this.deviceIMEI,
+    required this.deviceType,
     this.created,
   });
 
   Map<String, dynamic> toJson() => {
-    "uid" : uid,
-    "role" : role,
+    "deviceIMEI" : deviceIMEI,
+    "deviceType" : deviceType,
     "created": timestampToJson(created),
   };
 
-  factory BikeUserModel.fromJson(Map json) {
-    return BikeUserModel(
-      uid: (json['uid']?? '').toString(),
-      role: (json['role']?? '').toString(),
+  factory UserBikeModel.fromJson(Map json) {
+    return UserBikeModel(
+      deviceType: (json['deviceType']?? '').toString(),
+      deviceIMEI: (json['deviceIMEI']?? '').toString(),
       created: timestampFromJson(json['created']),
     );
   }

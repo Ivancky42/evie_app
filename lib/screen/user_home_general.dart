@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/widgets/widgets.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
@@ -21,6 +22,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   late BikeProvider _bikeProvider;
   final FocusNode _textFocus = FocusNode();
   final TextEditingController _bikeNameController = TextEditingController();
+  final TextEditingController _bikeIMEIController = TextEditingController();
 
   bool isScroll = false;
 
@@ -42,6 +44,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   void onNameChange() {
     if (!_textFocus.hasFocus) {
       String text = _bikeNameController.text.trim();
+
       _bikeProvider.updateBikeName(text);
     }
   }
@@ -49,10 +52,10 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
-    LinkedHashMap bikeList = _bikeProvider.bikeList;
+    LinkedHashMap userBikeList = _bikeProvider.userBikeList;
 
     ///Display "next", "back" button
-    if (bikeList.length > 1) {
+    if (userBikeList.length > 1) {
       setState(() {
         isScroll = true;
       });
@@ -61,6 +64,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
         isScroll = false;
       });
     }
+
 
     return Scaffold(
         //Body should change when bottom navigation bar state change
@@ -115,7 +119,24 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                   focusNode: _textFocus,
                   controller: _bikeNameController
                     ..text =
-                        _bikeProvider.currentBikeModel?.bikeName ?? 'Empty',
+                        _bikeProvider.currentBikeModel?.bikeName.trim() ?? 'Empty',
+                  style: const TextStyle(
+                      fontFamily: 'Raleway-Bold', fontSize: 18.0),
+                  decoration: const InputDecoration.collapsed(
+                    hintText: "",
+                    border: InputBorder.none,
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 30.0,
+                ),
+
+                TextFormField(
+                  enabled: false,
+                  controller: _bikeIMEIController
+                    ..text =
+                        _bikeProvider.currentBikeModel?.deviceIMEI ?? 'Empty',
                   style: const TextStyle(
                       fontFamily: 'Raleway-Bold', fontSize: 18.0),
                   decoration: const InputDecoration.collapsed(
@@ -190,15 +211,39 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                             },
                             onPressedRight: () {
                               try {
-                                _bikeProvider
-                                    .deleteBike(_bikeProvider.currentBikeModel!.deviceIMEI);
-                                    SmartDialog.dismiss();
+                                SmartDialog.dismiss();
+                                bool result = _bikeProvider
+                                    .deleteBike(_bikeProvider.currentBikeModel!.deviceIMEI.trim());
+                                if(result == true) {
+                                  SmartDialog.show(
+                                      widget:EvieSingleButtonDialog(
+                                          title: "Success",
+                                          content: "Successfully delete bike",
+                                          rightContent: "OK",
+                                          onPressedRight: () {
+                                            SmartDialog.dismiss();
+                                          }
+                                      )
+                                  );
+                                }else{
+                                  SmartDialog.show(
+                                    widget:EvieSingleButtonDialog(
+                                        title: "Error",
+                                        content: "Error delete bike, try again",
+                                        rightContent: "OK",
+                                        onPressedRight: () {SmartDialog.dismiss();}
+                                        )
+                                  );
+                                }
                               } catch (e) {
-                                print(e.toString());
+                                debugPrint(e.toString());
                               }
                             }));
+
+
                   },
                 ),
+
 
                 ///Sign out for development purpose
                 /*

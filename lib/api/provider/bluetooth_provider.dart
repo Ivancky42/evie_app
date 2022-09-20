@@ -16,7 +16,10 @@ import '../../widgets/evie_double_button_dialog.dart';
 import 'package:open_settings/open_settings.dart';
 
 import '../model/bike_user_model.dart';
+import '../model/user_bike_model.dart';
+import '../model/user_model.dart';
 import '../navigator.dart';
+import 'bike_provider.dart';
 
 class BluetoothProvider extends ChangeNotifier {
   final flutterReactiveBle = FlutterReactiveBle();
@@ -44,7 +47,13 @@ class BluetoothProvider extends ChangeNotifier {
   RequestComKeyResult? requestComKeyResult;
   late ErrorPromptResult errorPromptResult;
   late UnlockResult unlockResult;
-  String? currentUserUID;
+  UserModel? currentUserModel;
+
+  bool _isPaired = false;
+  bool get isPaired => _isPaired;
+
+  String? _deviceID;
+  String? get deviceID => _deviceID;
 
   /// * Command Listener ***/
   StreamController<UnlockResult> unlockResultListener =
@@ -52,14 +61,15 @@ class BluetoothProvider extends ChangeNotifier {
   StreamController<ChangeBleKeyResult> chgBleKeyResultListener =
       StreamController.broadcast();
 
-  Future<void> init(uid) async {
-    if (uid != null) {
-      currentUserUID = uid;
+  Future<void> init(currentUserModel) async {
+    checkBLEStatus();
+    if (currentUserModel != null) {
+      this.currentUserModel = currentUserModel;
       notifyListeners();
     }
   }
 
-  void checkBLEStatus() async {
+  checkBLEStatus() async {
     flutterReactiveBle.statusStream.listen((status) async {
       bleStatus = status;
       printLog("BLE Status", bleStatus.toString());
@@ -75,13 +85,13 @@ class BluetoothProvider extends ChangeNotifier {
           handlePermission();
           break;
         case BleStatus.poweredOff:
-          askForBLEOn();
+        // TODO: Handle this case.
           break;
         case BleStatus.locationServicesDisabled:
           // TODO: Handle this case.
           break;
         case BleStatus.ready:
-          SmartDialog.dismiss();
+        // TODO: Handle this case.
           break;
         default:
           break;
@@ -95,7 +105,6 @@ class BluetoothProvider extends ChangeNotifier {
     scanSubscription = flutterReactiveBle.scanForDevices(
         scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
       if (device.name.contains("REEVO")) {
-        ///
         discoverDeviceList.update(
           device.id,
           (existingDevice) => device,
@@ -104,13 +113,11 @@ class BluetoothProvider extends ChangeNotifier {
         notifyListeners();
       }
     }, onError: (error) {
+      stopScan();
+      scanSubscription = null;
       discoverDeviceList.clear();
+      notifyListeners();
       debugPrint(error.toString());
-
-      ///Ask user to turn on bluetooth setting if bluetooth status in user phone is power off
-      if (error.toString().contains("Bluetooth disabled")) {
-        askForBLEOn();
-      }
     });
   }
 
@@ -118,7 +125,7 @@ class BluetoothProvider extends ChangeNotifier {
     scanSubscription?.cancel();
   }
 
-  void connectDevice(String deviceId) async {
+  connectDevice(String deviceId) async {
     if (selectedDeviceId != null) {
       await disconnectDevice(selectedDeviceId!);
     }
@@ -175,6 +182,12 @@ class BluetoothProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setIsPairedResult(bool result) {
+    _isPaired = result;
+    notifyListeners();
+  }
+
+
   ///Discover device service and characteristic
   void discoverServices() async {
     final notifyCharacteristic = QualifiedCharacteristic(
@@ -183,13 +196,13 @@ class BluetoothProvider extends ChangeNotifier {
         deviceId: connectionStateUpdate!.deviceId);
     notifySubscription = flutterReactiveBle
         .subscribeToCharacteristic(notifyCharacteristic)
-        .listen((data) {
+        .listen((data) async {
       printLog("Notify Value",
           connectionStateUpdate!.deviceId + " " + utf8.decode(data));
       handleNotifyData(data);
 
       ///==========================REEVO START=============================
-      /*
+
       String? mainBatteryLevel = "Unknown";
 
       Uint8List bytes = Uint8List.fromList(data);
@@ -204,21 +217,17 @@ class BluetoothProvider extends ChangeNotifier {
           var data = notifyValue.split(",");
           if (data[7].toString().length == 12) {
             print(data[7].toString());
-            uploadBikeToFireStore(data[7].toString());
-            uploadBikeToUserFireStore(data[7].toString());
-            uploadUserToBikeFireStore(data[7].toString());
-          } else {
-            print("Warning... " + data[7].toString());
-            //showWarningDialog();
+
+            _isPaired = true;
+            _deviceID = data[7].toString();
+            notifyListeners();
+
           }
         }
       }
 
       notifyListeners();
 
-      // changeToUserHomePageScreen(context);
-
-       */
       ///==========================REEVO END=============================
 
     }, onError: (dynamic error) {
@@ -310,86 +319,6 @@ class BluetoothProvider extends ChangeNotifier {
       print(DateTime.now().toString() + " " + title + " : " + log);
     }
   }
-
-  ///=================================REEVO START====================================
-  void askForBLEOn() async {
-    SmartDialog.show(
-        widget: EvieDoubleButtonDialog(
-            title: "Bluetooth Required",
-            content: "Please turn on your bluetooth in phone setting",
-            leftContent: "Cancel",
-            rightContent: "Setting",
-            image: Image.asset(
-              "assets/icons/bluetooth_logo.png",
-              width: 36,
-              height: 36,
-            ),
-            onPressedLeft: () {
-              SmartDialog.dismiss();
-            },
-            onPressedRight: () {
-              OpenSettings.openBluetoothSetting();
-            }));
-  }
-
-  ///Bike not in firestore while testing
-  void uploadBikeToFireStore(String? selectedDeviceId) {
-    ///User name = provider current user
-    FirebaseFirestore.instance
-        .collection('bikes')
-        .doc(selectedDeviceId)
-        .set(BikeModel(
-          deviceType: "Reevo",
-          deviceIMEI: selectedDeviceId!,
-          isLocked: false,
-          bikeName: "ReevoBike",
-          created: Timestamp.now(),
-          updated: Timestamp.now(),
-        ).toJson());
-  }
-
-  void uploadBikeToUserFireStore(String? selectedDeviceId) {
-    ///User name = provider current user
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(currentUserUID)
-        .collection('bikes')
-        .doc(selectedDeviceId)
-        .set({
-      "deviceType": "Reevo",
-      'deviceIMEI': selectedDeviceId!,
-    });
-  }
-
-  Future<void> uploadUserToBikeFireStore(String? selectedDeviceId) async {
-    String role = "";
-
-    ///check if first registration. Role is owner/rider
-    final snapshot = await FirebaseFirestore.instance
-        .collection('bikes')
-        .doc(selectedDeviceId)
-        .collection('users')
-        .get();
-
-    if (snapshot.size == 0) {
-      role = "owner";
-    } else if (snapshot.size == 0) {
-      role = "user";
-    }
-
-    FirebaseFirestore.instance
-        .collection('bikes')
-        .doc(selectedDeviceId)
-        .collection('users')
-        .doc(currentUserUID!)
-        .set(BikeUserModel(
-          uid: currentUserUID!,
-          role: role,
-          created: Timestamp.now(),
-        ).toJson());
-  }
-
-  ///================================REEVO END==================================
 
 
   /// **********************/

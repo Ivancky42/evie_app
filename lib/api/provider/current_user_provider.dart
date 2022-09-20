@@ -15,20 +15,20 @@ class CurrentUserProvider extends ChangeNotifier {
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
 
   UserModel? currentUserModel;
+  UserModel? get getCurrentUserModel => currentUserModel;
 
   ///Initial value
   Future<void> init(uid) async {
-
-      if (uid != null) {
-        getUser(uid);
-        notifyListeners();
-      }
+    if(uid != null) {
+      getUser(uid);
+      notifyListeners();
+    }
   }
 
   ///Get user information
   void getUser(String? uid) {
     if(uid == null || uid == ""){currentUserModel = null;}
-    else if(uid != null || uid != "") {
+    else {
       FirebaseFirestore.instance.collection(usersCollection).doc(uid)
           .snapshots()
           .listen((event) {
