@@ -1,15 +1,25 @@
 import 'dart:collection';
 
+import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/widgets/widgets.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import 'package:sizer/sizer.dart';
+import '../api/model/notification_model.dart';
 import '../api/provider/bike_provider.dart';
+import '../api/provider/notification_provider.dart';
+import '../main.dart';
+
 
 ///Default user home page if login is true(display bicycle info)
 class UserHomeGeneral extends StatefulWidget {
@@ -20,9 +30,15 @@ class UserHomeGeneral extends StatefulWidget {
 
 class _UserHomeGeneralState extends State<UserHomeGeneral> {
   late BikeProvider _bikeProvider;
+  late NotificationProvider _notificationProvider;
+
   final FocusNode _textFocus = FocusNode();
+
   final TextEditingController _bikeNameController = TextEditingController();
   final TextEditingController _bikeIMEIController = TextEditingController();
+  final CarouselController _pageController = CarouselController();
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   bool isScroll = false;
 
@@ -31,8 +47,78 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     _textFocus.addListener(() {
       onNameChange();
     });
+
+
+    ///BG message
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      String data = message.data["id"].toString();
+      ///Pass notification id to get body and key
+      await _notificationProvider.getNotificationFromNotificationId(data);
+
+        Future.delayed(const Duration(milliseconds: 800), () {
+          changeToNotificationDetailsScreen(
+              context,
+              _notificationProvider.singleNotificationList.keys.first,
+              _notificationProvider.singleNotificationList.values.first);
+        });
+    });
+
+    foreNotificationSetting();
+
+    ///FG message
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if (notification != null && android != null && !kIsWeb) {
+        flutterLocalNotificationsPlugin.show(
+          notification!.hashCode,
+          notification!.title,
+          notification!.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channelDescription: channel.description,
+              icon: 'launch_background',
+            ),
+          ),
+          payload : message.data["id"].toString(),
+        );
+      }
+    });
     super.initState();
   }
+
+  ///Foreground notification setting
+  Future foreNotificationSetting() async {
+
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+    );
+
+    await flutterLocalNotificationsPlugin.initialize(
+        initializationSettings,
+        onSelectNotification: onSelectNotification
+    );
+  }
+
+  ///Foreground select Notification
+  Future<void> onSelectNotification(String? payload) async {
+    ///Pass notification id to get body and key
+    await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
+
+      Future.delayed(const Duration(milliseconds: 800), () {
+        changeToNotificationDetailsScreen(
+            context,
+            _notificationProvider.singleNotificationList.keys.first,
+            _notificationProvider.singleNotificationList.values.first);
+      });
+    });
+  }
+
 
   @override
   void dispose() {
@@ -49,9 +135,16 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     }
   }
 
+  late List<String> imgList = [
+    'assets/images/evie_bike_modelA.png',
+    'assets/images/evie_bike_modelA.png',
+  ];
+
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _notificationProvider = Provider.of<NotificationProvider>(context);
+
     LinkedHashMap userBikeList = _bikeProvider.userBikeList;
 
     ///Display "next", "back" button
@@ -94,11 +187,49 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                         },
                       ),
                     ),
+
+/*
                     Image.asset(
-                      'assets/evieBike.png',
+                      'assets/images/evie_bike_modelA.png',
                       height: 200,
                       width: 200,
                     ),
+
+ */
+                    SizedBox(
+                      height: 150,
+                    width: 180,
+                    child:CarouselSlider(
+                      carouselController: _pageController,
+                      items: imgList.map((item)=> Container(
+                        child:Center(
+                          child: Image.asset(
+                            item,
+                            fit: BoxFit.cover,
+                            width: 800,
+                            height: 100,
+                          ),
+                        ),
+                      )).toList(),
+                      options: CarouselOptions(
+                        onPageChanged: (index, reason){
+                          var _currentCarouIndex = 0;
+
+                          if(index >= _currentCarouIndex) {
+                            _bikeProvider.controlBikeList("next");
+                          }
+                          else{
+                            _bikeProvider.controlBikeList("back");
+                          }
+                        },
+
+                        enableInfiniteScroll: true,
+                        autoPlay: false,
+                        enlargeCenterPage: true,
+                      )
+                    ),
+                  ),
+
                     Visibility(
                       visible: isScroll,
                       child: IconButton(
@@ -146,7 +277,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                 ),
 
                 const SizedBox(
-                  height: 80.0,
+                  height: 50.0,
                 ),
 
                 EvieButton_LightBlue(
@@ -239,8 +370,22 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                                 debugPrint(e.toString());
                               }
                             }));
+                  },
+                ),
 
 
+                EvieButton_LightBlue(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Share Bike",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    changeToShareBikeScreen(context);
                   },
                 ),
 
@@ -259,12 +404,16 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
               ),
                */
 
-                const SizedBox(
-                  height: 5.0,
+                 SizedBox(
+                  height: 1.h,
                 ),
               ]),
         ),
       ),
     ));
   }
+
+
+
+
 }

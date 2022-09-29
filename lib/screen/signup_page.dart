@@ -65,38 +65,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      child: const Center(
+                      child: Center(
                         child: Text("Create Account",
                             style: TextStyle(
                               fontFamily: 'Raleway',
-                              fontSize: 24.0,
+                              fontSize: 20.sp,
                               fontWeight: FontWeight.w600,
                             )),
                       ),
                     ),
-                    const SizedBox(
-                      height: 8.0,
+                    SizedBox(
+                      height: 1.h,
                     ),
                     Container(
-                      child: const Center(
+                      child: Center(
                         child: Text(
                           "Please fill in the following info",
                           style: TextStyle(
                             color: Colors.grey,
-                            fontSize: 14.0,
+                            fontSize: 12.sp,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 44.0,
+                    SizedBox(
+                      height: 6.h,
                     ),
                     TextFormField(
                       controller: _nameController,
                       decoration: InputDecoration(
                         hintText: "Full Name",
                         hintStyle:
-                            const TextStyle(fontSize: 12, color: Colors.grey),
+                            TextStyle(fontSize: 10.sp, color: Colors.grey),
                         filled: true,
                         fillColor: const Color(0xFFFFFFFF).withOpacity(0.2),
                         enabledBorder: OutlineInputBorder(
@@ -113,8 +113,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(
-                      height: 15.0,
+                    SizedBox(
+                      height: 1.6.h,
                     ),
                     TextFormField(
                       controller: _emailController,
@@ -122,7 +122,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       decoration: InputDecoration(
                         hintText: "Email Address",
                         hintStyle:
-                            const TextStyle(fontSize: 12, color: Colors.grey),
+                        TextStyle(fontSize: 10.sp, color: Colors.grey),
                         filled: true,
                         //<-- SEE HERE
                         fillColor: const Color(0xFFFFFFFF).withOpacity(0.2),
@@ -140,8 +140,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(
-                      height: 15.0,
+                    SizedBox(
+                      height: 1.6.h,
                     ),
                     TextFormField(
                       controller: _passwordController,
@@ -149,7 +149,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       decoration: InputDecoration(
                           hintText: "Password",
                           hintStyle:
-                              const TextStyle(fontSize: 12, color: Colors.grey),
+                          TextStyle(fontSize: 10.sp, color: Colors.grey),
                           filled: true,
                           fillColor: const Color(0xFFFFFFFF).withOpacity(0.2),
                           enabledBorder: OutlineInputBorder(
@@ -180,8 +180,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(
-                      height: 15.0,
+                    SizedBox(
+                      height: 1.6.h,
                     ),
                     TextFormField(
                       controller: _passwordConfirmController,
@@ -189,7 +189,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       decoration: InputDecoration(
                           hintText: "Confirm your password",
                           hintStyle:
-                              const TextStyle(fontSize: 12, color: Colors.grey),
+                          TextStyle(fontSize: 10.sp, color: Colors.grey),
                           filled: true,
                           fillColor: const Color(0xFFFFFFFF).withOpacity(0.2),
                           enabledBorder: OutlineInputBorder(
@@ -221,16 +221,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(
-                      height: 50.0,
+                    SizedBox(
+                      height: 6.h
                     ),
                     EvieButton_DarkBlue(height: 12,
                       width: double.infinity,
-                      child: const Text(
+                      child: Text(
                         "Sign Up",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 12.0,
+                          fontSize: 10.sp,
                         ),
                       ),
                       onPressed: () async {
@@ -272,16 +272,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         }
                       },
                     ),
-                    const SizedBox(
-                      height: 10.0,
+                    SizedBox(
+                      height: 1.5.h,
                     ),
                     Container(
-                      child: const Center(
+                      child: Center(
                         child: Text(
                           "Already have an account?",
                           style: TextStyle(
                             color: Colors.grey,
-                            fontSize: 12.0,
+                            fontSize: 10.sp,
                           ),
                         ),
                       ),
@@ -296,11 +296,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         onPressed: () {
                           changeToSignInScreen(context);
                         },
-                        child: const Text(
+                        child: Text(
                           "Login",
                           style: TextStyle(
                             color: Color(0xFF00B6F1),
-                            fontSize: 12.0,
+                            fontSize: 10.sp,
                           ),
                         ),
                       ),

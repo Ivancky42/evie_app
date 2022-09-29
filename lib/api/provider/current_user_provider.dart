@@ -27,8 +27,9 @@ class CurrentUserProvider extends ChangeNotifier {
 
   ///Get user information
   void getUser(String? uid) {
-    if(uid == null || uid == ""){currentUserModel = null;}
-    else {
+    if(uid == null || uid == ""){
+      currentUserModel = null;
+    } else {
       FirebaseFirestore.instance.collection(usersCollection).doc(uid)
           .snapshots()
           .listen((event) {

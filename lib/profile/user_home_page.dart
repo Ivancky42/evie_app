@@ -3,8 +3,11 @@ import 'package:evie_test/screen/user_home_general.dart';
 import 'package:evie_test/screen/user_home_bluetooth.dart';
 import 'package:evie_test/screen/user_home_setting.dart';
 import 'package:evie_test/screen/user_home_history.dart';
+import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 import '../api/navigator.dart';
+import '../api/provider/notification_provider.dart';
 import '../theme/ThemeChangeNotifier.dart';
 
 ///User default home page when login condition is true
@@ -25,6 +28,8 @@ class _UserHomePageState extends State<UserHomePage> {
 
   bool _unlock = false;
 
+  late NotificationProvider _notificationProvider;
+
   ///Body Screen navigation by bottom navigation bar
   final screen = [
     UserHomeGeneral(),
@@ -35,26 +40,27 @@ class _UserHomePageState extends State<UserHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _notificationProvider = Provider.of<NotificationProvider>(context);
 
     Color lockColour = const Color(0xff00B6F1);
-    Image lockImage = const Image(
-      image: AssetImage("assets/buttons/lock_unlock.png"),
-      height: 20,
+    Image lockImage = Image(
+      image: const AssetImage("assets/buttons/lock_unlock.png"),
+      height: 3.h,
       fit: BoxFit.fitWidth,
     );
 
     if(_unlock == false){
-      lockImage = const Image(
-        image: AssetImage("assets/buttons/lock_lock.png"),
-        height: 20,
+      lockImage = Image(
+        image: const AssetImage("assets/buttons/lock_lock.png"),
+        height: 3.h,
         fit: BoxFit.fitWidth,
       );
       lockColour = const Color(0xff00B6F1);
     }else if(_unlock == true){
 
-      lockImage = const Image(
+      lockImage = Image(
         image: AssetImage("assets/buttons/lock_unlock.png"),
-        height: 20,
+        height: 8.h,
         fit: BoxFit.fitWidth,
       );
       lockColour = const Color(0xff404E53);
@@ -65,16 +71,16 @@ class _UserHomePageState extends State<UserHomePage> {
           toolbarHeight: 100,
           title: Text(
             _title,
-            style: const TextStyle(
-                fontFamily:'Raleway-Bold',fontSize: 24.0),
+            style: TextStyle(
+                fontFamily:'Raleway-Bold',fontSize: 21.sp),
           ),
           centerTitle: false,
           actions: <Widget>[
             if (currentIndex == 0) ... [
             Align(
             child: Container(
-              height: 40,
-              width: 40,
+              height: 6.8.h,
+              width: 6.8.h,
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 color: Colors.white.withOpacity(0.3),
@@ -112,8 +118,8 @@ class _UserHomePageState extends State<UserHomePage> {
 
             Align(
             child:Container(
-              height: 40,
-              width: 40,
+              height: 6.8.h,
+              width: 6.8.h,
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 color: Colors.white.withOpacity(0.3),
@@ -122,18 +128,25 @@ class _UserHomePageState extends State<UserHomePage> {
               child: IconButton(
                 iconSize: 25,
                 icon: ThemeChangeNotifier().isDarkMode(context) == true ?
+                    _notificationProvider.isReadAll == true?
                 const Image(
                   image: AssetImage(
                       "assets/buttons/notification_white.png"),
                   height: 17.0,
-                ) :
+                ) :  const Icon(Icons.notifications_active_outlined
+                    )
+                        :
+                    _notificationProvider.isReadAll == true?
                 const Image(
                   image: AssetImage(
                       "assets/buttons/notification.png"),
                   height: 17.0,
-                ),
+                ):  const Icon(Icons.notifications_active_outlined
+                    ),
                 tooltip: 'Notification',
-                onPressed: () {},
+                onPressed: () {
+                  changeToNotificationScreen(context);
+                },
               ),
             ),
            ),
@@ -208,14 +221,14 @@ class _UserHomePageState extends State<UserHomePage> {
                     image: AssetImage("assets/buttons/home.png"),
                   ),
                   padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                  height: 23,
+                  height: 6.3.h,
                 ),
                 activeIcon: Container(
                   child: const Image(
                     image: AssetImage("assets/buttons/home_selected.png"),
                   ),
                   padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                  height: 23,
+                  height: 6.3.h,
                 ),
                 tooltip: 'User Profile',
                 label: '',
@@ -242,14 +255,14 @@ class _UserHomePageState extends State<UserHomePage> {
                     image: AssetImage("assets/buttons/setting.png"),
                   ),
                   padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                  height: 23,
+                  height: 6.3.h,
                 ),
                 activeIcon: Container(
                   child: const Image(
                     image: AssetImage("assets/buttons/setting_selected.png"),
                   ),
                   padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                  height: 23,
+                  height: 6.3.h,
                 ),
                 tooltip: 'Settings',
                 label: '',
