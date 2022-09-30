@@ -13,7 +13,6 @@ import '../api/navigator.dart';
 import '../api/provider/notification_provider.dart';
 import '../widgets/evie_single_button_dialog.dart';
 
-
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
 
@@ -135,7 +134,7 @@ class _LoginScreenState extends State<Login> {
                       decoration: InputDecoration(
                           hintText: "Password",
                           hintStyle:
-                             TextStyle(fontSize: 10.sp, color: Colors.grey),
+                              TextStyle(fontSize: 10.sp, color: Colors.grey),
                           filled: true,
                           fillColor: const Color(0xFFFFFFFF).withOpacity(0.2),
                           enabledBorder: OutlineInputBorder(
@@ -182,7 +181,7 @@ class _LoginScreenState extends State<Login> {
                           }),
                     ),
 
-                   SizedBox(
+                    SizedBox(
                       height: 1.8.h,
                     ),
 
@@ -200,34 +199,37 @@ class _LoginScreenState extends State<Login> {
                           // If the form is valid, display a snackbar.
                         }
                         //Save to provider
-                        _authProvider.login(
-                            _emailController.text.trim(),
-                            _passwordController.text.trim(),
-                            context).then((result){
-                              if(result == true){
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Success'),
-                                    duration: Duration(seconds: 2),
+                        _authProvider
+                            .login(_emailController.text.trim(),
+                                _passwordController.text.trim(), context)
+                            .then((result) {
+                          if (result == true) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Success'),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+
+                            ///Quit loading and go to user home page
+                            changeToUserHomePageScreen(context);
+                          } else {
+                            SmartDialog.show(
+                              ///put in front end
+                              widget: EvieSingleButtonDialog(
+                                  title: "Error",
+                                  content: result.toString(),
+                                  rightContent: "Ok",
+                                  image: Image.asset(
+                                    "assets/images/error.png",
+                                    width: 36,
+                                    height: 36,
                                   ),
-                                );
-
-                                ///Quit loading and go to user home page
-                                changeToUserHomePageScreen(context);
-
-                              }else{
-                                SmartDialog.show(
-                                  ///put in front end
-                                  widget: EvieSingleButtonDialog(
-                                      title: "Error",
-                                      content: result.toString(),
-                                      rightContent: "Ok",
-                                      image: Image.asset("assets/images/error.png", width: 36,height: 36,),
-                                      onPressedRight: (){
-                                        SmartDialog.dismiss();
-                                      }),
-                                );
-                              }
+                                  onPressedRight: () {
+                                    SmartDialog.dismiss();
+                                  }),
+                            );
+                          }
                         });
                       },
                     ),
@@ -251,8 +253,23 @@ class _LoginScreenState extends State<Login> {
                                           "assets/icons/facebook_icon_black.png"),
                                       height: 20.0,
                                     ),
-                                    onPressed: () {
-                                      _authProvider.signInWithFacebook(context);
+                                    onPressed: () async {
+                                      _authProvider
+                                          .signInWithFacebook()
+                                          .then((result) {
+                                        if (result == true) {
+                                          changeToUserHomePageScreen(context);
+                                        } else {
+                                          SmartDialog.show(
+                                              widget: EvieSingleButtonDialog(
+                                                  title: "Error",
+                                                  content: result,
+                                                  rightContent: "Ok",
+                                                  onPressedRight: () {
+                                                    SmartDialog.dismiss();
+                                                  }));
+                                        }
+                                      });
                                     }),
                                 SizedBox(
                                   height: 1.h,
@@ -265,8 +282,23 @@ class _LoginScreenState extends State<Login> {
                                           "assets/icons/google_icon_colour.png"),
                                       height: 20.0,
                                     ),
-                                    onPressed: () {
-                                      _authProvider.signInWithGoogle(context);
+                                    onPressed: () async {
+                                      _authProvider
+                                          .signInWithGoogle()
+                                          .then((result) {
+                                        if (result == true) {
+                                          changeToUserHomePageScreen(context);
+                                        } else {
+                                          SmartDialog.show(
+                                              widget: EvieSingleButtonDialog(
+                                                  title: "Error",
+                                                  content: result,
+                                                  rightContent: "Ok",
+                                                  onPressedRight: () {
+                                                    SmartDialog.dismiss();
+                                                  }));
+                                        }
+                                      });
                                     }),
                                 SizedBox(
                                   height: 1.h,
@@ -279,8 +311,23 @@ class _LoginScreenState extends State<Login> {
                                           "assets/icons/apple_icon_black.png"),
                                       height: 20.0,
                                     ),
-                                    onPressed: () {
-                                      _authProvider.signInWithAppleID(context);
+                                    onPressed: () async {
+                                      _authProvider
+                                          .signInWithAppleID()
+                                          .then((result) {
+                                        if (result == true) {
+                                          changeToUserHomePageScreen(context);
+                                        } else {
+                                          SmartDialog.show(
+                                              widget: EvieSingleButtonDialog(
+                                                  title: "Error",
+                                                  content: result,
+                                                  rightContent: "Ok",
+                                                  onPressedRight: () {
+                                                    SmartDialog.dismiss();
+                                                  }));
+                                        }
+                                      });
                                     }),
                                 SizedBox(
                                   height: 1.h,
@@ -293,8 +340,23 @@ class _LoginScreenState extends State<Login> {
                                           "assets/icons/twitter_icon_black.png"),
                                       height: 20.0,
                                     ),
-                                    onPressed: () {
-                                      _authProvider.signInWithTwitter(context);
+                                    onPressed: () async {
+                                      _authProvider
+                                          .signInWithTwitter()
+                                          .then((result) {
+                                        if (result == true) {
+                                          changeToUserHomePageScreen(context);
+                                        } else {
+                                          SmartDialog.show(
+                                              widget: EvieSingleButtonDialog(
+                                                  title: "Error",
+                                                  content: result,
+                                                  rightContent: "Ok",
+                                                  onPressedRight: () {
+                                                    SmartDialog.dismiss();
+                                                  }));
+                                        }
+                                      });
                                     }),
                               ],
                             ),
@@ -315,8 +377,23 @@ class _LoginScreenState extends State<Login> {
                                           "assets/icons/facebook_icon_black.png"),
                                       height: 20.0,
                                     ),
-                                    onPressed: () {
-                                      _authProvider.signInWithFacebook(context);
+                                    onPressed: () async {
+                                      _authProvider
+                                          .signInWithFacebook()
+                                          .then((result) {
+                                        if (result == true) {
+                                          changeToUserHomePageScreen(context);
+                                        } else {
+                                          SmartDialog.show(
+                                              widget: EvieSingleButtonDialog(
+                                                  title: "Error",
+                                                  content: result,
+                                                  rightContent: "Ok",
+                                                  onPressedRight: () {
+                                                    SmartDialog.dismiss();
+                                                  }));
+                                        }
+                                      });
                                     }),
                                 SizedBox(
                                   height: 1.h,
@@ -329,8 +406,23 @@ class _LoginScreenState extends State<Login> {
                                           "assets/icons/google_icon_colour.png"),
                                       height: 20.0,
                                     ),
-                                    onPressed: () {
-                                      _authProvider.signInWithGoogle(context);
+                                    onPressed: () async {
+                                      _authProvider
+                                          .signInWithGoogle()
+                                          .then((result) {
+                                        if (result == true) {
+                                          changeToUserHomePageScreen(context);
+                                        } else {
+                                          SmartDialog.show(
+                                              widget: EvieSingleButtonDialog(
+                                                  title: "Error",
+                                                  content: result,
+                                                  rightContent: "Ok",
+                                                  onPressedRight: () {
+                                                    SmartDialog.dismiss();
+                                                  }));
+                                        }
+                                      });
                                     }),
                                 SizedBox(
                                   height: 1.h,
@@ -343,8 +435,23 @@ class _LoginScreenState extends State<Login> {
                                           "assets/icons/twitter_icon_black.png"),
                                       height: 20.0,
                                     ),
-                                    onPressed: () {
-                                      _authProvider.signInWithTwitter(context);
+                                    onPressed: () async {
+                                      _authProvider
+                                          .signInWithTwitter()
+                                          .then((result) {
+                                        if (result == true) {
+                                          changeToUserHomePageScreen(context);
+                                        } else {
+                                          SmartDialog.show(
+                                              widget: EvieSingleButtonDialog(
+                                                  title: "Error",
+                                                  content: result,
+                                                  rightContent: "Ok",
+                                                  onPressedRight: () {
+                                                    SmartDialog.dismiss();
+                                                  }));
+                                        }
+                                      });
                                     }),
                               ],
                             ),

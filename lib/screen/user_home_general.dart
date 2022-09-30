@@ -95,8 +95,12 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     const AndroidInitializationSettings initializationSettingsAndroid =
     AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    const InitializationSettings initializationSettings = InitializationSettings(
+    IOSInitializationSettings initializationSettingsIOS =
+    IOSInitializationSettings(requestSoundPermission: false, onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+
+    InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
     );
 
     await flutterLocalNotificationsPlugin.initialize(
@@ -107,6 +111,23 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
   ///Foreground select Notification
   Future<void> onSelectNotification(String? payload) async {
+    ///Pass notification id to get body and key
+    await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
+
+      Future.delayed(const Duration(milliseconds: 800), () {
+        changeToNotificationDetailsScreen(
+            context,
+            _notificationProvider.singleNotificationList.keys.first,
+            _notificationProvider.singleNotificationList.values.first);
+      });
+    });
+  }
+
+
+  ///IOS foreground message handler
+  void onDidReceiveLocalNotification(
+      int? id, String? title, String? body, String? payload) async {
+    // display a dialog with the notification details, tap ok to go to another page
     ///Pass notification id to get body and key
     await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
 

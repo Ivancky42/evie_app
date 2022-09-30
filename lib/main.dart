@@ -20,7 +20,6 @@ import 'package:evie_test/api/routes.dart';
 import 'package:evie_test/profile/user_home_page.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:evie_test/profile/user_change_password.dart';
@@ -70,7 +69,7 @@ Future main() async {
       sound: true,
     );
 
-    NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+    await FirebaseMessaging.instance.requestPermission(
       alert: true,
       badge: true,
       provisional: false,
