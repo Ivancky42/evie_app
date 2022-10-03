@@ -16,6 +16,7 @@ class BikeProvider extends ChangeNotifier {
   String bikesCollection = dotenv.env['DB_COLLECTION_BIKES'] ?? 'DB not found';
 
   LinkedHashMap bikeUserList = LinkedHashMap<String, BikeUserModel>();
+  LinkedHashMap bikeUserDetails = LinkedHashMap<String, UserModel>();
   LinkedHashMap userBikeList = LinkedHashMap<String, UserBikeModel>();
 
   BikeModel? currentBikeModel;
@@ -30,7 +31,9 @@ class BikeProvider extends ChangeNotifier {
   Future<void> init(UserModel? user) async {
 
     userBikeList.clear();
-    if(user == null){}
+    if(user == null){
+      clear();
+    }
     else{
       currentUserModel = user;
       getBikeList(currentUserModel?.uid);
@@ -123,6 +126,7 @@ class BikeProvider extends ChangeNotifier {
               } catch (_) {
                 return null;
               }
+              getBikeUserList();
             });
           }
         }
@@ -152,6 +156,8 @@ class BikeProvider extends ChangeNotifier {
             prefs.setInt('currentBikeList', currentBikeList);
             getBike(userBikeList.keys.elementAt(currentBikeList));
             notifyListeners();
+          }else if(currentBikeList == userBikeList.length -1){
+            controlBikeList("first");
           }
         }
         break;
@@ -162,18 +168,228 @@ class BikeProvider extends ChangeNotifier {
             prefs.setInt('currentBikeList', currentBikeList);
             getBike(userBikeList.keys.elementAt(currentBikeList));
             notifyListeners();
+          }else if(currentBikeList <= 0){
+            controlBikeList("last");
           }
         }
         break;
       case "first":
-        currentBikeList = 0;
+        {
+          currentBikeList = 0;
+          prefs.setInt('currentBikeList', currentBikeList);
+          getBike(userBikeList.keys.elementAt(currentBikeList));
+          notifyListeners();
+        }
+        break;
+      case "last":
+      {
+        currentBikeList = userBikeList.length -1;
         prefs.setInt('currentBikeList', currentBikeList);
         getBike(userBikeList.keys.elementAt(currentBikeList));
         notifyListeners();
-        break;
+      }
+      break;
     }
     notifyListeners();
   }
+
+  updateSharedBikeStatus(String targetID) async {
+    bool result;
+
+
+    try {
+      //Update
+      FirebaseFirestore.instance.
+      collection(bikesCollection).
+      doc(currentBikeModel!.deviceIMEI).
+      collection(usersCollection)
+          .doc(targetID)
+          .set({
+        'created':Timestamp.now(),
+        'uid':targetID,
+        'role':'user',
+     //   'notificationId':'',
+        'status':'pending',
+        'justInvited': false,
+        ///position,  0-4
+        'userId': 4,
+      }, SetOptions(merge: true));
+
+
+      Future.delayed(const Duration(milliseconds: 500), () {
+
+        FirebaseFirestore.instance.
+        collection(bikesCollection).
+        doc(currentBikeModel!.deviceIMEI).
+        collection(usersCollection)
+            .doc(targetID)
+            .set({
+          'justInvited': true,
+        }, SetOptions(merge: true));
+
+      });
+
+      result = true;
+    } catch (e) {
+      debugPrint(e.toString());
+      result = false;
+    }
+
+
+    return result;
+  }
+
+
+  updateAcceptSharedBikeStatus(String targetIMEI) async{
+    bool result;
+
+    try {
+      //Update
+      FirebaseFirestore.instance.
+      collection(bikesCollection).
+
+          ///target device imei
+      doc(targetIMEI).
+      collection(usersCollection)
+          .doc(currentUserModel!.uid)
+          .set({
+        'status':'shared',
+        'justInvited': true,
+      }, SetOptions(merge: true));
+
+      result = true;
+    } catch (e) {
+      debugPrint(e.toString());
+      result = false;
+    }
+
+    return result;
+  }
+
+
+  cancelSharedBikeStatus(String targetUID, String notificationId) async {
+    bool result;
+
+    try {
+      //Update
+      FirebaseFirestore.instance.
+      collection(bikesCollection).
+      doc(currentBikeModel!.deviceIMEI).
+      collection(usersCollection)
+          .doc(targetUID)
+          .set({
+        'status':'removed',
+        'justInvited': true,
+      }, SetOptions(merge: true));
+
+
+      ///Update user notification id status == removed
+
+      FirebaseFirestore.instance.
+      collection(usersCollection).
+          doc(targetUID)
+          .collection("notifications")
+          .doc(notificationId)
+          .set({
+        'status':'removed',
+      }, SetOptions(merge: true));
+
+
+
+      result = true;
+    } catch (e) {
+      debugPrint(e.toString());
+      result = false;
+    }
+
+
+    return result;
+  }
+
+
+  getBikeUserList(){
+    bikeUserList.clear();
+    bikeUserDetails.clear();
+
+    try {
+      //Update
+      FirebaseFirestore.instance.
+      collection(bikesCollection).
+      doc(currentBikeModel!.deviceIMEI).
+      collection(usersCollection).orderBy("created",descending: false).
+      snapshots().
+      listen((snapshot) {
+        if (snapshot.docs.isNotEmpty) {
+          for (var docChange in snapshot.docChanges) {
+            switch(docChange.type){   ///element.type
+              case DocumentChangeType.added:
+                Map<String, dynamic>? obj = docChange.doc.data();
+              ///  bikeUserList2.putIfAbsent(docChange.doc.id, () => BikeUserModel.fromJson(obj!));
+                bikeUserList.putIfAbsent(docChange.doc.id, () => BikeUserModel.fromJson(obj!));
+                bikeUserList.forEach((key, value) {
+                  getBikeUserDetails(key);
+                });
+                notifyListeners();
+                break;
+              case DocumentChangeType.removed:
+                bikeUserList.removeWhere((key, value) => key == docChange.doc.id);
+                notifyListeners();
+                break;
+              case DocumentChangeType.modified:
+              // TODO: Handle this case.
+                break;
+            }
+          }
+        }
+      });
+
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  getBikeUserDetails(String uid){
+
+    try {
+      //Update
+      FirebaseFirestore.instance.
+      collection(usersCollection).
+      doc(uid).
+      snapshots().
+      listen((snapshot) {
+
+        Map<String, dynamic>? obj = snapshot.data();
+        if (obj != null) {
+          bikeUserDetails.putIfAbsent(snapshot.id, () => UserModel.fromJson(obj!));
+          notifyListeners();
+        }if(obj == null){
+          bikeUserDetails.removeWhere((key, value) => key == obj?.keys);
+          notifyListeners();
+        }
+
+      });
+
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  bool checkIsOwner(){
+    if(bikeUserList.isNotEmpty){
+      for(var key in bikeUserList.keys) {
+        if (currentUserModel!.uid == key) {
+           if(bikeUserList[key].role == "owner"){
+             return true;
+           }else{
+             return false;
+           }
+        }
+      }
+    }
+
+    return false;
+  }
+
 
   Future uploadToFireStore(selectedDeviceId) async {
     try{
@@ -181,6 +397,8 @@ class BikeProvider extends ChangeNotifier {
     final snapshot = await FirebaseFirestore.instance
         .collection('bikes')
         .get();
+
+    //For each snapshot data match selected device id
 
     ///Check if have data
     if (snapshot.size == 0) {
@@ -222,8 +440,10 @@ class BikeProvider extends ChangeNotifier {
 
     if (ubsnapshot.size == 0) {
       role = "owner";
-    } else if (ubsnapshot.size >= 0) {
+    } else if (ubsnapshot.size > 0) {
       role = "user";
+    }else if (ubsnapshot.size >= 5) {
+      role = "exceed limit";
     }
 
     FirebaseFirestore.instance

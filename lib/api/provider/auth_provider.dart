@@ -1,9 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto/crypto.dart';
 import 'package:evie_test/api/model/bike_model.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +23,9 @@ import '../../widgets/evie_single_button_dialog.dart';
 import '../model/user_model.dart';
 import '../navigator.dart';
 import 'bike_provider.dart';
+import 'notification_provider.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 
 class AuthProvider extends ChangeNotifier {
 
@@ -27,11 +35,12 @@ class AuthProvider extends ChangeNotifier {
 
   String? _uid;
   String? _email;
+  bool isLogin = false;
 
   String? get getUid => _uid;
   String? get getEmail => _email;
 
-  bool isLogin = false;
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   AuthProvider() {
     init();
@@ -44,15 +53,14 @@ class AuthProvider extends ChangeNotifier {
         _uid = user.uid;
         _email = user.email!;
         isLogin = true;
+
         notifyListeners();
-      } else {
-        isLogin = false;
       }
     });
   }
 
   ///User login function
-  void login(String email, String password, BuildContext context) async {
+  Future login(String email, String password, BuildContext context) async {
 
     //User Provider
     try {
@@ -64,37 +72,15 @@ class AuthProvider extends ChangeNotifier {
       if (user != null) {
         _uid = user.uid;
         _email = user.email!;
+
         notifyListeners();
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Success'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-
-        ///Quit loading and go to user home page
-        Navigator.pushReplacementNamed(context, '/userHomePage');
-
+        return true;
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Incorrect Login Info'),
-            duration: Duration(seconds: 2),
-          ),
-        );
+        return "Incorrect login info";
       }
     } catch (e) {
-      SmartDialog.show(
-        widget: EvieSingleButtonDialog(
-            title: "Error",
-            content: e.toString(),
-            rightContent: "Ok",
-            image: Image.asset("assets/images/error.png", width: 36,height: 36,),
-            onPressedRight: (){
-              SmartDialog.dismiss();
-            }),
-      );
+      return e.toString();
     }
   }
 
@@ -124,24 +110,13 @@ class AuthProvider extends ChangeNotifier {
     }
 
     catch(e) {
-      SmartDialog.show(
-        widget: EvieSingleButtonDialog(
-            title: "Error",
-            content: e.toString(),
-            rightContent: "Ok",
-            image: Image.asset("assets/images/error.png", width: 36,height: 36,),
-            onPressedRight: (){
-              SmartDialog.dismiss();
-            }),
-      );
-      debugPrint("false");
+      debugPrint(e.toString());
     }
   }
 
 
   ///Upload the registered data to firestore
   Future createFirestoreUser(uid, email, name, phoneNo, profileIMG, credentialProvider) async {
-
 
     try{
       FirebaseFirestore.instance.collection(usersCollection).doc(uid).set(
@@ -158,17 +133,7 @@ class AuthProvider extends ChangeNotifier {
             updated: Timestamp.now(),
           ).toJson()
       );} catch(e) {
-      SmartDialog.show(
-        widget: EvieSingleButtonDialog(
-            title: "Error",
-            content: e.toString(),
-            rightContent: "Ok",
-            image: Image.asset("assets/images/error.png", width: 36,height: 36,),
-            onPressedRight: (){
-              SmartDialog.dismiss();
-            }),
-      );
-      debugPrint("false");
+      debugPrint(e.toString());
     }
   }
 
@@ -180,16 +145,6 @@ class AuthProvider extends ChangeNotifier {
       try {
         await firebaseUser.updatePassword(password);
       } on FirebaseAuthException catch (e){
-        SmartDialog.show(
-          widget: EvieSingleButtonDialog(
-              title: "Error",
-              content: e.toString(),
-              rightContent: "Ok",
-              image: Image.asset("assets/images/error.png", width: 36,height: 36,),
-              onPressedRight: (){
-                SmartDialog.dismiss();
-              }),
-        );
         debugPrint(e.toString());
       }
     }
@@ -199,7 +154,7 @@ class AuthProvider extends ChangeNotifier {
 
   final GoogleSignIn googleSignIn = GoogleSignIn();
   ///Sign in with google
-  Future<void> signInWithGoogle(BuildContext context) async {
+  Future signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
 
@@ -213,8 +168,6 @@ class AuthProvider extends ChangeNotifier {
           accessToken: googleSignInAuthentication.accessToken,
           idToken: googleSignInAuthentication.idToken,
         );
-
-        try {
           final UserCredential userCredential = await FirebaseAuth.instance
               .signInWithCredential(credential);
 
@@ -241,6 +194,7 @@ class AuthProvider extends ChangeNotifier {
             _email = userCredential.user!.email!;
 
             notifyListeners();
+            return true;
 
           }
           else {
@@ -248,31 +202,19 @@ class AuthProvider extends ChangeNotifier {
             _email = userCredential.user!.email!;
 
             notifyListeners();
+            return true;
           }
-
-          changeToUserHomePageScreen(context);
-
-        } catch (error) {
-          SmartDialog.show(
-            widget: EvieSingleButtonDialog(
-                title: "Error",
-                content: error.toString(),
-                rightContent: "Ok",
-                image: Image.asset("assets/images/error.png", width: 36,height: 36,),
-                onPressedRight: (){
-                  SmartDialog.dismiss();
-                }),
-          );
-        }
       }
     } catch (error) {
       debugPrint(error.toString());
+      return error.toString();
+
     }
   }
 
 
   ///Sign in with facebook
-  Future<void> signInWithFacebook(BuildContext context) async {
+  Future signInWithFacebook() async {
     try {
 
       final LoginResult loginResult = await FacebookAuth.instance.login(
@@ -307,6 +249,7 @@ class AuthProvider extends ChangeNotifier {
         _email = userCredential.user!.email!;
 
         notifyListeners();
+        return true;
 
       }
       else {
@@ -314,26 +257,18 @@ class AuthProvider extends ChangeNotifier {
         _email = userCredential.user!.email!;
 
         notifyListeners();
+        return true;
       }
 
-      changeToUserHomePageScreen(context);
     } catch (error) {
-      SmartDialog.show(
-        widget: EvieSingleButtonDialog(
-            title: "Error",
-            content: error.toString(),
-            rightContent: "Ok",
-            image: Image.asset("assets/images/error.png", width: 36,height: 36,),
-            onPressedRight: (){
-              SmartDialog.dismiss();
-            }),
-      );
+      debugPrint(error.toString());
+      return error.toString();
     }
   }
 
 
   ///Sign in with twitter
-  Future<void> signInWithTwitter(BuildContext context) async {
+  Future signInWithTwitter() async {
     try {
       final twitterLogin = TwitterLogin(
         apiKey: dotenv.env['TWITTER_API_KEY'] ?? 'TWITTER_API_KEY not found',
@@ -346,7 +281,6 @@ class AuthProvider extends ChangeNotifier {
         final AuthCredential twitterAuthCredential = TwitterAuthProvider
             .credential(accessToken: authResult.authToken!, secret: authResult.authTokenSecret!);
 
-        try {
           final userCredential = await FirebaseAuth.instance.signInWithCredential(twitterAuthCredential);
           if (userCredential.additionalUserInfo!.isNewUser) {
             String? userPhoneNo;
@@ -371,52 +305,102 @@ class AuthProvider extends ChangeNotifier {
             _email = userCredential.user!.email!;
 
             notifyListeners();
+            return true;
           }
           else {
             _uid = userCredential.user!.uid;
             _email = userCredential.user!.email!;
 
             notifyListeners();
+            return true;
           }
-
-          changeToUserHomePageScreen(context);
-
-        }catch (error) {
-          SmartDialog.show(
-            widget: EvieSingleButtonDialog(
-                title: "Error",
-                content: error.toString(),
-                rightContent: "Ok",
-                image: Image.asset("assets/images/error.png", width: 36,height: 36,),
-                onPressedRight: (){
-                  SmartDialog.dismiss();
-                }),
-          );
-        }
       }
     } catch (error) {
       debugPrint(error.toString());
+      return error.toString();
     }
   }
 
+
   ///Sign in with appleID
-  Future<void> signInWithAppleID(BuildContext context) async {
+  Future signInWithAppleID() async {
     try {
 
-      credentialProvider = "apple";
+      final rawNonce = generateNonce();
+      final nonce = sha256ofString(rawNonce);
+
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: nonce,
+      );
+
+      // Create an `OAuthCredential` from the credential returned by Apple.
+      final oauthCredential = OAuthProvider("apple.com").credential(
+        idToken: appleCredential.identityToken,
+        rawNonce: rawNonce,
+      );
+
+      // Sign in the user with Firebase. If the nonce we generated earlier does
+      // not match the nonce in `appleCredential.identityToken`, sign in will fail.
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+
+      if (userCredential.additionalUserInfo!.isNewUser) {
+        String? userPhoneNo;
+
+        if(userCredential.user?.phoneNumber != null){
+          userPhoneNo = userCredential.user?.phoneNumber.toString();
+        }else if(userCredential.user?.phoneNumber == null){
+          userPhoneNo = "empty";
+        }
+
+        credentialProvider = "apple";
+        notifyListeners();
+
+        ///Firestore
+        AuthProvider().createFirestoreUser(
+            _uid,
+            _email,
+            '${appleCredential.givenName} ${appleCredential.familyName}',//Name
+            userPhoneNo, //Phone no
+            userCredential.user?.photoURL.toString(),
+            credentialProvider//Profile image
+        );
+        _uid = userCredential.user!.uid;
+        _email = userCredential.user!.email!;
+
+        notifyListeners();
+        return true;
+      }
+      else {
+        _uid = userCredential.user!.uid;
+        _email = userCredential.user!.email!;
+
+        notifyListeners();
+        return true;
+      }
 
     } catch (error) {
-      SmartDialog.show(
-        widget: EvieSingleButtonDialog(
-            title: "Error",
-            content: error.toString(),
-            rightContent: "Ok",
-            image: Image.asset("assets/images/error.png", width: 36,height: 36,),
-            onPressedRight: (){
-              SmartDialog.dismiss();
-            }),
-      );
+      debugPrint(error.toString());
+      return error.toString();
     }
+  }
+
+  String generateNonce([int length = 32]) {
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+        .join();
+  }
+
+  /// Returns the sha256 hash of [input] in hex notation.
+  String sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 
   ///ReAuthentication
@@ -431,21 +415,30 @@ class AuthProvider extends ChangeNotifier {
       return true;
 
     }on FirebaseAuthException catch (e){
-      SmartDialog.show(
-        widget: EvieSingleButtonDialog(
-            title: "Error",
-            content: e.toString(),
-            rightContent: "Ok",
-            image: Image.asset("assets/images/error.png", width: 36,height: 36,),
-            onPressedRight: (){
-              SmartDialog.dismiss();
-            }),
-      );
-
-      debugPrint("false");
+      debugPrint(e.toString());
       return false;
     }
   }
+
+
+  checkIfFirestoreUserExist(String email) async {
+
+    var result = "false";
+
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection(usersCollection)
+        .get();
+
+    snapshot.docs.forEach((element) {
+      if(element['email'] == email){
+        result = element.id;
+      }
+    });
+
+    return result;
+  }
+
+
 
   Future<void> resetPassword(email) async {
     await _auth
@@ -457,11 +450,14 @@ class AuthProvider extends ChangeNotifier {
   ///User sign out
   Future signOut(BuildContext context) async {
     try {
-      //await FirebaseAuth.instance.signOut();
-      BikeProvider().clear();
-      await _auth.signOut();
-      _uid = "";
       isLogin = false;
+      await _auth.signOut();
+
+      BikeProvider().clear();
+      NotificationProvider().unsubscribeFromTopic(_uid);
+      NotificationProvider().unsubscribeFromTopic("fcm_test");
+
+     _uid = "";
       notifyListeners();
       return true;
     } catch (error) {

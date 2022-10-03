@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 ///Button Widget
 class EvieButton_DarkBlue extends StatelessWidget {
 
-  final VoidCallback onPressed;
-  final Widget child;
-  final double width;
-  final double height;
+  final VoidCallback? onPressed;
+  final Widget? child;
+  final double? width;
+  final double? height;
 
   const EvieButton_DarkBlue({
     Key? key,
-    required this.onPressed,
-    required this.child,
-    required this.width,
-    required this.height,
+    this.onPressed,
+    this.child,
+    this.width,
+    this.height,
   }) : super(key: key);
 
   @override

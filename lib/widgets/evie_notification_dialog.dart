@@ -3,26 +3,26 @@ import 'package:sizer/sizer.dart';
 
 
 ///Double button dialog
-class EvieDoubleButtonDialog extends StatelessWidget{
+class EvieNotificationDialog extends StatelessWidget{
   // final String buttonNumber;
   final String title;
   final String content;
   final Widget? image;
-  final String? leftContent;
+  final String leftContent;
   final String rightContent;
   final VoidCallback? onPressedLeft;
-  final VoidCallback onPressedRight;
+  final VoidCallback? onPressedRight;
 
-  const EvieDoubleButtonDialog({
+  const EvieNotificationDialog({
     Key? key,
     //required this.buttonNumber,
     required this.title,
     required this.content,
     this.image,
-    this.leftContent,
+    required this.leftContent,
     required this.rightContent,
     this.onPressedLeft,
-    required this.onPressedRight
+    this.onPressedRight
   }) : super(key: key);
 
 
@@ -85,7 +85,7 @@ class EvieDoubleButtonDialog extends StatelessWidget{
                               child: Padding(
                                 padding: EdgeInsets.fromLTRB(3.w, 0, 3.w, 0),
                                 child: Text(
-                                  leftContent!,
+                                  leftContent,
                                   style: TextStyle(
                                     fontSize: 10.sp,
                                     fontWeight: FontWeight.bold,
@@ -129,23 +129,23 @@ class EvieDoubleButtonDialog extends StatelessWidget{
               bottom: 20,
             ),
             margin: const EdgeInsets.only(top: 45),
-          //  decoration: BoxDecoration(
-          //    boxShadow: const [
-          //      BoxShadow(
-          //          color: Colors.black26, offset: Offset(0, 4), blurRadius: 5.0)
-          //    ],
-          //    gradient: const LinearGradient(
-          //      begin: Alignment.topLeft,
-          //      end: Alignment.bottomLeft,
-          //     stops: [0.0, 1.0],
-          //      colors: [
-          //        Color(0xffD7E9EF),
-          //        Color(0xffD7E9EF),
-          //      ],
-          //    ),
-          //    borderRadius: BorderRadius.circular(16),
-              //border: Border.all(color: ReevoColors.blue),
-          //  ),
+            //  decoration: BoxDecoration(
+            //    boxShadow: const [
+            //      BoxShadow(
+            //          color: Colors.black26, offset: Offset(0, 4), blurRadius: 5.0)
+            //    ],
+            //    gradient: const LinearGradient(
+            //      begin: Alignment.topLeft,
+            //      end: Alignment.bottomLeft,
+            //     stops: [0.0, 1.0],
+            //      colors: [
+            //        Color(0xffD7E9EF),
+            //        Color(0xffD7E9EF),
+            //      ],
+            //    ),
+            //    borderRadius: BorderRadius.circular(16),
+            //border: Border.all(color: ReevoColors.blue),
+            //  ),
 
           )
       );

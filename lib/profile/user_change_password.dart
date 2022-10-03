@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:sizer/sizer.dart';
 import '../api/navigator.dart';
 import '../api/provider/auth_provider.dart';
 import '../widgets/evie_single_button_dialog.dart';
@@ -22,7 +23,7 @@ class _UserChangePasswordState extends State<UserChangePassword> {
   final TextEditingController _passwordOriginalController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmController = TextEditingController();
-  late AuthProvider _authProvider;late CurrentUserProvider _currentUser;
+  late AuthProvider _authProvider;   late CurrentUserProvider _currentUser;
 
   bool _isObscure = true;
   bool _isObscure2 = true;
@@ -71,36 +72,36 @@ class _UserChangePasswordState extends State<UserChangePassword> {
                                 children: <Widget>[
 
                                   Container(
-                                    child: const Center(
+                                    child: Center(
                                       child: Text(
                                           "New Password",
                                           style: TextStyle(
                                             fontFamily: 'Raleway',
-                                            fontSize: 24.0,
+                                            fontSize: 20.sp,
                                             fontWeight: FontWeight.w600,
                                           )
                                       ),
                                     ),
                                   ),
 
-                                  const SizedBox(
-                                    height:8.0,
+                                  SizedBox(
+                                    height:1.5.h,
                                   ),
 
                                   Container(
-                                    child: const Center(
+                                    child: Center(
                                       child: Text(
                                         "Update your new password",
                                         style: TextStyle(
                                           color: Colors.grey,
-                                          fontSize: 14.0,
+                                          fontSize: 11.sp,
                                         ),
                                       ),
                                     ),
                                   ),
 
-                                  const SizedBox(
-                                    height: 100.0,
+                                  SizedBox(
+                                    height: 8.h,
                                   ),
 
                                   TextFormField(
@@ -108,7 +109,7 @@ class _UserChangePasswordState extends State<UserChangePassword> {
                                     obscureText: _isObscure3,
                                     decoration: InputDecoration(
                                         hintText: "Original Password",
-                                        hintStyle: const TextStyle(fontSize: 12, color: Colors.grey),
+                                        hintStyle: TextStyle(fontSize: 10.sp, color: Colors.grey),
                                         filled: true,
                                         fillColor: const Color(0xFFFFFFFF).withOpacity(0.2),
                                         enabledBorder: OutlineInputBorder(
@@ -139,8 +140,8 @@ class _UserChangePasswordState extends State<UserChangePassword> {
                                     },
                                   ),
 
-                                  const SizedBox(
-                                    height: 15.0,
+                                  SizedBox(
+                                    height: 2.h,
                                   ),
 
                                   TextFormField(
@@ -148,7 +149,7 @@ class _UserChangePasswordState extends State<UserChangePassword> {
                                     obscureText: _isObscure,
                                     decoration: InputDecoration(
                                         hintText: "New Password",
-                                        hintStyle: const TextStyle(fontSize: 12, color: Colors.grey),
+                                        hintStyle: TextStyle(fontSize: 10.sp, color: Colors.grey),
                                         filled: true,
                                         fillColor: const Color(0xFFFFFFFF).withOpacity(0.2),
                                         enabledBorder: OutlineInputBorder(
@@ -179,8 +180,8 @@ class _UserChangePasswordState extends State<UserChangePassword> {
                                     },
                                   ),
 
-                                  const SizedBox(
-                                    height: 15.0,
+                                  SizedBox(
+                                    height: 2.h,
                                   ),
 
                                   TextFormField(
@@ -188,7 +189,7 @@ class _UserChangePasswordState extends State<UserChangePassword> {
                                     obscureText: _isObscure2,
                                     decoration: InputDecoration(
                                         hintText: "Confirm New Password",
-                                        hintStyle: const TextStyle(fontSize: 12, color: Colors.grey),
+                                        hintStyle: TextStyle(fontSize: 10.sp, color: Colors.grey),
                                         filled: true,
                                         fillColor: const Color(0xFFFFFFFF).withOpacity(0.2),
                                         enabledBorder: OutlineInputBorder(
@@ -218,8 +219,8 @@ class _UserChangePasswordState extends State<UserChangePassword> {
                                     },
                                   ),
 
-                                  const SizedBox(
-                                    height: 50.0,
+                                  SizedBox(
+                                    height: 8.h,
                                   ),
 
 
@@ -227,9 +228,9 @@ class _UserChangePasswordState extends State<UserChangePassword> {
                                   EvieButton_DarkBlue(
                                     width: double.infinity,
                                     height: double.infinity,
-                                    child: const Text("Update Password",
+                                    child: Text("Update Password",
                                       style: TextStyle(color: Colors.white,
-                                        fontSize: 12.0,),
+                                        fontSize: 10.sp),
                                     ),
                                     onPressed: () async {
                                       if (_formKey.currentState!.validate()) {

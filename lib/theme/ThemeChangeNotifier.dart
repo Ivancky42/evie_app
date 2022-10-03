@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-///Detect theme mode
-
-late bool _isDarkMode;
-bool get getIsDarkMode => _isDarkMode;
-
 class ThemeChangeNotifier with ChangeNotifier {
 
   bool isDarkMode(context){

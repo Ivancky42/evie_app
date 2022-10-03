@@ -33,7 +33,7 @@ class BikeModel {
       deviceType: (json['deviceType']?? '').toString(),
       deviceIMEI: (json['deviceIMEI']?? '').toString(),
       bikeName: (json['bikeName']?? '').toString(),
-      isLocked: json['isLocked']?? '',
+      isLocked: (json['isLocked']?? ''),
       created: timestampFromJson(json['created']),
       updated: timestampFromJson(json['updated']),
     );

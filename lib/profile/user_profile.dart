@@ -161,13 +161,12 @@ class _UserProfileState extends State<UserProfile> {
                         child: SingleChildScrollView(
                             child: Column(
 
-
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
 
                                 children: <Widget>[
-                                  const SizedBox(
-                                    height: 20.0,
+                                  SizedBox(
+                                    height: 2.h,
                                   ),
 
                                   Stack(
@@ -180,8 +179,8 @@ class _UserProfileState extends State<UserProfile> {
                                               const CircularProgressIndicator(),
                                           errorWidget: (context, url, error) =>
                                               Icon(Icons.error),
-                                          width: 100,
-                                          height: 100,
+                                          width: 15.h,
+                                          height: 15.h,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -191,8 +190,8 @@ class _UserProfileState extends State<UserProfile> {
                                           bottom: 0,
                                           right: 110,
                                           child: Container(
-                                            height: 40,
-                                            width: 40,
+                                            height: 5.h,
+                                            width: 5.h,
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               border: Border.all(
@@ -309,8 +308,8 @@ class _UserProfileState extends State<UserProfile> {
                                   ),
 
 
-                                  const SizedBox(
-                                    height: 60.0,
+                                  SizedBox(
+                                    height: 10.h,
                                   ),
 
                                   Align(
