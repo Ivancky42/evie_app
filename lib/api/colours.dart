@@ -6,5 +6,6 @@ class EvieColors {
   static const AntiqueWhite = Color(0xFFFAEBD7);
   static const Aqua = Color(0xFF00FFFF);
   static const Aquamarine = Color(0xFF7FFFD4);
+  static const greyFill = Color(0xff717171);
 // etc.
 }

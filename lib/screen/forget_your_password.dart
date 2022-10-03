@@ -39,7 +39,6 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
         appBar: AppBar(
           centerTitle: false,
           title: Row(
@@ -56,104 +55,103 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
             ],
           ),
         ),
+        body: Form(
+          key: _formKey,
+          child:Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
 
-      body: Form(
-        key: _formKey,
-      child:Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-
-          children: [
-            Container(
-              child: const Center(
-                  child: Text(
-                      "Forget Password?",
-                      style: TextStyle(
-                        fontFamily: 'Raleway',
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.w600,
-                      )
-                  )
+            children: [
+              Container(
+                child: const Center(
+                    child: Text(
+                        "Forget Password?",
+                        style: TextStyle(
+                          fontFamily: 'Raleway',
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.w600,
+                        )
+                    )
+                ),
               ),
-            ),
 
-            const SizedBox(
-              height: 8.0,
-            ),
+              const SizedBox(
+                height: 8.0,
+              ),
 
-            Container(
-              child: const Center(
-                child: Text(
-                  "Enter your Email Address to recover",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14.0,
+              Container(
+                child: const Center(
+                  child: Text(
+                    "Enter your Email Address to recover",
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14.0,
+                    ),
                   ),
                 ),
               ),
-            ),
 
-            const SizedBox(
-              height: 44.0,
-            ),
-
-            TextFormField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                hintText: "Email Address",
-                hintStyle: const TextStyle(fontSize: 12, color: Colors.grey),
-                filled: true,
-                fillColor: const Color(0xFFFFFFFF).withOpacity(0.2),
-                enabledBorder: OutlineInputBorder(
-                  borderSide:
-                  BorderSide(width: 0.1,
-                      color: const Color(0xFFFFFFFF).withOpacity(0.2)),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
+              const SizedBox(
+                height: 44.0,
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty || !value.contains("@") ) {
-                  return 'Please enter your email';
-                }
-                //Check if email is in database
 
-                return null;
-              },
-            ),
-
-            const SizedBox(
-              height: 70.0,
-            ),
-
-            Container(
-              child: EvieButton_DarkBlue(
-                width: double.infinity,height: 12,
-                child: const Text("Recover",
-                  style: TextStyle(color: Colors.white,
-                    fontSize: 12.0,),
+              TextFormField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  hintText: "Email Address",
+                  hintStyle: const TextStyle(fontSize: 12, color: Colors.grey),
+                  filled: true,
+                  fillColor: const Color(0xFFFFFFFF).withOpacity(0.2),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                    BorderSide(width: 0.1,
+                        color: const Color(0xFFFFFFFF).withOpacity(0.2)),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
                 ),
-
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    AuthProvider().resetPassword(_emailController.text.trim());
-                    changeToSignInScreen(context);
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Sent')),
-                    );
+                validator: (value) {
+                  if (value == null || value.isEmpty || !value.contains("@") ) {
+                    return 'Please enter your email';
                   }
+                  //Check if email is in database
+
+                  return null;
                 },
               ),
-            ),
 
-          ]
+              const SizedBox(
+                height: 70.0,
+              ),
+
+              Container(
+                child: EvieButton_DarkBlue(
+                  width: double.infinity,height: 12,
+                  child: const Text("Recover",
+                    style: TextStyle(color: Colors.white,
+                      fontSize: 12.0,),
+                  ),
+
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      AuthProvider().resetPassword(_emailController.text.trim());
+                      changeToSignInScreen(context);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Sent')),
+                      );
+                    }
+                  },
+                ),
+              ),
+
+            ]
+          )
+         ),
         )
-       ),
-      )
     )
     );
   }

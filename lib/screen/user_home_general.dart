@@ -1,5 +1,5 @@
 import 'dart:collection';
-
+import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/widgets/widgets.dart';
@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import 'package:sizer/sizer.dart';
+import '../api/backend/stripe_api_caller.dart';
+import '../api/constants.dart';
 import '../api/provider/bike_provider.dart';
 
 ///Default user home page if login is true(display bicycle info)
@@ -94,10 +96,22 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                         },
                       ),
                     ),
-                    Image.asset(
-                      'assets/evieBike.png',
-                      height: 200,
-                      width: 200,
+                    GestureDetector(
+                      onTap: () async {
+                        // await StripeApiCaller.redirectToCheckout(nikesPriceId, customerId).then((value) {
+                        //   if (value != null) {
+                        //     Navigator.of(context).push(MaterialPageRoute(
+                        //       builder: (_) => StripeCheckoutPage(sessionId: value,),
+                        //     ));
+                        //   }
+                        // });
+                        await StripeApiCaller.cancelSubscription(subscriptionId);
+                      },
+                      child: Image.asset(
+                        'assets/evieBike.png',
+                        height: 200,
+                        width: 200,
+                      ),
                     ),
                     Visibility(
                       visible: isScroll,
