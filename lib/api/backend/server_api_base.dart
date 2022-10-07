@@ -37,8 +37,9 @@ class ServerApiBase {
         );
         return result.data;
       } on DioError catch (e, s) {
-        showServerErrorMsg(e.message);
-        rethrow;
+        var errorMessage = e.response?.data['error']['message'];
+        showServerErrorMsg(errorMessage);
+        return errorMessage;
       }
 
     } on TimeoutException catch (err) {

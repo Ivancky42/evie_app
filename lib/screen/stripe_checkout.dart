@@ -3,19 +3,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import '../api/constants.dart';
+import '../api/backend/stripe_api_caller.dart';
 import '../widgets/evie_single_button_dialog.dart';
 
-class StripeCheckoutPage extends StatefulWidget {
+class StripeCheckoutScreen extends StatefulWidget {
   final String sessionId;
 
-  const StripeCheckoutPage({Key? key, required this.sessionId}) : super(key: key);
+  const StripeCheckoutScreen({Key? key, required this.sessionId}) : super(key: key);
 
   @override
-  _StripeCheckoutPageState createState() => _StripeCheckoutPageState();
+  _StripeCheckoutScreenState createState() => _StripeCheckoutScreenState();
 }
 
-class _StripeCheckoutPageState extends State<StripeCheckoutPage> {
+class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
   late WebViewController _webViewController;
 
   @override
