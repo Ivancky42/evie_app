@@ -76,6 +76,14 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-analytics'
+
+    //Mapbox
+    implementation ('com.mapbox.maps:android:10.8.1'){
+        exclude group: 'com.mapbox.mapboxsdk', module:'mapbox-android-telemetry'
+    }
+    //configurations {
+    //    all*.exclude module: 'com.mapbox.android' // This removes all other versions of `support-v4` if gets duplicated from all the artifacts.
+    //}
 }
 
 

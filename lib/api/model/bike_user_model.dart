@@ -7,7 +7,7 @@ class BikeUserModel {
   String? justInvited;
   String? status;
   String? notificationId;
-  String? userId;
+  int? userId;
   Timestamp? created;
 
   BikeUserModel({
@@ -28,11 +28,11 @@ class BikeUserModel {
 
   factory BikeUserModel.fromJson(Map json) {
     return BikeUserModel(
-      uid: (json['uid']?? '').toString(),
-      role: (json['role']?? '').toString(),
-      status: (json['status']?? '').toString(),
-      userId: (json['userId']?? '').toString(),
-      notificationId: (json['notificationId']?? '').toString(),
+      uid: json['uid']?? '',
+      role: json['role']?? '',
+      status: json['status']?? '',
+      userId: json['userId'] ?? 10,
+      notificationId: json['notificationId']?? '',
       created: timestampFromJson(json['created']),
     );
   }

@@ -16,14 +16,14 @@ class UserBikeModel {
   Map<String, dynamic> toJson() => {
     "deviceIMEI" : deviceIMEI,
     "deviceType" : deviceType,
-    "created": timestampToJson(created),
+    "created":     timestampToJson(created),
   };
 
   factory UserBikeModel.fromJson(Map json) {
     return UserBikeModel(
-      deviceType: (json['deviceType']?? '').toString(),
-      deviceIMEI: (json['deviceIMEI']?? '').toString(),
-      created: timestampFromJson(json['created']),
+      deviceType: json['deviceType']?? '',
+      deviceIMEI: json['deviceIMEI']?? '',
+      created:    timestampFromJson(json['created']),
     );
   }
 

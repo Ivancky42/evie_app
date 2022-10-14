@@ -57,6 +57,10 @@
 	<string>Need bluetooth permission</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Need bluetooth permission</string>
+	<key>io.flutter.embedded_views_preview</key>
+    <true/>
+    <key>MGLMapboxMetricsEnabledSettingShownInApp</key>
+    <true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Need Location permission</string>
 	<key>NSLocationAlwaysUsageDescription</key>

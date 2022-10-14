@@ -26,9 +26,7 @@ import 'bike_provider.dart';
 import 'notification_provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-
 class AuthProvider extends ChangeNotifier {
-
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
   String credentialProvider = "";
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -61,11 +59,10 @@ class AuthProvider extends ChangeNotifier {
 
   ///User login function
   Future login(String email, String password, BuildContext context) async {
-
     //User Provider
     try {
-      UserCredential _authResult = await _auth.
-      signInWithEmailAndPassword(email: email, password: password);
+      UserCredential _authResult = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
 
       final user = _authResult.user;
 
@@ -84,10 +81,9 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-
   ///Data for user email sign up
-  Future signUp(String email, String password, String name,
-      String phoneNo) async {
+  Future signUp(
+      String email, String password, String name, String phoneNo) async {
     User? firebaseUser;
     credentialProvider = "email";
 
@@ -95,10 +91,12 @@ class AuthProvider extends ChangeNotifier {
     String profileIMG = dotenv.env['DEFAULT_PROFILE_IMG'] ?? 'DPI not found';
 
     try {
-      await _auth.createUserWithEmailAndPassword(
+      await _auth
+          .createUserWithEmailAndPassword(
         email: email,
         password: password,
-      ).then((auth) {
+      )
+          .then((auth) {
         firebaseUser = auth.user!;
         if (firebaseUser != null) {
           createFirestoreUser(firebaseUser?.uid, firebaseUser?.email, name,
@@ -107,21 +105,19 @@ class AuthProvider extends ChangeNotifier {
         }
       });
       return true;
-    }
-
-    catch(e) {
+    } catch (e) {
       debugPrint(e.toString());
     }
   }
 
-
   ///Upload the registered data to firestore
-  Future createFirestoreUser(uid, email, name, phoneNo, profileIMG, credentialProvider) async {
-
-    try{
-      FirebaseFirestore.instance.collection(usersCollection).doc(uid).set(
-
-          UserModel(
+  Future createFirestoreUser(
+      uid, email, name, phoneNo, profileIMG, credentialProvider) async {
+    try {
+      FirebaseFirestore.instance
+          .collection(usersCollection)
+          .doc(uid)
+          .set(UserModel(
             uid: uid,
             email: email,
             name: name,
@@ -131,107 +127,103 @@ class AuthProvider extends ChangeNotifier {
             credentialProvider: credentialProvider,
             created: Timestamp.now(),
             updated: Timestamp.now(),
-          ).toJson()
-      );} catch(e) {
+          ).toJson());
+    } catch (e) {
       debugPrint(e.toString());
     }
   }
 
-
   ///Change user password
-  Future<void> changeUserPassword(BuildContext context, password, originalpassword) async {
+  Future<void> changeUserPassword(
+      BuildContext context, password, originalpassword) async {
     var firebaseUser = _auth.currentUser!;
-    if(firebaseUser != null) {
+    if (firebaseUser != null) {
       try {
         await firebaseUser.updatePassword(password);
-      } on FirebaseAuthException catch (e){
+      } on FirebaseAuthException catch (e) {
         debugPrint(e.toString());
       }
     }
   }
 
-
-
   final GoogleSignIn googleSignIn = GoogleSignIn();
+
   ///Sign in with google
   Future signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
 
       if (googleSignInAccount != null) {
-
-
         final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
+            await googleSignInAccount.authentication;
 
         final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
           idToken: googleSignInAuthentication.idToken,
         );
-          final UserCredential userCredential = await FirebaseAuth.instance
-              .signInWithCredential(credential);
+        final UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithCredential(credential);
 
-          if (userCredential.additionalUserInfo!.isNewUser) {
-            String? userPhoneNo;
+        if (userCredential.additionalUserInfo!.isNewUser) {
+          String? userPhoneNo;
 
-            //Check google phone number
-            if(userCredential.user?.phoneNumber != null){
-              userPhoneNo = userCredential.user?.phoneNumber.toString();
-            }else if(userCredential.user?.phoneNumber == null){
-              userPhoneNo = "empty";
-            }
-
-            credentialProvider = "google";
-            notifyListeners();
-            ///Firestore
-            AuthProvider().createFirestoreUser(_uid, _email,
-                userCredential.user?.displayName.toString(), //Name
-                userPhoneNo, //Phone no
-                userCredential.user?.photoURL.toString() ,
-                credentialProvider//Profile image
-            );
-            _uid = userCredential.user!.uid;
-            _email = userCredential.user!.email!;
-
-            notifyListeners();
-            return true;
-
+          //Check google phone number
+          if (userCredential.user?.phoneNumber != null) {
+            userPhoneNo = userCredential.user?.phoneNumber.toString();
+          } else if (userCredential.user?.phoneNumber == null) {
+            userPhoneNo = "empty";
           }
-          else {
-            _uid = userCredential.user!.uid;
-            _email = userCredential.user!.email!;
 
-            notifyListeners();
-            return true;
-          }
+          credentialProvider = "google";
+          notifyListeners();
+
+          ///Firestore
+          AuthProvider().createFirestoreUser(
+              _uid,
+              _email,
+              userCredential.user?.displayName.toString(), //Name
+              userPhoneNo, //Phone no
+              userCredential.user?.photoURL.toString(),
+              credentialProvider //Profile image
+              );
+          _uid = userCredential.user!.uid;
+          _email = userCredential.user!.email!;
+
+          notifyListeners();
+          return true;
+        } else {
+          _uid = userCredential.user!.uid;
+          _email = userCredential.user!.email!;
+
+          notifyListeners();
+          return true;
+        }
       }
     } catch (error) {
       debugPrint(error.toString());
       return error.toString();
-
     }
   }
-
 
   ///Sign in with facebook
   Future signInWithFacebook() async {
     try {
+      final LoginResult loginResult = await FacebookAuth.instance
+          .login(permissions: ['email', 'public_profile']);
 
-      final LoginResult loginResult = await FacebookAuth.instance.login(
-          permissions: [
-            'email', 'public_profile'
-          ]
-      );
+      final OAuthCredential facebookAuthCredential =
+          FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-      final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
-      final userCredential = await _auth.signInWithCredential(facebookAuthCredential);
+      final userCredential =
+          await _auth.signInWithCredential(facebookAuthCredential);
 
       if (userCredential.additionalUserInfo!.isNewUser) {
         String? userPhoneNo;
 
-        if(userCredential.user?.phoneNumber != null){
+        if (userCredential.user?.phoneNumber != null) {
           userPhoneNo = userCredential.user?.phoneNumber.toString();
-        }else if(userCredential.user?.phoneNumber == null){
+        } else if (userCredential.user?.phoneNumber == null) {
           userPhoneNo = "empty";
         }
 
@@ -239,81 +231,85 @@ class AuthProvider extends ChangeNotifier {
         notifyListeners();
 
         ///Firestore
-        AuthProvider().createFirestoreUser(_uid, _email,
+        AuthProvider().createFirestoreUser(
+            _uid,
+            _email,
             userCredential.user?.displayName.toString(), //Name
             userPhoneNo, //Phone no
             userCredential.user?.photoURL.toString(),
-            credentialProvider//Profile image
-        );
+            credentialProvider //Profile image
+            );
         _uid = userCredential.user!.uid;
         _email = userCredential.user!.email!;
 
         notifyListeners();
         return true;
-
-      }
-      else {
+      } else {
         _uid = userCredential.user!.uid;
         _email = userCredential.user!.email!;
 
         notifyListeners();
         return true;
       }
-
     } catch (error) {
       debugPrint(error.toString());
       return error.toString();
     }
   }
-
 
   ///Sign in with twitter
   Future signInWithTwitter() async {
     try {
       final twitterLogin = TwitterLogin(
         apiKey: dotenv.env['TWITTER_API_KEY'] ?? 'TWITTER_API_KEY not found',
-        apiSecretKey: dotenv.env['TWITTER_API_SECRET'] ?? 'TWITTER_API_SECRET not found',
-        redirectURI: dotenv.env['TWITTER_REDIRECT_URI'] ?? 'Redirect URI not found',
+        apiSecretKey:
+            dotenv.env['TWITTER_API_SECRET'] ?? 'TWITTER_API_SECRET not found',
+        redirectURI:
+            dotenv.env['TWITTER_REDIRECT_URI'] ?? 'Redirect URI not found',
       );
 
       final authResult = await twitterLogin.loginV2();
-      if(authResult.status == TwitterLoginStatus.loggedIn){
-        final AuthCredential twitterAuthCredential = TwitterAuthProvider
-            .credential(accessToken: authResult.authToken!, secret: authResult.authTokenSecret!);
+      if (authResult.status == TwitterLoginStatus.loggedIn) {
+        final AuthCredential twitterAuthCredential =
+            TwitterAuthProvider.credential(
+                accessToken: authResult.authToken!,
+                secret: authResult.authTokenSecret!);
 
-          final userCredential = await FirebaseAuth.instance.signInWithCredential(twitterAuthCredential);
-          if (userCredential.additionalUserInfo!.isNewUser) {
-            String? userPhoneNo;
+        final userCredential = await FirebaseAuth.instance
+            .signInWithCredential(twitterAuthCredential);
+        if (userCredential.additionalUserInfo!.isNewUser) {
+          String? userPhoneNo;
 
-            if(userCredential.user?.phoneNumber != null){
-              userPhoneNo = userCredential.user?.phoneNumber.toString();
-            }else if(userCredential.user?.phoneNumber == null){
-              userPhoneNo = "empty";
-            }
-
-            credentialProvider = "twitter";
-            notifyListeners();
-
-            ///Firestore
-            AuthProvider().createFirestoreUser(_uid, _email,
-                userCredential.user?.displayName.toString(), //Name
-                userPhoneNo, //Phone no
-                userCredential.user?.photoURL.toString(),
-                credentialProvider//Profile image
-            );
-            _uid = userCredential.user!.uid;
-            _email = userCredential.user!.email!;
-
-            notifyListeners();
-            return true;
+          if (userCredential.user?.phoneNumber != null) {
+            userPhoneNo = userCredential.user?.phoneNumber.toString();
+          } else if (userCredential.user?.phoneNumber == null) {
+            userPhoneNo = "empty";
           }
-          else {
-            _uid = userCredential.user!.uid;
-            _email = userCredential.user!.email!;
 
-            notifyListeners();
-            return true;
-          }
+          credentialProvider = "twitter";
+          notifyListeners();
+
+          ///Firestore
+          AuthProvider().createFirestoreUser(
+              _uid,
+              _email,
+              userCredential.user?.displayName.toString(), //Name
+              userPhoneNo, //Phone no
+              userCredential.user?.photoURL.toString(),
+              credentialProvider //Profile image
+              );
+          _uid = userCredential.user!.uid;
+          _email = userCredential.user!.email!;
+
+          notifyListeners();
+          return true;
+        } else {
+          _uid = userCredential.user!.uid;
+          _email = userCredential.user!.email!;
+
+          notifyListeners();
+          return true;
+        }
       }
     } catch (error) {
       debugPrint(error.toString());
@@ -321,11 +317,9 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-
   ///Sign in with appleID
   Future signInWithAppleID() async {
     try {
-
       final rawNonce = generateNonce();
       final nonce = sha256ofString(rawNonce);
 
@@ -345,14 +339,15 @@ class AuthProvider extends ChangeNotifier {
 
       // Sign in the user with Firebase. If the nonce we generated earlier does
       // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-      final userCredential = await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
       if (userCredential.additionalUserInfo!.isNewUser) {
         String? userPhoneNo;
 
-        if(userCredential.user?.phoneNumber != null){
+        if (userCredential.user?.phoneNumber != null) {
           userPhoneNo = userCredential.user?.phoneNumber.toString();
-        }else if(userCredential.user?.phoneNumber == null){
+        } else if (userCredential.user?.phoneNumber == null) {
           userPhoneNo = "empty";
         }
 
@@ -363,25 +358,23 @@ class AuthProvider extends ChangeNotifier {
         AuthProvider().createFirestoreUser(
             _uid,
             _email,
-            '${appleCredential.givenName} ${appleCredential.familyName}',//Name
+            '${appleCredential.givenName} ${appleCredential.familyName}', //Name
             userPhoneNo, //Phone no
             userCredential.user?.photoURL.toString(),
-            credentialProvider//Profile image
-        );
+            credentialProvider //Profile image
+            );
+        _uid = userCredential.user!.uid;
+        _email = userCredential.user!.email!;
+
+        notifyListeners();
+        return true;
+      } else {
         _uid = userCredential.user!.uid;
         _email = userCredential.user!.email!;
 
         notifyListeners();
         return true;
       }
-      else {
-        _uid = userCredential.user!.uid;
-        _email = userCredential.user!.email!;
-
-        notifyListeners();
-        return true;
-      }
-
     } catch (error) {
       debugPrint(error.toString());
       return error.toString();
@@ -404,33 +397,29 @@ class AuthProvider extends ChangeNotifier {
   }
 
   ///ReAuthentication
-  Future<bool> reauthentication(originalpassword) async{
+  Future<bool> reauthentication(originalpassword) async {
     var firebaseUser = _auth.currentUser!;
-    AuthCredential credential = EmailAuthProvider.credential(email:
-    getEmail!, password: originalpassword);
+    AuthCredential credential = EmailAuthProvider.credential(
+        email: getEmail!, password: originalpassword);
 
     try {
       await firebaseUser.reauthenticateWithCredential(credential);
       debugPrint("true");
       return true;
-
-    }on FirebaseAuthException catch (e){
+    } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
       return false;
     }
   }
 
-
   checkIfFirestoreUserExist(String email) async {
-
     var result = "false";
 
-    QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection(usersCollection)
-        .get();
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection(usersCollection).get();
 
     snapshot.docs.forEach((element) {
-      if(element['email'] == email){
+      if (element['email'] == email) {
         result = element.id;
       }
     });
@@ -438,26 +427,23 @@ class AuthProvider extends ChangeNotifier {
     return result;
   }
 
-
-
   Future<void> resetPassword(email) async {
     await _auth
         .sendPasswordResetEmail(email: email)
         .catchError((e) => debugPrint(e));
   }
 
-
   ///User sign out
   Future signOut(BuildContext context) async {
     try {
-      isLogin = false;
       await _auth.signOut();
 
       BikeProvider().clear();
       NotificationProvider().unsubscribeFromTopic(_uid);
       NotificationProvider().unsubscribeFromTopic("fcm_test");
 
-     _uid = "";
+      _uid = null;
+      isLogin = false;
       notifyListeners();
       return true;
     } catch (error) {
@@ -465,5 +451,4 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
   }
-
 }

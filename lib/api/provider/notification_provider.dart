@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../model/notification_model.dart';
+import '../model/user_model.dart';
 
 class NotificationProvider extends ChangeNotifier {
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
@@ -15,23 +16,24 @@ class NotificationProvider extends ChangeNotifier {
 
   LinkedHashMap<String, NotificationModel> notificationList =
       LinkedHashMap<String, NotificationModel>();
-  LinkedHashMap<String, NotificationModel> singleNotificationList =
-      LinkedHashMap<String, NotificationModel>();
+
+  NotificationModel? currentSingleNotification;
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  String? uid;
-  bool? isReadAll = true;
+  UserModel? currentUserModel;
+  bool? isReadAll;
 
-  Future<void> init(String? uid) async {
+  Future<void> init(UserModel? currentUserModel) async {
     ///Subscribe to user uid for notification
     notificationList.clear();
-    if (uid == null) {
+    if (currentUserModel == null) {
     } else {
-      this.uid = uid;
+      this.currentUserModel = currentUserModel;
+      isReadAll = true;
       subscribeToTopic("fcm_test");
-      subscribeToTopic(this.uid);
-      getNotification(this.uid);
+      subscribeToTopic(this.currentUserModel!.uid);
+      getNotification(this.currentUserModel!.uid);
 
       //  firebaseCloudMessaging_Listeners();
 
@@ -69,12 +71,15 @@ class NotificationProvider extends ChangeNotifier {
         if (snapshot.docs.isNotEmpty) {
           for (var docChange in snapshot.docChanges) {
             switch (docChange.type) {
-
-              ///element.type
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
-                notificationList.putIfAbsent(
-                    docChange.doc.id, () => NotificationModel.fromJson(obj!));
+                notificationList.putIfAbsent(docChange.doc.id,
+                    () => NotificationModel.fromJson(obj!, docChange.doc.id));
+
+                var sortedByValueMap = LinkedHashMap.fromEntries(
+                    notificationList.entries.toList()..sort((e1, e2) => e2.value.created!.compareTo(e1.value.created!)));
+                notificationList = sortedByValueMap;
+
                 notifyListeners();
                 break;
               case DocumentChangeType.removed:
@@ -84,12 +89,17 @@ class NotificationProvider extends ChangeNotifier {
                 break;
               case DocumentChangeType.modified:
                 Map<String, dynamic>? obj = docChange.doc.data();
-                notificationList.putIfAbsent(
-                    docChange.doc.id, () => NotificationModel.fromJson(obj!));
+                notificationList.update(
+                    docChange.doc.id,
+                    (value) =>
+                        NotificationModel.fromJson(obj!, docChange.doc.id));
+                notifyListeners();
                 break;
             }
           }
         }
+
+      ///Is Read all
         isReadAll = true;
         detectIsReadAll(notificationList);
       });
@@ -100,12 +110,12 @@ class NotificationProvider extends ChangeNotifier {
     }
   }
 
-  Future getNotificationFromNotificationId(String? notificationId) async {
-    singleNotificationList.clear();
+  Future<Object?> getNotificationFromNotificationId(String? notificationId) async {
+    currentSingleNotification = null;
     try {
       FirebaseFirestore.instance
           .collection(usersCollection)
-          .doc(uid)
+          .doc(currentUserModel!.uid)
           .collection(notificationsCollection)
           .doc(notificationId)
           .snapshots()
@@ -113,17 +123,24 @@ class NotificationProvider extends ChangeNotifier {
         if (event.data() != null) {
           Map<String, dynamic>? obj = event.data();
 
-          singleNotificationList.putIfAbsent(
-              event.id, () => NotificationModel.fromJson(obj!));
+          currentSingleNotification =
+              NotificationModel.fromJson(obj!, event.id);
+
+          //  singleNotificationList.putIfAbsent(
+          //      event.id, () => NotificationModel.fromJson(obj!, event.id));
+
+          print(currentSingleNotification!.body);
+
           notifyListeners();
         }
       });
-      return true;
+      return currentSingleNotification;
     } on Exception catch (exception) {
       debugPrint(exception.toString());
     } catch (_) {
-      return false;
+      return currentSingleNotification;
     }
+    return null;
   }
 
   ///Check if all notification is read
@@ -141,7 +158,7 @@ class NotificationProvider extends ChangeNotifier {
       //Update
       FirebaseFirestore.instance
           .collection(usersCollection)
-          .doc(uid)
+          .doc(currentUserModel!.uid)
           .collection(notificationsCollection)
           .doc(targetNotifyId)
           .set({
@@ -162,7 +179,7 @@ class NotificationProvider extends ChangeNotifier {
       //Update
       FirebaseFirestore.instance
           .collection(usersCollection)
-          .doc(uid)
+          .doc(currentUserModel!.uid)
           .collection(notificationsCollection)
           .doc(targetNotifyId)
           .set({

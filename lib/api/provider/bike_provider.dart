@@ -1,11 +1,13 @@
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/bike_model.dart';
 import '../model/bike_user_model.dart';
+import '../model/location_model.dart';
 import '../model/user_bike_model.dart';
 import '../model/user_model.dart';
 
@@ -19,22 +21,20 @@ class BikeProvider extends ChangeNotifier {
   LinkedHashMap bikeUserDetails = LinkedHashMap<String, UserModel>();
   LinkedHashMap userBikeList = LinkedHashMap<String, UserBikeModel>();
 
+  UserModel? currentUserModel;
   BikeModel? currentBikeModel;
   BikeUserModel? bikeUserModel;
   UserBikeModel? userBikeModel;
 
-  UserModel? currentUserModel;
   int currentBikeList = 0;
   String? currentBikeIMEI;
 
   ///Get current user model
   Future<void> init(UserModel? user) async {
-
     userBikeList.clear();
-    if(user == null){
+    if (user == null) {
       clear();
-    }
-    else{
+    } else {
       currentUserModel = user;
       getBikeList(currentUserModel?.uid);
       notifyListeners();
@@ -51,38 +51,50 @@ class BikeProvider extends ChangeNotifier {
           .collection(usersCollection)
           .doc(uid)
           .collection(bikesCollection)
-          .snapshots().listen((snapshot) {
+          .snapshots()
+          .listen((snapshot) {
         if (snapshot.docs.isNotEmpty) {
-        for (var docChange in snapshot.docChanges) {
-          switch(docChange.type){   ///element.type
-            case DocumentChangeType.added:
-              Map<String, dynamic>? obj = docChange.doc.data();
-              ///Key = imei, Val = get json object
-              userBikeList.putIfAbsent(docChange.doc.id, () => UserBikeModel.fromJson(obj!));
-              notifyListeners();
-              break;
-            case DocumentChangeType.removed:
-              userBikeList.removeWhere((key, value) => key == docChange.doc.id);
-              notifyListeners();
-              break;
+          for (var docChange in snapshot.docChanges) {
+            switch (docChange.type) {
+
+              ///element.type
+              case DocumentChangeType.added:
+                Map<String, dynamic>? obj = docChange.doc.data();
+
+                ///Key = imei, Val = get json object
+                userBikeList.putIfAbsent(
+                    docChange.doc.id, () => UserBikeModel.fromJson(obj!));
+                NotificationProvider().subscribeToTopic(docChange.doc.id);
+                notifyListeners();
+                break;
+              case DocumentChangeType.removed:
+                userBikeList
+                    .removeWhere((key, value) => key == docChange.doc.id);
+                notifyListeners();
+                break;
+              case DocumentChangeType.modified:
+                Map<String, dynamic>? obj = docChange.doc.data();
+                userBikeList.update(docChange.doc.id, (value) => UserBikeModel.fromJson(obj!));
+                notifyListeners();
+                break;
+            }
           }
-        }
 
-        if (prefs.containsKey('currentBikeIMEI')) {
-          currentBikeIMEI = prefs.getString('currentBikeIMEI') ?? "";
-          notifyListeners();
-        } else {
-          currentBikeIMEI = userBikeList.keys.first.toString();
-        }
+          if (prefs.containsKey('currentBikeIMEI')) {
+            currentBikeIMEI = prefs.getString('currentBikeIMEI') ?? "";
+            notifyListeners();
+          } else {
+            currentBikeIMEI = userBikeList.keys.first.toString();
+          }
 
-         if (prefs.containsKey('currentBikeList')) {
-           currentBikeList = prefs.getInt('currentBikeList') ?? 0;
-           notifyListeners();
-         } else {
-           currentBikeList = 0;
-         }
+          if (prefs.containsKey('currentBikeList')) {
+            currentBikeList = prefs.getInt('currentBikeList') ?? 0;
+            notifyListeners();
+          } else {
+            currentBikeList = 0;
+          }
 
-          if(currentBikeIMEI != ""){
+          if (currentBikeIMEI != "") {
             getBike(currentBikeIMEI);
           }
         } else {
@@ -98,40 +110,43 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
-
   ///Get bike information based on selected current bike
   Future<void> getBike(String? imei) async {
-
     SharedPreferences prefs = await _prefs;
 
-    for(int index = 0; index < userBikeList.length; index++){
-          if (userBikeList.keys.elementAt(index) == imei) {
-            FirebaseFirestore.instance
-                .collection(bikesCollection)
-                .doc(imei)
-                .snapshots()
-                .listen((event) {
-              try {
-                Map<String, dynamic>? obj = event.data();
-                if (obj != null) {
-                  currentBikeModel = BikeModel.fromJson(obj);
-                  prefs.setString('currentBikeIMEI', imei!);
-                  prefs.setInt('currentBikeList', index);
-                  notifyListeners();
-                } else {
-                  currentBikeModel = null;
-                }
-              } on Exception catch (exception) {
-                debugPrint(exception.toString());
-              } catch (_) {
-                return null;
-              }
-              getBikeUserList();
-            });
-          }
-        }
-      }
 
+    for (int index = 0; index < userBikeList.length; index++) {
+      if (userBikeList.keys.elementAt(index) == imei) {
+        ///Current bike model = userBikeList doc that match imei
+        FirebaseFirestore.instance
+            .collection(bikesCollection)
+            .doc(imei)
+            .snapshots()
+            .listen((event) {
+          try {
+            Map<String, dynamic>? obj = event.data();
+            if (obj != null) {
+
+
+              currentBikeModel = BikeModel.fromJson(obj);
+              prefs.setString('currentBikeIMEI', imei!);
+              prefs.setInt('currentBikeList', index);
+
+              notifyListeners();
+
+            } else {
+              currentBikeModel = null;
+            }
+          } on Exception catch (exception) {
+            debugPrint(exception.toString());
+          } catch (_) {
+            return null;
+          }
+          getBikeUserList();
+        });
+      }
+    }
+  }
 
   void updateBikeName(name) async {
     try {
@@ -156,7 +171,7 @@ class BikeProvider extends ChangeNotifier {
             prefs.setInt('currentBikeList', currentBikeList);
             getBike(userBikeList.keys.elementAt(currentBikeList));
             notifyListeners();
-          }else if(currentBikeList == userBikeList.length -1){
+          } else if (currentBikeList == userBikeList.length - 1) {
             controlBikeList("first");
           }
         }
@@ -168,7 +183,7 @@ class BikeProvider extends ChangeNotifier {
             prefs.setInt('currentBikeList', currentBikeList);
             getBike(userBikeList.keys.elementAt(currentBikeList));
             notifyListeners();
-          }else if(currentBikeList <= 0){
+          } else if (currentBikeList <= 0) {
             controlBikeList("last");
           }
         }
@@ -182,13 +197,13 @@ class BikeProvider extends ChangeNotifier {
         }
         break;
       case "last":
-      {
-        currentBikeList = userBikeList.length -1;
-        prefs.setInt('currentBikeList', currentBikeList);
-        getBike(userBikeList.keys.elementAt(currentBikeList));
-        notifyListeners();
-      }
-      break;
+        {
+          currentBikeList = userBikeList.length - 1;
+          prefs.setInt('currentBikeList', currentBikeList);
+          getBike(userBikeList.keys.elementAt(currentBikeList));
+          notifyListeners();
+        }
+        break;
     }
     notifyListeners();
   }
@@ -196,37 +211,34 @@ class BikeProvider extends ChangeNotifier {
   updateSharedBikeStatus(String targetID) async {
     bool result;
 
-
     try {
       //Update
-      FirebaseFirestore.instance.
-      collection(bikesCollection).
-      doc(currentBikeModel!.deviceIMEI).
-      collection(usersCollection)
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI)
+          .collection(usersCollection)
           .doc(targetID)
           .set({
-        'created':Timestamp.now(),
-        'uid':targetID,
-        'role':'user',
-     //   'notificationId':'',
-        'status':'pending',
+        'created': Timestamp.now(),
+        'uid': targetID,
+        'role': 'user',
+        //   'notificationId':'',
+        'status': 'pending',
         'justInvited': false,
+
         ///position,  0-4
         'userId': 4,
       }, SetOptions(merge: true));
 
-
       Future.delayed(const Duration(milliseconds: 500), () {
-
-        FirebaseFirestore.instance.
-        collection(bikesCollection).
-        doc(currentBikeModel!.deviceIMEI).
-        collection(usersCollection)
+        FirebaseFirestore.instance
+            .collection(bikesCollection)
+            .doc(currentBikeModel!.deviceIMEI)
+            .collection(usersCollection)
             .doc(targetID)
             .set({
           'justInvited': true,
         }, SetOptions(merge: true));
-
       });
 
       result = true;
@@ -235,25 +247,21 @@ class BikeProvider extends ChangeNotifier {
       result = false;
     }
 
-
     return result;
   }
 
-
-  updateAcceptSharedBikeStatus(String targetIMEI) async{
+  updateAcceptSharedBikeStatus(String targetIMEI) async {
     bool result;
 
     try {
       //Update
-      FirebaseFirestore.instance.
-      collection(bikesCollection).
-
-          ///target device imei
-      doc(targetIMEI).
-      collection(usersCollection)
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(targetIMEI)
+          .collection(usersCollection)
           .doc(currentUserModel!.uid)
           .set({
-        'status':'shared',
+        'status': 'shared',
         'justInvited': true,
       }, SetOptions(merge: true));
 
@@ -262,208 +270,207 @@ class BikeProvider extends ChangeNotifier {
       debugPrint(e.toString());
       result = false;
     }
-
     return result;
   }
-
 
   cancelSharedBikeStatus(String targetUID, String notificationId) async {
     bool result;
 
     try {
       //Update
-      FirebaseFirestore.instance.
-      collection(bikesCollection).
-      doc(currentBikeModel!.deviceIMEI).
-      collection(usersCollection)
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI)
+          .collection(usersCollection)
           .doc(targetUID)
           .set({
-        'status':'removed',
+        'status': 'removed',
         'justInvited': true,
       }, SetOptions(merge: true));
 
-
       ///Update user notification id status == removed
 
-      FirebaseFirestore.instance.
-      collection(usersCollection).
-          doc(targetUID)
+      FirebaseFirestore.instance
+          .collection(usersCollection)
+          .doc(targetUID)
           .collection("notifications")
           .doc(notificationId)
           .set({
-        'status':'removed',
+        'status': 'removed',
       }, SetOptions(merge: true));
-
-
 
       result = true;
     } catch (e) {
       debugPrint(e.toString());
       result = false;
     }
-
-
     return result;
   }
 
-
-  getBikeUserList(){
+  getBikeUserList() {
     bikeUserList.clear();
     bikeUserDetails.clear();
-
     try {
       //Update
-      FirebaseFirestore.instance.
-      collection(bikesCollection).
-      doc(currentBikeModel!.deviceIMEI).
-      collection(usersCollection).orderBy("created",descending: false).
-      snapshots().
-      listen((snapshot) {
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI)
+          .collection(usersCollection)
+          .orderBy("created", descending: false)
+          .snapshots()
+          .listen((snapshot) {
         if (snapshot.docs.isNotEmpty) {
           for (var docChange in snapshot.docChanges) {
-            switch(docChange.type){   ///element.type
+            switch (docChange.type) {
+
+              ///element.type
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
-              ///  bikeUserList2.putIfAbsent(docChange.doc.id, () => BikeUserModel.fromJson(obj!));
-                bikeUserList.putIfAbsent(docChange.doc.id, () => BikeUserModel.fromJson(obj!));
+
+                ///  bikeUserList2.putIfAbsent(docChange.doc.id, () => BikeUserModel.fromJson(obj!));
+                bikeUserList.putIfAbsent(
+                    docChange.doc.id, () => BikeUserModel.fromJson(obj!));
                 bikeUserList.forEach((key, value) {
                   getBikeUserDetails(key);
                 });
                 notifyListeners();
                 break;
               case DocumentChangeType.removed:
-                bikeUserList.removeWhere((key, value) => key == docChange.doc.id);
+                bikeUserList
+                    .removeWhere((key, value) => key == docChange.doc.id);
                 notifyListeners();
                 break;
               case DocumentChangeType.modified:
-              // TODO: Handle this case.
+                Map<String, dynamic>? obj = docChange.doc.data();
+                bikeUserList.update(docChange.doc.id, (value) => BikeUserModel.fromJson(obj!));
+                notifyListeners();
                 break;
             }
           }
         }
       });
-
     } catch (e) {
       debugPrint(e.toString());
     }
   }
 
-  getBikeUserDetails(String uid){
-
+  getBikeUserDetails(String uid) {
     try {
       //Update
-      FirebaseFirestore.instance.
-      collection(usersCollection).
-      doc(uid).
-      snapshots().
-      listen((snapshot) {
-
+      FirebaseFirestore.instance
+          .collection(usersCollection)
+          .doc(uid)
+          .snapshots()
+          .listen((snapshot) {
         Map<String, dynamic>? obj = snapshot.data();
         if (obj != null) {
-          bikeUserDetails.putIfAbsent(snapshot.id, () => UserModel.fromJson(obj!));
+          bikeUserDetails.putIfAbsent(
+              snapshot.id, () => UserModel.fromJson(obj!));
           notifyListeners();
-        }if(obj == null){
+        }
+        if (obj == null) {
           bikeUserDetails.removeWhere((key, value) => key == obj?.keys);
           notifyListeners();
         }
-
       });
-
     } catch (e) {
       debugPrint(e.toString());
     }
   }
 
-  bool checkIsOwner(){
-    if(bikeUserList.isNotEmpty){
-      for(var key in bikeUserList.keys) {
+  bool checkIsOwner() {
+    if (bikeUserList.isNotEmpty) {
+      for (var key in bikeUserList.keys) {
         if (currentUserModel!.uid == key) {
-           if(bikeUserList[key].role == "owner"){
-             return true;
-           }else{
-             return false;
-           }
+          if (bikeUserList[key].role == "owner") {
+            return true;
+          } else {
+            return false;
+          }
         }
       }
     }
-
     return false;
   }
 
-
   Future uploadToFireStore(selectedDeviceId) async {
-    try{
-    ///Upload bike to firestore
-    final snapshot = await FirebaseFirestore.instance
-        .collection('bikes')
-        .get();
+    try {
+      ///Upload bike to firestore
+      final snapshot =
+          await FirebaseFirestore.instance.collection('bikes').get();
 
-    //For each snapshot data match selected device id
+      //For each snapshot data match selected device id
 
-    ///Check if have data
-    if (snapshot.size == 0) {
-      ///User name = provider current user
+      ///Check if have data
+      if (snapshot.size == 0) {
+        ///User name = provider current user
+        FirebaseFirestore.instance
+            .collection(bikesCollection)
+            .doc(selectedDeviceId)
+            .set(BikeModel(
+              deviceType: "Reevo",
+              deviceIMEI: selectedDeviceId!,
+              isLocked: false,
+              bikeName: "ReevoBike",
+
+              ///Here need to upload location based on user current location
+
+              created: Timestamp.now(),
+              updated: Timestamp.now(),
+            ).toJson());
+      }
+
+      ///uploadBikeToUserFireStore
+      FirebaseFirestore.instance
+          .collection(usersCollection)
+          .doc(currentUserModel!.uid)
+          .collection(bikesCollection)
+          .doc(selectedDeviceId)
+          .set(UserBikeModel(
+            deviceIMEI: selectedDeviceId!,
+            deviceType: "Reevo",
+            created: Timestamp.now(),
+          ).toJson());
+
+      ///uploadUserToBikeFireStore
+      String role = "";
+      //Check if first registration. Role is owner/rider
+      final ubsnapshot = await FirebaseFirestore.instance
+          .collection('bikes')
+          .doc(selectedDeviceId)
+          .collection('users')
+          .get();
+
+      if (ubsnapshot.size == 0) {
+        role = "owner";
+      } else if (ubsnapshot.size > 0) {
+        role = "user";
+      } else if (ubsnapshot.size >= 5) {
+        role = "exceed limit";
+      }
+
       FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(selectedDeviceId)
-          .set(BikeModel(
-        deviceType: "Reevo",
-        deviceIMEI: selectedDeviceId!,
-        isLocked: false,
-        bikeName: "ReevoBike",
-        created: Timestamp.now(),
-        updated: Timestamp.now(),
-      ).toJson());
+          .collection(usersCollection)
+          .doc(currentUserModel!.uid)
+          .set(BikeUserModel(
+            uid: currentUserModel!.uid,
+            role: role,
+
+
+      ///      userId:  if owner then == 0
+
+
+            created: Timestamp.now(),
+          ).toJson());
+
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
     }
-
-    ///uploadBikeToUserFireStore
-    FirebaseFirestore.instance
-        .collection(usersCollection)
-        .doc(currentUserModel!.uid)
-        .collection(bikesCollection)
-        .doc(selectedDeviceId)
-        .set(UserBikeModel(
-      deviceIMEI: selectedDeviceId!,
-      deviceType: "Reevo",
-      created: Timestamp.now(),
-    ).toJson());
-
-
-    ///uploadUserToBikeFireStore
-    String role = "";
-    //Check if first registration. Role is owner/rider
-    final ubsnapshot = await FirebaseFirestore.instance
-        .collection('bikes')
-        .doc(selectedDeviceId)
-        .collection('users')
-        .get();
-
-    if (ubsnapshot.size == 0) {
-      role = "owner";
-    } else if (ubsnapshot.size > 0) {
-      role = "user";
-    }else if (ubsnapshot.size >= 5) {
-      role = "exceed limit";
-    }
-
-    FirebaseFirestore.instance
-        .collection(bikesCollection)
-        .doc(selectedDeviceId)
-        .collection(usersCollection)
-        .doc(currentUserModel!.uid)
-        .set(BikeUserModel(
-      uid: currentUserModel!.uid,
-      role: role,
-      created: Timestamp.now(),
-    ).toJson());
-
-    return true;
-  }catch(e){
-    debugPrint(e.toString());
-    return false;
   }
-  }
-
 
   deleteBike(String imei) {
     controlBikeList("first");
@@ -497,7 +504,13 @@ class BikeProvider extends ChangeNotifier {
     prefs.remove('currentBikeName');
     prefs.remove('currentBikeList');
     prefs.remove('currentBikeIMEI');
+
+    userBikeList.keys.forEach((element) {
+      NotificationProvider().unsubscribeFromTopic(element);
+    });
+
     userBikeList.clear();
+
     currentBikeModel = null;
     userBikeModel = null;
     bikeUserModel = null;

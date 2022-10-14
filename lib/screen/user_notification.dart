@@ -31,10 +31,14 @@ class _UserNotificationState extends State<UserNotification> {
   late NotificationProvider _notificationProvider;
   late BikeProvider _bikeProvider;
 
+
+
   @override
   Widget build(BuildContext context) {
     _notificationProvider = Provider.of<NotificationProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
+
+
 
     return Scaffold(
         appBar: AppBar(

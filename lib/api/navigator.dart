@@ -46,6 +46,8 @@ void changeToNotificationScreen(BuildContext context) {
       .pushNamedAndRemoveUntil("/notification", (route) => false);
 }
 
+
+///Future builder
 void changeToNotificationDetailsScreen(BuildContext context, key, value) {
   Navigator.push(context,
     MaterialPageRoute(builder: (context) => UserNotificationDetails(key, value)),

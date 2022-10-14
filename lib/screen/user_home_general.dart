@@ -55,17 +55,52 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       ///Pass notification id to get body and key
       await _notificationProvider.getNotificationFromNotificationId(data);
 
+
+      FutureBuilder(
+          future: _notificationProvider.getNotificationFromNotificationId(data),
+          builder: (context, snapshot) {
+            if(snapshot.hasData) {
+              changeToNotificationDetailsScreen(
+                context,
+                _notificationProvider.currentSingleNotification?.notificationId,
+                _notificationProvider.currentSingleNotification,
+
+                //   _notificationProvider.singleNotificationList.keys.first,
+                //   _notificationProvider.singleNotificationList.values.first
+              );
+              return const Text("");
+            }
+            else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }
+      );
+
+
+
+      /*
+      ///Future builder
         Future.delayed(const Duration(milliseconds: 800), () {
           changeToNotificationDetailsScreen(
               context,
-              _notificationProvider.singleNotificationList.keys.first,
-              _notificationProvider.singleNotificationList.values.first);
+              _notificationProvider.currentSingleNotification?.notificationId,
+              _notificationProvider.currentSingleNotification,
+
+           //   _notificationProvider.singleNotificationList.keys.first,
+           //   _notificationProvider.singleNotificationList.values.first
+              );
         });
+
+
+       */
+
     });
 
     foreNotificationSetting();
 
-    ///FG message
+    ///android FG message
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
@@ -109,18 +144,52 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     );
   }
 
-  ///Foreground select Notification
+  ///Foreground select Notification android
   Future<void> onSelectNotification(String? payload) async {
     ///Pass notification id to get body and key
+
+    FutureBuilder(
+        future: _notificationProvider.getNotificationFromNotificationId(payload),
+        builder: (context, snapshot) {
+          if(snapshot.hasData) {
+            changeToNotificationDetailsScreen(
+              context,
+              _notificationProvider.currentSingleNotification?.notificationId,
+              _notificationProvider.currentSingleNotification,
+
+              //   _notificationProvider.singleNotificationList.keys.first,
+              //   _notificationProvider.singleNotificationList.values.first
+            );
+            return const Text("");
+          }
+          else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        }
+    );
+
+    /*
     await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
 
+      ///Future builder
       Future.delayed(const Duration(milliseconds: 800), () {
         changeToNotificationDetailsScreen(
-            context,
-            _notificationProvider.singleNotificationList.keys.first,
-            _notificationProvider.singleNotificationList.values.first);
+          context,
+          _notificationProvider.currentSingleNotification?.notificationId,
+          _notificationProvider.currentSingleNotification,
+
+          //   _notificationProvider.singleNotificationList.keys.first,
+          //   _notificationProvider.singleNotificationList.values.first
+        );
       });
+
     });
+
+
+     */
+
   }
 
 
@@ -129,16 +198,63 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       int? id, String? title, String? body, String? payload) async {
     // display a dialog with the notification details, tap ok to go to another page
     ///Pass notification id to get body and key
+    _notificationProvider.getNotificationFromNotificationId(payload);
+
+    if(_notificationProvider.currentSingleNotification?.notificationId != null){
+      changeToNotificationDetailsScreen(
+        context,
+        _notificationProvider.currentSingleNotification?.notificationId,
+        _notificationProvider.currentSingleNotification,
+
+        //   _notificationProvider.singleNotificationList.keys.first,
+        //   _notificationProvider.singleNotificationList.values.first
+      );
+    }
+
+    /*
+    FutureBuilder(
+        future: _notificationProvider.getNotificationFromNotificationId(payload),
+        builder: (context, snapshot) {
+          if(snapshot.hasData) {
+            changeToNotificationDetailsScreen(
+              context,
+              _notificationProvider.currentSingleNotification?.notificationId,
+              _notificationProvider.currentSingleNotification,
+
+              //   _notificationProvider.singleNotificationList.keys.first,
+              //   _notificationProvider.singleNotificationList.values.first
+            );
+            return const Text("");
+          }
+          else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        }
+    );
+
+     */
+    /*
     await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
 
+
+      ///Future builder
       Future.delayed(const Duration(milliseconds: 800), () {
         changeToNotificationDetailsScreen(
-            context,
-            _notificationProvider.singleNotificationList.keys.first,
-            _notificationProvider.singleNotificationList.values.first);
+          context,
+          _notificationProvider.currentSingleNotification?.notificationId,
+          _notificationProvider.currentSingleNotification,
+
+          //   _notificationProvider.singleNotificationList.keys.first,
+          //   _notificationProvider.singleNotificationList.values.first
+        );
       });
     });
+
+     */
   }
+
 
 
   @override

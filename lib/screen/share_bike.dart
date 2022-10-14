@@ -123,7 +123,6 @@ class _ShareBikeState extends State<ShareBike> {
                                           onPressed: isOwner ?() async {
                                             try {
 
-                                              ///should have loading dialog when await
                                               _authProvider.checkIfFirestoreUserExist(
                                                 _emailController.text.trim(),
                                               ).then((result){
@@ -149,7 +148,6 @@ class _ShareBikeState extends State<ShareBike> {
                                                         SmartDialog.dismiss();
                                                         _bikeProvider.updateSharedBikeStatus(result).
                                                         then((update){
-                                                          print(update.toString());
                                                           if(update == true){
                                                             SmartDialog.show(widget: EvieSingleButtonDialog(
                                                                 title: "Success",

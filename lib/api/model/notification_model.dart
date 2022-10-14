@@ -9,6 +9,7 @@ class NotificationModel {
   bool? isRead;
   Timestamp? created;
   Timestamp? updated;
+  String notificationId;
 
 
   NotificationModel({
@@ -20,18 +21,20 @@ class NotificationModel {
     required this.isRead,
     this.created,
     this.updated,
+    required this.notificationId,
   });
 
-  factory NotificationModel.fromJson(Map json) {
+  factory NotificationModel.fromJson(Map json, String notificationId) {
     return NotificationModel(
-      body:        (json['body']?? ''      ).toString(),
-      deviceIMEI:  (json['deviceIMEI']?? '').toString(),
-      status:      (json['status']?? ''    ).toString(),
-      title:       (json['title']?? ''     ).toString(),
-      type:        (json['type']?? ''      ).toString(),
-      isRead:      (json['isRead']?? ''    ),
-      created:     timestampFromJson(json['created'] as Timestamp?),
-      updated:     timestampFromJson(json['updated'] as Timestamp?),
+      notificationId:notificationId,
+      body:          json['body']?? '',
+      deviceIMEI:    json['deviceIMEI']?? '',
+      status:        json['status']?? '',
+      title:         json['title']?? '',
+      type:          json['type']?? '',
+      isRead:        json['isRead']?? false,
+      created:       timestampFromJson(json['created'] as Timestamp?),
+      updated:       timestampFromJson(json['updated'] as Timestamp?),
     );
   }
 

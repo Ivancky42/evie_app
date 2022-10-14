@@ -32,6 +32,7 @@ import 'package:sizer/sizer.dart';
 import 'api/model/user_model.dart';
 import 'api/provider/auth_provider.dart';
 import 'api/provider/bike_provider.dart';
+import 'api/provider/location_provider.dart';
 import 'api/provider/notification_provider.dart';
 
 
@@ -100,6 +101,9 @@ class AppProviders extends StatelessWidget {
           ChangeNotifierProvider<ThemeChangeNotifier>(
             create: (context) => ThemeChangeNotifier(),
           ),
+      ///    ChangeNotifierProvider<LocationProvider>(
+      ///      create: (context) => LocationProvider(),
+      ///    ),
           ChangeNotifierProxyProvider<AuthProvider, CurrentUserProvider>(
               lazy: false,
               create: (_) => CurrentUserProvider(),
@@ -124,12 +128,20 @@ class AppProviders extends StatelessWidget {
                   ..init(currentUserProvider.getCurrentUserModel);
               }
           ),
-          ChangeNotifierProxyProvider<AuthProvider, NotificationProvider>(
+          ChangeNotifierProxyProvider<CurrentUserProvider, NotificationProvider>(
               lazy: true,
               create: (_) => NotificationProvider(),
-              update: (_, authProvider, notificationProvider) {
+              update: (_, currentUserProvider, notificationProvider) {
                 return notificationProvider!
-                  ..init(authProvider.getUid);
+                  ..init(currentUserProvider.getCurrentUserModel);
+              }
+          ),
+          ChangeNotifierProxyProvider<BikeProvider, LocationProvider>(
+              lazy: true,
+              create: (_) => LocationProvider(),
+              update: (_, bikeProvider, locationProvider) {
+                return locationProvider!
+                  ..init(bikeProvider.currentBikeModel?.location);
               }
           ),
         ],
@@ -189,7 +201,7 @@ late AndroidNotificationChannel channel;
 /// INITIALIZE THE [FlutterLocalNotificationsPlugin] PACKAGE
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-/// BACKGROUND MESSAGE HANDLER
+/// ANDROID BACKGROUND MESSAGE HANDLER
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   debugPrint('Background message : ${message.messageId}');

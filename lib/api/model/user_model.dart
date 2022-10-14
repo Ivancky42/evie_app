@@ -34,14 +34,14 @@ class UserModel {
 
   factory UserModel.fromJson(Map json) {
     return UserModel(
-      uid: (json['uid']?? '').toString(),
-      email: (json['email']?? '').toString(),
-      name: (json['name']?? '').toString(),
-      credentialProvider: (json['credentialProvider']?? '').toString(),
-      profileIMG: (json['profileIMG']?? '').toString(),
-      phoneNumber:(json['phoneNumber']?? '').toString(),
-      created: timestampFromJson(json['created'] as Timestamp?),
-      updated: timestampFromJson(json['updated'] as Timestamp?),
+      uid:                json['uid']?? '',
+      email:              json['email']?? '',
+      name:               json['name']?? '',
+      credentialProvider: json['credentialProvider']?? '',
+      profileIMG:         json['profileIMG']?? '',
+      phoneNumber:        json['phoneNumber']?? '',
+      created:            timestampFromJson(json['created'] as Timestamp?),
+      updated:            timestampFromJson(json['updated'] as Timestamp?),
     );
   }
 
