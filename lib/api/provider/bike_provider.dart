@@ -327,7 +327,6 @@ class BikeProvider extends ChangeNotifier {
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
 
-                ///  bikeUserList2.putIfAbsent(docChange.doc.id, () => BikeUserModel.fromJson(obj!));
                 bikeUserList.putIfAbsent(
                     docChange.doc.id, () => BikeUserModel.fromJson(obj!));
                 bikeUserList.forEach((key, value) {
@@ -356,7 +355,6 @@ class BikeProvider extends ChangeNotifier {
 
   getBikeUserDetails(String uid) {
     try {
-      //Update
       FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(uid)

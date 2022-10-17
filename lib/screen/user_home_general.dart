@@ -1,13 +1,11 @@
 import 'dart:collection';
-
+import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/widgets/widgets.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -15,7 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import 'package:sizer/sizer.dart';
-import '../api/model/notification_model.dart';
+import '../api/backend/stripe_api_caller.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/provider/notification_provider.dart';
 import '../main.dart';
@@ -324,19 +322,10 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                         },
                       ),
                     ),
-
-/*
-                    Image.asset(
-                      'assets/images/evie_bike_modelA.png',
-                      height: 200,
-                      width: 200,
-                    ),
-
- */
                     SizedBox(
                       height: 150,
                     width: 180,
-                    child:CarouselSlider(
+                    child: CarouselSlider(
                       carouselController: _pageController,
                       items: imgList.map((item)=> Container(
                         child:Center(
@@ -526,20 +515,52 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                   },
                 ),
 
-
-                ///Sign out for development purpose
-                /*
-              EvieButton_LightBlue(
-                width: double.infinity,
-                child: const Text("Sign Out",
-                  style: TextStyle(color: Colors.white,
-                    fontSize: 12.0,),
+                EvieButton_LightBlue(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Checkout plan",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    // StripeApiCaller.redirectToCheckout("price_1Lp0yCBjvoM881zMsahs6rkP", customerId).then((sessionId) {
+                    //   changeToCheckoutScreen(context, sessionId);
+                    // });
+                  },
                 ),
-                onPressed: () {
-                  _currentUser.signOut();
-                },
-              ),
-               */
+
+                EvieButton_LightBlue(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Change Plan",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    //StripeApiCaller.changeSubscription("sub_1Lp1PjBjvoM881zMuyOFI50l", "price_1Lp11KBjvoM881zM7rIdanjj", "si_MY7fGJWs01DGF5");
+                  },
+                ),
+
+                EvieButton_LightBlue(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Cancel Plan",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    //StripeApiCaller.cancelSubscription("sub_1Lp1PjBjvoM881zMuyOFI50l");
+                  },
+                ),
 
                  SizedBox(
                   height: 1.h,

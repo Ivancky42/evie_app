@@ -117,7 +117,7 @@ class _TestBleState extends State<TestBle> {
               child: EvieButton_LightBlue(
                 onPressed: () {
                   SmartDialog.showLoading(msg: "Unlocking bike....");
-                  if (bluetoothProvider.checkIsBluetoothOn()) {
+                  if (bluetoothProvider.bleStatus == BleStatus.ready) {
                     bluetoothProvider.unlockBike(1, Timestamp
                         .now()
                         .seconds).listen((unlockResult) {

@@ -11,11 +11,6 @@ import '../api/provider/bike_provider.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
 
-
-///Cannot use when user bluetooth is off, should check user bluetooth
-///then request turn on bluetooth
-
-
 class UserHomeBluetooth extends StatefulWidget{
   const UserHomeBluetooth({ Key? key }) : super(key: key);
   @override

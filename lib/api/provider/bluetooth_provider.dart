@@ -289,14 +289,6 @@ class BluetoothProvider extends ChangeNotifier {
     }
   }
 
-  bool checkIsBluetoothOn() {
-    if (bleStatus == BleStatus.ready) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   void handlePermission() async {
     var status = await Permission.bluetooth.request();
     if (status.isPermanentlyDenied) {

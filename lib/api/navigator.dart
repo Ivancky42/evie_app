@@ -1,3 +1,4 @@
+import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -51,6 +52,12 @@ void changeToNotificationScreen(BuildContext context) {
 void changeToNotificationDetailsScreen(BuildContext context, key, value) {
   Navigator.push(context,
     MaterialPageRoute(builder: (context) => UserNotificationDetails(key, value)),
+  );
+}
+
+void changeToStripeCheckoutScreen(BuildContext context, value) {
+  Navigator.push(context,
+    MaterialPageRoute(builder: (context) => StripeCheckoutScreen(sessionId: value,)),
   );
 }
 

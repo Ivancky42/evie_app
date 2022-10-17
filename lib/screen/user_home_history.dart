@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
@@ -8,8 +9,12 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:sizer/sizer.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/provider/location_provider.dart';
+
+
+///Temporary use for location and map service
 
 class UserHomeHistory extends StatefulWidget {
   const UserHomeHistory({Key? key}) : super(key: key);
@@ -19,13 +24,15 @@ class UserHomeHistory extends StatefulWidget {
 }
 
 class _UserHomeHistoryState extends State<UserHomeHistory> {
+
+  final List<String> dangerStatus = ['safe', 'warning', 'danger'];
+  String currentDangerStatus = 'safe';
+
   late LocationProvider _locationProvider;
   late BikeProvider _bikeProvider;
+  late LatLngBounds latLngBounds;
 
   MapboxMapController? mapController;
-
-  final Map<String, int> dangerStatus = {'safe': 1, 'warning': 2, 'danger': 3};
-  String currentDangerStatus = 'safe';
 
   @override
   void initState() {
@@ -34,10 +41,10 @@ class _UserHomeHistoryState extends State<UserHomeHistory> {
 
   @override
   void dispose() {
-    //  mapController?.dispose();
     super.dispose();
   }
 
+  ///Load image according danger status
   Future<Uint8List> loadMarkerImage(String dangerStatus) async {
     switch (dangerStatus) {
       case 'safe':
@@ -47,14 +54,12 @@ class _UserHomeHistoryState extends State<UserHomeHistory> {
         }
       case 'warning':
         {
-          var byteData =
-              await rootBundle.load("assets/icons/marker_warning.png");
+          var byteData = await rootBundle.load("assets/icons/marker_warning.png");
           return byteData.buffer.asUint8List();
         }
       case 'danger':
         {
-          var byteData =
-              await rootBundle.load("assets/icons/marker_danger.png");
+          var byteData = await rootBundle.load("assets/icons/marker_danger.png");
           return byteData.buffer.asUint8List();
         }
       default:
@@ -66,58 +71,78 @@ class _UserHomeHistoryState extends State<UserHomeHistory> {
   }
 
   runSymbol() async {
-    mapController?.clearSymbols();
+    if(mapController!.symbols.isNotEmpty){
+      mapController?.clearSymbols();
+    }
 
     var markerImage = await loadMarkerImage(currentDangerStatus);
     mapController?.addImage('marker', markerImage);
 
+    ///Update symbol geometry and status instead of rebuild everytime
+    //mapController?.updateSymbol(symbol, changes)
 
-    ///Change icon according to dangerous level
-    await mapController?.addSymbol(
-      SymbolOptions(
-        //iconSize: 0.3,
-        iconImage: "marker",
-        geometry: LatLng(_locationProvider.locationModel!.geopoint.latitude,
-            _locationProvider.locationModel!.geopoint.longitude),
-        // iconAnchor: "bottom",
-      ),
+    addSymbol();
+
+    final LatLng southwest = LatLng(
+      min(_locationProvider.locationModel!.geopoint.latitude, _locationProvider.userPosition!.latitude),
+      min(_locationProvider.locationModel!.geopoint.longitude, _locationProvider.userPosition!.longitude),
     );
 
-    mapController?.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(target: LatLng(_locationProvider.locationModel!.geopoint.latitude,
-          _locationProvider.locationModel!.geopoint.longitude), zoom: 13),
-    ));
+    final LatLng northeast = LatLng(
+      max(_locationProvider.locationModel!.geopoint.latitude, _locationProvider.userPosition!.latitude),
+      max(_locationProvider.locationModel!.geopoint.longitude, _locationProvider.userPosition!.longitude),
+    );
 
-    _locationProvider.getPlaceMarks(
-        _locationProvider.locationModel!.geopoint.latitude,
-        _locationProvider.locationModel!.geopoint.longitude);
+    latLngBounds = LatLngBounds(southwest: southwest, northeast: northeast);
 
-    mapController?.onSymbolTapped.add((argument) {
-      SmartDialog.show(
-          keepSingle: true,
-          widget: EvieSingleButtonDialog(
-              title: "Bike Location",
-              content:
-                  "Latitude: ${_locationProvider.locationModel!.geopoint.latitude}\n"
-                  "Longtitude: ${_locationProvider.locationModel!.geopoint.longitude}\n"
-                  "Place: ${_locationProvider.currentPlaceMark?.name} "
-                  "${_locationProvider.currentPlaceMark?.country}",
-              rightContent: "Ok",
-              onPressedRight: () {
-                SmartDialog.dismiss();
-              }));
-    });
-
-    /*
     mapController?.animateCamera(CameraUpdate.newLatLngBounds(
         latLngBounds,
-        left: 144,
-        right: 144,
-        top: 144,
-        bottom: 144
+        left: 80,
+        right: 80,
+        top: 80,
+        bottom: 80,
     ));
+    getPlace();
+  }
 
-     */
+  ///Change icon according to dangerous level
+  void addSymbol() async{
+    mapController?.addSymbol(
+      SymbolOptions(
+        iconImage: 'marker',
+        geometry: LatLng(_locationProvider.locationModel!.geopoint.latitude,
+            _locationProvider.locationModel!.geopoint.longitude),
+      ),
+    );
+  }
+
+  void getPlace(){
+    _locationProvider.getPlaceMarks(
+        _locationProvider.locationModel!.geopoint.latitude,
+        _locationProvider.locationModel!.geopoint.longitude
+    );
+
+    mapController?.onSymbolTapped.add((argument) {
+      SmartDialog.showAttach(
+        keepSingle: true,
+        alignmentTemp: Alignment.center,
+        targetContext: context,
+        widget: Container(
+            width: 200,
+            height: 50,
+            color: Colors.white,
+          child: Text("Bike Location:\n "
+              "${_locationProvider.currentPlaceMark?.name} "
+              "${_locationProvider.currentPlaceMark?.country}"),
+        ),
+      );
+    });
+  }
+
+  void _onMapCreated(MapboxMapController mapController) async {
+    setState(() {
+      this.mapController = mapController;
+    });
   }
 
   @override
@@ -125,7 +150,7 @@ class _UserHomeHistoryState extends State<UserHomeHistory> {
     _locationProvider = Provider.of<LocationProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
 
-    for (var element in dangerStatus.keys) {
+    for (var element in dangerStatus) {
       if (_bikeProvider.currentBikeModel!.location!.status == element) {
         currentDangerStatus = element;
       }
@@ -134,32 +159,6 @@ class _UserHomeHistoryState extends State<UserHomeHistory> {
     if (mapController != null) {
       runSymbol();
     }
-    
-    void _onMapCreated(MapboxMapController mapController) async {
-      this.mapController = mapController;
-
-      runSymbol();
-      //mapController.updateSymbol(symbol, load);
-    }
-
-    /*
-      mapController.addSymbol(
-          SymbolOptions(
-            iconImage: "assets/icons/marker_bike.png",
-            geometry: LatLng(_bikeProvider.currentBikeModel!.location!.geopoint.latitude,
-                _bikeProvider.currentBikeModel!.location!.geopoint.longitude),
-            iconSize: 0.25,
-          ));
-       */
-
-/*
-    controller.addSymbol(
-      SymbolOptions(
-        geometry: LatLng(_locationProvider.position!.latitude,  _locationProvider.position!.longitude),
-        iconImage: "assets/icons/marker_bike.png",
-      ),
-    );
-    */
 
     return Scaffold(
         body: Padding(
@@ -170,9 +169,7 @@ class _UserHomeHistoryState extends State<UserHomeHistory> {
           //mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Status: ${_locationProvider.locationModel!.status},\n"
-                "long and lang: ${_locationProvider.locationModel!.geopoint.longitude},"
-                "${_locationProvider.locationModel!.geopoint.latitude}\n\n"),
+            Text("Status: ${_locationProvider.locationModel!.status} \n"),
 
             FutureBuilder(
                 future: getLocation(),
@@ -180,7 +177,7 @@ class _UserHomeHistoryState extends State<UserHomeHistory> {
                   if(snapshot.hasData) {
                     return SizedBox(
                       width: double.infinity,
-                      height: 300,
+                      height: 30.h,
                       child: MapboxMap(
                         myLocationEnabled: true,
                         //   styleString: _locationProvider.mapBoxStyleToken,
@@ -188,14 +185,12 @@ class _UserHomeHistoryState extends State<UserHomeHistory> {
                         myLocationTrackingMode: MyLocationTrackingMode.Tracking,
                         accessToken: _locationProvider.defPublicAccessToken,
                         compassEnabled: true,
-                        // styleString: _locationProvider.mapBoxStyleToken,
                         onMapCreated: _onMapCreated,
                         initialCameraPosition: CameraPosition(
-                          target:
-                          // LatLng(_locationProvider.position!.latitude,  _locationProvider.position!.longitude),
-                          LatLng(_locationProvider.userPosition!.latitude,
-                              _locationProvider.userPosition!.longitude),
-                          zoom: 14,
+                      target:
+                      LatLng(_locationProvider.locationModel!.geopoint.latitude,
+                          _locationProvider.locationModel!.geopoint.longitude),
+                      zoom: 14,
                         ),
                       ),
                     );
@@ -236,3 +231,5 @@ class _UserHomeHistoryState extends State<UserHomeHistory> {
   }
 
 }
+
+
