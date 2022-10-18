@@ -23,6 +23,7 @@ class BikeUserModel {
   Map<String, dynamic> toJson() => {
     "uid" : uid,
     "role" : role,
+    "userId" : userId,
     "created": timestampToJson(created),
   };
 

@@ -37,6 +37,7 @@ class BikeProvider extends ChangeNotifier {
     } else {
       currentUserModel = user;
       getBikeList(currentUserModel?.uid);
+
       notifyListeners();
     }
   }
@@ -212,6 +213,27 @@ class BikeProvider extends ChangeNotifier {
     bool result;
 
     try {
+
+      final ubsnapshot = await FirebaseFirestore.instance
+          .collection('bikes')
+          .doc(currentBikeModel!.deviceIMEI)
+          .collection('users')
+          .get();
+
+      List<int> aList = [];
+      int? userId;
+
+      for (var element in ubsnapshot.docs) {
+        aList.add(element.data()["userId"]);
+      }
+      aList = aList..sort();
+
+      for(var i = 4; i>0; i--){
+        if(!aList.contains(i)){
+          userId = i;
+        }
+      }
+      
       //Update
       FirebaseFirestore.instance
           .collection(bikesCollection)
@@ -222,12 +244,9 @@ class BikeProvider extends ChangeNotifier {
         'created': Timestamp.now(),
         'uid': targetID,
         'role': 'user',
-        //   'notificationId':'',
         'status': 'pending',
         'justInvited': false,
-
-        ///position,  0-4
-        'userId': 4,
+        'userId': userId,
       }, SetOptions(merge: true));
 
       Future.delayed(const Duration(milliseconds: 500), () {
@@ -393,7 +412,6 @@ class BikeProvider extends ChangeNotifier {
 
   Future uploadToFireStore(selectedDeviceId) async {
     try {
-      ///Upload bike to firestore
       final snapshot =
           await FirebaseFirestore.instance.collection('bikes').get();
 
@@ -411,7 +429,7 @@ class BikeProvider extends ChangeNotifier {
               isLocked: false,
               bikeName: "ReevoBike",
 
-              ///Here need to upload location based on user current location
+              ///TODO: Upload location based on user current location
 
               created: Timestamp.now(),
               updated: Timestamp.now(),
@@ -441,27 +459,49 @@ class BikeProvider extends ChangeNotifier {
 
       if (ubsnapshot.size == 0) {
         role = "owner";
+        FirebaseFirestore.instance
+            .collection(bikesCollection)
+            .doc(selectedDeviceId)
+            .collection(usersCollection)
+            .doc(currentUserModel!.uid)
+            .set(BikeUserModel(
+          uid: currentUserModel!.uid,
+          role: role,
+          userId: 0,
+          created: Timestamp.now(),
+        ).toJson());
       } else if (ubsnapshot.size > 0) {
+
         role = "user";
+        List<int> aList = [];
+        int? userId;
+
+        for (var element in ubsnapshot.docs) {
+          aList.add(element.data()["userId"]);
+        }
+        aList = aList..sort();
+
+        for(var i = 4; i>0; i--){
+          if(!aList.contains(i)){
+            userId = i;
+          }
+        }
+
+        ///Get snapshot data about user Id
+        FirebaseFirestore.instance
+            .collection(bikesCollection)
+            .doc(selectedDeviceId)
+            .collection(usersCollection)
+            .doc(currentUserModel!.uid)
+            .set(BikeUserModel(
+          uid: currentUserModel!.uid,
+          role: role,
+          userId: userId,
+          created: Timestamp.now(),
+        ).toJson());
       } else if (ubsnapshot.size >= 5) {
         role = "exceed limit";
       }
-
-      FirebaseFirestore.instance
-          .collection(bikesCollection)
-          .doc(selectedDeviceId)
-          .collection(usersCollection)
-          .doc(currentUserModel!.uid)
-          .set(BikeUserModel(
-            uid: currentUserModel!.uid,
-            role: role,
-
-
-      ///      userId:  if owner then == 0
-
-
-            created: Timestamp.now(),
-          ).toJson());
 
       return true;
     } catch (e) {
