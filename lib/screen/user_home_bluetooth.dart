@@ -174,14 +174,8 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
 
 
 
-
                       changeToTestBLEScreen(context);
                       //changeToUserHomePageScreen(context);
-
-
-
-
-
 
 
 

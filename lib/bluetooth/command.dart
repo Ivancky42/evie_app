@@ -19,6 +19,7 @@ class BluetoothCommand {
   static const int changeBleKeyCmd = 0x32; /// 4.5.6
 
   static const int rfidCardAddDelete = 0x37; ///4.5.11  ///1:add card 0:delete card
+  static const int externalCableLock = 0x81; ///4.5.11  ///1:add card 0:delete card
 
 
 
@@ -166,6 +167,44 @@ class BluetoothCommand {
     data[14] = 0x00;
 
     data[15] = 0x00; /// Normal unlock
+
+    return encodeData(dataSize, rand, data);
+  }
+
+  List<int> cableLock(int comKey) {
+    int dataSize = 1;
+    int totalDataSize = 6 + dataSize;
+    List<int> data = List<int>.filled(totalDataSize, 0, growable: true);
+    int rand = random.nextInt(255);
+
+    data[0] = header[0]; /// header
+    data[1] = header[1]; /// header
+    data[2] = dataSize; /// data length
+    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[4] = comKey; ///  Communication key
+    data[5] = externalCableLock; /// cmd : 0x81
+
+    data[6] = 0x13; /// 3: Cable lock unlock   13: Cable lock lock
+    data[7] = 0x00; /// Normal unlock
+
+    return encodeData(dataSize, rand, data);
+  }
+
+  List<int> cableUnlock(int comKey) {
+    int dataSize = 1;
+    int totalDataSize = 6 + dataSize;
+    List<int> data = List<int>.filled(totalDataSize, 0, growable: true);
+    int rand = random.nextInt(255);
+
+    data[0] = header[0]; /// header
+    data[1] = header[1]; /// header
+    data[2] = dataSize; /// data length
+    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[4] = comKey; ///  Communication key
+    data[5] = externalCableLock; /// cmd : 0x81
+
+    data[6] = 0x03; /// 3: Cable lock unlock   13: Cable lock lock
+    data[7] = 0x00; /// Normal unlock
 
     return encodeData(dataSize, rand, data);
   }

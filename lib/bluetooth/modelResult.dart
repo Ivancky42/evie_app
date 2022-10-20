@@ -101,7 +101,7 @@ class AddRFIDCardResult{
     /// 0: Success
     /// 1: Failed
 
-    result = data[6] == 1 ? CommandResult.success : CommandResult.failed;
+    result = data[6] == 0 ? CommandResult.success : CommandResult.failed;
   }
 }
 
@@ -114,7 +114,28 @@ class DeleteRFIDCardResult{
     /// 0: Success
     /// 1: Failed
 
-    result = data[6] == 1 ? CommandResult.success : CommandResult.failed;
+    result = data[6] == 0 ? CommandResult.success : CommandResult.failed;
+  }
+}
+
+class CableLockResult{
+  int dataSize = 0;
+  CommandResult result = CommandResult.unknown;
+
+  CableLockResult(List<int> data) {
+
+    /// Result type:
+    /// 0x03-> Cable lock unlock
+    /// 0x13-> Cable lock lock
+
+    /// Result :
+    /// 0: Success
+    /// 1: Failed
+    /// 2: Communication timeout
+    /// 10: locked state
+
+    //data[6] = result type
+    result = data[7] == 0 ? CommandResult.success : CommandResult.failed;
   }
 
 }

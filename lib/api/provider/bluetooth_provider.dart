@@ -59,6 +59,8 @@ class BluetoothProvider extends ChangeNotifier {
       StreamController.broadcast();
   StreamController<DeleteRFIDCardResult> deleteRFIDCardResult =
       StreamController.broadcast();
+  StreamController<CableLockResult> cableLockResult =
+      StreamController.broadcast();
 
   Future<void> init(currentUserModel) async {
     checkBLEStatus();
@@ -424,5 +426,54 @@ class BluetoothProvider extends ChangeNotifier {
   }
         //Command 0: delete card
         //Request rfid ID
+
+
+/// 7). Function for external cable lock. *4.5.19
+  Stream<CableLockResult> cableLock() {
+    if (requestComKeyResult != null) {
+      bool isConnected = sendCommand(
+          bluetoothCommand.cableLock(requestComKeyResult!.communicationKey));
+      if (isConnected) {
+        return cableLockResult.stream
+            .timeout(const Duration(seconds: 6), onTimeout: (sink) {
+          sink.addError("Operation timeout");
+        });
+      } else {
+        return cableLockResult.stream
+            .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
+          sink.addError("Bike is not connected.");
+        });
+      }
+    } else {
+      return cableLockResult.stream
+          .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
+        sink.addError("Communication key is empty value");
+      });
+    }
+  }
+
+  /// 8). Function for external cable unlock. *4.5.19
+  Stream<CableLockResult> cableUnlock() {
+    if (requestComKeyResult != null) {
+      bool isConnected = sendCommand(
+          bluetoothCommand.cableUnlock(requestComKeyResult!.communicationKey));
+      if (isConnected) {
+        return cableLockResult.stream
+            .timeout(const Duration(seconds: 6), onTimeout: (sink) {
+          sink.addError("Operation timeout");
+        });
+      } else {
+        return cableLockResult.stream
+            .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
+          sink.addError("Bike is not connected.");
+        });
+      }
+    } else {
+      return cableLockResult.stream
+          .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
+        sink.addError("Communication key is empty value");
+      });
+    }
+  }
 
 }
