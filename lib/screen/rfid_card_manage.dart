@@ -19,7 +19,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 import '../api/navigator.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/provider/bluetooth_provider.dart';
-import '../bluetooth/model.dart';
+import '../bluetooth/modelResult.dart';
 import '../theme/ThemeChangeNotifier.dart';
 
 ///User profile page with user account information

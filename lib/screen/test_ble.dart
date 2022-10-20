@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
-import 'package:evie_test/bluetooth/model.dart';
+import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:evie_test/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
