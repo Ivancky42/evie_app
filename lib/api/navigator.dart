@@ -47,6 +47,16 @@ void changeToNotificationScreen(BuildContext context) {
       .pushNamedAndRemoveUntil("/notification", (route) => false);
 }
 
+void changeToTestBLEScreen(BuildContext context) {
+  Navigator.of(context)
+      .pushNamedAndRemoveUntil("/testBle", (route) => false);
+}
+
+void changeToRFIDScreen(BuildContext context) {
+  Navigator.of(context)
+      .pushNamedAndRemoveUntil("/rfid", (route) => false);
+}
+
 
 ///Future builder
 void changeToNotificationDetailsScreen(BuildContext context, key, value) {

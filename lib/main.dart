@@ -1,6 +1,7 @@
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/profile/user_profile.dart';
+import 'package:evie_test/screen/rfid_card_manage.dart';
 import 'package:evie_test/screen/share_bike.dart';
 import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/screen/user_notification.dart';
@@ -34,6 +35,7 @@ import 'api/provider/auth_provider.dart';
 import 'api/provider/bike_provider.dart';
 import 'api/provider/location_provider.dart';
 import 'api/provider/notification_provider.dart';
+
 
 
 ///Main function execution
@@ -186,6 +188,7 @@ class MyApp extends StatelessWidget {
           "/testBle": (context) => const TestBle(),
           "/shareBike": (context) => const ShareBike(),
           "/notification": (context) => const UserNotification(),
+          "/rfid": (context) => const RFIDCardManage(),
         },
 
         navigatorObservers: [FlutterSmartDialog.observer],

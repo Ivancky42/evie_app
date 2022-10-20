@@ -46,7 +46,7 @@ class _UserProfileState extends State<UserProfile> {
     showAlertDialog(context);
     var picName = _currentUser.currentUserModel!.email;
     Reference ref = FirebaseStorage.instance.ref().child(
-        "UserProfilePic/" + picName!);
+        "UserProfilePic/" + picName);
 
    //Upload to firebase storage
     await ref.putFile(File(image!.path));

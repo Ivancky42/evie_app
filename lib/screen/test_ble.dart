@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/bluetooth/model.dart';
-import 'package:evie_test/bluetooth/result.dart';
 import 'package:evie_test/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
+import '../api/navigator.dart';
 import '../widgets/evie_button.dart';
 
 class TestBle extends StatefulWidget {
@@ -31,6 +31,25 @@ class _TestBleState extends State<TestBle> {
     connectionState = bluetoothProvider.connectionStateUpdate?.connectionState;
 
     return Scaffold(
+        appBar: AppBar(
+          centerTitle: false,
+          title: Row(
+            children: <Widget>[
+              IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    changeToUserBluetoothScreen(context);
+                  }
+              ),
+
+              const Text('RFID card'),
+
+            ],
+          ),
+        ),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

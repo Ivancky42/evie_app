@@ -104,9 +104,9 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null && !kIsWeb) {
         flutterLocalNotificationsPlugin.show(
-          notification!.hashCode,
-          notification!.title,
-          notification!.body,
+          notification.hashCode,
+          notification.title,
+          notification.body,
           NotificationDetails(
             android: AndroidNotificationDetails(
               channel.id,
@@ -252,8 +252,6 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
      */
   }
-
-
 
   @override
   void dispose() {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:crclib/catalog.dart';
 import 'package:crclib/crclib.dart';
 import 'package:hex/hex.dart';
@@ -16,6 +17,11 @@ class BluetoothCommand {
   static const int requestComKeyCmd = 0x01; /// 4.5.1
   static const int unlockBikeCmd = 0x15; /// 4.5.3
   static const int changeBleKeyCmd = 0x32; /// 4.5.6
+
+  static const int rfidCardAddDelete = 0x37; ///4.5.11  ///1:add card 0:delete card
+
+
+
 
   /// Report
   static const int errorPromptInstruction = 0x10; /// 4.5.2
@@ -100,6 +106,66 @@ class BluetoothCommand {
     data[11] = bytesBleKey[5];
     data[12] = bytesBleKey[6];
     data[13] = bytesBleKey[7];
+
+    return encodeData(dataSize, rand, data);
+  }
+
+  List<int> addRFID(int comKey, List<int> rfidID) {
+    int dataSize = 10;
+    int totalDataSize = 6 + dataSize;
+    List<int> data = List<int>.filled(totalDataSize, 0, growable: true);
+    int rand = random.nextInt(255);
+
+    //rfidID.split(' ').forEach((char) => bytesRFID.add(char));
+
+    data[0] = header[0]; /// header
+    data[1] = header[1]; /// header
+    data[2] = dataSize; /// data length
+    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[4] = comKey; ///  Communication key
+    data[5] = rfidCardAddDelete; /// cmd : 0x37
+
+    data[6] = 0x01; /// 1: Add RFID   0: Delete RFID
+    data[7] = rfidID[0];
+    data[8] = rfidID[1];
+    data[9] = rfidID[2];
+    data[10] = rfidID[3];
+
+    data[11] = 0x00;
+    data[12] = 0x00;
+    data[13] = 0x00;
+    data[14] = 0x00;
+
+    data[15] = 0x00; /// Normal unlock
+
+    return encodeData(dataSize, rand, data);
+  }
+
+  List<int> deleteRFID(int comKey, List<int> rfidID) {
+    int dataSize = 10;
+    int totalDataSize = 6 + dataSize;
+    List<int> data = List<int>.filled(totalDataSize, 0, growable: true);
+    int rand = random.nextInt(255);
+
+    data[0] = header[0]; /// header
+    data[1] = header[1]; /// header
+    data[2] = dataSize; /// data length
+    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[4] = comKey; ///  Communication key
+    data[5] = rfidCardAddDelete; /// cmd : 0x37
+
+    data[6] = 0x00; /// 1: Add RFID   0: Delete RFID
+    data[7] = rfidID[0];
+    data[8] = rfidID[1];
+    data[9] = rfidID[2];
+    data[10] = rfidID[3];
+
+    data[11] = 0x00;
+    data[12] = 0x00;
+    data[13] = 0x00;
+    data[14] = 0x00;
+
+    data[15] = 0x00; /// Normal unlock
 
     return encodeData(dataSize, rand, data);
   }

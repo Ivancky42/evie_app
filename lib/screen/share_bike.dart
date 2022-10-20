@@ -294,7 +294,7 @@ class _ShareBikeState extends State<ShareBike> {
 
         leftContent: isOwner&&bikeUserModel.status == "pending"? "Delete User" : "Cancel",
         onPressedLeft: isOwner&&bikeUserModel.status == "pending" ? () async {
-            _bikeProvider.cancelSharedBikeStatus(bikeUserModel.uid, bikeUserModel!.notificationId!).then((result){
+            _bikeProvider.cancelSharedBikeStatus(bikeUserModel.uid, bikeUserModel.notificationId!).then((result){
               ///Update user notification id status == removed
               if(result == true){
                 SmartDialog.dismiss();

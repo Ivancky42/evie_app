@@ -24,7 +24,6 @@ class LocationProvider extends ChangeNotifier {
   Placemark? currentPlaceMark;
 
   Future<void> init(LocationModel? locationModel) async {
-    checkLocationStatus();
     if(locationModel == null){}
     else{
       this.locationModel = locationModel;
@@ -42,19 +41,18 @@ class LocationProvider extends ChangeNotifier {
 
     switch (locationStatus) {
       case PermissionStatus.granted:
-      // TODO: Handle this case.
+      // Pass
         break;
       case PermissionStatus.denied:
-      // TODO: Handle this case.
-        break;
+        return;
       case PermissionStatus.permanentlyDenied:
       //  OpenSettings.openLocationSourceSetting();
-        break;
+        return;
       case PermissionStatus.restricted:
-      // TODO: Handle this case.
+      // Pass
         break;
       case PermissionStatus.limited:
-      // TODO: Handle this case.
+      // Pass
         break;
       default:
         break;

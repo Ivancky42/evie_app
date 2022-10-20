@@ -1,5 +1,17 @@
-import 'package:evie_test/bluetooth/result.dart';
 import 'package:hex/hex.dart';
+
+enum CommandResult {
+  unknown,
+  success,
+  failed,
+}
+
+enum ErrorMessage {
+  unknown,
+  crcAuthErr, ///CRC authentication error
+  comKeyNotObtained, ///The communication KEY was not obtained
+  wrongComKey, ///The communication KEY has been obtained, but the communication KEY is wrong
+}
 
 class RequestComKeyResult {
 
@@ -78,6 +90,31 @@ class ChangeBleKeyResult {
   }
 }
 
+///Can combine add and delete result together since return data only success/failed
 class AddRFIDCardResult{
+
+  int dataSize = 0;
+  CommandResult result = CommandResult.unknown;
+
+  AddRFIDCardResult(List<int> data) {
+    /// Add rfid Result :
+    /// 0: Success
+    /// 1: Failed
+
+    result = data[6] == 1 ? CommandResult.success : CommandResult.failed;
+  }
+}
+
+class DeleteRFIDCardResult{
+  int dataSize = 0;
+  CommandResult result = CommandResult.unknown;
+
+  DeleteRFIDCardResult(List<int> data) {
+    /// Delete rfid Result :
+    /// 0: Success
+    /// 1: Failed
+
+    result = data[6] == 1 ? CommandResult.success : CommandResult.failed;
+  }
 
 }

@@ -188,9 +188,9 @@ class _UserNotificationState extends State<UserNotification> {
         {
           SmartDialog.show(
               widget: EvieNotificationDialog(
-            title: notificationModel!.title!,
+            title: notificationModel.title!,
             content:
-                "${notificationModel!.body!} \n\n ${notificationModel!.created?.toDate()}",
+                "${notificationModel.body!} \n\n ${notificationModel.created?.toDate()}",
 
             ///Only available when status == pending
             rightContent: "Accept",
@@ -212,7 +212,7 @@ class _UserNotificationState extends State<UserNotification> {
                     ? () async {
                         _bikeProvider
                             .updateAcceptSharedBikeStatus(
-                                notificationModel!.deviceIMEI!)
+                                notificationModel.deviceIMEI!)
                             .then((result) {
                           if (result == true) {
                             SmartDialog.dismiss();
@@ -248,9 +248,9 @@ class _UserNotificationState extends State<UserNotification> {
         SmartDialog.show(
             widget: EvieSingleButtonDialog(
           //buttonNumber: "2",
-          title: notificationModel!.title!,
+          title: notificationModel.title!,
           content:
-              "${notificationModel!.body!} \n\n ${notificationModel!.created?.toDate()}",
+              "${notificationModel.body!} \n\n ${notificationModel.created?.toDate()}",
           rightContent: "OK",
           onPressedRight: () {
             SmartDialog.dismiss();

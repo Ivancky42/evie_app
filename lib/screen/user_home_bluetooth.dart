@@ -69,7 +69,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
     if (discoveredDevice != null) {
       return ListTile(
         leading: leading(),
-        title: deviceName(discoveredDevice!.name),
+        title: deviceName(discoveredDevice.name),
         subtitle: deviceSignal(discoveredDevice.rssi.toString()),
         trailing: IconButton(
           iconSize: 25,
@@ -170,7 +170,22 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
                     rightContent: "OK",
                     onPressedRight: () {
                       SmartDialog.dismiss(tag:"ConnectSuccess");
-                      changeToUserHomePageScreen(context);
+
+
+
+
+
+                      changeToTestBLEScreen(context);
+                      //changeToUserHomePageScreen(context);
+
+
+
+
+
+
+
+
+
                     }));
 
           } else {

@@ -12,19 +12,14 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../bluetooth/model.dart';
-import '../../widgets/evie_double_button_dialog.dart';
-import 'package:open_settings/open_settings.dart';
 
-import '../model/bike_user_model.dart';
-import '../model/user_bike_model.dart';
 import '../model/user_model.dart';
-import '../navigator.dart';
-import 'bike_provider.dart';
 
 class BluetoothProvider extends ChangeNotifier {
   final flutterReactiveBle = FlutterReactiveBle();
   final bluetoothCommand = BluetoothCommand();
 
+  ///Reevo characteristic
   static Uuid serviceUUID =
       Uuid.parse(dotenv.env['BLE_SERVICE_UUID'] ?? 'UUID not found');
   static Uuid notifyingUUID =
@@ -59,6 +54,10 @@ class BluetoothProvider extends ChangeNotifier {
   StreamController<UnlockResult> unlockResultListener =
       StreamController.broadcast();
   StreamController<ChangeBleKeyResult> chgBleKeyResultListener =
+      StreamController.broadcast();
+  StreamController<AddRFIDCardResult> addRFIDCardResultListener =
+      StreamController.broadcast();
+  StreamController<DeleteRFIDCardResult> deleteRFIDCardResult =
       StreamController.broadcast();
 
   Future<void> init(currentUserModel) async {
@@ -234,6 +233,7 @@ class BluetoothProvider extends ChangeNotifier {
       printLog("Notify Error", error.toString());
     });
 
+    ///Dummy data device keys
     sendCommand(bluetoothCommand.getComKey('yOTmK50z'));
 
     /// Get communication key from device.
@@ -312,7 +312,6 @@ class BluetoothProvider extends ChangeNotifier {
     }
   }
 
-
   /// **********************/
   /// *** Command Action ***/
   /// **********************/
@@ -343,8 +342,7 @@ class BluetoothProvider extends ChangeNotifier {
 
   /// 2). Function for change BLE Key and listening for acknowledge status from bike.
   Stream<ChangeBleKeyResult> changeBleKey() {
-    requestComKeyResult =
-        RequestComKeyResult([0x01, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01]);
+    requestComKeyResult = RequestComKeyResult([0x01, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01]);
     if (requestComKeyResult != null) {
       bool isConnected = sendCommand(
           bluetoothCommand.changeBleKey(requestComKeyResult!.communicationKey));
@@ -374,9 +372,57 @@ class BluetoothProvider extends ChangeNotifier {
 // TODO: Handle this case.
 
   /// 5). Function for add RFID card and listening for acknowledge status from bike. *4.5.11
-// TODO: Handle this case.
+
+  Stream<AddRFIDCardResult> addRFID(List<int> rfidID) {
+    if (requestComKeyResult != null) {
+      bool isConnected = sendCommand(
+          bluetoothCommand.addRFID(requestComKeyResult!.communicationKey, rfidID));
+      if (isConnected) {
+        return addRFIDCardResultListener.stream
+            .timeout(const Duration(seconds: 6), onTimeout: (sink) {
+          sink.addError("Operation timeout");
+        });
+      } else {
+        return addRFIDCardResultListener.stream
+            .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
+          sink.addError("Bike is not connected.");
+        });
+      }
+    } else {
+      return addRFIDCardResultListener.stream
+          .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
+        sink.addError("Communication key is empty value");
+      });
+    }
+  }
+        //Command 1: add card
+        //Request rfid ID
 
   /// 6). Function for delete RFID card and listening for acknowledge status from bike. *4.5.11
-// TODO: Handle this case.
+
+  Stream<DeleteRFIDCardResult> deleteRFID(List<int> rfidID) {
+    if (requestComKeyResult != null) {
+      bool isConnected = sendCommand(
+          bluetoothCommand.deleteRFID(requestComKeyResult!.communicationKey, rfidID));
+      if (isConnected) {
+        return deleteRFIDCardResult.stream
+            .timeout(const Duration(seconds: 6), onTimeout: (sink) {
+          sink.addError("Operation timeout");
+        });
+      } else {
+        return deleteRFIDCardResult.stream
+            .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
+          sink.addError("Bike is not connected.");
+        });
+      }
+    } else {
+      return deleteRFIDCardResult.stream
+          .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
+        sink.addError("Communication key is empty value");
+      });
+    }
+  }
+        //Command 0: delete card
+        //Request rfid ID
 
 }

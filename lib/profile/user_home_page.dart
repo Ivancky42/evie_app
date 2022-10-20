@@ -60,7 +60,7 @@ class _UserHomePageState extends State<UserHomePage> {
 
       lockImage = Image(
         image: AssetImage("assets/buttons/lock_unlock.png"),
-        height: 8.h,
+        height: 3.h,
         fit: BoxFit.fitWidth,
       );
       lockColour = const Color(0xff404E53);
@@ -150,6 +150,41 @@ class _UserHomePageState extends State<UserHomePage> {
               ),
             ),
            ),
+
+              const SizedBox(
+                width: 20,
+              ),
+
+              Align(
+                child:Container(
+                  height: 6.8.h,
+                  width: 6.8.h,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      color: Colors.white.withOpacity(0.3),
+                      borderRadius: const BorderRadius.all(Radius.circular(10),
+                      )),
+                  child: IconButton(
+                    iconSize: 25,
+                    icon: ThemeChangeNotifier().isDarkMode(context) == true ?
+                    _notificationProvider.isReadAll == true?
+                    const Icon(
+                      Icons.credit_card_outlined
+                    ) :  const Icon(Icons.notifications_active_outlined
+                    )
+                        :
+                    _notificationProvider.isReadAll == true?
+                    const Icon(
+                      Icons.credit_card_outlined
+                    ) :  const Icon(Icons.notifications_active_outlined
+                    ),
+                    tooltip: 'Notification',
+                    onPressed: () {
+                      changeToRFIDScreen(context);
+                    },
+                  ),
+                ),
+              ),
 
             const SizedBox(
               width: 20,

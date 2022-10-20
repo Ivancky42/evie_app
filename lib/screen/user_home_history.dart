@@ -150,6 +150,8 @@ class _UserHomeHistoryState extends State<UserHomeHistory> {
     _locationProvider = Provider.of<LocationProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
 
+
+
     for (var element in dangerStatus) {
       if (_bikeProvider.currentBikeModel!.location!.status == element) {
         currentDangerStatus = element;
