@@ -40,8 +40,9 @@
     <item>
         <title>Version 5.0</title>
         <sparkle:version>5.0</sparkle:version>
-        <description>A version 5 description. #[Minimum supported app version: 2.0.0] </description>
+        <description>A version 5 description. </description>
         <sparkle:maximumSystemVersion>2.0.0</sparkle:maximumSystemVersion>
+      <sparkle:minimumAutoupdateVersion>2.0</sparkle:minimumAutoupdateVersion>
     </item>
   </channel>
 </rss>
