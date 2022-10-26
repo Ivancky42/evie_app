@@ -42,7 +42,7 @@
         <sparkle:version>5.0</sparkle:version>
         <description>A version 5 description. </description>
         <sparkle:maximumSystemVersion>2.0.0</sparkle:maximumSystemVersion>
-      <sparkle:minimumAutoupdateVersion>2.0</sparkle:minimumAutoupdateVersion>
+      <sparkle:minimumSystemVersion>1.2.0</sparkle:minimumSystemVersion>
     </item>
   </channel>
 </rss>
