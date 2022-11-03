@@ -1,45 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
+import '../theme/ThemeChangeNotifier.dart';
 
-///Double button dialog
-class EvieAppbar extends StatelessWidget{
-  // final String buttonNumber;
-  final String? title;
-  final bool? centerTitle;
-  final VoidCallback? onPressedBack;
-  final Widget? row;
+class EvieAppbar_Back extends StatelessWidget implements PreferredSizeWidget {
+  final VoidCallback? onPressed;
 
-  const EvieAppbar({
+  const EvieAppbar_Back({
     Key? key,
-    //required this.buttonNumber,
-    this.title,
-    this.centerTitle,
-    this.onPressedBack,
-    this.row,
+    required this.onPressed,
   }) : super(key: key);
-
-
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (BuildContext context, Orientation orientation, DeviceType deviceType) {
-      return Scaffold(
-        appBar:AppBar(
-        centerTitle: centerTitle,
-        title: Row(
-          children: <Widget>[
-            IconButton(
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.grey,
-                ),
-                onPressed: onPressedBack),
-            Text(title!),
-          ],
-        ),
-        )
-      );
-    },);
+    return AppBar(
+      leading: IconButton(
+        icon: ThemeChangeNotifier().isDarkMode(context) == true
+            ? Image.asset('assets/buttons/back_darkMode.png')
+            : Image.asset('assets/buttons/back.png'),
+        onPressed: onPressed,
+      ),
+    );
   }
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => Size.fromHeight(8.h);
 }

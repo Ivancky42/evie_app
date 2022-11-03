@@ -105,7 +105,7 @@ class _TestBleState extends State<TestBle> {
 
             Padding(
               padding: EdgeInsets.all(20),
-              child: EvieButton_LightBlue(
+              child: EvieButton(
                 onPressed: () {
                   if (connectionState!.name == "connected") {
                     bluetoothProvider.disconnectDevice(connectionStateUpdate!.deviceId);
@@ -133,7 +133,7 @@ class _TestBleState extends State<TestBle> {
 
             Padding(
               padding: EdgeInsets.all(20),
-              child: EvieButton_LightBlue(
+              child: EvieButton(
                 onPressed: () {
                   SmartDialog.showLoading(msg: "Unlocking bike....");
                   if (bluetoothProvider.bleStatus == BleStatus.ready) {
@@ -170,7 +170,7 @@ class _TestBleState extends State<TestBle> {
 
             Padding(
               padding: EdgeInsets.all(20),
-              child: EvieButton_LightBlue(
+              child: EvieButton(
                 onPressed: () {
                   SmartDialog.showLoading(msg: "Changing BLE Key....");
                   bluetoothProvider.changeBleKey().listen((changeBleKeyResult) {

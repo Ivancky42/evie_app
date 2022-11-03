@@ -1,6 +1,70 @@
+
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import '../theme/ThemeChangeNotifier.dart';
+
+///Button Widget
+class EvieTextFormField extends StatelessWidget {
+
+  final TextEditingController? controller;
+  final bool? obscureText;
+  final TextInputType? keyboardType;
+  final String? hintText;
+  final Widget? suffixIcon;
+  final FormFieldValidator<String>? validator;
+
+  const EvieTextFormField({
+    Key? key,
+
+    this.controller,
+    this.obscureText,
+    this.keyboardType,
+    this.hintText,
+    this.suffixIcon,
+    this.validator,
+
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      obscureText: obscureText!,
+      decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+          hintText: hintText,
+          hintStyle: TextStyle(fontSize: 10.sp, color: Colors.grey),
+          filled: true,
+          fillColor: ThemeChangeNotifier().isDarkMode(context) ?  Color(0xff3F3F3F) : Color(0xffDFE0E0),
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+                width: 0.1,
+                color: Color(0xffDFE0E0),), //<-- SEE HERE
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              width: 1.5,
+              color: Color(0xff6A51CA),), //<-- SEE HERE
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+
+          errorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              width: 1.5,
+              color: Color(0xffF42525),), //<-- SEE HERE
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+
+          suffixIcon: suffixIcon),
+      validator: validator,
+    );
+  }
+}
+
 
 ///Button Widget
 class EvieButton_TextForm_Constant extends StatelessWidget {

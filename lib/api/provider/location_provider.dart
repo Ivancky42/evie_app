@@ -28,6 +28,9 @@ class LocationProvider extends ChangeNotifier {
     else{
       this.locationModel = locationModel;
 
+      LocationPermission permission;
+      permission = await Geolocator.requestPermission();
+
       userPosition = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high
       );

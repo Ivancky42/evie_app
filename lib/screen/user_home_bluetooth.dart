@@ -6,6 +6,7 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:provider/provider.dart';
+import 'package:lottie/lottie.dart';
 
 import '../api/provider/bike_provider.dart';
 import '../widgets/evie_double_button_dialog.dart';
@@ -215,6 +216,8 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
         child:Stack(
           alignment: Alignment.center,
           children: <Widget>[
+
+
             RipplePulseAnimation(),
             IconButton(
               iconSize: 55,

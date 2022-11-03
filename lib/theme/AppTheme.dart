@@ -9,7 +9,7 @@ class AppTheme{
   static final ThemeData lightTheme = ThemeData(
     //Default font setting for the application is Raleway
     //Font are store in assets/fonts
-    fontFamily: 'Raleway',
+    fontFamily: 'Avenir',
 
     //Default font colour
     textTheme: const TextTheme(
@@ -29,7 +29,7 @@ class AppTheme{
 
 
     //Default background colour for application
-    scaffoldBackgroundColor: const Color(0xFFD7E9EF),
+    scaffoldBackgroundColor: const Color(0xFFECEDEB),
 
     //suggest grey color: 0xFFc5c6d0
 
@@ -58,11 +58,12 @@ class AppTheme{
       backgroundColor: Colors.transparent,
     ),
 
-      dialogTheme: const DialogTheme(
-        backgroundColor: Color(0xffD7E9EF),
+      dialogTheme: DialogTheme(
+        backgroundColor: const Color(0xffF2F2F2).withOpacity(0.9),
       ),
 
   );
+
 
 
 
@@ -71,7 +72,7 @@ class AppTheme{
   static final ThemeData darkTheme = ThemeData(
     //Default font setting for the application is Raleway
     //Font are store in assets/fonts
-    fontFamily: 'Raleway',
+    fontFamily: 'Avenir',
 
     //Default font colour
     textTheme: const TextTheme(
@@ -90,7 +91,7 @@ class AppTheme{
     ),
     
     //Default background colour for application
-    scaffoldBackgroundColor: const Color(0xFF0F191D),
+    scaffoldBackgroundColor: const Color(0xFF252526),
 
     //Default App bar theme setting
     appBarTheme: const AppBarTheme(
@@ -117,10 +118,8 @@ class AppTheme{
       backgroundColor: Color(0xff0F191D),
     ),
 
-    dialogTheme: const DialogTheme(
-      backgroundColor: Color(0xff0F191D),
+    dialogTheme: DialogTheme(
+      backgroundColor: const Color(0xff1E1E1E).withOpacity(0.85),
     )
-
   );
-
 }

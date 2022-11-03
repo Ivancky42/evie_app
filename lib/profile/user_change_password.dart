@@ -225,7 +225,7 @@ class _UserChangePasswordState extends State<UserChangePassword> {
 
 
 
-                                  EvieButton_DarkBlue(
+                                  EvieButton(
                                     width: double.infinity,
                                     height: double.infinity,
                                     child: Text("Update Password",
@@ -252,7 +252,6 @@ class _UserChangePasswordState extends State<UserChangePassword> {
                                     debugPrint("authentication failed");
                                       }else{
                                         _authProvider.changeUserPassword(
-                                        context,
                                         _passwordController.text.trim(),
                                         _passwordOriginalController.text.trim()); //Last value field is phone number
                                         changeToUserProfileScreen(context);

@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 class EvieColors {
-  static const PrimaryColor = Color(0xFF808080);
+  static const PrimaryColor = Color(0xFF6A51CA);
   static const AliceBlue = Color(0xFFF0F8FF);
   static const AntiqueWhite = Color(0xFFFAEBD7);
   static const Aqua = Color(0xFF00FFFF);

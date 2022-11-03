@@ -81,6 +81,8 @@ class _UserProfileState extends State<UserProfile> {
       _isEmail = false;
     }
 
+
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -216,7 +218,6 @@ class _UserProfileState extends State<UserProfile> {
                                     ],
                                   ),
 
-
                                   const SizedBox(
                                     height: 30.0,
                                   ),
@@ -314,7 +315,7 @@ class _UserProfileState extends State<UserProfile> {
 
                                   Align(
                                       alignment: Alignment.bottomCenter,
-                                      child: EvieButton_DarkBlue(height: 12,
+                                      child: EvieButton(height: 12,
                                           width: double.infinity,
                                           onPressed: () async {
                                             try {
@@ -324,7 +325,7 @@ class _UserProfileState extends State<UserProfile> {
 
                                                  // _authProvider.clear();
 
-                                                  changeToSignInScreen(context);
+                                                  changeToWelcomeScreen(context);
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(
                                                     const SnackBar(

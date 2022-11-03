@@ -7,11 +7,6 @@ import 'package:evie_test/api/model/bike_model.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,6 +24,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 class AuthProvider extends ChangeNotifier {
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
   String credentialProvider = "";
+  bool isEmailVerified = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   String? _uid;
@@ -36,6 +32,7 @@ class AuthProvider extends ChangeNotifier {
   bool isLogin = false;
 
   String? get getUid => _uid;
+
   String? get getEmail => _email;
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -51,14 +48,14 @@ class AuthProvider extends ChangeNotifier {
         _uid = user.uid;
         _email = user.email!;
         isLogin = true;
-
+        print("verify" + user.emailVerified.toString());
         notifyListeners();
       }
     });
   }
 
   ///User login function
-  Future login(String email, String password, BuildContext context) async {
+  Future login(String email, String password) async {
     //User Provider
     try {
       UserCredential _authResult = await _auth.signInWithEmailAndPassword(
@@ -66,13 +63,20 @@ class AuthProvider extends ChangeNotifier {
 
       final user = _authResult.user;
 
-      if (user != null) {
+      if (user != null && user.emailVerified == true) {
         _uid = user.uid;
         _email = user.email!;
 
         notifyListeners();
 
-        return true;
+        return "Verified";
+      } else if(user != null && user.emailVerified == false) {
+        _uid = user.uid;
+        _email = user.email!;
+
+        notifyListeners();
+
+        return "Not yet verify";
       } else {
         return "Incorrect login info";
       }
@@ -99,15 +103,42 @@ class AuthProvider extends ChangeNotifier {
           .then((auth) {
         firebaseUser = auth.user!;
         if (firebaseUser != null) {
+
           createFirestoreUser(firebaseUser?.uid, firebaseUser?.email, name,
               phoneNo, profileIMG, credentialProvider);
-          //    .then((value) {});
+
+          sendFirestoreVerifyEmail();
+
         }
       });
       return true;
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  void sendFirestoreVerifyEmail(){
+    User? firebaseUser;
+    firebaseUser = _auth.currentUser;
+    firebaseUser!.sendEmailVerification();
+  }
+
+  Future checkIsVerify() async {
+
+    if(FirebaseAuth.instance.currentUser != null && !isEmailVerified) {
+      await FirebaseAuth.instance.currentUser!.reload();
+      isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+      notifyListeners();
+
+      if (isEmailVerified) {
+        return true;
+      } else {
+        return false;
+      }
+    }else {
+      return null;
+    }
+
   }
 
   ///Upload the registered data to firestore
@@ -134,8 +165,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   ///Change user password
-  Future<void> changeUserPassword(
-      BuildContext context, password, originalpassword) async {
+  Future<void> changeUserPassword(String password, String originalpassword) async {
     var firebaseUser = _auth.currentUser!;
     if (firebaseUser != null) {
       try {
@@ -146,10 +176,11 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   ///Sign in with google
-  Future signInWithGoogle() async {
+  Future signInWithGoogle(String nameInput) async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
@@ -182,7 +213,8 @@ class AuthProvider extends ChangeNotifier {
           AuthProvider().createFirestoreUser(
               _uid,
               _email,
-              userCredential.user?.displayName.toString(), //Name
+              //userCredential.user?.displayName.toString(), //Name
+              nameInput, //Name
               userPhoneNo, //Phone no
               userCredential.user?.photoURL.toString(),
               credentialProvider //Profile image
@@ -207,7 +239,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   ///Sign in with facebook
-  Future signInWithFacebook() async {
+  Future signInWithFacebook(String nameInput) async {
     try {
       final LoginResult loginResult = await FacebookAuth.instance
           .login(permissions: ['email', 'public_profile']);
@@ -234,7 +266,8 @@ class AuthProvider extends ChangeNotifier {
         AuthProvider().createFirestoreUser(
             _uid,
             _email,
-            userCredential.user?.displayName.toString(), //Name
+            //userCredential.user?.displayName.toString(), //Name
+            nameInput,
             userPhoneNo, //Phone no
             userCredential.user?.photoURL.toString(),
             credentialProvider //Profile image
@@ -258,7 +291,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   ///Sign in with twitter
-  Future signInWithTwitter() async {
+  Future signInWithTwitter(String nameInput) async {
     try {
       final twitterLogin = TwitterLogin(
         apiKey: dotenv.env['TWITTER_API_KEY'] ?? 'TWITTER_API_KEY not found',
@@ -293,7 +326,8 @@ class AuthProvider extends ChangeNotifier {
           AuthProvider().createFirestoreUser(
               _uid,
               _email,
-              userCredential.user?.displayName.toString(), //Name
+              //userCredential.user?.displayName.toString(), //Name
+              nameInput,
               userPhoneNo, //Phone no
               userCredential.user?.photoURL.toString(),
               credentialProvider //Profile image
@@ -318,7 +352,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   ///Sign in with appleID
-  Future signInWithAppleID() async {
+  Future signInWithAppleID(String? nameInput) async {
     try {
       final rawNonce = generateNonce();
       final nonce = sha256ofString(rawNonce);
@@ -358,7 +392,8 @@ class AuthProvider extends ChangeNotifier {
         AuthProvider().createFirestoreUser(
             _uid,
             _email,
-            '${appleCredential.givenName} ${appleCredential.familyName}', //Name
+            // '${appleCredential.givenName} ${appleCredential.familyName}', //Name
+            nameInput, //Name
             userPhoneNo, //Phone no
             userCredential.user?.photoURL.toString(),
             credentialProvider //Profile image
@@ -418,11 +453,11 @@ class AuthProvider extends ChangeNotifier {
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection(usersCollection).get();
 
-    snapshot.docs.forEach((element) {
+    for (var element in snapshot.docs) {
       if (element['email'] == email) {
         result = element.id;
       }
-    });
+    }
 
     return result;
   }

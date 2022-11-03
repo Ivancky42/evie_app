@@ -142,7 +142,7 @@ class _UserNotificationState extends State<UserNotification> {
                                                   Icons.mark_email_unread,
                                                   color: Colors.white,
                                                 ),
-                                          backgroundColor: Colors.cyan,
+                                          backgroundColor: Color(0xff69489D),
                                         ),
                                         title: Text(_notificationProvider
                                             .notificationList.values

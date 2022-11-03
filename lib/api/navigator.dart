@@ -1,15 +1,52 @@
 import 'package:evie_test/screen/stripe_checkout.dart';
+import 'package:evie_test/screen/verify_email.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../screen/signup_method.dart';
+import '../screen/signup_page.dart';
 import '../screen/user_notification_details.dart';
 
-changeToSignInScreen(BuildContext context) {
-  Navigator.of(context).pushNamedAndRemoveUntil("/signIn", (route) => false);
+void changeToWelcomeScreen(BuildContext context) {
+  Navigator.of(context).pushNamedAndRemoveUntil("/welcome", (route) => false);
 }
 
-void changeToSignUpScreen(BuildContext context) {
-  Navigator.of(context).pushNamedAndRemoveUntil("/signUp", (route) => false);
+void changeToInputNameScreen(BuildContext context) {
+  Navigator.of(context).pushNamedAndRemoveUntil("/inputName", (route) => false);
+}
+
+void changeToSignUpMethodScreen(BuildContext context, name) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => SignUpMethod(name))
+  );
+}
+
+void changeToSignUpScreen(BuildContext context, name) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => SignUp(name))
+  );
+}
+
+void changeToCheckYourEmailScreen(BuildContext context) {
+  Navigator.of(context).pushNamedAndRemoveUntil("/checkMail", (route) => false);
+}
+
+void changeToAccountVerifiedScreen(BuildContext context) {
+  Navigator.of(context).pushNamedAndRemoveUntil("/accountVerified", (route) => false);
+}
+
+void changeToVerifyEmailScreen(BuildContext context, email) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => VerifyEmail(email))
+  );
+}
+
+changeToSignInMethodScreen(BuildContext context) {
+  Navigator.of(context).pushNamedAndRemoveUntil("/signInMethod", (route) => false);
+}
+
+void changeToSignInScreen(BuildContext context) {
+  Navigator.of(context).pushNamedAndRemoveUntil("/signIn", (route) => false);
 }
 
 void changeToForgetPasswordScreen(BuildContext context) {

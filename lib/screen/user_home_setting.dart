@@ -239,7 +239,7 @@ class _UserHomeSettingState extends State<UserHomeSetting> {
                 const SizedBox(
                   height: 40.0,
                 ),
-                EvieButton_LightBlue(
+                EvieButton(
                   width: double.infinity,
                   height: 11.h,
                   child: const Text(

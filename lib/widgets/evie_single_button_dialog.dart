@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
+import '../api/colours.dart';
+
 
 ///Single button dialog
 class EvieSingleButtonDialog extends StatelessWidget{
@@ -77,7 +79,7 @@ class EvieSingleButtonDialog extends StatelessWidget{
                               style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0)),
-                                  backgroundColor: const Color(0xff00B6F1)),
+                                  backgroundColor: EvieColors.PrimaryColor),
                               child: Padding(
                                 padding: EdgeInsets.fromLTRB(3.w, 0, 3.w, 0),
                                 child: Text(

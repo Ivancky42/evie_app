@@ -117,7 +117,7 @@ class _ShareBikeState extends State<ShareBike> {
 
                                   Align(
                                       alignment: Alignment.bottomCenter,
-                                      child: EvieButton_DarkBlue(
+                                      child: EvieButton_Dark(
                                           height: 5.h,
                                           width: 40.w,
                                           onPressed: isOwner ?() async {

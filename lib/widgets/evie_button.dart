@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:get/utils.dart';
+
+import '../api/colours.dart';
 
 ///Button Widget
-class EvieButton_DarkBlue extends StatelessWidget {
+class EvieButton_Dark extends StatelessWidget {
 
   final VoidCallback? onPressed;
   final Widget? child;
   final double? width;
   final double? height;
+  final Color? backgroundColor;
 
-  const EvieButton_DarkBlue({
+  const EvieButton_Dark({
     Key? key,
     this.onPressed,
     this.child,
     this.width,
     this.height,
+    this.backgroundColor,
+
   }) : super(key: key);
 
   @override
@@ -30,7 +36,7 @@ class EvieButton_DarkBlue extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0)),
-                  backgroundColor: const Color(0xFF00B6F1),
+                  backgroundColor: backgroundColor ?? EvieColors.PrimaryColor,
                   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
                   textStyle: const TextStyle(
                       fontSize: 30,
@@ -46,19 +52,21 @@ class EvieButton_DarkBlue extends StatelessWidget {
 
 
 ///Button widget
-class EvieButton_LightBlue extends StatelessWidget {
+class EvieButton extends StatelessWidget {
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Widget child;
   final double width;
-  final double height;
+  final double? height;
+  final Color? backgroundColor;
 
-  const EvieButton_LightBlue({
+  const EvieButton({
     Key? key,
     required this.onPressed,
     required this.child,
     required this.width,
-    required this.height,
+    this.height,
+    this.backgroundColor,
   }) : super(key: key);
 
   @override
@@ -76,7 +84,7 @@ class EvieButton_LightBlue extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0)),
                   elevation: 0.0,
-                  backgroundColor: const Color(0xFF00B6F1).withOpacity(0.4),
+                  backgroundColor: backgroundColor ?? EvieColors.PrimaryColor,
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                   textStyle: const TextStyle(
                       fontSize: 30,

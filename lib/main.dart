@@ -1,11 +1,17 @@
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/profile/user_profile.dart';
+import 'package:evie_test/screen/account_verified.dart';
+import 'package:evie_test/screen/input_name.dart';
+import 'package:evie_test/screen/login_method.dart';
 import 'package:evie_test/screen/rfid_card_manage.dart';
 import 'package:evie_test/screen/share_bike.dart';
+import 'package:evie_test/screen/signup_method.dart';
 import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/screen/user_notification.dart';
 import 'package:evie_test/screen/user_notification_details.dart';
+import 'package:evie_test/screen/verify_email.dart';
+import 'package:evie_test/screen/welcome_page.dart';
 import 'package:evie_test/theme/ThemeChangeNotifier.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -29,6 +35,7 @@ import 'package:evie_test/theme/ThemeChangeNotifier.dart';
 import 'package:evie_test/screen/connect_bluetooth_device_page.dart';
 import 'package:evie_test/screen/user_home_bluetooth.dart';
 import 'package:sizer/sizer.dart';
+import 'package:upgrader/upgrader.dart';
 
 import 'api/model/user_model.dart';
 import 'api/provider/auth_provider.dart';
@@ -46,6 +53,10 @@ Future main() async {
 
   ///Dotnet file loading
   await dotenv.load(fileName: "env");
+
+  // Upgrader
+  // Only call clearSavedSettings() during testing to reset internal values.
+  await Upgrader.clearSavedSettings();
 
   ///Handle firebase cloud message
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -160,6 +171,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     AuthProvider _authProvider = Provider.of<AuthProvider>(context);
 
+    const appcastURL =
+        'https://raw.githubusercontent.com/Beno-Technologies/Evie-Flutter-App/'
+        'main/appcast.xml?token=GHSAT0AAAAAABW2QMGM37BL3U7U7TCQM4NGY2Y6IIQ';
+    final cfg = AppcastConfiguration(url: appcastURL, supportedOS: ['ios']);
+
     return Sizer(builder: (context, orientation, deviceType) {
 
       return MaterialApp(
@@ -173,13 +189,19 @@ class MyApp extends StatelessWidget {
         //Change the app to dark theme when user's phone is set to dark mode
         darkTheme: AppTheme.darkTheme,
 
+
+        ///Add logic for isVerified
         initialRoute:
-        _authProvider.isLogin == true ? '/userHomePage' : '/signIn',
+        _authProvider.isLogin == true ? '/userHomePage' : '/welcome',
 
         ///Routes setting for page navigation
         routes: {
+          "/welcome": (context) => const Welcome(),
+          "/inputName": (context) => const InputName(),
+          "/signInMethod": (context) => const SignInMethod(),
+          "/checkMail": (context) => const CheckYourEmail(),
+          "/accountVerified": (context) => const AccountVerified(),
           "/signIn": (context) => const SignIn(),
-          "/signUp": (context) => const SignUp(),
           "/forgetPassword": (context) => const ForgetYourPassword(),
           "/userProfile": (context) => const UserProfile(),
           "/userHomePage": (context) => const UserHomePage(),
@@ -193,6 +215,16 @@ class MyApp extends StatelessWidget {
 
         navigatorObservers: [FlutterSmartDialog.observer],
         builder: FlutterSmartDialog.init(),
+
+        ///For user version update
+        /*
+        home: Scaffold(
+            appBar: AppBar(title: Text('Upgrader Example')),
+            body: UpgradeAlert(
+              upgrader: Upgrader(dialogStyle: UpgradeDialogStyle.cupertino, appcastConfig: cfg),
+              child: Center(child: Text('Checking...')),
+            )),
+         */
       );
     });
   }

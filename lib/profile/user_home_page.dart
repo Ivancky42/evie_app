@@ -1,3 +1,4 @@
+import 'package:evie_test/profile/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/screen/user_home_general.dart';
 import 'package:evie_test/screen/user_home_bluetooth.dart';
@@ -24,7 +25,7 @@ class _UserHomePageState extends State<UserHomePage> {
   int currentIndex = 0;
 
   ///Appbar title
-  String _title = 'Home';
+  String _title = '';
 
   bool _unlock = false;
 
@@ -35,32 +36,33 @@ class _UserHomePageState extends State<UserHomePage> {
     UserHomeGeneral(),
     UserHomeBluetooth(),
     UserHomeHistory(),
-    UserHomeSetting(),
+    UserProfile(),
+    UserProfile(),
   ];
 
   @override
   Widget build(BuildContext context) {
     _notificationProvider = Provider.of<NotificationProvider>(context);
 
-    Color lockColour = const Color(0xff00B6F1);
+    Color lockColour = const Color(0xff6A51CA);
     Image lockImage = Image(
       image: const AssetImage("assets/buttons/lock_unlock.png"),
-      height: 3.h,
+      height: 2.h,
       fit: BoxFit.fitWidth,
     );
 
     if(_unlock == false){
       lockImage = Image(
         image: const AssetImage("assets/buttons/lock_lock.png"),
-        height: 3.h,
+        height: 2.h,
         fit: BoxFit.fitWidth,
       );
-      lockColour = const Color(0xff00B6F1);
+      lockColour = const Color(0xff6A51CA);
     }else if(_unlock == true){
 
       lockImage = Image(
         image: AssetImage("assets/buttons/lock_unlock.png"),
-        height: 3.h,
+        height: 2.h,
         fit: BoxFit.fitWidth,
       );
       lockColour = const Color(0xff404E53);
@@ -68,62 +70,21 @@ class _UserHomePageState extends State<UserHomePage> {
 
     return Scaffold(
         appBar: AppBar(
-          toolbarHeight: 100,
+          toolbarHeight: 5.5.h,
           title: Text(
             _title,
-            style: TextStyle(
-                fontFamily:'Raleway-Bold',fontSize: 21.sp),
+            style: TextStyle(fontSize: 21.sp),
           ),
           centerTitle: false,
           actions: <Widget>[
             if (currentIndex == 0) ... [
-            Align(
-            child: Container(
-              height: 6.8.h,
-              width: 6.8.h,
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: Colors.white.withOpacity(0.3),
-                borderRadius: const BorderRadius.all(Radius.circular(10),
-              )),
-              child: IconButton(
-                iconSize: 25,
-
-                icon: ThemeChangeNotifier().isDarkMode(context) == true ?
-                const Image(
-                  image: AssetImage(
-                      "assets/buttons/user_white.png"),
-                  height: 17.0,
-                ) :
-                const Image(
-                  image: AssetImage(
-                      "assets/buttons/user.png"),
-                  height: 17.0,
-                ),
-
-                tooltip: 'User Profile',
-                onPressed: () {
-                  changeToUserProfileScreen(context);
-
-                  //    ScaffoldMessenger.of(context).showSnackBar(
-                  //        const SnackBar(content: Text('User Profile')));
-                },
-              ),
-            ),
-        ),
-
-            const SizedBox(
-              width: 20,
-            ),
 
             Align(
             child:Container(
-              height: 6.8.h,
-              width: 6.8.h,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.rectangle,
-                color: Colors.white.withOpacity(0.3),
-                  borderRadius: const BorderRadius.all(Radius.circular(10),
+                color: Colors.transparent,
+                  borderRadius: BorderRadius.all(Radius.circular(10),
                   )),
               child: IconButton(
                 iconSize: 25,
@@ -132,7 +93,8 @@ class _UserHomePageState extends State<UserHomePage> {
                 const Image(
                   image: AssetImage(
                       "assets/buttons/notification_white.png"),
-                  height: 17.0,
+                  height: 19.99,
+                  width: 17.98,
                 ) :  const Icon(Icons.notifications_active_outlined
                     )
                         :
@@ -140,7 +102,8 @@ class _UserHomePageState extends State<UserHomePage> {
                 const Image(
                   image: AssetImage(
                       "assets/buttons/notification.png"),
-                  height: 17.0,
+                  height: 17.98,
+                  width: 17.98,
                 ):  const Icon(Icons.notifications_active_outlined
                     ),
                 tooltip: 'Notification',
@@ -150,42 +113,6 @@ class _UserHomePageState extends State<UserHomePage> {
               ),
             ),
            ),
-
-              const SizedBox(
-                width: 20,
-              ),
-
-              Align(
-                child:Container(
-                  height: 6.8.h,
-                  width: 6.8.h,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: Colors.white.withOpacity(0.3),
-                      borderRadius: const BorderRadius.all(Radius.circular(10),
-                      )),
-                  child: IconButton(
-                    iconSize: 25,
-                    icon: ThemeChangeNotifier().isDarkMode(context) == true ?
-                    _notificationProvider.isReadAll == true?
-                    const Icon(
-                      Icons.credit_card_outlined
-                    ) :  const Icon(Icons.notifications_active_outlined
-                    )
-                        :
-                    _notificationProvider.isReadAll == true?
-                    const Icon(
-                      Icons.credit_card_outlined
-                    ) :  const Icon(Icons.notifications_active_outlined
-                    ),
-                    tooltip: 'Notification',
-                    onPressed: () {
-                      changeToRFIDScreen(context);
-                    },
-                  ),
-                ),
-              ),
-
             const SizedBox(
               width: 20,
             ),
@@ -196,6 +123,7 @@ class _UserHomePageState extends State<UserHomePage> {
         //Body should change when bottom navigation bar state change
         body: screen[currentIndex],
 
+        /*
         floatingActionButton: FloatingActionButton(
           elevation: 0,
           backgroundColor: lockColour,
@@ -209,15 +137,18 @@ class _UserHomePageState extends State<UserHomePage> {
           child: lockImage,
 
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+         */
+     //   floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
         bottomNavigationBar: BottomAppBar(
-          shape: CircularNotchedRectangle(),
-          notchMargin: 10.0,
+       //   shape: CircularNotchedRectangle(),
+       //   notchMargin: 10.0,
           child: BottomNavigationBar(
             //For disable animation
             //type: BottomNavigationBarType.fixed,
             iconSize: 23,
-            selectedItemColor: Color(0xff00B6F1),
+            selectedItemColor: Color(0xff69489D),
             currentIndex: currentIndex,
             onTap: (index) {
               setState(() {
@@ -227,7 +158,7 @@ class _UserHomePageState extends State<UserHomePage> {
                 switch (index) {
                   case 0:
                     {
-                      _title = 'Home';
+                      _title = '';
                     }
                     break;
                   case 1:
@@ -245,6 +176,11 @@ class _UserHomePageState extends State<UserHomePage> {
                       _title = 'Setting';
                     }
                     break;
+                  case 4:
+                    {
+                      _title = 'Setting';
+                    }
+                    break;
                 }
               });
             },
@@ -255,14 +191,14 @@ class _UserHomePageState extends State<UserHomePage> {
                   child: const Image(
                     image: AssetImage("assets/buttons/home.png"),
                   ),
-                  padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+          //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,
                 ),
                 activeIcon: Container(
                   child: const Image(
                     image: AssetImage("assets/buttons/home_selected.png"),
                   ),
-                  padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+        //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,
                 ),
                 tooltip: 'User Profile',
@@ -271,7 +207,7 @@ class _UserHomePageState extends State<UserHomePage> {
               BottomNavigationBarItem(
                 icon: Container(
                   child: Icon(Icons.bluetooth),
-                  padding: EdgeInsets.fromLTRB(0, 5, 30, 0),
+         //         padding: EdgeInsets.fromLTRB(0, 5, 30, 0),
                 ),
                 tooltip: 'Bluetooth Pairing',
                 label: '',
@@ -279,7 +215,7 @@ class _UserHomePageState extends State<UserHomePage> {
               BottomNavigationBarItem(
                 icon: Container(
                   child: Icon(Icons.history),
-                  padding: EdgeInsets.fromLTRB(30, 5, 0, 0),
+          //        padding: EdgeInsets.fromLTRB(30, 5, 0, 0),
                 ),
                 tooltip: 'Settings',
                 label: '',
@@ -287,19 +223,37 @@ class _UserHomePageState extends State<UserHomePage> {
               BottomNavigationBarItem(
                 icon: Container(
                   child: const Image(
-                    image: AssetImage("assets/buttons/setting.png"),
+                    image: AssetImage("assets/buttons/user.png"),
                   ),
-                  padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+          //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,
                 ),
                 activeIcon: Container(
                   child: const Image(
-                    image: AssetImage("assets/buttons/setting_selected.png"),
+                    image: AssetImage("assets/buttons/user_selected.png"),
                   ),
-                  padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+           //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,
                 ),
-                tooltip: 'Settings',
+                tooltip: 'User',
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  child: const Image(
+                    image: AssetImage("assets/buttons/user.png"),
+                  ),
+                  //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                  height: 6.3.h,
+                ),
+                activeIcon: Container(
+                  child: const Image(
+                    image: AssetImage("assets/buttons/user_selected.png"),
+                  ),
+                  //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                  height: 6.3.h,
+                ),
+                tooltip: 'User',
                 label: '',
               ),
             ],

@@ -109,7 +109,7 @@ class _UserNotificationDetailsState extends State<UserNotificationDetails> {
                               widget.notificationValues.status == "pending",
 
                           ///Another button for declined
-                          child: EvieButton_DarkBlue(
+                          child: EvieButton(
                             width: 200,
                             height: 20,
                             onPressed: () {

@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.0.0+4
 
 environment:
   sdk: ">=2.16.2 <3.0.0"
@@ -63,6 +63,10 @@ dependencies:
   mapbox_gl: ^0.16.0
   geolocator: ^9.0.2
   geocoding: ^2.0.5
+  animated_text_kit: ^4.2.2
+  upgrader: ^4.8.1
+  lottie: ^1.4.2
+  open_mail_app: ^0.4.5
 
 dev_dependencies:
   build_runner: ^2.1.2
@@ -94,15 +98,17 @@ flutter:
     - assets/logo/
     - assets/buttons/
     - assets/images/
+    - assets/images/bike_HPStatus/
+    - assets/images/splashscreen/
     - env
   uses-material-design: true
 
   fonts:
-    - family: Raleway
+    - family: Avenir
       fonts:
-        - asset: assets/fonts/raleway/Raleway-Regular.ttf
-        - asset: assets/fonts/raleway/Raleway-ExtraLight.ttf
-        - asset: assets/fonts/raleway/Raleway-ExtraBold.ttf
+        - asset: assets/fonts/avenir/Avenir-Regular.otf
+        - asset: assets/fonts/avenir/Avenir-SemiBold.otf
+        - asset: assets/fonts/avenir/Avenir-Light.otf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
