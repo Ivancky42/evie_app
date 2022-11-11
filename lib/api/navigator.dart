@@ -1,4 +1,5 @@
 import 'package:evie_test/screen/stripe_checkout.dart';
+import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/screen/verify_email.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -85,8 +86,9 @@ void changeToNotificationScreen(BuildContext context) {
 }
 
 void changeToTestBLEScreen(BuildContext context) {
-  Navigator.of(context)
-      .pushNamedAndRemoveUntil("/testBle", (route) => false);
+  Navigator.push(context,
+    MaterialPageRoute(builder: (context) => const TestBle()),
+  );
 }
 
 void changeToRFIDScreen(BuildContext context) {

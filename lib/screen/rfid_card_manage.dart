@@ -102,26 +102,26 @@ class _RFIDCardManageState extends State<RFIDCardManage> {
                               SmartDialog.showLoading(msg: "Adding rfid....");
                               if (_bluetoothProvider.bleStatus ==
                                   BleStatus.ready) {
-                                _bluetoothProvider.addRFID([0x1A,0x2B,0x3C,0x4D]).listen(
-                                    (addResult) {
-                                  SmartDialog.dismiss(
-                                      status: SmartStatus.loading);
-                                  if (addResult.result ==
-                                      CommandResult.success) {
-
-                                    _bikeProvider.uploadRFIDtoFireStore([0x1A,0x2B,0x3C,0x4D]); //result
-
-                                    print("Success");
-
-                                    /// Successfully added
-                                  } else {
-                                    /// Failed to added
-                                  }
-                                }, onError: (error) {
-                                  SmartDialog.dismiss(
-                                      status: SmartStatus.loading);
-                                  print(error);
-                                });
+                                // _bluetoothProvider.addRFID([0x1A,0x2B,0x3C,0x4D]).listen(
+                                //     (addResult) {
+                                //   SmartDialog.dismiss(
+                                //       status: SmartStatus.loading);
+                                //   if (addResult.result ==
+                                //       CommandResult.success) {
+                                //
+                                //     _bikeProvider.uploadRFIDtoFireStore([0x1A,0x2B,0x3C,0x4D]); //result
+                                //
+                                //     print("Success");
+                                //
+                                //     /// Successfully added
+                                //   } else {
+                                //     /// Failed to added
+                                //   }
+                                // }, onError: (error) {
+                                //   SmartDialog.dismiss(
+                                //       status: SmartStatus.loading);
+                                //   print(error);
+                                // });
                               } else {
                                 showAlertDialog(context);
                               }
@@ -142,18 +142,18 @@ class _RFIDCardManageState extends State<RFIDCardManage> {
           onPressed: () {
             SmartDialog.showLoading(msg: "Remove rfid....");
             if (_bluetoothProvider.bleStatus == BleStatus.ready) {
-              _bluetoothProvider.deleteRFID([0x1A,0x2B,0x3C,0x4D]).listen((removeResult) {
-                SmartDialog.dismiss(status: SmartStatus.loading);
-                if (removeResult.result == CommandResult.success) {
-                  print("success delete");
-                  /// Successfully delete
-                } else {
-                  /// Failed to delete
-                }
-              }, onError: (error) {
-                SmartDialog.dismiss(status: SmartStatus.loading);
-                print(error);
-              });
+              // _bluetoothProvider.deleteRFID([0x1A,0x2B,0x3C,0x4D]).listen((removeResult) {
+              //   SmartDialog.dismiss(status: SmartStatus.loading);
+              //   if (removeResult.result == CommandResult.success) {
+              //     print("success delete");
+              //     /// Successfully delete
+              //   } else {
+              //     /// Failed to delete
+              //   }
+              // }, onError: (error) {
+              //   SmartDialog.dismiss(status: SmartStatus.loading);
+              //   print(error);
+              // });
             } else {
               showAlertDialog(context);
             }

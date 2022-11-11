@@ -1,5 +1,6 @@
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/bluetooth/command.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/animation/ripple_pulse_animation.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -80,7 +81,6 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
           ),
           tooltip: 'Connect',
           onPressed: () {
-
             SmartDialog.show(
               tag: "ConnectBike",
                 widget: EvieDoubleButtonDialog(
@@ -104,7 +104,8 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
                       Navigator.pop(context);
                       SmartDialog.showLoading(backDismiss: false);
                       try {
-                        bluetoothProvider.connectDevice(discoveredDevice.id);
+                        bluetoothProvider.connectDevice(discoveredDevice.id, "REw40n21");
+                        changeToTestBLEScreen(context);
                       } catch (e) {
                         debugPrint(e.toString());
                       }
@@ -155,48 +156,48 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
     });
 
 
-    if(bluetoothProvider.isPaired == true){
-      bluetoothProvider.setIsPairedResult(false);
-      if(bluetoothProvider.deviceID != null) {
-        bikeProvider.uploadToFireStore(
-            bluetoothProvider.deviceID)
-            .then((result) {
-          if (result == true) {
-            SmartDialog.dismiss(status: SmartStatus.loading);
-            SmartDialog.show(
-                tag: "ConnectSuccess",
-                widget:EvieSingleButtonDialog(
-                    title: "Success",
-                    content: "Connected",
-                    rightContent: "OK",
-                    onPressedRight: () {
-                      SmartDialog.dismiss(tag:"ConnectSuccess");
-
-
-
-
-                      changeToTestBLEScreen(context);
-                      //changeToUserHomePageScreen(context);
-
-
-
-
-                    }));
-
-          } else {
-            SmartDialog.show(
-                widget:EvieSingleButtonDialog(
-                    title: "Error",
-                    content: "Error connect bike, try again",
-                    rightContent: "OK",
-                    onPressedRight: () {SmartDialog.dismiss();}
-                )
-            );
-          }
-        }
-        );
-      }
-    }
+    // if(bluetoothProvider.isPaired == true){
+    //   bluetoothProvider.setIsPairedResult(false);
+    //   if(bluetoothProvider.deviceID != null) {
+    //     bikeProvider.uploadToFireStore(
+    //         bluetoothProvider.deviceID)
+    //         .then((result) {
+    //       if (result == true) {
+    //         SmartDialog.dismiss(status: SmartStatus.loading);
+    //         SmartDialog.show(
+    //             tag: "ConnectSuccess",
+    //             widget:EvieSingleButtonDialog(
+    //                 title: "Success",
+    //                 content: "Connected",
+    //                 rightContent: "OK",
+    //                 onPressedRight: () {
+    //                   SmartDialog.dismiss(tag:"ConnectSuccess");
+    //
+    //
+    //
+    //
+    //                   changeToTestBLEScreen(context);
+    //                   //changeToUserHomePageScreen(context);
+    //
+    //
+    //
+    //
+    //                 }));
+    //
+    //       } else {
+    //         SmartDialog.show(
+    //             widget:EvieSingleButtonDialog(
+    //                 title: "Error",
+    //                 content: "Error connect bike, try again",
+    //                 rightContent: "OK",
+    //                 onPressedRight: () {SmartDialog.dismiss();}
+    //             )
+    //         );
+    //       }
+    //     }
+    //     );
+    //   }
+    // }
 
 
     return Scaffold(

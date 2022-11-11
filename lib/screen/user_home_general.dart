@@ -1,9 +1,13 @@
 import 'dart:collection';
+import 'dart:io';
 import 'dart:math';
+import 'package:crclib/catalog.dart';
+import 'package:crclib/crclib.dart';
 import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/widgets/evie_oval.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -571,25 +575,25 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                           fontSize: 12.0,
                         ),
                       ),
-                      onPressed: () {
-                        SmartDialog.show(
-                            widget: EvieDoubleButtonDialog(
-                                //buttonNumber: "2",
-                                title: "Connect",
-                                content: "In progress",
-                                leftContent: "Cancel",
-                                rightContent: "Ok",
-                                image: Image.asset(
-                                  "assets/evieBike.png",
-                                  width: 36,
-                                  height: 36,
-                                ),
-                                onPressedLeft: () {
-                                  SmartDialog.dismiss();
-                                },
-                                onPressedRight: () {
-                                  SmartDialog.dismiss();
-                                }));
+                      onPressed: () async {
+                        // SmartDialog.show(
+                        //     widget: EvieDoubleButtonDialog(
+                        //         //buttonNumber: "2",
+                        //         title: "Connect",
+                        //         content: "In progress",
+                        //         leftContent: "Cancel",
+                        //         rightContent: "Ok",
+                        //         image: Image.asset(
+                        //           "assets/evieBike.png",
+                        //           width: 36,
+                        //           height: 36,
+                        //         ),
+                        //         onPressedLeft: () {
+                        //           SmartDialog.dismiss();
+                        //         },
+                        //         onPressedRight: () {
+                        //           SmartDialog.dismiss();
+                        //         }));
                       },
                     ),
 

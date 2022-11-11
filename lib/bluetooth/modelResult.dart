@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:hex/hex.dart';
 
 enum CommandResult {
@@ -6,11 +9,35 @@ enum CommandResult {
   failed,
 }
 
+enum LockState {
+  unknown,
+  lock,
+  unlock,
+}
+
 enum ErrorMessage {
   unknown,
   crcAuthErr, ///CRC authentication error
   comKeyNotObtained, ///The communication KEY was not obtained
   wrongComKey, ///The communication KEY has been obtained, but the communication KEY is wrong
+}
+
+enum AddRFIDState {
+  unknown,
+  startReadCard,
+  addCardSuccess,
+  addCardFailed,
+  cardIsExist,
+}
+
+enum PairingState {
+  unknown,
+  startPairing,
+  pairing,
+  gettingIotInfo,
+  errorPrompt,
+  pairDeviceSuccess,
+  pairDeviceFailed,
 }
 
 class RequestComKeyResult {
@@ -50,6 +77,27 @@ class ErrorPromptResult {
       data[6] == 1 ? ErrorMessage.crcAuthErr :
       data[6] == 2 ? ErrorMessage.comKeyNotObtained :
       ErrorMessage.wrongComKey;
+    print(errorMessage);
+  }
+}
+
+///Need to wait motor controller for verify
+class BikeInfoResult {
+  int dataSize = 0;
+  String? batteryLevel;
+  String? modeOfBike;
+  String? speed;
+  String? singleRidingMileage;
+  String? remainingMileage;
+
+
+  BikeInfoResult(List<int> data) {
+    dataSize = data[2];
+    batteryLevel = data[6].toString();
+    modeOfBike = data[7].toString();
+    speed = data[8].toString() + data[9].toString();
+    singleRidingMileage = data[10].toString() + data[11].toString();
+    remainingMileage = data[12].toString() + data[13].toString();
   }
 }
 
@@ -79,12 +127,38 @@ class ChangeBleKeyResult {
 
   ChangeBleKeyResult(List<int> data) {
     /// Change BLE key Result :
-    /// 1: Success
-    /// 2: Failed
+    /// 0: Success
+    /// 1: Failed
 
-    result = data[6] == 1 ? CommandResult.success : CommandResult.failed;
+    result = data[6] == 0 ? CommandResult.success : CommandResult.failed;
     if (result == CommandResult.success) {
-      bleKey = const HexCodec().encode(data.sublist(7, 15)).replaceAll("0", "");
+      const asciiDecoder = AsciiDecoder();
+      bleKey = asciiDecoder.convert(data.sublist(7, 15));
+      //bleKey = const HexCodec().encode(data.sublist(7, 15));
+      print(bleKey);
+    }
+    else {
+      print(bleKey);
+    }
+  }
+}
+
+class ChangeBleNameResult {
+  int dataSize = 0;
+  CommandResult result = CommandResult.unknown;
+  String? bleKey;
+
+  ChangeBleNameResult(List<int> data) {
+
+    result = data[6] == 0 ? CommandResult.success : CommandResult.failed;
+    const asciiDecoder = AsciiDecoder();
+    bleKey = asciiDecoder.convert(data.sublist(6, 13));
+    if (result == CommandResult.success) {
+      const asciiDecoder = AsciiDecoder();
+      bleKey = asciiDecoder.convert(data.sublist(6, 12));
+      print(bleKey);
+    }
+    else {
       print(bleKey);
     }
   }
@@ -94,14 +168,43 @@ class ChangeBleKeyResult {
 class AddRFIDCardResult{
 
   int dataSize = 0;
-  CommandResult result = CommandResult.unknown;
+  AddRFIDState addRFIDState = AddRFIDState.unknown;
+  String? rfidNumber;
+
 
   AddRFIDCardResult(List<int> data) {
-    /// Add rfid Result :
-    /// 0: Success
-    /// 1: Failed
+    if (data[6] == 0) {
+      addRFIDState = AddRFIDState.startReadCard;
+    }
+    else if (data[6] == 1) {
+      addRFIDState = AddRFIDState.addCardSuccess;
+    }
+    else if (data[6] == 2) {
+      addRFIDState = AddRFIDState.addCardFailed;
+    }
+    else if (data[6] == 3) {
+      addRFIDState = AddRFIDState.cardIsExist;
+    }
 
-    result = data[6] == 0 ? CommandResult.success : CommandResult.failed;
+    List<int> rfidData = [data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14]];
+    print("RFID State : " + addRFIDState.name.toString());
+    print("RFID Byte Data: " + rfidData.toString());
+    rfidNumber = const HexCodec().encode(rfidData);
+    print(rfidNumber);
+  }
+}
+
+class QueryRFIDCardResult{
+
+  int dataSize = 0;
+  String? rfidNumber = "0000000000000000";
+
+
+  QueryRFIDCardResult(List<int> data) {
+    List<int> rfidData = [data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13]];
+    print("RFID Byte Data: " + rfidData.toString());
+    rfidNumber = const HexCodec().encode(rfidData);
+    print(rfidNumber);
   }
 }
 
@@ -114,13 +217,16 @@ class DeleteRFIDCardResult{
     /// 0: Success
     /// 1: Failed
 
-    result = data[6] == 0 ? CommandResult.success : CommandResult.failed;
+    result = data[6] == 0 ? CommandResult.failed : CommandResult.success;
+    print(result);
   }
 }
 
 class CableLockResult{
   int dataSize = 0;
   CommandResult result = CommandResult.unknown;
+  LockState lockState = LockState.unknown;
+
 
   CableLockResult(List<int> data) {
 
@@ -134,8 +240,102 @@ class CableLockResult{
     /// 2: Communication timeout
     /// 10: locked state
 
-    //data[6] = result type
-    result = data[7] == 0 ? CommandResult.success : CommandResult.failed;
+    // data[6] = result type
+    if (data[6] == 0x23) {
+      ///For lock status -> 0x10 = "LOCK" , 0x11 = "UNLOCK"
+      lockState = data[7] == 0x10 ? LockState.lock : LockState.unlock;
+    }
+    else if (data[6] == 0x13) {
+      lockState = data[7] == 0x00 ? LockState.lock : LockState.unlock;
+    }
+    else if (data[6] == 0x03) {
+      lockState = data[7] == 0x00 ? LockState.unlock : LockState.lock;
+    }
+    // else {
+    //   result = data[7] == 0 ? CommandResult.success : CommandResult.failed;
+    // }
   }
+}
 
+class MovementSettingResult {
+  int dataSize = 0;
+  CommandResult result = CommandResult.unknown;
+  MovementSettingResult(List<int> data) {
+    result = data[6] == 0 ? CommandResult.success : CommandResult.failed;
+    print(result);
+  }
+}
+
+class FactoryResetResult {
+  int dataSize = 0;
+  CommandResult result = CommandResult.unknown;
+  FactoryResetResult(List<int> data) {
+    result = data[6] == 0 ? CommandResult.success : CommandResult.failed;
+    if (result == CommandResult.success) {
+      print("Successfully factory reset");
+    }
+    else {
+      print("Failed to factory reset");
+    }
+  }
+}
+
+class IotInfoModel {
+  String? apnName;
+  String? apnMode;
+  int? ipMode;
+  String? ipAddress;
+  String? port;
+  String? deviceIMEI;
+  String? iccid;
+  String? firmwareVer;
+
+  IotInfoModel(String iotInfoString) {
+    if (iotInfoString == "") {
+
+    }
+    else {
+      List<String> IotDataList = iotInfoString.split(",");
+
+      if (IotDataList[0].toString().contains("APN")) {
+        apnName = ((IotDataList[0].toString()).split(":"))[1];
+      }
+
+      if (IotDataList[1].toString().contains("APNMODE")) {
+        apnMode = ((IotDataList[1].toString()).split(":"))[1];
+      }
+
+      if (IotDataList[4].toString().contains("IPMODE")) {
+        ipMode = int.parse(((IotDataList[4].toString()).split(":"))[1]);
+      }
+
+      if (IotDataList[5].toString().contains("IP")) {
+        ipAddress = ((IotDataList[5].toString()).split(":"))[1];
+      }
+
+      if (IotDataList[6].toString().contains("PORT")) {
+        port = ((IotDataList[6].toString()).split(":"))[1];
+      }
+
+      if (IotDataList[7].toString().contains("IMEI")) {
+        deviceIMEI = ((IotDataList[7].toString()).split(":"))[1];
+      }
+
+      if (IotDataList[8].toString().contains("ICCID")) {
+        iccid = ((IotDataList[8].toString()).split(":"))[1];
+      }
+
+      if (IotDataList[11].toString().contains("VERSION")) {
+        firmwareVer = ((IotDataList[11].toString()).split(":"))[1];
+      }
+    }
+  }
+}
+
+class PairDeviceResult {
+  IotInfoModel? iotInfoModel;
+  PairingState pairingState = PairingState.unknown;
+  DeviceConnectionState? deviceConnectionState;
+
+  PairDeviceResult(this.iotInfoModel, this.pairingState, this.deviceConnectionState);
 }

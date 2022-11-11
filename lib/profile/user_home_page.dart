@@ -37,7 +37,7 @@ class _UserHomePageState extends State<UserHomePage> {
     UserHomeBluetooth(),
     UserHomeHistory(),
     UserProfile(),
-    UserProfile(),
+    UserHomeBluetooth(),
   ];
 
   @override
