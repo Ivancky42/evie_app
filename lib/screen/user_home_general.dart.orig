@@ -575,6 +575,27 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                           fontSize: 12.0,
                         ),
                       ),
+<<<<<<< HEAD
+                      onPressed: () {
+                        SmartDialog.show(
+                            widget: EvieDoubleButtonDialogCupertino(
+                                //buttonNumber: "2",
+                                title: "Connect",
+                                content: "In progress",
+                                leftContent: "Cancel",
+                                rightContent: "Ok",
+                                image: Image.asset(
+                                  "assets/evieBike.png",
+                                  width: 36,
+                                  height: 36,
+                                ),
+                                onPressedLeft: () {
+                                  SmartDialog.dismiss();
+                                },
+                                onPressedRight: () {
+                                  SmartDialog.dismiss();
+                                }));
+=======
                       onPressed: () async {
                         // SmartDialog.show(
                         //     widget: EvieDoubleButtonDialog(
@@ -594,6 +615,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                         //         onPressedRight: () {
                         //           SmartDialog.dismiss();
                         //         }));
+>>>>>>> 119095d03c0b2f34b5d365a37ae8d5e2d92e17cc
                       },
                     ),
 

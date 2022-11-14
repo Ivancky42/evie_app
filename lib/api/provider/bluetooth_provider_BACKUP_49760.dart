@@ -148,6 +148,20 @@ class BluetoothProvider extends ChangeNotifier {
 
   void startScan() {
     discoverDeviceList.clear();
+<<<<<<< HEAD
+    scanSubscription = flutterReactiveBle.scanForDevices(
+        scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
+   ///   if (device.name.contains("REEVO")) {
+        if (device.name.isNotEmpty) {
+          discoverDeviceList.update(
+            device.id,
+                (existingDevice) => device,
+            ifAbsent: () => device,
+          );
+          notifyListeners();
+        }
+  ///    }
+=======
     scanSubscription = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
       if (device.name.contains("EVIE")) {
         discoverDeviceList.update(
@@ -157,9 +171,9 @@ class BluetoothProvider extends ChangeNotifier {
         );
         notifyListeners();
       }
+>>>>>>> 119095d03c0b2f34b5d365a37ae8d5e2d92e17cc
     }, onError: (error) {
       stopScan();
-      scanSubscription = null;
       discoverDeviceList.clear();
       notifyListeners();
       debugPrint(error.toString());
@@ -168,6 +182,8 @@ class BluetoothProvider extends ChangeNotifier {
 
   void stopScan() {
     scanSubscription?.cancel();
+    scanSubscription = null;
+    notifyListeners();
   }
 
   // TODO: Exactly same function as @connectDevice, but bleKey = default BLE KEY ['REw40n21'].
