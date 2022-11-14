@@ -2,6 +2,67 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../api/colours.dart';
+import 'package:flutter/cupertino.dart';
+
+///Single button dialog
+class EvieSingleButtonDialogCupertino extends StatelessWidget{
+  // final String buttonNumber;
+  final String title;
+  final String content;
+  final Widget? image;
+  final String rightContent;
+  final VoidCallback onPressedRight;
+
+  const EvieSingleButtonDialogCupertino({
+    Key? key,
+    //required this.buttonNumber,
+    required this.title,
+    required this.content,
+    this.image,
+    required this.rightContent,
+    required this.onPressedRight
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Sizer(builder: (BuildContext context, Orientation orientation, DeviceType deviceType) {
+      return CupertinoAlertDialog(
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+
+        content: Text(
+          content,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 12.sp,
+          ),
+        ),
+
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            /// This parameter indicates this action is the default,
+            /// and turns the action's text to bold text.
+            onPressed: onPressedRight,
+            child: Text(
+              rightContent,
+              style: TextStyle(
+                fontSize: 10.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+
+
+      );
+    },);
+  }
+}
 
 
 ///Single button dialog

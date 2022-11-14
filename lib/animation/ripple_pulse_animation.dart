@@ -49,11 +49,12 @@ class _RipplePulseAnimationState extends State<RipplePulseAnimation>
         return Stack(
           alignment: Alignment.center,
           children: <Widget>[
-            _buildContainer(150 * _controller.value),
+            //_buildContainer(150 * _controller.value),
             //_buildContainer(200 * _controller.value),
-            _buildContainer(250 * _controller.value),
+            _buildContainer(270 * _controller.value),
             //_buildContainer(300 * _controller.value),
-            _buildContainer(350 * _controller.value),
+            //_buildContainer(350 * _controller.value),
+            _buildContainer(400 * _controller.value),
             const Align(),
           ],
         );
@@ -69,7 +70,7 @@ class _RipplePulseAnimationState extends State<RipplePulseAnimation>
         shape: BoxShape.circle,
 
         //Colour of the ripple pulse
-        color: Colors.lightBlue[200]?.withOpacity(1 - _controller.value),
+        color: const Color(0xff6A51CA).withOpacity(1 - _controller.value),
       ),
     );
   }

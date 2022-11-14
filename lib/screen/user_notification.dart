@@ -103,7 +103,7 @@ class _UserNotificationState extends State<UserNotification> {
                                                   .elementAt(index));
                                         } else {
                                           SmartDialog.show(
-                                              widget: EvieSingleButtonDialog(
+                                              widget: EvieSingleButtonDialogCupertino(
                                                   title: "Error",
                                                   content: "Try again",
                                                   rightContent: "Ok",
@@ -219,7 +219,7 @@ class _UserNotificationState extends State<UserNotification> {
                             _notificationProvider
                                 .updateUserNotificationSharedBikeStatus(key);
                             SmartDialog.show(
-                                widget: EvieSingleButtonDialog(
+                                widget: EvieSingleButtonDialogCupertino(
                                     title: "Success",
                                     content: "Bike added",
                                     rightContent: "OK",
@@ -229,7 +229,7 @@ class _UserNotificationState extends State<UserNotification> {
                           } else {
                             SmartDialog.dismiss();
                             SmartDialog.show(
-                                widget: EvieSingleButtonDialog(
+                                widget: EvieSingleButtonDialogCupertino(
                                     title: "Error",
                                     content: "Bike not added, try again",
                                     rightContent: "OK",
@@ -246,7 +246,7 @@ class _UserNotificationState extends State<UserNotification> {
 
       default:
         SmartDialog.show(
-            widget: EvieSingleButtonDialog(
+            widget: EvieSingleButtonDialogCupertino(
           //buttonNumber: "2",
           title: notificationModel.title!,
           content:

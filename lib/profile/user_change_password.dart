@@ -237,7 +237,7 @@ class _UserChangePasswordState extends State<UserChangePassword> {
 
                                   if (!await _authProvider.reauthentication(_passwordOriginalController.text.trim())) {
                                    /* SmartDialog.show(
-                                      widget: EvieSingleButtonDialog(
+                                      widget: EvieSingleButtonDialogCupertino(
                                           title: "Error",
                                           content: "Try again",
                                           rightContent: "Ok",

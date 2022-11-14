@@ -30,7 +30,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
   Widget build(BuildContext context) {
     _authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
-      appBar: EvieAppbar_Back(onPressed: (){ changeToSignUpMethodScreen(context, "");}),
+      appBar: EvieAppbar_Back(onPressed: (){ changeToInputNameScreen(context);}),
 
       body: SingleChildScrollView(
         child: Padding(
@@ -116,7 +116,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                         changeToUserHomePageScreen(context);
                       } else {
                         SmartDialog.show(
-                            widget: EvieSingleButtonDialog(
+                            widget: EvieSingleButtonDialogCupertino(
                                 title: "Error",
                                 content: result,
                                 rightContent: "Ok",
@@ -157,7 +157,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                         changeToUserHomePageScreen(context);
                       } else {
                         SmartDialog.show(
-                            widget: EvieSingleButtonDialog(
+                            widget: EvieSingleButtonDialogCupertino(
                                 title: "Error",
                                 content: result,
                                 rightContent: "Ok",
@@ -197,7 +197,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                         changeToUserHomePageScreen(context);
                       } else {
                         SmartDialog.show(
-                            widget: EvieSingleButtonDialog(
+                            widget: EvieSingleButtonDialogCupertino(
                                 title: "Error",
                                 content: result,
                                 rightContent: "Ok",
@@ -237,7 +237,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                         changeToUserHomePageScreen(context);
                       } else {
                         SmartDialog.show(
-                            widget: EvieSingleButtonDialog(
+                            widget: EvieSingleButtonDialogCupertino(
                                 title: "Error",
                                 content: result,
                                 rightContent: "Ok",

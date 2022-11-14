@@ -1,8 +1,20 @@
+import 'package:evie_test/screen/onboarding/email_preference_control.dart';
+import 'package:evie_test/screen/onboarding/lets_go.dart';
+import 'package:evie_test/screen/onboarding/name_bike.dart';
+import 'package:evie_test/screen/onboarding/turn_on_bluetooth.dart';
+import 'package:evie_test/screen/onboarding/turn_on_location.dart';
+import 'package:evie_test/screen/onboarding/turn_on_notifications.dart';
 import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/screen/verify_email.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../screen/onboarding/bike_connect_failed.dart';
+import '../screen/onboarding/bike_connect_success.dart';
+import '../screen/onboarding/bike_scanning.dart';
+import '../screen/onboarding/congratulation.dart';
+import '../screen/onboarding/display_control.dart';
+import '../screen/onboarding/notification_control.dart';
 import '../screen/signup_method.dart';
 import '../screen/signup_page.dart';
 import '../screen/user_notification_details.dart';
@@ -94,6 +106,80 @@ void changeToRFIDScreen(BuildContext context) {
       .pushNamedAndRemoveUntil("/rfid", (route) => false);
 }
 
+void changeToLetsGoScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const LetsGo())
+  );
+}
+
+void changeToCongratulationScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const Congratulation())
+  );
+}
+
+void changeToNameBikeScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const NameBike())
+  );
+}
+
+void changeToTurnOnBluetoothScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const TurnOnBluetooth())
+  );
+}
+
+void changeToTurnOnLocationScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const TurnOnLocation())
+  );
+}
+
+void changeToTurnOnNotificationsScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const TurnOnNotifications())
+  );
+}
+
+void changeToBikeScanningScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const BikeScanning())
+  );
+}
+
+
+void changeToBikeConnectSuccessScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const BikeConnectSuccess())
+  );
+}
+
+void changeToBikeConnectFailedScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const BikeConnectFailed())
+  );
+}
+
+
+void changeToNotificationsControlScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const NotificationsControl())
+  );
+}
+
+void changeToEmailPreferenceControlScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const EmailPreferenceControl())
+  );
+}
+
+void changeToDisplayControlScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const DisplayControl())
+  );
+}
+
 
 ///Future builder
 void changeToNotificationDetailsScreen(BuildContext context, key, value) {
@@ -109,3 +195,10 @@ void changeToStripeCheckoutScreen(BuildContext context, value) {
 }
 
 
+
+
+void changeToTestScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const NameBike())
+  );
+}

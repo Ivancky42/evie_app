@@ -7,6 +7,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:provider/provider.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sizer/sizer.dart';
 
 import '../api/provider/bike_provider.dart';
 import '../widgets/evie_double_button_dialog.dart';
@@ -83,7 +84,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
 
             SmartDialog.show(
               tag: "ConnectBike",
-                widget: EvieDoubleButtonDialog(
+                widget: EvieDoubleButtonDialogCupertino(
                   //buttonNumber: "2",
                     title: "Connect Bike",
                     content:
@@ -134,7 +135,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
       SmartDialog.show(
         keepSingle: true,
         //  tag: "bluetoothOff",
-          widget: EvieDoubleButtonDialog(
+          widget: EvieDoubleButtonDialogCupertino(
               title: "Bluetooth Required",
               content: "Please turn on your bluetooth in phone setting",
               leftContent: "Cancel",
@@ -165,7 +166,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
             SmartDialog.dismiss(status: SmartStatus.loading);
             SmartDialog.show(
                 tag: "ConnectSuccess",
-                widget:EvieSingleButtonDialog(
+                widget:EvieSingleButtonDialogCupertino(
                     title: "Success",
                     content: "Connected",
                     rightContent: "OK",
@@ -185,7 +186,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
 
           } else {
             SmartDialog.show(
-                widget:EvieSingleButtonDialog(
+                widget:EvieSingleButtonDialogCupertino(
                     title: "Error",
                     content: "Error connect bike, try again",
                     rightContent: "OK",
@@ -220,7 +221,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
 
             RipplePulseAnimation(),
             IconButton(
-              iconSize: 55,
+              iconSize: 12.h,
               icon: Image.asset("assets/icons/bluetooth_logo.png"),
               tooltip: 'Bluetooth',
               onPressed: () {
@@ -263,7 +264,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
                       return listItem(bluetoothProvider.discoverDeviceList[key]);
                     },
                     separatorBuilder: (BuildContext context, int index) {
-                      return Divider();
+                      return const Divider();
                     },
                   ),
                 )

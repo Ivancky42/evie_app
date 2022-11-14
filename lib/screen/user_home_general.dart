@@ -458,7 +458,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               "Security Status",
                               style: TextStyle(
                                   fontWeight: FontWeight.w400, fontSize: 12),
@@ -466,7 +466,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                             SizedBox(
                               height: 1.h,
                             ),
-                            Text(
+                            const Text(
                               "NOT AVAILABLE",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
@@ -498,7 +498,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 "Carbon Foorprint",
                                 style: TextStyle(
                                     fontWeight: FontWeight.w400, fontSize: 12),
@@ -532,7 +532,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 "Calories",
                                 style: TextStyle(
                                     fontWeight: FontWeight.w400, fontSize: 12),
@@ -542,7 +542,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                               ),
                               Row(
                                 children: [
-                                  Text(
+                                  const Text(
                                     "0kcal",
                                     style: TextStyle(fontSize: 16),
                                   ),
@@ -573,7 +573,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                       ),
                       onPressed: () {
                         SmartDialog.show(
-                            widget: EvieDoubleButtonDialog(
+                            widget: EvieDoubleButtonDialogCupertino(
                                 //buttonNumber: "2",
                                 title: "Connect",
                                 content: "In progress",
@@ -605,7 +605,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                       ),
                       onPressed: () {
                         SmartDialog.show(
-                            widget: EvieDoubleButtonDialog(
+                            widget: EvieDoubleButtonDialogCupertino(
                                 //buttonNumber: "2",
                                 title: "Delete bike",
                                 content:
@@ -629,7 +629,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                                             .trim());
                                     if (result == true) {
                                       SmartDialog.show(
-                                          widget: EvieSingleButtonDialog(
+                                          widget: EvieSingleButtonDialogCupertino(
                                               title: "Success",
                                               content:
                                                   "Successfully delete bike",
@@ -639,7 +639,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                                               }));
                                     } else {
                                       SmartDialog.show(
-                                          widget: EvieSingleButtonDialog(
+                                          widget: EvieSingleButtonDialogCupertino(
                                               title: "Error",
                                               content:
                                                   "Error delete bike, try again",
@@ -792,7 +792,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
               backgroundColor: lockColour,
               onPressed: () {
 
-                changeToUserBluetoothScreen(context);
+                changeToBikeScanningScreen(context);
               },
 
               //icon inside button
@@ -1112,7 +1112,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                       ),
                       onPressed: () {
                         SmartDialog.show(
-                            widget: EvieDoubleButtonDialog(
+                            widget: EvieDoubleButtonDialogCupertino(
                                 //buttonNumber: "2",
                                 title: "Connect",
                                 content: "In progress",
@@ -1144,7 +1144,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                       ),
                       onPressed: () {
                         SmartDialog.show(
-                            widget: EvieDoubleButtonDialog(
+                            widget: EvieDoubleButtonDialogCupertino(
                                 //buttonNumber: "2",
                                 title: "Delete bike",
                                 content:
@@ -1168,7 +1168,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                                             .trim());
                                     if (result == true) {
                                       SmartDialog.show(
-                                          widget: EvieSingleButtonDialog(
+                                          widget: EvieSingleButtonDialogCupertino(
                                               title: "Success",
                                               content:
                                                   "Successfully delete bike",
@@ -1178,7 +1178,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                                               }));
                                     } else {
                                       SmartDialog.show(
-                                          widget: EvieSingleButtonDialog(
+                                          widget: EvieSingleButtonDialogCupertino(
                                               title: "Error",
                                               content:
                                                   "Error delete bike, try again",

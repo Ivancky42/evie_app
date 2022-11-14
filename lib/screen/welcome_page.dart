@@ -37,7 +37,7 @@ class _WelcomeState extends State<Welcome> {
               ),
             ),
             SizedBox(
-              height: 5.h,
+              height: 8.h,
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -51,7 +51,8 @@ class _WelcomeState extends State<Welcome> {
                   ),
                 ),
                 onPressed: () async {
-                  changeToInputNameScreen(context);
+                  //changeToInputNameScreen(context);
+                  changeToLetsGoScreen(context);
                 },
               ),
             ),

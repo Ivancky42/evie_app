@@ -1,5 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:flutter/cupertino.dart';
+
+
+
+///Double cupertino button dialog
+class EvieDoubleButtonDialogCupertino extends StatelessWidget{
+  // final String buttonNumber;
+  final String title;
+  final String content;
+  final Widget? image;
+  final String leftContent;
+  final String rightContent;
+  final VoidCallback onPressedLeft;
+  final VoidCallback onPressedRight;
+
+  const EvieDoubleButtonDialogCupertino({
+    Key? key,
+    //required this.buttonNumber,
+    required this.title,
+    required this.content,
+    this.image,
+    required this.leftContent,
+    required this.rightContent,
+    required this.onPressedLeft,
+    required this.onPressedRight
+  }) : super(key: key);
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Sizer(builder: (BuildContext context, Orientation orientation, DeviceType deviceType) {
+      return  CupertinoAlertDialog(
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+
+        content: Text(
+          content,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 12.sp,
+          ),
+        ),
+
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            /// This parameter indicates this action is the default,
+            /// and turns the action's text to bold text.
+            onPressed: onPressedLeft,
+            child: Text(
+              leftContent,
+              style: TextStyle(
+                fontSize: 10.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          CupertinoDialogAction(
+            /// This parameter indicates this action is the default,
+            /// and turns the action's text to bold text.
+            onPressed: onPressedRight,
+            child: Text(
+              rightContent,
+              style: TextStyle(
+                fontSize: 10.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+
+
+      );
+    },);
+  }
+}
 
 
 ///Double button dialog
@@ -30,7 +111,7 @@ class EvieDoubleButtonDialog extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (BuildContext context, Orientation orientation, DeviceType deviceType) {
-      return Dialog(
+      return  Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -129,23 +210,6 @@ class EvieDoubleButtonDialog extends StatelessWidget{
               bottom: 20,
             ),
             margin: const EdgeInsets.only(top: 45),
-          //  decoration: BoxDecoration(
-          //    boxShadow: const [
-          //      BoxShadow(
-          //          color: Colors.black26, offset: Offset(0, 4), blurRadius: 5.0)
-          //    ],
-          //    gradient: const LinearGradient(
-          //      begin: Alignment.topLeft,
-          //      end: Alignment.bottomLeft,
-          //     stops: [0.0, 1.0],
-          //      colors: [
-          //        Color(0xffD7E9EF),
-          //        Color(0xffD7E9EF),
-          //      ],
-          //    ),
-          //    borderRadius: BorderRadius.circular(16),
-              //border: Border.all(color: ReevoColors.blue),
-          //  ),
 
           )
       );

@@ -95,7 +95,8 @@ class _LoginScreenState extends State<Login> {
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   obscureText: false,
-                  hintText: "Email Address",
+                  labelText: "Email Address",
+                  hintText: "enter your email address",
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
@@ -111,12 +112,15 @@ class _LoginScreenState extends State<Login> {
                 EvieTextFormField(
                   controller: _passwordController,
                   obscureText: _isObscure,
-                  hintText: "Password",
+                  labelText: "Password",
+                  hintText: "enter your password",
                   suffixIcon:  IconButton(
-                      icon: Icon(
-                        _isObscure
-                            ? Icons.visibility_off
-                            : Icons.visibility,
+                      icon:   _isObscure ?
+                      const Image(
+                        image: AssetImage("assets/buttons/view_off.png"),
+                      ):
+                      const Image(
+                        image: AssetImage("assets/buttons/view_on.png"),
                       ),
                       onPressed: () {
                         setState(() {
@@ -196,7 +200,7 @@ class _LoginScreenState extends State<Login> {
                     changeToVerifyEmailScreen(context, _emailController.text.trim());
                   } else {
                     SmartDialog.show(
-                      widget: EvieSingleButtonDialog(
+                      widget: EvieSingleButtonDialogCupertino(
                           title: "Error",
                           content: result.toString(),
                           rightContent: "Ok",

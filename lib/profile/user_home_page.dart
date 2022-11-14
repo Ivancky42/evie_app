@@ -9,6 +9,7 @@ import 'package:sizer/sizer.dart';
 
 import '../api/navigator.dart';
 import '../api/provider/notification_provider.dart';
+import '../screen/onboarding/bike_scanning.dart';
 import '../theme/ThemeChangeNotifier.dart';
 
 ///User default home page when login condition is true
@@ -34,7 +35,7 @@ class _UserHomePageState extends State<UserHomePage> {
   ///Body Screen navigation by bottom navigation bar
   final screen = [
     UserHomeGeneral(),
-    UserHomeBluetooth(),
+    BikeScanning(),
     UserHomeHistory(),
     UserProfile(),
     UserProfile(),

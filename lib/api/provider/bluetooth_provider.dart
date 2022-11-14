@@ -105,17 +105,18 @@ class BluetoothProvider extends ChangeNotifier {
     discoverDeviceList.clear();
     scanSubscription = flutterReactiveBle.scanForDevices(
         scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
-      if (device.name.contains("REEVO")) {
-        discoverDeviceList.update(
-          device.id,
-          (existingDevice) => device,
-          ifAbsent: () => device,
-        );
-        notifyListeners();
-      }
+   ///   if (device.name.contains("REEVO")) {
+        if (device.name.isNotEmpty) {
+          discoverDeviceList.update(
+            device.id,
+                (existingDevice) => device,
+            ifAbsent: () => device,
+          );
+          notifyListeners();
+        }
+  ///    }
     }, onError: (error) {
       stopScan();
-      scanSubscription = null;
       discoverDeviceList.clear();
       notifyListeners();
       debugPrint(error.toString());
@@ -124,6 +125,8 @@ class BluetoothProvider extends ChangeNotifier {
 
   void stopScan() {
     scanSubscription?.cancel();
+    scanSubscription = null;
+    notifyListeners();
   }
 
   connectDevice(String deviceId) async {

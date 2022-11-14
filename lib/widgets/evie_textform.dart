@@ -11,16 +11,18 @@ class EvieTextFormField extends StatelessWidget {
   final bool? obscureText;
   final TextInputType? keyboardType;
   final String? hintText;
+  final String? labelText;
   final Widget? suffixIcon;
   final FormFieldValidator<String>? validator;
 
   const EvieTextFormField({
     Key? key,
 
-    this.controller,
+    required this.controller,
     this.obscureText,
     this.keyboardType,
     this.hintText,
+    this.labelText,
     this.suffixIcon,
     this.validator,
 
@@ -35,15 +37,23 @@ class EvieTextFormField extends StatelessWidget {
       decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
           hintText: hintText,
-          hintStyle: TextStyle(fontSize: 10.sp, color: Colors.grey),
+          labelText: labelText,
+          hintStyle: TextStyle(fontSize: 10.sp, color: Color(0xff7A7A79)),
+          labelStyle: TextStyle(fontSize: 13.sp, color: Color(0xff7A7A79)),
           filled: true,
+          errorStyle: TextStyle(
+            color: Theme.of(context).errorColor, // or any other color
+          ),
           fillColor: ThemeChangeNotifier().isDarkMode(context) ?  Color(0xff3F3F3F) : Color(0xffDFE0E0),
           enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
+            borderSide: BorderSide(
                 width: 0.1,
-                color: Color(0xffDFE0E0),), //<-- SEE HERE
+                color: ThemeChangeNotifier().isDarkMode(context) ?  Color(0xff3F3F3F) : Color(0xffFAFAFA),), //<-- SEE HERE
             borderRadius: BorderRadius.circular(10.0),
           ),
+
+          focusColor: ThemeChangeNotifier().isDarkMode(context) ?  Color(0xff3F3F3F) : Color(0xffFAFAFA),
+
 
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(
@@ -59,6 +69,12 @@ class EvieTextFormField extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.0),
           ),
 
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              width: 1.5,
+              color: Color(0xffF42525),), //<-- SEE HERE
+            borderRadius: BorderRadius.circular(10.0),
+          ),
           suffixIcon: suffixIcon),
       validator: validator,
     );

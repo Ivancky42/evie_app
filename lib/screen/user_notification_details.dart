@@ -122,7 +122,7 @@ class _UserNotificationDetailsState extends State<UserNotificationDetails> {
                                       .updateUserNotificationSharedBikeStatus(
                                           widget.notificationKeys);
                                   SmartDialog.show(
-                                      widget: EvieSingleButtonDialog(
+                                      widget: EvieSingleButtonDialogCupertino(
                                           title: "Success",
                                           content: "Bike added",
                                           rightContent: "OK",

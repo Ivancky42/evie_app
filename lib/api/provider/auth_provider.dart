@@ -8,8 +8,6 @@ import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/widgets/widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:twitter_login/twitter_login.dart';
@@ -117,7 +115,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  void sendFirestoreVerifyEmail(){
+  sendFirestoreVerifyEmail(){
     User? firebaseUser;
     firebaseUser = _auth.currentUser;
     firebaseUser!.sendEmailVerification();

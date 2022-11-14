@@ -183,7 +183,7 @@ class _UserHomeSettingState extends State<UserHomeSetting> {
                   ),
                   onPressed: () {
                     SmartDialog.show(
-                        widget: EvieDoubleButtonDialog(
+                        widget: EvieDoubleButtonDialogCupertino(
                             //buttonNumber: "2",
                             title: "Connect",
                             content: "In progress",
@@ -217,7 +217,7 @@ class _UserHomeSettingState extends State<UserHomeSetting> {
                   ),
                   onPressed: () {
                     SmartDialog.show(
-                        widget: EvieDoubleButtonDialog(
+                        widget: EvieDoubleButtonDialogCupertino(
                             //buttonNumber: "2",
                             title: "Connect",
                             content: "In progress",
@@ -251,7 +251,7 @@ class _UserHomeSettingState extends State<UserHomeSetting> {
                   ),
                   onPressed: () {
                     SmartDialog.show(
-                        widget: EvieDoubleButtonDialog(
+                        widget: EvieDoubleButtonDialogCupertino(
                             //buttonNumber: "2",
                             title: "Connect",
                             content: "In progress",

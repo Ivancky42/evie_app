@@ -46,7 +46,7 @@ class _InputNameState extends State<InputName> {
                 SizedBox(
                   height: 1.h,
                 ),
-                Text("Just your first name will do the trick"),
+                Text("Just your first name will do the trick", style: TextStyle(fontSize: 11.5.sp),),
                 SizedBox(
                   height: 1.h,
                 ),
@@ -55,7 +55,8 @@ class _InputNameState extends State<InputName> {
                   controller: _nameController,
                   obscureText: false,
                   keyboardType: TextInputType.name,
-                  hintText: "First Name",
+                  hintText: "enter your first name",
+                  labelText: "First Name",
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your name';

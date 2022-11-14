@@ -24,6 +24,7 @@ class LocationProvider extends ChangeNotifier {
   Placemark? currentPlaceMark;
 
   Future<void> init(LocationModel? locationModel) async {
+    checkLocationPermissionStatus();
     if(locationModel == null){}
     else{
       this.locationModel = locationModel;
@@ -38,19 +39,18 @@ class LocationProvider extends ChangeNotifier {
     }
   }
 
-  checkLocationStatus() async {
+  checkLocationPermissionStatus() async {
     var locationStatus = await Permission.location.status;
      debugPrint("Location Status ${locationStatus.toString()}");
 
     switch (locationStatus) {
       case PermissionStatus.granted:
-      // Pass
-        break;
+        return PermissionStatus.granted;
       case PermissionStatus.denied:
-        return;
+        handlePermission();
+        return PermissionStatus.denied;
       case PermissionStatus.permanentlyDenied:
-      //  OpenSettings.openLocationSourceSetting();
-        return;
+        return PermissionStatus.permanentlyDenied;
       case PermissionStatus.restricted:
       // Pass
         break;
@@ -61,6 +61,23 @@ class LocationProvider extends ChangeNotifier {
         break;
     }
     notifyListeners();
+  }
+
+  void handlePermission() async {
+    var status = await Permission.location.request();
+    if (status.isPermanentlyDenied) {
+      return;
+    }
+
+    status = await Permission.locationWhenInUse.request();
+    if (status.isPermanentlyDenied) {
+      return;
+    }
+
+    status = await Permission.locationAlways.request();
+    if (status.isPermanentlyDenied) {
+      return;
+    }
   }
 
   getPlaceMarks(double latitude, double longitude) async {

@@ -154,7 +154,7 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
-  void updateBikeName(name) async {
+  updateBikeName(name) async {
     try {
       var docUser = FirebaseFirestore.instance.collection(bikesCollection);
       docUser.doc(currentBikeModel?.deviceIMEI).update({
@@ -162,8 +162,10 @@ class BikeProvider extends ChangeNotifier {
         'updated': Timestamp.now(),
       });
       notifyListeners();
+      return true;
     } catch (e) {
       debugPrint(e.toString());
+      return false;
     }
   }
 

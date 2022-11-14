@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/evie_single_button_dialog.dart';
 import '../model/user_model.dart';
 import '../todays_quote.dart';
@@ -14,9 +15,11 @@ import 'auth_provider.dart';
 
 class CurrentUserProvider extends ChangeNotifier {
 
+
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
 
   String? randomQuote;
+  bool? isFirstLogin;
 
   UserModel? currentUserModel;
   UserModel? get getCurrentUserModel => currentUserModel;
@@ -28,6 +31,7 @@ class CurrentUserProvider extends ChangeNotifier {
     if(uid != null) {
       getUser(uid);
       todayRandomQuote();
+      getIsFirstLogin();
       notifyListeners();
     }
   }
@@ -84,11 +88,35 @@ class CurrentUserProvider extends ChangeNotifier {
   todayRandomQuote(){
     Random random = Random();
     int randomNumber = random.nextInt(TodaysQuote.quotes.length)+1; // from 1-10
-
     var randomQuote = TodaysQuote.quotes[randomNumber];
-
     this.randomQuote = randomQuote;
   }
+
+  Future<void> setIsFirstLogin(bool result) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setBool('isFirstLogin', result);
+    notifyListeners();
+  }
+
+  Future<void> getIsFirstLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(prefs.containsKey('isFirstLogin')){
+
+      if(prefs.getBool('isFirstLogin') == true){
+        isFirstLogin = true;
+        notifyListeners();
+      }else{
+        isFirstLogin = false;
+        notifyListeners();
+      }
+    }else {
+      isFirstLogin = true;
+      notifyListeners();
+    }
+  }
+
+
 
 
 }

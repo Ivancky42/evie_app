@@ -87,7 +87,8 @@ class _SignUpState extends State<SignUp> {
                   controller: _emailController,
                   obscureText: false,
                   keyboardType: TextInputType.emailAddress,
-                  hintText: "Email Address",
+                  labelText: "Email Address",
+                  hintText: "enter your email address",
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
@@ -103,10 +104,15 @@ class _SignUpState extends State<SignUp> {
                 EvieTextFormField(
                   controller: _passwordController,
                   obscureText: _isObscure,
-                  hintText: "Password",
+                  labelText: "Password",
+                  hintText: "enter your password",
                   suffixIcon: IconButton(
-                      icon: Icon(
-                        _isObscure ? Icons.visibility_off : Icons.visibility,
+                      icon:   _isObscure ?
+                      const Image(
+                        image: AssetImage("assets/buttons/view_off.png"),
+                      ):
+                      const Image(
+                        image: AssetImage("assets/buttons/view_on.png"),
                       ),
                       onPressed: () {
                         setState(() {
@@ -129,10 +135,15 @@ class _SignUpState extends State<SignUp> {
                 EvieTextFormField(
                   controller: _passwordConfirmController,
                   obscureText: _isObscure2,
-                  hintText: "Confirm your password",
+                  labelText: "Confirm your password",
+                  hintText: "confirm your password",
                   suffixIcon: IconButton(
-                      icon: Icon(
-                        _isObscure2 ? Icons.visibility_off : Icons.visibility,
+                      icon:   _isObscure2 ?
+                      const Image(
+                        image: AssetImage("assets/buttons/view_off.png"),
+                      ):
+                      const Image(
+                        image: AssetImage("assets/buttons/view_on.png"),
                       ),
                       onPressed: () {
                         setState(() {
@@ -215,7 +226,6 @@ class _SignUpState extends State<SignUp> {
                               duration: Duration(seconds: 2),
                             ),
                           );
-
                           ///Quit loading and go to user home page
                           changeToUserHomePageScreen(context);
                         } else if (result.toString() == "Not yet verify") {
@@ -228,7 +238,7 @@ class _SignUpState extends State<SignUp> {
                           changeToVerifyEmailScreen(context, _emailController.text.trim());
                         } else {
                           SmartDialog.show(
-                            widget: EvieSingleButtonDialog(
+                            widget: EvieSingleButtonDialogCupertino(
                                 title: "Error",
                                 content: result.toString(),
                                 rightContent: "Ok",
@@ -247,7 +257,7 @@ class _SignUpState extends State<SignUp> {
                       /*
                               //Last value field is phone number
                               SmartDialog.show(
-                                widget: EvieSingleButtonDialog(
+                                widget: EvieSingleButtonDialogCupertino(
                                     title: "Success",
                                     content: "Registration success",
                                     rightContent: "Ok",
@@ -262,7 +272,7 @@ class _SignUpState extends State<SignUp> {
                     } else {
                       debugPrint("Sign Up Error");
                       SmartDialog.show(
-                        widget: EvieSingleButtonDialog(
+                        widget: EvieSingleButtonDialogCupertino(
                             title: "Error",
                             content: "Try again",
                             rightContent: "Ok",

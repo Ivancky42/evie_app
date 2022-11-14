@@ -129,7 +129,7 @@ class _ShareBikeState extends State<ShareBike> {
 
                                                 switch(result){
                                                   case "false":
-                                                    SmartDialog.show(widget: EvieSingleButtonDialog(
+                                                    SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
                                                         title: "User not found",
                                                         content: "Email not register in database",
                                                         rightContent: "Close",
@@ -137,7 +137,7 @@ class _ShareBikeState extends State<ShareBike> {
                                                     ));
                                                     break;
                                                   default:
-                                                    SmartDialog.show(widget: EvieDoubleButtonDialog(
+                                                    SmartDialog.show(widget: EvieDoubleButtonDialogCupertino(
                                                       title: "Share Bike",
                                                       content: "Share ${_bikeProvider.currentBikeModel!.bikeName}"
                                                           " with ${_emailController.text.trim()} ?",
@@ -149,7 +149,7 @@ class _ShareBikeState extends State<ShareBike> {
                                                         _bikeProvider.updateSharedBikeStatus(result).
                                                         then((update){
                                                           if(update == true){
-                                                            SmartDialog.show(widget: EvieSingleButtonDialog(
+                                                            SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
                                                                 title: "Success",
                                                                 content: "Shared bike with ${_emailController.text.trim()}",
                                                                 rightContent: "Close",
@@ -157,7 +157,7 @@ class _ShareBikeState extends State<ShareBike> {
                                                             ));
                                                           }
                                                           else {
-                                                            SmartDialog.show(widget: EvieSingleButtonDialog(
+                                                            SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
                                                                 title: "Not success",
                                                                 content: "Try again",
                                                                 rightContent: "Close",
@@ -283,7 +283,7 @@ class _ShareBikeState extends State<ShareBike> {
 
   showUserInfoTile(BikeUserModel bikeUserModel, UserModel bikeUserModelDetails){
     SmartDialog.show(
-      widget: EvieDoubleButtonDialog(
+      widget: EvieDoubleButtonDialogCupertino(
           title: "Name: ${bikeUserModelDetails.name}",
           content: bikeUserModel.status!.isEmpty ?
                      "Email: ${bikeUserModelDetails.email} \n"
@@ -298,7 +298,7 @@ class _ShareBikeState extends State<ShareBike> {
               ///Update user notification id status == removed
               if(result == true){
                 SmartDialog.dismiss();
-                SmartDialog.show(widget: EvieSingleButtonDialog(
+                SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
                     title: "Success",
                     content: "Cancelled",
                     rightContent: "Close",
@@ -306,7 +306,7 @@ class _ShareBikeState extends State<ShareBike> {
                 ));
               }
               else {
-                SmartDialog.show(widget: EvieSingleButtonDialog(
+                SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
                     title: "Not success",
                     content: "Try again",
                     rightContent: "Close",

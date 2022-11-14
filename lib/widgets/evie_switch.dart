@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'evie_textform.dart';
 
 ///Cupertino switch widget
@@ -19,25 +20,22 @@ class EvieSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        EvieButton_TextForm_Constant(
-          width: 12,
-          height: 12,
-          hintText: text,
+    return  Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          text,
+          style: TextStyle(fontSize: 12.sp),
         ),
-        Positioned(
-          bottom: 10,
-          right: 20,
-          child: CupertinoSwitch(
-            value: value,
-            activeColor: Color(0xffffffff),
-            thumbColor: thumbColor,
-            trackColor: Color(0xffffffff),
-            onChanged: onChanged,
-          ),
-        ),
+    CupertinoSwitch(
+    value: value,
+    activeColor:  const Color(0xff6A51CA),
+    thumbColor: thumbColor,
+    trackColor: const Color(0xff6A51CA).withOpacity(0.5),
+    onChanged: onChanged,
+    ),
       ],
     );
+
   }
 }

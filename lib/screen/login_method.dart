@@ -115,7 +115,7 @@ class _SignInMethodState extends State<SignInMethod> {
                         changeToUserHomePageScreen(context);
                       } else {
                         SmartDialog.show(
-                            widget: EvieSingleButtonDialog(
+                            widget: EvieSingleButtonDialogCupertino(
                                 title: "Error",
                                 content: result,
                                 rightContent: "Ok",
@@ -153,7 +153,7 @@ class _SignInMethodState extends State<SignInMethod> {
                         changeToUserHomePageScreen(context);
                       } else {
                         SmartDialog.show(
-                            widget: EvieSingleButtonDialog(
+                            widget: EvieSingleButtonDialogCupertino(
                                 title: "Error",
                                 content: result,
                                 rightContent: "Ok",
@@ -191,7 +191,7 @@ class _SignInMethodState extends State<SignInMethod> {
                         changeToUserHomePageScreen(context);
                       } else {
                         SmartDialog.show(
-                            widget: EvieSingleButtonDialog(
+                            widget: EvieSingleButtonDialogCupertino(
                                 title: "Error",
                                 content: result,
                                 rightContent: "Ok",
@@ -229,7 +229,7 @@ class _SignInMethodState extends State<SignInMethod> {
                         changeToUserHomePageScreen(context);
                       } else {
                         SmartDialog.show(
-                            widget: EvieSingleButtonDialog(
+                            widget: EvieSingleButtonDialogCupertino(
                                 title: "Error",
                                 content: result,
                                 rightContent: "Ok",

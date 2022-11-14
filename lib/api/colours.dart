@@ -7,5 +7,7 @@ class EvieColors {
   static const Aqua = Color(0xFF00FFFF);
   static const Aquamarine = Color(0xFF7FFFD4);
   static const greyFill = Color(0xff717171);
+  static const ThumbColorTrue = Color(0xffFAFAFA);
+  static const ThumbColorFalse = Color(0xffFAFAFA);
 // etc.
 }

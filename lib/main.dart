@@ -4,6 +4,7 @@ import 'package:evie_test/profile/user_profile.dart';
 import 'package:evie_test/screen/account_verified.dart';
 import 'package:evie_test/screen/input_name.dart';
 import 'package:evie_test/screen/login_method.dart';
+import 'package:evie_test/screen/onboarding/lets_go.dart';
 import 'package:evie_test/screen/rfid_card_manage.dart';
 import 'package:evie_test/screen/share_bike.dart';
 import 'package:evie_test/screen/signup_method.dart';
@@ -170,6 +171,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthProvider _authProvider = Provider.of<AuthProvider>(context);
+    CurrentUserProvider _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
     const appcastURL =
         'https://raw.githubusercontent.com/Beno-Technologies/Evie-Flutter-App/'
@@ -189,10 +191,10 @@ class MyApp extends StatelessWidget {
         //Change the app to dark theme when user's phone is set to dark mode
         darkTheme: AppTheme.darkTheme,
 
-
         ///Add logic for isVerified
+        ///Add logic for isFirstLogin
         initialRoute:
-        _authProvider.isLogin == true ? '/userHomePage' : '/welcome',
+        _authProvider.isLogin == true ? _currentUserProvider.isFirstLogin == true ? 'letsGo' : '/userHomePage' : '/welcome',
 
         ///Routes setting for page navigation
         routes: {
@@ -201,6 +203,7 @@ class MyApp extends StatelessWidget {
           "/signInMethod": (context) => const SignInMethod(),
           "/checkMail": (context) => const CheckYourEmail(),
           "/accountVerified": (context) => const AccountVerified(),
+          "/letsGo": (context) => const LetsGo(),
           "/signIn": (context) => const SignIn(),
           "/forgetPassword": (context) => const ForgetYourPassword(),
           "/userProfile": (context) => const UserProfile(),
