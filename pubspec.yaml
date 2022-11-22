@@ -67,14 +67,14 @@ dependencies:
   upgrader: ^4.8.1
   lottie: ^1.4.2
   open_mail_app: ^0.4.5
-<<<<<<< HEAD
+
   step_progress_indicator: ^1.0.2
-=======
+
   path_provider: ^2.0.11
   file_manager: ^1.0.1
   file_picker: ^5.2.2
   percent_indicator: ^4.2.2
->>>>>>> 119095d03c0b2f34b5d365a37ae8d5e2d92e17cc
+
 
 dev_dependencies:
   build_runner: ^2.1.2

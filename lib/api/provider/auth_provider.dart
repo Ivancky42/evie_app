@@ -136,7 +136,6 @@ class AuthProvider extends ChangeNotifier {
     }else {
       return null;
     }
-
   }
 
   ///Upload the registered data to firestore

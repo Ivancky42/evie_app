@@ -1,47 +1,69 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'location_model.dart';
 
 class BikeModel {
-  String deviceType;
-  String deviceIMEI;
-  bool isLocked;
-  String bikeName;
-  LocationModel? location;
+
+  int? batteryPercent;
+  String? bleKey;
   Timestamp? created;
-  Timestamp? updated;
+  String? deviceIMEI;
+  String? deviceName;
+  String? deviceType;
+  int? errorCode;
+  bool? isCharging;
+  bool? isLocked;
+  Timestamp? lastUpdated;
+  LocationModel? location;
+  String? macAddr;
+  int? networkSignal;
+  String? protVersion;
+  Timestamp? registered;
 
   BikeModel({
-    required this.deviceType,
+    required this.batteryPercent,
+    required this.bleKey,
+    required this.created,
     required this.deviceIMEI,
+    required this.deviceName,
+    required this.deviceType,
+    required this.errorCode,
+    required this.isCharging,
     required this.isLocked,
-    required this.bikeName,
-    this.location,
-    this.created,
-    this.updated,
+    required this.lastUpdated,
+    required this.location,
+    required this.macAddr,
+    required this.networkSignal,
+    required this.protVersion,
+    required this.registered,
+
   });
 
   Map<String, dynamic> toJson() => {
     "deviceType" : deviceType,
     "deviceIMEI" : deviceIMEI,
     "isLocked" : isLocked,
-    "bikeName" : bikeName,
     //"location" : location,
     "created": timestampToJson(created),
-    "updated": timestampToJson(updated)
   };
 
   factory BikeModel.fromJson(Map json) {
     return BikeModel(
-      deviceType: json['deviceType']?? '',
-      deviceIMEI: json['deviceIMEI']?? '',
-      bikeName:   json['bikeName']?? '',
-      isLocked:   json['isLocked']?? false,
-      location:   LocationModel.fromJson(json['location'] as Map<String, dynamic>),
+      batteryPercent: json['batteryPercent']?? 0,
+      bleKey: json['bleKey']?? '',
       created:    timestampFromJson(json['created']),
-      updated:    timestampFromJson(json['updated']),
+      deviceIMEI: json['deviceIMEI']?? '',
+      deviceName: json['deviceName']?? '',
+      deviceType: json['deviceType']?? '',
+      errorCode: json['errorCode']?? 0,
+      isCharging:   json['isCharging']?? false,
+      isLocked:   json['isLocked']?? false,
+      lastUpdated:    timestampFromJson(json['lastUpdated']),
+      location:   LocationModel.fromJson(json['location'] as Map<String, dynamic>),
+      macAddr: json['macAddr']?? '',
+      networkSignal: json['networkSignal']?? 0,
+      protVersion: json['protVersion']?? '',
+      registered:    timestampFromJson(json['registered']),
     );
   }
 

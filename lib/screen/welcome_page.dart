@@ -51,8 +51,8 @@ class _WelcomeState extends State<Welcome> {
                   ),
                 ),
                 onPressed: () async {
-                  //changeToInputNameScreen(context);
-                  changeToLetsGoScreen(context);
+                  changeToInputNameScreen(context);
+                  //changeToLetsGoScreen(context);
                 },
               ),
             ),

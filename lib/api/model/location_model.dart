@@ -3,17 +3,20 @@ import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LocationModel {
+  String? eventId;
   String status;
   GeoPoint geopoint;
   Timestamp? updated;
 
   LocationModel({
+    this.eventId,
     required this.status,
     required this.geopoint,
     this.updated,
   });
 
   Map<String, dynamic> toJson() => {
+    "eventId" : eventId,
     "status" : status,
     "geopoint" : geopoint,
     "updated": timestampToJson(updated)
@@ -21,6 +24,7 @@ class LocationModel {
 
   factory LocationModel.fromJson(Map json) {
     return LocationModel(
+      eventId: json['eventId']?? '',
       status: json['status']?? '',
       geopoint: fromJsonGeoPoint(json['geopoint'] as GeoPoint),
       updated: timestampFromJson(json['updated']),

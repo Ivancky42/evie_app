@@ -30,7 +30,8 @@ class EvieTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return SizedBox(
+        child:TextFormField(
       controller: controller,
       keyboardType: keyboardType,
       obscureText: obscureText!,
@@ -77,7 +78,9 @@ class EvieTextFormField extends StatelessWidget {
           ),
           suffixIcon: suffixIcon),
       validator: validator,
+    )
     );
+
   }
 }
 

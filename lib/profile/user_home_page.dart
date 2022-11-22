@@ -35,10 +35,10 @@ class _UserHomePageState extends State<UserHomePage> {
   ///Body Screen navigation by bottom navigation bar
   final screen = [
     UserHomeGeneral(),
-    BikeScanning(),
+    UserHomeBluetooth(),
     UserHomeHistory(),
     UserProfile(),
-    UserHomeBluetooth(),
+    UserProfile(),
   ];
 
   @override
