@@ -1,9 +1,11 @@
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/screen/onboarding/turn_on_bluetooth.dart';
 import 'package:evie_test/screen/onboarding/turn_on_location.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -26,69 +28,86 @@ class LetsGo extends StatefulWidget {
 class _LetsGoState extends State<LetsGo> {
   late CurrentUserProvider _currentUserProvider;
   late LocationProvider _locationProvider;
+  late BluetoothProvider _bluetoothProvider;
 
   @override
   Widget build(BuildContext context) {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
+    _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     var currentName = _currentUserProvider.currentUserModel?.name;
 
-    return Scaffold(
-        body: Stack(children: [
-      Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 12.h,
-            ),
-            Text(
-              //  "Hi ${_currentUserProvider.currentUserModel!.name}, thanks for choosing EVIE!",
-              "Hi $currentName, thanks for choosing EVIE!",
-              style: TextStyle(fontSize: 18.sp),
-            ),
-            SizedBox(
-              height: 1.h,
-            ),
-            Text(
-              "Let's connect to your bike and personalize your account.",
-              style: TextStyle(fontSize: 11.5.sp,height: 0.17.h),
-            ),
-          ],
-        ),
-      ),
-      const Align(
-        alignment: Alignment.center,
-        child: Image(
-          image: AssetImage("assets/images/setup_account.png"),
-        ),
-      ),
-      Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: EdgeInsets.only(
-              left: 16, right: 16, bottom: EvieLength.button_Bottom),
-          child: SizedBox(
-            width: double.infinity,
-            child: EvieButton(
-              width: double.infinity,
-              child: Text(
-                "Let's Go",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 10.sp,
-                ),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+
+      child: Scaffold(
+          body: Stack(children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 12.h,
               ),
-              onPressed: () {
-                changeToTurnOnLocationScreen(context);
-              },
+              Text(
+                //  "Hi ${_currentUserProvider.currentUserModel!.name}, thanks for choosing EVIE!",
+                "Hi $currentName, thanks for choosing EVIE!",
+                style: TextStyle(fontSize: 18.sp),
+              ),
+              SizedBox(
+                height: 1.h,
+              ),
+              Text(
+                "Let's connect to your bike and personalize your account.",
+                style: TextStyle(fontSize: 11.5.sp,height: 0.17.h),
+              ),
+            ],
+          ),
+        ),
+        const Align(
+          alignment: Alignment.center,
+          child: Image(
+            image: AssetImage("assets/images/setup_account.png"),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: EdgeInsets.only(
+                left: 16, right: 16, bottom: EvieLength.button_Bottom),
+            child: SizedBox(
+              width: double.infinity,
+              child: EvieButton(
+                width: double.infinity,
+                child: Text(
+                  "Let's Go",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10.sp,
+                  ),
+                ),
+                onPressed: () async {
+                  var locationStatus = await Permission.location.status;
+                  var bluetoothStatus = await Permission.bluetooth.status;
+
+                  if(locationStatus == PermissionStatus.granted && bluetoothStatus == PermissionStatus.granted ){
+                    changeToBikeScanningScreen(context);
+                  }else if(locationStatus == PermissionStatus.granted && bluetoothStatus != PermissionStatus.granted){
+                    changeToTurnOnBluetoothScreen(context);
+                  }else{
+                    changeToTurnOnLocationScreen(context);
+                  }
+                },
+              ),
             ),
           ),
         ),
-      ),
-    ]));
+      ])),
+    );
   }
 }

@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:evie_test/api/navigator.dart';
+import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:sizer/sizer.dart';
 
 import '../api/colours.dart';
@@ -15,71 +20,86 @@ class Welcome extends StatefulWidget {
 class _WelcomeState extends State<Welcome> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 18.h,
-            ),
-            const Image(
-              image: AssetImage("assets/icons/evie_logo.png"),
-            ),
-            SizedBox(
-              height: 8.h,
-            ),
-            Container(
-              alignment: Alignment.bottomRight,
-              child: const Image(
-                image: AssetImage("assets/images/evie_bike_shadow.png"),
+    return WillPopScope(
+        onWillPop: () async {
+     bool? exitApp = await SmartDialog.show(
+         widget:
+     EvieDoubleButtonDialogCupertino(
+         title: "Close this app?",
+         content: "Are you sure you want to close this App?",
+         leftContent: "No",
+         rightContent: "Yes",
+         onPressedLeft: (){SmartDialog.dismiss();},
+         onPressedRight: (){SystemNavigator.pop();})) as bool?;
+    return exitApp ?? false;
+    },
+
+    child:  Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 18.h,
               ),
-            ),
-            SizedBox(
-              height: 8.h,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: EvieButton(
+              const Image(
+                image: AssetImage("assets/icons/evie_logo.png"),
+              ),
+              SizedBox(
+                height: 8.h,
+              ),
+              Container(
+                alignment: Alignment.bottomRight,
+                child: const Image(
+                  image: AssetImage("assets/images/evie_bike_shadow.png"),
+                ),
+              ),
+              SizedBox(
+                height: 8.h,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: EvieButton(
+                  width: double.infinity,
+                  child: Text(
+                    "Get Started",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10.sp,
+                    ),
+                  ),
+                  onPressed: () async {
+                    changeToInputNameScreen(context);
+                    //changeToLetsGoScreen(context);
+                  },
+                ),
+              ),
+              Container(
                 width: double.infinity,
-                child: Text(
-                  "Get Started",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.sp,
-                  ),
-                ),
-                onPressed: () async {
-                  changeToInputNameScreen(context);
-                  //changeToLetsGoScreen(context);
-                },
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              child: RawMaterialButton(
-                elevation: 0.0,
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
-                onPressed: () {
-                  changeToSignInMethodScreen(context);
-                },
-                child: Text(
-                  "I already have an account",
-                  style: TextStyle(
-                    color: EvieColors.PrimaryColor,
-                    fontSize: 10.sp,
-                    decoration: TextDecoration.underline,
+                child: RawMaterialButton(
+                  elevation: 0.0,
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0)),
+                  onPressed: () {
+                    changeToSignInMethodScreen(context);
+                  },
+                  child: Text(
+                    "I already have an account",
+                    style: TextStyle(
+                      color: EvieColors.PrimaryColor,
+                      fontSize: 10.sp,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        //        ),
       ),
-      //        ),
     );
   }
 }

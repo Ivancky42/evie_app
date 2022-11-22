@@ -32,6 +32,10 @@ class CurrentUserProvider extends ChangeNotifier {
       getUser(uid);
       todayRandomQuote();
       getIsFirstLogin();
+
+      print("isfirstlogin");
+      print(isFirstLogin);
+
       notifyListeners();
     }
   }
@@ -96,6 +100,9 @@ class CurrentUserProvider extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     prefs.setBool('isFirstLogin', result);
+    isFirstLogin == result;
+    getIsFirstLogin();
+
     notifyListeners();
   }
 

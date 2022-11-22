@@ -149,151 +149,158 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
       }
     }
 
-    return Scaffold(
-        body: Stack(children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 5.h,
-                ),
+    return WillPopScope(
+      onWillPop: () async {
+        changeToUserHomePageScreen(context);
+        return true;
+      },
 
-                SizedBox(
-                  height: 3.h,
-                ),
-                bluetoothProvider.discoverDeviceList.isEmpty
-                    ? Text(
-                  "Scanning your Bike",
-                  style: TextStyle(fontSize: 18.sp),
-                )
-                    : Text(
-                  "Bluetooth found...",
-                  style: TextStyle(fontSize: 18.sp),
-                ),
-                SizedBox(
-                  height: 1.h,
-                ),
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: bluetoothProvider.discoverDeviceList.isEmpty
-                ? Container(
-              color: Colors.grey,
-              height: 60.h,
-              child: Stack(
-                alignment: Alignment.center,
-                children: <Widget>[
-                  const RipplePulseAnimation(),
-                  const Image(
-                    fit: BoxFit.fitWidth,
-                    image:
-                    AssetImage("assets/images/evie_bike_shadow_half.png"),
+      child: Scaffold(
+          body: Stack(children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 5.h,
                   ),
-                  IconButton(
-                    iconSize: 12.h,
-                    icon: Image.asset("assets/icons/bluetooth_logo.png"),
-                    tooltip: 'Bluetooth',
-                    onPressed: () {},
+
+                  SizedBox(
+                    height: 3.h,
+                  ),
+                  bluetoothProvider.discoverDeviceList.isEmpty
+                      ? Text(
+                    "Scanning your Bike",
+                    style: TextStyle(fontSize: 18.sp),
+                  )
+                      : Text(
+                    "Bluetooth found...",
+                    style: TextStyle(fontSize: 18.sp),
+                  ),
+                  SizedBox(
+                    height: 1.h,
                   ),
                 ],
               ),
-            )
-                : Container(
-              height: 60.h,
-              child: ListView.separated(
-                itemCount: bluetoothProvider.discoverDeviceList.length,
-                itemBuilder: (context, index) {
-                  String key = bluetoothProvider.discoverDeviceList.keys
-                      .elementAt(index);
-                  return listItem(bluetoothProvider.discoverDeviceList[key]);
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return Container();
-                },
-              ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(
-                  left: 16.0,
-                  right: 16,
-                  bottom: EvieLength.buttonWord_ButtonBottom),
-              child: EvieButton_ReversedColor(
-                width: double.infinity,
-                child: !isCountDownOver
-                    ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 2.h,
-                      width: 4.w,
-                      child: const CircularProgressIndicator(
-                        color: EvieColors.PrimaryColor,
-                      ),
+            Align(
+              alignment: Alignment.center,
+              child: bluetoothProvider.discoverDeviceList.isEmpty
+                  ? Container(
+                color: Colors.grey,
+                height: 60.h,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    const RipplePulseAnimation(),
+                    const Image(
+                      fit: BoxFit.fitWidth,
+                      image:
+                      AssetImage("assets/images/evie_bike_shadow_half.png"),
                     ),
-                    SizedBox(width: 5.w),
-                    Text(
-                      "Scanning",
-                      style: TextStyle(
-                        color: EvieColors.PrimaryColor,
-                        fontSize: 10.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    IconButton(
+                      iconSize: 12.h,
+                      icon: Image.asset("assets/icons/bluetooth_logo.png"),
+                      tooltip: 'Bluetooth',
+                      onPressed: () {},
                     ),
                   ],
-                )
-                    : Text(
-                  "Scan Again",
-                  style: TextStyle(
-                    color: EvieColors.PrimaryColor,
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
                 ),
-                onPressed: !isCountDownOver
-                    ? null
-                    : () {
-                  bluetoothProvider.stopScan();
-                  isCountDownOver = false;
-                  resetTimer();
-                  startCountDownTimer();
-                },
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(
-                  left: 16, right: 16, bottom: EvieLength.buttonWord_WordBottom),
-              child: SizedBox(
-                height: 4.h,
-                width: 30.w,
-                child: TextButton(
-                  child: Text(
-                    "Stop Scanning",
-                    style: TextStyle(
-                      fontSize: 9.sp,
-                      color: EvieColors.PrimaryColor,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                  onPressed: () {
-                    bluetoothProvider.stopScan();
-                    changeToUserHomePageScreen(context);
+              )
+                  : Container(
+                height: 60.h,
+                child: ListView.separated(
+                  itemCount: bluetoothProvider.discoverDeviceList.length,
+                  itemBuilder: (context, index) {
+                    String key = bluetoothProvider.discoverDeviceList.keys
+                        .elementAt(index);
+                    return listItem(bluetoothProvider.discoverDeviceList[key]);
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Container();
                   },
                 ),
               ),
             ),
-          ),
-        ]));
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: 16.0,
+                    right: 16,
+                    bottom: EvieLength.buttonWord_ButtonBottom),
+                child: EvieButton_ReversedColor(
+                  width: double.infinity,
+                  child: !isCountDownOver
+                      ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 2.h,
+                        width: 4.w,
+                        child: const CircularProgressIndicator(
+                          color: EvieColors.PrimaryColor,
+                        ),
+                      ),
+                      SizedBox(width: 5.w),
+                      Text(
+                        "Scanning",
+                        style: TextStyle(
+                          color: EvieColors.PrimaryColor,
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  )
+                      : Text(
+                    "Scan Again",
+                    style: TextStyle(
+                      color: EvieColors.PrimaryColor,
+                      fontSize: 10.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: !isCountDownOver
+                      ? null
+                      : () {
+                    bluetoothProvider.stopScan();
+                    isCountDownOver = false;
+                    resetTimer();
+                    startCountDownTimer();
+                  },
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: 16, right: 16, bottom: EvieLength.buttonWord_WordBottom),
+                child: SizedBox(
+                  height: 4.h,
+                  width: 30.w,
+                  child: TextButton(
+                    child: Text(
+                      "Stop Scanning",
+                      style: TextStyle(
+                        fontSize: 9.sp,
+                        color: EvieColors.PrimaryColor,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                    onPressed: () {
+                      bluetoothProvider.stopScan();
+                      changeToUserHomePageScreen(context);
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ])),
+    );
   }
 
   Widget deviceMacAddress(String deviceId) {

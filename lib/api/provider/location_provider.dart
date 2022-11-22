@@ -16,7 +16,8 @@ class LocationProvider extends ChangeNotifier {
 
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
   String bikesCollection = dotenv.env['DB_COLLECTION_BIKES'] ?? 'DB not found';
-  String defPublicAccessToken = dotenv.env['DEF_PUBLIC_TOKEN'] ?? 'DPT not found';
+  String defPublicAccessToken = dotenv.env['DEF_PUBLIC_TOKEN'] ??
+      'DPT not found';
   String mapBoxStyleToken = dotenv.env['MAPBOX_STYLE_TOKEN'] ?? 'MST not found';
 
   LocationModel? locationModel;
@@ -25,8 +26,8 @@ class LocationProvider extends ChangeNotifier {
 
   Future<void> init(LocationModel? locationModel) async {
     checkLocationPermissionStatus();
-    if(locationModel == null){}
-    else{
+    if (locationModel == null) {}
+    else {
       this.locationModel = locationModel;
 
       LocationPermission permission;
@@ -46,13 +47,12 @@ class LocationProvider extends ChangeNotifier {
 
   checkLocationPermissionStatus() async {
     var locationStatus = await Permission.location.status;
-     debugPrint("Location Status ${locationStatus.toString()}");
+    debugPrint("Location Status ${locationStatus.toString()}");
 
     switch (locationStatus) {
       case PermissionStatus.granted:
         return PermissionStatus.granted;
       case PermissionStatus.denied:
-        handlePermission();
         return PermissionStatus.denied;
       case PermissionStatus.permanentlyDenied:
         return PermissionStatus.permanentlyDenied;
@@ -86,7 +86,8 @@ class LocationProvider extends ChangeNotifier {
   }
 
   getPlaceMarks(double latitude, double longitude) async {
-    List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude);
+    List<Placemark> placeMarks = await placemarkFromCoordinates(
+        latitude, longitude);
 
     for (var element in placeMarks) {
       currentPlaceMark = element;

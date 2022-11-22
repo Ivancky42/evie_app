@@ -10,6 +10,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sizer/sizer.dart';
+import '../api/navigator.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/provider/location_provider.dart';
 
@@ -162,69 +163,76 @@ class _UserHomeHistoryState extends State<UserHomeHistory> {
       runSymbol();
     }
 
-    return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.all(16.0),
-      //     child: Center(
-      child: SingleChildScrollView(
-        child: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Status: ${_locationProvider.locationModel!.status} \n"),
+    return WillPopScope(
+      onWillPop: () async {
+        changeToUserHomePageScreen(context);
+        return true;
+      },
 
-            FutureBuilder(
-                future: getLocation(),
-                builder: (context, snapshot) {
-                  if(snapshot.hasData) {
-                    return SizedBox(
-                      width: double.infinity,
-                      height: 30.h,
-                      child: MapboxMap(
-                        myLocationEnabled: true,
-                        //   styleString: _locationProvider.mapBoxStyleToken,
-                        trackCameraPosition: true,
-                        myLocationTrackingMode: MyLocationTrackingMode.Tracking,
-                        accessToken: _locationProvider.defPublicAccessToken,
-                        compassEnabled: true,
-                        onMapCreated: _onMapCreated,
-                        initialCameraPosition: CameraPosition(
-                      target:
-                      LatLng(_locationProvider.locationModel!.geopoint.latitude,
-                          _locationProvider.locationModel!.geopoint.longitude),
-                      zoom: 14,
+      child: Scaffold(
+          body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        //     child: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Status: ${_locationProvider.locationModel!.status} \n"),
+
+              FutureBuilder(
+                  future: getLocation(),
+                  builder: (context, snapshot) {
+                    if(snapshot.hasData) {
+                      return SizedBox(
+                        width: double.infinity,
+                        height: 30.h,
+                        child: MapboxMap(
+                          myLocationEnabled: true,
+                          //   styleString: _locationProvider.mapBoxStyleToken,
+                          trackCameraPosition: true,
+                          myLocationTrackingMode: MyLocationTrackingMode.Tracking,
+                          accessToken: _locationProvider.defPublicAccessToken,
+                          compassEnabled: true,
+                          onMapCreated: _onMapCreated,
+                          initialCameraPosition: CameraPosition(
+                        target:
+                        LatLng(_locationProvider.locationModel!.geopoint.latitude,
+                            _locationProvider.locationModel!.geopoint.longitude),
+                        zoom: 14,
+                          ),
                         ),
+                      );
+                    }
+                    else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }
+              ),
+              FloatingActionButton.small(
+                child: const Icon(Icons.person),
+                onPressed: () async {
+                  var position = await Geolocator.getCurrentPosition(
+                      desiredAccuracy: LocationAccuracy.high);
+                  mapController?.animateCamera(
+                    CameraUpdate.newLatLngZoom(
+                      LatLng(
+                        position.latitude,
+                        position.longitude,
                       ),
-                    );
-                  }
-                  else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                }
-            ),
-            FloatingActionButton.small(
-              child: const Icon(Icons.person),
-              onPressed: () async {
-                var position = await Geolocator.getCurrentPosition(
-                    desiredAccuracy: LocationAccuracy.high);
-                mapController?.animateCamera(
-                  CameraUpdate.newLatLngZoom(
-                    LatLng(
-                      position.latitude,
-                      position.longitude,
+                      14,
                     ),
-                    14,
-                  ),
-                );
-              },
-            ),
-          ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
+        //        ),
+      )
       ),
-      //        ),
-    )
     );
   }
 

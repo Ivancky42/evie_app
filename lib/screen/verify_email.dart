@@ -5,6 +5,7 @@ import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:open_settings/open_settings.dart';
@@ -14,6 +15,7 @@ import '../api/colours.dart';
 import '../api/navigator.dart';
 import '../theme/ThemeChangeNotifier.dart';
 import '../widgets/evie_appbar.dart';
+import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/widgets.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
@@ -99,112 +101,127 @@ class _VerifyEmailState extends State<VerifyEmail> {
   Widget build(BuildContext context) {
     _authProvider = Provider.of<AuthProvider>(context);
 
-    return Scaffold(
-      appBar: EvieAppbar_Back(onPressed: () {
-        changeToWelcomeScreen(context);
-      }),
-      body: Stack(children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 1.h,
-                ),
-                Text(
-                  "Verify your email address",
-                  style: TextStyle(fontSize: 18.sp),
-                ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                Text(
-                  "To keep your account secure, we've sent an email to ${widget.email}. Please follow the instruction to verify your account.",
-                  style: TextStyle(fontSize: 12.sp, height: 0.17.h),
-                ),
-              ]),
-        ),
-        const Align(
-          alignment: Alignment.center,
-          child: Image(
-            image: AssetImage("assets/images/sent_message.png"),
+    return WillPopScope(
+      onWillPop: () async {
+        bool? exitApp = await SmartDialog.show(
+            widget:
+            EvieDoubleButtonDialogCupertino(
+                title: "Close this app?",
+                content: "Are you sure you want to close this App?",
+                leftContent: "No",
+                rightContent: "Yes",
+                onPressedLeft: (){SmartDialog.dismiss();},
+                onPressedRight: (){SystemNavigator.pop();})) as bool?;
+        return exitApp ?? false;
+      },
+
+      child:  Scaffold(
+        appBar: EvieAppbar_Back(onPressed: () {
+          changeToWelcomeScreen(context);
+        }),
+        body: Stack(children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  Text(
+                    "Verify your email address",
+                    style: TextStyle(fontSize: 18.sp),
+                  ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  Text(
+                    "To keep your account secure, we've sent an email to ${widget.email}. Please follow the instruction to verify your account.",
+                    style: TextStyle(fontSize: 12.sp, height: 0.17.h),
+                  ),
+                ]),
           ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 84.0),
-            child: EvieButton(
-              width: double.infinity,
-              child: Text(
-                "Open Email Inbox",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 10.sp,
-                ),
-              ),
-              onPressed: () async {
-                await OpenMailApp.openMailApp();
-              },
+          const Align(
+            alignment: Alignment.center,
+            child: Image(
+              image: AssetImage("assets/images/sent_message.png"),
             ),
           ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 64.0),
-            child: Text(
-              "Did not receive the email? Check your spam filter, or try",
-              style: TextStyle(fontSize: 9.sp),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 42.0),
-            child: SizedBox(
-              height: 30,
-              width: 100,
-              child: TextButton(
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 84.0),
+              child: EvieButton(
+                width: double.infinity,
                 child: Text(
-                  "resend email.",
-                  style:
-                      TextStyle(fontSize: 9.sp, color: EvieColors.PrimaryColor),
+                  "Open Email Inbox",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10.sp,
+                  ),
                 ),
-                onPressed: () {
-                  if(isCountDownOver = false){
-                    SmartDialog.show(
-                      widget: EvieSingleButtonDialogCupertino(
-                          title: "Error",
-                          content: "You need to wait 30 seconds before sending another email",
-                          rightContent: "Ok",
-                          onPressedRight:(){SmartDialog.dismiss();})
-                    );
-                  }else{
-                    _authProvider.sendFirestoreVerifyEmail().then((){
-                      SmartDialog.show(
-                          widget: EvieSingleButtonDialogCupertino(
-                              title: "Success",
-                              content: "We have send another verify email to your account",
-                              rightContent: "Ok",
-                              onPressedRight:(){SmartDialog.dismiss();})
-                      );
-                      setState(() {
-                        isCountDownOver = false;
-                        resetTimer();
-                        startCountDownTimer();
-                      });
-                    });
-                  }
+                onPressed: () async {
+                  await OpenMailApp.openMailApp();
                 },
               ),
             ),
           ),
-        ),
-      ]),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 64.0),
+              child: Text(
+                "Did not receive the email? Check your spam filter, or try",
+                style: TextStyle(fontSize: 9.sp),
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 42.0),
+              child: SizedBox(
+                height: 30,
+                width: 100,
+                child: TextButton(
+                  child: Text(
+                    "resend email.",
+                    style:
+                        TextStyle(fontSize: 9.sp, color: EvieColors.PrimaryColor),
+                  ),
+                  onPressed: () {
+                    if(isCountDownOver = false){
+                      SmartDialog.show(
+                        widget: EvieSingleButtonDialogCupertino(
+                            title: "Error",
+                            content: "You need to wait 30 seconds before sending another email",
+                            rightContent: "Ok",
+                            onPressedRight:(){SmartDialog.dismiss();})
+                      );
+                    }else{
+                      _authProvider.sendFirestoreVerifyEmail().then((){
+                        SmartDialog.show(
+                            widget: EvieSingleButtonDialogCupertino(
+                                title: "Success",
+                                content: "We have send another verify email to your account",
+                                rightContent: "Ok",
+                                onPressedRight:(){SmartDialog.dismiss();})
+                        );
+                        setState(() {
+                          isCountDownOver = false;
+                          resetTimer();
+                          startCountDownTimer();
+                        });
+                      });
+                    }
+                  },
+                ),
+              ),
+            ),
+          ),
+        ]),
+      ),
     );
   }
 }

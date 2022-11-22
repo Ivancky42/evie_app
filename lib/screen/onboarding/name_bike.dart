@@ -38,130 +38,136 @@ class _NameBikeState extends State<NameBike> {
     final TextEditingController _bikeNameController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          Form(
-            key: _formKey,
-            child:Padding(
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 5.h,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(24.0),
-                    child:StepProgressIndicator(
-                      totalSteps: 10,
-                      currentStep: 5,
-                      selectedColor: Color(0xffCECFCF),
-                      selectedSize: 4,
-                      unselectedColor: Color(0xffDFE0E0),
-                      unselectedSize: 3,
-                      padding: 0.0,
-                      roundedEdges: Radius.circular(16),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Form(
+              key: _formKey,
+              child:Padding(
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 5.h,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(24.0),
+                      child:StepProgressIndicator(
+                        totalSteps: 10,
+                        currentStep: 5,
+                        selectedColor: Color(0xffCECFCF),
+                        selectedSize: 4,
+                        unselectedColor: Color(0xffDFE0E0),
+                        unselectedSize: 3,
+                        padding: 0.0,
+                        roundedEdges: Radius.circular(16),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 3.h,
+                    ),
+                    Text(
+                      "Name your bike",
+                      style:
+                      TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    Text("Give your bike a unique name. "
+                        "Can't think of a name for your bike now? "
+                        "No worries, you can always do that later at bike setting page whenever you are ready.",
+                      style: TextStyle(fontSize: 11.5.sp, fontWeight: FontWeight.w400,height: 0.17.h),),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+
+                    EvieTextFormField(
+                      controller: _bikeNameController,
+                      obscureText: false,
+                      keyboardType: TextInputType.name,
+                      hintText: "give your bike a unique name",
+                      labelText: "Bike Name",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your bike name';
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding:
+                EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.buttonWord_ButtonBottom),
+                child: EvieButton(
+                  width: double.infinity,
+                  child: Text(
+                    "Save",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10.sp,
                     ),
                   ),
-                  SizedBox(
-                    height: 3.h,
-                  ),
-                  Text(
-                    "Name your bike",
-                    style:
-                    TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  Text("Give your bike a unique name. "
-                      "Can't think of a name for your bike now? "
-                      "No worries, you can always do that later at bike setting page whenever you are ready.",
-                    style: TextStyle(fontSize: 11.5.sp, fontWeight: FontWeight.w400,height: 0.17.h),),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-
-                  EvieTextFormField(
-                    controller: _bikeNameController,
-                    obscureText: false,
-                    keyboardType: TextInputType.name,
-                    hintText: "give your bike a unique name",
-                    labelText: "Bike Name",
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your bike name';
-                      }
-                      return null;
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding:
-              EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.buttonWord_ButtonBottom),
-              child: EvieButton(
-                width: double.infinity,
-                child: Text(
-                  "Save",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.sp,
-                  ),
-                ),
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    _bikeProvider.updateBikeName(_bikeNameController.text.trim()).then((result){
-                      if(result == true){
-                        SmartDialog.show(
-                            widget: EvieSingleButtonDialogCupertino
-                          (title: "Success",
-                            content: "Update successful",
-                            rightContent: "Ok",
-                            onPressedRight: (){changeToTurnOnNotificationsScreen(context);} ));
-                      } else{
-                        SmartDialog.show(
-                            widget: EvieSingleButtonDialogCupertino
-                              (title: "Not Success",
-                                content: "An error occur, try again",
-                                rightContent: "Ok",
-                                onPressedRight: (){SmartDialog.dismiss();} ));
-                      }
-                    });
-                  }
-                },
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, bottom: EvieLength.buttonWord_WordBottom),
-              child:
-
-              SizedBox(
-                height: 4.h,
-                width: 30.w,
-                child:
-                TextButton(
-                  child: Text(
-                    "Maybe Later",
-                    style: TextStyle(fontSize: 9.sp,color: EvieColors.PrimaryColor,decoration: TextDecoration.underline,),
-                  ),
-                  onPressed: () {
-                   changeToTurnOnNotificationsScreen(context);
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      _bikeProvider.updateBikeName(_bikeNameController.text.trim()).then((result){
+                        if(result == true){
+                          SmartDialog.show(
+                              widget: EvieSingleButtonDialogCupertino
+                            (title: "Success",
+                              content: "Update successful",
+                              rightContent: "Ok",
+                              onPressedRight: (){changeToTurnOnNotificationsScreen(context);} ));
+                        } else{
+                          SmartDialog.show(
+                              widget: EvieSingleButtonDialogCupertino
+                                (title: "Not Success",
+                                  content: "An error occur, try again",
+                                  rightContent: "Ok",
+                                  onPressedRight: (){SmartDialog.dismiss();} ));
+                        }
+                      });
+                    }
                   },
                 ),
               ),
             ),
-          ),
-        ],
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, bottom: EvieLength.buttonWord_WordBottom),
+                child:
+
+                SizedBox(
+                  height: 4.h,
+                  width: 30.w,
+                  child:
+                  TextButton(
+                    child: Text(
+                      "Maybe Later",
+                      style: TextStyle(fontSize: 9.sp,color: EvieColors.PrimaryColor,decoration: TextDecoration.underline,),
+                    ),
+                    onPressed: () {
+                     changeToTurnOnNotificationsScreen(context);
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

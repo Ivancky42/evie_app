@@ -40,146 +40,153 @@ class _UserNotificationState extends State<UserNotification> {
 
 
 
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          title: Row(
-            children: <Widget>[
-              IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.grey,
-                  ),
-                  onPressed: () {
-                    changeToUserHomePageScreen(context);
-                  }),
-              const Text('Notification'),
-            ],
+    return WillPopScope(
+      onWillPop: () async {
+        changeToUserHomePageScreen(context);
+        return true;
+      },
+
+      child:Scaffold(
+          appBar: AppBar(
+            centerTitle: false,
+            title: Row(
+              children: <Widget>[
+                IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                      changeToUserHomePageScreen(context);
+                    }),
+                const Text('Notification'),
+              ],
+            ),
           ),
-        ),
-        body: Scaffold(
-            body: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                          "Dev-There are ${_notificationProvider.notificationList.length} "
-                          "notifications in firestore"),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Container(
-                          height: 76.h,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: ThemeChangeNotifier().isDarkMode(context) ==
-                                    true
-                                ? const Color(0xFF0F191D)
-                                : const Color(0xffD7E9EF),
-                          ),
-                          child: Center(
-                            child: ListView.separated(
-                              itemCount:
-                                  _notificationProvider.notificationList.length,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                    onTap: () async {
-                                      _notificationProvider
-                                          .updateIsReadStatus(
-                                              _notificationProvider
-                                                  .notificationList.keys
-                                                  .elementAt(index))
-                                          .then((result) {
-                                        if (result == true) {
-                                          changeToNotificationDetailsScreen(
-                                              context,
-                                              _notificationProvider
-                                                  .notificationList.keys
-                                                  .elementAt(index),
-                                              _notificationProvider
-                                                  .notificationList.values
-                                                  .elementAt(index));
-                                        } else {
-                                          SmartDialog.show(
-                                              widget: EvieSingleButtonDialogCupertino(
-                                                  title: "Error",
-                                                  content: "Try again",
-                                                  rightContent: "Ok",
-                                                  onPressedRight: () {
-                                                    SmartDialog.dismiss();
-                                                  }));
-                                        }
-                                      });
-
-                                      ///Change to notification details page
-                                      ///Pass notification id then get details;
-                                      ///Notification = read id, compare with list, if match then send the key and value
-                                      /*
-                                      showNotificationTile(
-                                          _notificationProvider
-                                              .notificationList.keys
-                                              .elementAt(index),
-                                          _notificationProvider
-                                          .notificationList.values
-                                          .elementAt(index));
-
-                                       */
-                                    },
-                                    child: ListTile(
-                                        leading: CircleAvatar(
-                                          ///If mail unread then icon mailunread
-                                          child: _notificationProvider
-                                                  .notificationList.values
-                                                  .elementAt(index)
-                                                  .isRead!
-                                              ? const Icon(
-                                                  Icons.mail,
-                                                  color: Colors.white,
-                                                )
-                                              : const Icon(
-                                                  Icons.mark_email_unread,
-                                                  color: Colors.white,
-                                                ),
-                                          backgroundColor: Color(0xff69489D),
-                                        ),
-                                        title: Text(_notificationProvider
-                                            .notificationList.values
-                                            .elementAt(index)
-                                            .title!),
-                                        subtitle: Text(
-                                          "${_notificationProvider.notificationList.values.elementAt(index).body!}\n\n${_notificationProvider.notificationList.values.elementAt(index).created!.toDate()}",
-                                          style: TextStyle(
-                                            color: ThemeChangeNotifier()
-                                                        .isDarkMode(context) ==
-                                                    true
-                                                ? Colors.white70
-                                                : Colors.black54,
-                                          ),
-                                          /*
-                            trailing: IconButton(
-                              iconSize: 25,
-                              icon: const Image(
-                                image: AssetImage("assets/buttons/arrow_right.png"),
-                                height: 20.0,
-                              ),
-                              tooltip: '',
-                              onPressed: () {
-                                ///Display Tile
-                                showNotificationTile(_notificationProvider.notificationList.values.elementAt(index));
-                              },
-                              ),
-                             */
-                                        )));
-                              },
-                              separatorBuilder:
-                                  (BuildContext context, int index) {
-                                return const Divider();
-                              },
+          body: Scaffold(
+              body: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                            "Dev-There are ${_notificationProvider.notificationList.length} "
+                            "notifications in firestore"),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Container(
+                            height: 76.h,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: ThemeChangeNotifier().isDarkMode(context) ==
+                                      true
+                                  ? const Color(0xFF0F191D)
+                                  : const Color(0xffD7E9EF),
                             ),
-                          )),
-                    ]))));
+                            child: Center(
+                              child: ListView.separated(
+                                itemCount:
+                                    _notificationProvider.notificationList.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                      onTap: () async {
+                                        _notificationProvider
+                                            .updateIsReadStatus(
+                                                _notificationProvider
+                                                    .notificationList.keys
+                                                    .elementAt(index))
+                                            .then((result) {
+                                          if (result == true) {
+                                            changeToNotificationDetailsScreen(
+                                                context,
+                                                _notificationProvider
+                                                    .notificationList.keys
+                                                    .elementAt(index),
+                                                _notificationProvider
+                                                    .notificationList.values
+                                                    .elementAt(index));
+                                          } else {
+                                            SmartDialog.show(
+                                                widget: EvieSingleButtonDialogCupertino(
+                                                    title: "Error",
+                                                    content: "Try again",
+                                                    rightContent: "Ok",
+                                                    onPressedRight: () {
+                                                      SmartDialog.dismiss();
+                                                    }));
+                                          }
+                                        });
+
+                                        ///Change to notification details page
+                                        ///Pass notification id then get details;
+                                        ///Notification = read id, compare with list, if match then send the key and value
+                                        /*
+                                        showNotificationTile(
+                                            _notificationProvider
+                                                .notificationList.keys
+                                                .elementAt(index),
+                                            _notificationProvider
+                                            .notificationList.values
+                                            .elementAt(index));
+
+                                         */
+                                      },
+                                      child: ListTile(
+                                          leading: CircleAvatar(
+                                            ///If mail unread then icon mailunread
+                                            child: _notificationProvider
+                                                    .notificationList.values
+                                                    .elementAt(index)
+                                                    .isRead!
+                                                ? const Icon(
+                                                    Icons.mail,
+                                                    color: Colors.white,
+                                                  )
+                                                : const Icon(
+                                                    Icons.mark_email_unread,
+                                                    color: Colors.white,
+                                                  ),
+                                            backgroundColor: Color(0xff69489D),
+                                          ),
+                                          title: Text(_notificationProvider
+                                              .notificationList.values
+                                              .elementAt(index)
+                                              .title!),
+                                          subtitle: Text(
+                                            "${_notificationProvider.notificationList.values.elementAt(index).body!}\n\n${_notificationProvider.notificationList.values.elementAt(index).created!.toDate()}",
+                                            style: TextStyle(
+                                              color: ThemeChangeNotifier()
+                                                          .isDarkMode(context) ==
+                                                      true
+                                                  ? Colors.white70
+                                                  : Colors.black54,
+                                            ),
+                                            /*
+                              trailing: IconButton(
+                                iconSize: 25,
+                                icon: const Image(
+                                  image: AssetImage("assets/buttons/arrow_right.png"),
+                                  height: 20.0,
+                                ),
+                                tooltip: '',
+                                onPressed: () {
+                                  ///Display Tile
+                                  showNotificationTile(_notificationProvider.notificationList.values.elementAt(index));
+                                },
+                                ),
+                               */
+                                          )));
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return const Divider();
+                                },
+                              ),
+                            )),
+                      ])))),
+    );
   }
 
   showNotificationTile(String key, NotificationModel notificationModel) {

@@ -83,287 +83,294 @@ class _UserProfileState extends State<UserProfile> {
 
 
 
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          title: Row(
-            children: <Widget>[
-              IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.grey,
-                  ),
+    return WillPopScope(
+      onWillPop: () async {
+        changeToUserHomePageScreen(context);
+        return true;
+      },
+
+      child:Scaffold(
+          appBar: AppBar(
+            centerTitle: false,
+            title: Row(
+              children: <Widget>[
+                IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                      changeToUserHomePageScreen(context);
+                    }
+                ),
+
+                const Text('Profile'),
+
+              ],
+            ),
+            actions: <Widget>[
+
+          Visibility(
+            visible: _isEmail,
+              child:IconButton(
+                  tooltip: 'Change Password',
+                  icon: const Icon(Icons.key),
                   onPressed: () {
-                    changeToUserHomePageScreen(context);
+                    changeToChangePasswordScreen(context);
                   }
               ),
+          ),
 
-              const Text('Profile'),
 
+              IconButton(
+                  tooltip: 'Edit',
+                  icon: Icon(
+                    _isInputEnable ? Icons.edit_off : Icons.edit,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isInputEnable = !_isInputEnable;
+                    });}
+              ),
+              IconButton(
+                iconSize: 25,
+                icon: const Icon(Icons.save),
+                tooltip: 'Save',
+                onPressed: () {
+                      _currentUser.updateUserProfile(uploadimageUrl,
+                          _nameController.text.trim(), _phoneNoController.text.trim());
+
+                      setState(() {
+                        _isInputEnable = false;
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Update Successful'),
+                            actions:[
+                              TextButton(
+                                  child: const Text('OK'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  }
+                              ),
+                            ],
+                          ),
+                        );
+                      });
+                }),
             ],
           ),
-          actions: <Widget>[
 
-        Visibility(
-          visible: _isEmail,
-            child:IconButton(
-                tooltip: 'Change Password',
-                icon: const Icon(Icons.key),
-                onPressed: () {
-                  changeToChangePasswordScreen(context);
-                }
-            ),
-        ),
+          body: Scaffold(
+              body: Center(
+                  child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Center(
+                          child: SingleChildScrollView(
+                              child: Column(
 
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
 
-            IconButton(
-                tooltip: 'Edit',
-                icon: Icon(
-                  _isInputEnable ? Icons.edit_off : Icons.edit,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _isInputEnable = !_isInputEnable;
-                  });}
-            ),
-            IconButton(
-              iconSize: 25,
-              icon: const Icon(Icons.save),
-              tooltip: 'Save',
-              onPressed: () {
-                    _currentUser.updateUserProfile(uploadimageUrl,
-                        _nameController.text.trim(), _phoneNoController.text.trim());
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 2.h,
+                                    ),
 
-                    setState(() {
-                      _isInputEnable = false;
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Update Successful'),
-                          actions:[
-                            TextButton(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                }
-                            ),
-                          ],
-                        ),
-                      );
-                    });
-              }),
-          ],
-        ),
+                                    Stack(
+                                      children: [
+                                        Center(child: ClipOval(
+                                          child: CachedNetworkImage(
+                                            //imageUrl: document['profileIMG'],
+                                            imageUrl: uploadimageUrl,
+                                            placeholder: (context, url) =>
+                                                const CircularProgressIndicator(),
+                                            errorWidget: (context, url, error) =>
+                                                Icon(Icons.error),
+                                            width: 15.h,
+                                            height: 15.h,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        ),
 
-        body: Scaffold(
-            body: Center(
-                child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Center(
-                        child: SingleChildScrollView(
-                            child: Column(
+                                        Positioned(
+                                            bottom: 0,
+                                            right: 110,
+                                            child: Container(
+                                              height: 5.h,
+                                              width: 5.h,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                  width: 2,
+                                                  color: Colors.white,
+                                                ),
+                                                color: Colors.green,
+                                              ),
+                                              child: IconButton(
+                                                color: Colors.white70,
+                                                iconSize: 20,
+                                                icon: const Icon(
+                                                    Icons.camera_alt_outlined),
+                                                tooltip: 'Upload Image',
+                                                onPressed: () async {
+                                                  pickImage();
+                                                  //Image
+                                                },
+                                              ),
+                                            )
+                                        )
+                                      ],
+                                    ),
 
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-
-                                children: <Widget>[
-                                  SizedBox(
-                                    height: 2.h,
-                                  ),
-
-                                  Stack(
-                                    children: [
-                                      Center(child: ClipOval(
-                                        child: CachedNetworkImage(
-                                          //imageUrl: document['profileIMG'],
-                                          imageUrl: uploadimageUrl,
-                                          placeholder: (context, url) =>
-                                              const CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
-                                          width: 15.h,
-                                          height: 15.h,
-                                          fit: BoxFit.cover,
+                                    const SizedBox(
+                                      height: 30.0,
+                                    ),
+                                    TextFormField(
+                                      enabled: false,
+                                      initialValue: _currentUser.currentUserModel!.email,
+                                      decoration: InputDecoration(
+                                        labelText: 'Email Address',
+                                        labelStyle: TextStyle(
+                                            color: ThemeChangeNotifier().isDarkMode(context)
+                                                == true ? Colors.white70 : Colors.black,
+                                        ),
+                                        filled: true,
+                                        fillColor: const Color(0xFFFFFFFF)
+                                            .withOpacity(0.2),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide:
+                                          BorderSide(
+                                              width: 0.1,
+                                              color: const Color(0xFFFFFFFF)
+                                                  .withOpacity(0.2)),
+                                          borderRadius: BorderRadius.circular(
+                                              20.0),
                                         ),
                                       ),
-                                      ),
+                                    ),
 
-                                      Positioned(
-                                          bottom: 0,
-                                          right: 110,
-                                          child: Container(
-                                            height: 5.h,
-                                            width: 5.h,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                width: 2,
-                                                color: Colors.white,
-                                              ),
-                                              color: Colors.green,
-                                            ),
-                                            child: IconButton(
-                                              color: Colors.white70,
-                                              iconSize: 20,
-                                              icon: const Icon(
-                                                  Icons.camera_alt_outlined),
-                                              tooltip: 'Upload Image',
-                                              onPressed: () async {
-                                                pickImage();
-                                                //Image
-                                              },
-                                            ),
-                                          )
-                                      )
-                                    ],
-                                  ),
+                                    const SizedBox(
+                                      height: 20.0,
+                                    ),
 
-                                  const SizedBox(
-                                    height: 30.0,
-                                  ),
-                                  TextFormField(
-                                    enabled: false,
-                                    initialValue: _currentUser.currentUserModel!.email,
-                                    decoration: InputDecoration(
-                                      labelText: 'Email Address',
-                                      labelStyle: TextStyle(
+                                    TextFormField(
+                                      //controller: _nameController..text = document['name'],
+                                      controller: _nameController..text = _currentUser.currentUserModel!.name,
+                                      enabled: _isInputEnable,
+                                      //initialValue: document['name'],
+                                      decoration: InputDecoration(
+                                        labelText: 'Username',
+                                        labelStyle: TextStyle(
                                           color: ThemeChangeNotifier().isDarkMode(context)
                                               == true ? Colors.white70 : Colors.black,
+                                        ),
+                                        hintText: 'Type your name here',
+                                        filled: true,
+                                        fillColor: const Color(0xFFFFFFFF)
+                                            .withOpacity(0.2),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide:
+                                          BorderSide(
+                                              width: 0.1,
+                                              color: const Color(0xFFFFFFFF)
+                                                  .withOpacity(0.2)),
+                                          borderRadius: BorderRadius.circular(
+                                              20.0),
+                                        ),
                                       ),
-                                      filled: true,
-                                      fillColor: const Color(0xFFFFFFFF)
-                                          .withOpacity(0.2),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide:
-                                        BorderSide(
-                                            width: 0.1,
-                                            color: const Color(0xFFFFFFFF)
-                                                .withOpacity(0.2)),
-                                        borderRadius: BorderRadius.circular(
-                                            20.0),
-                                      ),
-                                    ),
-                                  ),
 
-                                  const SizedBox(
-                                    height: 20.0,
-                                  ),
-
-                                  TextFormField(
-                                    //controller: _nameController..text = document['name'],
-                                    controller: _nameController..text = _currentUser.currentUserModel!.name,
-                                    enabled: _isInputEnable,
-                                    //initialValue: document['name'],
-                                    decoration: InputDecoration(
-                                      labelText: 'Username',
-                                      labelStyle: TextStyle(
-                                        color: ThemeChangeNotifier().isDarkMode(context)
-                                            == true ? Colors.white70 : Colors.black,
-                                      ),
-                                      hintText: 'Type your name here',
-                                      filled: true,
-                                      fillColor: const Color(0xFFFFFFFF)
-                                          .withOpacity(0.2),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide:
-                                        BorderSide(
-                                            width: 0.1,
-                                            color: const Color(0xFFFFFFFF)
-                                                .withOpacity(0.2)),
-                                        borderRadius: BorderRadius.circular(
-                                            20.0),
-                                      ),
                                     ),
 
-                                  ),
-
-                                  const SizedBox(
-                                    height: 20.0,
-                                  ),
+                                    const SizedBox(
+                                      height: 20.0,
+                                    ),
 
 
-                                  TextFormField(
-                                    controller: _phoneNoController..text = _currentUser.currentUserModel!.phoneNumber!,
-                                    enabled: _isInputEnable,
-                                    //initialValue: document['phoneNumber'],
-                                    decoration: InputDecoration(
-                                      labelText: 'Phone Number',
-                                      labelStyle: TextStyle(
-                                        color: ThemeChangeNotifier().isDarkMode(context)
-                                            == true ? Colors.white70 : Colors.black,
-                                      ),
-                                      hintText: 'Type your phone number here',
-                                      filled: true,
-                                      fillColor: const Color(0xFFFFFFFF)
-                                          .withOpacity(0.2),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide:
-                                        BorderSide(
-                                            width: 0.1,
-                                            color: const Color(0xFFFFFFFF)
-                                                .withOpacity(0.2)),
-                                        borderRadius: BorderRadius.circular(
-                                            20.0),
+                                    TextFormField(
+                                      controller: _phoneNoController..text = _currentUser.currentUserModel!.phoneNumber!,
+                                      enabled: _isInputEnable,
+                                      //initialValue: document['phoneNumber'],
+                                      decoration: InputDecoration(
+                                        labelText: 'Phone Number',
+                                        labelStyle: TextStyle(
+                                          color: ThemeChangeNotifier().isDarkMode(context)
+                                              == true ? Colors.white70 : Colors.black,
+                                        ),
+                                        hintText: 'Type your phone number here',
+                                        filled: true,
+                                        fillColor: const Color(0xFFFFFFFF)
+                                            .withOpacity(0.2),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide:
+                                          BorderSide(
+                                              width: 0.1,
+                                              color: const Color(0xFFFFFFFF)
+                                                  .withOpacity(0.2)),
+                                          borderRadius: BorderRadius.circular(
+                                              20.0),
+                                        ),
                                       ),
                                     ),
-                                  ),
 
 
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
 
-                                  Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: EvieButton(height: 12,
-                                          width: double.infinity,
-                                          onPressed: () async {
-                                            try {
+                                    Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: EvieButton(height: 12,
+                                            width: double.infinity,
+                                            onPressed: () async {
+                                              try {
 
-                                              _authProvider.signOut(context).then((result){
-                                                if(result == true){
+                                                _authProvider.signOut(context).then((result){
+                                                  if(result == true){
 
-                                                 // _authProvider.clear();
+                                                   // _authProvider.clear();
 
-                                                  changeToWelcomeScreen(context);
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    const SnackBar(
-                                                      content: Text('Signed out'),
-                                                      duration: Duration(
-                                                          seconds: 2),),
-                                                  );
-                                                }else{
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    const SnackBar(
-                                                      content: Text('Error, Try Again'),
-                                                      duration: Duration(
-                                                          seconds: 4),),
-                                                  );
+                                                    changeToWelcomeScreen(context);
+                                                    ScaffoldMessenger.of(context)
+                                                        .showSnackBar(
+                                                      const SnackBar(
+                                                        content: Text('Signed out'),
+                                                        duration: Duration(
+                                                            seconds: 2),),
+                                                    );
+                                                  }else{
+                                                    ScaffoldMessenger.of(context)
+                                                        .showSnackBar(
+                                                      const SnackBar(
+                                                        content: Text('Error, Try Again'),
+                                                        duration: Duration(
+                                                            seconds: 4),),
+                                                    );
 
-                                                }
+                                                  }
 
-                                              });
-                                            }
-                                            catch (e) {
-                                              debugPrint(e.toString());
-                                            }
-                                          },
-                                          child: const Text("Sign Out",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12.0,
-                                              )
-                                          )
-                                      )
-                                  )
-                                ])
-                        )
-                    )
-                )
-            )
-        )
+                                                });
+                                              }
+                                              catch (e) {
+                                                debugPrint(e.toString());
+                                              }
+                                            },
+                                            child: const Text("Sign Out",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12.0,
+                                                )
+                                            )
+                                        )
+                                    )
+                                  ])
+                          )
+                      )
+                  )
+              )
+          )
+      ),
     );
   }
 }

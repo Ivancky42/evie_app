@@ -49,6 +49,7 @@ class _LoginScreenState extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   late AuthProvider _authProvider;
+  late CurrentUserProvider _currentUserProvider;
 
   //For user input password visibility true/false
   bool _isObscure = true;
@@ -59,193 +60,210 @@ class _LoginScreenState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     _authProvider = Provider.of<AuthProvider>(context);
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
-    return Scaffold(
-      appBar: EvieAppbar_Back(onPressed: (){ changeToSignInMethodScreen(context);}),
+    return WillPopScope(
+      onWillPop: () async {
+        changeToSignInMethodScreen(context);
+        return true;
+      },
 
-      body: Stack(children: [
-        Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              //  mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 2.h,
-                ),
-                Text("Welcome Back!",
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w500,
-                    )),
-                SizedBox(
-                  height: 1.h,
-                ),
-                Text("Enter your email address",
-                    style: TextStyle(
-                      fontSize: 11.5.sp,
-                    )),
-                SizedBox(
-                  height: 1.h,
-                ),
+      child:Scaffold(
+        appBar: EvieAppbar_Back(onPressed: (){ changeToSignInMethodScreen(context);}),
 
-                EvieTextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  obscureText: false,
-                  labelText: "Email Address",
-                  hintText: "enter your email address",
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    return null;
-                  },
-                ),
+        body: Stack(children: [
+          Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                //  mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  Text("Welcome Back!",
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w500,
+                      )),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  Text("Enter your email address",
+                      style: TextStyle(
+                        fontSize: 11.5.sp,
+                      )),
+                  SizedBox(
+                    height: 1.h,
+                  ),
 
-                SizedBox(
-                  height: 1.h,
-                ),
+                  EvieTextFormField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    obscureText: false,
+                    labelText: "Email Address",
+                    hintText: "enter your email address",
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      return null;
+                    },
+                  ),
 
-                EvieTextFormField(
-                  controller: _passwordController,
-                  obscureText: _isObscure,
-                  labelText: "Password",
-                  hintText: "enter your password",
-                  suffixIcon:  IconButton(
-                      icon:   _isObscure ?
-                      const Image(
-                        image: AssetImage("assets/buttons/view_off.png"),
-                      ):
-                      const Image(
-                        image: AssetImage("assets/buttons/view_on.png"),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _isObscure = !_isObscure;
-                        });
-                      }),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    }
-                    return null;
-                  },
-                ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
 
-                SizedBox(
-                  height: 0.5.h,
-                ),
-                Container(
-                  alignment: const Alignment(1, 0),
-                  padding: const EdgeInsets.only(top: 10, left: 20),
-                  child: TextButton(
-                      child: Text(
-                        "Forgot Password?",
-                        style: TextStyle(
-                            color: EvieColors.PrimaryColor,
-                            fontSize: 10.sp,
-                            fontWeight: FontWeight.w400),
-                      ),
-                      onPressed: () {
-                        changeToForgetPasswordScreen(context);
-                      }),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 16.0, right: 16, bottom: 64.0),
-            child: EvieButton(
-              width: double.infinity,
-              child: Text(
-                "Log In With Email",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 10.sp,
-                ),
+                  EvieTextFormField(
+                    controller: _passwordController,
+                    obscureText: _isObscure,
+                    labelText: "Password",
+                    hintText: "enter your password",
+                    suffixIcon:  IconButton(
+                        icon:   _isObscure ?
+                        const Image(
+                          image: AssetImage("assets/buttons/view_off.png"),
+                        ):
+                        const Image(
+                          image: AssetImage("assets/buttons/view_on.png"),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure;
+                          });
+                        }),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                  ),
+
+                  SizedBox(
+                    height: 0.5.h,
+                  ),
+                  Container(
+                    alignment: const Alignment(1, 0),
+                    padding: const EdgeInsets.only(top: 10, left: 20),
+                    child: TextButton(
+                        child: Text(
+                          "Forgot Password?",
+                          style: TextStyle(
+                              color: EvieColors.PrimaryColor,
+                              fontSize: 10.sp,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        onPressed: () {
+                          changeToForgetPasswordScreen(context);
+                        }),
+                  ),
+                ],
               ),
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  // If the form is valid, display a snackbar.
-                }
-                //Save to provider
-                _authProvider
-                    .login(_emailController.text.trim(),
-                        _passwordController.text.trim())
-                    .then((result) {
-                  if (result.toString() == "Verified") {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Success'),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-
-                    ///Quit loading and go to user home page
-                    changeToUserHomePageScreen(context);
-                  } else if (result.toString() == "Not yet verify") {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Verify your account'),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-                    changeToVerifyEmailScreen(context, _emailController.text.trim());
-                  } else {
-                    SmartDialog.show(
-                      widget: EvieSingleButtonDialogCupertino(
-                          title: "Error",
-                          content: result.toString(),
-                          rightContent: "Ok",
-                          image: Image.asset(
-                            "assets/images/error.png",
-                            width: 36,
-                            height: 36,
-                          ),
-                          onPressedRight: () {
-                            SmartDialog.dismiss();
-                          }),
-                    );
-                  }
-                });
-              },
             ),
           ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16.0),
-            child: SizedBox(
-              width: double.infinity,
-              child: RawMaterialButton(
-                elevation: 0.0,
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
-                onPressed: () {
-                  changeToInputNameScreen(context);
-                },
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(left: 16.0, right: 16, bottom: 64.0),
+              child: EvieButton(
+                width: double.infinity,
                 child: Text(
-                  "I don't have an account yet",
+                  "Log In With Email",
                   style: TextStyle(
-                    color: EvieColors.PrimaryColor,
+                    color: Colors.white,
                     fontSize: 10.sp,
-                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    // If the form is valid, display a snackbar.
+                  }
+                  //Save to provider
+                  _authProvider
+                      .login(_emailController.text.trim(),
+                          _passwordController.text.trim())
+                      .then((result) {
+                    if (result.toString() == "Verified") {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Success'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+
+
+                      print("isfirstlogin");
+                      print(_currentUserProvider.isFirstLogin);
+
+                      ///Quit loading and go to user home page
+                      if(_currentUserProvider.isFirstLogin == true){
+                        changeToLetsGoScreen(context);
+                      }else{
+                        changeToUserHomePageScreen(context);
+                      }
+
+                    } else if (result.toString() == "Not yet verify") {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Verify your account'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                      changeToVerifyEmailScreen(context, _emailController.text.trim());
+                    } else {
+                      SmartDialog.show(
+                        widget: EvieSingleButtonDialogCupertino(
+                            title: "Error",
+                            content: result.toString(),
+                            rightContent: "Ok",
+                            image: Image.asset(
+                              "assets/images/error.png",
+                              width: 36,
+                              height: 36,
+                            ),
+                            onPressedRight: () {
+                              SmartDialog.dismiss();
+                            }),
+                      );
+                    }
+                  });
+                },
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: RawMaterialButton(
+                  elevation: 0.0,
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0)),
+                  onPressed: () {
+                    changeToInputNameScreen(context);
+                  },
+                  child: Text(
+                    "I don't have an account yet",
+                    style: TextStyle(
+                      color: EvieColors.PrimaryColor,
+                      fontSize: 10.sp,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-      ]),
+        ]),
+      ),
     );
   }
 }

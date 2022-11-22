@@ -45,134 +45,141 @@ class _UserNotificationDetailsState extends State<UserNotificationDetails> {
     _notificationProvider = Provider.of<NotificationProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
 
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          title: Row(
-            children: const <Widget>[
-              /*
-              IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.grey,
-                  ),
-                  onPressed: () {
-                    changeToUserHomePageScreen(context);
-                  }),
-               */
-              Text('Notification'),
-            ],
+    return WillPopScope(
+      onWillPop: () async {
+       changeToNotificationScreen(context);
+        return true;
+      },
+
+      child:Scaffold(
+          appBar: AppBar(
+            centerTitle: false,
+            title: Row(
+              children: const <Widget>[
+                /*
+                IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                      changeToUserHomePageScreen(context);
+                    }),
+                 */
+                Text('Notification'),
+              ],
+            ),
           ),
-        ),
-        body: Scaffold(
-            body: Padding(
-                padding: const EdgeInsets.all(16.0),
-                //    child: Center(
-                child: SingleChildScrollView(
-                    child: Column(
+          body: Scaffold(
+              body: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  //    child: Center(
+                  child: SingleChildScrollView(
+                      child: Column(
 
-                        //  mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                      if (widget.notificationValues.type == "shareBike") ...[
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Center(
-                          child:
-                              Text(widget.notificationValues.title ?? "error",
-                                  style: TextStyle(
-                                    fontFamily: 'Raleway',
-                                    fontSize: 17.sp,
-                                    fontWeight: FontWeight.w600,
-                                  )),
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        Container(
-                          child: Center(
+                          //  mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                        if (widget.notificationValues.type == "shareBike") ...[
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Center(
+                            child:
+                                Text(widget.notificationValues.title ?? "error",
+                                    style: TextStyle(
+                                      fontFamily: 'Raleway',
+                                      fontSize: 17.sp,
+                                      fontWeight: FontWeight.w600,
+                                    )),
+                          ),
+                          SizedBox(
+                            height: 5.h,
+                          ),
+                          Container(
+                            child: Center(
+                              child: Text(
+                                widget.notificationValues.body ?? "error",
+                                style: TextStyle(
+                                  fontFamily: 'Raleway',
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Visibility(
+                            visible:
+                                widget.notificationValues.status == "pending",
+
+                            ///Another button for declined
+                            child: EvieButton(
+                              width: 200,
+                              height: 20,
+                              onPressed: () {
+                                _bikeProvider
+                                    .updateAcceptSharedBikeStatus(
+                                        widget.notificationValues.deviceIMEI!)
+                                    .then((result) {
+                                  if (result == true) {
+                                    _notificationProvider
+                                        .updateUserNotificationSharedBikeStatus(
+                                            widget.notificationKeys);
+                                    SmartDialog.show(
+                                        widget: EvieSingleButtonDialogCupertino(
+                                            title: "Success",
+                                            content: "Bike added",
+                                            rightContent: "OK",
+                                            onPressedRight: () {
+                                              SmartDialog.dismiss();
+                                              changeToNotificationScreen(context);
+                                            }));
+                                  }
+                                });
+                              },
+                              child: const Text(
+                                "Accept",
+                                style: TextStyle(
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ] else if (widget.notificationValues.type ==
+                            "removeBike") ...[
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Center(
                             child: Text(
-                              widget.notificationValues.body ?? "error",
+                              widget.notificationValues.title ?? "error",
                               style: TextStyle(
                                 fontFamily: 'Raleway',
-                                fontSize: 15.sp,
+                                fontSize: 17.sp,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Visibility(
-                          visible:
-                              widget.notificationValues.status == "pending",
-
-                          ///Another button for declined
-                          child: EvieButton(
-                            width: 200,
-                            height: 20,
-                            onPressed: () {
-                              _bikeProvider
-                                  .updateAcceptSharedBikeStatus(
-                                      widget.notificationValues.deviceIMEI!)
-                                  .then((result) {
-                                if (result == true) {
-                                  _notificationProvider
-                                      .updateUserNotificationSharedBikeStatus(
-                                          widget.notificationKeys);
-                                  SmartDialog.show(
-                                      widget: EvieSingleButtonDialogCupertino(
-                                          title: "Success",
-                                          content: "Bike added",
-                                          rightContent: "OK",
-                                          onPressedRight: () {
-                                            SmartDialog.dismiss();
-                                            changeToNotificationScreen(context);
-                                          }));
-                                }
-                              });
-                            },
-                            child: const Text(
-                              "Accept",
-                              style: TextStyle(
-                                fontSize: 15.0,
+                          SizedBox(
+                            height: 5.h,
+                          ),
+                          Container(
+                            child: Center(
+                              child: Text(
+                                widget.notificationValues.body ?? "error",
+                                style: TextStyle(
+                                  fontFamily: 'Raleway',
+                                  fontSize: 15.sp,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ] else if (widget.notificationValues.type ==
-                          "removeBike") ...[
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Center(
-                          child: Text(
-                            widget.notificationValues.title ?? "error",
-                            style: TextStyle(
-                              fontFamily: 'Raleway',
-                              fontSize: 17.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        Container(
-                          child: Center(
-                            child: Text(
-                              widget.notificationValues.body ?? "error",
-                              style: TextStyle(
-                                fontFamily: 'Raleway',
-                                fontSize: 15.sp,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ]
-                    ]))
-                //     )
-                )));
+                        ]
+                      ]))
+                  //     )
+                  ))),
+    );
   }
 }
