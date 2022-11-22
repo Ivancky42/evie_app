@@ -231,7 +231,7 @@ class _TestBleState extends State<TestBle> {
 
                       }
                       else {
-                        bluetoothProvider.connectDevice(connectionStateUpdate!.deviceId, "REw40n21");
+                        bluetoothProvider.connectDevice(connectionStateUpdate!.deviceId, "RIiOU5wK");
                       }
                     },
                     height: 12.2,

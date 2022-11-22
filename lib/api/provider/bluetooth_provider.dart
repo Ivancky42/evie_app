@@ -6,6 +6,7 @@ import 'package:evie_test/bluetooth/command.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:hex/hex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../bluetooth/modelResult.dart';
 
@@ -279,7 +280,7 @@ class BluetoothProvider extends ChangeNotifier {
     notifySubscription = flutterReactiveBle
         .subscribeToCharacteristic(notifyCharacteristic)
         .listen((data) async {
-      printLog("Notify Value", connectionStateUpdate!.deviceId + " " + data.toString());
+      printLog("Notify Value", connectionStateUpdate!.deviceId + " " + HexCodec().encode(data));
       handleNotifyData(data);
     }, onError: (dynamic error) {
       printLog("Notify Error", error.toString());
