@@ -115,40 +115,40 @@ class _BikeScanningState extends State<BikeScanning> {
       }
     });
 
-    if (bluetoothProvider.isPaired == true) {
-      bluetoothProvider.setIsPairedResult(false);
-      if (bluetoothProvider.deviceID != null) {
-        bikeProvider
-            .uploadToFireStore(bluetoothProvider.deviceID)
-            .then((result) {
-          if (result == true) {
-            SmartDialog.dismiss(status: SmartStatus.loading);
-            SmartDialog.show(
-                tag: "ConnectSuccess",
-                widget: EvieSingleButtonDialogCupertino(
-                    title: "Success",
-                    content: "Connected",
-                    rightContent: "OK",
-                    onPressedRight: () {
-                      SmartDialog.dismiss(tag: "ConnectSuccess");
-
-                      ///Change to connect success page
-                      changeToNameBikeScreen(context);
-                      //changeToUserHomePageScreen(context);
-                    }));
-          } else {
-            SmartDialog.show(
-                widget: EvieSingleButtonDialogCupertino(
-                    title: "Error",
-                    content: "Error connect bike, try again",
-                    rightContent: "OK",
-                    onPressedRight: () {
-                      SmartDialog.dismiss();
-                    }));
-          }
-        });
-      }
-    }
+    // if (bluetoothProvider.isPaired == true) {
+    //   bluetoothProvider.setIsPairedResult(false);
+    //   if (bluetoothProvider.deviceID != null) {
+    //     bikeProvider
+    //         .uploadToFireStore(bluetoothProvider.deviceID)
+    //         .then((result) {
+    //       if (result == true) {
+    //         SmartDialog.dismiss(status: SmartStatus.loading);
+    //         SmartDialog.show(
+    //             tag: "ConnectSuccess",
+    //             widget: EvieSingleButtonDialogCupertino(
+    //                 title: "Success",
+    //                 content: "Connected",
+    //                 rightContent: "OK",
+    //                 onPressedRight: () {
+    //                   SmartDialog.dismiss(tag: "ConnectSuccess");
+    //
+    //                   ///Change to connect success page
+    //                   changeToNameBikeScreen(context);
+    //                   //changeToUserHomePageScreen(context);
+    //                 }));
+    //       } else {
+    //         SmartDialog.show(
+    //             widget: EvieSingleButtonDialogCupertino(
+    //                 title: "Error",
+    //                 content: "Error connect bike, try again",
+    //                 rightContent: "OK",
+    //                 onPressedRight: () {
+    //                   SmartDialog.dismiss();
+    //                 }));
+    //       }
+    //     });
+    //   }
+    // }
 
     return WillPopScope(
       onWillPop: () async {

@@ -154,7 +154,7 @@ class BluetoothCommand {
     List<int> data = List<int>.filled(totalDataSize, 0, growable: true);
     int rand = random.nextInt(255);
     //String randHexBleKey = randomHexString(8);
-    String randBleKey = "EVIEck";
+    String randBleKey = "EVIE17";
     //String randBleKey = "abcdefgh";
     //List<int> bytesBleKey = HexCodec().decode(randHexBleKey);
     List<int> bytesBleKey = utf8.encode(randBleKey);
@@ -331,10 +331,10 @@ class BluetoothCommand {
     data[4] = comKey; ///  Communication key
     data[5] = factoryResetCmd; /// cmd : 0x39
 
-    data[6] = 0x01;
-    data[7] = 0x01;
-    data[8] = 0x01;
-    data[9] = 0x01;
+    data[6] = 0xff;
+    data[7] = 0xff;
+    data[8] = 0xff;
+    data[9] = 0xff;
     data[10] = 0x01;
 
     return encodeData(dataSize, rand, data);

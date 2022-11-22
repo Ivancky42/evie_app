@@ -152,10 +152,10 @@ class ChangeBleNameResult {
 
     result = data[6] == 0 ? CommandResult.success : CommandResult.failed;
     const asciiDecoder = AsciiDecoder();
-    bleKey = asciiDecoder.convert(data.sublist(6, 13));
+    bleKey = asciiDecoder.convert(data.sublist(7, 13));
     if (result == CommandResult.success) {
       const asciiDecoder = AsciiDecoder();
-      bleKey = asciiDecoder.convert(data.sublist(6, 12));
+      bleKey = asciiDecoder.convert(data.sublist(7, 13));
       print(bleKey);
     }
     else {

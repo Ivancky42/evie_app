@@ -361,121 +361,118 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
             children: [
               Container(
                   height: 35.h,
-                  child: Stack(children: [
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        height: 26.h,
-                        decoration: const BoxDecoration(
-                          color: Color(0xffDFE0E0),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10.0),
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 26.h,
+                          decoration: const BoxDecoration(
+                            color: Color(0xffDFE0E0),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.0),
+                            ),
                           ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                discoveredDevice.name,
-                                style: TextStyle(
-                                    fontSize: 14.8.sp,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(height: 0.8.h),
-                              Text(
-                                "Ready to connect",
-                                style: TextStyle(
-                                    fontSize: 11.8.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff5F6060)),
-                              ),
-                              SizedBox(height: 0.8.h),
-                              Row(
-                                children: [
-                                  Container(
-                                    height: 2.5.h,
-                                    child: const Image(
-                                      image: AssetImage(
-                                          "assets/icons/bluetooth_small.png"),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  discoveredDevice.name,
+                                  style: TextStyle(
+                                      fontSize: 14.8.sp,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                SizedBox(height: 0.8.h),
+                                Text(
+                                  "Ready to connect",
+                                  style: TextStyle(
+                                      fontSize: 11.8.sp,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xff5F6060)),
+                                ),
+                                SizedBox(height: 0.8.h),
+                                Row(
+                                  children: [
+                                    Container(
+                                      height: 2.5.h,
+                                      child: const Image(
+                                        image: AssetImage(
+                                            "assets/icons/bluetooth_small.png"),
+                                      ),
+                                    ),
+                                    Text(
+                                      "Strength",
+                                      style: TextStyle(
+                                          fontSize: 11.8.sp,
+                                          fontWeight: FontWeight.w400,
+                                          color: Color(0xff5F6060)),
+                                    ),
+                                    Spacer(),
+                                    deviceSignal(discoveredDevice.rssi)
+                                  ],
+                                ),
+                                SizedBox(height: 0.8.h),
+                                EvieButton(
+                                  width: double.infinity,
+                                  child: Text(
+                                    "Connect",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10.sp,
                                     ),
                                   ),
-                                  Text(
-                                    "Strength",
-                                    style: TextStyle(
-                                        fontSize: 11.8.sp,
-                                        fontWeight: FontWeight.w400,
-                                        color: Color(0xff5F6060)),
-                                  ),
-                                  Spacer(),
-                                  deviceSignal(discoveredDevice.rssi)
-                                ],
-                              ),
-                              SizedBox(height: 0.8.h),
-                              EvieButton(
-                                width: double.infinity,
-                                child: Text(
-                                  "Connect",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10.sp,
-                                  ),
+                                  onPressed: () {
+                                    SmartDialog.show(
+                                        backDismiss: false,
+                                        tag: "ConnectBike",
+                                        widget: EvieDoubleButtonDialogCupertino(
+                                          //buttonNumber: "2",
+                                            title: "Connect Bike",
+                                            content: "Connect to this bike?",
+                                            leftContent: "Cancel",
+                                            rightContent: "Connect",
+                                            image: Image.asset(
+                                              "assets/evieBike.png",
+                                              width: 36,
+                                              height: 36,
+                                            ),
+                                            onPressedLeft: () {
+                                              SmartDialog.dismiss(
+                                                  tag: "ConnectBike");
+                                            },
+                                            onPressedRight: () {
+                                              SmartDialog.dismiss(
+                                                  tag: "ConnectBike");
+                                              bluetoothProvider.stopScan();
+                                              Navigator.pop(context);
+                                              SmartDialog.showLoading(
+                                                  backDismiss: false);
+                                              try {
+                                                bluetoothProvider.connectDevice(
+                                                    discoveredDevice.id, "REw40n21");
+                                              } catch (e) {
+                                                debugPrint(e.toString());
+                                              }
+                                            }));
+                                  },
                                 ),
-                                onPressed: () {
-                                  SmartDialog.show(
-                                      backDismiss: false,
-                                      tag: "ConnectBike",
-                                      widget: EvieDoubleButtonDialogCupertino(
-                                        //buttonNumber: "2",
-                                          title: "Connect Bike",
-                                          content: "Connect to this bike?",
-                                          leftContent: "Cancel",
-                                          rightContent: "Connect",
-                                          image: Image.asset(
-                                            "assets/evieBike.png",
-                                            width: 36,
-                                            height: 36,
-                                          ),
-                                          onPressedLeft: () {
-                                            SmartDialog.dismiss(
-                                                tag: "ConnectBike");
-                                          },
-                                          onPressedRight: () {
-                                            SmartDialog.dismiss(
-                                                tag: "ConnectBike");
-                                            bluetoothProvider.stopScan();
-                                            Navigator.pop(context);
-                                            SmartDialog.showLoading(
-                                                backDismiss: false);
-                                            try {
-                                              bluetoothProvider.connectDevice(
-                                                  discoveredDevice.id, "REw40n21");
-                                            } catch (e) {
-                                              debugPrint(e.toString());
-                                            }
-                                          }));
-                                },
-                              ),
-                              SizedBox(height: 1.h),
-                            ],
+                                SizedBox(height: 1.h),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Image(
-                        height: 18.h,
-                        image: const AssetImage(
-                            "assets/images/bike_HPStatus/bike_normal.png"),
-                      ),
-                    )
-                  ])),
-            ],
-          ));
-    } else {
+                    ]
+              ),
+            ),
+            ]
+          ),
+        );
+    }
+    else {
       return Container();
     }
   }
