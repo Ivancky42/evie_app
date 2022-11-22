@@ -629,7 +629,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                                     SmartDialog.dismiss();
                                     bool result = _bikeProvider.deleteBike(
                                         _bikeProvider
-                                            .currentBikeModel!.deviceIMEI
+                                            .currentBikeModel!.deviceIMEI!
                                             .trim());
                                     if (result == true) {
                                       SmartDialog.show(
@@ -796,7 +796,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
               backgroundColor: lockColour,
               onPressed: () {
 
-                changeToBikeScanningScreen(context);
+                changeToUserBluetoothScreen(context);
               },
 
               //icon inside button
@@ -873,7 +873,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                       focusNode: _textFocus,
                       controller: _bikeNameController
                         ..text =
-                            _bikeProvider.currentBikeModel?.bikeName.trim() ??
+                            _bikeProvider.currentBikeModel?.deviceName?.trim() ??
                                 'Empty',
                       style: const TextStyle(
                           fontFamily: 'Avenir-SemiBold', fontSize: 16.0),
@@ -1168,7 +1168,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
                                     SmartDialog.dismiss();
                                     bool result = _bikeProvider.deleteBike(
                                         _bikeProvider
-                                            .currentBikeModel!.deviceIMEI
+                                            .currentBikeModel!.deviceIMEI!
                                             .trim());
                                     if (result == true) {
                                       SmartDialog.show(

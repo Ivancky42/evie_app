@@ -456,7 +456,7 @@ class _BikeScanningState extends State<BikeScanning> {
                                                 backDismiss: false);
                                             try {
                                               bluetoothProvider.connectDevice(
-                                                  discoveredDevice.id, "");
+                                                  discoveredDevice.id, "REw40n21");
                                             } catch (e) {
                                               debugPrint(e.toString());
                                             }

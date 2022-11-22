@@ -32,11 +32,16 @@ class LocationProvider extends ChangeNotifier {
       LocationPermission permission;
       permission = await Geolocator.requestPermission();
 
-      userPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high
-      );
+      userPosition = getCurrentLocation();
+
       notifyListeners();
     }
+  }
+
+  getCurrentLocation() async {
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high
+    );
   }
 
   checkLocationPermissionStatus() async {

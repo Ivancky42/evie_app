@@ -3,7 +3,7 @@ import 'package:sizer/sizer.dart';
 import 'package:flutter/cupertino.dart';
 
 
-
+///Cupertino for system dialog usage only
 ///Double cupertino button dialog
 class EvieDoubleButtonDialogCupertino extends StatelessWidget{
   // final String buttonNumber;

@@ -139,7 +139,7 @@ class _ShareBikeState extends State<ShareBike> {
                                                   default:
                                                     SmartDialog.show(widget: EvieDoubleButtonDialogCupertino(
                                                       title: "Share Bike",
-                                                      content: "Share ${_bikeProvider.currentBikeModel!.bikeName}"
+                                                      content: "Share ${_bikeProvider.currentBikeModel!.deviceName}"
                                                           " with ${_emailController.text.trim()} ?",
                                                       leftContent: "Cancel",
                                                       onPressedLeft: () => SmartDialog.dismiss(),

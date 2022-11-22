@@ -4,6 +4,7 @@ import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/bike_model.dart';
 import '../model/bike_user_model.dart';
@@ -419,10 +420,12 @@ class BikeProvider extends ChangeNotifier {
 
   Future uploadToFireStore(selectedDeviceId) async {
     try {
+      Position currentPosition = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high
+      );
+
       final snapshot =
           await FirebaseFirestore.instance.collection('bikes').get();
-
-      //For each snapshot data match selected device id
 
       ///Check if have data
       if (snapshot.size == 0) {
@@ -431,15 +434,22 @@ class BikeProvider extends ChangeNotifier {
             .collection(bikesCollection)
             .doc(selectedDeviceId)
             .set(BikeModel(
-              deviceType: "Reevo",
+          batteryPercent: 0,
+              bleKey: "",
+              deviceType: "Evie",
+              macAddr: "",
+              networkSignal: 0,
+              protVersion: "",
               deviceIMEI: selectedDeviceId!,
+              deviceName: "EvieBike",
+              errorCode: 0,
+              isCharging: false,
               isLocked: false,
-              bikeName: "ReevoBike",
-
-              ///TODO: Upload location based on user current location
-
+          ///TODO: Upload location based on current usre location
+              location: LocationModel(status: '', geopoint: GeoPoint(currentPosition.latitude, currentPosition.longitude)),
               created: Timestamp.now(),
-              updated: Timestamp.now(),
+              lastUpdated: Timestamp.now(),
+              registered: Timestamp.now(),
             ).toJson());
       }
 
