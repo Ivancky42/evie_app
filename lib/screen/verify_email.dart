@@ -46,7 +46,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
     startCountDownTimer();
 
     ///Loop timer 5 every 5 second and detect isVerified condition
-    timer = Timer.periodic(const Duration(seconds: 5), (Timer t) {
+    timer = Timer.periodic(const Duration(seconds: 3), (Timer t) {
       AuthProvider().checkIsVerify().then((value) {
         setState(() {
           isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
@@ -54,9 +54,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
         if (value == true) {
           timer?.cancel();
-          setState(() {
-            isCountDownOver = true;
-          });
           changeToAccountVerifiedScreen(context);
 
       }});
@@ -66,6 +63,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   @override
   void dispose() {
     timer?.cancel();
+    countdownTimer?.cancel();
     super.dispose();
   }
 
@@ -89,12 +87,9 @@ class _VerifyEmailState extends State<VerifyEmail> {
       final seconds = myDuration.inSeconds - reduceSecondsBy;
       if (seconds < 0) {
         countdownTimer!.cancel();
-        setState(() {
           isCountDownOver = true;
-        });
       } else {
         myDuration = Duration(seconds: seconds);
-        print(seconds.toInt());
       }
     });
   }
@@ -108,19 +103,80 @@ class _VerifyEmailState extends State<VerifyEmail> {
         bool? exitApp = await SmartDialog.show(
             widget:
             EvieDoubleButtonDialogCupertino(
-                title: "Close this app?",
-                content: "Are you sure you want to close this App?",
+                title: "Back to Home Page?",
+                content: "Are you sure you want to sign out and back to home page?",
                 leftContent: "No",
                 rightContent: "Yes",
                 onPressedLeft: (){SmartDialog.dismiss();},
-                onPressedRight: (){SystemNavigator.pop();})) as bool?;
+                onPressedRight: (){
+                  _authProvider.signOut(context).then((result){
+                    if(result == true){
+
+                      // _authProvider.clear();
+
+                      changeToWelcomeScreen(context);
+                      SmartDialog.dismiss();
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(
+                        const SnackBar(
+                          content: Text('Signed out'),
+                          duration: Duration(
+                              seconds: 2),),
+                      );
+                    }else{
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(
+                        const SnackBar(
+                          content: Text('Error, Try Again'),
+                          duration: Duration(
+                              seconds: 4),),
+                      );
+                    }
+                  });
+                })) as bool?;
         return exitApp ?? false;
       },
 
       child:  Scaffold(
+
         appBar: EvieAppbar_Back(onPressed: () {
-          changeToWelcomeScreen(context);
+          SmartDialog.show(
+              widget:
+              EvieDoubleButtonDialogCupertino(
+                  title: "Back to Home Page?",
+                  content: "Are you sure you want to sign out and back to home page?",
+                  leftContent: "No",
+                  rightContent: "Yes",
+                  onPressedLeft: (){SmartDialog.dismiss();},
+                  onPressedRight: (){
+                    _authProvider.signOut(context).then((result){
+                      if(result == true){
+
+                        // _authProvider.clear();
+
+                        changeToWelcomeScreen(context);
+                        SmartDialog.dismiss();
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(
+                          const SnackBar(
+                            content: Text('Signed out'),
+                            duration: Duration(
+                                seconds: 2),),
+                        );
+                      }else{
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(
+                          const SnackBar(
+                            content: Text('Error, Try Again'),
+                            duration: Duration(
+                                seconds: 4),),
+                        );
+                      }
+                    });
+                  })) as bool?;
         }),
+
+
         body: Stack(children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -192,9 +248,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
                     style:
                         TextStyle(fontSize: 9.sp, color: EvieColors.PrimaryColor),
                   ),
-                  onPressed: () {
-
-                    if(isCountDownOver = false){
+                  onPressed: () async {
+                    if(isCountDownOver == false){
                       SmartDialog.show(
                         widget: EvieSingleButtonDialogCupertino(
                             title: "Error",
@@ -202,8 +257,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
                             rightContent: "Ok",
                             onPressedRight:(){SmartDialog.dismiss();})
                       );
-                    }else if(isCountDownOver = true){
-                      _authProvider.sendFirestoreVerifyEmail().then((){
+                    }else if(isCountDownOver == true){
+                      _authProvider.sendFirestoreVerifyEmail();
                         SmartDialog.show(
                             widget: EvieSingleButtonDialogCupertino(
                                 title: "Success",
@@ -216,7 +271,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
                           resetTimer();
                           startCountDownTimer();
                         });
-                      });
                     }
                   },
                 ),

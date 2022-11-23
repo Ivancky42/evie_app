@@ -7,6 +7,7 @@ import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/screen/user_home_page/add_new_bike.dart';
 import 'package:evie_test/screen/user_home_page/free_plan.dart';
+import 'package:evie_test/screen/verify_email.dart';
 import 'package:evie_test/widgets/evie_oval.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:file_picker/file_picker.dart';
@@ -321,10 +322,6 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   }
 
   Widget _buildChild(LinkedHashMap userBikeList) {
-
-    if(_currentUserProvider.isFirstLogin == true){
-      return const LetsGo();
-    }
 
     if (!userBikeList.isNotEmpty) {
       return const AddNewBike();

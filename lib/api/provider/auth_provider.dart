@@ -22,7 +22,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 class AuthProvider extends ChangeNotifier {
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
   String credentialProvider = "";
-  bool isEmailVerified = false;
+  bool? isEmailVerified;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   String? _uid;
@@ -123,12 +123,12 @@ class AuthProvider extends ChangeNotifier {
 
   Future checkIsVerify() async {
 
-    if(FirebaseAuth.instance.currentUser != null && !isEmailVerified) {
+    if(FirebaseAuth.instance.currentUser != null) {
       await FirebaseAuth.instance.currentUser!.reload();
       isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
       notifyListeners();
 
-      if (isEmailVerified) {
+      if (isEmailVerified == true) {
         return true;
       } else {
         return false;
