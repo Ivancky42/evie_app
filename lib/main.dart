@@ -194,7 +194,7 @@ class MyApp extends StatelessWidget {
         ///Add logic for isVerified
         ///Add logic for isFirstLogin
         initialRoute:
-        _authProvider.isLogin == true ? _currentUserProvider.isFirstLogin == true ? '/letsGo' : '/userHomePage' : '/welcome',
+        _authProvider.isLogin == true ? '/userHomePage' : '/welcome',
 
         ///Routes setting for page navigation
         routes: {

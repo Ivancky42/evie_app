@@ -1,3 +1,4 @@
+import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/profile/user_profile.dart';
 import 'package:evie_test/screen/test_ble.dart';
@@ -13,6 +14,7 @@ import '../api/navigator.dart';
 import '../api/provider/notification_provider.dart';
 import '../screen/onboarding/bike_scanning.dart';
 import '../screen/onboarding/lets_go.dart';
+import '../screen/verify_email.dart';
 import '../theme/ThemeChangeNotifier.dart';
 
 ///User default home page when login condition is true
@@ -31,9 +33,8 @@ class _UserHomePageState extends State<UserHomePage> {
   ///Appbar title
   String _title = '';
 
-  bool _unlock = false;
-
   late NotificationProvider _notificationProvider;
+  late AuthProvider _authProvider;
   late CurrentUserProvider _currentUserProvider;
 
   ///Body Screen navigation by bottom navigation bar
@@ -45,37 +46,19 @@ class _UserHomePageState extends State<UserHomePage> {
     TestBle(),
   ];
 
+
   @override
   Widget build(BuildContext context) {
     _notificationProvider = Provider.of<NotificationProvider>(context);
+    _authProvider = Provider.of<AuthProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
+
+    if(_authProvider.isEmailVerified == false){
+      return VerifyEmail(_authProvider.getEmail!);
+    }
 
     if(_currentUserProvider.isFirstLogin == true){
       return const LetsGo();
-    }
-
-    Color lockColour = const Color(0xff6A51CA);
-    Image lockImage = Image(
-      image: const AssetImage("assets/buttons/lock_unlock.png"),
-      height: 2.h,
-      fit: BoxFit.fitWidth,
-    );
-
-    if(_unlock == false){
-      lockImage = Image(
-        image: const AssetImage("assets/buttons/lock_lock.png"),
-        height: 2.h,
-        fit: BoxFit.fitWidth,
-      );
-      lockColour = const Color(0xff6A51CA);
-    }else if(_unlock == true){
-
-      lockImage = Image(
-        image: AssetImage("assets/buttons/lock_unlock.png"),
-        height: 2.h,
-        fit: BoxFit.fitWidth,
-      );
-      lockColour = const Color(0xff404E53);
     }
 
     return Scaffold(

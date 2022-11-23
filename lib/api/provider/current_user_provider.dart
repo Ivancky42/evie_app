@@ -22,13 +22,14 @@ class CurrentUserProvider extends ChangeNotifier {
   bool? isFirstLogin;
 
   UserModel? currentUserModel;
+
   UserModel? get getCurrentUserModel => currentUserModel;
 
   get fetchCurrentUserModel async => currentUserModel;
 
   ///Initial value
   Future<void> init(uid) async {
-    if(uid != null) {
+    if (uid != null) {
       getUser(uid);
       todayRandomQuote();
       getIsFirstLogin();
@@ -42,7 +43,7 @@ class CurrentUserProvider extends ChangeNotifier {
 
   ///Get user information
   void getUser(String? uid) {
-    if(uid == null || uid == ""){
+    if (uid == null || uid == "") {
       currentUserModel = null;
     } else {
       FirebaseFirestore.instance.collection(usersCollection).doc(uid)
@@ -54,7 +55,6 @@ class CurrentUserProvider extends ChangeNotifier {
             currentUserModel = UserModel.fromJson(obj);
             notifyListeners();
           }
-
         } on Exception catch (exception) {
           debugPrint(exception.toString());
         }
@@ -89,9 +89,10 @@ class CurrentUserProvider extends ChangeNotifier {
     }
   }
 
-  todayRandomQuote(){
+  todayRandomQuote() {
     Random random = Random();
-    int randomNumber = random.nextInt(TodaysQuote.quotes.length)+1; // from 1-10
+    int randomNumber = random.nextInt(TodaysQuote.quotes.length) +
+        1; // from 1-10
     var randomQuote = TodaysQuote.quotes[randomNumber];
     this.randomQuote = randomQuote;
     notifyListeners();
@@ -109,22 +110,19 @@ class CurrentUserProvider extends ChangeNotifier {
 
   Future<void> getIsFirstLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if(prefs.containsKey('isFirstLogin')){
-
-      if(prefs.getBool('isFirstLogin') == true){
+    if (prefs.containsKey('isFirstLogin')) {
+      if (prefs.getBool('isFirstLogin') == true) {
         isFirstLogin = true;
         notifyListeners();
-      }else{
+      } else {
         isFirstLogin = false;
         notifyListeners();
       }
-    }else {
+    } else {
       isFirstLogin = true;
       notifyListeners();
     }
   }
-
-
 
 
 }

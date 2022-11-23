@@ -33,6 +33,7 @@ class _SignUpState extends State<SignUp> {
       TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   late AuthProvider _authProvider;
+  late CurrentUserProvider _currentUserProvider;
 
   //For user input password visibility true/false
   bool _isObscure = true;
@@ -45,6 +46,7 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     _authProvider = Provider.of<AuthProvider>(context);
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -219,8 +221,10 @@ class _SignUpState extends State<SignUp> {
                               _emailController.text.trim(),
                               _passwordController.text.trim(),
                               widget.name,
-                              "empty") ??
-                          true) {
+                              "empty") ?? true) {
+
+                        _currentUserProvider.setIsFirstLogin(true);
+
                         await _authProvider
                             .login(_emailController.text.trim(),
                                 _passwordController.text.trim())
