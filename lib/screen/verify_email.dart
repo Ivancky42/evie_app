@@ -35,6 +35,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   bool isEmailVerified = false;
 
   late AuthProvider _authProvider;
+  late CurrentUserProvider _currentUserProvider;
 
   Duration myDuration = const Duration(seconds: 30);
 
@@ -93,6 +94,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
         });
       } else {
         myDuration = Duration(seconds: seconds);
+        print(seconds.toInt());
       }
     });
   }
@@ -191,6 +193,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                         TextStyle(fontSize: 9.sp, color: EvieColors.PrimaryColor),
                   ),
                   onPressed: () {
+
                     if(isCountDownOver = false){
                       SmartDialog.show(
                         widget: EvieSingleButtonDialogCupertino(
@@ -199,7 +202,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                             rightContent: "Ok",
                             onPressedRight:(){SmartDialog.dismiss();})
                       );
-                    }else{
+                    }else if(isCountDownOver = true){
                       _authProvider.sendFirestoreVerifyEmail().then((){
                         SmartDialog.show(
                             widget: EvieSingleButtonDialogCupertino(

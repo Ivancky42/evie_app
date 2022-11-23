@@ -241,6 +241,7 @@ class _SignUpState extends State<SignUp> {
                                 duration: Duration(seconds: 2),
                               ),
                             );
+
                             changeToVerifyEmailScreen(context, _emailController.text.trim());
                           } else {
                             SmartDialog.show(
