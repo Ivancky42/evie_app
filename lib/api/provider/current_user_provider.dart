@@ -86,8 +86,7 @@ class CurrentUserProvider extends ChangeNotifier {
 
   todayRandomQuote() {
     Random random = Random();
-    int randomNumber = random.nextInt(TodaysQuote.quotes.length) +
-        1; // from 1-10
+    int randomNumber = random.nextInt(TodaysQuote.quotes.length); // from 1-10
     var randomQuote = TodaysQuote.quotes[randomNumber];
     this.randomQuote = randomQuote;
     notifyListeners();
