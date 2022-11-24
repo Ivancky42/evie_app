@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:evie_test/bluetooth/command.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_background/flutter_background.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:hex/hex.dart';
@@ -45,6 +46,7 @@ class BluetoothProvider extends ChangeNotifier {
 
   ConnectionStateUpdate? connectionStateUpdate;
   BleStatus? bleStatus;
+  StreamController<BleStatus> bleStatusListener = StreamController.broadcast();
   String? selectedDeviceId;
   IotInfoModel? iotInfoModel;
   String? deviceIMEI;
@@ -109,6 +111,7 @@ class BluetoothProvider extends ChangeNotifier {
   late Stream<IotInfoModel> iotInfoModelStream;
 
   Future<void> init(currentUserModel) async {
+    FlutterBackground.enableBackgroundExecution();
     checkBLEStatus();
     if (currentUserModel != null) {
       this.currentUserModel = currentUserModel;
@@ -116,9 +119,10 @@ class BluetoothProvider extends ChangeNotifier {
     }
   }
 
-  checkBLEStatus() async {
+  Stream<BleStatus> checkBLEStatus() {
     flutterReactiveBle.statusStream.listen((status) async {
       bleStatus = status;
+      bleStatusListener.add(status);
       printLog("BLE Status", bleStatus.toString());
 
       switch (bleStatus) {
@@ -129,7 +133,7 @@ class BluetoothProvider extends ChangeNotifier {
           // TODO: Handle this case.
           break;
         case BleStatus.unauthorized:
-          //handlePermission();
+          // handlePermission();
           break;
         case BleStatus.poweredOff:
         // TODO: Handle this case.
@@ -145,6 +149,8 @@ class BluetoothProvider extends ChangeNotifier {
       }
       notifyListeners();
     });
+
+    return bleStatusListener.stream;
   }
 
   void startScan() {
@@ -344,20 +350,40 @@ class BluetoothProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void handlePermission() async {
-    var status = await Permission.bluetooth.request();
-    if (status.isPermanentlyDenied) {
-      return;
-    }
+  Future<PermissionStatus> handlePermission() async {
 
-    status = await Permission.bluetoothConnect.request();
-    if (status.isPermanentlyDenied) {
-      return;
+    var bleConnectStatus = await Permission.bluetoothConnect.request();
+    print(bleConnectStatus.toString());
+    if (bleConnectStatus.isGranted) {
+      //return PermissionStatus.granted;
+      var bleScanStatus = await Permission.bluetoothScan.request();
+      if (bleScanStatus.isDenied){
+        return PermissionStatus.denied;
+      }
+      else if (bleScanStatus.isPermanentlyDenied) {
+        return PermissionStatus.permanentlyDenied;
+      }
+      else if (bleScanStatus.isLimited) {
+        return PermissionStatus.limited;
+      }
+      else if (bleScanStatus.isGranted) {
+        return PermissionStatus.granted;
+      }
+      else {
+        return PermissionStatus.restricted;
+      }
     }
-
-    status = await Permission.bluetoothScan.request();
-    if (status.isPermanentlyDenied) {
-      return;
+    else if (bleConnectStatus.isDenied){
+      return PermissionStatus.denied;
+    }
+    else if (bleConnectStatus.isPermanentlyDenied) {
+      return PermissionStatus.permanentlyDenied;
+    }
+    else if (bleConnectStatus.isLimited) {
+      return PermissionStatus.limited;
+    }
+    else {
+      return PermissionStatus.restricted;
     }
   }
 

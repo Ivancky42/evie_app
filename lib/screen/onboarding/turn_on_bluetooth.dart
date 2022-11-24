@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -24,10 +28,12 @@ class TurnOnBluetooth extends StatefulWidget {
 class _TurnOnBluetoothState extends State<TurnOnBluetooth> {
 
   late CurrentUserProvider _currentUserProvider;
+  late BluetoothProvider _bluetoothProvider;
 
   @override
   Widget build(BuildContext context) {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -110,10 +116,29 @@ class _TurnOnBluetoothState extends State<TurnOnBluetooth> {
                     ),
                   ),
                   onPressed: () async {
-                    if (await Permission.bluetooth.request().isGranted && await Permission.bluetoothScan.request().isGranted) {
-                      changeToBikeScanningScreen(context);
-                    }else if(await Permission.bluetooth.isPermanentlyDenied || await Permission.bluetooth.isDenied){
-                      OpenSettings.openBluetoothSetting();
+                    // if (await Permission.bluetooth.request().isGranted && await Permission.bluetoothScan.request().isGranted) {
+                    //   changeToBikeScanningScreen(context);
+                    // }else if(await Permission.bluetooth.isPermanentlyDenied || await Permission.bluetooth.isDenied){
+                    //   OpenSettings.openBluetoothSetting();
+                    // }
+                    StreamSubscription? subscription;
+                    PermissionStatus status = await _bluetoothProvider.handlePermission();
+                    if (status == PermissionStatus.granted) {
+                      subscription = _bluetoothProvider.checkBLEStatus().listen((bleStatus) {
+                        if (bleStatus == BleStatus.ready) {
+                          changeToBikeScanningScreen(context);
+                          subscription?.cancel();
+                        }
+                        else if (bleStatus == BleStatus.poweredOff){
+                          OpenSettings.openBluetoothSetting();
+                        }
+                      });
+                    }
+                    else if (status == PermissionStatus.denied) {
+                      await _bluetoothProvider.handlePermission();
+                    }
+                    else if (status == PermissionStatus.permanentlyDenied) {
+                      // TODO: Display a dialog to show user have permanetly denied the bluetooth permission
                     }
                   },
                 ),

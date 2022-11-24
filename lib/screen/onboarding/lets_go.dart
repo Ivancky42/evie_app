@@ -95,13 +95,23 @@ class _LetsGoState extends State<LetsGo> {
                   var locationStatus = await Permission.location.status;
                   var bluetoothStatus = await Permission.bluetooth.status;
 
-                  if(locationStatus == PermissionStatus.granted && bluetoothStatus == PermissionStatus.granted ){
-                    changeToBikeScanningScreen(context);
-                  }else if(locationStatus == PermissionStatus.granted && bluetoothStatus != PermissionStatus.granted){
+                  if (_bluetoothProvider.bleStatus == BleStatus.unauthorized && locationStatus == PermissionStatus.granted) {
                     changeToTurnOnBluetoothScreen(context);
-                  }else{
+                  }
+                  else if (locationStatus == PermissionStatus.granted && _bluetoothProvider.bleStatus != BleStatus.unauthorized) {
+                    changeToBikeScanningScreen(context);
+                  }
+                  else {
                     changeToTurnOnLocationScreen(context);
                   }
+
+                  // if(locationStatus == PermissionStatus.granted && bluetoothStatus == PermissionStatus.granted ){
+                  //   changeToBikeScanningScreen(context);
+                  // }else if(locationStatus == PermissionStatus.granted && bluetoothStatus != PermissionStatus.granted){
+                  //   changeToTurnOnBluetoothScreen(context);
+                  // }else{
+                  //   changeToTurnOnLocationScreen(context);
+                  // }
                 },
               ),
             ),
