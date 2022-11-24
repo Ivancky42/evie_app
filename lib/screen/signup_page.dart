@@ -223,7 +223,7 @@ class _SignUpState extends State<SignUp> {
                               widget.name,
                               "empty") ?? true) {
 
-                        _currentUserProvider.setIsFirstLogin(true);
+                        _authProvider.setIsFirstLogin(true);
 
                         await _authProvider
                             .login(_emailController.text.trim(),
@@ -246,7 +246,7 @@ class _SignUpState extends State<SignUp> {
                               ),
                             );
 
-                            changeToVerifyEmailScreen(context, _emailController.text.trim());
+                            changeToVerifyEmailScreen(context);
                           } else {
                             SmartDialog.show(
                               widget: EvieSingleButtonDialogCupertino(

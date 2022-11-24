@@ -20,11 +20,11 @@ class Congratulation extends StatefulWidget {
 
 class _CongratulationState extends State<Congratulation> {
 
-  late CurrentUserProvider _currentUserProvider;
+  late AuthProvider _authProvider;
 
   @override
   Widget build(BuildContext context) {
-    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    _authProvider = Provider.of<AuthProvider>(context);
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -96,7 +96,7 @@ class _CongratulationState extends State<Congratulation> {
                       ),
                     ),
                     onPressed: (){
-                      _currentUserProvider.setIsFirstLogin(false);
+                      _authProvider.setIsFirstLogin(false);
                       changeToUserHomePageScreen(context);
                     },
                   ),

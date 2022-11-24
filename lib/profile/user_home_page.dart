@@ -53,13 +53,6 @@ class _UserHomePageState extends State<UserHomePage> {
     _authProvider = Provider.of<AuthProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
-    if(_authProvider.isEmailVerified == false){
-      return VerifyEmail(_authProvider.getEmail!);
-    }
-
-    if(_currentUserProvider.isFirstLogin == true){
-      return const LetsGo();
-    }
 
     return Scaffold(
         appBar: AppBar(

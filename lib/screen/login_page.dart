@@ -196,12 +196,8 @@ class _LoginScreenState extends State<Login> {
                         ),
                       );
 
-
-                      print("isfirstlogin");
-                      print(_currentUserProvider.isFirstLogin);
-
                       ///Quit loading and go to user home page
-                      if(_currentUserProvider.isFirstLogin == true){
+                      if(_authProvider.isFirstLogin == true){
                         changeToLetsGoScreen(context);
                       }else{
                         changeToUserHomePageScreen(context);
@@ -214,7 +210,7 @@ class _LoginScreenState extends State<Login> {
                           duration: Duration(seconds: 2),
                         ),
                       );
-                      changeToVerifyEmailScreen(context, _emailController.text.trim());
+                      changeToVerifyEmailScreen(context);
                     } else {
                       SmartDialog.show(
                         widget: EvieSingleButtonDialogCupertino(

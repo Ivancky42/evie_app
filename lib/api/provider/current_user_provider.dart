@@ -19,7 +19,6 @@ class CurrentUserProvider extends ChangeNotifier {
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
 
   String? randomQuote;
-  bool? isFirstLogin;
 
   UserModel? currentUserModel;
 
@@ -32,10 +31,6 @@ class CurrentUserProvider extends ChangeNotifier {
     if (uid != null) {
       getUser(uid);
       todayRandomQuote();
-      getIsFirstLogin();
-
-      print("isfirstlogin");
-      print(isFirstLogin);
 
       notifyListeners();
     }
@@ -91,38 +86,12 @@ class CurrentUserProvider extends ChangeNotifier {
 
   todayRandomQuote() {
     Random random = Random();
-    int randomNumber = random.nextInt(TodaysQuote.quotes.length) +
-        1; // from 1-10
+    int randomNumber = random.nextInt(TodaysQuote.quotes.length); // from 1-10
     var randomQuote = TodaysQuote.quotes[randomNumber];
     this.randomQuote = randomQuote;
     notifyListeners();
   }
 
-  Future<void> setIsFirstLogin(bool result) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    prefs.setBool('isFirstLogin', result);
-    isFirstLogin == result;
-    getIsFirstLogin();
-
-    notifyListeners();
-  }
-
-  Future<void> getIsFirstLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('isFirstLogin')) {
-      if (prefs.getBool('isFirstLogin') == true) {
-        isFirstLogin = true;
-        notifyListeners();
-      } else {
-        isFirstLogin = false;
-        notifyListeners();
-      }
-    } else {
-      isFirstLogin = true;
-      notifyListeners();
-    }
-  }
 
 
 }

@@ -20,9 +20,8 @@ import '../widgets/widgets.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 class VerifyEmail extends StatefulWidget {
-  final String email;
 
-  const VerifyEmail(this.email, {Key? key}) : super(key: key);
+  const VerifyEmail({Key? key}) : super(key: key);
 
   @override
   _VerifyEmailState createState() => _VerifyEmailState();
@@ -195,7 +194,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                     height: 1.h,
                   ),
                   Text(
-                    "To keep your account secure, we've sent an email to ${widget.email}. Please follow the instruction to verify your account.",
+                    "To keep your account secure, we've sent an email to ${_authProvider.getEmail}. Please follow the instruction to verify your account.",
                     style: TextStyle(fontSize: 12.sp, height: 0.17.h),
                   ),
                 ]),
