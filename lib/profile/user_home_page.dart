@@ -1,6 +1,7 @@
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/profile/user_profile.dart';
+import 'package:evie_test/screen/test_ble.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/screen/user_home_general.dart';
 import 'package:evie_test/screen/user_home_bluetooth.dart';
@@ -42,7 +43,7 @@ class _UserHomePageState extends State<UserHomePage> {
     UserHomeBluetooth(),
     UserHomeHistory(),
     UserProfile(),
-    UserProfile(),
+    TestBle(),
   ];
 
 
@@ -52,13 +53,6 @@ class _UserHomePageState extends State<UserHomePage> {
     _authProvider = Provider.of<AuthProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
-    if(_authProvider.isEmailVerified == false){
-      return VerifyEmail(_authProvider.getEmail!);
-    }
-
-    if(_currentUserProvider.isFirstLogin == true){
-      return const LetsGo();
-    }
 
     return Scaffold(
         appBar: AppBar(

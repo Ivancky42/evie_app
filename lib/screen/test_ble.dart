@@ -224,14 +224,21 @@ class _TestBleState extends State<TestBle> {
                   padding: EdgeInsets.all(20),
                   child: EvieButton(
                     onPressed: () {
-                      if (connectionState!.name == "connected") {
-                        bluetoothProvider.disconnectDevice(connectionStateUpdate!.deviceId);
-                      }
-                      else if (connectionState!.name == "connecting") {
-
+                      if (connectionState == null) {
+                        bluetoothProvider.connectDevice("connectionStateUpdate!.deviceId", "RIiOU5wK");
                       }
                       else {
-                        bluetoothProvider.connectDevice(connectionStateUpdate!.deviceId, "RIiOU5wK");
+                        if (connectionState!.name == "connected") {
+                          bluetoothProvider.disconnectDevice(
+                              connectionStateUpdate!.deviceId);
+                        }
+                        else if (connectionState!.name == "connecting") {
+
+                        }
+                        else {
+                          bluetoothProvider.connectDevice(connectionStateUpdate!
+                              .deviceId, "RIiOU5wK");
+                        }
                       }
                     },
                     height: 12.2,

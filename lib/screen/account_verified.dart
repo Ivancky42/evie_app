@@ -25,10 +25,10 @@ class AccountVerified extends StatefulWidget {
 
 class _AccountVerifiedState extends State<AccountVerified> {
 
-  late CurrentUserProvider _currentUserProvider;
+  late AuthProvider _authProvider;
   @override
   Widget build(BuildContext context) {
-    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    _authProvider = Provider.of<AuthProvider>(context);
     return WillPopScope(
       onWillPop: () async {
         bool? exitApp = await SmartDialog.show(
@@ -97,7 +97,7 @@ class _AccountVerifiedState extends State<AccountVerified> {
                   ),
                 ),
                 onPressed: () async {
-                  _currentUserProvider.setIsFirstLogin(true);
+                  _authProvider.setIsFirstLogin(true);
                   changeToLetsGoScreen(context);
                 },
               ),

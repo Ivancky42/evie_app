@@ -10,6 +10,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twitter_login/twitter_login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../widgets/evie_single_button_dialog.dart';
@@ -28,6 +29,7 @@ class AuthProvider extends ChangeNotifier {
   String? _uid;
   String? _email;
   bool isLogin = false;
+  bool? isFirstLogin;
 
   String? get getUid => _uid;
 
@@ -46,7 +48,8 @@ class AuthProvider extends ChangeNotifier {
         _uid = user.uid;
         _email = user.email!;
         isLogin = true;
-        print("verify" + user.emailVerified.toString());
+        isEmailVerified = user.emailVerified;
+        getIsFirstLogin();
         notifyListeners();
       }
     });
@@ -135,6 +138,32 @@ class AuthProvider extends ChangeNotifier {
       }
     }else {
       return null;
+    }
+  }
+
+  Future<void> setIsFirstLogin(bool result) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setBool('isFirstLogin', result);
+    isFirstLogin == result;
+    getIsFirstLogin();
+
+    notifyListeners();
+  }
+
+  Future<void> getIsFirstLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('isFirstLogin')) {
+      if (prefs.getBool('isFirstLogin') == true) {
+        isFirstLogin = true;
+        notifyListeners();
+      } else {
+        isFirstLogin = false;
+        notifyListeners();
+      }
+    } else {
+      isFirstLogin = true;
+      notifyListeners();
     }
   }
 

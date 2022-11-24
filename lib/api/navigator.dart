@@ -48,9 +48,9 @@ void changeToAccountVerifiedScreen(BuildContext context) {
   Navigator.of(context).pushNamedAndRemoveUntil("/accountVerified", (route) => false);
 }
 
-void changeToVerifyEmailScreen(BuildContext context, email) {
+void changeToVerifyEmailScreen(BuildContext context) {
   Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => VerifyEmail(email))
+      builder: (context) => VerifyEmail())
   );
 }
 

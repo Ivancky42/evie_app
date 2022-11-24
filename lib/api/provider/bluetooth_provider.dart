@@ -215,7 +215,7 @@ class BluetoothProvider extends ChangeNotifier {
 
   connectDevice(String deviceId, String bleKey) async {
 
-    selectedDeviceId = deviceId;
+    selectedDeviceId = "8C:59:DC:FA:44:8A";
 
     connectSubscription = flutterReactiveBle.connectToDevice(id: selectedDeviceId!, connectionTimeout: const Duration(seconds: 10),).listen((event) {
       connectionStateUpdate = event;

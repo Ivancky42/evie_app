@@ -171,12 +171,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthProvider _authProvider = Provider.of<AuthProvider>(context);
-    CurrentUserProvider _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
-    const appcastURL =
-        'https://raw.githubusercontent.com/Beno-Technologies/Evie-Flutter-App/'
-        'main/appcast.xml?token=GHSAT0AAAAAABW2QMGM37BL3U7U7TCQM4NGY2Y6IIQ';
-    final cfg = AppcastConfiguration(url: appcastURL, supportedOS: ['ios']);
+    decideMainPage() {
+      if (_authProvider.isLogin == true) {
+        if (_authProvider.isEmailVerified == true) {
+          if (_authProvider.isFirstLogin == false) {
+            return '/userHomePage';
+          } else {
+            return '/letsGo';
+          }
+        } else {
+          return '/verifyEmail';
+        }
+      } else {
+        return '/welcome';
+      }
+    }
 
     return Sizer(builder: (context, orientation, deviceType) {
 
@@ -191,10 +201,9 @@ class MyApp extends StatelessWidget {
         //Change the app to dark theme when user's phone is set to dark mode
         darkTheme: AppTheme.darkTheme,
 
-        ///Add logic for isVerified
-        ///Add logic for isFirstLogin
         initialRoute:
-        _authProvider.isLogin == true ? '/userHomePage' : '/welcome',
+        decideMainPage(),
+       // _authProvider.isLogin == true ? '/userHomePage' : '/welcome',
 
         ///Routes setting for page navigation
         routes: {
@@ -202,6 +211,7 @@ class MyApp extends StatelessWidget {
           "/inputName": (context) => const InputName(),
           "/signInMethod": (context) => const SignInMethod(),
           "/checkMail": (context) => const CheckYourEmail(),
+          "/verifyEmail": (context) => const VerifyEmail(),
           "/accountVerified": (context) => const AccountVerified(),
           "/letsGo": (context) => const LetsGo(),
           "/signIn": (context) => const SignIn(),
@@ -231,6 +241,8 @@ class MyApp extends StatelessWidget {
       );
     });
   }
+
+
 }
 
 /// CREATE A [AndroidNotificationChannel] FOR HEADS UP NOTIFICATIONS
