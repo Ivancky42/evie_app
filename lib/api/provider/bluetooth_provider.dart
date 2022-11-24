@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:evie_test/bluetooth/command.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_background/flutter_background.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:hex/hex.dart';
@@ -111,7 +110,6 @@ class BluetoothProvider extends ChangeNotifier {
   late Stream<IotInfoModel> iotInfoModelStream;
 
   Future<void> init(currentUserModel) async {
-    FlutterBackground.enableBackgroundExecution();
     checkBLEStatus();
     if (currentUserModel != null) {
       this.currentUserModel = currentUserModel;
