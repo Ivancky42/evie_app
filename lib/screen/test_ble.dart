@@ -221,11 +221,11 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: EvieButton(
                     onPressed: () {
                       if (connectionState == null) {
-                        bluetoothProvider.connectDevice("connectionStateUpdate!.deviceId", "RIiOU5wK");
+                        bluetoothProvider.connectDevice("8C:59:DC:FA:44:87", "REw40n21");
                       }
                       else {
                         if (connectionState!.name == "connected") {
@@ -236,8 +236,7 @@ class _TestBleState extends State<TestBle> {
 
                         }
                         else {
-                          bluetoothProvider.connectDevice(connectionStateUpdate!
-                              .deviceId, "RIiOU5wK");
+                          bluetoothProvider.connectDevice(connectionStateUpdate!.deviceId, "REw40n21");
                         }
                       }
                     },
@@ -256,7 +255,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                   child: EvieButton(
                     onPressed: () async {
                       SmartDialog.showLoading(msg: "Unlocking cable lock....");
@@ -290,7 +289,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                   child: EvieButton(
                     onPressed: () {
                       SmartDialog.showLoading(msg: "Get cable lock status...");
@@ -322,6 +321,82 @@ class _TestBleState extends State<TestBle> {
                       ),
                     ),
                   ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                  child: EvieButton(
+                    onPressed: () async {
+                      ///Send command to get total packet of IOT information
+                      bluetoothProvider.requestTotalPacketOfIotInfo();
+                    },
+                    height: 12.2,
+                    width: double.infinity,
+                    child: const Text(
+                      "Get IOT Info",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                  child: EvieButton(
+                    onPressed: () async {
+                      FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+                      if (result != null) {
+                        File file = File(result.files.single.path!);
+                        bluetoothProvider.startUpgradeFirmware(file);
+                      } else {
+                        // User canceled the picker
+                      }
+                    },
+                    height: 12.2,
+                    width: double.infinity,
+                    child: const Text(
+                      "Upgrade Firmware",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+
+                Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+                    child: Column(
+                      children: [
+                        Text(
+                          bluetoothProvider.firmwareUpgradeState.name.toUpperCase(),
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        LinearPercentIndicator(
+                          width: 350,
+                          animation: false,
+                          lineHeight: 20.0,
+                          animationDuration: 0,
+                          percent: bluetoothProvider.fwUpgradeProgress,
+                          center: Text(
+                            (bluetoothProvider.fwUpgradeProgress * 100).toStringAsFixed(0) + "%",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          linearStrokeCap: LinearStrokeCap.roundAll,
+                          progressColor: EvieColors.PrimaryColor,
+                          backgroundColor: EvieColors.greyFill,
+                        ),
+                      ],
+                    )
                 ),
 
                 Padding(
@@ -625,143 +700,6 @@ class _TestBleState extends State<TestBle> {
                     width: double.infinity,
                     child: const Text(
                       "Factory Reset",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: EvieButton(
-                    onPressed: () async {
-                      FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-                      if (result != null) {
-                        File file = File(result.files.single.path!);
-                        bluetoothProvider.startUpgradeFirmware(file);
-                      } else {
-                        // User canceled the picker
-                      }
-                    },
-                    height: 12.2,
-                    width: double.infinity,
-                    child: const Text(
-                      "Upgrade Firmware",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-
-                Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-                  child: Column(
-                    children: [
-                      Text(
-                        bluetoothProvider.firmwareUpgradeState.name.toUpperCase(),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      LinearPercentIndicator(
-                        width: 350,
-                        animation: false,
-                        lineHeight: 20.0,
-                        animationDuration: 0,
-                        percent: bluetoothProvider.fwUpgradeProgress,
-                        center: Text(
-                          (bluetoothProvider.fwUpgradeProgress * 100).toStringAsFixed(0) + "%",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        linearStrokeCap: LinearStrokeCap.roundAll,
-                        progressColor: EvieColors.PrimaryColor,
-                        backgroundColor: EvieColors.greyFill,
-                      ),
-                    ],
-                  )
-                ),
-
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: EvieButton(
-                    onPressed: () async {
-                      StreamSubscription? subscription;
-                      try {
-                        subscription = bluetoothProvider.iotInfoModelStream.listen((iotInfoModel) {
-                          print(iotInfoModel.deviceIMEI.toString());
-                          subscription?.cancel();
-                          ///After get IOT Info Model, add bike information to firestore.
-                          /// Then change ble key and update blekey to firestore.
-                        });
-                      } catch (e, s) {
-                        print(s);
-                      }
-                    },
-                    height: 12.2,
-                    width: double.infinity,
-                    child: const Text(
-                      "Listen IoT info",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: EvieButton(
-                    onPressed: () async {
-                      StreamSubscription? subscription;
-                      try {
-                        subscription = bluetoothProvider.pairDevice("8C:59:DC:FA:44:8A").listen((pairDeviceResult) {
-                          print(pairDeviceResult.pairingState.toString());
-                          switch (pairDeviceResult.pairingState) {
-                            case PairingState.unknown:
-                              // TODO: Handle this case.
-                              break;
-                            case PairingState.startPairing:
-                              // TODO: Handle this case.
-                              break;
-                            case PairingState.pairing:
-                              // TODO: Handle this case.
-                              break;
-                            case PairingState.gettingIotInfo:
-                              // TODO: Handle this case.
-                              break;
-                            case PairingState.errorPrompt:
-                              // TODO: Handle this case.
-                              subscription?.cancel();
-                              break;
-                            case PairingState.pairDeviceSuccess:
-                              // TODO: Handle this case.
-                              subscription?.cancel();
-                              break;
-                            case PairingState.pairDeviceFailed:
-                              // TODO: Handle this case.
-                              subscription?.cancel();
-                              break;
-                          }
-                        });
-                      } catch (e, s) {
-                        print(s);
-                        subscription?.cancel();
-                      }
-                    },
-                    height: 12.2,
-                    width: double.infinity,
-                    child: const Text(
-                      "Pair Device",
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.black,

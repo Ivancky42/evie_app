@@ -105,8 +105,6 @@ class BluetoothProvider extends ChangeNotifier {
       StreamController.broadcast();
   StreamController<IotInfoModel> iotInfoModelListener =
       StreamController.broadcast();
-  StreamController<PairDeviceResult> pairDeviceListener =
-      StreamController.broadcast();
   late Stream<IotInfoModel> iotInfoModelStream;
 
   Future<void> init(currentUserModel) async {
@@ -175,51 +173,9 @@ class BluetoothProvider extends ChangeNotifier {
     scanSubscription?.cancel();
   }
 
-  // TODO: Exactly same function as @connectDevice, but bleKey = default BLE KEY ['REw40n21'].
-  Stream<PairDeviceResult> pairDevice(String deviceId) {
-
-    selectedDeviceId = deviceId;
-    String bleKey = 'REw40n21';
-
-    connectSubscription = flutterReactiveBle.connectToDevice(id: selectedDeviceId!, connectionTimeout: const Duration(seconds: 10),).listen((event) {
-      connectionStateUpdate = event;
-      printLog("Connect State", connectionStateUpdate!.deviceId);
-      printLog("Connect State", connectionStateUpdate!.connectionState.name);
-      printLog("Connect State", connectionStateUpdate!.failure.toString());
-
-      switch (connectionStateUpdate?.connectionState) {
-        case DeviceConnectionState.connecting:
-        // TODO: Handle this case.
-          pairDeviceListener.add(PairDeviceResult(IotInfoModel(""), PairingState.startPairing, event.connectionState));
-          break;
-        case DeviceConnectionState.connected:
-          discoverServices(bleKey);
-          pairDeviceListener.add(PairDeviceResult(IotInfoModel(""), PairingState.pairing, event.connectionState));
-          break;
-        case DeviceConnectionState.disconnecting:
-          stopServices();
-          break;
-        case DeviceConnectionState.disconnected:
-        // TODO: Handle this case.
-          clearBluetoothStatus();
-          pairDeviceListener.add(PairDeviceResult(IotInfoModel(""), PairingState.pairDeviceFailed, event.connectionState));
-          connectSubscription?.cancel();
-          break;
-        default:
-          break;
-      }
-      notifyListeners();
-    }, onError: (error) {
-      printLog("Connect Error", error.toString());
-      connectSubscription?.cancel();
-    });
-
-    return pairDeviceListener.stream;
-  }
-
   connectDevice(String deviceId, String bleKey) async {
-
-    selectedDeviceId = "8C:59:DC:FA:44:8A";
+    
+    selectedDeviceId = deviceId;
 
     connectSubscription = flutterReactiveBle.connectToDevice(id: selectedDeviceId!, connectionTimeout: const Duration(seconds: 10),).listen((event) {
       connectionStateUpdate = event;
@@ -298,6 +254,7 @@ class BluetoothProvider extends ChangeNotifier {
     //sendCommand(bluetoothCommand.getComKey('EVIE+'));
     //sendCommand(bluetoothCommand.cableUnlock(0));
     //sendCommand(bluetoothCommand.getComKey('REw40n21'));
+    //sendCommand(bluetoothCommand.getComKey('RIiOU5wK'));
 
     /// Get communication key from device.
   }
@@ -676,15 +633,13 @@ class BluetoothProvider extends ChangeNotifier {
         case BluetoothCommand.requestComKeyCmd:
           requestComKeyResult = RequestComKeyResult(decodedData);
           if (requestComKeyResult?.communicationKey != null) {
-            ///Send command to get total packet of IOT information
-            requestTotalPacketOfIotInfo();
-            pairDeviceListener.add(PairDeviceResult(IotInfoModel(""), PairingState.gettingIotInfo, connectionStateUpdate?.connectionState));
+            sendCommand(bluetoothCommand.getBikeInfo(requestComKeyResult!.communicationKey));
+            sendCommand(bluetoothCommand.getCableLockStatus(requestComKeyResult!.communicationKey));
           }
           notifyListeners();
           break;
         case BluetoothCommand.errorPromptInstruction:
           errorPromptResult = ErrorPromptResult(decodedData);
-          pairDeviceListener.add(PairDeviceResult(IotInfoModel(""), PairingState.errorPrompt, connectionStateUpdate?.connectionState));
           notifyListeners();
           break;
         case BluetoothCommand.unlockBikeCmd:
@@ -786,7 +741,6 @@ class BluetoothProvider extends ChangeNotifier {
       //printLog("FINAL IOT Info Data", iotInfoString); ///Print final IOTInfo String.
       iotInfoModel = IotInfoModel(iotInfoString);
       iotInfoModelListener.add(iotInfoModel!);
-      pairDeviceListener.add(PairDeviceResult(iotInfoModel, PairingState.pairDeviceSuccess, connectionStateUpdate?.connectionState));
       exitNotifyIotInfoState();
       sendCommand(bluetoothCommand.getBikeInfo(requestComKeyResult!.communicationKey));
       sendCommand(bluetoothCommand.getCableLockStatus(requestComKeyResult!.communicationKey));
