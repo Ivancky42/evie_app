@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:evie_test/screen/user_home_general.dart';
 import 'package:evie_test/screen/user_home_bluetooth.dart';
 import 'package:evie_test/screen/user_home_setting.dart';
-import 'package:evie_test/screen/user_home_history.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../api/navigator.dart';
 import '../api/provider/notification_provider.dart';
+import '../screen/bike_security/bike_location.dart';
 import '../screen/onboarding/bike_scanning.dart';
 import '../screen/onboarding/lets_go.dart';
 import '../screen/verify_email.dart';
@@ -40,8 +40,8 @@ class _UserHomePageState extends State<UserHomePage> {
   ///Body Screen navigation by bottom navigation bar
   final screen = [
     UserHomeGeneral(),
+    BikeLocation(),
     UserHomeBluetooth(),
-    UserHomeHistory(),
     UserProfile(),
     TestBle(),
   ];
@@ -192,31 +192,51 @@ class _UserHomePageState extends State<UserHomePage> {
               ),
               BottomNavigationBarItem(
                 icon: Container(
-                  child: Icon(Icons.bluetooth),
-         //         padding: EdgeInsets.fromLTRB(0, 5, 30, 0),
+                  child: const Image(
+                    image: AssetImage("assets/buttons/navigation.png"),
+                  ),
+                  //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                  height: 6.3.h,
                 ),
-                tooltip: 'Bluetooth Pairing',
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Container(
-                  child: Icon(Icons.history),
-          //        padding: EdgeInsets.fromLTRB(30, 5, 0, 0),
+                activeIcon: Container(
+                  child: const Image(
+                    image: AssetImage("assets/buttons/navigation_selected.png"),
+                  ),
+                  //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                  height: 6.3.h,
                 ),
-                tooltip: 'Settings',
+                tooltip: 'User Profile',
                 label: '',
               ),
               BottomNavigationBarItem(
                 icon: Container(
                   child: const Image(
-                    image: AssetImage("assets/buttons/user.png"),
+                    image: AssetImage("assets/buttons/statistic.png"),
+                  ),
+                  //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                  height: 6.3.h,
+                ),
+                activeIcon: Container(
+                  child: const Image(
+                    image: AssetImage("assets/buttons/statistic.png"),
+                  ),
+                  //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                  height: 6.3.h,
+                ),
+                tooltip: 'User Profile',
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Container(
+                  child: const Image(
+                    image: AssetImage("assets/buttons/bikeIcon.png"),
                   ),
           //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,
                 ),
                 activeIcon: Container(
                   child: const Image(
-                    image: AssetImage("assets/buttons/user_selected.png"),
+                    image: AssetImage("assets/buttons/bikeIcon.png"),
                   ),
            //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,
