@@ -117,35 +117,32 @@ class BluetoothCommand {
   }
 
   List<int> changeBleKey(int comKey) {
-    int dataSize = 8;
-    int totalDataSize = 6 + dataSize;
-    List<int> data = List<int>.filled(totalDataSize, 0, growable: true);
-    int rand = random.nextInt(255);
-    //String randHexBleKey = randomHexString(8);
-    //String randBleKey = "yOTmK50z";
-    //String randBleKey = "REw40n21";
-    //List<int> bytesBleKey = HexCodec().decode(randHexBleKey);
-
-    String randBleKey = getRandomString(8);
-    List<int> bytesBleKey = utf8.encode(randBleKey);
-
-    data[0] = header[0]; /// header
-    data[1] = header[1]; /// header
-    data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
-    data[4] = comKey; ///  Communication key
-    data[5] = changeBleKeyCmd; /// cmd : 0x32
-
-    data[6] = bytesBleKey[0];
-    data[7] = bytesBleKey[1];
-    data[8] = bytesBleKey[2];
-    data[9] = bytesBleKey[3];
-    data[10] = bytesBleKey[4];
-    data[11] = bytesBleKey[5];
-    data[12] = bytesBleKey[6];
-    data[13] = bytesBleKey[7];
-
-    return encodeData(dataSize, rand, data);
+    /// Current EVIE app not required to have this function. Disable it to prevent ble key changed.
+    // int dataSize = 8;
+    // int totalDataSize = 6 + dataSize;
+    // List<int> data = List<int>.filled(totalDataSize, 0, growable: true);
+    // int rand = random.nextInt(255);
+    // String randBleKey = getRandomString(8);
+    // List<int> bytesBleKey = utf8.encode(randBleKey);
+    //
+    // data[0] = header[0]; /// header
+    // data[1] = header[1]; /// header
+    // data[2] = dataSize; /// data length
+    // data[3] = (rand + 0x32) & 0xFF; /// random number
+    // data[4] = comKey; ///  Communication key
+    // data[5] = changeBleKeyCmd; /// cmd : 0x32
+    //
+    // data[6] = bytesBleKey[0];
+    // data[7] = bytesBleKey[1];
+    // data[8] = bytesBleKey[2];
+    // data[9] = bytesBleKey[3];
+    // data[10] = bytesBleKey[4];
+    // data[11] = bytesBleKey[5];
+    // data[12] = bytesBleKey[6];
+    // data[13] = bytesBleKey[7];
+    //
+    // return encodeData(dataSize, rand, data);
+    return [];
   }
 
   List<int> changeBleName(int comKey) {
