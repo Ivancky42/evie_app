@@ -1,6 +1,7 @@
+import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/utils.dart';
-import 'package:sizer/sizer.dart';
+
 
 import '../api/colours.dart';
 
@@ -83,14 +84,15 @@ class EvieButton extends StatelessWidget {
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0)),
+                      borderRadius: BorderRadius.circular(10.w)),
                   elevation: 0.0,
                   backgroundColor: backgroundColor ?? EvieColors.PrimaryColor,
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                  textStyle: const TextStyle(
-                      fontSize: 30,
-            //          fontWeight: FontWeight.bold
-                  )),
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 14.h),
+            //       textStyle: const TextStyle(
+            //           fontSize: 30,
+            // //          fontWeight: FontWeight.bold
+            //       )
+              ),
             ),
           ),
         )

@@ -108,8 +108,8 @@ class BluetoothProvider extends ChangeNotifier {
   late Stream<IotInfoModel> iotInfoModelStream;
 
   Future<void> init(currentUserModel) async {
-    checkBLEStatus();
     if (currentUserModel != null) {
+      checkBLEStatus();
       this.currentUserModel = currentUserModel;
       notifyListeners();
     }
@@ -174,10 +174,10 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   connectDevice(String deviceId, String bleKey) async {
-    
+
     selectedDeviceId = deviceId;
 
-    connectSubscription = flutterReactiveBle.connectToDevice(id: selectedDeviceId!, connectionTimeout: const Duration(seconds: 10),).listen((event) {
+    connectSubscription = flutterReactiveBle.connectToDevice(id: selectedDeviceId!, connectionTimeout: const Duration(seconds: 6),).listen((event) {
       connectionStateUpdate = event;
       printLog("Connect State", connectionStateUpdate!.deviceId);
       printLog("Connect State", connectionStateUpdate!.connectionState.name);
