@@ -24,6 +24,16 @@ class TodaysQuote{
 
     "Wisdom is the expression of love reflected from you to all things in life.",
 
+    "Many of life’s failures are people who did not realize how close they were to success when they gave up.",
+
+    "Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work.",
+
+    "We should remember that just as a positive outlook on life can promote good health, so can everyday acts of kindness.",
+
+    "If you can do what you do best and be happy, you're further along in life than most people.",
+
+    "We should remember that just as a positive outlook on life can promote good health, so can everyday acts of kindness.",
+
   ];
 
 }
