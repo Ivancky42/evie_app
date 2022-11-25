@@ -34,7 +34,6 @@ class PaidPlan extends StatefulWidget {
 }
 
 class _PaidPlanState extends State<PaidPlan> {
-
   late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
   late AuthProvider _authProvider;
@@ -53,7 +52,6 @@ class _PaidPlanState extends State<PaidPlan> {
 
   @override
   Widget build(BuildContext context) {
-
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
@@ -90,17 +88,19 @@ class _PaidPlanState extends State<PaidPlan> {
     return WillPopScope(
       onWillPop: () async {
         bool? exitApp = await SmartDialog.show(
-            widget:
-            EvieDoubleButtonDialogCupertino(
+            widget: EvieDoubleButtonDialogCupertino(
                 title: "Close this app?",
                 content: "Are you sure you want to close this App?",
                 leftContent: "No",
                 rightContent: "Yes",
-                onPressedLeft: (){SmartDialog.dismiss();},
-                onPressedRight: (){SystemNavigator.pop();})) as bool?;
+                onPressedLeft: () {
+                  SmartDialog.dismiss();
+                },
+                onPressedRight: () {
+                  SystemNavigator.pop();
+                })) as bool?;
         return exitApp ?? false;
       },
-
       child: Scaffold(
         //Body should change when bottom navigation bar state change
 
@@ -165,9 +165,9 @@ class _PaidPlanState extends State<PaidPlan> {
                       enabled: true,
                       focusNode: _textFocus,
                       controller: _bikeNameController
-                        ..text =
-                            _bikeProvider.currentBikeModel?.deviceName?.trim() ??
-                                'Empty',
+                        ..text = _bikeProvider.currentBikeModel?.deviceName
+                            ?.trim() ??
+                            'Empty',
                       style: const TextStyle(
                           fontFamily: 'Avenir-SemiBold', fontSize: 16.0),
                       decoration: const InputDecoration.collapsed(
@@ -178,7 +178,6 @@ class _PaidPlanState extends State<PaidPlan> {
                     SizedBox(
                       height: 1.h,
                     ),
-
 
                     /*
                     Row(
@@ -206,15 +205,16 @@ class _PaidPlanState extends State<PaidPlan> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Image(
-                          image:
-                          AssetImage("assets/icons/unlink.png"),
+                          image: AssetImage("assets/icons/unlink.png"),
                           //height: 1.h,
                         ),
                         SizedBox(
                           width: 1.w,
                         ),
-                        const Text("Bike Is Not Connected", style: TextStyle(fontStyle: FontStyle.italic),),
-
+                        const Text(
+                          "Bike Is Not Connected",
+                          style: TextStyle(fontStyle: FontStyle.italic),
+                        ),
                       ],
                     ),
 
@@ -223,73 +223,83 @@ class _PaidPlanState extends State<PaidPlan> {
                     ),
 
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        /*
-                      Visibility(
-                        visible: isScroll,
-                        child: IconButton(
-                          icon: const Image(
-                            image:
-                                AssetImage("assets/buttons/chg_to_left_bttn.png"),
-                          ),
-                          onPressed: () {
-                            _bikeProvider.controlBikeList("back");
-                          },
-                        ),
-                      ),
-
-                       */
-
-                        SizedBox(
-                          height: 20.h,
-                          width: 90.w,
-                          child: CarouselSlider(
-                              carouselController: _pageController,
-                              items: imgList
-                                  .map((item) => Container(
-                                child: Center(
-                                  child: Image.asset(
-                                    item,
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: 200.h,
-                                    opacity: const AlwaysStoppedAnimation(.5),
+                        Stack(
+                          children: [
+                            Positioned(
+                              left: 2.w,
+                              top: 5.h,
+                              child: Visibility(
+                                visible: _bikeProvider.userBikeList.length > 1
+                                    ? true
+                                    : false,
+                                child: IconButton(
+                                  icon: const Image(
+                                    image:
+                                    AssetImage("assets/buttons/back.png"),
                                   ),
-                                ),
-                              ))
-                                  .toList(),
-                              options: CarouselOptions(
-                                onPageChanged: (index, reason) {
-                                  var _currentCarouIndex = 0;
-
-                                  if (index >= _currentCarouIndex) {
-                                    _bikeProvider.controlBikeList("next");
-                                  } else {
+                                  onPressed: () {
                                     _bikeProvider.controlBikeList("back");
-                                  }
-                                },
-                                enableInfiniteScroll: true,
-                                autoPlay: false,
-                                enlargeCenterPage: true,
-                              )),
-                        ),
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                              width: 90.w,
+                              child: CarouselSlider(
+                                  carouselController: _pageController,
+                                  items: imgList
+                                      .map((item) => Container(
+                                    child: Center(
+                                      child: Image.asset(
+                                        item,
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: 200.h,
+                                        opacity:
+                                        const AlwaysStoppedAnimation(
+                                            .5),
+                                      ),
+                                    ),
+                                  ))
+                                      .toList(),
+                                  options: CarouselOptions(
+                                    onPageChanged: (index, reason) {
+                                      var _currentCarouIndex = 0;
 
-                        /*
-                      Visibility(
-                        visible: isScroll,
-                        child: IconButton(
-                          icon: const Image(
-                            image: AssetImage(
-                                "assets/buttons/chg_to_right_bttn.png"),
-                          ),
-                          onPressed: () {
-                            _bikeProvider.controlBikeList("next");
-                          },
+                                      if (index >= _currentCarouIndex) {
+                                        _bikeProvider.controlBikeList("next");
+                                      } else {
+                                        _bikeProvider.controlBikeList("back");
+                                      }
+                                    },
+                                    enableInfiniteScroll: true,
+                                    autoPlay: false,
+                                    enlargeCenterPage: true,
+                                  )),
+                            ),
+                            Positioned(
+                              right: 2.w,
+                              top: 5.h,
+                              child: Visibility(
+                                visible: _bikeProvider.userBikeList.length > 1
+                                    ? true
+                                    : false,
+                                child: IconButton(
+                                  icon: const Image(
+                                    image:
+                                    AssetImage("assets/buttons/next.png"),
+                                  ),
+                                  onPressed: () {
+                                    _bikeProvider.controlBikeList("next");
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-
-                       */
                       ],
                     ),
 
@@ -302,8 +312,9 @@ class _PaidPlanState extends State<PaidPlan> {
                       children: [
                         Container(
                           width: 10.w,
-                          child:const Image(
-                            image: AssetImage("assets/buttons/bike_security_not_available.png"),
+                          child: const Image(
+                            image: AssetImage(
+                                "assets/buttons/bike_security_not_available.png"),
                             //height: 5.h,
                           ),
                         ),
@@ -368,21 +379,22 @@ class _PaidPlanState extends State<PaidPlan> {
                                     width: 8.w,
                                   ),
                                   GestureDetector(
-                                    onTap: (){
-                                      if(carbonFootprint == "D"){
+                                    onTap: () {
+                                      if (carbonFootprint == "D") {
                                         setState(() {
                                           carbonFootprint = "M";
                                         });
-                                      }else if(carbonFootprint == "M"){
+                                      } else if (carbonFootprint == "M") {
                                         setState(() {
                                           carbonFootprint = "D";
                                         });
                                       }
                                     },
                                     child: EvieOvalGray(
-                                        height: 3.h, width: 15.w, text: carbonFootprint),
+                                        height: 3.h,
+                                        width: 15.w,
+                                        text: carbonFootprint),
                                   )
-
                                 ],
                               ),
                             ],
@@ -418,19 +430,21 @@ class _PaidPlanState extends State<PaidPlan> {
                                     width: 5.w,
                                   ),
                                   GestureDetector(
-                                    onTap: (){
-                                      if(mileage == "D"){
+                                    onTap: () {
+                                      if (mileage == "D") {
                                         setState(() {
                                           mileage = "M";
                                         });
-                                      }else if(mileage == "M"){
+                                      } else if (mileage == "M") {
                                         setState(() {
                                           mileage = "D";
                                         });
                                       }
                                     },
                                     child: EvieOvalGray(
-                                        height: 3.h, width: 15.w, text: mileage),
+                                        height: 3.h,
+                                        width: 15.w,
+                                        text: mileage),
                                   )
                                 ],
                               ),
@@ -512,7 +526,8 @@ class _PaidPlanState extends State<PaidPlan> {
                                             .trim());
                                     if (result == true) {
                                       SmartDialog.show(
-                                          widget: EvieSingleButtonDialogCupertino(
+                                          widget:
+                                          EvieSingleButtonDialogCupertino(
                                               title: "Success",
                                               content:
                                               "Successfully delete bike",
@@ -522,7 +537,8 @@ class _PaidPlanState extends State<PaidPlan> {
                                               }));
                                     } else {
                                       SmartDialog.show(
-                                          widget: EvieSingleButtonDialogCupertino(
+                                          widget:
+                                          EvieSingleButtonDialogCupertino(
                                               title: "Error",
                                               content:
                                               "Error delete bike, try again",
@@ -625,34 +641,27 @@ class _PaidPlanState extends State<PaidPlan> {
                       ),
                       onPressed: () async {
                         try {
-
-                          _authProvider.signOut(context).then((result){
-                            if(result == true){
-
+                          _authProvider.signOut(context).then((result) {
+                            if (result == true) {
                               // _authProvider.clear();
 
                               changeToWelcomeScreen(context);
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Signed out'),
-                                  duration: Duration(
-                                      seconds: 2),),
+                                  duration: Duration(seconds: 2),
+                                ),
                               );
-                            }else{
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Error, Try Again'),
-                                  duration: Duration(
-                                      seconds: 4),),
+                                  duration: Duration(seconds: 4),
+                                ),
                               );
-
                             }
-
                           });
-                        }
-                        catch (e) {
+                        } catch (e) {
                           debugPrint(e.toString());
                         }
                       },
@@ -673,6 +682,14 @@ class _PaidPlanState extends State<PaidPlan> {
               elevation: 0,
               backgroundColor: lockColour,
               onPressed: () {
+                SmartDialog.show(
+                    widget: EvieSingleButtonDialogCupertino(
+                        title: "In development",
+                        content: "In development",
+                        rightContent: "OK",
+                        onPressedRight: () {
+                          SmartDialog.dismiss();
+                        }));
                 setState(() {
                   _unlock = !_unlock;
                 });
@@ -689,6 +706,3 @@ class _PaidPlanState extends State<PaidPlan> {
     );
   }
 }
-
-
-

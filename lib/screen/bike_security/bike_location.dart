@@ -42,11 +42,8 @@ class _BikeLocationState extends State<BikeLocation> {
 
   double currentScroll = 0.28;
 
-
-
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -61,21 +58,12 @@ class _BikeLocationState extends State<BikeLocation> {
       case 'safe':
         {
           var byteData = await rootBundle.load("assets/icons/marker_safe.png");
-
-          currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
-          currentSecurityIcon =
-              "assets/buttons/bike_security_lock_and_secure.png";
-
           return byteData.buffer.asUint8List();
         }
       case 'warning':
         {
           var byteData =
               await rootBundle.load("assets/icons/marker_warning.png");
-
-          currentBikeStatusImage =
-              "assets/images/bike_HPStatus/bike_warning.png";
-          currentSecurityIcon = "assets/buttons/bike_security_warning.png";
 
           return byteData.buffer.asUint8List();
         }
@@ -84,21 +72,57 @@ class _BikeLocationState extends State<BikeLocation> {
           var byteData =
               await rootBundle.load("assets/icons/marker_danger.png");
 
-          currentBikeStatusImage =
-              "assets/images/bike_HPStatus/bike_danger.png";
-          currentSecurityIcon = "assets/buttons/bike_security_danger.png";
-
           return byteData.buffer.asUint8List();
         }
       default:
         {
           var byteData = await rootBundle.load("assets/icons/marker_safe.png");
 
-          currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
-          currentSecurityIcon =
-              "assets/buttons/bike_security_lock_and_secure.png";
-
           return byteData.buffer.asUint8List();
+        }
+    }
+  }
+
+  void loadImage(String dangerStatus) {
+    switch (dangerStatus) {
+      case 'safe':
+        {
+          setState(() {
+            currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
+            currentSecurityIcon =
+            "assets/buttons/bike_security_lock_and_secure.png";
+          });
+
+        }
+        break;
+      case 'warning':
+        {
+          setState(() {
+            currentBikeStatusImage =
+            "assets/images/bike_HPStatus/bike_warning.png";
+            currentSecurityIcon = "assets/buttons/bike_security_warning.png";
+          });
+
+        }
+        break;
+      case 'danger':
+        {
+          setState(() {
+            currentBikeStatusImage =
+            "assets/images/bike_HPStatus/bike_danger.png";
+            currentSecurityIcon = "assets/buttons/bike_security_danger.png";
+          });
+
+        }
+        break;
+      default:
+        {
+          setState(() {
+            currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
+            currentSecurityIcon =
+            "assets/buttons/bike_security_lock_and_secure.png";
+          });
+
         }
     }
   }
@@ -143,15 +167,15 @@ class _BikeLocationState extends State<BikeLocation> {
   }
 
   ///Change icon according to dangerous level
-  void addSymbol() async {
-    mapController?.addSymbol(
-      SymbolOptions(
-        iconImage: 'marker',
-        iconSize: 0.2.h,
-        geometry: LatLng(_locationProvider.locationModel!.geopoint.latitude,
-            _locationProvider.locationModel!.geopoint.longitude),
-      ),
-    );
+  void addSymbol()  {
+      mapController?.addSymbol(
+        SymbolOptions(
+          iconImage: 'marker',
+          iconSize: 0.2.h,
+          geometry: LatLng(_locationProvider.locationModel!.geopoint.latitude,
+              _locationProvider.locationModel!.geopoint.longitude),
+        ),
+      );
   }
 
   void getPlace() {
@@ -196,9 +220,9 @@ class _BikeLocationState extends State<BikeLocation> {
     }
 
     if (mapController != null) {
+      loadImage(currentDangerStatus);
       runSymbol();
     }
-
 
     return WillPopScope(
       onWillPop: () async {
@@ -324,8 +348,7 @@ class _BikeLocationState extends State<BikeLocation> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           children: <Widget>[
-                                            SizedBox(height: 2.h),
-                                            SizedBox(height: 3.h),
+                                            SizedBox(height: 5.h),
                                             Stack(
                                               children: [
                                                 Positioned(
@@ -553,6 +576,23 @@ class _BikeLocationState extends State<BikeLocation> {
                                   ],
                                 ),
                               ),
+                              Positioned(
+                                left: 2.w,
+                                child: Visibility(
+                                  visible: _bikeProvider.userBikeList.length > 1
+                                      ? true
+                                      : false,
+                                  child: IconButton(
+                                    icon: const Image(
+                                      image:
+                                          AssetImage("assets/buttons/back.png"),
+                                    ),
+                                    onPressed: () {
+                                      _bikeProvider.controlBikeList("back");
+                                    },
+                                  ),
+                                ),
+                              ),
                               Align(
                                 alignment: Alignment.topCenter,
                                 child: Transform.translate(
@@ -571,6 +611,23 @@ class _BikeLocationState extends State<BikeLocation> {
                                     ),
                                   ),
                                   offset: Offset(0, -70),
+                                ),
+                              ),
+                              Positioned(
+                                right: 2.w,
+                                child: Visibility(
+                                  visible: _bikeProvider.userBikeList.length > 1
+                                      ? true
+                                      : false,
+                                  child: IconButton(
+                                    icon: const Image(
+                                      image:
+                                          AssetImage("assets/buttons/next.png"),
+                                    ),
+                                    onPressed: () {
+                                      _bikeProvider.controlBikeList("next");
+                                    },
+                                  ),
                                 ),
                               ),
 
@@ -615,8 +672,7 @@ class _BikeLocationState extends State<BikeLocation> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           children: <Widget>[
-                                            SizedBox(height: 2.h),
-                                            SizedBox(height: 3.h),
+                                            SizedBox(height: 5.h),
                                             Image(
                                               image: AssetImage(
                                                   currentBikeStatusImage),
