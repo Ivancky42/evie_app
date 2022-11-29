@@ -44,6 +44,10 @@ class _FreePlanState extends State<FreePlan> {
 
   Color lockColour = const Color(0xff6A51CA);
 
+  ///When get data from _bluetoothProvider.cableLockState is not equal to unknown
+  ///Need either lock/unlock
+  bool? isDeviceConnected;
+
   final CarouselController _pageController = CarouselController();
 
   late List<String> imgList = [
@@ -57,6 +61,8 @@ class _FreePlanState extends State<FreePlan> {
   DeviceConnectionState? connectionState;
   ConnectionStateUpdate? connectionStateUpdate;
 
+  CableLockResult? cableLockState;
+
   @override
   Widget build(BuildContext context) {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
@@ -64,13 +70,25 @@ class _FreePlanState extends State<FreePlan> {
     _authProvider = Provider.of<AuthProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
+    connectionState = _bluetoothProvider.connectionStateUpdate?.connectionState;
+    cableLockState = _bluetoothProvider.cableLockState;
+
     final TextEditingController _bikeNameController = TextEditingController();
 
-    var currentName = _currentUserProvider.currentUserModel?.name;
     final FocusNode _textFocus = FocusNode();
 
-    bool _connect = false;
-    bool _unlock = false;
+
+    ///Handle all data if bool isDeviceConnected is true
+    if(connectionState == DeviceConnectionState.connected && cableLockState?.lockState != LockState.unknown){
+      setState(() {
+        isDeviceConnected = true;
+      });
+    }else{
+      setState(() {
+        isDeviceConnected = false;
+      });
+    }
+
 
     Image connectImage = Image(
       image: const AssetImage("assets/buttons/bluetooth_not_connected.png"),
@@ -108,38 +126,13 @@ class _FreePlanState extends State<FreePlan> {
     }
 
 
-
-
-
-
-
-
     Image lockImage = Image(
       image: const AssetImage("assets/buttons/lock_lock.png"),
       height: 2.5.h,
       fit: BoxFit.fitWidth,
     );
 
-    if (_unlock == false) {
-      setState(() {
-        lockImage = Image(
-          image: const AssetImage("assets/buttons/lock_lock.png"),
-          height: 2.5.h,
-          fit: BoxFit.fitWidth,
-        );
-        lockColour = const Color(0xff6A51CA);
-      });
 
-    } else if (_unlock == true) {
-      setState(() {
-        lockImage = Image(
-          image: AssetImage("assets/buttons/lock_unlock.png"),
-          height: 2.5.h,
-          fit: BoxFit.fitWidth,
-        );
-        lockColour = const Color(0xff404E53);
-      });
-    }
 
     return WillPopScope(
       onWillPop: () async {
@@ -359,8 +352,8 @@ class _FreePlanState extends State<FreePlan> {
                       ],
                     ),
 
-                    const SizedBox(
-                      height: 30.0,
+                    SizedBox(
+                      height: 4.h,
                     ),
 
                     Row(
@@ -513,6 +506,16 @@ class _FreePlanState extends State<FreePlan> {
                   SizedBox(
                       height: 50.h,
                     ),
+
+
+                    Text(
+                      "Connection status : " + (cableLockState?.lockState.toString() ?? "none"),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+
                     EvieButton(
                       height: 12.2.h,
                       width: double.infinity,
@@ -720,15 +723,6 @@ class _FreePlanState extends State<FreePlan> {
                       },
                     ),
 
-
-                    Text(
-                      "Connection status : " + (connectionState?.name ?? ""),
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                    ),
-
                     SizedBox(
                       height: 1.h,
                     ),
@@ -738,14 +732,18 @@ class _FreePlanState extends State<FreePlan> {
         ),
 
 
-        floatingActionButton: SizedBox(
+        /// change to isDeviceConnected
+        floatingActionButton: cableLockState?.lockState != null ?  SizedBox(
           height: 8.8.h,
           width: 8.8.h,
           child: FittedBox(
-            child: connectionState?.name == "connected"? FloatingActionButton(
+            child: FloatingActionButton(
               elevation: 0,
               backgroundColor: lockColour,
               onPressed: () {
+
+                ///Check is connected
+
                 SmartDialog.showLoading(msg: "Unlocking");
                 StreamSubscription? subscription;
                 subscription = _bluetoothProvider.cableUnlock().listen((unlockResult) {
@@ -765,24 +763,29 @@ class _FreePlanState extends State<FreePlan> {
               },
               //icon inside button
               child: lockImage,
-            ):FloatingActionButton(
+            ),
+          ),
+        ): SizedBox(
+          height: 8.8.h,
+          width: 8.8.h,
+          child: FittedBox(
+            child:
+            FloatingActionButton(
               elevation: 0,
               backgroundColor: lockColour,
               onPressed: () {
-                if (connectionState == null) {
-                  _bluetoothProvider.connectDevice();
-                  setState(() {
-                    _unlock = !_unlock;
-                  });
-                }else{
-                  setState(() {
 
-                  });
+                ///Check bluetooth status
+
+                if (connectionState == null || connectionState?.name == "disconnected") {
+                  _bluetoothProvider.connectDevice();
+                }else{
+                 print("not connect");
                 }
               },
               //icon inside button
               child: connectImage,
-            ),
+            )
           ),
         ),
 

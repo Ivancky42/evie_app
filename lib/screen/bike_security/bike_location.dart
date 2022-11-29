@@ -219,10 +219,10 @@ class _BikeLocationState extends State<BikeLocation> {
       }
     }
 
-    // if (mapController != null) {
-    //   loadImage(currentDangerStatus);
-    //   runSymbol();
-    // }
+     if (mapController != null) {
+       loadImage(currentDangerStatus);
+       runSymbol();
+     }
 
     return WillPopScope(
       onWillPop: () async {
@@ -267,6 +267,10 @@ class _BikeLocationState extends State<BikeLocation> {
                               onStyleLoadedCallback: () {
                                 runSymbol();
                               },
+                              onUserLocationUpdated: (userLocation) {
+                            //    userLocation.
+
+                              },
                               initialCameraPosition: CameraPosition(
                                 target: LatLng(
                                     _locationProvider
@@ -274,6 +278,7 @@ class _BikeLocationState extends State<BikeLocation> {
                                     _locationProvider
                                         .locationModel!.geopoint.longitude),
                                 zoom: 16,
+
                               ),
                             ),
                           );

@@ -33,11 +33,11 @@ class BluetoothProvider extends ChangeNotifier {
 
   ///Reevo characteristic
   static Uuid serviceUUID =
-      Uuid.parse(dotenv.env['BLE_SERVICE_UUID'] ?? 'UUID not found');
+  Uuid.parse(dotenv.env['BLE_SERVICE_UUID'] ?? 'UUID not found');
   static Uuid notifyingUUID =
-      Uuid.parse(dotenv.env['BLE_NOTIFY_UUID'] ?? 'UUID not found');
+  Uuid.parse(dotenv.env['BLE_NOTIFY_UUID'] ?? 'UUID not found');
   static Uuid writeUUID =
-      Uuid.parse(dotenv.env['BLE_WRITE_UUID'] ?? 'UUID not found');
+  Uuid.parse(dotenv.env['BLE_WRITE_UUID'] ?? 'UUID not found');
   String? mainBatteryLevel = "Unknown";
 
   StreamSubscription? scanSubscription;
@@ -86,26 +86,27 @@ class BluetoothProvider extends ChangeNotifier {
   ///*/////////////////////////
 
   /// * Command Listener ***/
+
   StreamController<UnlockResult> unlockResultListener =
-      StreamController.broadcast();
+  StreamController.broadcast();
   StreamController<ChangeBleKeyResult> chgBleKeyResultListener =
-      StreamController.broadcast();
+  StreamController.broadcast();
   StreamController<ChangeBleNameResult> chgBleNameResultListener =
-      StreamController.broadcast();
+  StreamController.broadcast();
   StreamController<AddRFIDCardResult> addRFIDCardResultListener =
-      StreamController.broadcast();
+  StreamController.broadcast();
   StreamController<QueryRFIDCardResult> queryRFIDCardResultListener =
   StreamController.broadcast();
   StreamController<DeleteRFIDCardResult> deleteRFIDCardResult =
-      StreamController.broadcast();
+  StreamController.broadcast();
   StreamController<CableLockResult> cableLockResult =
-      StreamController.broadcast();
+  StreamController.broadcast();
   StreamController<MovementSettingResult> chgMoveSettingResultListener =
-      StreamController.broadcast();
+  StreamController.broadcast();
   StreamController<FactoryResetResult> factoryResetResultListener =
-      StreamController.broadcast();
+  StreamController.broadcast();
   StreamController<IotInfoModel> iotInfoModelListener =
-      StreamController.broadcast();
+  StreamController.broadcast();
   late Stream<IotInfoModel> iotInfoModelStream;
 
   Future<void> init(currentBikeModel) async {
@@ -124,19 +125,19 @@ class BluetoothProvider extends ChangeNotifier {
 
       switch (bleStatus) {
         case BleStatus.unknown:
-          // TODO: Handle this case.
+        // TODO: Handle this case.
           break;
         case BleStatus.unsupported:
-          // TODO: Handle this case.
+        // TODO: Handle this case.
           break;
         case BleStatus.unauthorized:
-          // handlePermission();
+        // handlePermission();
           break;
         case BleStatus.poweredOff:
         // TODO: Handle this case.
           break;
         case BleStatus.locationServicesDisabled:
-          // TODO: Handle this case.
+        // TODO: Handle this case.
           break;
         case BleStatus.ready:
         // TODO: Handle this case.
@@ -176,6 +177,8 @@ class BluetoothProvider extends ChangeNotifier {
 
   connectDevice() async {
 
+    selectedDeviceId = currentBikeModel!.macAddr;
+
     connectSubscription = flutterReactiveBle.connectToDevice(id: currentBikeModel!.macAddr!, connectionTimeout: const Duration(seconds: 6),).listen((event) {
       connectionStateUpdate = event;
       printLog("Connect State", connectionStateUpdate!.deviceId);
@@ -184,7 +187,7 @@ class BluetoothProvider extends ChangeNotifier {
 
       switch (connectionStateUpdate?.connectionState) {
         case DeviceConnectionState.connecting:
-          // TODO: Handle this case.
+        // TODO: Handle this case.
           break;
         case DeviceConnectionState.connected:
           discoverServices(currentBikeModel!.bleKey!);
@@ -193,7 +196,7 @@ class BluetoothProvider extends ChangeNotifier {
           stopServices();
           break;
         case DeviceConnectionState.disconnected:
-          // TODO: Handle this case.
+        // TODO: Handle this case.
           clearBluetoothStatus();
           connectSubscription?.cancel();
           break;
@@ -306,7 +309,6 @@ class BluetoothProvider extends ChangeNotifier {
   Future<PermissionStatus> handlePermission() async {
 
     var bleConnectStatus = await Permission.bluetoothConnect.request();
-    print(bleConnectStatus.toString());
     if (bleConnectStatus.isGranted) {
       //return PermissionStatus.granted;
       var bleScanStatus = await Permission.bluetoothScan.request();
@@ -358,8 +360,8 @@ class BluetoothProvider extends ChangeNotifier {
       if (isConnected) {
         return unlockResultListener.stream.timeout(const Duration(seconds: 6),
             onTimeout: (sink) {
-          sink.addError("Operation timeout");
-        });
+              sink.addError("Operation timeout");
+            });
       } else {
         return unlockResultListener.stream
             .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
@@ -498,11 +500,11 @@ class BluetoothProvider extends ChangeNotifier {
       });
     }
   }
-        //Command 0: delete card
-        //Request rfid ID
+  //Command 0: delete card
+  //Request rfid ID
 
 
-/// 7). Function for external cable lock. *4.5.19
+  /// 7). Function for external cable lock. *4.5.19
   Stream<CableLockResult> cableLock() {
     if (requestComKeyResult != null) {
       bool isConnected = sendCommand(
@@ -634,12 +636,6 @@ class BluetoothProvider extends ChangeNotifier {
             sendCommand(bluetoothCommand.getBikeInfo(requestComKeyResult!.communicationKey));
             sendCommand(bluetoothCommand.getCableLockStatus(requestComKeyResult!.communicationKey));
           }else{
-
-
-            print("requestcom key result fail");
-
-
-
 
           }
           notifyListeners();
@@ -773,8 +769,8 @@ class BluetoothProvider extends ChangeNotifier {
       var command = decodedData[5];
       switch (command) {
         case BluetoothCommand.getFirmwareUpgradeDataCmd:
-          // printLog("Sending Packet ", fwUpgradeDataIndex.toString());
-          // printLog("Remaining Packet ", (totalPacketOfFwFile - fwUpgradeDataIndex).toString());
+        // printLog("Sending Packet ", fwUpgradeDataIndex.toString());
+        // printLog("Remaining Packet ", (totalPacketOfFwFile - fwUpgradeDataIndex).toString());
           if (fwUpgradeDataIndex == totalPacketOfFwFile - 2) {
             // printLog("Data Index: ", fwUpgradeDataIndex.toString());
             // printLog("Total Data Index: ", (totalPacketOfFwFile - 2).toString());
@@ -852,14 +848,14 @@ class BluetoothProvider extends ChangeNotifier {
     fwUpgradeProgress = fwUpgradeDataIndex/(totalPacketOfFwFile - 1);
     printLog("Upgrading firmware ", (fwUpgradeProgress * 100).toString() + "%");
 
-     if (fwUpgradeDataIndex == totalPacketOfFwFile - 1) {
-       Future.delayed(const Duration(seconds: 5)).then((value) {
-         return firmwareUpgradeState = FirmwareUpgradeState.upgradeSuccessfully;
-       });
-     }
-     else {
-       firmwareUpgradeState = FirmwareUpgradeState.upgrading;
-     }
+    if (fwUpgradeDataIndex == totalPacketOfFwFile - 1) {
+      Future.delayed(const Duration(seconds: 5)).then((value) {
+        return firmwareUpgradeState = FirmwareUpgradeState.upgradeSuccessfully;
+      });
+    }
+    else {
+      firmwareUpgradeState = FirmwareUpgradeState.upgrading;
+    }
 
     notifyListeners();
   }
