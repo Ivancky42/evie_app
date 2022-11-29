@@ -251,8 +251,9 @@ class _BikeLocationState extends State<BikeLocation> {
                             width: double.infinity,
                             height: 55.h,
                             child: MapboxMap(
+                              useHybridCompositionOverride: true,
+                              useDelayedDisposal: true,
                               myLocationEnabled: true,
-                              //   styleString: _locationProvider.mapBoxStyleToken,
                               trackCameraPosition: true,
                               myLocationTrackingMode:
                                   MyLocationTrackingMode.Tracking,

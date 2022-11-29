@@ -25,6 +25,11 @@ dependencies:
   flutter:
     sdk: flutter
 
+  mapbox_gl:
+    git:
+      url: https://github.com/flutter-mapbox-gl/maps.git
+      ref: f505fcf5c79b75c165703028af77f3af62d382ae
+
   provider: ^5.0.0
   cupertino_icons: ^1.0.2
   firebase_core: ^1.20.0
@@ -60,7 +65,6 @@ dependencies:
   carousel_slider: ^4.1.1
   sign_in_with_apple: ^4.1.0
   crypto: ^3.0.1
-  mapbox_gl: ^0.16.0
   geolocator: ^9.0.2
   geocoding: ^2.0.5
   animated_text_kit: ^4.2.2
@@ -88,6 +92,23 @@ dev_dependencies:
 
   #For splash screen
   flutter_native_splash: ^2.2.6
+
+dependency_overrides:
+  test_api: ^0.4.14
+  mapbox_gl:
+    git:
+      url: https://github.com/flutter-mapbox-gl/maps.git
+      ref: f505fcf5c79b75c165703028af77f3af62d382ae
+  mapbox_gl_platform_interface:
+    git:
+      url: https://github.com/flutter-mapbox-gl/maps.git
+      ref: f505fcf5c79b75c165703028af77f3af62d382ae
+      path: mapbox_gl_platform_interface
+  mapbox_gl_web:
+    git:
+      url: https://github.com/flutter-mapbox-gl/maps.git
+      ref: f505fcf5c79b75c165703028af77f3af62d382ae
+      path: mapbox_gl_web
 
 flutter_icons:
   android: true
