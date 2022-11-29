@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
@@ -22,6 +24,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../api/provider/bike_provider.dart';
 import '../../api/provider/location_provider.dart';
+import '../../bluetooth/modelResult.dart';
 import '../../widgets/evie_double_button_dialog.dart';
 import '../../widgets/evie_oval.dart';
 import '../../widgets/evie_single_button_dialog.dart';
@@ -37,6 +40,7 @@ class _FreePlanState extends State<FreePlan> {
   late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
   late AuthProvider _authProvider;
+  late BluetoothProvider _bluetoothProvider;
 
   Color lockColour = const Color(0xff6A51CA);
 
@@ -50,39 +54,91 @@ class _FreePlanState extends State<FreePlan> {
   String carbonFootprint = "D";
   String mileage = "D";
 
+  DeviceConnectionState? connectionState;
+  ConnectionStateUpdate? connectionStateUpdate;
+
   @override
   Widget build(BuildContext context) {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
+    _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     final TextEditingController _bikeNameController = TextEditingController();
 
     var currentName = _currentUserProvider.currentUserModel?.name;
     final FocusNode _textFocus = FocusNode();
 
+    bool _connect = false;
     bool _unlock = false;
 
-    Image lockImage = Image(
+    Image connectImage = Image(
       image: const AssetImage("assets/buttons/bluetooth_not_connected.png"),
       height: 2.5.h,
       fit: BoxFit.fitWidth,
     );
 
+    if(connectionState?.name == "connected"){
+      setState(() {
+        connectImage = Image(
+          image: const AssetImage("assets/buttons/lock_lock.png"),
+          height: 2.5.h,
+          fit: BoxFit.fitWidth,
+        );
+        lockColour = const Color(0xff6A51CA);
+      });
+
+    }else if(connectionState?.name == "connecting"){
+      setState(() {
+        connectImage = Image(
+          image: const AssetImage("assets/buttons/loading.png"),
+          height: 2.5.h,
+          fit: BoxFit.fitWidth,
+        );
+        lockColour = const Color(0xff6A51CA);
+      });
+    }else if(connectionState?.name == "disconnected"){
+      setState(() {
+         connectImage = Image(
+          image: const AssetImage("assets/buttons/bluetooth_not_connected.png"),
+          height: 2.5.h,
+          fit: BoxFit.fitWidth,
+        );
+      });
+    }
+
+
+
+
+
+
+
+
+    Image lockImage = Image(
+      image: const AssetImage("assets/buttons/lock_lock.png"),
+      height: 2.5.h,
+      fit: BoxFit.fitWidth,
+    );
+
     if (_unlock == false) {
-      lockImage = Image(
-        image: const AssetImage("assets/buttons/bluetooth_not_connected.png"),
-        height: 2.5.h,
-        fit: BoxFit.fitWidth,
-      );
-      lockColour = const Color(0xff6A51CA);
+      setState(() {
+        lockImage = Image(
+          image: const AssetImage("assets/buttons/lock_lock.png"),
+          height: 2.5.h,
+          fit: BoxFit.fitWidth,
+        );
+        lockColour = const Color(0xff6A51CA);
+      });
+
     } else if (_unlock == true) {
-      lockImage = Image(
-        image: AssetImage("assets/buttons/lock_unlock.png"),
-        height: 2.5.h,
-        fit: BoxFit.fitWidth,
-      );
-      lockColour = const Color(0xff404E53);
+      setState(() {
+        lockImage = Image(
+          image: AssetImage("assets/buttons/lock_unlock.png"),
+          height: 2.5.h,
+          fit: BoxFit.fitWidth,
+        );
+        lockColour = const Color(0xff404E53);
+      });
     }
 
     return WillPopScope(
@@ -454,39 +510,36 @@ class _FreePlanState extends State<FreePlan> {
                       ),
                     ),
 
-                    const SizedBox(
-                      height: 500.0,
+                  SizedBox(
+                      height: 50.h,
                     ),
-
                     EvieButton(
                       height: 12.2.h,
                       width: double.infinity,
                       child: const Text(
-                        "Connect To Bike",
+                        "Unlock bike",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12.0,
                         ),
                       ),
                       onPressed: () {
-                        SmartDialog.show(
-                            widget: EvieDoubleButtonDialogCupertino(
-                                //buttonNumber: "2",
-                                title: "Connect",
-                                content: "In progress",
-                                leftContent: "Cancel",
-                                rightContent: "Ok",
-                                image: Image.asset(
-                                  "assets/evieBike.png",
-                                  width: 36,
-                                  height: 36,
-                                ),
-                                onPressedLeft: () {
-                                  SmartDialog.dismiss();
-                                },
-                                onPressedRight: () {
-                                  SmartDialog.dismiss();
-                                }));
+                        SmartDialog.showLoading(msg: "Unlocking");
+                        StreamSubscription? subscription;
+                        subscription = _bluetoothProvider.cableUnlock().listen((unlockResult) {
+                          SmartDialog.dismiss(status: SmartStatus.loading);
+                          subscription?.cancel();
+                          if (unlockResult.result == CommandResult.success) {
+                            print("unlock success");
+                          }
+                          else {
+                            print("unlock not success");
+                          }
+                        }, onError: (error) {
+                          SmartDialog.dismiss(status: SmartStatus.loading);
+                          subscription?.cancel();
+                          print(error);
+                        });
                       },
                     ),
 
@@ -667,6 +720,15 @@ class _FreePlanState extends State<FreePlan> {
                       },
                     ),
 
+
+                    Text(
+                      "Connection status : " + (connectionState?.name ?? ""),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+
                     SizedBox(
                       height: 1.h,
                     ),
@@ -674,29 +736,52 @@ class _FreePlanState extends State<FreePlan> {
             ),
           ),
         ),
+
+
         floatingActionButton: SizedBox(
           height: 8.8.h,
           width: 8.8.h,
           child: FittedBox(
-            child: FloatingActionButton(
+            child: connectionState?.name == "connected"? FloatingActionButton(
               elevation: 0,
               backgroundColor: lockColour,
               onPressed: () {
-                SmartDialog.show(
-                    widget: EvieSingleButtonDialogCupertino(
-                        title: "In development",
-                        content: "In development",
-                        rightContent: "OK",
-                        onPressedRight: () {
-                          SmartDialog.dismiss();
-                        }));
-                setState(() {
-                  _unlock = !_unlock;
+                SmartDialog.showLoading(msg: "Unlocking");
+                StreamSubscription? subscription;
+                subscription = _bluetoothProvider.cableUnlock().listen((unlockResult) {
+                  SmartDialog.dismiss(status: SmartStatus.loading);
+                  subscription?.cancel();
+                  if (unlockResult.result == CommandResult.success) {
+                    print("unlock success");
+                  }
+                  else {
+                    print("unlock not success");
+                  }
+                }, onError: (error) {
+                  SmartDialog.dismiss(status: SmartStatus.loading);
+                  subscription?.cancel();
+                  print(error);
                 });
               },
-
               //icon inside button
               child: lockImage,
+            ):FloatingActionButton(
+              elevation: 0,
+              backgroundColor: lockColour,
+              onPressed: () {
+                if (connectionState == null) {
+                  _bluetoothProvider.connectDevice();
+                  setState(() {
+                    _unlock = !_unlock;
+                  });
+                }else{
+                  setState(() {
+
+                  });
+                }
+              },
+              //icon inside button
+              child: connectImage,
             ),
           ),
         ),

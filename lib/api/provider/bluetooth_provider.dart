@@ -10,6 +10,7 @@ import 'package:hex/hex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../bluetooth/modelResult.dart';
 
+import '../model/bike_model.dart';
 import '../model/user_model.dart';
 
 enum NotifyDataState {
@@ -59,7 +60,7 @@ class BluetoothProvider extends ChangeNotifier {
   BikeInfoResult? bikeInfoResult;
   CableLockResult? cableLockState;
   QueryRFIDCardResult? queryRFIDCardResult;
-  UserModel? currentUserModel;
+  BikeModel? currentBikeModel;
 
 
   bool _isPaired = false;
@@ -107,10 +108,10 @@ class BluetoothProvider extends ChangeNotifier {
       StreamController.broadcast();
   late Stream<IotInfoModel> iotInfoModelStream;
 
-  Future<void> init(currentUserModel) async {
-    if (currentUserModel != null) {
+  Future<void> init(currentBikeModel) async {
+    if (currentBikeModel != null) {
       checkBLEStatus();
-      this.currentUserModel = currentUserModel;
+      this.currentBikeModel = currentBikeModel;
       notifyListeners();
     }
   }
@@ -173,11 +174,9 @@ class BluetoothProvider extends ChangeNotifier {
     scanSubscription?.cancel();
   }
 
-  connectDevice(String deviceId, String bleKey) async {
+  connectDevice() async {
 
-    selectedDeviceId = deviceId;
-
-    connectSubscription = flutterReactiveBle.connectToDevice(id: selectedDeviceId!, connectionTimeout: const Duration(seconds: 6),).listen((event) {
+    connectSubscription = flutterReactiveBle.connectToDevice(id: currentBikeModel!.macAddr!, connectionTimeout: const Duration(seconds: 6),).listen((event) {
       connectionStateUpdate = event;
       printLog("Connect State", connectionStateUpdate!.deviceId);
       printLog("Connect State", connectionStateUpdate!.connectionState.name);
@@ -188,7 +187,7 @@ class BluetoothProvider extends ChangeNotifier {
           // TODO: Handle this case.
           break;
         case DeviceConnectionState.connected:
-          discoverServices(bleKey);
+          discoverServices(currentBikeModel!.bleKey!);
           break;
         case DeviceConnectionState.disconnecting:
           stopServices();
@@ -273,7 +272,6 @@ class BluetoothProvider extends ChangeNotifier {
           deviceId: selectedDeviceId!);
       flutterReactiveBle.writeCharacteristicWithoutResponse(writeCharacteristic,
           value: command);
-
       return true;
     } else {
       return false;
@@ -635,6 +633,14 @@ class BluetoothProvider extends ChangeNotifier {
           if (requestComKeyResult?.communicationKey != null) {
             sendCommand(bluetoothCommand.getBikeInfo(requestComKeyResult!.communicationKey));
             sendCommand(bluetoothCommand.getCableLockStatus(requestComKeyResult!.communicationKey));
+          }else{
+
+
+            print("requestcom key result fail");
+
+
+
+
           }
           notifyListeners();
           break;

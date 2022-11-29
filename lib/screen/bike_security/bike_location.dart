@@ -219,10 +219,10 @@ class _BikeLocationState extends State<BikeLocation> {
       }
     }
 
-    if (mapController != null) {
-      loadImage(currentDangerStatus);
-      runSymbol();
-    }
+    // if (mapController != null) {
+    //   loadImage(currentDangerStatus);
+    //   runSymbol();
+    // }
 
     return WillPopScope(
       onWillPop: () async {
@@ -263,6 +263,9 @@ class _BikeLocationState extends State<BikeLocation> {
                               onMapCreated: _onMapCreated,
                               styleString:
                                   "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
+                              onStyleLoadedCallback: () {
+                                runSymbol();
+                              },
                               initialCameraPosition: CameraPosition(
                                 target: LatLng(
                                     _locationProvider

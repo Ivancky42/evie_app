@@ -134,12 +134,12 @@ class AppProviders extends StatelessWidget {
                   ..init(currentUserProvider.getCurrentUserModel);
               }
           ),
-          ChangeNotifierProxyProvider<CurrentUserProvider, BluetoothProvider>(
+          ChangeNotifierProxyProvider< BikeProvider, BluetoothProvider>(
               lazy: true,
               create: (_) => BluetoothProvider(),
-              update: (_, currentUserProvider, bluetoothProvider) {
+              update: (_, bikeProvider, bluetoothProvider) {
                 return bluetoothProvider!
-                  ..init(currentUserProvider.getCurrentUserModel);
+                  ..init(bikeProvider.currentBikeModel);
               }
           ),
           ChangeNotifierProxyProvider<CurrentUserProvider, NotificationProvider>(

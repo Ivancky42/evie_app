@@ -225,7 +225,7 @@ class _TestBleState extends State<TestBle> {
                   child: EvieButton(
                     onPressed: () {
                       if (connectionState == null) {
-                        bluetoothProvider.connectDevice("8C:59:DC:FA:44:87", "REw40n21");
+                        bluetoothProvider.connectDevice();
                       }
                       else {
                         if (connectionState!.name == "connected") {
@@ -236,7 +236,7 @@ class _TestBleState extends State<TestBle> {
 
                         }
                         else {
-                          bluetoothProvider.connectDevice(connectionStateUpdate!.deviceId, "REw40n21");
+                          bluetoothProvider.connectDevice();
                         }
                       }
                     },

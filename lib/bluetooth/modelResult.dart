@@ -47,6 +47,7 @@ class RequestComKeyResult {
   CommandResult result = CommandResult.unknown;
   bool isValidKey = false;
 
+
   RequestComKeyResult(List<int> data) {
 
     /// Verification ID: (1: Success, 0: Failure)

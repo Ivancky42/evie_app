@@ -451,8 +451,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
                                               SmartDialog.showLoading(
                                                   backDismiss: false);
                                               try {
-                                                bluetoothProvider.connectDevice(
-                                                    discoveredDevice.id, "REw40n21");
+                                                bluetoothProvider.connectDevice();
                                               } catch (e) {
                                                 debugPrint(e.toString());
                                               }
