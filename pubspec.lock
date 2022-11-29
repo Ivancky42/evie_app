@@ -923,9 +923,11 @@ packages:
   mapbox_gl:
     dependency: "direct main"
     description:
-      name: mapbox_gl
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: f505fcf5c79b75c165703028af77f3af62d382ae
+      resolved-ref: f505fcf5c79b75c165703028af77f3af62d382ae
+      url: "https://github.com/flutter-mapbox-gl/maps.git"
+    source: git
     version: "0.16.0"
   mapbox_gl_dart:
     dependency: transitive
@@ -935,18 +937,22 @@ packages:
     source: hosted
     version: "0.2.1"
   mapbox_gl_platform_interface:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: mapbox_gl_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: mapbox_gl_platform_interface
+      ref: f505fcf5c79b75c165703028af77f3af62d382ae
+      resolved-ref: f505fcf5c79b75c165703028af77f3af62d382ae
+      url: "https://github.com/flutter-mapbox-gl/maps.git"
+    source: git
     version: "0.16.0"
   mapbox_gl_web:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: mapbox_gl_web
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: mapbox_gl_web
+      ref: f505fcf5c79b75c165703028af77f3af62d382ae
+      resolved-ref: f505fcf5c79b75c165703028af77f3af62d382ae
+      url: "https://github.com/flutter-mapbox-gl/maps.git"
+    source: git
     version: "0.16.0"
   matcher:
     dependency: transitive
@@ -1528,12 +1534,12 @@ packages:
     source: hosted
     version: "1.21.4"
   test_api:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.12"
+    version: "0.4.16"
   test_core:
     dependency: transitive
     description:
