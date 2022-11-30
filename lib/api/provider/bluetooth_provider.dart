@@ -181,6 +181,7 @@ class BluetoothProvider extends ChangeNotifier {
 
     connectSubscription = flutterReactiveBle.connectToDevice(id: currentBikeModel!.macAddr!, connectionTimeout: const Duration(seconds: 6),).listen((event) {
       connectionStateUpdate = event;
+
       printLog("Connect State", connectionStateUpdate!.deviceId);
       printLog("Connect State", connectionStateUpdate!.connectionState.name);
       printLog("Connect State", connectionStateUpdate!.failure.toString());
