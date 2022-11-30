@@ -12,9 +12,14 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 import '../api/navigator.dart';
+import '../api/provider/auth_provider.dart';
+import '../api/provider/bike_provider.dart';
 import '../widgets/evie_button.dart';
+import '../widgets/evie_double_button_dialog.dart';
+import '../widgets/evie_single_button_dialog.dart';
 
 class TestBle extends StatefulWidget {
   const TestBle({Key? key}) : super(key: key);
@@ -25,6 +30,8 @@ class TestBle extends StatefulWidget {
 
 class _TestBleState extends State<TestBle> {
   late BluetoothProvider bluetoothProvider;
+  late BikeProvider _bikeProvider;
+  late AuthProvider _authProvider;
   DeviceConnectionState? connectionState;
   ConnectionStateUpdate? connectionStateUpdate;
 
@@ -32,6 +39,8 @@ class _TestBleState extends State<TestBle> {
   Widget build(BuildContext context) {
 
     bluetoothProvider = context.watch<BluetoothProvider>();
+    _bikeProvider = Provider.of<BikeProvider>(context);
+    _authProvider = Provider.of<AuthProvider>(context);
     connectionStateUpdate = bluetoothProvider.connectionStateUpdate;
     connectionState = bluetoothProvider.connectionStateUpdate?.connectionState;
 
@@ -706,6 +715,213 @@ class _TestBleState extends State<TestBle> {
                       ),
                     ),
                   ),
+                ),
+
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Unlock bike",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    SmartDialog.showLoading(msg: "Unlocking");
+                    StreamSubscription? subscription;
+                    subscription = bluetoothProvider.cableUnlock().listen((unlockResult) {
+                      SmartDialog.dismiss(status: SmartStatus.loading);
+                      subscription?.cancel();
+                      if (unlockResult.result == CommandResult.success) {
+                        print("unlock success");
+                      }
+                      else {
+                        print("unlock not success");
+                      }
+                    }, onError: (error) {
+                      SmartDialog.dismiss(status: SmartStatus.loading);
+                      subscription?.cancel();
+                      print(error);
+                    });
+                  },
+                ),
+
+                ///Delete bike for development purpose
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Delete Bike",
+                    style: TextStyle(
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    SmartDialog.show(
+                        widget: EvieDoubleButtonDialogCupertino(
+                          //buttonNumber: "2",
+                            title: "Delete bike",
+                            content:
+                            "Are you sure you want to delete this bike?",
+                            leftContent: "Cancel",
+                            rightContent: "Delete",
+                            image: Image.asset(
+                              "assets/evieBike.png",
+                              width: 36,
+                              height: 36,
+                            ),
+                            onPressedLeft: () {
+                              SmartDialog.dismiss();
+                            },
+                            onPressedRight: () {
+                              try {
+                                SmartDialog.dismiss();
+                                bool result = _bikeProvider.deleteBike(
+                                    _bikeProvider
+                                        .currentBikeModel!.deviceIMEI!
+                                        .trim());
+                                if (result == true) {
+                                  SmartDialog.show(
+                                      widget:
+                                      EvieSingleButtonDialogCupertino(
+                                          title: "Success",
+                                          content:
+                                          "Successfully delete bike",
+                                          rightContent: "OK",
+                                          onPressedRight: () {
+                                            SmartDialog.dismiss();
+                                          }));
+                                } else {
+                                  SmartDialog.show(
+                                      widget:
+                                      EvieSingleButtonDialogCupertino(
+                                          title: "Error",
+                                          content:
+                                          "Error delete bike, try again",
+                                          rightContent: "OK",
+                                          onPressedRight: () {
+                                            SmartDialog.dismiss();
+                                          }));
+                                }
+                              } catch (e) {
+                                debugPrint(e.toString());
+                              }
+                            }));
+                  },
+                ),
+
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Share Bike",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    changeToShareBikeScreen(context);
+                  },
+                ),
+
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Checkout plan",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    // StripeApiCaller.redirectToCheckout("price_1Lp0yCBjvoM881zMsahs6rkP", customerId).then((sessionId) {
+                    //   changeToCheckoutScreen(context, sessionId);
+                    // });
+                  },
+                ),
+
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Change Plan",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    //StripeApiCaller.changeSubscription("sub_1Lp1PjBjvoM881zMuyOFI50l", "price_1Lp11KBjvoM881zM7rIdanjj", "si_MY7fGJWs01DGF5");
+                  },
+                ),
+
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Cancel Plan",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    //StripeApiCaller.cancelSubscription("sub_1Lp1PjBjvoM881zMuyOFI50l");
+                  },
+                ),
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "RFID card",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    changeToRFIDScreen(context);
+                  },
+                ),
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Sign out",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () async {
+                    try {
+                      _authProvider.signOut(context).then((result) {
+                        if (result == true) {
+                          // _authProvider.clear();
+
+                          changeToWelcomeScreen(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Signed out'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Error, Try Again'),
+                              duration: Duration(seconds: 4),
+                            ),
+                          );
+                        }
+                      });
+                    } catch (e) {
+                      debugPrint(e.toString());
+                    }
+                  },
                 ),
               ],
             ),
