@@ -201,23 +201,22 @@ class _BikeLocationState extends State<BikeLocation> {
     _locationProvider = Provider.of<LocationProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
 
-    for (var element in dangerStatus) {
-      if(_bikeProvider.currentBikeModel != null){
-        if (_bikeProvider.currentBikeModel!.location!.status == element) {
-          setState(() {
-            currentDangerStatus = element;
-          });
-        }
-      }
-    }
 
     _locationProvider.addListener(() {
+      for (var element in dangerStatus) {
+        if(_bikeProvider.currentBikeModel != null){
+          if (_bikeProvider.currentBikeModel!.location!.status == element) {
+            setState(() {
+              currentDangerStatus = element;
+            });
+          }
+        }
+      }
+       getDistanceBetween();
         loadImage(currentDangerStatus);
         runSymbol();
       });
 
-
-    getDistanceBetween();
 
     return WillPopScope(
       onWillPop: () async {
@@ -269,6 +268,7 @@ class _BikeLocationState extends State<BikeLocation> {
                                   this.userLocation = userLocation;
                                 });
                                 animateBounce();
+                                getDistanceBetween();
                               },
                               initialCameraPosition: CameraPosition(
                                 target: LatLng(
@@ -763,7 +763,7 @@ class _BikeLocationState extends State<BikeLocation> {
                                                                           .w700),
                                                             ),
                                                             Text(
-                                                              "Est. -m",
+                                                            "Est. ${distanceBetween}m",
                                                               style: TextStyle(
                                                                   fontSize:
                                                                       10.sp,
@@ -1057,10 +1057,10 @@ class _BikeLocationState extends State<BikeLocation> {
   }
 
   void getDistanceBetween() {
-    if (_locationProvider.userPosition != null) {
+    if (userLocation != null) {
       distanceBetween = Geolocator.distanceBetween(
-              _locationProvider.userPosition!.position.latitude,
-              _locationProvider.userPosition!.position.longitude,
+              userLocation!.position.latitude,
+              userLocation!.position.longitude,
               _locationProvider.locationModel!.geopoint.latitude,
               _locationProvider.locationModel!.geopoint.longitude)
           .toStringAsFixed(0);
