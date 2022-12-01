@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/navigator.dart';
@@ -23,6 +24,9 @@ class NotificationProvider extends ChangeNotifier {
 
   UserModel? currentUserModel;
   bool? isReadAll;
+
+  StreamSubscription? notificationListSubscription;
+  StreamSubscription? currentNotificationSubscription;
 
   Future<void> init(UserModel? currentUserModel) async {
     ///Subscribe to user uid for notification
@@ -61,7 +65,12 @@ class NotificationProvider extends ChangeNotifier {
 
   Future<void> getNotification(String? uid) async {
     try {
-      FirebaseFirestore.instance
+
+      if(notificationListSubscription != null){
+        notificationListSubscription?.cancel();
+      }
+
+      notificationListSubscription = FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(uid)
           .collection(notificationsCollection)
@@ -113,7 +122,12 @@ class NotificationProvider extends ChangeNotifier {
   Future<Object?> getNotificationFromNotificationId(String? notificationId) async {
     currentSingleNotification = null;
     try {
-      FirebaseFirestore.instance
+
+      if(currentNotificationSubscription != null){
+        currentNotificationSubscription?.cancel();
+      }
+
+      currentNotificationSubscription = FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(currentUserModel!.uid)
           .collection(notificationsCollection)

@@ -1,13 +1,16 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:evie_test/api/model/location_model.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:geocoding_platform_interface/src/models/placemark.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
@@ -42,6 +45,12 @@ class _BikeLocationState extends State<BikeLocation> {
 
   double currentScroll = 0.28;
 
+  Symbol? locationSymbol;
+  String? distanceBetween;
+  UserLocation? userLocation;
+
+  StreamSubscription? locationSubscription;
+
   @override
   void initState() {
     super.initState();
@@ -49,6 +58,10 @@ class _BikeLocationState extends State<BikeLocation> {
 
   @override
   void dispose() {
+    _locationProvider.removeListener(() {
+      loadImage(currentDangerStatus);
+    runSymbol();});
+    mapController!.dispose();
     super.dispose();
   }
 
@@ -87,95 +100,70 @@ class _BikeLocationState extends State<BikeLocation> {
     switch (dangerStatus) {
       case 'safe':
         {
-          setState(() {
-            currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
-            currentSecurityIcon =
-            "assets/buttons/bike_security_lock_and_secure.png";
-          });
-
+          currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
+          currentSecurityIcon =
+              "assets/buttons/bike_security_lock_and_secure.png";
         }
         break;
       case 'warning':
         {
-          setState(() {
-            currentBikeStatusImage =
-            "assets/images/bike_HPStatus/bike_warning.png";
-            currentSecurityIcon = "assets/buttons/bike_security_warning.png";
-          });
-
+          currentBikeStatusImage =
+              "assets/images/bike_HPStatus/bike_warning.png";
+          currentSecurityIcon = "assets/buttons/bike_security_warning.png";
         }
         break;
       case 'danger':
         {
-          setState(() {
-            currentBikeStatusImage =
-            "assets/images/bike_HPStatus/bike_danger.png";
-            currentSecurityIcon = "assets/buttons/bike_security_danger.png";
-          });
-
+          currentBikeStatusImage =
+              "assets/images/bike_HPStatus/bike_danger.png";
+          currentSecurityIcon = "assets/buttons/bike_security_danger.png";
         }
         break;
       default:
         {
-          setState(() {
-            currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
-            currentSecurityIcon =
-            "assets/buttons/bike_security_lock_and_secure.png";
-          });
-
+          currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
+          currentSecurityIcon =
+              "assets/buttons/bike_security_lock_and_secure.png";
         }
     }
   }
 
   runSymbol() async {
-    if (mapController!.symbols.isNotEmpty) {
-      mapController?.clearSymbols();
-    }
-
     var markerImage = await loadMarkerImage(currentDangerStatus);
     mapController?.addImage('marker', markerImage);
 
-    ///Update symbol geometry and status instead of rebuild everytime
-    //mapController?.updateSymbol(symbol, changes)
-
-    addSymbol();
-
-    final LatLng southwest = LatLng(
-      min(_locationProvider.locationModel!.geopoint.latitude,
-          _locationProvider.userPosition!.latitude),
-      min(_locationProvider.locationModel!.geopoint.longitude,
-          _locationProvider.userPosition!.longitude),
-    );
-
-    final LatLng northeast = LatLng(
-      max(_locationProvider.locationModel!.geopoint.latitude,
-          _locationProvider.userPosition!.latitude),
-      max(_locationProvider.locationModel!.geopoint.longitude,
-          _locationProvider.userPosition!.longitude),
-    );
-
-    latLngBounds = LatLngBounds(southwest: southwest, northeast: northeast);
-
-    mapController?.animateCamera(CameraUpdate.newLatLngBounds(
-      latLngBounds,
-      left: 80,
-      right: 80,
-      top: 80,
-      bottom: 80,
-    ));
-    getPlace();
-  }
-
-  ///Change icon according to dangerous level
-  void addSymbol()  {
-      mapController?.addSymbol(
+    if (mapController!.symbols.isNotEmpty) {
+      mapController?.updateSymbol(
+        locationSymbol!,
         SymbolOptions(
           iconImage: 'marker',
           iconSize: 0.2.h,
           geometry: LatLng(_locationProvider.locationModel!.geopoint.latitude,
               _locationProvider.locationModel!.geopoint.longitude),
         ),
+
       );
+      animateBounce();
+    } else {
+
+      addSymbol();
+      animateBounce();
+
+    }
+
+    //  getPlace();
+  }
+
+  ///Change icon according to dangerous level
+  void addSymbol() async {
+    locationSymbol = (await mapController?.addSymbol(
+      SymbolOptions(
+        iconImage: 'marker',
+        iconSize: 0.2.h,
+        geometry: LatLng(_locationProvider.locationModel!.geopoint.latitude,
+            _locationProvider.locationModel!.geopoint.longitude),
+      ),
+    ))!;
   }
 
   void getPlace() {
@@ -192,9 +180,11 @@ class _BikeLocationState extends State<BikeLocation> {
           width: 200,
           height: 50,
           color: Colors.white,
-          child: Text("Bike Location:\n "
-              "${_locationProvider.currentPlaceMark?.name} "
-              "${_locationProvider.currentPlaceMark?.country}"),
+          child: _locationProvider.currentPlaceMark != null
+              ? Text("Bike Location:\n "
+                  "${_locationProvider.currentPlaceMark?.name} "
+                  "${_locationProvider.currentPlaceMark?.country}")
+              : const Text("Not Available"),
         ),
       );
     });
@@ -212,17 +202,22 @@ class _BikeLocationState extends State<BikeLocation> {
     _bikeProvider = Provider.of<BikeProvider>(context);
 
     for (var element in dangerStatus) {
-      if (_bikeProvider.currentBikeModel!.location!.status == element) {
-        setState(() {
-          currentDangerStatus = element;
-        });
+      if(_bikeProvider.currentBikeModel != null){
+        if (_bikeProvider.currentBikeModel!.location!.status == element) {
+          setState(() {
+            currentDangerStatus = element;
+          });
+        }
       }
     }
 
-     if (mapController != null) {
-       loadImage(currentDangerStatus);
-       runSymbol();
-     }
+    _locationProvider.addListener(() {
+        loadImage(currentDangerStatus);
+        runSymbol();
+      });
+
+
+    getDistanceBetween();
 
     return WillPopScope(
       onWillPop: () async {
@@ -244,7 +239,7 @@ class _BikeLocationState extends State<BikeLocation> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   FutureBuilder(
-                      future: getLocation(),
+                      future: getLocationModel(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return SizedBox(
@@ -252,7 +247,7 @@ class _BikeLocationState extends State<BikeLocation> {
                             height: 55.h,
                             child: MapboxMap(
                               useHybridCompositionOverride: true,
-                              useDelayedDisposal: true,
+                              //                           useDelayedDisposal: true,
                               myLocationEnabled: true,
                               trackCameraPosition: true,
                               myLocationTrackingMode:
@@ -265,11 +260,15 @@ class _BikeLocationState extends State<BikeLocation> {
                               styleString:
                                   "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
                               onStyleLoadedCallback: () {
+                                loadImage(currentDangerStatus);
                                 runSymbol();
+                                getPlace();
                               },
                               onUserLocationUpdated: (userLocation) {
-                            //    userLocation.
-
+                                setState(() {
+                                  this.userLocation = userLocation;
+                                });
+                                animateBounce();
                               },
                               initialCameraPosition: CameraPosition(
                                 target: LatLng(
@@ -278,7 +277,6 @@ class _BikeLocationState extends State<BikeLocation> {
                                     _locationProvider
                                         .locationModel!.geopoint.longitude),
                                 zoom: 16,
-
                               ),
                             ),
                           );
@@ -376,6 +374,13 @@ class _BikeLocationState extends State<BikeLocation> {
                                                             "assets/buttons/back.png"),
                                                       ),
                                                       onPressed: () {
+                                                        setState(() {
+                                                          _locationProvider.removeListener(() {
+                                                            loadImage(currentDangerStatus);
+                                                          runSymbol();
+                                                          });
+                                                          mapController?.dispose();
+                                                        });
                                                         _bikeProvider
                                                             .controlBikeList(
                                                                 "back");
@@ -408,6 +413,11 @@ class _BikeLocationState extends State<BikeLocation> {
                                                             "assets/buttons/next.png"),
                                                       ),
                                                       onPressed: () {
+                                                        setState(() {
+                                                          _locationProvider.removeListener(() { loadImage(currentDangerStatus);
+                                                          runSymbol(); });
+                                                          mapController?.dispose();
+                                                        });
                                                         _bikeProvider
                                                             .controlBikeList(
                                                                 "next");
@@ -457,7 +467,7 @@ class _BikeLocationState extends State<BikeLocation> {
                                                               _locationProvider
                                                                       .currentPlaceMark
                                                                       ?.name! ??
-                                                                  "Empty",
+                                                                  "Not Available",
                                                               //    "Random Place",
                                                               style: TextStyle(
                                                                   fontSize:
@@ -467,7 +477,7 @@ class _BikeLocationState extends State<BikeLocation> {
                                                                           .w700),
                                                             ),
                                                             Text(
-                                                              "Est. 100m",
+                                                              "Est. ${distanceBetween}m",
                                                               style: TextStyle(
                                                                   fontSize:
                                                                       10.sp,
@@ -482,7 +492,7 @@ class _BikeLocationState extends State<BikeLocation> {
                                                         height: 0.5.h,
                                                       ),
                                                       Text(
-                                                        "Feb 14, 2022 at 18:55",
+                                     getDateTime(),
                                                         style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w400,
@@ -743,7 +753,7 @@ class _BikeLocationState extends State<BikeLocation> {
                                                               _locationProvider
                                                                       .currentPlaceMark
                                                                       ?.name! ??
-                                                                  "Empty",
+                                                                  "Not Available",
                                                               //    "Random Place",
                                                               style: TextStyle(
                                                                   fontSize:
@@ -753,7 +763,7 @@ class _BikeLocationState extends State<BikeLocation> {
                                                                           .w700),
                                                             ),
                                                             Text(
-                                                              "Est. 100m",
+                                                              "Est. -m",
                                                               style: TextStyle(
                                                                   fontSize:
                                                                       10.sp,
@@ -768,7 +778,7 @@ class _BikeLocationState extends State<BikeLocation> {
                                                         height: 0.5.h,
                                                       ),
                                                       Text(
-                                                        "Feb 14, 2022 at 18:55",
+                                                        getDateTime(),
                                                         style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w400,
@@ -1042,7 +1052,85 @@ class _BikeLocationState extends State<BikeLocation> {
     );
   }
 
-  Future<Position?> getLocation() async {
-    return _locationProvider.userPosition;
+  Future<LocationModel?> getLocationModel() async {
+    return _locationProvider.locationModel;
   }
+
+  void getDistanceBetween() {
+    if (_locationProvider.userPosition != null) {
+      distanceBetween = Geolocator.distanceBetween(
+              _locationProvider.userPosition!.position.latitude,
+              _locationProvider.userPosition!.position.longitude,
+              _locationProvider.locationModel!.geopoint.latitude,
+              _locationProvider.locationModel!.geopoint.longitude)
+          .toStringAsFixed(0);
+    } else {
+      distanceBetween = "-";
+    }
+  }
+
+  String getDateTime() {
+    final now = DateTime.now();
+    String? month;
+
+    switch(now.month){
+      case 1:month = "Jan";
+        break;
+      case 2:month = "Feb";
+        break;
+      case 3:month = "Mar";
+        break;
+      case 4:month = "Apr";
+        break;
+      case 5:month = "May";
+        break;
+      case 6:month = "Jun";
+        break;
+      case 7:month = "Jly";
+        break;
+      case 8:month = "Aug";
+        break;
+      case 9:month = "Sep";
+        break;
+      case 10:month = "Oct";
+        break;
+      case 11:month = "Nov";
+        break;
+      case 12:month = "Dec";
+        break;
+
+    }
+
+    String returnValue = "$month ${now.day.toString()}, ${now.year.toString()} at ${now.hour.toString()} : ${now.minute.toString()}";
+
+    return returnValue;
+
+  }
+
+  void animateBounce() {
+    final LatLng southwest = LatLng(
+      min(_locationProvider.locationModel!.geopoint.latitude,
+          userLocation!.position.latitude),
+      min(_locationProvider.locationModel!.geopoint.longitude,
+          userLocation!.position.longitude),
+    );
+
+    final LatLng northeast = LatLng(
+      max(_locationProvider.locationModel!.geopoint.latitude,
+          userLocation!.position.latitude),
+      max(_locationProvider.locationModel!.geopoint.longitude,
+          userLocation!.position.longitude),
+    );
+
+    latLngBounds = LatLngBounds(southwest: southwest, northeast: northeast);
+
+    mapController?.animateCamera(CameraUpdate.newLatLngBounds(
+      latLngBounds,
+      left: 80,
+      right: 80,
+      top: 80,
+      bottom: 80,
+    ));
+  }
+
 }

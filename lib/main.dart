@@ -151,7 +151,7 @@ class AppProviders extends StatelessWidget {
               }
           ),
           ChangeNotifierProxyProvider<BikeProvider, LocationProvider>(
-              lazy: true,
+              lazy: false,
               create: (_) => LocationProvider(),
               update: (_, bikeProvider, locationProvider) {
                 return locationProvider!

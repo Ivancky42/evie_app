@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
@@ -17,14 +18,14 @@ class CurrentUserProvider extends ChangeNotifier {
 
 
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
-
   String? randomQuote;
 
   UserModel? currentUserModel;
-
   UserModel? get getCurrentUserModel => currentUserModel;
 
   get fetchCurrentUserModel async => currentUserModel;
+
+  StreamSubscription? currentUserSubscription;
 
   ///Initial value
   Future<void> init(uid) async {
@@ -41,7 +42,7 @@ class CurrentUserProvider extends ChangeNotifier {
     if (uid == null || uid == "") {
       currentUserModel = null;
     } else {
-      FirebaseFirestore.instance.collection(usersCollection).doc(uid)
+      currentUserSubscription = FirebaseFirestore.instance.collection(usersCollection).doc(uid)
           .snapshots()
           .listen((event) {
         try {
@@ -84,6 +85,10 @@ class CurrentUserProvider extends ChangeNotifier {
     }
   }
 
+  cancelSubscription(){
+    currentUserSubscription?.cancel();
+  }
+
   todayRandomQuote() {
     Random random = Random();
     int randomNumber = random.nextInt(TodaysQuote.quotes.length); // from 1-10
@@ -91,7 +96,4 @@ class CurrentUserProvider extends ChangeNotifier {
     this.randomQuote = randomQuote;
     notifyListeners();
   }
-
-
-
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
@@ -34,6 +35,12 @@ class BikeProvider extends ChangeNotifier {
   int currentBikeList = 0;
   String? currentBikeIMEI;
 
+  StreamSubscription? bikeListSubscription;
+  StreamSubscription? currentBikeSubscription;
+  StreamSubscription? bikeUserSubscription;
+  StreamSubscription? currentBikeUserSubscription;
+  StreamSubscription? rfidListSubscription;
+
   ///Get current user model
   Future<void> init(UserModel? user) async {
     userBikeList.clear();
@@ -53,7 +60,7 @@ class BikeProvider extends ChangeNotifier {
     currentBikeModel = null;
     try {
       ///read doc change
-      FirebaseFirestore.instance
+      bikeListSubscription = FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(uid)
           .collection(bikesCollection)
@@ -120,11 +127,14 @@ class BikeProvider extends ChangeNotifier {
   Future<void> getBike(String? imei) async {
     SharedPreferences prefs = await _prefs;
 
+    if(currentBikeSubscription != null){
+      currentBikeSubscription?.cancel();
+    }
 
     for (int index = 0; index < userBikeList.length; index++) {
       if (userBikeList.keys.elementAt(index) == imei) {
         ///Current bike model = userBikeList doc that match imei
-        FirebaseFirestore.instance
+        currentBikeSubscription = FirebaseFirestore.instance
             .collection(bikesCollection)
             .doc(imei)
             .snapshots()
@@ -132,7 +142,6 @@ class BikeProvider extends ChangeNotifier {
           try {
             Map<String, dynamic>? obj = event.data();
             if (obj != null) {
-
 
               currentBikeModel = BikeModel.fromJson(obj);
               prefs.setString('currentBikeIMEI', imei!);
@@ -339,7 +348,7 @@ class BikeProvider extends ChangeNotifier {
     bikeUserDetails.clear();
     try {
       //Update
-      FirebaseFirestore.instance
+      bikeUserSubscription = FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(currentBikeModel!.deviceIMEI)
           .collection(usersCollection)
@@ -382,7 +391,12 @@ class BikeProvider extends ChangeNotifier {
 
   getBikeUserDetails(String uid) {
     try {
-      FirebaseFirestore.instance
+
+      if(currentBikeUserSubscription != null){
+        currentBikeUserSubscription?.cancel();
+      }
+
+      currentBikeUserSubscription = FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(uid)
           .snapshots()
@@ -558,7 +572,7 @@ class BikeProvider extends ChangeNotifier {
     rfidList.clear();
 
     try {
-      FirebaseFirestore.instance
+      rfidListSubscription = FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(currentBikeModel!.deviceIMEI)
           .collection(rfidCollection)

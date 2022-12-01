@@ -66,7 +66,6 @@ class _FreePlanState extends State<FreePlan> {
   List<String> imgList = [
     'assets/images/bike_HPStatus/bike_normal.png',
   ];
-  Timer? timer;
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +106,6 @@ class _FreePlanState extends State<FreePlan> {
               onPressedRight: (){SmartDialog.dismiss();}));
     }
     });
-
 
     setConnectImage();
     setLockImage();
@@ -318,25 +316,6 @@ class _FreePlanState extends State<FreePlan> {
                           Container(
                             width: 10.w,
                             child: getSecurityImageWidget(
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                                 cableLockState!.lockState,

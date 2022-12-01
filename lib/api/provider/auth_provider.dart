@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:evie_test/api/model/bike_model.dart';
+import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -23,19 +25,22 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 class AuthProvider extends ChangeNotifier {
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
   String credentialProvider = "";
-  bool? isEmailVerified;
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   String? _uid;
   String? _email;
-  bool isLogin = false;
-  bool? isFirstLogin;
 
   String? get getUid => _uid;
-
   String? get getEmail => _email;
 
+  bool isLogin = false;
+  bool? isFirstLogin;
+  bool? isEmailVerified;
+
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  StreamSubscription? userChangeSubscription;
 
   AuthProvider() {
     init();
@@ -43,7 +48,7 @@ class AuthProvider extends ChangeNotifier {
 
   ///Initial value
   Future<void> init() async {
-    FirebaseAuth.instance.userChanges().listen((user) {
+    userChangeSubscription = FirebaseAuth.instance.userChanges().listen((user) {
       if (user != null) {
         _uid = user.uid;
         _email = user.email!;
@@ -499,7 +504,12 @@ class AuthProvider extends ChangeNotifier {
     try {
       await _auth.signOut();
 
+      if(userChangeSubscription != null){
+        userChangeSubscription?.cancel();
+      }
+
       BikeProvider().clear();
+    CurrentUserProvider().cancelSubscription();
       NotificationProvider().unsubscribeFromTopic(_uid);
       NotificationProvider().unsubscribeFromTopic("fcm_test");
 

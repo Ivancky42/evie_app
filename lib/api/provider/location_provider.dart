@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/utils.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -21,7 +22,7 @@ class LocationProvider extends ChangeNotifier {
   String mapBoxStyleToken = dotenv.env['MAPBOX_STYLE_TOKEN'] ?? 'MST not found';
 
   LocationModel? locationModel;
-  Position? userPosition;
+  UserLocation? userPosition;
   Placemark? currentPlaceMark;
 
   Future<void> init(LocationModel? locationModel) async {
@@ -33,9 +34,8 @@ class LocationProvider extends ChangeNotifier {
       LocationPermission permission;
       permission = await Geolocator.requestPermission();
 
-      userPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high
-      );
+      getPlaceMarks(locationModel.geopoint.latitude, locationModel.geopoint.longitude);
+      //userPosition = updateUserPosition();
 
       notifyListeners();
     }
@@ -82,12 +82,31 @@ class LocationProvider extends ChangeNotifier {
   }
 
   getPlaceMarks(double latitude, double longitude) async {
-    List<Placemark> placeMarks = await placemarkFromCoordinates(
-        latitude, longitude);
 
-    for (var element in placeMarks) {
-      currentPlaceMark = element;
+    currentPlaceMark = null;
+
+    try {
+      List<Placemark> placeMarks = await placemarkFromCoordinates(
+          latitude, longitude, localeIdentifier: "en");
+
+      if (placeMarks.isNotEmpty) {
+        for (var element in placeMarks) {
+          currentPlaceMark = element;
+        }
+      } else {
+        currentPlaceMark = null;
+      }
+    }catch(error){
+      debugPrint(error.toString());
+      currentPlaceMark = null;
     }
+    notifyListeners();
+  }
+
+  updateUserPosition(UserLocation userLocation) async {
+    userPosition = userLocation;
+    //notifyListeners();
+
   }
 
 }
