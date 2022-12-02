@@ -11,7 +11,6 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../bluetooth/modelResult.dart';
 
 import '../model/bike_model.dart';
-import '../model/user_model.dart';
 
 enum NotifyDataState {
   notifying,
@@ -31,7 +30,6 @@ class BluetoothProvider extends ChangeNotifier {
   final flutterReactiveBle = FlutterReactiveBle();
   final bluetoothCommand = BluetoothCommand();
 
-  ///Reevo characteristic
   static Uuid serviceUUID =
   Uuid.parse(dotenv.env['BLE_SERVICE_UUID'] ?? 'UUID not found');
   static Uuid notifyingUUID =

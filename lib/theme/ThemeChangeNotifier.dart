@@ -1,7 +1,10 @@
+import 'package:evie_test/theme/AppTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 class ThemeChangeNotifier with ChangeNotifier {
+
+  ThemeData? currentTheme;
 
   bool isDarkMode(context){
     var darkMode = MediaQuery.of(context).platformBrightness;
@@ -15,4 +18,22 @@ class ThemeChangeNotifier with ChangeNotifier {
       return false;
     }
   }
+
+  setSystemMode(){
+
+
+    notifyListeners();
+  }
+
+  setLightMode(){
+
+    notifyListeners();
+  }
+
+  setDarkMode(){
+
+    notifyListeners();
+  }
+
+
 }

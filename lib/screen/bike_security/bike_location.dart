@@ -54,13 +54,13 @@ class _BikeLocationState extends State<BikeLocation> {
   @override
   void initState() {
     super.initState();
+    _locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    _locationProvider.addListener(locationListener);
   }
 
   @override
   void dispose() {
-    _locationProvider.removeListener(() {
-      loadImage(currentDangerStatus);
-    runSymbol();});
+    _locationProvider.removeListener(locationListener);
     mapController!.dispose();
     super.dispose();
   }
@@ -198,25 +198,8 @@ class _BikeLocationState extends State<BikeLocation> {
 
   @override
   Widget build(BuildContext context) {
-    _locationProvider = Provider.of<LocationProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
-
-
-    _locationProvider.addListener(() {
-      for (var element in dangerStatus) {
-        if(_bikeProvider.currentBikeModel != null){
-          if (_bikeProvider.currentBikeModel!.location!.status == element) {
-            setState(() {
-              currentDangerStatus = element;
-            });
-          }
-        }
-      }
-       getDistanceBetween();
-        loadImage(currentDangerStatus);
-        runSymbol();
-      });
-
+    _locationProvider = Provider.of<LocationProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -375,11 +358,8 @@ class _BikeLocationState extends State<BikeLocation> {
                                                       ),
                                                       onPressed: () {
                                                         setState(() {
-                                                          _locationProvider.removeListener(() {
-                                                            loadImage(currentDangerStatus);
-                                                          runSymbol();
-                                                          });
-                                                          mapController?.dispose();
+                                                          _locationProvider.removeListener(locationListener);
+                                                    //      mapController?.dispose();
                                                         });
                                                         _bikeProvider
                                                             .controlBikeList(
@@ -414,9 +394,8 @@ class _BikeLocationState extends State<BikeLocation> {
                                                       ),
                                                       onPressed: () {
                                                         setState(() {
-                                                          _locationProvider.removeListener(() { loadImage(currentDangerStatus);
-                                                          runSymbol(); });
-                                                          mapController?.dispose();
+                                                          _locationProvider.removeListener(locationListener);
+                                                    //      mapController?.dispose();
                                                         });
                                                         _bikeProvider
                                                             .controlBikeList(
@@ -650,23 +629,6 @@ class _BikeLocationState extends State<BikeLocation> {
                                 ),
                               ),
 
-                              /*
-                           Align(
-                            alignment: Alignment.topCenter,
-                            child: Transform.translate(
-                              child: Container(
-                                height: 12.h,
-                                width: 50.w,
-                                child: Image(
-                                  image: AssetImage(currentBikeStatusImage),
-                                  height: 12.h,
-                                  width: 50.w,
-                                ),
-                              ),
-                              offset: Offset(0, -70),
-                            ),
-                          ),
-                           */
                             ],
                           );
                         } else {
@@ -904,143 +866,6 @@ class _BikeLocationState extends State<BikeLocation> {
                         }
                       }),
 
-                  //
-                  // GestureDetector(
-                  //   onTap: () async {
-                  //     showMaterialModalBottomSheet(
-                  //         bounce: true,
-                  //         //expand: true,
-                  //         shape: const RoundedRectangleBorder(
-                  //           borderRadius: BorderRadius.vertical(
-                  //             top: Radius.circular(20),
-                  //           ),
-                  //         ),
-                  //         backgroundColor: const Color(0xFFECEDEB),
-                  //         context: context,
-                  //         builder: (context) => SingleChildScrollView(
-                  //               controller: ModalScrollController.of(context),
-                  //               child: SizedBox(
-                  //                 height: 90.h,
-                  //                 child: Center(
-                  //                   child: Column(
-                  //                     mainAxisAlignment:
-                  //                         MainAxisAlignment.start,
-                  //                     children: <Widget>[
-                  //                       SizedBox(height: 2.h),
-                  //                       const Image(
-                  //                         image: AssetImage(
-                  //                             "assets/buttons/down.png"),
-                  //                       ),
-                  //                       SizedBox(height: 2.h),
-                  //                       Image(
-                  //                         image: AssetImage(
-                  //                             currentBikeStatusImage),
-                  //                         height: 12.h,
-                  //                         width: 50.w,
-                  //                       ),
-                  //                       SizedBox(height: 1.h),
-                  //                       Text(
-                  //                         _bikeProvider
-                  //                             .currentBikeModel!.deviceName!,
-                  //                         style: TextStyle(
-                  //                             fontSize: 13.sp,
-                  //                             fontWeight: FontWeight.w500),
-                  //                       ),
-                  //                       SizedBox(height: 1.h),
-                  //                     ],
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             ));
-                  //
-                  //     // var position = await Geolocator.getCurrentPosition(
-                  //     //     desiredAccuracy: LocationAccuracy.high);
-                  //     // mapController?.animateCamera(
-                  //     //   CameraUpdate.newLatLngZoom(
-                  //     //     LatLng(
-                  //     //       position.latitude,
-                  //     //       position.longitude,
-                  //     //     ),
-                  //     //     16,
-                  //     //   ),
-                  //     // );
-                  //   },
-                  //   child: Image(
-                  //     image: AssetImage(currentBikeStatusImage),
-                  //     height: 12.h,
-                  //     width: 50.w,
-                  //   ),
-                  // ),
-                  // SizedBox(height: 1.h),
-                  // Text(
-                  //   _bikeProvider.currentBikeModel!.deviceName!,
-                  //   style: TextStyle(
-                  //       fontSize: 13.sp, fontWeight: FontWeight.w500),
-                  // ),
-                  // SizedBox(height: 1.h),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(10.0),
-                  //   child: Row(
-                  //     children: [
-                  //       Container(
-                  //         width: 10.w,
-                  //         child: Image(
-                  //           image: AssetImage(currentSecurityIcon),
-                  //           height: 24.0,
-                  //         ),
-                  //       ),
-                  //       Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           const Text(
-                  //             "Last Seen",
-                  //             style: TextStyle(
-                  //                 fontWeight: FontWeight.w400, fontSize: 12),
-                  //           ),
-                  //           SizedBox(
-                  //             height: 0.5.h,
-                  //           ),
-                  //           Container(
-                  //             width: 77.w,
-                  //             child: Row(
-                  //               mainAxisAlignment:
-                  //                   MainAxisAlignment.spaceBetween,
-                  //               children: [
-                  //                 Text(
-                  //                   _locationProvider
-                  //                           .currentPlaceMark?.name! ??
-                  //                       "Empty",
-                  //                   //    "Random Place",
-                  //                   style: TextStyle(
-                  //                       fontSize: 14.sp,
-                  //                       fontWeight: FontWeight.w700),
-                  //                 ),
-                  //                 Text(
-                  //                   "Est. 100m",
-                  //                   style: TextStyle(
-                  //                       fontSize: 10.sp,
-                  //                       fontWeight: FontWeight.w400),
-                  //                 ),
-                  //               ],
-                  //             ),
-                  //           ),
-                  //           SizedBox(
-                  //             height: 0.5.h,
-                  //           ),
-                  //           Text(
-                  //             "Feb 14, 2022 at 18:55",
-                  //             style: TextStyle(
-                  //                 fontWeight: FontWeight.w400,
-                  //                 fontSize: 10.sp),
-                  //           ),
-
-                  //   ],
-                  // ),
-                  //     ],
-                  //   ),
-                  // ),
-                  //   ],
-                  // ),
                 ),
               ),
             )
@@ -1057,6 +882,7 @@ class _BikeLocationState extends State<BikeLocation> {
   }
 
   void getDistanceBetween() {
+
     if (userLocation != null) {
       distanceBetween = Geolocator.distanceBetween(
               userLocation!.position.latitude,
@@ -1131,6 +957,14 @@ class _BikeLocationState extends State<BikeLocation> {
       top: 80,
       bottom: 80,
     ));
+  }
+
+  void locationListener(){
+    currentDangerStatus = _bikeProvider.currentBikeModel!.location!.status;
+
+    getDistanceBetween();
+    loadImage(currentDangerStatus);
+    runSymbol();
   }
 
 }
