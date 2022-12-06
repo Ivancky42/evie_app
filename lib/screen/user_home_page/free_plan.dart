@@ -1262,4 +1262,5 @@ class _FreePlanState extends State<FreePlan> {
     loadImage(currentDangerStatus);
     runSymbol();
   }
+
 }
