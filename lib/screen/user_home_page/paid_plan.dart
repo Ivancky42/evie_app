@@ -177,6 +177,7 @@ class _PaidPlanState extends State<PaidPlan> {
 
     var markerImage = await loadMarkerImage(currentDangerStatus);
     mapController?.addImage('marker', markerImage);
+
     // String key = '856822fd8e22db5e1ba48c0e7d69844a';
     // WeatherFactory wf = WeatherFactory(key);
     // List<Weather> forecast = await wf.fiveDayForecastByCityName("Bayan Lepas, Penang");
@@ -327,14 +328,6 @@ class _PaidPlanState extends State<PaidPlan> {
                             child: Stack(
                               children: [
 
-                                IconButton(
-                                    onPressed: (){},
-                                    icon: Image(
-                                      image: AssetImage(
-                                          "assets/buttons/direction.png"),
-                                      //height: 1.h,
-                                    ),),
-
                                 MapboxMap(
                                   useHybridCompositionOverride: true,
                                   //                           useDelayedDisposal: true,
@@ -371,6 +364,7 @@ class _PaidPlanState extends State<PaidPlan> {
                                   ),
                                 ),
 
+
                               ],
 
                             ),
@@ -401,6 +395,9 @@ class _PaidPlanState extends State<PaidPlan> {
                     });
                     return false;
                   },
+
+
+
                   child: DraggableScrollableSheet(
                       initialChildSize: .40,
                       minChildSize: .14,
@@ -419,6 +416,31 @@ class _PaidPlanState extends State<PaidPlan> {
 
                         if (currentScroll <= 0.80) {
                           return Stack(children: [
+
+                            Transform.translate(
+                              child:  IconButton(
+
+                                iconSize:10.h,
+                                onPressed: ()async{
+                                  final availableMaps = await MapLauncher.installedMaps;
+
+                                  await availableMaps.first.showMarker(
+                                    coords: Coords(_locationProvider.locationModel!.geopoint.latitude,
+                                        _locationProvider.locationModel!.geopoint.longitude),
+                                    title: "Hello",
+                                  );
+
+
+                                },
+                                icon: const Image(
+                                  image: AssetImage(
+                                      "assets/buttons/direction.png"),
+                                  //height: 1.h,
+                                ),),
+                              offset: const Offset(300, -50),
+                            ),
+
+
                             if (isDeviceConnected == true) ...{
                               Container(
                                   decoration: BoxDecoration(
@@ -1259,7 +1281,6 @@ class _PaidPlanState extends State<PaidPlan> {
 
   runSymbol() async {
 
-
     if (mapController?.symbols != null  && locationSymbol != null) {
 
       var markerImage = await loadMarkerImage(currentDangerStatus);
@@ -1276,7 +1297,7 @@ class _PaidPlanState extends State<PaidPlan> {
       );
       animateBounce();
     } else {
-      if(locationSymbol != null){
+      if(mapController != null){
         addSymbol();
         animateBounce();
       }
