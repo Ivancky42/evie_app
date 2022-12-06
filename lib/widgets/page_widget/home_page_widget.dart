@@ -1,7 +1,7 @@
+import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../bluetooth/modelResult.dart';
 
@@ -48,7 +48,7 @@ class HomePageWidget_Status extends StatelessWidget{
     }
     
     return Container(
-      height: 10.h,
+      height: 80.h,
       width:double.infinity,
       decoration: BoxDecoration(
         color: dangerColor,
@@ -61,7 +61,7 @@ class HomePageWidget_Status extends StatelessWidget{
               image: AssetImage(
                   alertImage),
             ),
-            SizedBox(width:3.w,),
+            SizedBox(width:12.25.w,),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
