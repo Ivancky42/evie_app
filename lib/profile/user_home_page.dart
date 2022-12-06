@@ -55,56 +55,56 @@ class _UserHomePageState extends State<UserHomePage> {
 
 
     return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 5.5.h,
-          title: Text(
-            _title,
-            style: TextStyle(fontSize: 21.sp),
-          ),
-          centerTitle: false,
-          actions: <Widget>[
-            if (currentIndex == 0) ... [
-
-            Align(
-            child:Container(
-              decoration: const BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: Colors.transparent,
-                  borderRadius: BorderRadius.all(Radius.circular(10),
-                  )),
-              child: IconButton(
-                iconSize: 25,
-                icon: ThemeChangeNotifier().isDarkMode(context) == true ?
-                    _notificationProvider.isReadAll == true?
-                const Image(
-                  image: AssetImage(
-                      "assets/buttons/notification_white.png"),
-                  height: 19.99,
-                  width: 17.98,
-                ) :  const Icon(Icons.notifications_active_outlined
-                    )
-                        :
-                    _notificationProvider.isReadAll == true?
-                const Image(
-                  image: AssetImage(
-                      "assets/buttons/notification.png"),
-                  height: 17.98,
-                  width: 17.98,
-                ):  const Icon(Icons.notifications_active_outlined
-                    ),
-                tooltip: 'Notification',
-                onPressed: () {
-                  changeToNotificationScreen(context);
-                },
-              ),
-            ),
-           ),
-            const SizedBox(
-              width: 20,
-            ),
-          ],
-          ],
-        ),
+    //    appBar: AppBar(
+        //  toolbarHeight: 5.5.h,
+          // title: Text(
+          //   _title,
+          //   style: TextStyle(fontSize: 21.sp),
+          // ),
+          // centerTitle: false,
+          // actions: <Widget>[
+          //   if (currentIndex == 0) ... [
+          //
+          //   Align(
+          //   child:Container(
+          //     decoration: const BoxDecoration(
+          //       shape: BoxShape.rectangle,
+          //       color: Colors.transparent,
+          //         borderRadius: BorderRadius.all(Radius.circular(10),
+          //         )),
+          //     child: IconButton(
+          //       iconSize: 25,
+          //       icon: ThemeChangeNotifier().isDarkMode(context) == true ?
+          //           _notificationProvider.isReadAll == true?
+          //       const Image(
+          //         image: AssetImage(
+          //             "assets/buttons/notification_white.png"),
+          //         height: 19.99,
+          //         width: 17.98,
+          //       ) :  const Icon(Icons.notifications_active_outlined
+          //           )
+          //               :
+          //           _notificationProvider.isReadAll == true?
+          //       const Image(
+          //         image: AssetImage(
+          //             "assets/buttons/notification.png"),
+          //         height: 17.98,
+          //         width: 17.98,
+          //       ):  const Icon(Icons.notifications_active_outlined
+          //           ),
+          //       tooltip: 'Notification',
+          //       onPressed: () {
+          //         changeToNotificationScreen(context);
+          //       },
+          //     ),
+          //   ),
+          //  ),
+          //   const SizedBox(
+          //     width: 20,
+          //   ),
+          // ],
+          // ],
+      //  ),
 
         //Body should change when bottom navigation bar state change
         body: screen[currentIndex],

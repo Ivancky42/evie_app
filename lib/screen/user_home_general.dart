@@ -323,7 +323,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
   Widget _buildChild(LinkedHashMap userBikeList) {
 
-    if (!userBikeList.isNotEmpty) {
+    if (_bikeProvider.currentBikeIMEI != null && !userBikeList.isNotEmpty) {
       return const AddNewBike();
     } else {
       ///Free and paid plan

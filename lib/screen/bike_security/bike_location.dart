@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sizer/sizer.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:weather/weather.dart';
 
 import '../../api/navigator.dart';
 import '../../api/provider/bike_provider.dart';
@@ -50,6 +51,7 @@ class _BikeLocationState extends State<BikeLocation> {
   UserLocation? userLocation;
 
   StreamSubscription? locationSubscription;
+
 
   @override
   void initState() {
@@ -150,12 +152,20 @@ class _BikeLocationState extends State<BikeLocation> {
       animateBounce();
 
     }
-
     //  getPlace();
   }
 
   ///Change icon according to dangerous level
   void addSymbol() async {
+
+    String key = '856822fd8e22db5e1ba48c0e7d69844a';
+    WeatherFactory wf = WeatherFactory(key);
+    List<Weather> forecast = await wf.fiveDayForecastByCityName("Bayan Lepas, Penang");
+
+
+
+
+
     locationSymbol = (await mapController?.addSymbol(
       SymbolOptions(
         iconImage: 'marker',
@@ -924,13 +934,11 @@ class _BikeLocationState extends State<BikeLocation> {
         break;
       case 12:month = "Dec";
         break;
-
     }
 
     String returnValue = "$month ${now.day.toString()}, ${now.year.toString()} at ${now.hour.toString()} : ${now.minute.toString()}";
 
     return returnValue;
-
   }
 
   void animateBounce() {
