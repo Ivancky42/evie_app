@@ -77,8 +77,6 @@ class HomePageWidget_Status extends StatelessWidget{
         ),
       )
 
-
-
       // Center(
       //     child:Text(location!,style: TextStyle(fontSize: 12, color: fontColor),)),
     );
@@ -96,7 +94,7 @@ Widget getSecurityTextWidget(LockState isLocked, String status) {
         );
       } else if (status == "warning") {
         return const Text(
-          "ATTENTION NEEDED",
+          "MOVEMENT DETECTED",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         );
       } else if (status == "danger") {
@@ -114,7 +112,7 @@ Widget getSecurityTextWidget(LockState isLocked, String status) {
         );
       } else if (status == "warning") {
         return const Text(
-          "ATTENTION NEEDED",
+          "MOVEMENT DETECTED",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         );
       } else if (status == "danger") {
@@ -125,7 +123,22 @@ Widget getSecurityTextWidget(LockState isLocked, String status) {
       }
       break;
     case LockState.unknown:
-    // TODO: Handle this case.
+      if (status == "safe") {
+        return const Text(
+          "UNKNOWN",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        );
+      } else if (status == "warning") {
+        return const Text(
+          "MOVEMENT DETECTED",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        );
+      } else if (status == "danger") {
+        return const Text(
+          "UNDER THREAT",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        );
+      }
       break;
   }
 

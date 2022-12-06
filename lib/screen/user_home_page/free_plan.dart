@@ -414,9 +414,9 @@ class _FreePlanState extends State<FreePlan> {
                       builder: (BuildContext context,
                           ScrollController _scrollController) {
 
-                        if(currentScroll == 0.40){
+                        if(currentScroll > 0.36 && currentScroll < 0.45){
                           animateBounce();
-                        }else if(currentScroll == 0.14){
+                        }else if(currentScroll < 0.36){
                           animateBounce();
                         }
 
@@ -800,8 +800,8 @@ class _FreePlanState extends State<FreePlan> {
                                                       ],
                                                     ),
                                                     Image(
-                                                      image: const AssetImage(
-                                                          "assets/images/bike_HPStatus/bike_normal.png"),
+                                                      image: AssetImage(
+                                                         currentBikeStatusImage),
                                                       height: 7.h,
                                                       width: 30.w,
                                                     ),
@@ -819,9 +819,9 @@ class _FreePlanState extends State<FreePlan> {
                                                   child: Row(children: [
                                                     Container(
                                                       width: 10.w,
-                                                      child: const Image(
+                                                      child: Image(
                                                         image: AssetImage(
-                                                            "assets/buttons/bike_security_not_available.png"),
+                                                            currentSecurityIcon),
                                                         height: 24.0,
                                                       ),
                                                     ),
@@ -835,14 +835,10 @@ class _FreePlanState extends State<FreePlan> {
                                                         ),
                                                         Container(
                                                           width: 35.w,
-                                                          child: const Text(
-                                                            "BIKE NOT CONNECTED",
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 16),
-                                                          ),
+                                                          child: getSecurityTextWidget(
+                                                              cableLockState!.lockState,
+                                                              _bikeProvider
+                                                                  .currentBikeModel!.location!.status),
                                                         )
                                                       ],
                                                     ),
