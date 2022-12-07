@@ -14,16 +14,16 @@ import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import '../../api/length.dart';
-import '../../api/navigator.dart';
+import '../../../api/length.dart';
+import '../../../api/navigator.dart';
 
 import 'package:evie_test/widgets/evie_button.dart';
 
-import '../../api/provider/bike_provider.dart';
-import '../../api/provider/location_provider.dart';
-import '../../widgets/evie_double_button_dialog.dart';
-import '../../widgets/evie_oval.dart';
-import '../../widgets/evie_single_button_dialog.dart';
+import '../../../api/provider/bike_provider.dart';
+import '../../../api/provider/location_provider.dart';
+import '../../../widgets/evie_double_button_dialog.dart';
+import '../../../widgets/evie_oval.dart';
+import '../../../widgets/evie_single_button_dialog.dart';
 
 class AddNewBike extends StatefulWidget {
   const AddNewBike({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
+import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../bluetooth/modelResult.dart';
 
@@ -48,7 +48,7 @@ class HomePageWidget_Status extends StatelessWidget{
     }
     
     return Container(
-      height: 10.h,
+      height: 80.h,
       width:double.infinity,
       decoration: BoxDecoration(
         color: dangerColor,
@@ -61,7 +61,7 @@ class HomePageWidget_Status extends StatelessWidget{
               image: AssetImage(
                   alertImage),
             ),
-            SizedBox(width:3.w,),
+            SizedBox(width:12.25.w,),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -197,36 +197,117 @@ Widget getSecurityImageWidget(LockState isLocked, String status) {
   );
 }
 
-Widget getBatteryImage(int batteryPercent) {
+Widget getFirestoreSecurityTextWidget(bool? isLocked, String status) {
+  switch (isLocked) {
+    case true:
+      if (status == "safe") {
+        return const Text(
+          "LOCKED AND SECURE",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        );
+      } else if (status == "warning") {
+        return const Text(
+          "MOVEMENT DETECTED",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        );
+      } else if (status == "danger") {
+        return const Text(
+          "UNDER THREAT",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        );
+      }
+      break;
+    case false:
+      if (status == "safe") {
+        return const Text(
+          "UNLOCKED",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        );
+      } else if (status == "warning") {
+        return const Text(
+          "MOVEMENT DETECTED",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        );
+      } else if (status == "danger") {
+        return const Text(
+          "UNDER THREAT",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        );
+      }
+      break;
+  }
+
+  return const Text(
+    "LOCKED AND SECURE",
+    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+  );
+}
+
+String getBatteryImage(int batteryPercent) {
+
   if (batteryPercent > 50 && batteryPercent <= 100) {
-    return Image(
-      image: const AssetImage("assets/icons/battery_full.png"),
-      height: 1.h,
-    );
+    return "assets/icons/battery_full.png";
+
   } else if (batteryPercent > 10 && batteryPercent <= 50) {
-    return Image(
-      image: const AssetImage("assets/icons/battery_half.png"),
-      height: 1.h,
-    );
+    return "assets/icons/battery_half.png";
   } else if (batteryPercent > 0 && batteryPercent <= 10) {
-    return Image(
-      image: const AssetImage("assets/icons/battery_low.png"),
-      height: 1.h,
-    );
+    return "assets/icons/battery_low.png";
   } else if (batteryPercent == 0) {
-    return Image(
-      image: const AssetImage("assets/icons/battery_empty.png"),
-      height: 1.h,
-    );
+    return "assets/icons/battery_empty.png";
   } else {
-    return Image(
-      image: const AssetImage("assets/icons/battery_empty.png"),
-      height: 1.h,
-    );
+    return "assets/icons/battery_empty.png";
   }
 }
 
+String getBatteryImageFromBLE(String? batteryPercentage) {
+int batteryPercent;
 
+batteryPercent = int.parse(batteryPercentage!);
+
+  if (batteryPercent > 50 && batteryPercent <= 100) {
+    return "assets/icons/battery_full.png";
+
+  } else if (batteryPercent > 10 && batteryPercent <= 50) {
+    return "assets/icons/battery_half.png";
+  } else if (batteryPercent > 0 && batteryPercent <= 10) {
+    return "assets/icons/battery_low.png";
+  } else if (batteryPercent == 0) {
+    return "assets/icons/battery_empty.png";
+  } else {
+    return "assets/icons/battery_empty.png";
+  }
+}
+
+///Load image according danger status
+Future<Uint8List> loadMarkerImage(String dangerStatus) async {
+  switch (dangerStatus) {
+    case 'safe':
+      {
+        var byteData = await rootBundle.load("assets/icons/marker_safe.png");
+        return byteData.buffer.asUint8List();
+      }
+    case 'warning':
+      {
+        var byteData =
+        await rootBundle.load("assets/icons/marker_warning.png");
+
+        return byteData.buffer.asUint8List();
+      }
+    case 'danger':
+      {
+        var byteData =
+        await rootBundle.load("assets/icons/marker_danger.png");
+
+        return byteData.buffer.asUint8List();
+      }
+    default:
+      {
+        var byteData = await rootBundle.load("assets/icons/marker_safe.png");
+
+        return byteData.buffer.asUint8List();
+      }
+  }
+}
 
 
 String getDateTime() {
