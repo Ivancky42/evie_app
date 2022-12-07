@@ -307,7 +307,6 @@ class _PaidPlanState extends State<PaidPlan> {
                                     },
                                     onUserLocationUpdate: (userLocation) {
                                       this.userLocation = userLocation;
-                                      animateBounce();
                                       getDistanceBetween();
                                     },
                                     latitude: _locationProvider
@@ -348,12 +347,7 @@ class _PaidPlanState extends State<PaidPlan> {
                       expand: true,
                       builder: (BuildContext context, ScrollController _scrollController) {
 
-
-                        if(currentScroll == (120 / 710)){
-                          animateBounce();
-                        }else if(currentScroll == (324 / 710)){
-                          animateBounce();
-                        }
+                        animateBounce();
 
                         return ListView(
                           controller: _scrollController,
@@ -1002,22 +996,26 @@ class _PaidPlanState extends State<PaidPlan> {
 
       latLngBounds = LatLngBounds(southwest: southwest, northeast: northeast);
 
-      if(currentScroll == (324 / 710)){
-        mapController?.animateCamera(CameraUpdate.newLatLngBounds(
-          latLngBounds,
-          left: 170,
-          right: 170,
-          top: 100,
-          bottom: 300,
-        ));
+      if(currentScroll <= (324 / 710) && currentScroll > (125/710)){
+        if (mapController != null) {
+          if (!mapController!.isCameraMoving) {
+            mapController?.animateCamera(CameraUpdate.newLatLngBounds(
+              latLngBounds,
+              left: 170.w,
+              right: 170.w,
+              top: 100.h,
+              bottom: 324.h,
+            ));
+          }
+        }
 
       }else if(currentScroll == (120 / 710)){
         mapController?.animateCamera(CameraUpdate.newLatLngBounds(
           latLngBounds,
-          left: 80,
-          right: 80,
-          top: 80,
-          bottom: 80,
+          left: 80.w,
+          right: 80.w,
+          top: 80.h,
+          bottom: 120.h,
         ));
       }
     }
