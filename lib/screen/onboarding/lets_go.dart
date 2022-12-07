@@ -11,6 +11,7 @@ import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import '../../api/colours.dart';
 import '../../api/length.dart';
 import '../../api/navigator.dart';
 
@@ -56,16 +57,22 @@ class _LetsGoState extends State<LetsGo> {
               ),
               Text(
                 //  "Hi ${_currentUserProvider.currentUserModel!.name}, thanks for choosing EVIE!",
-                "Hi $currentName, thanks for choosing EVIE!",
+                "Stay closeby with your bike",
                 style: TextStyle(fontSize: 18.sp),
               ),
               SizedBox(
                 height: 1.h,
               ),
               Text(
-                "Let's connect to your bike and personalize your account.",
+                "Assemble your bike fully and keep your bike closely with you for the following steps.",
                 style: TextStyle(fontSize: 11.5.sp,height: 0.17.h),
               ),
+
+              TextButton(
+                  onPressed: (){
+
+                  },
+                  child: const Text("How to assemble my bike?", style: TextStyle(color: EvieColors.PrimaryColor, decoration: TextDecoration.underline,),))
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -78,7 +79,7 @@ class _PaidPlanState extends State<PaidPlan> {
   late LocationProvider _locationProvider;
   late LatLngBounds latLngBounds;
 
-  MapboxMapController? mapController;
+  late final MapboxMapController? mapController;
   double currentScroll = 0.40;
 
   Symbol? locationSymbol;
@@ -87,17 +88,11 @@ class _PaidPlanState extends State<PaidPlan> {
 
   StreamSubscription? locationSubscription;
   
-  double? currentBikeLatitude;
-  double? currentBikeLongitude;
-  
   @override
   void initState() {
-    super.initState();
     _locationProvider = Provider.of<LocationProvider>(context, listen: false);
-    _bikeProvider = Provider.of<BikeProvider>(context, listen: false);
-    _bluetoothProvider = Provider.of<BluetoothProvider>(context, listen: false);
-
     _locationProvider.addListener(locationListener);
+    super.initState();
   }
 
   @override
@@ -146,41 +141,24 @@ class _PaidPlanState extends State<PaidPlan> {
 
     var markerImage = await loadMarkerImage(currentDangerStatus);
     mapController?.addImage('marker', markerImage);
-    // String key = '856822fd8e22db5e1ba48c0e7d69844a';
-    // WeatherFactory wf = WeatherFactory(key);
-    // List<Weather> forecast = await wf.fiveDayForecastByCityName("Bayan Lepas, Penang");
 
     locationSymbol = (await mapController?.addSymbol(
       SymbolOptions(
         iconImage: 'marker',
         iconSize: 2,
-        geometry: LatLng(currentBikeLatitude!,
-            currentBikeLongitude!),
+        geometry: LatLng(_locationProvider.locationModel!.geopoint.latitude,
+            _locationProvider.locationModel!.geopoint.longitude),
       ),
     ));
   }
 
   void getPlace() {
     _locationProvider.getPlaceMarks(
-        currentBikeLatitude!,
-        currentBikeLongitude!);
+        _locationProvider.locationModel!.geopoint.latitude,
+        _locationProvider.locationModel!.geopoint.longitude);
 
     mapController?.onSymbolTapped.add((argument) {
-      SmartDialog.showAttach(
-        keepSingle: true,
-        alignmentTemp: Alignment.center,
-        targetContext: context,
-        widget: Container(
-          width: 200,
-          height: 50,
-          color: Colors.white,
-          child: _locationProvider.currentPlaceMark != null
-              ? Text("Bike Location:\n "
-              "${_locationProvider.currentPlaceMark?.name} "
-              "${_locationProvider.currentPlaceMark?.country}")
-              : const Text("Not Available"),
-        ),
-      );
+
     });
   }
 
@@ -196,8 +174,6 @@ class _PaidPlanState extends State<PaidPlan> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
-
-
 
     connectionState = _bluetoothProvider.connectionStateUpdate?.connectionState;
     connectionStateUpdate = _bluetoothProvider.connectionStateUpdate;
@@ -274,7 +250,7 @@ class _PaidPlanState extends State<PaidPlan> {
                         if (snapshot.hasData) {
                           return GestureDetector(
                               onTap: (){
-
+                                changeToLetsGoScreen(context);
                               },
                               child:HomePageWidget_Status(
                                   currentDangerState: currentDangerStatus,
@@ -452,9 +428,9 @@ class _PaidPlanState extends State<PaidPlan> {
                                                                             ScaffoldMessenger.of(
                                                                                 context)
                                                                                 .showSnackBar(
-                                                                              const SnackBar(
+                                                                              SnackBar(
                                                                                 content:
-                                                                                Text('Bike is unlocked. To lock bike......'),
+                                                                                Text('Bike is unlocked. To lock bike, pull the lock handle on the bike.',style: TextStyle(fontSize: 16.sp),),
                                                                                 duration:
                                                                                 Duration(seconds: 2),
                                                                               ),
@@ -470,7 +446,7 @@ class _PaidPlanState extends State<PaidPlan> {
                                                                                 .showSnackBar(
                                                                               SnackBar(
                                                                                 width:
-                                                                                90.w,
+                                                                                358.w,
                                                                                 behavior:
                                                                                 SnackBarBehavior.floating,
                                                                                 shape: const RoundedRectangleBorder(
@@ -479,27 +455,10 @@ class _PaidPlanState extends State<PaidPlan> {
                                                                                 content:
                                                                                 Container(
                                                                                   height:
-                                                                                  9.h,
+                                                                                  80.h,
                                                                                   child:
-                                                                                  Column(
-                                                                                    children: [
-                                                                                      const Align(
-                                                                                        alignment: Alignment.topLeft,
-                                                                                        child: Text('Bike is unlocked. To lock bike......'),
+                                                                                  Text('Bike is unlocked. To lock bike, pull the lock handle on the bike.',style: TextStyle(fontSize: 16.sp),),
                                                                                       ),
-                                                                                      Align(
-                                                                                        alignment: Alignment.centerRight,
-                                                                                        child: TextButton(
-                                                                                          child: const Text(
-                                                                                            'LEARN MORE',
-                                                                                            style: TextStyle(color: Color(0xff836ED3)),
-                                                                                          ),
-                                                                                          onPressed: () {},
-                                                                                        ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                ),
                                                                                 duration:
                                                                                 const Duration(seconds: 4),
                                                                               ),
@@ -531,10 +490,10 @@ class _PaidPlanState extends State<PaidPlan> {
                                                         ),
                                                         if (connectionState?.name ==
                                                             "connecting") ...{
-                                                          const Text(
+                                                      Text(
                                                             "Connecting bike",
                                                             style: TextStyle(
-                                                                fontSize: 12,
+                                                                fontSize: 12.sp,
                                                                 fontWeight:
                                                                 FontWeight.w400,
                                                                 color: Color(
@@ -542,20 +501,20 @@ class _PaidPlanState extends State<PaidPlan> {
                                                           ),
                                                         } else if(connectionState?.name ==
                                                             "connected")...{
-                                                          const Text(
+                                                           Text(
                                                             "Tap to unlock bike",
                                                             style: TextStyle(
-                                                                fontSize: 12,
+                                                                fontSize: 12.sp,
                                                                 fontWeight:
                                                                 FontWeight.w400,
                                                                 color: Color(
                                                                     0xff3F3F3F)),
                                                           ),
                                                         }else ...{
-                                                          const Text(
+                                                      Text(
                                                             "Tap to connect bike",
                                                             style: TextStyle(
-                                                                fontSize: 12,
+                                                                fontSize: 12.sp,
                                                                 fontWeight:
                                                                 FontWeight.w400,
                                                                 color: Color(
@@ -731,20 +690,20 @@ class _PaidPlanState extends State<PaidPlan> {
                                                         ),
                                                         if (connectionState?.name ==
                                                             "connecting") ...{
-                                                          const Text(
+                                                          Text(
                                                             "Connecting bike",
                                                             style: TextStyle(
-                                                                fontSize: 12,
+                                                                fontSize: 12.sp,
                                                                 fontWeight:
                                                                 FontWeight.w400,
                                                                 color: Color(
                                                                     0xff3F3F3F)),
                                                           ),
                                                         } else ...{
-                                                          const Text(
+                                                           Text(
                                                             "Tap to connect bike",
                                                             style: TextStyle(
-                                                                fontSize: 12,
+                                                                fontSize: 12.sp,
                                                                 fontWeight:
                                                                 FontWeight.w400,
                                                                 color: Color(
@@ -808,7 +767,7 @@ class _PaidPlanState extends State<PaidPlan> {
                                       child: Column(
                                         children: [
 
-                                          const Text("scroll to load more",style:TextStyle(color: Color(0xff7A7A79), fontSize: 12),),
+                                           Text("scroll to load more",style:TextStyle(color: Color(0xff7A7A79), fontSize: 12.sp),),
                                           SizedBox(height: 1.h),
                                           Padding(
                                             padding: const EdgeInsets.all(6),
@@ -976,8 +935,8 @@ class _PaidPlanState extends State<PaidPlan> {
       distanceBetween = Geolocator.distanceBetween(
           userLocation!.position.latitude,
           userLocation!.position.longitude,
-          currentBikeLatitude!,
-          currentBikeLongitude!)
+          _locationProvider.locationModel!.geopoint.latitude,
+          _locationProvider.locationModel!.geopoint.longitude)
           .toStringAsFixed(0);
     } else {
       distanceBetween = "-";
@@ -987,16 +946,16 @@ class _PaidPlanState extends State<PaidPlan> {
   void animateBounce() {
     if(_locationProvider.locationModel != null && userLocation?.position != null){
       final LatLng southwest = LatLng(
-        min(currentBikeLatitude!,
+        min(_locationProvider.locationModel!.geopoint.latitude,
             userLocation!.position.latitude),
-        min(currentBikeLongitude!,
+        min(_locationProvider.locationModel!.geopoint.longitude,
             userLocation!.position.longitude),
       );
 
       final LatLng northeast = LatLng(
-        max(currentBikeLatitude!,
+        max(_locationProvider.locationModel!.geopoint.latitude,
             userLocation!.position.latitude),
-        max(currentBikeLongitude!,
+        max(_locationProvider.locationModel!.geopoint.longitude,
             userLocation!.position.longitude),
       );
 
@@ -1025,8 +984,8 @@ class _PaidPlanState extends State<PaidPlan> {
 
   void locationListener() {
     currentDangerStatus = _bikeProvider.currentBikeModel!.location!.status;
-    currentBikeLatitude = _locationProvider.locationModel!.geopoint.latitude;
-    currentBikeLongitude =  _locationProvider.locationModel!.geopoint.longitude;
+    //currentBikeLatitude = _locationProvider.locationModel!.geopoint.latitude;
+    //currentBikeLongitude =  _locationProvider.locationModel!.geopoint.longitude;
 
     getDistanceBetween();
     loadImage(currentDangerStatus);
@@ -1044,8 +1003,8 @@ class _PaidPlanState extends State<PaidPlan> {
         SymbolOptions(
           iconImage: 'marker',
           iconSize: 2,
-          geometry: LatLng(currentBikeLatitude!,
-              currentBikeLongitude!),
+          geometry: LatLng(_locationProvider.locationModel!.geopoint.latitude,
+              _locationProvider.locationModel!.geopoint.longitude),
         ),
       );
       animateBounce();

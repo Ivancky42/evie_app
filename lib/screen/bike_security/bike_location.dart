@@ -16,7 +16,6 @@ import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sizer/sizer.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:weather/weather.dart';
 
 import '../../api/navigator.dart';
 import '../../api/provider/bike_provider.dart';
@@ -157,15 +156,6 @@ class _BikeLocationState extends State<BikeLocation> {
 
   ///Change icon according to dangerous level
   void addSymbol() async {
-
-    String key = '856822fd8e22db5e1ba48c0e7d69844a';
-    WeatherFactory wf = WeatherFactory(key);
-    List<Weather> forecast = await wf.fiveDayForecastByCityName("Bayan Lepas, Penang");
-
-
-
-
-
     locationSymbol = (await mapController?.addSymbol(
       SymbolOptions(
         iconImage: 'marker',

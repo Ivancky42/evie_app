@@ -155,7 +155,7 @@ class Bike_Status_Row extends StatelessWidget {
                     fontSize: 20.sp
                       ),
                 ),
-                Text("Est 0km")
+                Text("Est 0km", style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),)
               ])
         ]);
   }

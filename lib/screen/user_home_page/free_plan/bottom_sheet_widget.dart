@@ -84,6 +84,7 @@ class Bike_Status_Row extends StatelessWidget {
   String currentBatteryIcon;
   String connectText;
   Widget child;
+  String estKm;
 
   Bike_Status_Row({
     Key? key,
@@ -91,6 +92,7 @@ class Bike_Status_Row extends StatelessWidget {
     required this.currentBatteryIcon,
     required this.connectText,
     required this. child,
+    required this.estKm,
 
   }) : super(key: key);
 
@@ -136,10 +138,11 @@ class Bike_Status_Row extends StatelessWidget {
               children:[
                 Text(
                "${connectText} %",
-                  style: const TextStyle(
+                  style: TextStyle(
+                    fontSize: 20.sp
                     ),
                 ),
-                Text("Est -km")
+                Text(estKm,style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),)
               ])
         ]);
   }
