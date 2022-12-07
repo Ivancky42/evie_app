@@ -328,8 +328,8 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       return const AddNewBike();
     } else {
       ///Free and paid plan
-      //return const PaidPlan();
-      return const FreePlan();
+      return const PaidPlan();
+     // return const FreePlan();
     }
   }
 }

@@ -33,13 +33,25 @@ class Bike_Name_Row extends StatelessWidget {
               .start,
           children: [
 
-            Text(
-              bikeName,
-              style: TextStyle(
-                  fontSize: 16.5.sp,
-                  fontWeight:
-                  FontWeight
-                      .w700),
+            Row(
+              children: [
+                Text(
+                  bikeName,
+                  style: TextStyle(
+                      fontSize: 16.5.sp,
+                      fontWeight:
+                      FontWeight
+                          .w700),
+                ),
+
+                Image(
+                  image: AssetImage(
+                      "assets/icons/bluetooth_small.png"),
+
+                ),
+
+              ],
+
             ),
             SizedBox(
               height: 4.h,
