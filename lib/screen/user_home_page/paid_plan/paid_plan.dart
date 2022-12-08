@@ -14,6 +14,7 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:provider/provider.dart';
 import '../../../api/model/location_model.dart';
@@ -159,9 +160,19 @@ class _PaidPlanState extends State<PaidPlan> {
         _locationProvider.locationModel!.geopoint.latitude,
         _locationProvider.locationModel!.geopoint.longitude);
 
-    mapController?.onSymbolTapped.add((argument) {
+    try {
+      mapController?.onSymbolTapped.add((argument) async {
+        List<AvailableMap> availableMaps = await MapLauncher.installedMaps;
+        ///Display available maps for user.
+        print(availableMaps);
+        ///show direction with map that user selected
+        ///input mapType will do.
+        MapLauncher.showDirections(mapType: availableMaps.first.mapType, destination: Coords(argument.options.geometry!.latitude, argument.options.geometry!.longitude));
 
-    });
+      });
+    } catch (e, s) {
+      print(s);
+    }
   }
 
   void _onMapCreated(MapboxMapController mapController) async {
