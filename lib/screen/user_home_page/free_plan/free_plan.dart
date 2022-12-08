@@ -86,6 +86,7 @@ class _FreePlanState extends State<FreePlan> {
   UserLocation? userLocation;
 
   StreamSubscription? locationSubscription;
+  bool myLocationEnabled = false;
 
   @override
   void initState() {
@@ -274,7 +275,6 @@ class _FreePlanState extends State<FreePlan> {
                             height: 636.h,
                             child: Stack(
                               children: [
-
                                 Mapbox_Widget(
                                   accessToken: _locationProvider.defPublicAccessToken,
                                   onMapCreated: _onMapCreated,
@@ -291,7 +291,8 @@ class _FreePlanState extends State<FreePlan> {
                                   latitude: _locationProvider
                                       .locationModel!.geopoint.latitude,
                                   longitude:_locationProvider
-                                      .locationModel!.geopoint.longitude,)
+                                      .locationModel!.geopoint.longitude,
+                                  )
                               ],
                             ),
                           );

@@ -24,7 +24,7 @@ class Mapbox_Widget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MapboxMap(
-      useHybridCompositionOverride: true,
+      //useHybridCompositionOverride: true,
       //    useDelayedDisposal: true,
       myLocationEnabled: true,
       trackCameraPosition: true,

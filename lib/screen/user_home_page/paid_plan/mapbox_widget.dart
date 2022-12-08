@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
-class Mapbox_Widget extends StatelessWidget {
-
+class Mapbox_Widget extends StatefulWidget {
   String accessToken;
   Function(MapboxMapController)? onMapCreated;
-  Function()? onStyleLoadedCallback;
+  VoidCallback onStyleLoadedCallback;
   Function(UserLocation)? onUserLocationUpdate;
   double latitude;
   double longitude;
@@ -22,26 +21,30 @@ class Mapbox_Widget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _Mapbox_WidgetState createState() => _Mapbox_WidgetState();
+}
+
+class _Mapbox_WidgetState extends State<Mapbox_Widget> {
+
+  @override
   Widget build(BuildContext context) {
     return MapboxMap(
-      useHybridCompositionOverride: true,
-      //    useDelayedDisposal: true,
+      useDelayedDisposal: true,
       myLocationEnabled: true,
       trackCameraPosition: true,
       myLocationTrackingMode:
       MyLocationTrackingMode.Tracking,
       myLocationRenderMode: MyLocationRenderMode.COMPASS,
-      accessToken:accessToken,
+      accessToken:widget.accessToken,
       compassEnabled: true,
-      onMapCreated: onMapCreated,
+      onMapCreated: widget.onMapCreated,
       styleString: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
-
-      onStyleLoadedCallback: onStyleLoadedCallback,
-      onUserLocationUpdated: onUserLocationUpdate,
+      onStyleLoadedCallback: widget.onStyleLoadedCallback,
+      onUserLocationUpdated: widget.onUserLocationUpdate,
       initialCameraPosition: CameraPosition(
         target: LatLng(
-            latitude,
-            longitude),
+            widget.latitude,
+            widget.longitude),
         zoom: 16,
       ),
     );
