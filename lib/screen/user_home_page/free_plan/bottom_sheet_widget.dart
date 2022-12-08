@@ -8,12 +8,14 @@ class Bike_Name_Row extends StatelessWidget {
   String bikeName;
   String distanceBetween;
   String currentBikeStatusImage;
+  bool? isDeviceConnected;
 
   Bike_Name_Row({
     Key? key,
     required this.bikeName,
    required this.distanceBetween,
     required this.currentBikeStatusImage,
+    required this.isDeviceConnected,
 
   }) : super(key: key);
 
@@ -44,12 +46,15 @@ class Bike_Name_Row extends StatelessWidget {
                           .w700),
                 ),
 
-                Image(
-                  image: AssetImage(
-                      "assets/icons/bluetooth_small.png"),
+                Visibility(
+                    visible: isDeviceConnected!,
 
-                ),
+                    child:   const Image(
+                      image: AssetImage(
+                          "assets/icons/bluetooth_small.png"),
 
+                    ),
+                )
               ],
 
             ),
@@ -91,7 +96,7 @@ class Bike_Status_Row extends StatelessWidget {
     required this.currentSecurityIcon,
     required this.currentBatteryIcon,
     required this.connectText,
-    required this. child,
+    required this.child,
     required this.estKm,
 
   }) : super(key: key);
@@ -106,6 +111,8 @@ class Bike_Status_Row extends StatelessWidget {
             child: Image(
               image: AssetImage(
                   currentSecurityIcon),
+              height: 35.h,
+              width: 35.w,
             ),
           ),
           SizedBox(width: 11.5.w),
@@ -126,24 +133,38 @@ class Bike_Status_Row extends StatelessWidget {
           Image(
             image: AssetImage(
                 currentBatteryIcon),
+            height: 24.h,
+            width: 24.w,
             //height: 1.h,
           ),
           SizedBox(
             width: 10.w,
           ),
-          Column(
-              crossAxisAlignment:
-              CrossAxisAlignment
-                  .start,
-              children:[
-                Text(
-               "${connectText} %",
-                  style: TextStyle(
-                    fontSize: 20.sp
+
+          if(estKm == "")...{
+            Text(
+              "${connectText} %",
+              style: TextStyle(
+                  fontSize: 20.sp
+              ),
+            ),
+
+          }else...{
+            Column(
+                crossAxisAlignment:
+                CrossAxisAlignment
+                    .start,
+                children:[
+                  Text(
+                    "${connectText} %",
+                    style: TextStyle(
+                        fontSize: 20.sp
                     ),
-                ),
-                Text(estKm,style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),)
-              ])
+                  ),
+                  Text(estKm,style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),)
+                ])
+          }
+
         ]);
   }
 }

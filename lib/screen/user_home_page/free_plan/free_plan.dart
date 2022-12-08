@@ -53,15 +53,15 @@ class _FreePlanState extends State<FreePlan> {
 
   Image connectImage = Image(
     image: const AssetImage("assets/buttons/bluetooth_not_connected.png"),
-    width: 21.w,
-    height: 24.h,
+    width: 35.w,
+    height: 35.h,
     fit: BoxFit.fitWidth,
   );
 
   Image lockImage = Image(
     image: const AssetImage("assets/buttons/lock_lock.png"),
-    width: 21.w,
-    height: 24.h,
+    width: 35.w,
+    height: 35.h,
     fit: BoxFit.fitWidth,
   );
 
@@ -248,12 +248,15 @@ class _FreePlanState extends State<FreePlan> {
                         if (snapshot.hasData) {
                           return GestureDetector(
                               onTap: (){},
-                              child:Container(
-                                height: 80.h,
-                                child: Text(
-                                  "Good Morning ${_currentUserProvider.currentUserModel!.name}",
-                                  style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
-                                )
+                              child:Padding(
+                                padding: EdgeInsets.fromLTRB(16.w, 28.h, 146.w, 28.h),
+                                child: Container(
+                                  height: 24.h,
+                                  child: Text(
+                                    "Good Morning ${_currentUserProvider.currentUserModel!.name}",
+                                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                                  )
+                                ),
                               ),
                           );
                         } else {
@@ -360,6 +363,7 @@ class _FreePlanState extends State<FreePlan> {
                                                     padding:
                                                     EdgeInsets.fromLTRB(16.w, 9.h, 0, 0),
                                                     child: Bike_Name_Row(
+                                                      isDeviceConnected: this.isDeviceConnected,
                                                       bikeName: _bikeProvider.currentBikeModel?.deviceName ?? "",
                                                       distanceBetween: "Est. ${distanceBetween}m",
                                                       currentBikeStatusImage: currentBikeStatusImage,),
@@ -374,9 +378,10 @@ class _FreePlanState extends State<FreePlan> {
                                                         currentBatteryIcon: getBatteryImageFromBLE(_bluetoothProvider.bikeInfoResult!.batteryLevel!),
                                                         connectText: _bluetoothProvider.bikeInfoResult!.batteryLevel!,
                                                         currentSecurityIcon: currentSecurityIcon,
-                                                        child: getSecurityTextWidget(
-                                                            _bluetoothProvider.cableLockState?.lockState ?? LockState.unknown,
-                                                            _bikeProvider.currentBikeModel?.location!.status ?? ""),),
+                                                        child: Text(
+                                                          "NOT AVAILABLE",
+                                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+                                                        ),),
                                                     ),
                                                   ),
 
@@ -563,7 +568,8 @@ class _FreePlanState extends State<FreePlan> {
                                                     child: Bike_Name_Row(
                                                       bikeName: _bikeProvider.currentBikeModel?.deviceName ?? "",
                                                       distanceBetween: "Bike is not connected",
-                                                      currentBikeStatusImage: "assets/images/bike_HPStatus/bike_normal.png",),
+                                                      currentBikeStatusImage: "assets/images/bike_HPStatus/bike_normal.png",
+                                                      isDeviceConnected: this.isDeviceConnected,),
                                                   ),
 
                                                   Padding(
@@ -804,8 +810,8 @@ class _FreePlanState extends State<FreePlan> {
       setState(() {
         connectImage = Image(
           image: const AssetImage("assets/buttons/lock_lock.png"),
-          width: 21.w,
-          height: 24.h,
+          width: 35.w,
+          height: 35.h,
           fit: BoxFit.fitWidth,
         );
         lockColour = const Color(0xff6A51CA);
@@ -814,8 +820,8 @@ class _FreePlanState extends State<FreePlan> {
       setState(() {
         connectImage = Image(
           image: const AssetImage("assets/buttons/loading.png"),
-          width: 21.w,
-          height: 24.h,
+          width: 35.w,
+          height: 35.h,
           fit: BoxFit.fitWidth,
         );
         lockColour = const Color(0xff6A51CA);
@@ -824,8 +830,8 @@ class _FreePlanState extends State<FreePlan> {
       setState(() {
         connectImage = Image(
           image: const AssetImage("assets/buttons/bluetooth_not_connected.png"),
-          width: 21.w,
-          height: 24.h,
+          width: 35.w,
+          height: 35.h,
           fit: BoxFit.fitWidth,
         );
       });
@@ -837,8 +843,8 @@ class _FreePlanState extends State<FreePlan> {
       setState(() {
         lockImage = Image(
           image: const AssetImage("assets/buttons/lock_lock.png"),
-          width: 21.w,
-          height: 24.h,
+          width: 35.w,
+          height: 35.h,
           fit: BoxFit.fitWidth,
         );
         lockColour = const Color(0xff6A51CA);
@@ -847,8 +853,8 @@ class _FreePlanState extends State<FreePlan> {
       setState(() {
         lockImage = Image(
           image: const AssetImage("assets/buttons/lock_unlock.png"),
-          width: 21.w,
-          height: 24.h,
+          width: 35.w,
+          height: 35.h,
           fit: BoxFit.fitWidth,
         );
         lockColour = const Color(0xff6A51CA);

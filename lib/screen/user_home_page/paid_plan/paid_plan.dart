@@ -54,15 +54,15 @@ class _PaidPlanState extends State<PaidPlan> {
 
   Image connectImage = Image(
     image: const AssetImage("assets/buttons/bluetooth_not_connected.png"),
-    width: 21.w,
-    height: 24.h,
+    width: 35.w,
+    height: 35.h,
     fit: BoxFit.fitWidth,
   );
 
   Image lockImage = Image(
     image: const AssetImage("assets/buttons/lock_lock.png"),
-    width: 21.w,
-    height: 24.h,
+    width: 35.w,
+    height: 35.h,
     fit: BoxFit.fitWidth,
   );
 
@@ -828,8 +828,8 @@ class _PaidPlanState extends State<PaidPlan> {
       setState(() {
         connectImage = Image(
           image: const AssetImage("assets/buttons/lock_lock.png"),
-          width: 21.w,
-          height: 24.h,
+          width: 35.w,
+          height: 35.h,
           fit: BoxFit.fitWidth,
         );
         lockColour = const Color(0xff6A51CA);
@@ -838,8 +838,8 @@ class _PaidPlanState extends State<PaidPlan> {
       setState(() {
         connectImage = Image(
           image: const AssetImage("assets/buttons/loading.png"),
-          width: 21.w,
-          height: 24.h,
+          width: 35.w,
+          height: 35.h,
           fit: BoxFit.fitWidth,
         );
         lockColour = const Color(0xff6A51CA);
@@ -848,8 +848,8 @@ class _PaidPlanState extends State<PaidPlan> {
       setState(() {
         connectImage = Image(
           image: const AssetImage("assets/buttons/bluetooth_not_connected.png"),
-          width: 21.w,
-          height: 24.h,
+          width: 35.w,
+          height: 35.h,
           fit: BoxFit.fitWidth,
         );
       });
@@ -861,8 +861,8 @@ class _PaidPlanState extends State<PaidPlan> {
       setState(() {
         lockImage = Image(
           image: const AssetImage("assets/buttons/lock_lock.png"),
-          width: 21.w,
-          height: 24.h,
+          width: 35.w,
+          height: 35.h,
           fit: BoxFit.fitWidth,
         );
         lockColour = const Color(0xff6A51CA);
@@ -871,8 +871,8 @@ class _PaidPlanState extends State<PaidPlan> {
       setState(() {
         lockImage = Image(
           image: const AssetImage("assets/buttons/lock_unlock.png"),
-          width: 21.w,
-          height: 24.h,
+          width: 35.w,
+          height: 35.h,
           fit: BoxFit.fitWidth,
         );
         lockColour = const Color(0xff6A51CA);
