@@ -87,9 +87,12 @@ class _PaidPlanState extends State<PaidPlan> {
 
   StreamSubscription? locationSubscription;
 
-  static const double initialRatio = 324 / 710;
-  static const double minRatio = 120 / 710;
+  static const double initialRatio = 374 / 710;
+  static const double minRatio = 170 / 710;
   static const double maxRatio = 1.0;
+  bool isBottomSheetExpanded = false;
+  bool isMapListShowing = false;
+  List<AvailableMap>? availableMaps;
 
   @override
   void initState() {
@@ -327,9 +330,20 @@ class _PaidPlanState extends State<PaidPlan> {
                 width: double.infinity,
                 child: NotificationListener<DraggableScrollableNotification>(
                   onNotification: (notification) {
-                    setState(() {
-                      currentScroll = notification.extent;
-                    });
+
+
+                    if (notification.extent > 0.8) {
+                      setState(() {
+                        currentScroll = notification.extent;
+                        isBottomSheetExpanded = true;
+                      });
+                    }
+                    else {
+                      setState(() {
+                        currentScroll = notification.extent;
+                        isBottomSheetExpanded = false;
+                      });
+                    }
 
                     return false;
                   },
@@ -347,6 +361,7 @@ class _PaidPlanState extends State<PaidPlan> {
                         return ListView(
                           controller: _scrollController,
                           children: [
+                            mapLauncher(),
                             currentScroll <= 0.8 ?
                             Stack(
                                 children: [
@@ -837,6 +852,76 @@ class _PaidPlanState extends State<PaidPlan> {
         //   )
       ),
     );
+  }
+
+  Widget mapLauncher() {
+    if (isBottomSheetExpanded) {
+      return const SizedBox();
+    }
+    else {
+      return Align(
+        alignment: Alignment.bottomRight,
+        child: GestureDetector(
+          onTap: () async {
+            List<AvailableMap> availableMaps = await MapLauncher.installedMaps;
+            if (isMapListShowing) {
+              setState(() {
+                this.availableMaps = null;
+                isMapListShowing = false;
+              });
+            }
+            else {
+              setState(() {
+                this.availableMaps = availableMaps;
+                isMapListShowing = true;
+              });
+            }
+          },
+          child: Container(
+              height: 50.h,
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    availableMaps != null ?
+                    ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            MapLauncher.showDirections(
+                                mapType: availableMaps![index].mapType,
+                                destination: Coords(_bikeProvider.currentBikeModel!.location!.geopoint.latitude,
+                                    _bikeProvider.currentBikeModel!.location!.geopoint.longitude
+                                )
+                            );
+                          },
+                          child: SvgPicture.asset(
+                            availableMaps![index].icon,
+                            width: 36.w,
+                            height: 36.h,
+                          ),
+                        );
+                      },
+                      itemCount: availableMaps?.length,
+                    ) : SizedBox(),
+                    Padding(
+                      padding: EdgeInsets.only(right: 8.h),
+                      child: SvgPicture.asset(
+                        "assets/icons/direction.svg",
+                        width: 50.w,
+                        height: 50.h,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+          ),
+        ),
+      );
+    }
   }
 
 
