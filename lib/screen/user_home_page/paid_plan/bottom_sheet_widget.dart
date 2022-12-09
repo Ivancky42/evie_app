@@ -46,13 +46,15 @@ class Bike_Name_Row extends StatelessWidget {
                 Text(
                   bikeName,
                   style: TextStyle(
-                      fontSize: 16.5.sp,
+                      fontSize: 20.sp,
                       fontWeight:
                       FontWeight
                           .w700),
                 ),
 
                 Image(
+                  width: 20.w,
+                  height: 20.h,
                   image: AssetImage(
                       "assets/icons/batch_tick.png"),
 
@@ -74,7 +76,7 @@ class Bike_Name_Row extends StatelessWidget {
             Text(
               "Est. ${distanceBetween}m",
               style: TextStyle(
-                  fontSize: 10.sp,
+                  fontSize: 12.sp,
                   fontWeight:
                   FontWeight
                       .w400),

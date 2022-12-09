@@ -252,6 +252,8 @@ class CableLockResult{
     else if (data[6] == 0x03) {
       lockState = data[7] == 0x00 ? LockState.unlock : LockState.lock;
     }
+
+    print("hello");
     // else {
     //   result = data[7] == 0 ? CommandResult.success : CommandResult.failed;
     // }
