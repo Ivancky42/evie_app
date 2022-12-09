@@ -1,6 +1,8 @@
 import 'package:evie_test/screen/onboarding/email_preference_control.dart';
 import 'package:evie_test/screen/onboarding/lets_go.dart';
 import 'package:evie_test/screen/onboarding/name_bike.dart';
+import 'package:evie_test/screen/onboarding/qr_add_manually.dart';
+import 'package:evie_test/screen/onboarding/turn_on_QRScanner.dart';
 import 'package:evie_test/screen/onboarding/turn_on_bluetooth.dart';
 import 'package:evie_test/screen/onboarding/turn_on_location.dart';
 import 'package:evie_test/screen/onboarding/turn_on_notifications.dart';
@@ -12,10 +14,10 @@ import 'package:flutter/material.dart';
 
 import '../screen/onboarding/bike_connect_failed.dart';
 import '../screen/onboarding/bike_connect_success.dart';
-import '../screen/onboarding/bike_scanning.dart';
 import '../screen/onboarding/congratulation.dart';
 import '../screen/onboarding/display_control.dart';
 import '../screen/onboarding/notification_control.dart';
+import '../screen/onboarding/qr_scanning.dart';
 import '../screen/signup_method.dart';
 import '../screen/signup_page.dart';
 import '../screen/user_notification_details.dart';
@@ -138,6 +140,24 @@ void changeToTurnOnLocationScreen(BuildContext context) {
   );
 }
 
+void changeToTurnOnQRScannerScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const TurnOnQRScanner())
+  );
+}
+
+void changeToQRScanningScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const QRScanning())
+  );
+}
+
+void changeToQRAddManuallyScreen(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const QRAddManually())
+  );
+}
+
 void changeToTurnOnNotificationsScreen(BuildContext context) {
   Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (context) => const TurnOnNotifications())
@@ -145,9 +165,9 @@ void changeToTurnOnNotificationsScreen(BuildContext context) {
 }
 
 void changeToBikeScanningScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const BikeScanning())
-  );
+  // Navigator.of(context).pushReplacement(MaterialPageRoute(
+  //     builder: (context) => const BikeScanning())
+  // );
 }
 
 

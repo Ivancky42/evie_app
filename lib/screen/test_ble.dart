@@ -17,6 +17,7 @@ import 'package:sizer/sizer.dart';
 import '../api/navigator.dart';
 import '../api/provider/auth_provider.dart';
 import '../api/provider/bike_provider.dart';
+import '../test/test qr scanner.dart';
 import '../widgets/evie_button.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
@@ -715,6 +716,40 @@ class _TestBleState extends State<TestBle> {
                       ),
                     ),
                   ),
+                ),
+
+
+
+
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Qr code",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => TestQRScan()));
+                  },
+                ),
+
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Onboarding",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    changeToLetsGoScreen(context);
+                  },
                 ),
 
                 EvieButton(

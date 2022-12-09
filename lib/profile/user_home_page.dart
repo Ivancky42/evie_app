@@ -12,7 +12,6 @@ import 'package:sizer/sizer.dart';
 import '../api/navigator.dart';
 import '../api/provider/notification_provider.dart';
 import '../screen/bike_security/bike_location.dart';
-import '../screen/onboarding/bike_scanning.dart';
 import '../screen/onboarding/lets_go.dart';
 import '../screen/verify_email.dart';
 import '../theme/ThemeChangeNotifier.dart';

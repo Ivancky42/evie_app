@@ -1,5 +1,6 @@
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/onboarding/turn_on_bluetooth.dart';
 import 'package:evie_test/screen/onboarding/turn_on_location.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,7 +11,6 @@ import 'package:open_mail_app/open_mail_app.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 import '../../api/colours.dart';
 import '../../api/length.dart';
 import '../../api/navigator.dart';
@@ -46,84 +46,108 @@ class _LetsGoState extends State<LetsGo> {
 
       child: Scaffold(
           body: Stack(children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
+          Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 12.h,
-              ),
-              Text(
-                //  "Hi ${_currentUserProvider.currentUserModel!.name}, thanks for choosing EVIE!",
-                "Stay closeby with your bike",
-                style: TextStyle(fontSize: 18.sp),
+              Padding(
+                padding: EdgeInsets.fromLTRB(16.w,76.h,16.w,4.h),
+                child: Text(
+                  //  "Hi ${_currentUserProvider.currentUserModel!.name}, thanks for choosing EVIE!",
+                  "Stay closeby with your bike",
+                  style: TextStyle(fontSize: 24.sp),
+                ),
               ),
               SizedBox(
                 height: 1.h,
               ),
-              Text(
-                "Assemble your bike fully and keep your bike closely with you for the following steps.",
-                style: TextStyle(fontSize: 11.5.sp,height: 0.17.h),
+              Padding(
+                padding: EdgeInsets.fromLTRB(16.w,4.h,16.w,4.h),
+                child: Container(
+                  child: Text(
+                    "Assemble your bike fully and keep your bike closely with you for the following steps.",
+                    style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                  ),
+                ),
               ),
 
-              TextButton(
-                  onPressed: (){
+              Padding(
+                padding: EdgeInsets.fromLTRB(11.w,4.h,16.w,98.h),
 
-                  },
-                  child: const Text("How to assemble my bike?", style: TextStyle(color: EvieColors.PrimaryColor, decoration: TextDecoration.underline,),))
+                  child: TextButton(
+                      onPressed: (){
+
+                      },
+                      child: Text("How to assemble my bike?",
+                        style: TextStyle( fontSize: 16.sp, color: EvieColors.PrimaryColor, decoration: TextDecoration.underline,),)),
+              )
             ],
           ),
-        ),
-        const Align(
+
+        Align(
           alignment: Alignment.center,
-          child: Image(
-            image: AssetImage("assets/images/setup_account.png"),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(75.w,98.h,75.w,127.84.h),
+            child: const Image(
+              image: AssetImage("assets/images/setup_account.png"),
+            ),
           ),
         ),
+
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: EdgeInsets.only(
-                left: 16, right: 16, bottom: EvieLength.button_Bottom),
+            padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom),
             child: SizedBox(
+              height: 48.h,
               width: double.infinity,
               child: EvieButton(
                 width: double.infinity,
                 child: Text(
-                  "Let's Go",
+                  "I'm Ready",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 10.sp,
+                    fontSize: 16.sp,
+                      fontWeight: FontWeight.w700
                   ),
                 ),
                 onPressed: () async {
                   var locationStatus = await Permission.location.status;
-                  var bluetoothStatus = await Permission.bluetooth.status;
 
                   if (_bluetoothProvider.bleStatus == BleStatus.unauthorized && locationStatus == PermissionStatus.granted) {
                     changeToTurnOnBluetoothScreen(context);
                   }
                   else if (locationStatus == PermissionStatus.granted && _bluetoothProvider.bleStatus != BleStatus.unauthorized) {
-                    changeToBikeScanningScreen(context);
+                    changeToTurnOnQRScannerScreen(context);
                   }
                   else {
                     changeToTurnOnLocationScreen(context);
                   }
 
-                  // if(locationStatus == PermissionStatus.granted && bluetoothStatus == PermissionStatus.granted ){
-                  //   changeToBikeScanningScreen(context);
-                  // }else if(locationStatus == PermissionStatus.granted && bluetoothStatus != PermissionStatus.granted){
-                  //   changeToTurnOnBluetoothScreen(context);
-                  // }else{
-                  //   changeToTurnOnLocationScreen(context);
-                  // }
                 },
               ),
             ),
           ),
         ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(150.w,25.h,150.w,EvieLength.buttonWord_WordBottom),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                        child: Text(
+                          "Maybe Later",
+                          softWrap: false,
+                          style: TextStyle(fontSize: 12.sp,color: EvieColors.PrimaryColor,decoration: TextDecoration.underline,),
+                        ),
+                        onPressed: () {
+                          changeToTurnOnNotificationsScreen(context);
+                        },
+                      ),
+                ),
+              ),
+            ),
       ])),
     );
   }

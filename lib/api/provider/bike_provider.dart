@@ -14,12 +14,24 @@ import '../model/rfid_model.dart';
 import '../model/user_bike_model.dart';
 import '../model/user_model.dart';
 
+
+enum ScanQRCodeResult {
+  unknown,
+  validateFailure,
+  noBikeDataFailure,
+  userExistFailure,
+  userUploadFailure,
+  success,
+}
+
+
 class BikeProvider extends ChangeNotifier {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
   String bikesCollection = dotenv.env['DB_COLLECTION_BIKES'] ?? 'DB not found';
   String rfidCollection = dotenv.env['DB_COLLECTION_RFID'] ?? 'DB not found';
+  String inventoryCollection = dotenv.env['DB_COLLECTION_INVENTORY'] ?? 'DB not found';
 
   LinkedHashMap bikeUserList = LinkedHashMap<String, BikeUserModel>();
   LinkedHashMap bikeUserDetails = LinkedHashMap<String, UserModel>();
@@ -40,6 +52,8 @@ class BikeProvider extends ChangeNotifier {
   StreamSubscription? bikeUserSubscription;
   StreamSubscription? currentBikeUserSubscription;
   StreamSubscription? rfidListSubscription;
+
+  ScanQRCodeResult scanQRCodeResult = ScanQRCodeResult.unknown;
 
   ///Get current user model
   Future<void> init(UserModel? user) async {
@@ -432,6 +446,117 @@ class BikeProvider extends ChangeNotifier {
     return false;
   }
 
+
+  Future handleBarcodeData(String code)async{
+    List<String> splitCode = code.split(',');
+    String serialNumber = splitCode[0].split(':').last;
+    String validationKey= splitCode[1].split(':').last;
+
+    await validateSerialAndKey(serialNumber, validationKey);
+  }
+
+  Future validateSerialAndKey(String serialNumber, String validationKey) async {
+
+    final snapshot = await FirebaseFirestore.instance
+        .collection(inventoryCollection)
+        .doc(serialNumber)
+        .get();
+
+    if(validationKey == snapshot["validationKey"]){
+
+      checkIsBikeExist(snapshot["bikeRef"]);
+
+    }else{
+      scanQRCodeResult = ScanQRCodeResult.validateFailure;
+      notifyListeners();
+    }
+  }
+
+  Future<void> checkIsBikeExist(DocumentReference docRef) async {
+
+    docRef.get().then((DocumentSnapshot documentSnapshot) async {
+      if (documentSnapshot.exists) {
+        final snapshot = await FirebaseFirestore.instance.collection('bikes')
+          .doc(documentSnapshot["deviceIMEI"])
+        .collection('users')
+          .get();
+
+        if (snapshot.size == 0) {
+          uploadUserToFireStore(documentSnapshot["deviceIMEI"]);
+        }else{
+          scanQRCodeResult = ScanQRCodeResult.userExistFailure;
+          notifyListeners();
+        }
+
+
+      }else {
+        scanQRCodeResult = ScanQRCodeResult.noBikeDataFailure;
+        notifyListeners();
+      }
+    });
+  }
+
+  Future uploadUserToFireStore(selectedDeviceId) async {
+    try {
+      ///uploadBikeToUserFireStore
+      FirebaseFirestore.instance
+          .collection(usersCollection)
+          .doc(currentUserModel!.uid)
+          .collection(bikesCollection)
+          .doc(selectedDeviceId)
+          .set(UserBikeModel(
+        deviceIMEI: selectedDeviceId!,
+        deviceType: "Reevo",
+        created: Timestamp.now(),
+      ).toJson());
+
+
+      ///uploadBikeToUserFireStore
+      FirebaseFirestore.instance
+          .collection(usersCollection)
+          .doc(currentUserModel!.uid)
+          .collection(bikesCollection)
+          .doc(selectedDeviceId)
+          .set(UserBikeModel(
+        deviceIMEI: selectedDeviceId!,
+        deviceType: "Evie",
+        created: Timestamp.now(),
+      ).toJson());
+
+      ///uploadUserToBikeFireStore
+        var role = "owner";
+        FirebaseFirestore.instance
+            .collection(bikesCollection)
+            .doc(selectedDeviceId)
+            .collection(usersCollection)
+            .doc(currentUserModel!.uid)
+            .set(BikeUserModel(
+          uid: currentUserModel!.uid,
+          role: role,
+          userId: 0,
+          created: Timestamp.now(),
+        ).toJson());
+
+        print("success");
+      scanQRCodeResult = ScanQRCodeResult.success;
+      notifyListeners();
+
+    }catch(e){
+      debugPrint(e.toString());
+      scanQRCodeResult = ScanQRCodeResult.userUploadFailure;
+      notifyListeners();
+    }
+  }
+
+  getQRCodeResult() async {
+    return scanQRCodeResult;
+  }
+
+  setQRCodeResult(ScanQRCodeResult result){
+    scanQRCodeResult = result;
+    notifyListeners();
+  }
+
   Future uploadToFireStore(selectedDeviceId) async {
     try {
       Position currentPosition = await Geolocator.getCurrentPosition(
@@ -638,4 +763,6 @@ class BikeProvider extends ChangeNotifier {
     currentBikeList = 0;
     notifyListeners();
   }
+
+
 }
