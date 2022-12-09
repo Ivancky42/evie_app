@@ -165,13 +165,6 @@ class _PaidPlanState extends State<PaidPlan> {
 
     try {
       mapController?.onSymbolTapped.add((argument) async {
-        List<AvailableMap> availableMaps = await MapLauncher.installedMaps;
-        ///Display available maps for user.
-        print(availableMaps);
-        ///show direction with map that user selected
-        ///input mapType will do.
-        MapLauncher.showDirections(mapType: availableMaps.first.mapType, destination: Coords(argument.options.geometry!.latitude, argument.options.geometry!.longitude));
-
       });
     } catch (e, s) {
       print(s);
