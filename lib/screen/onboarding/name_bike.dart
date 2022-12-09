@@ -125,6 +125,7 @@ class _NameBikeState extends State<NameBike> {
                       _bikeProvider.updateBikeName(_bikeNameController.text.trim()).then((result){
                         if(result == true){
                           SmartDialog.show(
+                            keepSingle: true,
                               widget: EvieSingleButtonDialogCupertino
                             (title: "Success",
                               content: "Update successful",
@@ -132,6 +133,7 @@ class _NameBikeState extends State<NameBike> {
                               onPressedRight: (){changeToTurnOnNotificationsScreen(context);} ));
                         } else{
                           SmartDialog.show(
+                              keepSingle: true,
                               widget: EvieSingleButtonDialogCupertino
                                 (title: "Not Success",
                                   content: "An error occur, try again",

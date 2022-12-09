@@ -141,6 +141,7 @@ class _DisplayControlState extends State<DisplayControl> {
               ),
 
 
+
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
@@ -148,19 +149,23 @@ class _DisplayControlState extends State<DisplayControl> {
                   EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.button_Bottom),
                   child:  EvieButton(
                     width: double.infinity,
+                    height: 48.h,
                     child: Text(
                       "Save",
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10.sp,
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w700
                       ),
                     ),
                     onPressed: () {
-changeToCongratulationScreen(context);
+                      changeToCongratulationScreen(context);
                     },
                   ),
                 ),
               ),
+
+
 
 
             ]

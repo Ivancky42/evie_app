@@ -14,7 +14,6 @@ import '../model/rfid_model.dart';
 import '../model/user_bike_model.dart';
 import '../model/user_model.dart';
 
-
 enum ScanQRCodeResult {
   unknown,
   validateFailure,
@@ -24,14 +23,14 @@ enum ScanQRCodeResult {
   success,
 }
 
-
 class BikeProvider extends ChangeNotifier {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
   String bikesCollection = dotenv.env['DB_COLLECTION_BIKES'] ?? 'DB not found';
   String rfidCollection = dotenv.env['DB_COLLECTION_RFID'] ?? 'DB not found';
-  String inventoryCollection = dotenv.env['DB_COLLECTION_INVENTORY'] ?? 'DB not found';
+  String inventoryCollection =
+      dotenv.env['DB_COLLECTION_INVENTORY'] ?? 'DB not found';
 
   LinkedHashMap bikeUserList = LinkedHashMap<String, BikeUserModel>();
   LinkedHashMap bikeUserDetails = LinkedHashMap<String, UserModel>();
@@ -101,7 +100,8 @@ class BikeProvider extends ChangeNotifier {
                 break;
               case DocumentChangeType.modified:
                 Map<String, dynamic>? obj = docChange.doc.data();
-                userBikeList.update(docChange.doc.id, (value) => UserBikeModel.fromJson(obj!));
+                userBikeList.update(
+                    docChange.doc.id, (value) => UserBikeModel.fromJson(obj!));
                 notifyListeners();
                 break;
             }
@@ -141,7 +141,7 @@ class BikeProvider extends ChangeNotifier {
   Future<void> getBike(String? imei) async {
     SharedPreferences prefs = await _prefs;
 
-    if(currentBikeSubscription != null){
+    if (currentBikeSubscription != null) {
       currentBikeSubscription?.cancel();
     }
 
@@ -156,13 +156,11 @@ class BikeProvider extends ChangeNotifier {
           try {
             Map<String, dynamic>? obj = event.data();
             if (obj != null) {
-
               currentBikeModel = BikeModel.fromJson(obj);
               prefs.setString('currentBikeIMEI', imei!);
               prefs.setInt('currentBikeList', index);
 
               notifyListeners();
-
             } else {
               currentBikeModel = null;
             }
@@ -244,7 +242,6 @@ class BikeProvider extends ChangeNotifier {
     bool result;
 
     try {
-
       final ubsnapshot = await FirebaseFirestore.instance
           .collection('bikes')
           .doc(currentBikeModel!.deviceIMEI)
@@ -259,8 +256,8 @@ class BikeProvider extends ChangeNotifier {
       }
       aList = aList..sort();
 
-      for(var i = 4; i>0; i--){
-        if(!aList.contains(i)){
+      for (var i = 4; i > 0; i--) {
+        if (!aList.contains(i)) {
           userId = i;
         }
       }
@@ -391,7 +388,8 @@ class BikeProvider extends ChangeNotifier {
                 break;
               case DocumentChangeType.modified:
                 Map<String, dynamic>? obj = docChange.doc.data();
-                bikeUserList.update(docChange.doc.id, (value) => BikeUserModel.fromJson(obj!));
+                bikeUserList.update(
+                    docChange.doc.id, (value) => BikeUserModel.fromJson(obj!));
                 notifyListeners();
                 break;
             }
@@ -405,8 +403,7 @@ class BikeProvider extends ChangeNotifier {
 
   getBikeUserDetails(String uid) {
     try {
-
-      if(currentBikeUserSubscription != null){
+      if (currentBikeUserSubscription != null) {
         currentBikeUserSubscription?.cancel();
       }
 
@@ -446,50 +443,48 @@ class BikeProvider extends ChangeNotifier {
     return false;
   }
 
-
-  Future handleBarcodeData(String code)async{
+  handleBarcodeData(String code) async {
     List<String> splitCode = code.split(',');
     String serialNumber = splitCode[0].split(':').last;
-    String validationKey= splitCode[1].split(':').last;
-
-    await validateSerialAndKey(serialNumber, validationKey);
-  }
-
-  Future validateSerialAndKey(String serialNumber, String validationKey) async {
+    String validationKey = splitCode[1].split(':').last;
 
     final snapshot = await FirebaseFirestore.instance
         .collection(inventoryCollection)
         .doc(serialNumber)
         .get();
 
-    if(validationKey == snapshot["validationKey"]){
-
-      checkIsBikeExist(snapshot["bikeRef"]);
-
+    if (!snapshot.exists) {
+      scanQRCodeResult = ScanQRCodeResult.validateFailure;
+      notifyListeners();
+      return false;
+    } else if(validationKey == snapshot["validationKey"]){
+      await checkIsBikeExist(snapshot["bikeRef"]);
     }else{
       scanQRCodeResult = ScanQRCodeResult.validateFailure;
       notifyListeners();
+      return false;
     }
   }
 
-  Future<void> checkIsBikeExist(DocumentReference docRef) async {
-
-    docRef.get().then((DocumentSnapshot documentSnapshot) async {
+  Future checkIsBikeExist(DocumentReference docRef) async {
+    await docRef.get().then((DocumentSnapshot documentSnapshot) async {
       if (documentSnapshot.exists) {
-        final snapshot = await FirebaseFirestore.instance.collection('bikes')
-          .doc(documentSnapshot["deviceIMEI"])
-        .collection('users')
-          .get();
+        final snapshot = await FirebaseFirestore.instance
+            .collection(bikesCollection)
+            .doc(documentSnapshot["deviceIMEI"])
+            .collection(usersCollection)
+            .get();
 
         if (snapshot.size == 0) {
-          uploadUserToFireStore(documentSnapshot["deviceIMEI"]);
-        }else{
+          await uploadUserToFireStore(
+              documentSnapshot["deviceIMEI"].toString());
+        } else {
           scanQRCodeResult = ScanQRCodeResult.userExistFailure;
+
           notifyListeners();
+          return "";
         }
-
-
-      }else {
+      } else {
         scanQRCodeResult = ScanQRCodeResult.noBikeDataFailure;
         notifyListeners();
       }
@@ -498,172 +493,54 @@ class BikeProvider extends ChangeNotifier {
 
   Future uploadUserToFireStore(selectedDeviceId) async {
     try {
-      ///uploadBikeToUserFireStore
-      FirebaseFirestore.instance
-          .collection(usersCollection)
-          .doc(currentUserModel!.uid)
-          .collection(bikesCollection)
-          .doc(selectedDeviceId)
-          .set(UserBikeModel(
-        deviceIMEI: selectedDeviceId!,
-        deviceType: "Reevo",
-        created: Timestamp.now(),
-      ).toJson());
-
 
       ///uploadBikeToUserFireStore
-      FirebaseFirestore.instance
-          .collection(usersCollection)
-          .doc(currentUserModel!.uid)
-          .collection(bikesCollection)
-          .doc(selectedDeviceId)
-          .set(UserBikeModel(
-        deviceIMEI: selectedDeviceId!,
-        deviceType: "Evie",
-        created: Timestamp.now(),
-      ).toJson());
-
-      ///uploadUserToBikeFireStore
-        var role = "owner";
-        FirebaseFirestore.instance
-            .collection(bikesCollection)
-            .doc(selectedDeviceId)
-            .collection(usersCollection)
-            .doc(currentUserModel!.uid)
-            .set(BikeUserModel(
-          uid: currentUserModel!.uid,
-          role: role,
-          userId: 0,
-          created: Timestamp.now(),
-        ).toJson());
-
-        print("success");
-      scanQRCodeResult = ScanQRCodeResult.success;
-      notifyListeners();
-
-    }catch(e){
-      debugPrint(e.toString());
-      scanQRCodeResult = ScanQRCodeResult.userUploadFailure;
-      notifyListeners();
-    }
-  }
-
-  getQRCodeResult() async {
-    return scanQRCodeResult;
-  }
-
-  setQRCodeResult(ScanQRCodeResult result){
-    scanQRCodeResult = result;
-    notifyListeners();
-  }
-
-  Future uploadToFireStore(selectedDeviceId) async {
-    try {
-      Position currentPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high
-      );
-
-      final snapshot =
-          await FirebaseFirestore.instance.collection('bikes').get();
-
-      ///Check if have data
-      if (snapshot.size == 0) {
-        ///User name = provider current user
-        FirebaseFirestore.instance
-            .collection(bikesCollection)
-            .doc(selectedDeviceId)
-            .set(BikeModel(
-          batteryPercent: 0,
-              bleKey: "",
-              deviceType: "Evie",
-              macAddr: "",
-              networkSignal: 0,
-              protVersion: "",
-              deviceIMEI: selectedDeviceId!,
-              deviceName: "EvieBike",
-              errorCode: 0,
-              isCharging: false,
-              isLocked: false,
-          ///TODO: Upload location based on current usre location
-              location: LocationModel(status: '', geopoint: GeoPoint(currentPosition.latitude, currentPosition.longitude)),
-              created: Timestamp.now(),
-              lastUpdated: Timestamp.now(),
-              registered: Timestamp.now(),
-            ).toJson());
-      }
-
-      ///uploadBikeToUserFireStore
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(currentUserModel!.uid)
           .collection(bikesCollection)
           .doc(selectedDeviceId)
           .set(UserBikeModel(
             deviceIMEI: selectedDeviceId!,
-            deviceType: "Reevo",
+            deviceType: "Evie",
             created: Timestamp.now(),
           ).toJson());
 
       ///uploadUserToBikeFireStore
-      String role = "";
-      //Check if first registration. Role is owner/rider
-      final ubsnapshot = await FirebaseFirestore.instance
-          .collection('bikes')
+      var role = "owner";
+      await FirebaseFirestore.instance
+          .collection(bikesCollection)
           .doc(selectedDeviceId)
-          .collection('users')
-          .get();
+          .collection(usersCollection)
+          .doc(currentUserModel!.uid)
+          .set(BikeUserModel(
+            uid: currentUserModel!.uid,
+            role: role,
+            userId: 0,
+            created: Timestamp.now(),
+          ).toJson());
 
-      if (ubsnapshot.size == 0) {
-        role = "owner";
-        FirebaseFirestore.instance
-            .collection(bikesCollection)
-            .doc(selectedDeviceId)
-            .collection(usersCollection)
-            .doc(currentUserModel!.uid)
-            .set(BikeUserModel(
-          uid: currentUserModel!.uid,
-          role: role,
-          userId: 0,
-          created: Timestamp.now(),
-        ).toJson());
-      } else if (ubsnapshot.size > 0) {
+      scanQRCodeResult = ScanQRCodeResult.success;
+      notifyListeners();
 
-        role = "user";
-        List<int> aList = [];
-        int? userId;
-
-        for (var element in ubsnapshot.docs) {
-          aList.add(element.data()["userId"]);
-        }
-        aList = aList..sort();
-
-        for(var i = 4; i>0; i--){
-          if(!aList.contains(i)){
-            userId = i;
-          }
-        }
-
-        ///Get snapshot data about user Id
-        FirebaseFirestore.instance
-            .collection(bikesCollection)
-            .doc(selectedDeviceId)
-            .collection(usersCollection)
-            .doc(currentUserModel!.uid)
-            .set(BikeUserModel(
-          uid: currentUserModel!.uid,
-          role: role,
-          userId: userId,
-          created: Timestamp.now(),
-        ).toJson());
-      } else if (ubsnapshot.size >= 5) {
-        role = "exceed limit";
-      }
+      getBike(selectedDeviceId);
 
       return true;
     } catch (e) {
       debugPrint(e.toString());
+      scanQRCodeResult = ScanQRCodeResult.userUploadFailure;
+      notifyListeners();
       return false;
     }
+  }
+
+  getQRCodeResult() {
+    return scanQRCodeResult;
+  }
+
+  setQRCodeResult(ScanQRCodeResult result) {
+    scanQRCodeResult = result;
+    notifyListeners();
   }
 
   deleteBike(String imei) {
@@ -709,7 +586,8 @@ class BikeProvider extends ChangeNotifier {
             switch (docChange.type) {
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
-                rfidList.putIfAbsent(docChange.doc.id, () => RFIDModel.fromJson(obj!, docChange.doc.id));
+                rfidList.putIfAbsent(docChange.doc.id,
+                    () => RFIDModel.fromJson(obj!, docChange.doc.id));
                 notifyListeners();
                 break;
               case DocumentChangeType.removed:
@@ -718,7 +596,8 @@ class BikeProvider extends ChangeNotifier {
                 break;
               case DocumentChangeType.modified:
                 Map<String, dynamic>? obj = docChange.doc.data();
-                rfidList.update(docChange.doc.id, (value) => RFIDModel.fromJson(obj!, docChange.doc.id));
+                rfidList.update(docChange.doc.id,
+                    (value) => RFIDModel.fromJson(obj!, docChange.doc.id));
                 notifyListeners();
                 break;
             }
@@ -730,7 +609,7 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
-  uploadRFIDtoFireStore(List<int> rfidID){
+  uploadRFIDtoFireStore(List<int> rfidID) {
     try {
       FirebaseFirestore.instance
           .collection(bikesCollection)
@@ -763,6 +642,4 @@ class BikeProvider extends ChangeNotifier {
     currentBikeList = 0;
     notifyListeners();
   }
-
-
 }

@@ -1,10 +1,13 @@
 
+import 'package:evie_test/api/navigator.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:provider/provider.dart';
 
-import 'package:sizer/sizer.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import '../../animation/ripple_pulse_animation.dart';
+import '../../api/provider/bike_provider.dart';
 
 class BikeConnectSuccess extends StatefulWidget {
   const BikeConnectSuccess({Key? key}) : super(key: key);
@@ -15,9 +18,17 @@ class BikeConnectSuccess extends StatefulWidget {
 
 class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
 
+  late BikeProvider _bikeProvider;
+
 
   @override
   Widget build(BuildContext context) {
+
+    _bikeProvider = Provider.of<BikeProvider>(context);
+
+     Future.delayed(const Duration(seconds: 8), (){
+       changeToNameBikeScreen(context);
+     });
 
     return WillPopScope(
       onWillPop: () async {
@@ -27,18 +38,14 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
       child: Scaffold(
           body: Stack(
               children:[
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
+              Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(24.0),
-                        child:StepProgressIndicator(
+
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(70.w, 66.h, 70.w,50.h),
+                        child:const StepProgressIndicator(
                           totalSteps: 10,
                           currentStep: 4,
                           selectedColor: Color(0xffCECFCF),
@@ -49,65 +56,70 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                           roundedEdges: Radius.circular(16),
                         ),
                       ),
-                      SizedBox(
-                        height: 3.h,
+
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
+                        child: Text(
+                          "Bike registration successfully",
+                          style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
+                        ),
                       ),
-                      Text(
-                        "Bike Connected Successfully",
-                        style: TextStyle(fontSize: 18.sp),
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Text("Hooray! You have successfully connected #Bike Name#", style: TextStyle(fontSize: 11.5.sp),),
-                      SizedBox(
-                        height: 10.h,
+
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 63.h),
+                        child: Text(
+                          "Hooray! You have successfully register your Bike Serial Number.",
+                          style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                        ),
                       ),
 
                      Center(
-                      child: Text(
-                        "Bluetooth Name",
-                        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(32.w, 0.h, 32.w, 4.h),
+                        child: Text(
+                          _bikeProvider.currentBikeModel?.deviceIMEI ?? "",
+                          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
+                        ),
                       ),
                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
+
                   Center(
-                     child: Text("Connected", style: TextStyle(fontSize: 11.5.sp, fontWeight: FontWeight.w400),),
+                     child: Padding(
+                       padding: EdgeInsets.fromLTRB(32.w, 4.h, 32.w, 32.h),
+                       child:
+                       Text("Registered", style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),),
+                     ),
                   ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
+
                     ],
                   ),
-                ),
 
 
-                Align(
-                  alignment: Alignment.center,
-                  child:  Container(
-                    height: 40.h,
-                    child:Stack(
-                      alignment: Alignment.center,
-                      children: <Widget>[
+          Padding(
+                    padding: EdgeInsets.fromLTRB(19.w, 336.h, 19.w, 288.h),
+                    child: Container(
+                      height: 220.h,
+                      width: 352.18.w,
+                      child:Stack(
+                        alignment: Alignment.center,
+                        children: <Widget>[
 
-                        const Image(
-                          fit: BoxFit.fitWidth,
-                          image: AssetImage("assets/images/bike_HPStatus/bike_normal.png"),
-                        ),
-                        IconButton(
-                          iconSize: 12.h,
-                          icon: Image.asset("assets/icons/connect_success.png"),
-                          onPressed: () {
+                          const Image(
+                            fit: BoxFit.fitWidth,
+                            image: AssetImage("assets/images/bike_HPStatus/bike_normal.png"),
+                          ),
+                          IconButton(
+                            iconSize: 100.h,
+                            icon: Image.asset("assets/icons/connect_success.png"),
+                            onPressed: () {
 
-                          },
-                        ),
+                            },
+                          ),
 
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ),
+          ),
               ]
           )
       ),

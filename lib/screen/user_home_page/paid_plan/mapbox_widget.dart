@@ -29,7 +29,7 @@ class _Mapbox_WidgetState extends State<Mapbox_Widget> {
   @override
   Widget build(BuildContext context) {
     return MapboxMap(
-      useDelayedDisposal: true,
+      //useDelayedDisposal: true,
       myLocationEnabled: true,
       trackCameraPosition: true,
       myLocationTrackingMode:

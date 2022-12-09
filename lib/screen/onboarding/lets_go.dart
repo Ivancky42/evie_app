@@ -58,9 +58,7 @@ class _LetsGoState extends State<LetsGo> {
                   style: TextStyle(fontSize: 24.sp),
                 ),
               ),
-              SizedBox(
-                height: 1.h,
-              ),
+
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w,4.h,16.w,4.h),
                 child: Container(
@@ -84,7 +82,7 @@ class _LetsGoState extends State<LetsGo> {
             ],
           ),
 
-        Align(
+            Align(
           alignment: Alignment.center,
           child: Padding(
             padding: EdgeInsets.fromLTRB(75.w,98.h,75.w,127.84.h),
@@ -94,7 +92,7 @@ class _LetsGoState extends State<LetsGo> {
           ),
         ),
 
-        Align(
+            Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
             padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom),
@@ -112,23 +110,25 @@ class _LetsGoState extends State<LetsGo> {
                   ),
                 ),
                 onPressed: () async {
-                  var locationStatus = await Permission.location.status;
-
-                  if (_bluetoothProvider.bleStatus == BleStatus.unauthorized && locationStatus == PermissionStatus.granted) {
-                    changeToTurnOnBluetoothScreen(context);
-                  }
-                  else if (locationStatus == PermissionStatus.granted && _bluetoothProvider.bleStatus != BleStatus.unauthorized) {
-                    changeToTurnOnQRScannerScreen(context);
-                  }
-                  else {
-                    changeToTurnOnLocationScreen(context);
-                  }
+                  changeToTurnOnLocationScreen(context);
+                  // var locationStatus = await Permission.location.status;
+                  //
+                  // if (_bluetoothProvider.bleStatus == BleStatus.unauthorized && locationStatus == PermissionStatus.granted) {
+                  //   changeToTurnOnBluetoothScreen(context);
+                  // }
+                  // else if (locationStatus == PermissionStatus.granted && _bluetoothProvider.bleStatus != BleStatus.unauthorized) {
+                  //   changeToTurnOnQRScannerScreen(context);
+                  // }
+                  // else {
+                  //   changeToTurnOnLocationScreen(context);
+                  // }
 
                 },
               ),
             ),
           ),
         ),
+
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(

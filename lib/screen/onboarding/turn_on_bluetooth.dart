@@ -69,9 +69,7 @@ class _TurnOnBluetoothState extends State<TurnOnBluetooth> {
                         style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
                       ),
                     ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
+
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 113.h),
                       child: Text(

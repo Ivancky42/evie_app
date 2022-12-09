@@ -1,5 +1,6 @@
 
 import 'package:evie_test/api/navigator.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/onboarding/bike_connect_failed.dart';
 import 'package:evie_test/screen/onboarding/bike_connect_success.dart';
 import 'package:evie_test/widgets/evie_appbar.dart';
@@ -8,11 +9,13 @@ import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
-import 'package:sizer/sizer.dart';
+
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../../api/length.dart';
 import '../../api/provider/bike_provider.dart';
+import '../../widgets/evie_button.dart';
 
 
 
@@ -24,6 +27,8 @@ class QRScanning extends StatefulWidget {
 }
 
 class _QRScanningState extends State<QRScanning> {
+
+  MobileScannerController cameraController = MobileScannerController();
 
   late BikeProvider _bikeProvider;
 
@@ -38,60 +43,107 @@ class _QRScanningState extends State<QRScanning> {
       },
 
       child: Scaffold(
-        body: Column(
+        body: Stack(
             children:[
 
-              Container(
-                height: 300.h,
-                child: MobileScanner(
-                  fit: BoxFit.fill,
-                    allowDuplicates: false,
-                    controller: MobileScannerController(
-                        facing: CameraFacing.back, torchEnabled: false, ),
-                    onDetect: (barcode, args) {
-                      if (barcode.rawValue == null) {
-                        debugPrint('Failed to scan Barcode');
-                      } else {
-                        final String code = barcode.rawValue!;
-                        debugPrint('Barcode found, $code');
 
-                        SmartDialog.showLoading();
-                        _bikeProvider.handleBarcodeData(code);
+              MobileScanner(
+                fit: BoxFit.cover,
+                  allowDuplicates: false,
+                  controller: cameraController,
+                  onDetect: (barcode, args) async {
+                    if (barcode.rawValue == null) {
+                      debugPrint('Failed to scan Barcode');
+                    } else {
+                      final String code = barcode.rawValue!;
+                      debugPrint('Barcode found, $code');
 
+                      SmartDialog.showLoading();
+                      cameraController.stop();
+                      _bikeProvider.handleBarcodeData(code);
 
-                        FutureBuilder(
-                            future: _bikeProvider.getQRCodeResult(),
-                            builder: (_, snapshot) {
-                              if (snapshot.data != ScanQRCodeResult.unknown) {
+                      await _bikeProvider.handleBarcodeData(code);
+                      if(_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success){
 
-                                _bikeProvider.setQRCodeResult(ScanQRCodeResult.unknown);
-                                if(snapshot.data == ScanQRCodeResult.success){
-
-                                 return BikeConnectSuccess();
-                                }else{
-
-                                  return BikeConnectFailed();
-                                }
-
-
-
-
-                              } else {
-                                return const CircularProgressIndicator();
-                              }
-                            });
-
-
-                        //get serial number
-
-                        ///handle code pass to bike provider
-                        ///Detect bike exist from reference, the validation code correct
-                        ///Detect is first user
-                        ///upload to userbike and bikeuser list
-
+                        SmartDialog.dismiss(status:SmartStatus.loading);
+                        changeToBikeConnectSuccessScreen(context);
+                      }else{
+                        SmartDialog.dismiss(status:SmartStatus.loading);
+                        changeToBikeConnectFailedScreen(context);
                       }
-                    }),
-              )
+
+
+                      ///get serial number
+                      ///handle code pass to bike provider
+                      ///Detect bike exist from reference, the validation code correct
+                      ///Detect is first user
+                      ///upload to userbike and bikeuser list
+
+                    }
+                  }),
+
+
+              Padding(
+                padding: EdgeInsets.fromLTRB(20.w, 153.h, 20.w, 123.h),
+                child: Text(
+                  "Align the QR code within the frame to scan",
+                  style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                ),
+              ),
+
+
+
+    Align(
+    alignment: Alignment.bottomCenter,
+    child:Padding(
+          padding:       EdgeInsets.only(left: 16.w, right: 16.w, bottom: 180.h),
+          child: IconButton(
+            iconSize: 64.h,
+              icon:  Image(
+                image: const AssetImage("assets/buttons/torch.png"),
+                height: 64.h,
+                width: 64.w,
+              ),
+            onPressed: () => cameraController.toggleTorch(),
+          ),
+        ),
+    ),
+
+
+        Align(
+            alignment: Alignment.bottomCenter,
+        child:Padding(
+          padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,132.h),
+          child: Text(
+            "Or",
+            style: TextStyle(fontSize: 16.sp, color: Colors.white),
+          ),
+        ),
+        ),
+
+
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding:
+                  EdgeInsets.only(left: 16.0.w, right: 16.w, bottom:56.h),
+                  child:  EvieButton(
+                    width: double.infinity,
+                    height: 48.h,
+                    child: Text(
+                      "Add Manually",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w700
+                      ),
+                    ),
+                    onPressed: () async {
+                      changeToQRAddManuallyScreen(context);
+                    },
+                  ),
+                ),
+              ),
 
             ]
 
@@ -101,7 +153,7 @@ class _QRScanningState extends State<QRScanning> {
       ),
     );
   }
-
-
-
 }
+
+
+

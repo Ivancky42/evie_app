@@ -17,23 +17,23 @@
 // import 'package:step_progress_indicator/step_progress_indicator.dart';
 // import 'package:evie_test/widgets/evie_button.dart';
 //
-// import '../api/provider/bluetooth_provider.dart';
+// import '../../api/provider/bluetooth_provider.dart';
 //
-// class TurnOnBluetooth extends StatefulWidget {
-//   const TurnOnBluetooth({Key? key}) : super(key: key);
+//
+// class Congratulation extends StatefulWidget {
+//   const Congratulation({Key? key}) : super(key: key);
 //
 //   @override
-//   _TurnOnBluetoothState createState() => _TurnOnBluetoothState();
+//   _CongratulationState createState() => _CongratulationState();
 // }
 //
-// class _TurnOnBluetoothState extends State<TurnOnBluetooth> {
+// class _CongratulationState extends State<Congratulation> {
 //
-//   late BluetoothProvider _bluetoothProvider;
+//   late AuthProvider _authProvider;
 //
 //   @override
 //   Widget build(BuildContext context) {
-//
-//     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+//     _authProvider = Provider.of<AuthProvider>(context);
 //
 //     return WillPopScope(
 //       onWillPop: () async {
@@ -51,7 +51,7 @@
 //                       padding: EdgeInsets.fromLTRB(70.w, 66.h, 70.w,50.h),
 //                       child:const StepProgressIndicator(
 //                         totalSteps: 10,
-//                         currentStep: 2,
+//                         currentStep: 10,
 //                         selectedColor: Color(0xffCECFCF),
 //                         selectedSize: 4,
 //                         unselectedColor: Color(0xffDFE0E0),
@@ -64,17 +64,15 @@
 //                     Padding(
 //                       padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
 //                       child: Text(
-//                         "Turn on Bluetooth",
+//                         "Congrats!",
 //                         style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
 //                       ),
 //                     ),
-//                     SizedBox(
-//                       height: 1.h,
-//                     ),
+//
 //                     Padding(
 //                       padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 113.h),
 //                       child: Text(
-//                         "EVIE will use Bluetooth to stay connect with your EVIE bike.",
+//                         "You have completed your account setup! Let's enjoy...",
 //                         style: TextStyle(fontSize: 16.sp,height: 1.5.h),
 //                       ),
 //                     ),
@@ -83,7 +81,7 @@
 //                       padding: EdgeInsets.fromLTRB(45.w, 0.h, 45.2.w,221.h),
 //                       child: const Center(
 //                         child: Image(
-//                           image: AssetImage("assets/images/allow_bluetooth.png"),
+//                           image: AssetImage("assets/images/account_verified.png"),
 //                         ),
 //                       ),
 //                     ),
@@ -99,34 +97,17 @@
 //                       width: double.infinity,
 //                       height: 48.h,
 //                       child: Text(
-//                         "Allow Bluetooth",
+//                         "Let's Get Started",
 //                         style: TextStyle(
 //                             color: Colors.white,
 //                             fontSize: 16.sp,
 //                             fontWeight: FontWeight.w700
 //                         ),
 //                       ),
-//                       onPressed: () async {
 //
-//                         StreamSubscription? subscription;
-//                         PermissionStatus status = await _bluetoothProvider.handlePermission();
-//                         if (status == PermissionStatus.granted) {
-//                           subscription = _bluetoothProvider.checkBLEStatus().listen((bleStatus) {
-//                             if (bleStatus == BleStatus.ready) {
-//                               changeToTurnOnQRScannerScreen(context);
-//                               subscription?.cancel();
-//                             }
-//                             else if (bleStatus == BleStatus.poweredOff){
-//                               OpenSettings.openBluetoothSetting();
-//                             }
-//                           });
-//                         }
-//                         else if (status == PermissionStatus.denied) {
-//                           await _bluetoothProvider.handlePermission();
-//                         }
-//                         else if (status == PermissionStatus.permanentlyDenied) {
-//                           // TODO: Display a dialog to show user have permanetly denied the bluetooth permission
-//                         }
+//                       onPressed: (){
+//                         _authProvider.setIsFirstLogin(false);
+//                         changeToUserHomePageScreen(context);
 //                       },
 //                     ),
 //                   ),
