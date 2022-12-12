@@ -16,6 +16,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../api/length.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../widgets/evie_button.dart';
+import '../../widgets/page_widget/qr_scanner_overlay.dart';
 
 
 
@@ -48,18 +49,20 @@ class _QRScanningState extends State<QRScanning> {
 
 
               MobileScanner(
-                fit: BoxFit.cover,
+
+                  fit: BoxFit.cover,
                   allowDuplicates: false,
                   controller: cameraController,
                   onDetect: (barcode, args) async {
+
                     if (barcode.rawValue == null) {
                       debugPrint('Failed to scan Barcode');
                     } else {
+
                       final String code = barcode.rawValue!;
                       debugPrint('Barcode found, $code');
 
                       SmartDialog.showLoading();
-                      cameraController.stop();
                       _bikeProvider.handleBarcodeData(code);
 
                       await _bikeProvider.handleBarcodeData(code);
@@ -72,7 +75,6 @@ class _QRScanningState extends State<QRScanning> {
                         changeToBikeConnectFailedScreen(context);
                       }
 
-
                       ///get serial number
                       ///handle code pass to bike provider
                       ///Detect bike exist from reference, the validation code correct
@@ -83,11 +85,17 @@ class _QRScanningState extends State<QRScanning> {
                   }),
 
 
-              Padding(
-                padding: EdgeInsets.fromLTRB(20.w, 153.h, 20.w, 123.h),
-                child: Text(
-                  "Align the QR code within the frame to scan",
-                  style: TextStyle(fontSize: 16.sp, color: Colors.white),
+              Positioned.fill(
+                child: Container(
+                  decoration: ShapeDecoration(
+                    shape: QrScannerOverlayShape(
+                      borderColor: Colors.white,
+                      borderRadius: 10,
+                      borderLength: 20,
+                      borderWidth: 5,
+                      cutOutSize: 184.h,
+                    ),
+                  ),
                 ),
               ),
 
@@ -109,6 +117,14 @@ class _QRScanningState extends State<QRScanning> {
         ),
     ),
 
+
+              Padding(
+                padding: EdgeInsets.fromLTRB(20.w, 153.h, 20.w, 123.h),
+                child: Text(
+                  "Align the QR code within the frame to scan",
+                  style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                ),
+              ),
 
         Align(
             alignment: Alignment.bottomCenter,

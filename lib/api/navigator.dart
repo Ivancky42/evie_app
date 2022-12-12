@@ -11,6 +11,7 @@ import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/screen/verify_email.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../screen/onboarding/bike_connect_failed.dart';
 import '../screen/onboarding/bike_connect_success.dart';
@@ -100,7 +101,7 @@ void changeToNotificationScreen(BuildContext context) {
 }
 
 void changeToTestBLEScreen(BuildContext context) {
-  Navigator.push(context,
+  Navigator.pushReplacement(context,
     MaterialPageRoute(builder: (context) => const TestBle()),
   );
 }
@@ -117,88 +118,130 @@ void changeToLetsGoScreen(BuildContext context) {
 }
 
 void changeToCongratulationScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const Congratulation())
+  Navigator.pushReplacement(context,
+  PageTransition(
+    type: PageTransitionType.rightToLeft,
+    child: const Congratulation(),
+    duration: const Duration(milliseconds: 300),
+  ),
   );
 }
 
 void changeToNameBikeScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const NameBike())
+  Navigator.pushReplacement(context,
+  PageTransition(
+    type: PageTransitionType.rightToLeft,
+    child: const NameBike(),
+    duration: const Duration(milliseconds: 300),
+  ),
   );
 }
 
 void changeToTurnOnBluetoothScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const TurnOnBluetooth())
+  Navigator.pushReplacement(context,
+  PageTransition(
+    type: PageTransitionType.rightToLeft,
+    child: const TurnOnBluetooth(),
+    duration: const Duration(milliseconds: 300),
+  ),
   );
 }
 
 void changeToTurnOnLocationScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const TurnOnLocation())
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const TurnOnLocation(),
+      duration: const Duration(milliseconds: 300),
+    ),
   );
 }
 
 void changeToTurnOnQRScannerScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const TurnOnQRScanner())
+  Navigator.pushReplacement(context,
+  PageTransition(
+    type: PageTransitionType.rightToLeft,
+    child: const TurnOnQRScanner(),
+    duration: const Duration(milliseconds: 300),
+  ),
   );
 }
 
 void changeToQRScanningScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const QRScanning())
+  Navigator.pushReplacement(context,
+  PageTransition(
+    type: PageTransitionType.rightToLeft,
+    child: const QRScanning(),
+    duration: const Duration(milliseconds: 300),
+  ),
   );
 }
-
 void changeToQRAddManuallyScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const QRAddManually())
+  Navigator.pushReplacement(context,
+  PageTransition(
+    type: PageTransitionType.rightToLeft,
+    child: const QRAddManually(),
+    duration: const Duration(milliseconds: 300),
+  ),
   );
 }
 
 void changeToTurnOnNotificationsScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const TurnOnNotifications())
+  Navigator.pushReplacement(context,
+  PageTransition(
+    type: PageTransitionType.rightToLeft,
+    child: const TurnOnNotifications(),
+    duration: const Duration(milliseconds: 300),
+  ),
   );
 }
 
-void changeToBikeScanningScreen(BuildContext context) {
-  // Navigator.of(context).pushReplacement(MaterialPageRoute(
-  //     builder: (context) => const BikeScanning())
-  // );
-}
-
-
 void changeToBikeConnectSuccessScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const BikeConnectSuccess())
+  Navigator.pushReplacement(context,
+  PageTransition(
+    type: PageTransitionType.rightToLeft,
+    child: const BikeConnectSuccess(),
+    duration: const Duration(milliseconds: 300),
+  ),
   );
 }
 
 void changeToBikeConnectFailedScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const BikeConnectFailed())
+  Navigator.pushReplacement(context,
+  PageTransition(
+    type: PageTransitionType.rightToLeft,
+    child: const BikeConnectFailed(),
+    duration: const Duration(milliseconds: 300),
+  ),
   );
 }
 
-
 void changeToNotificationsControlScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const NotificationsControl())
+  Navigator.pushReplacement(context,
+  PageTransition(
+    type: PageTransitionType.rightToLeft,
+    child: const NotificationsControl(),
+    duration: const Duration(milliseconds: 300),
+  ),
   );
 }
 
 void changeToEmailPreferenceControlScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const EmailPreferenceControl())
+  Navigator.pushReplacement(context,
+  PageTransition(
+    type: PageTransitionType.rightToLeft,
+    child: const EmailPreferenceControl(),
+    duration: const Duration(milliseconds: 300),
+  ),
   );
 }
-
 void changeToDisplayControlScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const DisplayControl())
+  Navigator.pushReplacement(context,
+  PageTransition(
+    type: PageTransitionType.rightToLeft,
+    child: const DisplayControl(),
+    duration: const Duration(milliseconds: 300),
+  ),
   );
 }
 

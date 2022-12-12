@@ -1,19 +1,22 @@
 import 'dart:async';
-import 'dart:math';
+import 'dart:math' as math;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/mapbox_widget.dart';
+import 'package:evie_test/screen/user_home_page/free_plan/mapbox_widget.dart';
 import 'package:evie_test/widgets/page_widget/home_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_compass/flutter_compass.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:location/location.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import '../../../api/model/location_model.dart';
 import '../../../api/provider/bike_provider.dart';
@@ -76,23 +79,44 @@ class _FreePlanState extends State<FreePlan> {
       "assets/buttons/bike_security_lock_and_secure.png";
 
   late LocationProvider _locationProvider;
-  late LatLngBounds latLngBounds;
 
-  MapboxMapController? mapController;
   double currentScroll = 0.40;
 
   Symbol? locationSymbol;
   String? distanceBetween;
-  UserLocation? userLocation;
 
   StreamSubscription? locationSubscription;
   bool myLocationEnabled = false;
+
+  LocationData? userLocation;
+  late final MapController mapController;
+  final Location _locationService = Location();
+
+  StreamSubscription? userLocationSubscription;
 
   @override
   void initState() {
     super.initState();
     _locationProvider = Provider.of<LocationProvider>(context, listen: false);
     _locationProvider.addListener(locationListener);
+
+    initLocationService();
+  }
+
+  void initLocationService() async {
+    LocationData? location;
+
+    ///For user live location
+    location = await _locationService.getLocation();
+    userLocation = location;
+    userLocationSubscription =
+        _locationService.onLocationChanged.listen((LocationData result) async {
+          if (mounted) {
+            setState(() {
+              userLocation = result;
+            });
+          }
+        });
   }
 
   @override
@@ -136,38 +160,6 @@ class _FreePlanState extends State<FreePlan> {
   }
 
 
-  ///Change icon according to dangerous level
-  void addSymbol() async {
-
-    var markerImage = await loadMarkerImage(currentDangerStatus);
-    mapController?.addImage('marker', markerImage);
-
-    locationSymbol = (await mapController?.addSymbol(
-      SymbolOptions(
-        iconImage: 'marker',
-        iconSize: 2,
-        geometry: LatLng(_locationProvider.locationModel!.geopoint.latitude,
-            _locationProvider.locationModel!.geopoint.longitude),
-      ),
-    ));
-  }
-
-  void getPlace() {
-    _locationProvider.getPlaceMarks(
-        _locationProvider.locationModel!.geopoint.latitude,
-        _locationProvider.locationModel!.geopoint.longitude);
-
-    mapController?.onSymbolTapped.add((argument) {
-
-    });
-  }
-
-  void _onMapCreated(MapboxMapController mapController) async {
-    setState(() {
-      this.mapController = mapController;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
@@ -210,6 +202,25 @@ class _FreePlanState extends State<FreePlan> {
     setConnectImage();
     setLockImage();
     setBikeImage();
+
+    LatLng currentLatLngFree;
+
+    if (userLocation != null) {
+      currentLatLngFree = LatLng(userLocation!.latitude!, userLocation!.longitude!);
+    } else {
+      currentLatLngFree = LatLng(0, 0);
+    }
+
+    final markers = <Marker>[
+      Marker(
+        width: 42.w,
+        height: 56.h,
+        point: currentLatLngFree,
+        builder: (ctx) {
+          return _buildCompass();
+        },
+      ),
+    ];
 
     // final TextEditingController _bikeNameController = TextEditingController();
     // final FocusNode _textFocus = FocusNode();
@@ -276,23 +287,28 @@ class _FreePlanState extends State<FreePlan> {
                             child: Stack(
                               children: [
                                 Mapbox_Widget(
-                                  accessToken: _locationProvider.defPublicAccessToken,
-                                  onMapCreated: _onMapCreated,
-                                  onStyleLoadedCallback:  () {
-                                    loadImage(currentDangerStatus);
-                                    //runSymbol();
-                                    getPlace();
-                                  },
-                                  onUserLocationUpdate: (userLocation) {
-                                    this.userLocation = userLocation;
-                                //    animateBounce();
-                                //    getDistanceBetween();
-                                  },
+                                  accessToken:
+                                  _locationProvider.defPublicAccessToken,
+                                  //onMapCreated: _onMapCreated,
+
+                                  mapController: mapController,
+                                  markers: markers,
+                                  // onUserLocationUpdate: (userLocation) {
+                                  //   if (this.userLocation != null) {
+                                  //     this.userLocation = userLocation;
+                                  //     getDistanceBetween();
+                                  //   }
+                                  //   else {
+                                  //     this.userLocation = userLocation;
+                                  //     getDistanceBetween();
+                                  //     runSymbol();
+                                  //   }
+                                  // },
                                   latitude: _locationProvider
                                       .locationModel!.geopoint.latitude,
-                                  longitude:_locationProvider
+                                  longitude: _locationProvider
                                       .locationModel!.geopoint.longitude,
-                                  )
+                                ),
                               ],
                             ),
                           );
@@ -805,6 +821,46 @@ class _FreePlanState extends State<FreePlan> {
     );
   }
 
+  Widget _buildCompass() {
+    return StreamBuilder<CompassEvent>(
+      stream: FlutterCompass.events,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text('Error reading heading: ${snapshot.error}');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        double? direction = snapshot.data!.heading;
+
+        // if direction is null, then device does not support this sensor
+        // show error message
+        if (direction == null)
+          return Center(
+            child: Text("Device does not have sensors !"),
+          );
+
+        return Material(
+          shape: CircleBorder(),
+          clipBehavior: Clip.antiAlias,
+          elevation: 0.0,
+          color: Colors.transparent,
+          child: Container(
+            child: Transform.rotate(
+              //   angle: (direction * (math.pi / 180) * -1),
+              angle: (direction * (math.pi / 180) * 1),
+              child: Image.asset('assets/icons/user_location_icon.png'),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 
   void setConnectImage() {
     if (connectionState?.name == "connected") {
@@ -907,18 +963,7 @@ class _FreePlanState extends State<FreePlan> {
     return _locationProvider.locationModel;
   }
 
-  void getDistanceBetween() {
-    if (userLocation != null) {
-      distanceBetween = Geolocator.distanceBetween(
-          userLocation!.position.latitude,
-          userLocation!.position.longitude,
-          _locationProvider.locationModel!.geopoint.latitude,
-          _locationProvider.locationModel!.geopoint.longitude)
-          .toStringAsFixed(0);
-    } else {
-      distanceBetween = "-";
-    }
-  }
+
 
   // void animateBounce() {
   //   if(_locationProvider.locationModel != null && userLocation?.position != null){
@@ -962,7 +1007,6 @@ class _FreePlanState extends State<FreePlan> {
   void locationListener() {
     currentDangerStatus = _bikeProvider.currentBikeModel!.location!.status;
 
-    getDistanceBetween();
     loadImage(currentDangerStatus);
     //runSymbol();
   }

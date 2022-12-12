@@ -153,7 +153,7 @@ class _NameBikeState extends State<NameBike> {
                 child:
 
                 SizedBox(
-                  height: 4.h,
+                  height: 6.h,
                   width: 30.w,
                   child:
                   TextButton(

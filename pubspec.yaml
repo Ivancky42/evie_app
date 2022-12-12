@@ -80,6 +80,10 @@ dependencies:
   flutter_svg: ^1.1.6
   map_launcher: ^2.4.0
   mobile_scanner: ^2.1.0
+  flutter_map: ^2.2.0
+  location: ^4.4.0
+  page_transition: ^2.0.9
+  flutter_compass: ^0.7.0
 
 dev_dependencies:
   build_runner: ^2.1.2

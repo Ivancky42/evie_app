@@ -310,6 +310,32 @@ Future<Uint8List> loadMarkerImage(String dangerStatus) async {
 }
 
 
+///Load image according danger status
+loadMarkerImageString(String dangerStatus){
+  switch (dangerStatus) {
+    case 'safe':
+      {
+
+        return "assets/icons/marker_safe.png";
+      }
+    case 'warning':
+      {
+
+        return "assets/icons/marker_warning.png";
+      }
+    case 'danger':
+      {
+
+        return "assets/icons/marker_danger.png";
+      }
+    default:
+      {
+
+        return "assets/icons/marker_safe.png";
+      }
+  }
+}
+
 String getDateTime() {
   final now = DateTime.now();
   String? month;

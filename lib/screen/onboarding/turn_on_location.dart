@@ -104,8 +104,9 @@ class _TurnOnLocationState extends State<TurnOnLocation> {
                       var bluetoothStatus = await Permission.bluetooth.status;
 
                       if(bluetoothStatus == PermissionStatus.granted){
-                       changeToTurnOnQRScannerScreen(context);
+                        changeToTurnOnQRScannerScreen(context);
                       }else{
+
                         changeToTurnOnBluetoothScreen(context);
                       }
                     }else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
