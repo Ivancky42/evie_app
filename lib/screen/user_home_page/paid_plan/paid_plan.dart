@@ -98,7 +98,7 @@ class _PaidPlanState extends State<PaidPlan> {
   List<map_launcher.AvailableMap>? availableMaps;
 
   LocationData? userLocation;
-  late final MapController mapController;
+  MapController? mapController;
   final Location _locationService = Location();
 
   StreamSubscription? userLocationSubscription;
@@ -109,7 +109,6 @@ class _PaidPlanState extends State<PaidPlan> {
     _locationProvider.addListener(locationListener);
     mapController = MapController();
     initLocationService();
-
     super.initState();
   }
 
@@ -118,14 +117,13 @@ class _PaidPlanState extends State<PaidPlan> {
 
     ///For user live location
     location = await _locationService.getLocation();
-    userLocation = location;
     userLocationSubscription =
         _locationService.onLocationChanged.listen((LocationData result) async {
       if (mounted) {
         setState(() {
           userLocation = result;
           getDistanceBetween();
-          animateBounce();
+          //animateBounce();
         });
       }
     });
@@ -322,6 +320,8 @@ class _PaidPlanState extends State<PaidPlan> {
                       });
                     }
 
+                    animateBounce();
+
                     return false;
                   },
                   child: DraggableScrollableSheet(
@@ -333,7 +333,6 @@ class _PaidPlanState extends State<PaidPlan> {
                       expand: true,
                       builder: (BuildContext context,
                           ScrollController _scrollController) {
-                        //animateBounce();
 
                         return ListView(
                           controller: _scrollController,
@@ -1160,11 +1159,11 @@ class _PaidPlanState extends State<PaidPlan> {
       );
 
       if (currentScroll <= (initialRatio) && currentScroll > minRatio + 0.01) {
-        mapController.fitBounds(latLngBounds, options: FitBoundsOptions(
+        mapController?.fitBounds(latLngBounds, options: FitBoundsOptions(
           padding: EdgeInsets.fromLTRB(170.w, 100.h, 170.w, 324.h),
         ));
-      } else if (currentScroll == minRatio) {
-        mapController.fitBounds(latLngBounds, options: FitBoundsOptions(
+      } else if (currentScroll >= minRatio) {
+        mapController?.fitBounds(latLngBounds, options: FitBoundsOptions(
           padding: EdgeInsets.fromLTRB(80.w, 80.h, 80.w, 120.h),
         ));
       }

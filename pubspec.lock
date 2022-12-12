@@ -595,9 +595,11 @@ packages:
   flutter_map:
     dependency: "direct main"
     description:
-      name: flutter_map
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "89f6c2bc2e773f13a4555a1bd2d5a72d4d8043c3"
+      resolved-ref: "89f6c2bc2e773f13a4555a1bd2d5a72d4d8043c3"
+      url: "https://github.com/fleaflet/flutter_map.git"
+    source: git
     version: "3.0.0"
   flutter_native_splash:
     dependency: "direct dev"
@@ -1898,5 +1900,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.17.0 <3.0.0"
+  dart: ">=2.18.0 <3.0.0"
   flutter: ">=3.3.0"
