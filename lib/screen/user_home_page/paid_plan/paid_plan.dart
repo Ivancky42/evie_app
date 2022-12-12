@@ -1158,30 +1158,13 @@ class _PaidPlanState extends State<PaidPlan> {
       );
 
       if (currentScroll <= (initialRatio) && currentScroll > minRatio + 0.01) {
-        if (mapController != null) {
-          //      if (!mapController!.isCameraMoving) {
-
-          // mapController.fitBounds(latLngBounds);
-          mapController.move(center, 14);
-          // mapController?.animateCamera(CameraUpdate.newLatLngBounds(
-          //   latLngBounds,
-          //   left: 170.w,
-          //   right: 170.w,
-          //   top: 100.h,
-          //   bottom: 324.h,
-          // ));
-          //      }
-        }
+        mapController.fitBounds(latLngBounds, options: FitBoundsOptions(
+          padding: EdgeInsets.fromLTRB(170.w, 100.h, 170.w, 324.h),
+        ));
       } else if (currentScroll == minRatio) {
-        // mapController.fitBounds(latLngBounds);
-        mapController.move(center, 14);
-        // mapController?.animateCamera(CameraUpdate.newLatLngBounds(
-        //   latLngBounds,
-        //   left: 80.w,
-        //   right: 80.w,
-        //   top: 80.h,
-        //   bottom: 120.h,
-        // ));
+        mapController.fitBounds(latLngBounds, options: FitBoundsOptions(
+          padding: EdgeInsets.fromLTRB(80.w, 80.h, 80.w, 120.h),
+        ));
       }
     }
   }
