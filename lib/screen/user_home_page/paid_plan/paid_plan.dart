@@ -59,6 +59,7 @@ class _PaidPlanState extends State<PaidPlan> {
     width: 52.w,
     height: 50.h,
   );
+  
 
   Image lockImage = Image(
     width: 52.w,
@@ -177,6 +178,7 @@ class _PaidPlanState extends State<PaidPlan> {
       }
     });
 
+    loadImage(currentDangerStatus);
     setConnectImage();
     setLockImage();
     setBikeImage();
@@ -1173,8 +1175,12 @@ class _PaidPlanState extends State<PaidPlan> {
     currentDangerStatus = _bikeProvider.currentBikeModel!.location!.status;
     //currentBikeLatitude = _locationProvider.locationModel!.geopoint.latitude;
     //currentBikeLongitude =  _locationProvider.locationModel!.geopoint.longitude;
+
+    loadImage(currentDangerStatus);
+    setConnectImage();
     getDistanceBetween();
     animateBounce();
+
     // getDistanceBetween();
     // loadImage(currentDangerStatus);
     // if (mapController != null) {
