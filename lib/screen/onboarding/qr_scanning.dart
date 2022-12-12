@@ -100,7 +100,6 @@ class _QRScanningState extends State<QRScanning> {
               ),
 
 
-
     Align(
     alignment: Alignment.bottomCenter,
     child:Padding(

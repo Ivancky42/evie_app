@@ -18,7 +18,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
-import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import '../../../api/model/location_model.dart';
 import '../../../api/provider/bike_provider.dart';
@@ -29,6 +28,7 @@ import '../../../widgets/evie_single_button_dialog.dart';
 import '../free_plan/free_plan.dart';
 import 'bottom_sheet_widget.dart';
 import 'package:location/location.dart';
+import 'package:latlong2/latlong.dart';
 
 class PaidPlan extends StatefulWidget {
   const PaidPlan({Key? key}) : super(key: key);

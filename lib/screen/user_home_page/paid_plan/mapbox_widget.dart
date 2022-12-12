@@ -38,17 +38,16 @@ class _Mapbox_WidgetState extends State<Mapbox_Widget> {
       mapController: widget.mapController,
       options: MapOptions(
         interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
-        onMapCreated: (MapController mapController){
 
-        },
         zoom: 16,
         center: LatLng(
                widget.latitude,
                 widget.longitude),
       ),
 
-      layers: [
-      TileLayerOptions(
+      children: [
+
+      TileLayer(
       urlTemplate:
       "https://api.mapbox.com/styles/v1/helloevie/claug0xq5002w15mk96ksixpz/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaGVsbG9ldmllIiwiYSI6ImNsN3pvMm9oZTBsM3ozcG4zd2NmenVlZWQifQ.Y1R7b5ban6IwnLODyrf9Zw",
       additionalOptions: {
@@ -57,7 +56,7 @@ class _Mapbox_WidgetState extends State<Mapbox_Widget> {
       },
       ),
 
-        MarkerLayerOptions(
+        MarkerLayer(
           markers: widget.markers,
         ),
       ],
