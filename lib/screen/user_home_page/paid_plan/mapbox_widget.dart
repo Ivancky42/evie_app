@@ -5,7 +5,7 @@ import 'package:latlong2/latlong.dart';
 
 class Mapbox_Widget extends StatefulWidget {
   String accessToken;
- // Function(MapboxMapController)? onMapCreated;
+  Function()? onMapReady;
   //VoidCallback onStyleLoadedCallback;
   //Function(UserLocation)? onUserLocationUpdate;
   double latitude;
@@ -16,7 +16,7 @@ class Mapbox_Widget extends StatefulWidget {
   Mapbox_Widget({
     Key? key,
     required this.accessToken,
-   // required this.onMapCreated,
+   required this.onMapReady,
     //required this.onStyleLoadedCallback,
   //  required this.onUserLocationUpdate,
     required this.latitude,
@@ -38,6 +38,7 @@ class _Mapbox_WidgetState extends State<Mapbox_Widget> {
     return FlutterMap(
       mapController: widget.mapController,
       options: MapOptions(
+ //       onMapReady: widget.onMapReady,
         interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
 
         zoom: 16,

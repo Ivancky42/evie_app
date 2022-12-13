@@ -54,10 +54,7 @@ class _PaidPlanState extends State<PaidPlan> {
   ConnectionStateUpdate? connectionStateUpdate;
   CableLockResult? cableLockState;
 
-
   Image? connectImage;
-  
-
   Image? lockImage;
 
   List<String> imgList = [
@@ -73,13 +70,10 @@ class _PaidPlanState extends State<PaidPlan> {
   late LocationProvider _locationProvider;
   late LatLngBounds latLngBounds;
 
-  //MapboxMapController? mapController;
   double currentScroll = 0.40;
 
   Symbol? locationSymbol;
   String? distanceBetween;
-
-  //UserLocation? userLocation;
 
   StreamSubscription? locationSubscription;
 
@@ -102,21 +96,21 @@ class _PaidPlanState extends State<PaidPlan> {
     _locationProvider.addListener(locationListener);
     mapController = MapController();
     initLocationService();
+
     super.initState();
   }
 
   void initLocationService() async {
-    LocationData? location;
 
     ///For user live location
-    location = await _locationService.getLocation();
-    userLocationSubscription =
-        _locationService.onLocationChanged.listen((LocationData result) async {
+    await _locationService.getLocation();
+    locationListener();
+    userLocationSubscription = _locationService.onLocationChanged.listen((LocationData result) async {
       if (mounted) {
         setState(() {
           userLocation = result;
           getDistanceBetween();
-          //animateBounce();
+          animateBounce();
         });
       }
     });
@@ -125,7 +119,7 @@ class _PaidPlanState extends State<PaidPlan> {
   @override
   void dispose() {
     _locationProvider.removeListener(locationListener);
-    //mapController?.dispose();
+    mapController?.dispose();
     userLocationSubscription?.cancel();
     super.dispose();
   }
@@ -140,7 +134,6 @@ class _PaidPlanState extends State<PaidPlan> {
     connectionState = _bluetoothProvider.connectionStateUpdate?.connectionState;
     connectionStateUpdate = _bluetoothProvider.connectionStateUpdate;
     cableLockState = _bluetoothProvider.cableLockState;
-
 
     ///Handle all data if bool isDeviceConnected is true
     if (connectionState == DeviceConnectionState.connected &&
@@ -170,10 +163,7 @@ class _PaidPlanState extends State<PaidPlan> {
       }
     });
 
-    loadImage(currentDangerStatus);
-    setConnectImage();
-    setLockImage();
-    setBikeImage();
+
 
     LatLng currentLatLng;
 
@@ -280,6 +270,9 @@ class _PaidPlanState extends State<PaidPlan> {
                                       .locationModel!.geopoint.latitude,
                                   longitude: _locationProvider
                                       .locationModel!.geopoint.longitude,
+                                  onMapReady: () {
+                                    loadImage(currentDangerStatus);
+                                },
                                 ),
 
                                 // _buildCompass(),
@@ -1032,6 +1025,14 @@ class _PaidPlanState extends State<PaidPlan> {
           height: 50.h,
         );
       });
+    }else{
+      setState(() {
+        connectImage = Image(
+          image: const AssetImage("assets/buttons/bluetooth_not_connected.png"),
+          width: 52.w,
+          height: 50.h,
+        );
+      });
     }
   }
 
@@ -1054,7 +1055,16 @@ class _PaidPlanState extends State<PaidPlan> {
         );
         lockColour = const Color(0xff6A51CA);
       });
-    }
+ }else if (cableLockState?.lockState == LockState.unknown){
+  setState(() {
+  connectImage = Image(
+  image: const AssetImage("assets/buttons/loading.png"),
+  width: 52.w,
+  height: 50.h,
+  );
+  lockColour = const Color(0xff6A51CA);
+  });
+  }
   }
 
   void setBikeImage() {
@@ -1165,20 +1175,18 @@ class _PaidPlanState extends State<PaidPlan> {
   }
 
   void locationListener() {
-    currentDangerStatus = _bikeProvider.currentBikeModel!.location!.status;
-    //currentBikeLatitude = _locationProvider.locationModel!.geopoint.latitude;
-    //currentBikeLongitude =  _locationProvider.locationModel!.geopoint.longitude;
+    currentDangerStatus = _locationProvider.locationModel!.status;
 
     loadImage(currentDangerStatus);
     setConnectImage();
+    setLockImage();
+    setBikeImage();
+
     getDistanceBetween();
     animateBounce();
 
-    // getDistanceBetween();
     // loadImage(currentDangerStatus);
-    // if (mapController != null) {
-    //   runSymbol();
-    // }
+
   }
 
   void loadImage(String dangerStatus) {

@@ -54,19 +54,8 @@ class _FreePlanState extends State<FreePlan> {
   ConnectionStateUpdate? connectionStateUpdate;
   CableLockResult? cableLockState;
 
-  Image connectImage = Image(
-    image: const AssetImage("assets/buttons/bluetooth_not_connected.png"),
-    width: 35.w,
-    height: 35.h,
-    fit: BoxFit.fitWidth,
-  );
-
-  Image lockImage = Image(
-    image: const AssetImage("assets/buttons/lock_lock.png"),
-    width: 35.w,
-    height: 35.h,
-    fit: BoxFit.fitWidth,
-  );
+  Image? connectImage;
+  Image? lockImage;
 
   List<String> imgList = [
     'assets/images/bike_HPStatus/bike_normal.png',
@@ -99,12 +88,13 @@ class _FreePlanState extends State<FreePlan> {
     super.initState();
     _locationProvider = Provider.of<LocationProvider>(context, listen: false);
     _locationProvider.addListener(locationListener);
-
+    mapController = MapController();
     initLocationService();
   }
 
   void initLocationService() async {
     LocationData? location;
+    locationListener();
 
     ///For user live location
     location = await _locationService.getLocation();
@@ -114,6 +104,7 @@ class _FreePlanState extends State<FreePlan> {
           if (mounted) {
             setState(() {
               userLocation = result;
+              animateBounce();
             });
           }
         });
@@ -199,9 +190,6 @@ class _FreePlanState extends State<FreePlan> {
       }
     });
 
-    setConnectImage();
-    setLockImage();
-    setBikeImage();
 
     LatLng currentLatLngFree;
 
@@ -892,6 +880,15 @@ class _FreePlanState extends State<FreePlan> {
           fit: BoxFit.fitWidth,
         );
       });
+    }else{
+      setState(() {
+        connectImage = Image(
+          image: const AssetImage("assets/buttons/bluetooth_not_connected.png"),
+          width: 35.w,
+          height: 35.h,
+          fit: BoxFit.fitWidth,
+        );
+      });
     }
   }
 
@@ -913,6 +910,15 @@ class _FreePlanState extends State<FreePlan> {
           width: 35.w,
           height: 35.h,
           fit: BoxFit.fitWidth,
+        );
+        lockColour = const Color(0xff6A51CA);
+      });
+    }else if (cableLockState?.lockState == LockState.unknown){
+      setState(() {
+        connectImage = Image(
+          image: const AssetImage("assets/buttons/loading.png"),
+          width: 52.w,
+          height: 50.h,
         );
         lockColour = const Color(0xff6A51CA);
       });
@@ -964,6 +970,11 @@ class _FreePlanState extends State<FreePlan> {
   }
 
 
+  void animateBounce(){
+       if(userLocation != null){
+         mapController.move(LatLng(userLocation!.latitude!, userLocation!.longitude!), 14);
+       }
+  }
 
   // void animateBounce() {
   //   if(_locationProvider.locationModel != null && userLocation?.position != null){
@@ -1005,35 +1016,14 @@ class _FreePlanState extends State<FreePlan> {
   // }
 
   void locationListener() {
-    currentDangerStatus = _bikeProvider.currentBikeModel!.location!.status;
+    //currentDangerStatus = _bikeProvider.currentBikeModel!.location!.status;
 
-    loadImage(currentDangerStatus);
-    //runSymbol();
+    //loadImage(currentDangerStatus);
+
+    setConnectImage();
+    setLockImage();
+    setBikeImage();
   }
 
 
-  // runSymbol() async {
-  //   if (mapController?.symbols != null  && locationSymbol != null) {
-  //
-  //     var markerImage = await loadMarkerImage(currentDangerStatus);
-  //     mapController?.addImage('marker', markerImage);
-  //
-  //     mapController?.updateSymbol(
-  //       locationSymbol!,
-  //       SymbolOptions(
-  //         iconImage: 'marker',
-  //         iconSize: 2,
-  //         geometry: LatLng(_locationProvider.locationModel!.geopoint.latitude!,
-  //             _locationProvider.locationModel!.geopoint.longitude!),
-  //       ),
-  //     );
-  //     animateBounce();
-  //   } else {
-  //     if(mapController != null){
-  //       addSymbol();
-  //       animateBounce();
-  //     }
-  //   }
-  //   //  getPlace();
-  // }
 }
