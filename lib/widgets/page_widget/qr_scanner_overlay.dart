@@ -185,7 +185,6 @@ class QrScannerOverlayShape extends ShapeBorder {
 
 
 
-
 class QRScannerOverlay extends StatelessWidget {
   const QRScannerOverlay({Key? key, required this.overlayColour})
       : super(key: key);

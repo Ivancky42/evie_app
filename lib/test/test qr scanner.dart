@@ -35,21 +35,21 @@ class _TestQRScanState extends State<TestQRScan> {
           body: Column(
           children:[
 
-            Container(
-              height: 300.h,
-              child: MobileScanner(
-                  allowDuplicates: false,
-                  controller: MobileScannerController(
-                      facing: CameraFacing.back, torchEnabled: false),
-                  onDetect: (barcode, args) {
-                    if (barcode.rawValue == null) {
-                      debugPrint('Failed to scan Barcode');
-                    } else {
-                      final String code = barcode.rawValue!;
-                      debugPrint('Barcode found! $code');
-                    }
-                  }),
-            )
+            // Container(
+            //   height: 300.h,
+            //   child: MobileScanner(
+            //       allowDuplicates: false,
+            //       controller: MobileScannerController(
+            //           facing: CameraFacing.back, torchEnabled: false),
+            //       onDetect: (barcode, args) {
+            //         if (barcode.rawValue == null) {
+            //           debugPrint('Failed to scan Barcode');
+            //         } else {
+            //           final String code = barcode.rawValue!;
+            //           debugPrint('Barcode found! $code');
+            //         }
+            //       }),
+            // )
 
           ]
 

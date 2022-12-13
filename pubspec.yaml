@@ -35,6 +35,11 @@ dependencies:
       url: https://github.com/fleaflet/flutter_map.git
       ref: 89f6c2bc2e773f13a4555a1bd2d5a72d4d8043c3
 
+  mobile_scanner:
+    git:
+      url: https://github.com/juliansteenbakker/mobile_scanner.git
+      ref: b358cdec9ae6045e46565769657ae313d7f3c957
+
   provider: ^5.0.0
   cupertino_icons: ^1.0.2
   firebase_core: ^1.20.0
@@ -84,7 +89,6 @@ dependencies:
   modal_bottom_sheet: ^2.1.2
   flutter_svg: ^1.1.6
   map_launcher: ^2.4.0
-  mobile_scanner: ^2.1.0
   location: ^4.4.0
   page_transition: ^2.0.9
   flutter_compass: ^0.7.0

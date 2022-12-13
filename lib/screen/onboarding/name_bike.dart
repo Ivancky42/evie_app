@@ -130,7 +130,10 @@ class _NameBikeState extends State<NameBike> {
                             (title: "Success",
                               content: "Update successful",
                               rightContent: "Ok",
-                              onPressedRight: (){changeToTurnOnNotificationsScreen(context);} ));
+                              onPressedRight: (){
+                              SmartDialog.dismiss();
+                              changeToTurnOnNotificationsScreen(context);
+                            } ));
                         } else{
                           SmartDialog.show(
                               keepSingle: true,

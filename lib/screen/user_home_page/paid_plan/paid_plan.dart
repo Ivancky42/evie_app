@@ -54,18 +54,11 @@ class _PaidPlanState extends State<PaidPlan> {
   ConnectionStateUpdate? connectionStateUpdate;
   CableLockResult? cableLockState;
 
-  Image connectImage = Image(
-    image: const AssetImage("assets/buttons/bluetooth_not_connected.png"),
-    width: 52.w,
-    height: 50.h,
-  );
+
+  Image? connectImage;
   
 
-  Image lockImage = Image(
-    width: 52.w,
-    height: 50.h,
-    image: const AssetImage("assets/buttons/lock_lock.png"),
-  );
+  Image? lockImage;
 
   List<String> imgList = [
     'assets/images/bike_HPStatus/bike_normal.png',
@@ -147,6 +140,7 @@ class _PaidPlanState extends State<PaidPlan> {
     connectionState = _bluetoothProvider.connectionStateUpdate?.connectionState;
     connectionStateUpdate = _bluetoothProvider.connectionStateUpdate;
     cableLockState = _bluetoothProvider.cableLockState;
+
 
     ///Handle all data if bool isDeviceConnected is true
     if (connectionState == DeviceConnectionState.connected &&

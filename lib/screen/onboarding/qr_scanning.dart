@@ -29,12 +29,30 @@ class QRScanning extends StatefulWidget {
 
 class _QRScanningState extends State<QRScanning> {
 
-  MobileScannerController cameraController = MobileScannerController();
+  late MobileScannerController cameraController;
 
   late BikeProvider _bikeProvider;
 
   @override
+  void initState() {
+   cameraController = MobileScannerController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    cameraController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+    final scanWindow = Rect.fromCenter(
+      center: MediaQuery.of(context).size.center(Offset.zero),
+      width: 184.h,
+      height: 184.h,
+    );
 
     _bikeProvider = Provider.of<BikeProvider>(context);
 
@@ -47,46 +65,86 @@ class _QRScanningState extends State<QRScanning> {
         body: Stack(
             children:[
 
-
               MobileScanner(
+                fit: BoxFit.cover,
+                scanWindow: scanWindow,
+                controller: cameraController,
+                onDetect: (BarcodeCapture barcode) async {
 
-                  fit: BoxFit.cover,
-                  allowDuplicates: false,
-                  controller: cameraController,
-                  onDetect: (barcode, args) async {
+                 for (var element in barcode.barcodes) {
+                      cameraController.stop();
+                     final String code = element.rawValue!;
+                     debugPrint('Barcode found, $code');
 
-                    if (barcode.rawValue == null) {
-                      debugPrint('Failed to scan Barcode');
-                    } else {
+                     SmartDialog.showLoading();
+                     _bikeProvider.handleBarcodeData(code);
 
-                      final String code = barcode.rawValue!;
-                      debugPrint('Barcode found, $code');
+                     await _bikeProvider.handleBarcodeData(code);
+                     if (_bikeProvider.scanQRCodeResult ==
+                         ScanQRCodeResult.success) {
+                       SmartDialog.dismiss(status: SmartStatus.loading);
+                       changeToBikeConnectSuccessScreen(context);
+                     } else {
+                       SmartDialog.dismiss(status: SmartStatus.loading);
+                       changeToBikeConnectFailedScreen(context);
+                     }
 
-                      SmartDialog.showLoading();
-                      _bikeProvider.handleBarcodeData(code);
+                     ///get serial number
+                     ///handle code pass to bike provider
+                     ///Detect bike exist from reference, the validation code correct
+                     ///Detect is first user
+                     ///upload to userbike and bikeuser list
 
-                      await _bikeProvider.handleBarcodeData(code);
-                      if(_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success){
+                   }
 
-                        SmartDialog.dismiss(status:SmartStatus.loading);
-                        changeToBikeConnectSuccessScreen(context);
-                      }else{
-                        SmartDialog.dismiss(status:SmartStatus.loading);
-                        changeToBikeConnectFailedScreen(context);
-                      }
 
-                      ///get serial number
-                      ///handle code pass to bike provider
-                      ///Detect bike exist from reference, the validation code correct
-                      ///Detect is first user
-                      ///upload to userbike and bikeuser list
+                }
+                ),
 
-                    }
-                  }),
+
+
+     // MobileScanner(
+     //
+     //              fit: BoxFit.cover,
+     //              allowDuplicates: false,
+     //              scan
+     //              controller: cameraController,
+     //              onDetect: (barcode, args) async {
+     //
+     //                if (barcode.rawValue == null) {
+     //                  debugPrint('Failed to scan Barcode');
+     //                } else {
+     //                  final String code = barcode.rawValue!;
+     //                  debugPrint('Barcode found, $code');
+     //
+     //                  SmartDialog.showLoading();
+     //                  _bikeProvider.handleBarcodeData(code);
+     //
+     //                  await _bikeProvider.handleBarcodeData(code);
+     //                  if(_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success){
+     //
+     //                    SmartDialog.dismiss(status:SmartStatus.loading);
+     //                    changeToBikeConnectSuccessScreen(context);
+     //                  }else{
+     //                    SmartDialog.dismiss(status:SmartStatus.loading);
+     //                    changeToBikeConnectFailedScreen(context);
+     //                  }
+     //
+     //                  ///get serial number
+     //                  ///handle code pass to bike provider
+     //                  ///Detect bike exist from reference, the validation code correct
+     //                  ///Detect is first user
+     //                  ///upload to userbike and bikeuser list
+     //
+     //                }
+     //              }),
+
 
 
               Positioned.fill(
                 child: Container(
+                  height:10,
+                  width: 20,
                   decoration: ShapeDecoration(
                     shape: QrScannerOverlayShape(
                       borderColor: Colors.white,
@@ -96,8 +154,12 @@ class _QRScanningState extends State<QRScanning> {
                       cutOutSize: 184.h,
                     ),
                   ),
+
                 ),
               ),
+
+
+
 
 
     Align(
