@@ -1,6 +1,9 @@
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../../../bluetooth/modelResult.dart';
 
 
 class Bike_Name_Row extends StatelessWidget {
@@ -49,11 +52,12 @@ class Bike_Name_Row extends StatelessWidget {
                 Visibility(
                     visible: isDeviceConnected!,
 
-                    child:   const Image(
-                      image: AssetImage(
-                          "assets/icons/bluetooth_small.png"),
-
+                    child: SvgPicture.asset(
+                      "assets/icons/bluetooth_small.svg",
+                      width: 20.w,
+                      height: 20.h,
                     ),
+
                 )
               ],
 
@@ -62,7 +66,7 @@ class Bike_Name_Row extends StatelessWidget {
               height: 4.h,
             ),
             Text(
-              distanceBetween,
+              isDeviceConnected! ? "With You" : "Bike is not connected",
               style: TextStyle(
                   fontSize: 12.sp,
                   fontWeight:
@@ -86,6 +90,7 @@ class Bike_Name_Row extends StatelessWidget {
 class Bike_Status_Row extends StatelessWidget {
 
   String currentSecurityIcon;
+  LockState isLocked;
   String currentBatteryIcon;
   String connectText;
   Widget child;
@@ -94,6 +99,7 @@ class Bike_Status_Row extends StatelessWidget {
   Bike_Status_Row({
     Key? key,
     required this.currentSecurityIcon,
+    required this.isLocked,
     required this.currentBatteryIcon,
     required this.connectText,
     required this.child,
@@ -105,17 +111,29 @@ class Bike_Status_Row extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
         children: [
-          Container(
-            width: 21.w,
-            height: 24.h,
-            child: Image(
-              image: AssetImage(
-                  currentSecurityIcon),
-              height: 35.h,
-              width: 35.w,
+
+          if(isLocked == LockState.lock)...{
+            SvgPicture.asset(
+              "assets/buttons/bike_security_lock_and_secure.svg",
+              height:36.h,
+              width: 36.w,
             ),
-          ),
-          SizedBox(width: 11.5.w),
+
+          }else if(isLocked == LockState.unlock)...{
+            SvgPicture.asset(
+              "assets/buttons/bike_security_unlock.svg",
+              height:36.h,
+              width: 36.w,
+            ),
+          }else ...{
+            SvgPicture.asset(
+              "assets/icons/battery_not_available.svg",
+              height:36.h,
+              width: 36.w,
+            ),
+          },
+
+          SizedBox(width: 4.w),
           Column(
             crossAxisAlignment:
             CrossAxisAlignment
@@ -130,12 +148,10 @@ class Bike_Status_Row extends StatelessWidget {
           const VerticalDivider(
             thickness: 1,
           ),
-          Image(
-            image: AssetImage(
-                currentBatteryIcon),
-            height: 24.h,
-            width: 24.w,
-            //height: 1.h,
+          SvgPicture.asset(
+            currentBatteryIcon,
+            width: 36.w,
+            height: 36.h,
           ),
           SizedBox(
             width: 10.w,

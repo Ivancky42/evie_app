@@ -52,7 +52,7 @@ class BikeModel {
   factory BikeModel.fromJson(Map json) {
     return BikeModel(
       batteryPercent: json['batteryPercent']?? 0,
-      bleKey: json['bleKey']?? '',
+      bleKey: json['bleKey']?? null,
       bleName: json['bleName']?? '',
       created:    timestampFromJson(json['created']),
       deviceIMEI: json['deviceIMEI']?? '',

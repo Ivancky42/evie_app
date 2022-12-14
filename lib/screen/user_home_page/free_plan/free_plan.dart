@@ -54,8 +54,8 @@ class _FreePlanState extends State<FreePlan> {
   ConnectionStateUpdate? connectionStateUpdate;
   CableLockResult? cableLockState;
 
-  Image? connectImage;
-  Image? lockImage;
+  SvgPicture? connectImage;
+  SvgPicture? lockImage;
 
   List<String> imgList = [
     'assets/images/bike_HPStatus/bike_normal.png',
@@ -65,7 +65,7 @@ class _FreePlanState extends State<FreePlan> {
   String currentDangerStatus = 'safe';
   String currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
   String currentSecurityIcon =
-      "assets/buttons/bike_security_lock_and_secure.png";
+      "assets/buttons/bike_security_not_available.svg";
 
   late LocationProvider _locationProvider;
 
@@ -122,39 +122,6 @@ class _FreePlanState extends State<FreePlan> {
   }
 
 
-  void loadImage(String dangerStatus) {
-    switch (dangerStatus) {
-      case 'safe':
-        {
-          currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
-          currentSecurityIcon =
-          "assets/buttons/bike_security_lock_and_secure.png";
-        }
-        break;
-      case 'warning':
-        {
-          currentBikeStatusImage =
-          "assets/images/bike_HPStatus/bike_warning.png";
-          currentSecurityIcon = "assets/buttons/bike_security_warning.png";
-        }
-        break;
-      case 'danger':
-        {
-          currentBikeStatusImage =
-          "assets/images/bike_HPStatus/bike_danger.png";
-          currentSecurityIcon = "assets/buttons/bike_security_danger.png";
-        }
-        break;
-      default:
-        {
-          currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
-          currentSecurityIcon =
-          "assets/buttons/bike_security_lock_and_secure.png";
-        }
-    }
-  }
-
-
   @override
   Widget build(BuildContext context) {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
@@ -194,6 +161,8 @@ class _FreePlanState extends State<FreePlan> {
       }
     });
 
+    setConnectImage();
+    setLockImage();
 
     LatLng currentLatLngFree;
 
@@ -251,7 +220,7 @@ class _FreePlanState extends State<FreePlan> {
                             return GestureDetector(
                               onTap: (){},
                               child:Padding(
-                                padding: EdgeInsets.fromLTRB(16.w, 28.h, 146.w, 28.h),
+                                padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w, 28.h),
                                 child: Container(
                                     height: 24.h,
                                     child: Text(
@@ -373,7 +342,7 @@ class _FreePlanState extends State<FreePlan> {
                                                       padding:
                                                       EdgeInsets.fromLTRB(16.w, 9.h, 0, 0),
                                                       child: Bike_Name_Row(
-                                                        isDeviceConnected: this.isDeviceConnected,
+                                                        isDeviceConnected: isDeviceConnected,
                                                         bikeName: _bikeProvider.currentBikeModel?.deviceName ?? "",
                                                         distanceBetween: "Est. ${distanceBetween}m",
                                                         currentBikeStatusImage: currentBikeStatusImage,),
@@ -384,13 +353,14 @@ class _FreePlanState extends State<FreePlan> {
                                                       EdgeInsets.fromLTRB(16.w, 17.15.h, 0, 0),
                                                       child: IntrinsicHeight(
                                                         child: Bike_Status_Row(
-                                                          estKm:"Est -km",
+                                                          estKm:"",
                                                           currentBatteryIcon: getBatteryImageFromBLE(_bluetoothProvider.bikeInfoResult!.batteryLevel!),
                                                           connectText: _bluetoothProvider.bikeInfoResult!.batteryLevel!,
                                                           currentSecurityIcon: currentSecurityIcon,
-                                                          child: Text(
-                                                            "NOT \nAVAILABLE",
-                                                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
+                                                          isLocked: cableLockState?.lockState ?? LockState.unknown,
+                                                          child: Text( cableLockState!.lockState == LockState.lock ?
+                                                          "LOCK & SECURED" : "UNLOCKED",
+                                                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
                                                           ),),
                                                       ),
                                                     ),
@@ -402,103 +372,101 @@ class _FreePlanState extends State<FreePlan> {
                                                           SizedBox(
                                                             height: 96.h,
                                                             width: 96.w,
-                                                            child:FittedBox(
-                                                              child:
-                                                              FloatingActionButton(
-                                                                elevation: 0,
-                                                                backgroundColor:
-                                                                cableLockState
-                                                                    ?.lockState ==
-                                                                    LockState
-                                                                        .lock
-                                                                    ? lockColour
-                                                                    : const Color(
-                                                                    0xffC1B7E8),
-                                                                onPressed: cableLockState
-                                                                    ?.lockState ==
-                                                                    LockState.lock
-                                                                    ? () {
-                                                                  ///Check is connected
+                                                            child:FloatingActionButton(
+                                                              elevation: 0,
+                                                              backgroundColor:
+                                                              cableLockState
+                                                                  ?.lockState ==
+                                                                  LockState
+                                                                      .lock
+                                                                  ? lockColour
+                                                                  : const Color(
+                                                                  0xffC1B7E8),
+                                                              onPressed: cableLockState
+                                                                  ?.lockState ==
+                                                                  LockState.lock
+                                                                  ? () {
+                                                                ///Check is connected
 
-                                                                  SmartDialog
-                                                                      .showLoading(
-                                                                      msg:
-                                                                      "Unlocking");
-                                                                  StreamSubscription?
-                                                                  subscription;
-                                                                  subscription =
-                                                                      _bluetoothProvider
-                                                                          .cableUnlock()
-                                                                          .listen(
-                                                                              (unlockResult) {
+                                                                SmartDialog
+                                                                    .showLoading(
+                                                                    msg:
+                                                                    "Unlocking");
+                                                                StreamSubscription?
+                                                                subscription;
+                                                                subscription =
+                                                                    _bluetoothProvider
+                                                                        .cableUnlock()
+                                                                        .listen(
+                                                                            (unlockResult) {
+                                                                          SmartDialog.dismiss(
+                                                                              status: SmartStatus
+                                                                                  .loading);
+                                                                          subscription
+                                                                              ?.cancel();
+                                                                          if (unlockResult
+                                                                              .result ==
+                                                                              CommandResult
+                                                                                  .success) {
+                                                                            ScaffoldMessenger.of(
+                                                                                context)
+                                                                                .showSnackBar(
+                                                                              SnackBar(
+                                                                                content:
+                                                                                Text('Bike is unlocked. To lock bike, pull the lock handle on the bike.',style: TextStyle(fontSize: 16.sp),),
+                                                                                duration:
+                                                                                Duration(seconds: 2),
+                                                                              ),
+                                                                            );
+                                                                          } else {
                                                                             SmartDialog.dismiss(
-                                                                                status: SmartStatus
-                                                                                    .loading);
+                                                                                status:
+                                                                                SmartStatus.loading);
                                                                             subscription
                                                                                 ?.cancel();
-                                                                            if (unlockResult
-                                                                                .result ==
-                                                                                CommandResult
-                                                                                    .success) {
-                                                                              ScaffoldMessenger.of(
-                                                                                  context)
-                                                                                  .showSnackBar(
-                                                                                SnackBar(
-                                                                                  content:
+                                                                            ScaffoldMessenger.of(
+                                                                                context)
+                                                                                .showSnackBar(
+                                                                              SnackBar(
+                                                                                width:
+                                                                                358.w,
+                                                                                behavior:
+                                                                                SnackBarBehavior.floating,
+                                                                                shape: RoundedRectangleBorder(
+                                                                                    borderRadius:
+                                                                                    BorderRadius.all(Radius.circular(10))),
+                                                                                content:
+                                                                                Container(
+                                                                                  height:
+                                                                                  80.h,
+                                                                                  child:
                                                                                   Text('Bike is unlocked. To lock bike, pull the lock handle on the bike.',style: TextStyle(fontSize: 16.sp),),
-                                                                                  duration:
-                                                                                  Duration(seconds: 2),
                                                                                 ),
-                                                                              );
-                                                                            } else {
-                                                                              SmartDialog.dismiss(
-                                                                                  status:
-                                                                                  SmartStatus.loading);
-                                                                              subscription
-                                                                                  ?.cancel();
-                                                                              ScaffoldMessenger.of(
-                                                                                  context)
-                                                                                  .showSnackBar(
-                                                                                SnackBar(
-                                                                                  width:
-                                                                                  358.w,
-                                                                                  behavior:
-                                                                                  SnackBarBehavior.floating,
-                                                                                  shape: RoundedRectangleBorder(
-                                                                                      borderRadius:
-                                                                                      BorderRadius.all(Radius.circular(10))),
-                                                                                  content:
-                                                                                  Container(
-                                                                                    height:
-                                                                                    80.h,
-                                                                                    child:
-                                                                                    Text('Bike is unlocked. To lock bike, pull the lock handle on the bike.',style: TextStyle(fontSize: 16.sp),),
-                                                                                  ),
-                                                                                  duration:
-                                                                                  const Duration(seconds: 4),
-                                                                                ),
-                                                                              );
-                                                                            }
-                                                                          }, onError: (error) {
-                                                                        SmartDialog.dismiss(
-                                                                            status: SmartStatus
-                                                                                .loading);
-                                                                        subscription
-                                                                            ?.cancel();
-                                                                        SmartDialog.show(
-                                                                            widget: EvieSingleButtonDialogCupertino(
-                                                                                title: "Error",
-                                                                                content: "Cannot unlock bike, please place the phone near the bike and try again.",
-                                                                                rightContent: "OK",
-                                                                                onPressedRight: () {
-                                                                                  SmartDialog.dismiss();
-                                                                                }));
-                                                                      });
-                                                                }
-                                                                    : null,
-                                                                //icon inside button
-                                                                child: lockImage,
-                                                              ),),
+                                                                                duration:
+                                                                                const Duration(seconds: 4),
+                                                                              ),
+                                                                            );
+                                                                          }
+                                                                        }, onError: (error) {
+                                                                      SmartDialog.dismiss(
+                                                                          status: SmartStatus
+                                                                              .loading);
+                                                                      subscription
+                                                                          ?.cancel();
+                                                                      SmartDialog.show(
+                                                                          widget: EvieSingleButtonDialogCupertino(
+                                                                              title: "Error",
+                                                                              content: "Cannot unlock bike, please place the phone near the bike and try again.",
+                                                                              rightContent: "OK",
+                                                                              onPressedRight: () {
+                                                                                SmartDialog.dismiss();
+                                                                              }));
+                                                                    });
+                                                              }
+                                                                  : null,
+                                                              //icon inside button
+                                                              child: lockImage,
+                                                            ),
                                                           ),
                                                           SizedBox(
                                                             height: 12.h,
@@ -589,11 +557,12 @@ class _FreePlanState extends State<FreePlan> {
                                                         child: Bike_Status_Row(
                                                           connectText: "-",
                                                           estKm: "",
-                                                          currentSecurityIcon: "assets/buttons/bike_security_not_available.png",
-                                                          currentBatteryIcon: "assets/icons/battery_not_available.png",
+                                                          currentSecurityIcon: currentSecurityIcon,
+                                                          currentBatteryIcon: "assets/icons/battery_not_available.svg",
+                                                          isLocked: cableLockState?.lockState ?? LockState.unknown,
                                                           child:Text(
-                                                            "NOT \nAVAILABLE",
-                                                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
+                                                            "NOT AVAILABLE",
+                                                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
                                                           ),),
                                                       ),
                                                     ),
@@ -605,15 +574,12 @@ class _FreePlanState extends State<FreePlan> {
                                                           SizedBox(
                                                             height: 96.h,
                                                             width: 96.w,
-                                                            child: FittedBox(
-                                                                child:
-                                                                FloatingActionButton(
-                                                                  elevation: 0,
-                                                                  backgroundColor:
-                                                                  lockColour,
-                                                                  onPressed: () {
-                                                                    ///Check bluetooth status
-
+                                                            child: FloatingActionButton(
+                                                              elevation: 0,
+                                                              backgroundColor:
+                                                              lockColour,
+                                                              onPressed: () {
+                                                                ///Check bluetooth status
                                                                     var bleStatus =
                                                                         _bluetoothProvider
                                                                             .bleStatus;
@@ -678,30 +644,30 @@ class _FreePlanState extends State<FreePlan> {
                                                                           _bluetoothProvider
                                                                               .startScanAndConnect();
 
-                                                                          // if(connectionStateUpdate != null){
-                                                                          //   if(connectionStateUpdate?.failure.toString() != null){
-                                                                          //     SmartDialog.show(
-                                                                          //         keepSingle: true,
-                                                                          //         widget: EvieSingleButtonDialogCupertino(
-                                                                          //             title: "Error",
-                                                                          //             content: "Cannot connect bike, please place the phone near the bike and try again.",
-                                                                          //             rightContent: "OK",
-                                                                          //             onPressedRight: (){SmartDialog.dismiss();})
-                                                                          //     );
-                                                                          //   }
-                                                                          // }
+                                                                      // if(connectionStateUpdate != null){
+                                                                      //   if(connectionStateUpdate?.failure.toString() != null){
+                                                                      //     SmartDialog.show(
+                                                                      //         keepSingle: true,
+                                                                      //         widget: EvieSingleButtonDialogCupertino(
+                                                                      //             title: "Error",
+                                                                      //             content: "Cannot connect bike, please place the phone near the bike and try again.",
+                                                                      //             rightContent: "OK",
+                                                                      //             onPressedRight: (){SmartDialog.dismiss();})
+                                                                      //     );
+                                                                      //   }
+                                                                      // }
 
-                                                                        } else {
+                                                                    } else {
 
-                                                                        }
-                                                                        break;
-                                                                      default:
-                                                                        break;
                                                                     }
-                                                                  },
-                                                                  //icon inside button
-                                                                  child: connectImage,
-                                                                )),
+                                                                    break;
+                                                                  default:
+                                                                    break;
+                                                                }
+                                                              },
+                                                              //icon inside button
+                                                              child: connectImage,
+                                                            ),
                                                           ),
                                                           SizedBox(
                                                             height: 12.h,
@@ -766,7 +732,13 @@ class _FreePlanState extends State<FreePlan> {
                                         ),
                                         IconButton(
                                             onPressed: (){
-                                              _bikeProvider.controlBikeList("next");
+                                              _bikeProvider
+                                                  .controlBikeList("next");
+                                              _bluetoothProvider
+                                                  .disconnectDevice(
+                                                  _bikeProvider
+                                                      .currentBikeModel!
+                                                      .deviceIMEI!);
                                             },
                                             icon: const Image(
                                               image: AssetImage("assets/buttons/filter.png"),
@@ -859,70 +831,64 @@ class _FreePlanState extends State<FreePlan> {
   void setConnectImage() {
     if (connectionState?.name == "connected") {
       setState(() {
-        connectImage = Image(
-          image: const AssetImage("assets/buttons/lock_lock.png"),
-          width: 35.w,
-          height: 35.h,
-          fit: BoxFit.fitWidth,
+        connectImage = SvgPicture.asset(
+          "assets/buttons/loading.svg",
+          width: 52.w,
+          height: 50.h,
         );
         lockColour = const Color(0xff6A51CA);
       });
     } else if (connectionState?.name == "connecting") {
       setState(() {
-        connectImage = Image(
-          image: const AssetImage("assets/buttons/loading.png"),
-          width: 35.w,
-          height: 35.h,
-          fit: BoxFit.fitWidth,
+        connectImage = SvgPicture.asset(
+          "assets/buttons/loading.svg",
+          width: 52.w,
+          height: 50.h,
         );
         lockColour = const Color(0xff6A51CA);
       });
     } else if (connectionState?.name == "disconnected") {
       setState(() {
-        connectImage = Image(
-          image: const AssetImage("assets/buttons/bluetooth_not_connected.png"),
-          width: 35.w,
-          height: 35.h,
-          fit: BoxFit.fitWidth,
+        connectImage = SvgPicture.asset(
+          "assets/buttons/bluetooth_not_connected.svg",
+          width: 52.w,
+          height: 50.h,
         );
       });
-    }else{
+    } else {
       setState(() {
-        connectImage = Image(
-          image: const AssetImage("assets/buttons/bluetooth_not_connected.png"),
-          width: 35.w,
-          height: 35.h,
-          fit: BoxFit.fitWidth,
+        connectImage = SvgPicture.asset(
+          "assets/buttons/bluetooth_not_connected.svg",
+          width: 52.w,
+          height: 50.h,
         );
       });
     }
   }
 
   void setLockImage() {
-    if (cableLockState?.lockState == LockState.lock) {
+    if (cableLockState?.lockState == LockState.unlock) {
       setState(() {
-        lockImage = Image(
-          image: const AssetImage("assets/buttons/lock_lock.png"),
-          width: 35.w,
-          height: 35.h,
-          fit: BoxFit.fitWidth,
+        lockImage = SvgPicture.asset(
+          "assets/buttons/lock_unlock.svg",
+          width: 52.w,
+          height: 50.h,
         );
         lockColour = const Color(0xff6A51CA);
       });
-    } else if (cableLockState?.lockState == LockState.unlock) {
+    } else if (cableLockState?.lockState == LockState.lock) {
       setState(() {
-        lockImage = Image(
-          image: const AssetImage("assets/buttons/lock_unlock.png"),
-          width: 35.w,
-          height: 35.h,
-          fit: BoxFit.fitWidth,
+        lockImage = SvgPicture.asset(
+          "assets/buttons/lock_lock.svg",
+          width: 52.w,
+          height: 50.h,
         );
         lockColour = const Color(0xff6A51CA);
       });
-    }else if (cableLockState?.lockState == LockState.unknown){
+    } else if (cableLockState?.lockState == LockState.unknown) {
       setState(() {
-        connectImage = Image(
-          image: const AssetImage("assets/buttons/loading.png"),
+        lockImage = SvgPicture.asset(
+          "assets/buttons/loading.svg",
           width: 52.w,
           height: 50.h,
         );
@@ -930,6 +896,7 @@ class _FreePlanState extends State<FreePlan> {
       });
     }
   }
+
 
   void setBikeImage() {
     if (isDeviceConnected == true) {

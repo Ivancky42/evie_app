@@ -99,20 +99,19 @@ class _TurnOnLocationState extends State<TurnOnLocation> {
                     ),
                   ),
                   onPressed: () async {
-                    changeToTurnOnQRScannerScreen(context);
-                    // if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
-                    //   var bluetoothStatus = await Permission.bluetooth.status;
-                    //
-                    //   if(bluetoothStatus == PermissionStatus.granted){
-                    //
-                    //     changeToTurnOnQRScannerScreen(context);
-                    //   }else{
-                    //
-                    //     changeToTurnOnBluetoothScreen(context);
-                    //   }
-                    // }else if(await Permission.location.isPermanentlyDenied){
-                    //  OpenSettings.openLocationSourceSetting();
-                    // }
+                    if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
+                      var bluetoothStatus = await Permission.bluetooth.status;
+
+                      if(bluetoothStatus == PermissionStatus.granted){
+
+                        changeToTurnOnQRScannerScreen(context);
+                      }else{
+
+                        changeToTurnOnBluetoothScreen(context);
+                      }
+                    }else if(await Permission.location.isPermanentlyDenied){
+                     OpenSettings.openLocationSourceSetting();
+                    }
                   },
                 ),
               ),
