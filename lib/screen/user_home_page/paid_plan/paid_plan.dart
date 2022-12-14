@@ -728,7 +728,7 @@ class _PaidPlanState extends State<PaidPlan> {
                                                                           connectionState ==
                                                                               DeviceConnectionState.disconnected) {
                                                                         _bluetoothProvider
-                                                                            .connectDevice(_bikeProvider.currentBikeModel!.deviceIMEI!);
+                                                                            .startScanAndConnect();
 
                                                                         // if(connectionStateUpdate != null){
                                                                         //   if(connectionStateUpdate?.failure.toString() != null){
