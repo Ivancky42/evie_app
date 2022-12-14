@@ -148,53 +148,81 @@ Widget getSecurityTextWidget(LockState isLocked, String status) {
   );
 }
 
-Widget getSecurityImageWidget(LockState isLocked, String status) {
+getSecurityImageWidget(bool isLocked, String status) {
+  switch (isLocked) {
+    case true:
+      if (status == "safe") {
+        return "assets/buttons/bike_security_lock_and_secure.svg";
+          //height: 5.h,
+      } else if (status == "warning") {
+        return  "assets/buttons/bike_security_warning.svg";
+          //height: 5.h,
+
+      } else if (status == "danger") {
+        return "assets/buttons/bike_security_danger.svg";
+          //height: 5.h,
+
+      }
+      break;
+    case false:
+      if (status == "safe") {
+        return "assets/buttons/bike_security_unlock.svg";
+          //height: 5.h,
+
+      } else if (status == "warning") {
+        return "assets/buttons/bike_security_warning.svg";
+          //height: 5.h,
+
+      } else if (status == "danger") {
+        return "assets/buttons/bike_security_danger.svg";
+          //height: 5.h,
+      }
+      break;
+    default:
+    // TODO: Handle this case.
+      break;
+  }
+  return "assets/buttons/bike_security_lock_and_secure.svg";
+    //height: 5.h,
+}
+
+
+getSecurityImageWidgetBluetooth(LockState isLocked, String status) {
   switch (isLocked) {
     case LockState.lock:
       if (status == "safe") {
-        return const Image(
-          image:
-          AssetImage("assets/buttons/bike_security_lock_and_secure.png"),
-          //height: 5.h,
-        );
+        return "assets/buttons/bike_security_lock_and_secure.svg";
+        //height: 5.h,
       } else if (status == "warning") {
-        return const Image(
-          image: AssetImage("assets/buttons/bike_security_warning.png"),
-          //height: 5.h,
-        );
+        return  "assets/buttons/bike_security_warning.svg";
+        //height: 5.h,
+
       } else if (status == "danger") {
-        return const Image(
-          image: AssetImage("assets/buttons/bike_security_danger.png"),
-          //height: 5.h,
-        );
+        return "assets/buttons/bike_security_danger.svg";
+        //height: 5.h,
+
       }
       break;
     case LockState.unlock:
       if (status == "safe") {
-        return const Image(
-          image: AssetImage("assets/buttons/bike_security_unlock.png"),
-          //height: 5.h,
-        );
+        return "assets/buttons/bike_security_unlock.svg";
+        //height: 5.h,
+
       } else if (status == "warning") {
-        return const Image(
-          image: AssetImage("assets/buttons/bike_security_warning.png"),
-          //height: 5.h,
-        );
+        return "assets/buttons/bike_security_warning.svg";
+        //height: 5.h,
+
       } else if (status == "danger") {
-        return const Image(
-          image: AssetImage("assets/buttons/bike_security_danger.png"),
-          //height: 5.h,
-        );
+        return "assets/buttons/bike_security_danger.svg";
+        //height: 5.h,
       }
       break;
-    case LockState.unknown:
+    default:
     // TODO: Handle this case.
       break;
   }
-  return const Image(
-    image: AssetImage("assets/buttons/bike_security_lock_and_secure.png"),
-    //height: 5.h,
-  );
+  return "assets/buttons/bike_security_lock_and_secure.svg";
+  //height: 5.h,
 }
 
 Widget getFirestoreSecurityTextWidget(bool? isLocked, String status) {

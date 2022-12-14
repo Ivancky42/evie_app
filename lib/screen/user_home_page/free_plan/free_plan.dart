@@ -83,6 +83,10 @@ class _FreePlanState extends State<FreePlan> {
 
   StreamSubscription? userLocationSubscription;
 
+  static const double initialRatio = 324 / 700;
+  static const double minRatio = 86 / 700;
+  static const double maxRatio = 1.0;
+
   @override
   void initState() {
     super.initState();
@@ -113,41 +117,8 @@ class _FreePlanState extends State<FreePlan> {
   @override
   void dispose() {
     _locationProvider.removeListener(locationListener);
-    mapController.dispose();
+    mapController?.dispose();
     super.dispose();
-  }
-
-
-  void loadImage(String dangerStatus) {
-    switch (dangerStatus) {
-      case 'safe':
-        {
-          currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
-          currentSecurityIcon =
-          "assets/buttons/bike_security_lock_and_secure.svg";
-        }
-        break;
-      case 'warning':
-        {
-          currentBikeStatusImage =
-          "assets/images/bike_HPStatus/bike_warning.png";
-          currentSecurityIcon = "assets/buttons/bike_security_warning.svg";
-        }
-        break;
-      case 'danger':
-        {
-          currentBikeStatusImage =
-          "assets/images/bike_HPStatus/bike_danger.png";
-          currentSecurityIcon = "assets/buttons/bike_security_danger.svg";
-        }
-        break;
-      default:
-        {
-          currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
-          currentSecurityIcon =
-          "assets/buttons/bike_security_lock_and_secure.svg";
-        }
-    }
   }
 
 
@@ -242,24 +213,22 @@ class _FreePlanState extends State<FreePlan> {
                   //mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     FutureBuilder(
                         future: _currentUserProvider.fetchCurrentUserModel,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             return GestureDetector(
-                                onTap: (){},
-                                child:Padding(
-                                  padding: EdgeInsets.fromLTRB(16.w, 28.h, 146.w, 28.h),
-                                  child: Container(
+                              onTap: (){},
+                              child:Padding(
+                                padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w, 28.h),
+                                child: Container(
                                     height: 24.h,
-                                    width: double.infinity,
                                     child: Text(
                                       "Good Morning ${_currentUserProvider.currentUserModel!.name}",
                                       style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
                                     )
-                                  ),
                                 ),
+                              ),
                             );
                           } else {
                             return const Center(
@@ -325,11 +294,11 @@ class _FreePlanState extends State<FreePlan> {
                       return false;
                     },
                     child: DraggableScrollableSheet(
-                        initialChildSize: 324 / 710,
-                        minChildSize: 120 / 710,
-                        maxChildSize: 1.0,
+                        initialChildSize: initialRatio,
+                        minChildSize: minRatio,
+                        maxChildSize: maxRatio,
                         snap: true,
-                        snapSizes: const [120 / 710, 324 / 710, 1.0],
+                        snapSizes: const [minRatio, initialRatio, maxRatio],
                         expand: true,
                         builder: (BuildContext context, ScrollController _scrollController) {
 
@@ -343,6 +312,9 @@ class _FreePlanState extends State<FreePlan> {
                           return ListView(
                             controller: _scrollController,
                             children: [
+                              // SizedBox(
+                              //   height: 50.h,
+                              // ),
                               currentScroll <= 0.8 ?
                               Stack(
                                   children: [
@@ -372,21 +344,22 @@ class _FreePlanState extends State<FreePlan> {
                                                       child: Bike_Name_Row(
                                                         isDeviceConnected: isDeviceConnected,
                                                         bikeName: _bikeProvider.currentBikeModel?.deviceName ?? "",
-                                                        distanceBetween: "With You",
+                                                        distanceBetween: "Est. ${distanceBetween}m",
                                                         currentBikeStatusImage: currentBikeStatusImage,),
                                                     ),
 
                                                     Padding(
                                                       padding:
-                                                      EdgeInsets.fromLTRB(16.w, 22.5.h, 0, 0),
+                                                      EdgeInsets.fromLTRB(16.w, 17.15.h, 0, 0),
                                                       child: IntrinsicHeight(
                                                         child: Bike_Status_Row(
-                                                          estKm:"Est -km",
+                                                          estKm:"",
                                                           currentBatteryIcon: getBatteryImageFromBLE(_bluetoothProvider.bikeInfoResult!.batteryLevel!),
                                                           connectText: _bluetoothProvider.bikeInfoResult!.batteryLevel!,
                                                           currentSecurityIcon: currentSecurityIcon,
-                                                          child: Text(
-                                                            "NOT AVAILABLE",
+                                                          isLocked: cableLockState?.lockState ?? LockState.unknown,
+                                                          child: Text( cableLockState!.lockState == LockState.lock ?
+                                                          "LOCK & SECURED" : "UNLOCKED",
                                                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
                                                           ),),
                                                       ),
@@ -467,8 +440,8 @@ class _FreePlanState extends State<FreePlan> {
                                                                                   height:
                                                                                   80.h,
                                                                                   child:
-                                                                                   Text('Bike is unlocked. To lock bike, pull the lock handle on the bike.',style: TextStyle(fontSize: 16.sp),),
-                                                                                      ),
+                                                                                  Text('Bike is unlocked. To lock bike, pull the lock handle on the bike.',style: TextStyle(fontSize: 16.sp),),
+                                                                                ),
                                                                                 duration:
                                                                                 const Duration(seconds: 4),
                                                                               ),
@@ -511,7 +484,7 @@ class _FreePlanState extends State<FreePlan> {
                                                             ),
                                                           } else if(connectionState?.name ==
                                                               "connected")...{
-                                                             Text(
+                                                            Text(
                                                               "Tap to unlock bike",
                                                               style: TextStyle(
                                                                   fontSize: 12.sp,
@@ -579,13 +552,14 @@ class _FreePlanState extends State<FreePlan> {
 
                                                     Padding(
                                                       padding:
-                                                      EdgeInsets.fromLTRB(16.w, 22.5.h, 0, 0),
+                                                      EdgeInsets.fromLTRB(16.w, 17.15.h, 0, 0),
                                                       child: IntrinsicHeight(
                                                         child: Bike_Status_Row(
                                                           connectText: "-",
                                                           estKm: "",
-                                                          currentSecurityIcon: "assets/buttons/bike_security_not_available.svg",
+                                                          currentSecurityIcon: currentSecurityIcon,
                                                           currentBatteryIcon: "assets/icons/battery_not_available.svg",
+                                                          isLocked: cableLockState?.lockState ?? LockState.unknown,
                                                           child:Text(
                                                             "NOT AVAILABLE",
                                                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
@@ -604,7 +578,7 @@ class _FreePlanState extends State<FreePlan> {
                                                               elevation: 0,
                                                               backgroundColor:
                                                               lockColour,
-                                                              onPressed: () async {
+                                                              onPressed: () {
                                                                 ///Check bluetooth status
 
                                                                 var bleStatus =
@@ -645,15 +619,7 @@ class _FreePlanState extends State<FreePlan> {
                                                                     break;
                                                                   case BleStatus
                                                                       .unauthorized:
-                                                                    SmartDialog.show(
-                                                                        keepSingle: true,
-                                                                        widget: EvieSingleButtonDialogCupertino(
-                                                                            title: "Error",
-                                                                            content: "Please Enable Bluetooth in your app setting.",
-                                                                            rightContent: "OK",
-                                                                            onPressedRight: () {
-                                                                              SmartDialog.dismiss();
-                                                                            }));
+                                                                  // TODO: Handle this case.
                                                                     break;
                                                                   case BleStatus
                                                                       .locationServicesDisabled:
@@ -676,11 +642,9 @@ class _FreePlanState extends State<FreePlan> {
                                                                         connectionState ==
                                                                             DeviceConnectionState
                                                                                 .disconnected) {
-
-                                                                      await _bluetoothProvider
+                                                                      _bluetoothProvider
                                                                           .connectDevice();
 
-                                                                      setLockImage();
                                                                       // if(connectionStateUpdate != null){
                                                                       //   if(connectionStateUpdate?.failure.toString() != null){
                                                                       //     SmartDialog.show(
@@ -769,10 +733,13 @@ class _FreePlanState extends State<FreePlan> {
                                         ),
                                         IconButton(
                                             onPressed: (){
-
                                               _bikeProvider
                                                   .controlBikeList("next");
-                                              _bluetoothProvider.disconnectDevice(_bikeProvider.currentBikeModel!.deviceIMEI!);
+                                              _bluetoothProvider
+                                                  .disconnectDevice(
+                                                  _bikeProvider
+                                                      .currentBikeModel!
+                                                      .deviceIMEI!);
                                             },
                                             icon: const Image(
                                               image: AssetImage("assets/buttons/filter.png"),
@@ -792,9 +759,9 @@ class _FreePlanState extends State<FreePlan> {
                                           Padding(
                                             padding: EdgeInsets.only(left:15.w, right:15.w),
                                             child: SvgPicture.asset(
-                                            "assets/images/free_plan_threat.svg",
+                                              "assets/images/free_plan_threat.svg",
                                               height:608.h,
-                                      ),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -814,7 +781,7 @@ class _FreePlanState extends State<FreePlan> {
               )
             ],
           ),
-        ),
+        )
         //        ),
         //   )
       ),
@@ -930,6 +897,7 @@ class _FreePlanState extends State<FreePlan> {
       });
     }
   }
+
 
   void setBikeImage() {
     if (isDeviceConnected == true) {
