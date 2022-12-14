@@ -88,63 +88,63 @@ Widget getSecurityTextWidget(LockState isLocked, String status) {
   switch (isLocked) {
     case LockState.lock:
       if (status == "safe") {
-        return const Text(
+        return Text(
           "LOCKED AND SECURE",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
         );
       } else if (status == "warning") {
-        return const Text(
+        return Text(
           "MOVEMENT DETECTED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
         );
       } else if (status == "danger") {
-        return const Text(
+        return Text(
           "UNDER THREAT",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
         );
       }
       break;
     case LockState.unlock:
       if (status == "safe") {
-        return const Text(
+        return Text(
           "UNLOCKED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
         );
       } else if (status == "warning") {
-        return const Text(
+        return Text(
           "MOVEMENT DETECTED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
         );
       } else if (status == "danger") {
-        return const Text(
+        return Text(
           "UNDER THREAT",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
         );
       }
       break;
     case LockState.unknown:
       if (status == "safe") {
-        return const Text(
+        return Text(
           "UNKNOWN",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
         );
       } else if (status == "warning") {
-        return const Text(
+        return Text(
           "MOVEMENT DETECTED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
         );
       } else if (status == "danger") {
-        return const Text(
+        return Text(
           "UNDER THREAT",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
         );
       }
       break;
   }
 
-  return const Text(
+  return Text(
     "LOCKED AND SECURE",
-    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
   );
 }
 
@@ -201,45 +201,45 @@ Widget getFirestoreSecurityTextWidget(bool? isLocked, String status) {
   switch (isLocked) {
     case true:
       if (status == "safe") {
-        return const Text(
+        return Text(
           "LOCKED AND SECURE",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
         );
       } else if (status == "warning") {
-        return const Text(
+        return Text(
           "MOVEMENT DETECTED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
         );
       } else if (status == "danger") {
-        return const Text(
+        return Text(
           "UNDER THREAT",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
         );
       }
       break;
     case false:
       if (status == "safe") {
-        return const Text(
+        return Text(
           "UNLOCKED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
         );
       } else if (status == "warning") {
-        return const Text(
+        return Text(
           "MOVEMENT DETECTED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
         );
       } else if (status == "danger") {
-        return const Text(
+        return Text(
           "UNDER THREAT",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
         );
       }
       break;
   }
 
-  return const Text(
+  return Text(
     "LOCKED AND SECURE",
-    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
   );
 }
 

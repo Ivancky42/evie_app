@@ -40,7 +40,7 @@ class Bike_Name_Row extends StatelessWidget {
                 Text(
                   bikeName,
                   style: TextStyle(
-                      fontSize: 16.5.sp,
+                      fontSize: 20.sp,
                       fontWeight:
                       FontWeight
                           .w700),
@@ -64,7 +64,7 @@ class Bike_Name_Row extends StatelessWidget {
             Text(
               distanceBetween,
               style: TextStyle(
-                  fontSize: 10.sp,
+                  fontSize: 12.sp,
                   fontWeight:
                   FontWeight
                       .w400),

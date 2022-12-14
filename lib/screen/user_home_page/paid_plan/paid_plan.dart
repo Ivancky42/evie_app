@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'dart:math';
+import 'dart:ui';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
@@ -77,8 +78,8 @@ class _PaidPlanState extends State<PaidPlan> {
 
   StreamSubscription? locationSubscription;
 
-  static const double initialRatio = 374 / 710;
-  static const double minRatio = 170 / 710;
+  static const double initialRatio = 374/700;
+  static const double minRatio = 136 / 700;
   static const double maxRatio = 1.0;
   bool isBottomSheetExpanded = false;
   bool isMapListShowing = false;
@@ -130,6 +131,8 @@ class _PaidPlanState extends State<PaidPlan> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
+
+    double height = MediaQuery. of(context).size.height;
 
     connectionState = _bluetoothProvider.connectionStateUpdate?.connectionState;
     connectionStateUpdate = _bluetoothProvider.connectionStateUpdate;
@@ -210,678 +213,680 @@ class _PaidPlanState extends State<PaidPlan> {
         return exitApp ?? false;
       },
       child: Scaffold(
-        body: Stack(
-          children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: Column(
-                //mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 34.h,
-                  ),
-                  FutureBuilder(
-                      future: _currentUserProvider.fetchCurrentUserModel,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return GestureDetector(
-                              onTap: () {
-                                changeToLetsGoScreen(context);
-                              },
-                              child: HomePageWidget_Status(
-                                  currentDangerState: currentDangerStatus,
-                                  location:
-                                      _locationProvider.currentPlaceMark));
-                        } else {
-                          return const Center(
-                            child: Text("Good Morning"),
-                          );
-                        }
-                      }),
-                  FutureBuilder(
-                      future: getLocationModel(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return SizedBox(
-                            width: double.infinity,
-                            height: 636.h,
-                            child: Stack(
-                              children: [
-                                Mapbox_Widget(
-                                  accessToken:
-                                      _locationProvider.defPublicAccessToken,
-                                  //onMapCreated: _onMapCreated,
-
-                                  mapController: mapController,
-                                  markers: markers,
-                                  // onUserLocationUpdate: (userLocation) {
-                                  //   if (this.userLocation != null) {
-                                  //     this.userLocation = userLocation;
-                                  //     getDistanceBetween();
-                                  //   }
-                                  //   else {
-                                  //     this.userLocation = userLocation;
-                                  //     getDistanceBetween();
-                                  //     runSymbol();
-                                  //   }
-                                  // },
-                                  latitude: _locationProvider
-                                      .locationModel!.geopoint.latitude,
-                                  longitude: _locationProvider
-                                      .locationModel!.geopoint.longitude,
-                                  onMapReady: () {
-                                    loadImage(currentDangerStatus);
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.topCenter,
+                child: Column(
+                  //mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // SizedBox(
+                    //   height: 34.h,
+                    // ),
+                    FutureBuilder(
+                        future: _currentUserProvider.fetchCurrentUserModel,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return GestureDetector(
+                                onTap: () {
+                                  changeToLetsGoScreen(context);
                                 },
-                                ),
+                                child: HomePageWidget_Status(
+                                    currentDangerState: currentDangerStatus,
+                                    location:
+                                    _locationProvider.currentPlaceMark));
+                          } else {
+                            return const Center(
+                              child: Text("Good Morning"),
+                            );
+                          }
+                        }),
+                    FutureBuilder(
+                        future: getLocationModel(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return SizedBox(
+                              width: double.infinity,
+                              height: 636.h,
+                              child: Stack(
+                                children: [
+                                  Mapbox_Widget(
+                                    accessToken:
+                                    _locationProvider.defPublicAccessToken,
+                                    //onMapCreated: _onMapCreated,
 
-                                // _buildCompass(),
-                              ],
-                            ),
-                          );
-                        } else {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      }),
-                ],
+                                    mapController: mapController,
+                                    markers: markers,
+                                    // onUserLocationUpdate: (userLocation) {
+                                    //   if (this.userLocation != null) {
+                                    //     this.userLocation = userLocation;
+                                    //     getDistanceBetween();
+                                    //   }
+                                    //   else {
+                                    //     this.userLocation = userLocation;
+                                    //     getDistanceBetween();
+                                    //     runSymbol();
+                                    //   }
+                                    // },
+                                    latitude: _locationProvider
+                                        .locationModel!.geopoint.latitude,
+                                    longitude: _locationProvider
+                                        .locationModel!.geopoint.longitude,
+                                    onMapReady: () {
+                                      loadImage(currentDangerStatus);
+                                    },
+                                  ),
+
+                                  // _buildCompass(),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        }),
+                  ],
+                ),
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                child: NotificationListener<DraggableScrollableNotification>(
-                  onNotification: (notification) {
-                    if (notification.extent > 0.8) {
-                      setState(() {
-                        currentScroll = notification.extent;
-                        isBottomSheetExpanded = true;
-                      });
-                    } else {
-                      setState(() {
-                        currentScroll = notification.extent;
-                        isBottomSheetExpanded = false;
-                      });
-                    }
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: NotificationListener<DraggableScrollableNotification>(
+                    onNotification: (notification) {
+                      if (notification.extent > 0.8) {
+                        setState(() {
+                          currentScroll = notification.extent;
+                          isBottomSheetExpanded = true;
+                        });
+                      } else {
+                        setState(() {
+                          currentScroll = notification.extent;
+                          isBottomSheetExpanded = false;
+                        });
+                      }
 
-                    animateBounce();
+                      animateBounce();
 
-                    return false;
-                  },
-                  child: DraggableScrollableSheet(
-                      initialChildSize: initialRatio,
-                      minChildSize: minRatio,
-                      maxChildSize: maxRatio,
-                      snap: true,
-                      snapSizes: const [minRatio, initialRatio, maxRatio],
-                      expand: true,
-                      builder: (BuildContext context,
-                          ScrollController _scrollController) {
+                      return false;
+                    },
+                    child: DraggableScrollableSheet(
+                        initialChildSize: initialRatio,
+                        minChildSize: minRatio,
+                        maxChildSize: maxRatio,
+                        snap: true,
+                        snapSizes: const [minRatio, initialRatio, maxRatio],
+                        expand: true,
+                        builder: (BuildContext context,
+                            ScrollController _scrollController) {
 
-                        return ListView(
-                          controller: _scrollController,
-                          children: [
-                            mapLauncher(),
-                            currentScroll <= 0.8
-                                ? Stack(children: [
-                                    ///Bike Connected
-                                    if (isDeviceConnected == true) ...{
-                                      Container(
-                                          height: 636.h,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFECEDEB),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Center(
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 11.h),
-                                                      child: Image.asset(
-                                                        "assets/buttons/home_indicator.png",
-                                                        width: 40.w,
-                                                        height: 4.h,
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.fromLTRB(
-                                                              16.w, 9.h, 0, 0),
-                                                      child: Bike_Name_Row(
-                                                        bikeName: _bikeProvider
-                                                                .currentBikeModel
-                                                                ?.deviceName ??
-                                                            "",
-                                                        distanceBetween:
-                                                            distanceBetween ??
-                                                                "-",
-                                                        currentBikeStatusImage:
-                                                            currentBikeStatusImage,
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.fromLTRB(
-                                                              16.w,
-                                                              17.15.h,
-                                                              0,
-                                                              0),
-                                                      child: IntrinsicHeight(
-                                                        child: Bike_Status_Row(
-                                                          batteryImage: getBatteryImage(
-                                                              _bikeProvider
-                                                                      .currentBikeModel
-                                                                      ?.batteryPercent ??
-                                                                  0),
-                                                          batteryPercentage:
-                                                              _bikeProvider
-                                                                      .currentBikeModel
-                                                                      ?.batteryPercent ??
-                                                                  0,
-                                                          currentSecurityIcon:
-                                                              currentSecurityIcon,
-                                                          child: getSecurityTextWidget(
-                                                              _bluetoothProvider
-                                                                      .cableLockState
-                                                                      ?.lockState ??
-                                                                  LockState
-                                                                      .unknown,
-                                                              _bikeProvider
-                                                                      .currentBikeModel
-                                                                      ?.location!
-                                                                      .status ??
-                                                                  ""),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 31.h),
-                                                      child: Column(
-                                                        children: [
-                                                          SizedBox(
-                                                            height: 96.h,
-                                                            width: 96.w,
-                                                            child:
-                                                                FloatingActionButton(
-                                                              elevation: 0,
-                                                              backgroundColor: cableLockState
-                                                                          ?.lockState ==
-                                                                      LockState
-                                                                          .lock
-                                                                  ? lockColour
-                                                                  : const Color(
-                                                                      0xffC1B7E8),
-                                                              onPressed: cableLockState
-                                                                          ?.lockState ==
-                                                                      LockState
-                                                                          .lock
-                                                                  ? () {
-                                                                      ///Check is connected
-
-                                                                      SmartDialog
-                                                                          .showLoading(
-                                                                              msg: "Unlocking");
-                                                                      StreamSubscription?
-                                                                          subscription;
-                                                                      subscription = _bluetoothProvider
-                                                                          .cableUnlock()
-                                                                          .listen(
-                                                                              (unlockResult) {
-                                                                        SmartDialog.dismiss(
-                                                                            status:
-                                                                                SmartStatus.loading);
-                                                                        subscription
-                                                                            ?.cancel();
-                                                                        if (unlockResult.result ==
-                                                                            CommandResult.success) {
-                                                                          ScaffoldMessenger.of(context)
-                                                                              .showSnackBar(
-                                                                            SnackBar(
-                                                                              content: Text(
-                                                                                'Bike is unlocked. To lock bike, pull the lock handle on the bike.',
-                                                                                style: TextStyle(fontSize: 16.sp),
-                                                                              ),
-                                                                              duration: Duration(seconds: 2),
-                                                                            ),
-                                                                          );
-                                                                        } else {
-                                                                          SmartDialog.dismiss(
-                                                                              status: SmartStatus.loading);
-                                                                          subscription
-                                                                              ?.cancel();
-                                                                          ScaffoldMessenger.of(context)
-                                                                              .showSnackBar(
-                                                                            SnackBar(
-                                                                              width: 358.w,
-                                                                              behavior: SnackBarBehavior.floating,
-                                                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                                                                              content: Container(
-                                                                                height: 80.h,
-                                                                                child: Text(
-                                                                                  'Bike is unlocked. To lock bike, pull the lock handle on the bike.',
-                                                                                  style: TextStyle(fontSize: 16.sp),
-                                                                                ),
-                                                                              ),
-                                                                              duration: const Duration(seconds: 4),
-                                                                            ),
-                                                                          );
-                                                                        }
-                                                                      }, onError: (error) {
-                                                                        SmartDialog.dismiss(
-                                                                            status:
-                                                                                SmartStatus.loading);
-                                                                        subscription
-                                                                            ?.cancel();
-                                                                        SmartDialog.show(
-                                                                            widget: EvieSingleButtonDialogCupertino(
-                                                                                title: "Error",
-                                                                                content: "Cannot unlock bike, please place the phone near the bike and try again.",
-                                                                                rightContent: "OK",
-                                                                                onPressedRight: () {
-                                                                                  SmartDialog.dismiss();
-                                                                                }));
-                                                                      });
-                                                                    }
-                                                                  : null,
-                                                              //icon inside button
-                                                              child: lockImage,
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 12.h,
-                                                          ),
-                                                          if (connectionState
-                                                                  ?.name ==
-                                                              "connecting") ...{
-                                                            Text(
-                                                              "Connecting bike",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      12.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  color: Color(
-                                                                      0xff3F3F3F)),
-                                                            ),
-                                                          } else if (connectionState
-                                                                  ?.name ==
-                                                              "connected") ...{
-                                                            Text(
-                                                              "Tap to unlock bike",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      12.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  color: Color(
-                                                                      0xff3F3F3F)),
-                                                            ),
-                                                          } else ...{
-                                                            Text(
-                                                              "Tap to connect bike",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      12.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  color: Color(
-                                                                      0xff3F3F3F)),
-                                                            ),
-                                                          },
-                                                          // SizedBox(
-                                                          //   height: 11.h,
-                                                          // ),
-                                                          Image(
-                                                            image: AssetImage(
-                                                                "assets/buttons/up.png"),
-                                                            width: 24.w,
-                                                            height: 24.h,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  ],
+                          return ListView(
+                            controller: _scrollController,
+                            children: [
+                              mapLauncher(),
+                              currentScroll <= 0.8
+                                  ? Stack(children: [
+                                ///Bike Connected
+                                if (isDeviceConnected == true) ...{
+                                  Container(
+                                      height: 636.h,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFECEDEB),
+                                        borderRadius:
+                                        BorderRadius.circular(16),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Center(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                              children: <Widget>[
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 11.h),
+                                                  child: Image.asset(
+                                                    "assets/buttons/home_indicator.png",
+                                                    width: 40.w,
+                                                    height: 4.h,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          )),
-                                    }
-
-                                    ///Bike Not Connected
-                                    else ...{
-                                      Container(
-                                          height: 636.h,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFECEDEB),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Center(
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 11.h),
-                                                      child: Image.asset(
-                                                        "assets/buttons/home_indicator.png",
-                                                        width: 40.w,
-                                                        height: 4.h,
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.fromLTRB(
-                                                              16.w, 9.h, 0, 0),
-                                                      child: Bike_Name_Row(
-                                                        bikeName: _bikeProvider
-                                                                .currentBikeModel
-                                                                ?.deviceName ??
-                                                            "",
-                                                        distanceBetween:
-                                                            distanceBetween ??
-                                                                "-",
-                                                        currentBikeStatusImage:
-                                                            currentBikeStatusImage,
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.fromLTRB(
-                                                              16.w,
-                                                              17.15.h,
-                                                              0,
-                                                              0),
-                                                      child: IntrinsicHeight(
-                                                        child: Bike_Status_Row(
-                                                          currentSecurityIcon:
-                                                              currentSecurityIcon,
-                                                          batteryImage: getBatteryImage(
-                                                              _bikeProvider
-                                                                      .currentBikeModel
-                                                                      ?.batteryPercent ??
-                                                                  0),
-                                                          batteryPercentage:
-                                                              _bikeProvider
-                                                                      .currentBikeModel
-                                                                      ?.batteryPercent ??
-                                                                  0,
-                                                          child: getFirestoreSecurityTextWidget(
-                                                              _bikeProvider
-                                                                  .currentBikeModel
-                                                                  ?.isLocked,
-                                                              _bikeProvider
-                                                                      .currentBikeModel
-                                                                      ?.location!
-                                                                      .status ??
-                                                                  ""),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 31.h),
-                                                      child: Column(
-                                                        children: [
-                                                          SizedBox(
-                                                              height: 96.h,
-                                                              width: 96.w,
-                                                              child:
-                                                                  FloatingActionButton(
-                                                                elevation: 0,
-                                                                backgroundColor:
-                                                                    lockColour,
-                                                                onPressed: () {
-                                                                  ///Check bluetooth status
-
-                                                                  var bleStatus =
-                                                                      _bluetoothProvider
-                                                                          .bleStatus;
-                                                                  switch (
-                                                                      bleStatus) {
-                                                                    case BleStatus
-                                                                        .poweredOff:
-                                                                      SmartDialog.show(
-                                                                          keepSingle: true,
-                                                                          widget: EvieSingleButtonDialogCupertino(
-                                                                              title: "Error",
-                                                                              content: "Bluetooth is off, please turn on your bluetooth",
-                                                                              rightContent: "OK",
-                                                                              onPressedRight: () {
-                                                                                SmartDialog.dismiss();
-                                                                              }));
-                                                                      break;
-                                                                    case BleStatus
-                                                                        .unknown:
-                                                                      // TODO: Handle this case.
-                                                                      break;
-                                                                    case BleStatus
-                                                                        .unsupported:
-                                                                      SmartDialog.show(
-                                                                          keepSingle: true,
-                                                                          widget: EvieSingleButtonDialogCupertino(
-                                                                              title: "Error",
-                                                                              content: "Bluetooth unsupported",
-                                                                              rightContent: "OK",
-                                                                              onPressedRight: () {
-                                                                                SmartDialog.dismiss();
-                                                                              }));
-                                                                      break;
-                                                                    case BleStatus
-                                                                        .unauthorized:
-                                                                      // TODO: Handle this case.
-                                                                      break;
-                                                                    case BleStatus
-                                                                        .locationServicesDisabled:
-                                                                      SmartDialog.show(
-                                                                          keepSingle: true,
-                                                                          widget: EvieSingleButtonDialogCupertino(
-                                                                              title: "Error",
-                                                                              content: "Location service disabled",
-                                                                              rightContent: "OK",
-                                                                              onPressedRight: () {
-                                                                                SmartDialog.dismiss();
-                                                                              }));
-                                                                      break;
-                                                                    case BleStatus
-                                                                        .ready:
-                                                                      if (connectionState ==
-                                                                              null ||
-                                                                          connectionState ==
-                                                                              DeviceConnectionState.disconnected) {
-                                                                        _bluetoothProvider
-                                                                            .connectDevice();
-
-                                                                        // if(connectionStateUpdate != null){
-                                                                        //   if(connectionStateUpdate?.failure.toString() != null){
-                                                                        //     SmartDialog.show(
-                                                                        //         keepSingle: true,
-                                                                        //         widget: EvieSingleButtonDialogCupertino(
-                                                                        //             title: "Error",
-                                                                        //             content: "Cannot connect bike, please place the phone near the bike and try again.",
-                                                                        //             rightContent: "OK",
-                                                                        //             onPressedRight: (){SmartDialog.dismiss();})
-                                                                        //     );
-                                                                        //   }
-                                                                        // }
-
-                                                                      } else {}
-                                                                      break;
-                                                                    default:
-                                                                      break;
-                                                                  }
-                                                                },
-                                                                //icon inside button
-                                                                child:
-                                                                    connectImage,
-                                                              )),
-                                                          SizedBox(
-                                                            height: 12.h,
-                                                          ),
-                                                          if (connectionState
-                                                                  ?.name ==
-                                                              "connecting") ...{
-                                                            Text(
-                                                              "Connecting bike",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      12.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  color: Color(
-                                                                      0xff3F3F3F)),
-                                                            ),
-                                                          } else ...{
-                                                            Text(
-                                                              "Tap to connect bike",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      12.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  color: Color(
-                                                                      0xff3F3F3F)),
-                                                            ),
-                                                          },
-                                                          SizedBox(
-                                                            height: 11.h,
-                                                          ),
-                                                          const Image(
-                                                            image: AssetImage(
-                                                                "assets/buttons/up.png"),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  ],
+                                                Padding(
+                                                  padding:
+                                                  EdgeInsets.fromLTRB(
+                                                      16.w, 9.h, 0, 0),
+                                                  child: Bike_Name_Row(
+                                                    bikeName: _bikeProvider
+                                                        .currentBikeModel
+                                                        ?.deviceName ??
+                                                        "",
+                                                    distanceBetween:
+                                                    distanceBetween ??
+                                                        "-",
+                                                    currentBikeStatusImage:
+                                                    currentBikeStatusImage,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          )),
-                                    }
-                                  ])
-                                : Container(
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFECEDEB),
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        SizedBox(
-                                          height: 28.h,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 17.w),
-                                              child: Text(
-                                                "Threat History",
-                                                style: TextStyle(
-                                                    fontSize: 24.sp,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                            ),
-                                            IconButton(
-                                                onPressed: () {
-                                                  _bikeProvider
-                                                      .controlBikeList("next");
-                                                },
-                                                icon: const Image(
-                                                  image: AssetImage(
-                                                      "assets/buttons/filter.png"),
-                                                )),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 11.h,
-                                        ),
-                                        const Divider(
-                                          thickness: 2,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                "scroll to load more",
-                                                style: TextStyle(
-                                                    color: Color(0xff7A7A79),
-                                                    fontSize: 12.sp),
-                                              ),
-                                              SizedBox(height: 1.h),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(6),
-                                                child: Container(
-                                                  child: ElevatedButton(
-                                                    child: Text(
-                                                      "Show All Data",
-                                                      style: TextStyle(
-                                                        fontSize: 11.sp,
-                                                        color:
-                                                            Color(0xff7A7A79),
-                                                      ),
-                                                    ),
-                                                    onPressed: () {},
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      14.0),
-                                                          side: const BorderSide(
-                                                              color: Color(
-                                                                  0xff7A7A79))),
-                                                      elevation: 0.0,
-                                                      backgroundColor:
-                                                          Colors.transparent,
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 120,
-                                                          vertical: 20),
+                                                Padding(
+                                                  padding:
+                                                  EdgeInsets.fromLTRB(
+                                                      16.w,
+                                                      17.15.h,
+                                                      0,
+                                                      0),
+                                                  child: IntrinsicHeight(
+                                                    child: Bike_Status_Row(
+                                                      batteryImage: getBatteryImage(
+                                                          _bikeProvider
+                                                              .currentBikeModel
+                                                              ?.batteryPercent ??
+                                                              0),
+                                                      batteryPercentage:
+                                                      _bikeProvider
+                                                          .currentBikeModel
+                                                          ?.batteryPercent ??
+                                                          0,
+                                                      currentSecurityIcon:
+                                                      currentSecurityIcon,
+                                                      child: getSecurityTextWidget(
+                                                          _bluetoothProvider
+                                                              .cableLockState
+                                                              ?.lockState ??
+                                                              LockState
+                                                                  .unknown,
+                                                          _bikeProvider
+                                                              .currentBikeModel
+                                                              ?.location!
+                                                              .status ??
+                                                              ""),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 31.h),
+                                                  child: Column(
+                                                    children: [
+                                                      SizedBox(
+                                                        height: 96.h,
+                                                        width: 96.w,
+                                                        child:
+                                                        FloatingActionButton(
+                                                          elevation: 0,
+                                                          backgroundColor: cableLockState
+                                                              ?.lockState ==
+                                                              LockState
+                                                                  .lock
+                                                              ? lockColour
+                                                              : const Color(
+                                                              0xffC1B7E8),
+                                                          onPressed: cableLockState
+                                                              ?.lockState ==
+                                                              LockState
+                                                                  .lock
+                                                              ? () {
+                                                            ///Check is connected
+
+                                                            SmartDialog
+                                                                .showLoading(
+                                                                msg: "Unlocking");
+                                                            StreamSubscription?
+                                                            subscription;
+                                                            subscription = _bluetoothProvider
+                                                                .cableUnlock()
+                                                                .listen(
+                                                                    (unlockResult) {
+                                                                  SmartDialog.dismiss(
+                                                                      status:
+                                                                      SmartStatus.loading);
+                                                                  subscription
+                                                                      ?.cancel();
+                                                                  if (unlockResult.result ==
+                                                                      CommandResult.success) {
+                                                                    ScaffoldMessenger.of(context)
+                                                                        .showSnackBar(
+                                                                      SnackBar(
+                                                                        content: Text(
+                                                                          'Bike is unlocked. To lock bike, pull the lock handle on the bike.',
+                                                                          style: TextStyle(fontSize: 16.sp),
+                                                                        ),
+                                                                        duration: Duration(seconds: 2),
+                                                                      ),
+                                                                    );
+                                                                  } else {
+                                                                    SmartDialog.dismiss(
+                                                                        status: SmartStatus.loading);
+                                                                    subscription
+                                                                        ?.cancel();
+                                                                    ScaffoldMessenger.of(context)
+                                                                        .showSnackBar(
+                                                                      SnackBar(
+                                                                        width: 358.w,
+                                                                        behavior: SnackBarBehavior.floating,
+                                                                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                                                                        content: Container(
+                                                                          height: 80.h,
+                                                                          child: Text(
+                                                                            'Bike is unlocked. To lock bike, pull the lock handle on the bike.',
+                                                                            style: TextStyle(fontSize: 16.sp),
+                                                                          ),
+                                                                        ),
+                                                                        duration: const Duration(seconds: 4),
+                                                                      ),
+                                                                    );
+                                                                  }
+                                                                }, onError: (error) {
+                                                              SmartDialog.dismiss(
+                                                                  status:
+                                                                  SmartStatus.loading);
+                                                              subscription
+                                                                  ?.cancel();
+                                                              SmartDialog.show(
+                                                                  widget: EvieSingleButtonDialogCupertino(
+                                                                      title: "Error",
+                                                                      content: "Cannot unlock bike, please place the phone near the bike and try again.",
+                                                                      rightContent: "OK",
+                                                                      onPressedRight: () {
+                                                                        SmartDialog.dismiss();
+                                                                      }));
+                                                            });
+                                                          }
+                                                              : null,
+                                                          //icon inside button
+                                                          child: lockImage,
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 12.h,
+                                                      ),
+                                                      if (connectionState
+                                                          ?.name ==
+                                                          "connecting") ...{
+                                                        Text(
+                                                          "Connecting bike",
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                              12.sp,
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .w400,
+                                                              color: Color(
+                                                                  0xff3F3F3F)),
+                                                        ),
+                                                      } else if (connectionState
+                                                          ?.name ==
+                                                          "connected") ...{
+                                                        Text(
+                                                          "Tap to unlock bike",
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                              12.sp,
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .w400,
+                                                              color: Color(
+                                                                  0xff3F3F3F)),
+                                                        ),
+                                                      } else ...{
+                                                        Text(
+                                                          "Tap to connect bike",
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                              12.sp,
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .w400,
+                                                              color: Color(
+                                                                  0xff3F3F3F)),
+                                                        ),
+                                                      },
+                                                      // SizedBox(
+                                                      //   height: 11.h,
+                                                      // ),
+                                                      Image(
+                                                        image: AssetImage(
+                                                            "assets/buttons/up.png"),
+                                                        width: 24.w,
+                                                        height: 24.h,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                                }
+
+                                ///Bike Not Connected
+                                else ...{
+                                  Container(
+                                      height: 636.h,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFECEDEB),
+                                        borderRadius:
+                                        BorderRadius.circular(16),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Center(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                              children: <Widget>[
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 11.h),
+                                                  child: Image.asset(
+                                                    "assets/buttons/home_indicator.png",
+                                                    width: 40.w,
+                                                    height: 4.h,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                  EdgeInsets.fromLTRB(
+                                                      16.w, 9.h, 0, 0),
+                                                  child: Bike_Name_Row(
+                                                    bikeName: _bikeProvider
+                                                        .currentBikeModel
+                                                        ?.deviceName ??
+                                                        "",
+                                                    distanceBetween:
+                                                    distanceBetween ??
+                                                        "-",
+                                                    currentBikeStatusImage:
+                                                    currentBikeStatusImage,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                  EdgeInsets.fromLTRB(
+                                                      16.w,
+                                                      17.15.h,
+                                                      0,
+                                                      0),
+                                                  child: IntrinsicHeight(
+                                                    child: Bike_Status_Row(
+                                                      currentSecurityIcon:
+                                                      currentSecurityIcon,
+                                                      batteryImage: getBatteryImage(
+                                                          _bikeProvider
+                                                              .currentBikeModel
+                                                              ?.batteryPercent ??
+                                                              0),
+                                                      batteryPercentage:
+                                                      _bikeProvider
+                                                          .currentBikeModel
+                                                          ?.batteryPercent ??
+                                                          0,
+                                                      child: getFirestoreSecurityTextWidget(
+                                                          _bikeProvider
+                                                              .currentBikeModel
+                                                              ?.isLocked,
+                                                          _bikeProvider
+                                                              .currentBikeModel
+                                                              ?.location!
+                                                              .status ??
+                                                              ""),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 31.h),
+                                                  child: Column(
+                                                    children: [
+                                                      SizedBox(
+                                                          height: 96.h,
+                                                          width: 96.w,
+                                                          child:
+                                                          FloatingActionButton(
+                                                            elevation: 0,
+                                                            backgroundColor:
+                                                            lockColour,
+                                                            onPressed: () {
+                                                              ///Check bluetooth status
+
+                                                              var bleStatus =
+                                                                  _bluetoothProvider
+                                                                      .bleStatus;
+                                                              switch (
+                                                              bleStatus) {
+                                                                case BleStatus
+                                                                    .poweredOff:
+                                                                  SmartDialog.show(
+                                                                      keepSingle: true,
+                                                                      widget: EvieSingleButtonDialogCupertino(
+                                                                          title: "Error",
+                                                                          content: "Bluetooth is off, please turn on your bluetooth",
+                                                                          rightContent: "OK",
+                                                                          onPressedRight: () {
+                                                                            SmartDialog.dismiss();
+                                                                          }));
+                                                                  break;
+                                                                case BleStatus
+                                                                    .unknown:
+                                                                // TODO: Handle this case.
+                                                                  break;
+                                                                case BleStatus
+                                                                    .unsupported:
+                                                                  SmartDialog.show(
+                                                                      keepSingle: true,
+                                                                      widget: EvieSingleButtonDialogCupertino(
+                                                                          title: "Error",
+                                                                          content: "Bluetooth unsupported",
+                                                                          rightContent: "OK",
+                                                                          onPressedRight: () {
+                                                                            SmartDialog.dismiss();
+                                                                          }));
+                                                                  break;
+                                                                case BleStatus
+                                                                    .unauthorized:
+                                                                // TODO: Handle this case.
+                                                                  break;
+                                                                case BleStatus
+                                                                    .locationServicesDisabled:
+                                                                  SmartDialog.show(
+                                                                      keepSingle: true,
+                                                                      widget: EvieSingleButtonDialogCupertino(
+                                                                          title: "Error",
+                                                                          content: "Location service disabled",
+                                                                          rightContent: "OK",
+                                                                          onPressedRight: () {
+                                                                            SmartDialog.dismiss();
+                                                                          }));
+                                                                  break;
+                                                                case BleStatus
+                                                                    .ready:
+                                                                  if (connectionState ==
+                                                                      null ||
+                                                                      connectionState ==
+                                                                          DeviceConnectionState.disconnected) {
+                                                                    _bluetoothProvider
+                                                                        .connectDevice();
+
+                                                                    // if(connectionStateUpdate != null){
+                                                                    //   if(connectionStateUpdate?.failure.toString() != null){
+                                                                    //     SmartDialog.show(
+                                                                    //         keepSingle: true,
+                                                                    //         widget: EvieSingleButtonDialogCupertino(
+                                                                    //             title: "Error",
+                                                                    //             content: "Cannot connect bike, please place the phone near the bike and try again.",
+                                                                    //             rightContent: "OK",
+                                                                    //             onPressedRight: (){SmartDialog.dismiss();})
+                                                                    //     );
+                                                                    //   }
+                                                                    // }
+
+                                                                  } else {}
+                                                                  break;
+                                                                default:
+                                                                  break;
+                                                              }
+                                                            },
+                                                            //icon inside button
+                                                            child:
+                                                            connectImage,
+                                                          )),
+                                                      SizedBox(
+                                                        height: 12.h,
+                                                      ),
+                                                      if (connectionState
+                                                          ?.name ==
+                                                          "connecting") ...{
+                                                        Text(
+                                                          "Connecting bike",
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                              12.sp,
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .w400,
+                                                              color: Color(
+                                                                  0xff3F3F3F)),
+                                                        ),
+                                                      } else ...{
+                                                        Text(
+                                                          "Tap to connect bike",
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                              12.sp,
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .w400,
+                                                              color: Color(
+                                                                  0xff3F3F3F)),
+                                                        ),
+                                                      },
+                                                      SizedBox(
+                                                        height: 11.h,
+                                                      ),
+                                                      const Image(
+                                                        image: AssetImage(
+                                                            "assets/buttons/up.png"),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                                }
+                              ])
+                                  : Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFECEDEB),
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    SizedBox(
+                                      height: 28.h,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                          EdgeInsets.only(left: 17.w),
+                                          child: Text(
+                                            "Threat History",
+                                            style: TextStyle(
+                                                fontSize: 24.sp,
+                                                fontWeight:
+                                                FontWeight.w500),
                                           ),
                                         ),
+                                        IconButton(
+                                            onPressed: () {
+                                              _bikeProvider
+                                                  .controlBikeList("next");
+                                            },
+                                            icon: const Image(
+                                              image: AssetImage(
+                                                  "assets/buttons/filter.png"),
+                                            )),
                                       ],
                                     ),
-                                    height: 720.h,
-                                  ),
-                          ],
-                        );
-                      }),
+                                    SizedBox(
+                                      height: 11.h,
+                                    ),
+                                    const Divider(
+                                      thickness: 2,
+                                    ),
+                                    Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            "scroll to load more",
+                                            style: TextStyle(
+                                                color: Color(0xff7A7A79),
+                                                fontSize: 12.sp),
+                                          ),
+                                          SizedBox(height: 1.h),
+                                          Padding(
+                                            padding:
+                                            const EdgeInsets.all(6),
+                                            child: Container(
+                                              child: ElevatedButton(
+                                                child: Text(
+                                                  "Show All Data",
+                                                  style: TextStyle(
+                                                    fontSize: 11.sp,
+                                                    color:
+                                                    Color(0xff7A7A79),
+                                                  ),
+                                                ),
+                                                onPressed: () {},
+                                                style: ElevatedButton
+                                                    .styleFrom(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                      BorderRadius
+                                                          .circular(
+                                                          14.0),
+                                                      side: const BorderSide(
+                                                          color: Color(
+                                                              0xff7A7A79))),
+                                                  elevation: 0.0,
+                                                  backgroundColor:
+                                                  Colors.transparent,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 120,
+                                                      vertical: 20),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                height: 720.h,
+                              ),
+                            ],
+                          );
+                        }),
+                  ),
                 ),
-              ),
-            )
-          ],
-        ),
+              )
+            ],
+          ),
+        )
         //        ),
         //   )
       ),
@@ -1164,7 +1169,7 @@ class _PaidPlanState extends State<PaidPlan> {
 
       if (currentScroll <= (initialRatio) && currentScroll > minRatio + 0.01) {
         mapController?.fitBounds(latLngBounds, options: FitBoundsOptions(
-          padding: EdgeInsets.fromLTRB(170.w, 100.h, 170.w, 324.h),
+          padding: EdgeInsets.fromLTRB(170.w, 100.h, 170.w, 360.h),
         ));
       } else if (currentScroll >= minRatio) {
         mapController?.fitBounds(latLngBounds, options: FitBoundsOptions(
