@@ -304,24 +304,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                         ),
                       ),
                       onPressed: () async {
-                        // SmartDialog.show(
-                        //     widget: EvieDoubleButtonDialog(
-                        //         //buttonNumber: "2",
-                        //         title: "Connect",
-                        //         content: "In progress",
-                        //         leftContent: "Cancel",
-                        //         rightContent: "Ok",
-                        //         image: Image.asset(
-                        //           "assets/evieBike.png",
-                        //           width: 36,
-                        //           height: 36,
-                        //         ),
-                        //         onPressedLeft: () {
-                        //           SmartDialog.dismiss();
-                        //         },
-                        //         onPressedRight: () {
-                        //           SmartDialog.dismiss();
-                        //         }));
+
                       },
                     ),
 
@@ -344,11 +327,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                                 "Are you sure you want to delete this bike?",
                                 leftContent: "Cancel",
                                 rightContent: "Delete",
-                                image: Image.asset(
-                                  "assets/evieBike.png",
-                                  width: 36,
-                                  height: 36,
-                                ),
+
                                 onPressedLeft: () {
                                   SmartDialog.dismiss();
                                 },

@@ -196,11 +196,7 @@ class _UserHomeSettingState extends State<UserHomeSetting> {
                               content: "In progress",
                               leftContent: "Cancel",
                               rightContent: "Ok",
-                              image: Image.asset(
-                                "assets/evieBike.png",
-                                width: 36,
-                                height: 36,
-                              ),
+
                               onPressedLeft: () {
                                 SmartDialog.dismiss();
                               },
@@ -230,11 +226,7 @@ class _UserHomeSettingState extends State<UserHomeSetting> {
                               content: "In progress",
                               leftContent: "Cancel",
                               rightContent: "Ok",
-                              image: Image.asset(
-                                "assets/evieBike.png",
-                                width: 36,
-                                height: 36,
-                              ),
+
                               onPressedLeft: () {
                                 SmartDialog.dismiss();
                               },
@@ -264,11 +256,7 @@ class _UserHomeSettingState extends State<UserHomeSetting> {
                               content: "In progress",
                               leftContent: "Cancel",
                               rightContent: "Ok",
-                              image: Image.asset(
-                                "assets/evieBike.png",
-                                width: 36,
-                                height: 36,
-                              ),
+
                               onPressedLeft: () {
                                 SmartDialog.dismiss();
                               },

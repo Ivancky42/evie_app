@@ -835,10 +835,10 @@ class _PaidPlanState extends State<PaidPlan> {
                                                               .currentBikeModel!
                                                               .deviceIMEI!);
                                                 },
-                                                icon: const Image(
-                                                  image: AssetImage(
-                                                      "assets/buttons/filter.png"),
-                                                )),
+                                              icon: SvgPicture.asset(
+                                                "assets/buttons/filter.svg",
+                                              ),
+                                            ),
                                           ],
                                         ),
                                         SizedBox(

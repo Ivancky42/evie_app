@@ -203,11 +203,7 @@ class _UserNotificationState extends State<UserNotification> {
             rightContent: "Accept",
 
             leftContent: "Cancel",
-            image: Image.asset(
-              "assets/evieBike.png",
-              width: 36,
-              height: 36,
-            ),
+
             onPressedLeft: () {
               SmartDialog.dismiss();
             },

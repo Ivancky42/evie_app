@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -79,9 +80,9 @@ class _CongratulationState extends State<Congratulation> {
 
                     Padding(
                       padding: EdgeInsets.fromLTRB(45.w, 0.h, 45.2.w,221.h),
-                      child: const Center(
-                        child: Image(
-                          image: AssetImage("assets/images/account_verified.png"),
+                      child: Center(
+                        child: SvgPicture.asset(
+                          "assets/images/account_verified.svg",
                         ),
                       ),
                     ),

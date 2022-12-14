@@ -801,11 +801,7 @@ class _TestBleState extends State<TestBle> {
                             "Are you sure you want to delete this bike?",
                             leftContent: "Cancel",
                             rightContent: "Delete",
-                            image: Image.asset(
-                              "assets/evieBike.png",
-                              width: 36,
-                              height: 36,
-                            ),
+
                             onPressedLeft: () {
                               SmartDialog.dismiss();
                             },

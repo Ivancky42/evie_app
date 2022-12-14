@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -86,8 +87,8 @@ class _LetsGoState extends State<LetsGo> {
           alignment: Alignment.center,
           child: Padding(
             padding: EdgeInsets.fromLTRB(75.w,98.h,75.w,127.84.h),
-            child: const Image(
-              image: AssetImage("assets/images/setup_account.png"),
+            child: SvgPicture.asset(
+              "assets/images/setup_account.svg",
             ),
           ),
         ),

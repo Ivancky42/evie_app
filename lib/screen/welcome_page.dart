@@ -6,6 +6,7 @@ import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../api/colours.dart';
 import '../widgets/evie_button.dart';
@@ -42,11 +43,13 @@ class _WelcomeState extends State<Welcome> {
             SizedBox(
               height: 142.h,
             ),
-            Image(
-              image: AssetImage("assets/icons/evie_logo.png"),
+
+            SvgPicture.asset(
+              "assets/logo/evie_logo.svg",
               width: 191.w,
               height: 42.h,
             ),
+
             SizedBox(
               height: 99.h,
             ),
@@ -56,7 +59,7 @@ class _WelcomeState extends State<Welcome> {
                 width: 395.92.w,
                 height: 279.62.h,
                 alignment: Alignment.bottomRight,
-                child: Image(
+                child: const Image(
                   image: AssetImage("assets/images/evie_bike_shadow.png"),
                 ),
               ),
@@ -67,6 +70,7 @@ class _WelcomeState extends State<Welcome> {
             Padding(
               padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
               child: EvieButton(
+                height: 48.h,
                 width: double.infinity,
                 child: Text(
                   "Get Started",

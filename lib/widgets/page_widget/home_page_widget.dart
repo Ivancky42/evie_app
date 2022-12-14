@@ -1,6 +1,7 @@
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 
 import '../../bluetooth/modelResult.dart';
@@ -27,24 +28,24 @@ class HomePageWidget_Status extends StatelessWidget{
   Widget build(BuildContext context) {
     Color dangerColor = Colors.transparent;
     Color fontColor = Color(0xff383838);
-    String alertImage = "assets/buttons/location_pin.png";
+    String alertImage = "assets/buttons/location_pin.svg";
     
     if(currentDangerState == "safe"){
       dangerColor = Colors.transparent;
       fontColor = Color(0xff383838);
-      alertImage = "assets/buttons/location_pin.png";
+      alertImage = "assets/buttons/location_pin.svg";
     } else if(currentDangerState == "warning"){
       dangerColor = Color(0xffE59200);
       fontColor = Color(0xffECEDEB);
-    alertImage = "assets/buttons/warning.png";
+    alertImage = "assets/buttons/warning.svg";
     }else if(currentDangerState == "danger"){
       dangerColor = Color(0xffCA0D0D);
       fontColor = Color(0xffECEDEB);
-       alertImage = "assets/buttons/alert.png";
+       alertImage = "assets/buttons/alert.svg";
     }else{
       dangerColor = Colors.transparent;
       fontColor = Color(0xff383838);
-     alertImage = "assets/buttons/location_pin.png";
+     alertImage = "assets/buttons/location_pin.svg";
     }
     
     return Container(
@@ -57,9 +58,8 @@ class HomePageWidget_Status extends StatelessWidget{
            EdgeInsets.only(left:16.0, top: 8.0, bottom: 8.0),
         child: Row(
           children: [
-            Image(
-              image: AssetImage(
-                  alertImage),
+            SvgPicture.asset(
+             alertImage,
             ),
             SizedBox(width:12.25.w,),
             Column(
