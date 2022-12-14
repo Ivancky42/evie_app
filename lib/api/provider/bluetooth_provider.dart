@@ -173,11 +173,31 @@ class BluetoothProvider extends ChangeNotifier {
     scanSubscription?.cancel();
   }
 
-  connectDevice() async {
+  startScanAndConnect() async {
+    if (Platform.isAndroid) {
+      connectDevice(currentBikeModel!.macAddr!);
+    }
+    else {
+      scanSubscription = flutterReactiveBle.scanForDevices(
+          scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
+        if (device.name == currentBikeModel?.bleName) {
+          connectDevice(device.id);
+        }
+      }, onError: (error) {
+        stopScan();
+        scanSubscription = null;
+      });
+    }
+  }
 
-    selectedDeviceId = currentBikeModel!.macAddr;
+  connectDevice(String foundDeviceId) async {
 
-    connectSubscription = flutterReactiveBle.connectToDevice(id: currentBikeModel!.macAddr!, connectionTimeout: const Duration(seconds: 6),).listen((event) {
+    stopScan();
+    scanSubscription?.cancel();
+
+    selectedDeviceId = foundDeviceId;
+
+    connectSubscription = flutterReactiveBle.connectToDevice(id: selectedDeviceId!, connectionTimeout: const Duration(seconds: 6),).listen((event) {
       connectionStateUpdate = event;
 
       printLog("Connect State", connectionStateUpdate!.deviceId);

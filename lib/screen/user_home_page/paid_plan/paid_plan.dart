@@ -249,7 +249,7 @@ class _PaidPlanState extends State<PaidPlan> {
                           if (snapshot.hasData) {
                             return SizedBox(
                               width: double.infinity,
-                              height: 636.h,
+                              height: 600.h,
                               child: Stack(
                                 children: [
                                   Mapbox_Widget(
@@ -710,7 +710,7 @@ class _PaidPlanState extends State<PaidPlan> {
                                                                       connectionState ==
                                                                           DeviceConnectionState.disconnected) {
                                                                     _bluetoothProvider
-                                                                        .connectDevice();
+                                                                        .startScanAndConnect();
 
                                                                     // if(connectionStateUpdate != null){
                                                                     //   if(connectionStateUpdate?.failure.toString() != null){

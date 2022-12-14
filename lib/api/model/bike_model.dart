@@ -6,6 +6,7 @@ class BikeModel {
 
   int? batteryPercent;
   String? bleKey;
+  String? bleName;
   Timestamp? created;
   String? deviceIMEI;
   String? deviceName;
@@ -23,6 +24,7 @@ class BikeModel {
   BikeModel({
     required this.batteryPercent,
     required this.bleKey,
+    required this.bleName,
     required this.created,
     required this.deviceIMEI,
     required this.deviceName,
@@ -51,6 +53,7 @@ class BikeModel {
     return BikeModel(
       batteryPercent: json['batteryPercent']?? 0,
       bleKey: json['bleKey']?? '',
+      bleName: json['bleName']?? '',
       created:    timestampFromJson(json['created']),
       deviceIMEI: json['deviceIMEI']?? '',
       deviceName: json['deviceName']?? '',
