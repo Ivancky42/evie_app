@@ -88,63 +88,63 @@ Widget getSecurityTextWidget(LockState isLocked, String status) {
   switch (isLocked) {
     case LockState.lock:
       if (status == "safe") {
-        return const Text(
+        return Text(
           "LOCKED AND SECURE",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       } else if (status == "warning") {
-        return const Text(
+        return Text(
           "MOVEMENT DETECTED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       } else if (status == "danger") {
-        return const Text(
+        return  Text(
           "UNDER THREAT",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       }
       break;
     case LockState.unlock:
       if (status == "safe") {
-        return const Text(
+        return Text(
           "UNLOCKED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       } else if (status == "warning") {
-        return const Text(
+        return Text(
           "MOVEMENT DETECTED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       } else if (status == "danger") {
-        return const Text(
+        return Text(
           "UNDER THREAT",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       }
       break;
     case LockState.unknown:
       if (status == "safe") {
-        return const Text(
+        return Text(
           "UNKNOWN",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       } else if (status == "warning") {
-        return const Text(
+        return Text(
           "MOVEMENT DETECTED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       } else if (status == "danger") {
-        return const Text(
+        return Text(
           "UNDER THREAT",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       }
       break;
   }
 
-  return const Text(
+  return Text(
     "LOCKED AND SECURE",
-    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
   );
 }
 
@@ -201,61 +201,58 @@ Widget getFirestoreSecurityTextWidget(bool? isLocked, String status) {
   switch (isLocked) {
     case true:
       if (status == "safe") {
-        return const Text(
-          "LOCKED AND SECURE",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        return  Text(
+          "LOCKED & SECURE",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       } else if (status == "warning") {
-        return const Text(
+        return  Text(
           "MOVEMENT DETECTED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       } else if (status == "danger") {
-        return const Text(
+        return Text(
           "UNDER THREAT",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       }
       break;
     case false:
       if (status == "safe") {
-        return const Text(
+        return  Text(
           "UNLOCKED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       } else if (status == "warning") {
-        return const Text(
+        return  Text(
           "MOVEMENT DETECTED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       } else if (status == "danger") {
-        return const Text(
+        return Text(
           "UNDER THREAT",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       }
       break;
   }
-
-  return const Text(
-    "LOCKED AND SECURE",
-    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+  return Text(
+    "LOCKED & SECURE",
+    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
   );
 }
 
 String getBatteryImage(int batteryPercent) {
 
   if (batteryPercent > 50 && batteryPercent <= 100) {
-    return "assets/icons/battery_full.png";
+    return "assets/icons/battery_full.svg";
 
   } else if (batteryPercent > 10 && batteryPercent <= 50) {
-    return "assets/icons/battery_half.png";
-  } else if (batteryPercent > 0 && batteryPercent <= 10) {
-    return "assets/icons/battery_low.png";
-  } else if (batteryPercent == 0) {
-    return "assets/icons/battery_empty.png";
+    return "assets/icons/battery_half.svg";
+  } else if (batteryPercent >= 0 && batteryPercent <= 10) {
+    return "assets/icons/battery_low.svg";
   } else {
-    return "assets/icons/battery_empty.png";
+    return "assets/icons/battery_not_available.svg";
   }
 }
 
@@ -265,16 +262,14 @@ int batteryPercent;
 batteryPercent = int.parse(batteryPercentage!);
 
   if (batteryPercent > 50 && batteryPercent <= 100) {
-    return "assets/icons/battery_full.png";
+    return "assets/icons/battery_full.svg";
 
   } else if (batteryPercent > 10 && batteryPercent <= 50) {
-    return "assets/icons/battery_half.png";
-  } else if (batteryPercent > 0 && batteryPercent <= 10) {
-    return "assets/icons/battery_low.png";
-  } else if (batteryPercent == 0) {
-    return "assets/icons/battery_empty.png";
+    return "assets/icons/battery_half.svg";
+  } else if (batteryPercent >= 0 && batteryPercent <= 10) {
+    return "assets/icons/battery_low.svg";
   } else {
-    return "assets/icons/battery_empty.png";
+    return "assets/icons/battery_not_available.svg";
   }
 }
 

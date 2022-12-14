@@ -1,6 +1,7 @@
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 
 class Bike_Name_Row extends StatelessWidget {
@@ -40,7 +41,7 @@ class Bike_Name_Row extends StatelessWidget {
                 Text(
                   bikeName,
                   style: TextStyle(
-                      fontSize: 16.5.sp,
+                      fontSize: 20.sp,
                       fontWeight:
                       FontWeight
                           .w700),
@@ -49,11 +50,12 @@ class Bike_Name_Row extends StatelessWidget {
                 Visibility(
                     visible: isDeviceConnected!,
 
-                    child:   const Image(
-                      image: AssetImage(
-                          "assets/icons/bluetooth_small.png"),
-
+                    child: SvgPicture.asset(
+                      "assets/icons/bluetooth_small.svg",
+                      width: 20.w,
+                      height: 20.h,
                     ),
+
                 )
               ],
 
@@ -64,7 +66,7 @@ class Bike_Name_Row extends StatelessWidget {
             Text(
               distanceBetween,
               style: TextStyle(
-                  fontSize: 10.sp,
+                  fontSize: 12.sp,
                   fontWeight:
                   FontWeight
                       .w400),
@@ -105,17 +107,12 @@ class Bike_Status_Row extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
         children: [
-          Container(
-            width: 21.w,
-            height: 24.h,
-            child: Image(
-              image: AssetImage(
-                  currentSecurityIcon),
-              height: 35.h,
-              width: 35.w,
-            ),
+          SvgPicture.asset(
+            currentSecurityIcon,
+            height:36.h,
+            width: 36.w,
           ),
-          SizedBox(width: 11.5.w),
+          SizedBox(width: 4.w),
           Column(
             crossAxisAlignment:
             CrossAxisAlignment
@@ -130,12 +127,10 @@ class Bike_Status_Row extends StatelessWidget {
           const VerticalDivider(
             thickness: 1,
           ),
-          Image(
-            image: AssetImage(
-                currentBatteryIcon),
-            height: 24.h,
-            width: 24.w,
-            //height: 1.h,
+          SvgPicture.asset(
+            currentBatteryIcon,
+            width: 36.w,
+            height: 36.h,
           ),
           SizedBox(
             width: 10.w,
