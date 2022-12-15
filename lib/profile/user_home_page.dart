@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:evie_test/screen/user_home_general.dart';
 import 'package:evie_test/screen/user_home_bluetooth.dart';
 import 'package:evie_test/screen/user_home_setting.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -174,15 +175,15 @@ class _UserHomePageState extends State<UserHomePage> {
             items: [
               BottomNavigationBarItem(
                 icon: Container(
-                  child: const Image(
-                    image: AssetImage("assets/buttons/home.png"),
+                  child: SvgPicture.asset(
+                    "assets/buttons/home.svg",
                   ),
           //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,
                 ),
                 activeIcon: Container(
-                  child: const Image(
-                    image: AssetImage("assets/buttons/home_selected.png"),
+                  child: SvgPicture.asset(
+                    "assets/buttons/home_selected.svg",
                   ),
         //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,
@@ -192,15 +193,15 @@ class _UserHomePageState extends State<UserHomePage> {
               ),
               BottomNavigationBarItem(
                 icon: Container(
-                  child: const Image(
-                    image: AssetImage("assets/buttons/navigation.png"),
+                  child: SvgPicture.asset(
+                    "assets/buttons/statistic.svg",
                   ),
                   //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,
                 ),
                 activeIcon: Container(
-                  child: const Image(
-                    image: AssetImage("assets/buttons/navigation_selected.png"),
+                  child: SvgPicture.asset(
+                    "assets/buttons/statistic_selected.svg",
                   ),
                   //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,
@@ -210,15 +211,15 @@ class _UserHomePageState extends State<UserHomePage> {
               ),
               BottomNavigationBarItem(
                 icon: Container(
-                  child: const Image(
-                    image: AssetImage("assets/buttons/statistic.png"),
+                  child: SvgPicture.asset(
+                    "assets/buttons/bike.svg",
                   ),
                   //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,
                 ),
                 activeIcon: Container(
-                  child: const Image(
-                    image: AssetImage("assets/buttons/statistic.png"),
+                  child: SvgPicture.asset(
+                    "assets/buttons/bike.svg",
                   ),
                   //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,
@@ -228,15 +229,15 @@ class _UserHomePageState extends State<UserHomePage> {
               ),
               BottomNavigationBarItem(
                 icon: Container(
-                  child: const Image(
-                    image: AssetImage("assets/buttons/bikeIcon.png"),
+                  child: SvgPicture.asset(
+                    "assets/buttons/notification.svg",
                   ),
           //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,
                 ),
                 activeIcon: Container(
-                  child: const Image(
-                    image: AssetImage("assets/buttons/bikeIcon.png"),
+                  child: SvgPicture.asset(
+                    "assets/buttons/notification.svg",
                   ),
            //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,
@@ -246,15 +247,15 @@ class _UserHomePageState extends State<UserHomePage> {
               ),
               BottomNavigationBarItem(
                 icon: Container(
-                  child: const Image(
-                    image: AssetImage("assets/buttons/user.png"),
+                  child: SvgPicture.asset(
+                    "assets/buttons/user.svg",
                   ),
                   //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,
                 ),
                 activeIcon: Container(
-                  child: const Image(
-                    image: AssetImage("assets/buttons/user_selected.png"),
+                  child: SvgPicture.asset(
+                    "assets/buttons/user.svg",
                   ),
                   //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: 6.3.h,

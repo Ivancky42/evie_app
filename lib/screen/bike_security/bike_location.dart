@@ -10,6 +10,7 @@ import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geocoding_platform_interface/src/models/placemark.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:provider/provider.dart';
@@ -388,9 +389,9 @@ class _BikeLocationState extends State<BikeLocation> {
                                                         ? true
                                                         : false,
                                                     child: IconButton(
-                                                      icon: const Image(
-                                                        image: AssetImage(
-                                                            "assets/buttons/next.png"),
+                                                      icon: SvgPicture.asset(
+                                                        "assets/buttons/next.svg",
+
                                                       ),
                                                       onPressed: () {
                                                         setState(() {
@@ -618,9 +619,9 @@ class _BikeLocationState extends State<BikeLocation> {
                                       ? true
                                       : false,
                                   child: IconButton(
-                                    icon: const Image(
-                                      image:
-                                          AssetImage("assets/buttons/next.png"),
+                                    icon:  SvgPicture.asset(
+                                      "assets/buttons/next.svg",
+
                                     ),
                                     onPressed: () {
                                       _bikeProvider.controlBikeList("next");
