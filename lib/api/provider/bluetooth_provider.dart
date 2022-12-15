@@ -41,6 +41,7 @@ class BluetoothProvider extends ChangeNotifier {
   StreamSubscription? scanSubscription;
   StreamSubscription? connectSubscription;
   StreamSubscription? notifySubscription;
+  StreamSubscription? bleStatusSubscription;
 
   ConnectionStateUpdate? connectionStateUpdate;
   BleStatus? bleStatus;
@@ -110,13 +111,15 @@ class BluetoothProvider extends ChangeNotifier {
   Future<void> init(currentBikeModel) async {
     if (currentBikeModel != null) {
       checkBLEStatus();
+      disconnectDevice();
       this.currentBikeModel = currentBikeModel;
       notifyListeners();
     }
   }
 
   Stream<BleStatus> checkBLEStatus() {
-    flutterReactiveBle.statusStream.listen((status) async {
+    bleStatusSubscription?.cancel();
+    bleStatusSubscription = flutterReactiveBle.statusStream.listen((status) async {
       bleStatus = status;
       bleStatusListener.add(status);
       printLog("BLE Status", bleStatus.toString());
@@ -229,19 +232,17 @@ class BluetoothProvider extends ChangeNotifier {
     });
   }
 
-  disconnectDevice(String deviceId) async {
-    if (notifySubscription != null) {
-      await notifySubscription!.cancel();
-    }
+  disconnectDevice() async {
 
-    if (connectSubscription != null) {
-      await connectSubscription!.cancel();
-    }
+    await notifySubscription?.cancel();
+    await connectSubscription?.cancel();
 
-    connectionStateUpdate = ConnectionStateUpdate(
-        deviceId: deviceId,
-        connectionState: DeviceConnectionState.disconnected,
-        failure: null);
+    if (connectionStateUpdate != null) {
+      connectionStateUpdate = ConnectionStateUpdate(
+          deviceId: connectionStateUpdate!.deviceId,
+          connectionState: DeviceConnectionState.disconnected,
+          failure: null);
+    }
     clearBluetoothStatus();
     notifyListeners();
   }

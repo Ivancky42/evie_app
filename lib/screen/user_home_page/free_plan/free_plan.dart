@@ -83,9 +83,10 @@ class _FreePlanState extends State<FreePlan> {
 
   StreamSubscription? userLocationSubscription;
 
-  static const double initialRatio = 324 / 700;
-  static const double minRatio = 86 / 700;
+  static const double initialRatio = 374 / 700;
+  static const double minRatio = 136 / 700;
   static const double maxRatio = 1.0;
+  bool isBottomSheetExpanded = false;
 
   @override
   void initState() {
@@ -148,7 +149,7 @@ class _FreePlanState extends State<FreePlan> {
 
     Future.delayed(Duration.zero, () {
       if (_bluetoothProvider.connectionStateUpdate?.failure != null) {
-        _bluetoothProvider.disconnectDevice(connectionStateUpdate!.deviceId);
+        _bluetoothProvider.disconnectDevice();
         SmartDialog.show(
             keepSingle: true,
             widget: EvieSingleButtonDialogCupertino(
@@ -287,9 +288,17 @@ class _FreePlanState extends State<FreePlan> {
                   width: double.infinity,
                   child: NotificationListener<DraggableScrollableNotification>(
                     onNotification: (notification) {
-                      setState(() {
-                        currentScroll = notification.extent;
-                      });
+                      if (notification.extent > 0.8) {
+                        setState(() {
+                          currentScroll = notification.extent;
+                          isBottomSheetExpanded = true;
+                        });
+                      } else {
+                        setState(() {
+                          currentScroll = notification.extent;
+                          isBottomSheetExpanded = false;
+                        });
+                      }
 
                       return false;
                     },
@@ -303,18 +312,10 @@ class _FreePlanState extends State<FreePlan> {
                         builder: (BuildContext context, ScrollController _scrollController) {
 
 
-                          // if(currentScroll == (120 / 710)){
-                          //   animateBounce();
-                          // }else if(currentScroll == (324 / 710)){
-                          //   animateBounce();
-                          // }
-
                           return ListView(
                             controller: _scrollController,
                             children: [
-                              // SizedBox(
-                              //   height: 50.h,
-                              // ),
+                              navigateButton(),
                               currentScroll <= 0.8 ?
                               Stack(
                                   children: [
@@ -743,10 +744,7 @@ class _FreePlanState extends State<FreePlan> {
                                               _bikeProvider
                                                   .controlBikeList("next");
                                               _bluetoothProvider
-                                                  .disconnectDevice(
-                                                  _bikeProvider
-                                                      .currentBikeModel!
-                                                      .deviceIMEI!);
+                                                  .disconnectDevice();
                                             },
                                             icon: SvgPicture.asset(
                                               "assets/buttons/filter.svg",
@@ -834,6 +832,34 @@ class _FreePlanState extends State<FreePlan> {
         );
       },
     );
+  }
+
+  Widget navigateButton() {
+    if (isBottomSheetExpanded) {
+      return const SizedBox();
+    } else {
+      return Align(
+        alignment: Alignment.bottomRight,
+        child: GestureDetector(
+          onTap: () async {
+
+          },
+          child: Container(
+              height: 50.h,
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: EdgeInsets.only(right: 8.h),
+                  child: SvgPicture.asset(
+                    "assets/buttons/location.svg",
+                    width: 50.w,
+                    height: 50.h,
+                  ),
+                ),
+              )),
+        ),
+      );
+    }
   }
 
 
