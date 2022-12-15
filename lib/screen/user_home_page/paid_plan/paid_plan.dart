@@ -78,8 +78,8 @@ class _PaidPlanState extends State<PaidPlan> {
 
   StreamSubscription? locationSubscription;
 
-  static const double initialRatio = 374 / 700;
-  static const double minRatio = 136 / 700;
+  static const double initialRatio = 424 / 700;
+  static const double minRatio = 186 / 700;
   static const double maxRatio = 1.0;
   bool isBottomSheetExpanded = false;
   bool isMapListShowing = false;
@@ -330,6 +330,7 @@ class _PaidPlanState extends State<PaidPlan> {
                           controller: _scrollController,
                           children: [
                             mapLauncher(),
+                            navigateButton(),
                             currentScroll <= 0.8
                                 ? Stack(children: [
                                     ///Bike Connected
@@ -1014,6 +1015,34 @@ class _PaidPlanState extends State<PaidPlan> {
                       ),
                     ),
                   ],
+                ),
+              )),
+        ),
+      );
+    }
+  }
+
+  Widget navigateButton() {
+    if (isBottomSheetExpanded) {
+      return const SizedBox();
+    } else {
+      return Align(
+        alignment: Alignment.bottomRight,
+        child: GestureDetector(
+          onTap: () async {
+
+          },
+          child: Container(
+              height: 50.h,
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: EdgeInsets.only(right: 8.h),
+                  child: SvgPicture.asset(
+                    "assets/buttons/location.svg",
+                    width: 50.w,
+                    height: 50.h,
+                  ),
                 ),
               )),
         ),
