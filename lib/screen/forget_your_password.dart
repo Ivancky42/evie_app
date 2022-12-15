@@ -1,6 +1,7 @@
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sizer/sizer.dart';
 import '../api/navigator.dart';
 import '../theme/ThemeChangeNotifier.dart';
@@ -192,8 +193,8 @@ class CheckYourEmail extends StatelessWidget {
               height: 12.h,
             ),
             Center(
-              child: Image(
-                image: AssetImage("assets/images/sent_message.png"),
+              child: SvgPicture.asset(
+                  "assets/images/sent_message.svg",
               ),
             ),
             SizedBox(

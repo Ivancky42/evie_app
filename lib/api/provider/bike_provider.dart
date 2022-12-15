@@ -180,7 +180,7 @@ class BikeProvider extends ChangeNotifier {
     try {
       var docUser = FirebaseFirestore.instance.collection(bikesCollection);
       docUser.doc(currentBikeModel?.deviceIMEI).update({
-        'bikeName': name,
+        'deviceName': name,
         'updated': Timestamp.now(),
       });
       notifyListeners();

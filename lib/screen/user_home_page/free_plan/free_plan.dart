@@ -737,9 +737,10 @@ class _FreePlanState extends State<FreePlan> {
                                               _bluetoothProvider
                                                   .disconnectDevice();
                                             },
-                                            icon: const Image(
-                                              image: AssetImage("assets/buttons/filter.png"),
-                                            )),
+                                            icon: SvgPicture.asset(
+                                              "assets/buttons/filter.svg",
+                                            ),
+                                        ),
                                       ],
                                     ),
                                     SizedBox(

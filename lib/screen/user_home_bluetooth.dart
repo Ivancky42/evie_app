@@ -434,11 +434,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
                                             content: "Connect to this bike?",
                                             leftContent: "Cancel",
                                             rightContent: "Connect",
-                                            image: Image.asset(
-                                              "assets/evieBike.png",
-                                              width: 36,
-                                              height: 36,
-                                            ),
+
                                             onPressedLeft: () {
                                               SmartDialog.dismiss(
                                                   tag: "ConnectBike");

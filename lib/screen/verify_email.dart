@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:provider/provider.dart';
@@ -199,10 +200,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
                   ),
                 ]),
           ),
-          const Align(
+          Align(
             alignment: Alignment.center,
-            child: Image(
-              image: AssetImage("assets/images/sent_message.png"),
+            child: SvgPicture.asset(
+              "assets/images/sent_message.svg",
             ),
           ),
           Align(
