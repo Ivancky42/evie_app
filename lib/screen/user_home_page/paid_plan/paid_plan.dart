@@ -556,15 +556,14 @@ class _PaidPlanState extends State<PaidPlan> {
                                                                       0xff3F3F3F)),
                                                             ),
                                                           },
-                                                          // SizedBox(
-                                                          //   height: 11.h,
-                                                          // ),
-                                                          Image(
-                                                            image: AssetImage(
-                                                                "assets/buttons/up.png"),
-                                                            width: 24.w,
-                                                            height: 24.h,
+                                                           SizedBox(
+                                                             height: 11.h,
+                                                           ),
+                                                          SvgPicture.asset(
+                                                            "assets/buttons/up.svg",
+
                                                           ),
+
                                                         ],
                                                       ),
                                                     )
@@ -785,9 +784,9 @@ class _PaidPlanState extends State<PaidPlan> {
                                                           SizedBox(
                                                             height: 11.h,
                                                           ),
-                                                          const Image(
-                                                            image: AssetImage(
-                                                                "assets/buttons/up.png"),
+                                                          SvgPicture.asset(
+                                                            "assets/buttons/up.svg",
+
                                                           ),
                                                         ],
                                                       ),
@@ -1024,70 +1023,56 @@ class _PaidPlanState extends State<PaidPlan> {
 
   void setConnectImage() {
     if (connectionState?.name == "connected") {
-      setState(() {
         connectImage = SvgPicture.asset(
           "assets/buttons/loading.svg",
           width: 52.w,
           height: 50.h,
         );
         lockColour = const Color(0xff6A51CA);
-      });
     } else if (connectionState?.name == "connecting") {
-      setState(() {
         connectImage = SvgPicture.asset(
           "assets/buttons/loading.svg",
           width: 52.w,
           height: 50.h,
         );
         lockColour = const Color(0xff6A51CA);
-      });
     } else if (connectionState?.name == "disconnected") {
-      setState(() {
         connectImage = SvgPicture.asset(
           "assets/buttons/bluetooth_not_connected.svg",
           width: 52.w,
           height: 50.h,
         );
-      });
     } else {
-      setState(() {
         connectImage = SvgPicture.asset(
           "assets/buttons/bluetooth_not_connected.svg",
           width: 52.w,
           height: 50.h,
         );
-      });
     }
   }
 
   void setLockImage() {
     if (cableLockState?.lockState == LockState.unlock) {
-      setState(() {
         lockImage = SvgPicture.asset(
           "assets/buttons/lock_unlock.svg",
           width: 52.w,
           height: 50.h,
         );
         lockColour = const Color(0xff6A51CA);
-      });
     } else if (cableLockState?.lockState == LockState.lock) {
-      setState(() {
         lockImage = SvgPicture.asset(
           "assets/buttons/lock_lock.svg",
           width: 52.w,
           height: 50.h,
         );
         lockColour = const Color(0xff6A51CA);
-      });
     } else if (cableLockState?.lockState == LockState.unknown) {
-      setState(() {
         lockImage = SvgPicture.asset(
           "assets/buttons/loading.svg",
           width: 52.w,
           height: 50.h,
         );
         lockColour = const Color(0xff6A51CA);
-      });
     }
   }
 

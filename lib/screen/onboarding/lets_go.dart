@@ -111,18 +111,18 @@ class _LetsGoState extends State<LetsGo> {
                   ),
                 ),
                 onPressed: () async {
-                  changeToTurnOnLocationScreen(context);
-                  // var locationStatus = await Permission.location.status;
-                  //
-                  // if (_bluetoothProvider.bleStatus == BleStatus.unauthorized && locationStatus == PermissionStatus.granted) {
-                  //   changeToTurnOnBluetoothScreen(context);
-                  // }
-                  // else if (locationStatus == PermissionStatus.granted && _bluetoothProvider.bleStatus != BleStatus.unauthorized) {
-                  //   changeToTurnOnQRScannerScreen(context);
-                  // }
-                  // else {
-                  //   changeToTurnOnLocationScreen(context);
-                  // }
+                  //changeToTurnOnLocationScreen(context);
+                  var locationStatus = await Permission.location.status;
+
+                  if (_bluetoothProvider.bleStatus == BleStatus.unauthorized && locationStatus == PermissionStatus.granted) {
+                    changeToTurnOnBluetoothScreen(context);
+                  }
+                  else if (locationStatus == PermissionStatus.granted && _bluetoothProvider.bleStatus != BleStatus.unauthorized) {
+                    changeToTurnOnQRScannerScreen(context);
+                  }
+                  else {
+                    changeToTurnOnLocationScreen(context);
+                  }
 
                 },
               ),

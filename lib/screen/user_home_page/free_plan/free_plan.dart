@@ -507,9 +507,8 @@ class _FreePlanState extends State<FreePlan> {
                                                           SizedBox(
                                                             height: 11.h,
                                                           ),
-                                                          const Image(
-                                                            image: AssetImage(
-                                                                "assets/buttons/up.png"),
+                                                          SvgPicture.asset(
+                                                            "assets/buttons/up.svg",
                                                           ),
                                                         ],
                                                       ),
@@ -697,9 +696,8 @@ class _FreePlanState extends State<FreePlan> {
                                                           SizedBox(
                                                             height: 11.h,
                                                           ),
-                                                          const Image(
-                                                            image: AssetImage(
-                                                                "assets/buttons/up.png"),
+                                                          SvgPicture.asset(
+                                                            "assets/buttons/up.svg",
                                                           ),
                                                         ],
                                                       ),
