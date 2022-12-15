@@ -152,7 +152,7 @@ class _PaidPlanState extends State<PaidPlan> {
 
     Future.delayed(Duration.zero, () {
       if (_bluetoothProvider.connectionStateUpdate?.failure != null) {
-        _bluetoothProvider.disconnectDevice(connectionStateUpdate!.deviceId);
+        _bluetoothProvider.disconnectDevice();
         SmartDialog.show(
             keepSingle: true,
             widget: EvieSingleButtonDialogCupertino(
@@ -830,10 +830,7 @@ class _PaidPlanState extends State<PaidPlan> {
                                                   _bikeProvider
                                                       .controlBikeList("next");
                                                   _bluetoothProvider
-                                                      .disconnectDevice(
-                                                          _bikeProvider
-                                                              .currentBikeModel!
-                                                              .deviceIMEI!);
+                                                      .disconnectDevice();
                                                 },
                                                 icon: const Image(
                                                   image: AssetImage(

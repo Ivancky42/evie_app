@@ -239,8 +239,7 @@ class _TestBleState extends State<TestBle> {
                       }
                       else {
                         if (connectionState!.name == "connected") {
-                          bluetoothProvider.disconnectDevice(
-                              connectionStateUpdate!.deviceId);
+                          bluetoothProvider.disconnectDevice();
                         }
                         else if (connectionState!.name == "connecting") {
 
