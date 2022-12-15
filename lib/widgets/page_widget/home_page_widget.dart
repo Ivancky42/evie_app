@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
-
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import '../../bluetooth/modelResult.dart';
 
 
@@ -82,6 +82,7 @@ class HomePageWidget_Status extends StatelessWidget{
     );
   }
 }
+
 
 
 Widget getSecurityTextWidget(LockState isLocked, String status) {
@@ -407,3 +408,4 @@ String getDateTime() {
 
   return returnValue;
 }
+

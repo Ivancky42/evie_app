@@ -617,7 +617,17 @@ class _FreePlanState extends State<FreePlan> {
                                                                         break;
                                                                       case BleStatus
                                                                           .unauthorized:
-                                                                      // TODO: Handle this case.
+                                                                        SmartDialog.show(
+                                                                            keepSingle:
+                                                                            true,
+                                                                            widget: EvieSingleButtonDialogCupertino(
+                                                                                title: "Error",
+                                                                                content: "Bluetooth Permission is off",
+                                                                                rightContent: "OK",
+                                                                                onPressedRight: () {
+                                                                                  SmartDialog
+                                                                                      .dismiss();
+                                                                                }));
                                                                         break;
                                                                       case BleStatus
                                                                           .locationServicesDisabled:
