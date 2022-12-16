@@ -37,8 +37,7 @@ class _ChangeBikeBottomSheetState extends State<ChangeBikeBottomSheet> {
   @override
   Widget build(BuildContext context) {
     BikeProvider _bikeProvider = Provider.of<BikeProvider>(context);
-    BluetoothProvider _bluetoothProvider =
-        Provider.of<BluetoothProvider>(context);
+    BluetoothProvider _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     /// get bluetooth connection state and lock unlock to detect isConnected
     connectionState = _bluetoothProvider.connectionStateUpdate?.connectionState;

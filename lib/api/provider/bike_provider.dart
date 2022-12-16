@@ -145,6 +145,7 @@ class BikeProvider extends ChangeNotifier {
 
   ///Get bike information based on selected current bike
   Future<void> getBike(String? imei) async {
+    currentBikeModel = null;
     SharedPreferences prefs = await _prefs;
 
     if (currentBikeSubscription != null) {

@@ -1,4 +1,5 @@
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/switch_bike.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -65,7 +66,7 @@ class Bike_Name_Row extends StatelessWidget {
                 expand: false,
                 context: context,
                 builder: (context) {
-                  return ChangeBikeBottomSheet();
+                  return SwitchBike();
                 });
           },
           child: Image(
