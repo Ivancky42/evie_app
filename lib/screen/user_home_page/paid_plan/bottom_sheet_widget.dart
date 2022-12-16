@@ -1,19 +1,24 @@
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/widgets/page_widget/home_page_widet_change_bike_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class Bike_Name_Row extends StatelessWidget {
   String bikeName;
   String distanceBetween;
   String currentBikeStatusImage;
+bool isDeviceConnected;
 
   Bike_Name_Row({
     Key? key,
     required this.bikeName,
     required this.distanceBetween,
     required this.currentBikeStatusImage,
+    required this.isDeviceConnected,
   }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +57,20 @@ class Bike_Name_Row extends StatelessWidget {
             ),
           ],
         ),
-        Image(
-          image: AssetImage(currentBikeStatusImage),
-          height: 60.h,
-          width: 87.w,
+        GestureDetector(
+          onTap: (){
+            showMaterialModalBottomSheet(
+                expand: false,
+                context: context,
+                builder: (context) {
+                  return ChangeBikeBottomSheet();
+                });
+          },
+          child: Image(
+            image: AssetImage(currentBikeStatusImage),
+            height: 60.h,
+            width: 87.w,
+          ),
         ),
       ],
     );

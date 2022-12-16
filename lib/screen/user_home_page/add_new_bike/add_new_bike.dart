@@ -9,6 +9,7 @@ import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -178,9 +179,10 @@ class _AddNewBikeState extends State<AddNewBike> {
                       children: [
                         Container(
                           width: 10.w,
-                          child: const Image(
-                            image: AssetImage("assets/buttons/bike_security_not_available.png"),
-                         //   height: 24.0,
+                          child: SvgPicture.asset(
+                            "assets/buttons/bike_security_not_available.svg",
+                            width: 52.w,
+                            height: 50.h,
                           ),
                         ),
                         Column(

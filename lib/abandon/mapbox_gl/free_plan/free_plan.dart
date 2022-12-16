@@ -580,7 +580,7 @@
 //                                                       child: Bike_Status_Row(
 //                                                         connectText: "-",
 //                                                         estKm: "",
-//                                                         currentSecurityIcon: "assets/buttons/bike_security_not_available.png",
+//                                                         currentSecurityIcon: "assets/buttons/bike_security_not_available.svg",
 //                                                         currentBatteryIcon: "assets/icons/battery_not_available.png",
 //                                                         child:Text(
 //                                                           "NOT AVAILABLE",

@@ -2,12 +2,12 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../bluetooth/modelResult.dart';
-
+import '../../../widgets/page_widget/home_page_widet_change_bike_bottom_sheet.dart';
 
 class Bike_Name_Row extends StatelessWidget {
-
   String bikeName;
   String distanceBetween;
   String currentBikeStatusImage;
@@ -16,79 +16,71 @@ class Bike_Name_Row extends StatelessWidget {
   Bike_Name_Row({
     Key? key,
     required this.bikeName,
-   required this.distanceBetween,
+    required this.distanceBetween,
     required this.currentBikeStatusImage,
     required this.isDeviceConnected,
-
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment:
-      MainAxisAlignment
-          .spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
-          mainAxisAlignment:
-          MainAxisAlignment
-              .start,
-          crossAxisAlignment:
-          CrossAxisAlignment
-              .start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             Row(
               children: [
                 Text(
                   bikeName,
-                  style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight:
-                      FontWeight
-                          .w700),
+                  style:
+                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
                 ),
-
                 Visibility(
-                    visible: isDeviceConnected!,
-
-                    child: SvgPicture.asset(
-                      "assets/icons/bluetooth_small.svg",
-                      width: 20.w,
-                      height: 20.h,
-                    ),
-
+                  visible: isDeviceConnected!,
+                  child: SvgPicture.asset(
+                    "assets/icons/bluetooth_small.svg",
+                    width: 20.w,
+                    height: 20.h,
+                  ),
                 )
               ],
-
             ),
+
             SizedBox(
               height: 4.h,
             ),
+
             Text(
               isDeviceConnected! ? "With You" : "Bike is not connected",
-              style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight:
-                  FontWeight
-                      .w400),
+              style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400),
             ),
           ],
         ),
-        Image(
-          image: AssetImage(
-              currentBikeStatusImage),
-          height: 60.h,
-          width: 87.w,
+
+        GestureDetector(
+          onTap: () {
+            showMaterialModalBottomSheet(
+                expand: false,
+                context: context,
+                builder: (context) {
+                  return ChangeBikeBottomSheet();
+                });
+          },
+          child: Image(
+            image: AssetImage(currentBikeStatusImage),
+            height: 60.h,
+            width: 87.w,
+          ),
         ),
+
       ],
     );
   }
 }
 
-
 class Bike_Status_Row extends StatelessWidget {
-
   String currentSecurityIcon;
   LockState isLocked;
   String currentBatteryIcon;
@@ -104,85 +96,68 @@ class Bike_Status_Row extends StatelessWidget {
     required this.connectText,
     required this.child,
     required this.estKm,
-
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Row(children: [
+      if (isLocked == LockState.lock) ...{
+        SvgPicture.asset(
+          "assets/buttons/bike_security_lock_and_secure.svg",
+          height: 36.h,
+          width: 36.w,
+        ),
+      } else if (isLocked == LockState.unlock) ...{
+        SvgPicture.asset(
+          "assets/buttons/bike_security_unlock.svg",
+          height: 36.h,
+          width: 36.w,
+        ),
+      } else ...{
+        SvgPicture.asset(
+          "assets/icons/battery_not_available.svg",
+          height: 36.h,
+          width: 36.w,
+        ),
+      },
+      SizedBox(width: 4.w),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          if(isLocked == LockState.lock)...{
-            SvgPicture.asset(
-              "assets/buttons/bike_security_lock_and_secure.svg",
-              height:36.h,
-              width: 36.w,
-            ),
-
-          }else if(isLocked == LockState.unlock)...{
-            SvgPicture.asset(
-              "assets/buttons/bike_security_unlock.svg",
-              height:36.h,
-              width: 36.w,
-            ),
-          }else ...{
-            SvgPicture.asset(
-              "assets/icons/battery_not_available.svg",
-              height:36.h,
-              width: 36.w,
-            ),
-          },
-
-          SizedBox(width: 4.w),
-          Column(
-            crossAxisAlignment:
-            CrossAxisAlignment
-                .start,
-            children: [
-              Container(
-                width: 135.w,
-                child: child,
-              )
-            ],
+          Container(
+            width: 135.w,
+            child: child,
+          )
+        ],
+      ),
+      const VerticalDivider(
+        thickness: 1,
+      ),
+      SvgPicture.asset(
+        currentBatteryIcon,
+        width: 36.w,
+        height: 36.h,
+      ),
+      SizedBox(
+        width: 10.w,
+      ),
+      if (estKm == "") ...{
+        Text(
+          "${connectText} %",
+          style: TextStyle(fontSize: 20.sp),
+        ),
+      } else ...{
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            "${connectText} %",
+            style: TextStyle(fontSize: 20.sp),
           ),
-          const VerticalDivider(
-            thickness: 1,
-          ),
-          SvgPicture.asset(
-            currentBatteryIcon,
-            width: 36.w,
-            height: 36.h,
-          ),
-          SizedBox(
-            width: 10.w,
-          ),
-
-          if(estKm == "")...{
-            Text(
-              "${connectText} %",
-              style: TextStyle(
-                  fontSize: 20.sp
-              ),
-            ),
-
-          }else...{
-            Column(
-                crossAxisAlignment:
-                CrossAxisAlignment
-                    .start,
-                children:[
-                  Text(
-                    "${connectText} %",
-                    style: TextStyle(
-                        fontSize: 20.sp
-                    ),
-                  ),
-                  Text(estKm,style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),)
-                ])
-          }
-
-        ]);
+          Text(
+            estKm,
+            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
+          )
+        ])
+      }
+    ]);
   }
 }
-
-

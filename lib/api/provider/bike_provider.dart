@@ -35,6 +35,7 @@ class BikeProvider extends ChangeNotifier {
   LinkedHashMap bikeUserList = LinkedHashMap<String, BikeUserModel>();
   LinkedHashMap bikeUserDetails = LinkedHashMap<String, UserModel>();
   LinkedHashMap userBikeList = LinkedHashMap<String, UserBikeModel>();
+  LinkedHashMap userBikeDetails = LinkedHashMap<String, BikeModel>();
   LinkedHashMap rfidList = LinkedHashMap<String, RFIDModel>();
 
   UserModel? currentUserModel;
@@ -50,6 +51,7 @@ class BikeProvider extends ChangeNotifier {
   StreamSubscription? currentBikeSubscription;
   StreamSubscription? bikeUserSubscription;
   StreamSubscription? currentBikeUserSubscription;
+  StreamSubscription? currentUserBikeSubscription;
   StreamSubscription? rfidListSubscription;
 
   ScanQRCodeResult scanQRCodeResult = ScanQRCodeResult.unknown;
@@ -71,6 +73,10 @@ class BikeProvider extends ChangeNotifier {
   Future<void> getBikeList(String? uid) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     currentBikeModel = null;
+
+    // if(userBikeDetails.isNotEmpty){
+    //   userBikeDetails.clear();
+    // }
     try {
       ///read doc change
       bikeListSubscription = FirebaseFirestore.instance
@@ -82,7 +88,6 @@ class BikeProvider extends ChangeNotifier {
         if (snapshot.docs.isNotEmpty) {
           for (var docChange in snapshot.docChanges) {
             switch (docChange.type) {
-
               ///element.type
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
@@ -90,6 +95,7 @@ class BikeProvider extends ChangeNotifier {
                 ///Key = imei, Val = get json object
                 userBikeList.putIfAbsent(
                     docChange.doc.id, () => UserBikeModel.fromJson(obj!));
+                getUserBikeDetails(docChange.doc.id);
                 NotificationProvider().subscribeToTopic(docChange.doc.id);
                 notifyListeners();
                 break;
@@ -142,7 +148,7 @@ class BikeProvider extends ChangeNotifier {
     SharedPreferences prefs = await _prefs;
 
     if (currentBikeSubscription != null) {
-      currentBikeSubscription?.cancel();
+      await currentBikeSubscription?.cancel();
     }
 
     for (int index = 0; index < userBikeList.length; index++) {
@@ -189,6 +195,14 @@ class BikeProvider extends ChangeNotifier {
       debugPrint(e.toString());
       return false;
     }
+  }
+
+  Future<void> changeBikeUsingIMEI(String deviceIMEI) async {
+    SharedPreferences prefs = await _prefs;
+    currentBikeList = 0;
+    await prefs.setInt('currentBikeList', currentBikeList);
+    await getBike(deviceIMEI);
+    notifyListeners();
   }
 
   Future<void> controlBikeList(String action) async {
@@ -369,7 +383,6 @@ class BikeProvider extends ChangeNotifier {
         if (snapshot.docs.isNotEmpty) {
           for (var docChange in snapshot.docChanges) {
             switch (docChange.type) {
-
               ///element.type
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
@@ -403,10 +416,6 @@ class BikeProvider extends ChangeNotifier {
 
   getBikeUserDetails(String uid) {
     try {
-      if (currentBikeUserSubscription != null) {
-        currentBikeUserSubscription?.cancel();
-      }
-
       currentBikeUserSubscription = FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(uid)
@@ -420,6 +429,30 @@ class BikeProvider extends ChangeNotifier {
         }
         if (obj == null) {
           bikeUserDetails.removeWhere((key, value) => key == obj?.keys);
+          notifyListeners();
+        }
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  getUserBikeDetails(String deviceIMEI) {
+    try {
+      currentUserBikeSubscription = FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(deviceIMEI)
+          .snapshots()
+          .listen((snapshot) {
+        Map<String, dynamic>? obj = snapshot.data();
+
+        if (obj != null) {
+          userBikeDetails.putIfAbsent(
+              snapshot.id, () => BikeModel.fromJson(obj));
+          notifyListeners();
+        }
+        if (obj == null) {
+          userBikeDetails.removeWhere((key, value) => key == obj?.keys);
           notifyListeners();
         }
       });
@@ -457,9 +490,9 @@ class BikeProvider extends ChangeNotifier {
       scanQRCodeResult = ScanQRCodeResult.validateFailure;
       notifyListeners();
       return false;
-    } else if(validationKey == snapshot["validationKey"]){
+    } else if (validationKey == snapshot["validationKey"]) {
       await checkIsBikeExist(snapshot["bikeRef"]);
-    }else{
+    } else {
       scanQRCodeResult = ScanQRCodeResult.validateFailure;
       notifyListeners();
       return false;
@@ -493,7 +526,6 @@ class BikeProvider extends ChangeNotifier {
 
   Future uploadUserToFireStore(selectedDeviceId) async {
     try {
-
       ///uploadBikeToUserFireStore
       await FirebaseFirestore.instance
           .collection(usersCollection)

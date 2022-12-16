@@ -77,6 +77,7 @@ class _PaidPlanState extends State<PaidPlan> {
   String? distanceBetween;
 
   StreamSubscription? locationSubscription;
+  StreamSubscription? userLocationSubscription;
 
   static const double initialRatio = 424 / 700;
   static const double minRatio = 186 / 700;
@@ -89,7 +90,7 @@ class _PaidPlanState extends State<PaidPlan> {
   MapController? mapController;
   final Location _locationService = Location();
 
-  StreamSubscription? userLocationSubscription;
+  bool isScanned = false;
 
   @override
   void initState() {
@@ -105,17 +106,22 @@ class _PaidPlanState extends State<PaidPlan> {
   void initLocationService() async {
     ///For user live location
     await _locationService.getLocation();
-    locationListener();
     userLocationSubscription =
         _locationService.onLocationChanged.listen((LocationData result) async {
-      if (mounted) {
-        setState(() {
-          userLocation = result;
-          getDistanceBetween();
-          animateBounce();
+          if (mounted) {
+            setState(() {
+              userLocation = result;
+
+              if(userLocation != null && _locationProvider.locationModel?.status != null) {
+                getDistanceBetween();
+                animateBounce();
+              }
+            });
+          }
         });
-      }
-    });
+    if(userLocation != null && _locationProvider.locationModel?.status != null){
+      locationListener();
+    }
   }
 
   @override
@@ -198,6 +204,8 @@ class _PaidPlanState extends State<PaidPlan> {
       ),
     ];
 
+
+
     return WillPopScope(
       onWillPop: () async {
         bool? exitApp = await SmartDialog.show(
@@ -249,6 +257,7 @@ class _PaidPlanState extends State<PaidPlan> {
                       future: getLocationModel(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
+
                           return SizedBox(
                             width: double.infinity,
                             height: 636.h,
@@ -312,8 +321,10 @@ class _PaidPlanState extends State<PaidPlan> {
                         isBottomSheetExpanded = false;
                       });
                     }
-
+                    if(userLocation != null && _locationProvider.locationModel?.status != null){
                     animateBounce();
+                    }
+
 
                     return false;
                   },
@@ -371,7 +382,7 @@ class _PaidPlanState extends State<PaidPlan> {
                                                             distanceBetween ??
                                                                 "-",
                                                         currentBikeStatusImage:
-                                                            currentBikeStatusImage,
+                                                            currentBikeStatusImage, isDeviceConnected: isDeviceConnected!,
                                                       ),
                                                     ),
                                                     Padding(
@@ -614,6 +625,7 @@ class _PaidPlanState extends State<PaidPlan> {
                                                                 "-",
                                                         currentBikeStatusImage:
                                                             currentBikeStatusImage,
+                                                          isDeviceConnected: isDeviceConnected!
                                                       ),
                                                     ),
                                                     Padding(
