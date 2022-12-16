@@ -31,14 +31,14 @@ import 'bottom_sheet_widget.dart';
 import 'package:location/location.dart';
 import 'package:latlong2/latlong.dart';
 
-class PaidPlan extends StatefulWidget {
+class PaidPlan extends StatefulWidget  {
   const PaidPlan({Key? key}) : super(key: key);
 
   @override
   _PaidPlanState createState() => _PaidPlanState();
 }
 
-class _PaidPlanState extends State<PaidPlan> {
+class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
@@ -94,13 +94,14 @@ class _PaidPlanState extends State<PaidPlan> {
 
   @override
   void initState() {
+    super.initState();
     _locationProvider = Provider.of<LocationProvider>(context, listen: false);
     _locationProvider.addListener(locationListener);
     mapController = MapController();
 
     initLocationService();
+    WidgetsBinding.instance.addObserver(this);
 
-    super.initState();
   }
 
   void initLocationService() async {
@@ -129,7 +130,15 @@ class _PaidPlanState extends State<PaidPlan> {
     _locationProvider.removeListener(locationListener);
     mapController?.dispose();
     userLocationSubscription?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.resumed) {
+     // _bluetoothProvider.startScanAndConnect();
+    }
   }
 
   @override
@@ -175,7 +184,6 @@ class _PaidPlanState extends State<PaidPlan> {
       setConnectImage();
       setLockImage();
 
-
     LatLng currentLatLng;
 
     if (userLocation != null) {
@@ -184,7 +192,7 @@ class _PaidPlanState extends State<PaidPlan> {
       currentLatLng = LatLng(0, 0);
     }
 
-    final markers = <Marker>[
+    var markers = <Marker>[
       Marker(
         width: 42.w,
         height: 56.h,
@@ -194,6 +202,7 @@ class _PaidPlanState extends State<PaidPlan> {
           image: AssetImage(loadMarkerImageString(currentDangerStatus)),
         ),
       ),
+
       Marker(
         width: 42.w,
         height: 56.h,
@@ -239,14 +248,9 @@ class _PaidPlanState extends State<PaidPlan> {
                       future: _currentUserProvider.fetchCurrentUserModel,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return GestureDetector(
-                              onTap: () {
-                                changeToLetsGoScreen(context);
-                              },
-                              child: HomePageWidget_Status(
+                          return HomePageWidget_Status(
                                   currentDangerState: currentDangerStatus,
-                                  location:
-                                      _locationProvider.currentPlaceMark));
+                                  location: _locationProvider.currentPlaceMark);
                         } else {
                           return const Center(
                             child: Text("Good Morning"),
@@ -538,7 +542,7 @@ class _PaidPlanState extends State<PaidPlan> {
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w400,
-                                                                  color: Color(
+                                                                  color: const Color(
                                                                       0xff3F3F3F)),
                                                             ),
                                                           } else if (connectionState
@@ -821,104 +825,7 @@ class _PaidPlanState extends State<PaidPlan> {
                                           )),
                                     }
                                   ])
-                                : Container(
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFECEDEB),
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        SizedBox(
-                                          height: 28.h,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 17.w),
-                                              child: Text(
-                                                "Threat History",
-                                                style: TextStyle(
-                                                    fontSize: 24.sp,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                            ),
-                                            IconButton(
-                                                onPressed: () {
-                                                  _bikeProvider
-                                                      .controlBikeList("next");
-                                                  _bluetoothProvider
-                                                      .disconnectDevice();
-                                                },
-                                              icon: SvgPicture.asset(
-                                                "assets/buttons/filter.svg",
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 11.h,
-                                        ),
-                                        const Divider(
-                                          thickness: 2,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                "scroll to load more",
-                                                style: TextStyle(
-                                                    color: Color(0xff7A7A79),
-                                                    fontSize: 12.sp),
-                                              ),
-                                              SizedBox(height: 1.h),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(6),
-                                                child: Container(
-                                                  child: ElevatedButton(
-                                                    child: Text(
-                                                      "Show All Data",
-                                                      style: TextStyle(
-                                                        fontSize: 11.sp,
-                                                        color:
-                                                            Color(0xff7A7A79),
-                                                      ),
-                                                    ),
-                                                    onPressed: () {},
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      14.0),
-                                                          side: const BorderSide(
-                                                              color: Color(
-                                                                  0xff7A7A79))),
-                                                      elevation: 0.0,
-                                                      backgroundColor:
-                                                          Colors.transparent,
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 120,
-                                                          vertical: 20),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    height: 720.h,
-                                  ),
+                                : Threat_History(bikeProvider: _bikeProvider, bluetoothProvider: _bluetoothProvider,),
                           ],
                         );
                       }),

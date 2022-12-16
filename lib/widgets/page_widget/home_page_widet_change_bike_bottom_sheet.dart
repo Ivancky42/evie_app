@@ -96,6 +96,7 @@ class _ChangeBikeBottomSheetState extends State<ChangeBikeBottomSheet> {
               Container(
                 height: ((1 + _bikeProvider.userBikeList.length) * 59).h,
                 child: ListView.builder(
+                  padding: EdgeInsets.zero,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: _bikeProvider.userBikeList.length,
                   itemBuilder: (context, index) {

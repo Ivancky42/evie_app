@@ -8,7 +8,7 @@ import '../../bluetooth/modelResult.dart';
 
 
 ///Double button dialog
-class HomePageWidget_Status extends StatelessWidget{
+class HomePageWidget_Status extends StatefulWidget{
   String currentDangerState;
   String? lastSeen;
   Placemark? location;
@@ -25,20 +25,25 @@ class HomePageWidget_Status extends StatelessWidget{
   }) : super(key: key);
 
   @override
+  State<HomePageWidget_Status> createState() => _HomePageWidget_StatusState();
+}
+
+class _HomePageWidget_StatusState extends State<HomePageWidget_Status> {
+  @override
   Widget build(BuildContext context) {
     Color dangerColor = Colors.transparent;
     Color fontColor = Color(0xff383838);
     String alertImage = "assets/buttons/location_pin.svg";
-    
-    if(currentDangerState == "safe"){
+
+    if(widget.currentDangerState == "safe"){
       dangerColor = Colors.transparent;
       fontColor = Color(0xff383838);
       alertImage = "assets/buttons/location_pin.svg";
-    } else if(currentDangerState == "warning"){
+    } else if(widget.currentDangerState == "warning"){
       dangerColor = Color(0xffE59200);
       fontColor = Color(0xffECEDEB);
     alertImage = "assets/buttons/warning.svg";
-    }else if(currentDangerState == "danger"){
+    }else if(widget.currentDangerState == "danger"){
       dangerColor = Color(0xffCA0D0D);
       fontColor = Color(0xffECEDEB);
        alertImage = "assets/buttons/alert.svg";
@@ -47,7 +52,7 @@ class HomePageWidget_Status extends StatelessWidget{
       fontColor = Color(0xff383838);
      alertImage = "assets/buttons/location_pin.svg";
     }
-    
+
     return Container(
       height: 80.h,
       width:double.infinity,
@@ -67,7 +72,7 @@ class HomePageWidget_Status extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text("Last seen",style: TextStyle(fontSize: 12,color: fontColor),),
-                Text(location?.name ?? "Not available",style: TextStyle(fontSize: 20, color: fontColor),),
+                Text(widget.location?.name ?? "Not available",style: TextStyle(fontSize: 20, color: fontColor),),
                 Text("1 minutes ago",style: TextStyle(fontSize: 12,color: fontColor),),
 
               ],
@@ -339,7 +344,6 @@ loadMarkerImageString(String dangerStatus){
   switch (dangerStatus) {
     case 'safe':
       {
-
         return "assets/icons/marker_safe.png";
       }
     case 'warning':
