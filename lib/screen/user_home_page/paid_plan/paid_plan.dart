@@ -8,6 +8,7 @@ import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/mapbox_widget.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/threat_history.dart';
 import 'package:evie_test/widgets/page_widget/home_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
@@ -825,7 +826,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                           )),
                                     }
                                   ])
-                                : Threat_History(bikeProvider: _bikeProvider, bluetoothProvider: _bluetoothProvider,),
+                                : Threat_History(bikeProvider: _bikeProvider, bluetoothProvider: _bluetoothProvider, locationProvider: _locationProvider,),
                           ],
                         );
                       }),

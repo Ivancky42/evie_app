@@ -567,6 +567,22 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
+  Future uploadPlaceMarkAddressToFirestore(String deviceIMEI, String eventID, String address) async {
+    try {
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(deviceIMEI)
+          .collection("events")
+          .doc(eventID)
+          .set({
+        'address': address,
+      }, SetOptions(merge: true));
+
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   getQRCodeResult() {
     return scanQRCodeResult;
   }

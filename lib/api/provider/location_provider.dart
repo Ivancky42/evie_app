@@ -103,6 +103,30 @@ class LocationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  returnPlaceMarks(double latitude, double longitude) async {
+
+    Placemark? placeMark;
+
+    try {
+      List<Placemark> placeMarks = await placemarkFromCoordinates(
+          latitude, longitude, localeIdentifier: "en");
+
+      if (placeMarks.isNotEmpty) {
+        for (var element in placeMarks) {
+          placeMark = element;
+        }
+      } else {
+        placeMark = null;
+      }
+
+      return placeMark;
+    }catch(error){
+      debugPrint(error.toString());
+      placeMark = null;
+    }
+  }
+
+
   updateUserPosition(UserLocation userLocation) async {
     userPosition = userLocation;
     //notifyListeners();
