@@ -37,7 +37,7 @@ class _MyAccountState extends State<MyAccount> {
 
     return WillPopScope(
       onWillPop: () async {
-        return true;
+        return false;
       },
       child: Scaffold(
           body: Column(
@@ -92,74 +92,76 @@ class _MyAccountState extends State<MyAccount> {
               ],
             ),
           ),
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Divider(
-                  thickness: 0.5.h,
-                  color: const Color(0xff8E8E8E),
-                  height: 0,
-                ),
-                AccountPageContainer(
-                    content: "Edit Personal Info",
-                    onPress: () {},
-                    trailingImage: "assets/buttons/next.svg"),
-                AccountPageDivider(),
-                AccountPageContainer(
-                    content: "My Garage",
-                    onPress: () {},
-                    trailingImage: "assets/buttons/next.svg"),
-                Divider(
-                  thickness: 11.h,
-                  color: const Color(0xffF4F4F4),
-                ),
-                AccountPageContainer(
-                    content: "Push Notification",
-                    onPress: () {},
-                    trailingImage: "assets/buttons/next.svg"),
-                AccountPageDivider(),
-                AccountPageContainer(
-                    content: "Email Notification",
-                    onPress: () {},
-                    trailingImage: "assets/buttons/next.svg"),
-                AccountPageDivider(),
-                AccountPageContainer(
-                    content: "Display Setting",
-                    onPress: () {},
-                    trailingImage: "assets/buttons/next.svg"),
-                Divider(
-                  thickness: 11.h,
-                  color: const Color(0xffF4F4F4),
-                ),
-                AccountPageContainer(
-                    content: "Help Center",
-                    onPress: () {},
-                    trailingImage: "assets/buttons/external_link.svg"),
-                AccountPageDivider(),
-                AccountPageContainer(
-                    content: "Privacy Policy",
-                    onPress: () {},
-                    trailingImage: "assets/buttons/external_link.svg"),
-                AccountPageDivider(),
-                AccountPageContainer(
-                    content: "Terms & Conditions",
-                    onPress: () {},
-                    trailingImage: "assets/buttons/external_link.svg"),
-                AccountPageDivider(),
-              ],
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Divider(
+                    thickness: 0.5.h,
+                    color: const Color(0xff8E8E8E),
+                    height: 0,
+                  ),
+                  AccountPageContainer(
+                      content: "Edit Personal Info",
+                      onPress: () {changeToEditProfile(context);},
+                      trailingImage: "assets/buttons/next.svg"),
+                  AccountPageDivider(),
+                  AccountPageContainer(
+                      content: "My Garage",
+                      onPress: () {},
+                      trailingImage: "assets/buttons/next.svg"),
+                  Divider(
+                    thickness: 11.h,
+                    color: const Color(0xffF4F4F4),
+                  ),
+                  AccountPageContainer(
+                      content: "Push Notification",
+                      onPress: () {},
+                      trailingImage: "assets/buttons/next.svg"),
+                  AccountPageDivider(),
+                  AccountPageContainer(
+                      content: "Email Notification",
+                      onPress: () {},
+                      trailingImage: "assets/buttons/next.svg"),
+                  AccountPageDivider(),
+                  AccountPageContainer(
+                      content: "Display Setting",
+                      onPress: () {},
+                      trailingImage: "assets/buttons/next.svg"),
+                  Divider(
+                    thickness: 11.h,
+                    color: const Color(0xffF4F4F4),
+                  ),
+                  AccountPageContainer(
+                      content: "Help Center",
+                      onPress: () {},
+                      trailingImage: "assets/buttons/external_link.svg"),
+                  AccountPageDivider(),
+                  AccountPageContainer(
+                      content: "Privacy Policy",
+                      onPress: () {},
+                      trailingImage: "assets/buttons/external_link.svg"),
+                  AccountPageDivider(),
+                  AccountPageContainer(
+                      content: "Terms & Conditions",
+                      onPress: () {},
+                      trailingImage: "assets/buttons/external_link.svg"),
+                  AccountPageDivider(),
+                ],
+              ),
             ),
           ),
           Padding(
             padding: EdgeInsets.only(
                 left: 16.w, right: 16.w, top: 24.h, bottom: 10.h),
             child: Container(
-              height: 56.h,
+              height: 45.h,
               width: double.infinity,
               child: ElevatedButton(
                 child: Text(
                   "Logout",
                   style: TextStyle(
-                    fontSize: 11.sp,
+                    fontSize: 17.sp,
                     color: Color(0xff7A7A79), fontWeight: FontWeight.w700
                   ),
                 ),
@@ -195,23 +197,22 @@ class _MyAccountState extends State<MyAccount> {
                       side:  BorderSide(color: Color(0xff7A7A79), width: 1.5.w)),
                   elevation: 0.0,
                   backgroundColor: Colors.transparent,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 120, vertical: 20),
+
                 ),
               ),
             ),
           ),
           Padding(
             padding: EdgeInsets.only(
-                left: 16.w, right: 16.w, top: 0.h, bottom: 10.h),
+                left: 16.w, right: 16.w, top: 0.h, bottom: 6.h),
             child: Container(
-              height: 56.h,
+              height: 45.h,
               width: double.infinity,
               child: ElevatedButton(
                 child: Text(
                   "Revoke Account",
                   style: TextStyle(
-                      fontSize: 11.sp,
+                      fontSize: 17.sp,
                       color: Color(0xff7A7A79),
                       fontWeight: FontWeight.w700),
                 ),
@@ -222,30 +223,32 @@ class _MyAccountState extends State<MyAccount> {
                       side:  BorderSide(color: Color(0xff7A7A79), width: 1.5.w)),
                   elevation: 0.0,
                   backgroundColor: Colors.transparent,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 120, vertical: 20),
+
                 ),
               ),
             ),
           ),
-          Center(
-            child: Column(
-              children: [
-                Text(
-                  "Evie v0.0.1",
-                  style: TextStyle(
+          Padding(
+            padding: EdgeInsets.only(bottom: 14.h),
+            child: Center(
+              child: Column(
+                children: [
+                  Text(
+                    "Evie v0.0.1",
+                    style: TextStyle(
+                        fontSize: 12.sp,
+                      color: Color(0xff8E8E8E),
+                    ),
+                  ),
+                  Text(
+                    "Copyright 2022 by Beno Inc",
+                    style: TextStyle(
                       fontSize: 12.sp,
-                    color: Color(0xff8E8E8E),
+                      color: Color(0xff8E8E8E),
+                    ),
                   ),
-                ),
-                Text(
-                  "Copyright 2022 by Beno Inc",
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: Color(0xff8E8E8E),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

@@ -1,6 +1,10 @@
+import 'package:evie_test/api/colours.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+
 import 'package:flutter/cupertino.dart';
+
+import 'evie_button.dart';
 
 
 ///Cupertino for system dialog usage only
@@ -31,7 +35,6 @@ class EvieDoubleButtonDialogCupertino extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (BuildContext context, Orientation orientation, DeviceType deviceType) {
       return  CupertinoAlertDialog(
         title: Text(
           title,
@@ -78,7 +81,6 @@ class EvieDoubleButtonDialogCupertino extends StatelessWidget{
 
 
       );
-    },);
   }
 }
 
@@ -87,22 +89,20 @@ class EvieDoubleButtonDialogCupertino extends StatelessWidget{
 class EvieDoubleButtonDialog extends StatelessWidget{
   // final String buttonNumber;
   final String title;
-  final String content;
-  final Widget? image;
-  final String? leftContent;
+  final Widget childContent;
+  final String leftContent;
   final String rightContent;
-  final VoidCallback? onPressedLeft;
+  final VoidCallback onPressedLeft;
   final VoidCallback onPressedRight;
 
   const EvieDoubleButtonDialog({
     Key? key,
     //required this.buttonNumber,
     required this.title,
-    required this.content,
-    this.image,
-    this.leftContent,
+    required this.childContent,
+    required this.leftContent,
     required this.rightContent,
-    this.onPressedLeft,
+    required this.onPressedLeft,
     required this.onPressedRight
   }) : super(key: key);
 
@@ -110,109 +110,88 @@ class EvieDoubleButtonDialog extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (BuildContext context, Orientation orientation, DeviceType deviceType) {
-      return  Dialog(
+
+      return Dialog(
+          insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(10),
           ),
           elevation: 0.0,
-          //backgroundColor: Colors.transparent,
+          backgroundColor: Color(0xffECEDEB),
           child: Container(
+            padding:  EdgeInsets.only(
+              left: 17.w,
+              right: 17.w,
+              top: 16.w,
+                bottom: 16.w
+            ),
+
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                image != null ? image! : SizedBox(),
+
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16,16,16,0),
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                    ),
-                  ),
+                  padding:  EdgeInsets.only(bottom: 8.h),
+                  child: Text(title, style: TextStyle(fontSize: 24.sp),),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16,16,16,0),
-                  child: Text(
-                    content,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: Colors.grey,
-                    ),
+                  padding:  EdgeInsets.only(bottom: 11.h),
+                  child: Divider(
+                    thickness: 0.5.h,
+                    color: const Color(0xff8E8E8E),
+                    height: 0,
                   ),
                 ),
 
-                const SizedBox(
-                  height:30.0,
-                ),
+                SizedBox(height: 8.h,),
+
+                childContent,
 
                 Padding(
-                    padding: EdgeInsets.only(top: 2.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                              onPressed: onPressedLeft,
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0)),
-                                  ///Set to transparent
-                                  elevation: 0.0,
-                                  backgroundColor: Color(0xff00B6F1).withOpacity(0)),
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(3.w, 0, 3.w, 0),
-                                child: Text(
-                                  leftContent!,
-                                  style: TextStyle(
-                                    fontSize: 10.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              )
-                            //width: double.infinity, height: 40,
+                  padding: EdgeInsets.only(top: 9.h),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: EvieButton_ReversedColor(
+                          width: double.infinity,
+                          height: 48.h,
+                          child: Text(
+                            leftContent,
+                            style: TextStyle(
+                                color: EvieColors.PrimaryColor,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w700
+                            ),
+                          ),
+                          onPressed: onPressedLeft,
+                        ),
+                      ),
+
+                      Expanded(
+                        child:
+                      EvieButton(
+                        width: double.infinity,
+                        height: 48.h,
+                        child: Text(
+                          rightContent,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w700
                           ),
                         ),
-                        SizedBox(width: 2.w,),
-                        Expanded(
-                          child: ElevatedButton(
-                              onPressed: onPressedRight,
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0)),
-                                  backgroundColor: const Color(0xff00B6F1)),
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(3.w, 0, 3.w, 0),
-                                child: Text(
-                                  rightContent,
-                                  style: TextStyle(
-                                    fontSize: 10.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              )
-                            //width: double.infinity, height: 40,
-                          ),
-                        ),
-                      ],
-                    )
-                ),
+                        onPressed: onPressedRight
+                      ),
+      ),
+                    ],
+                  ),
+                )
+
               ],
             ),
-            padding: const EdgeInsets.only(
-              left: 20,
-              top: 20,
-              right: 20,
-              bottom: 20,
-            ),
-            margin: const EdgeInsets.only(top: 45),
-
           )
       );
-    },);
-  }
+    }
 }

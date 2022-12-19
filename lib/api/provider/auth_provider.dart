@@ -196,14 +196,14 @@ class AuthProvider extends ChangeNotifier {
   }
 
   ///Change user password
-  Future<void> changeUserPassword(String password, String originalpassword) async {
+  Future changeUserPassword(String password) async {
     var firebaseUser = _auth.currentUser!;
-    if (firebaseUser != null) {
-      try {
-        await firebaseUser.updatePassword(password);
-      } on FirebaseAuthException catch (e) {
-        debugPrint(e.toString());
-      }
+    try {
+      await firebaseUser.updatePassword(password);
+      return true;
+    } on FirebaseAuthException catch (e) {
+      debugPrint(e.toString());
+      return false;
     }
   }
 
@@ -463,10 +463,10 @@ class AuthProvider extends ChangeNotifier {
   }
 
   ///ReAuthentication
-  Future<bool> reauthentication(originalpassword) async {
+  Future<bool> reauthentication(String originalPassword) async {
     var firebaseUser = _auth.currentUser!;
     AuthCredential credential = EmailAuthProvider.credential(
-        email: getEmail!, password: originalpassword);
+        email: getEmail!, password: originalPassword);
 
     try {
       await firebaseUser.reauthenticateWithCredential(credential);

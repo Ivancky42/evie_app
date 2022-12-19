@@ -87,11 +87,8 @@ class EvieButton extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.w)),
                   elevation: 0.0,
                   backgroundColor: backgroundColor ?? EvieColors.PrimaryColor,
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 14.h),
-            //       textStyle: const TextStyle(
-            //           fontSize: 30,
-            // //          fontWeight: FontWeight.bold
-            //       )
+                  padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 14.h),
+
               ),
             ),
           ),
@@ -131,14 +128,11 @@ class EvieButton_ReversedColor extends StatelessWidget {
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0)),
+                      borderRadius: BorderRadius.circular(10.w)),
                   elevation: 0.0,
                   backgroundColor: const Color(0xffDFE0E0),
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                  textStyle: const TextStyle(
-                    fontSize: 30,
-                    //          fontWeight: FontWeight.bold
-                  )),
+                  padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 14.h),
+              ),
             ),
           ),
         )

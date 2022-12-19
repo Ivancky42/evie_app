@@ -1,3 +1,5 @@
+import 'package:evie_test/screen/my_account/edit_profile.dart';
+import 'package:evie_test/screen/my_account/my_account.dart';
 import 'package:evie_test/screen/onboarding/email_preference_control.dart';
 import 'package:evie_test/screen/onboarding/lets_go.dart';
 import 'package:evie_test/screen/onboarding/name_bike.dart';
@@ -246,6 +248,28 @@ void changeToDisplayControlScreen(BuildContext context) {
 }
 
 
+void changeToEditProfile(BuildContext context) {
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil("/editProfile", (route) => false);
+  }
+
+void changeToVerifyPassword(BuildContext context) {
+  Navigator.of(context)
+      .pushNamedAndRemoveUntil("/verifyPassword", (route) => false);
+}
+
+void changeToEnterNewPassword(BuildContext context) {
+  Navigator.of(context)
+      .pushNamedAndRemoveUntil("/enterNewPassword", (route) => false);
+}
+
+
+void changeToMyAccount(BuildContext context) {
+  Navigator.of(context)
+      .pushNamedAndRemoveUntil("/myAccount", (route) => false);
+}
+
+
 ///Future builder
 void changeToNotificationDetailsScreen(BuildContext context, key, value) {
   Navigator.push(context,
@@ -258,8 +282,6 @@ void changeToStripeCheckoutScreen(BuildContext context, value) {
     MaterialPageRoute(builder: (context) => StripeCheckoutScreen(sessionId: value,)),
   );
 }
-
-
 
 
 void changeToTestScreen(BuildContext context) {

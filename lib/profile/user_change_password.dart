@@ -252,8 +252,7 @@ class _UserChangePasswordState extends State<UserChangePassword> {
                                     debugPrint("authentication failed");
                                       }else{
                                         _authProvider.changeUserPassword(
-                                        _passwordController.text.trim(),
-                                        _passwordOriginalController.text.trim()); //Last value field is phone number
+                                        _passwordController.text.trim()); //Last value field is phone number
                                         changeToUserProfileScreen(context);
 
                                     ScaffoldMessenger.of(context)

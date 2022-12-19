@@ -852,7 +852,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -861,10 +861,11 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
         // if direction is null, then device does not support this sensor
         // show error message
-        if (direction == null)
+        if (direction == null) {
           return Center(
             child: Text("Device does not have sensors !"),
           );
+        }
 
         return Material(
           shape: CircleBorder(),

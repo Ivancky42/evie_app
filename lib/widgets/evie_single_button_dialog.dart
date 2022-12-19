@@ -94,7 +94,7 @@ class EvieSingleButtonDialog extends StatelessWidget{
             borderRadius: BorderRadius.circular(20),
           ),
           elevation: 0.0,
-      //    backgroundColor: Colors.transparent,
+          backgroundColor: Color(0xffECEDEB),
           child: Container(
             child: Column(
               mainAxisSize: MainAxisSize.min,

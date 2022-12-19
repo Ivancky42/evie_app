@@ -62,6 +62,54 @@ class CurrentUserProvider extends ChangeNotifier {
   }
 
   ///User update user profile
+   Future updateUserName(String name) async {
+    try {
+      final FirebaseAuth auth = FirebaseAuth.instance;
+      final User? user = auth.currentUser;
+      final uid = user?.uid;
+
+      //Update
+      var docUser = FirebaseFirestore.instance.collection(usersCollection);
+          await docUser
+          .doc(uid)
+          .update({
+        'name': name,
+        'updated': Timestamp.now(),
+      });
+      notifyListeners();
+
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  ///User update user profile
+ Future updateUserProfileImage(String imageURL) async {
+    try {
+      ///Get current user id, might get from provider
+      final FirebaseAuth auth = FirebaseAuth.instance;
+      final User? user = auth.currentUser;
+      final uid = user?.uid;
+
+      //Update
+      var docUser = FirebaseFirestore.instance.collection(usersCollection);
+      docUser
+          .doc(uid)
+          .update({
+        'profileIMG': imageURL,
+        'updated': Timestamp.now(),
+      });
+      notifyListeners();
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  ///User update user profile
   void updateUserProfile(imageURL, name, phoneNo) async {
     try {
       ///Get current user id, might get from provider
