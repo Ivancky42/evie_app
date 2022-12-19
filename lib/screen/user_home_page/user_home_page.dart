@@ -10,7 +10,7 @@ import 'package:evie_test/screen/user_home_bluetooth.dart';
 import 'package:evie_test/screen/user_home_setting.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import '../screen/my_account/my_account.dart';
+import '../my_account/my_account.dart';
 
 ///User default home page when login condition is true
 

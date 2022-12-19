@@ -32,7 +32,7 @@ import '../api/provider/notification_provider.dart';
 import '../api/todays_quote.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import '../main.dart';
-import '../profile/user_home_page.dart';
+import 'user_home_page/user_home_page.dart';
 import 'login_page.dart';
 import 'onboarding/lets_go.dart';
 

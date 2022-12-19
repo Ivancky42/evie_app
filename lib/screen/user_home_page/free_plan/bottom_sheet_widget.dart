@@ -1,12 +1,11 @@
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/switch_bike.dart';
+import 'package:evie_test/screen/user_home_page/switch_bike.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../bluetooth/modelResult.dart';
-import '../home_page_widet_change_bike_bottom_sheet.dart';
 
 class Bike_Name_Row extends StatelessWidget {
   String bikeName;

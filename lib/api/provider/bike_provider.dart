@@ -23,6 +23,13 @@ enum ScanQRCodeResult {
   success,
 }
 
+enum SwitchBikeResult {
+  unknown,
+  changing,
+  failure,
+  success,
+}
+
 class BikeProvider extends ChangeNotifier {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
@@ -56,6 +63,10 @@ class BikeProvider extends ChangeNotifier {
   StreamSubscription? rfidListSubscription;
 
   ScanQRCodeResult scanQRCodeResult = ScanQRCodeResult.unknown;
+  SwitchBikeResult switchBikeResult = SwitchBikeResult.unknown;
+
+  StreamController<SwitchBikeResult> switchBikeResultListener =
+  StreamController.broadcast();
 
   ///Get current user model
   Future<void> init(UserModel? user) async {
@@ -145,7 +156,7 @@ class BikeProvider extends ChangeNotifier {
   }
 
   ///Get bike information based on selected current bike
-  Future<void> getBike(String? imei) async {
+  Future getBike(String? imei) async {
     currentBikeModel = null;
     SharedPreferences prefs = await _prefs;
 
@@ -168,14 +179,21 @@ class BikeProvider extends ChangeNotifier {
               prefs.setString('currentBikeIMEI', imei!);
               prefs.setInt('currentBikeList', index);
 
+              ///Switch case
+              switchBikeResult = SwitchBikeResult.success;
+              switchBikeResultListener.add(switchBikeResult);
+
               notifyListeners();
             } else {
               currentBikeModel = null;
             }
           } on Exception catch (exception) {
+            switchBikeResult = SwitchBikeResult.failure;
+            switchBikeResultListener.add(switchBikeResult);
             debugPrint(exception.toString());
           } catch (_) {
-            return null;
+            switchBikeResult = SwitchBikeResult.failure;
+            switchBikeResultListener.add(switchBikeResult);
           }
           getRFIDList();
           getBikeUserList();
@@ -183,6 +201,10 @@ class BikeProvider extends ChangeNotifier {
       }
     }
   }
+
+  Stream<SwitchBikeResult> switchBike() {
+  return switchBikeResultListener.stream;
+    }
 
   updateBikeName(name) async {
     try {
@@ -199,7 +221,7 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> changeBikeUsingIMEI(String deviceIMEI) async {
+   changeBikeUsingIMEI(String deviceIMEI) async {
     SharedPreferences prefs = await _prefs;
     currentBikeList = 0;
     await prefs.setInt('currentBikeList', currentBikeList);
@@ -352,7 +374,6 @@ class BikeProvider extends ChangeNotifier {
       }, SetOptions(merge: true));
 
       ///Update user notification id status == removed
-
       FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(targetUID)
@@ -584,14 +605,6 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
-  getQRCodeResult() {
-    return scanQRCodeResult;
-  }
-
-  setQRCodeResult(ScanQRCodeResult result) {
-    scanQRCodeResult = result;
-    notifyListeners();
-  }
 
   deleteBike(String imei) {
     controlBikeList("first");

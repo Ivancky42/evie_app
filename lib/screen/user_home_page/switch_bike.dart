@@ -1,5 +1,5 @@
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/bike_container.dart';
+import 'package:evie_test/screen/user_home_page/bike_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -7,11 +7,11 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../../api/colours.dart';
-import '../../../api/navigator.dart';
-import '../../../api/provider/bike_provider.dart';
-import '../../../api/provider/bluetooth_provider.dart';
-import '../../../bluetooth/modelResult.dart';
+import '../../api/colours.dart';
+import '../../api/navigator.dart';
+import '../../api/provider/bike_provider.dart';
+import '../../api/provider/bluetooth_provider.dart';
+import '../../bluetooth/modelResult.dart';
 
 class SwitchBike extends StatefulWidget {
   const SwitchBike({Key? key}) : super(key: key);

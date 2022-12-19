@@ -1,17 +1,21 @@
+import 'dart:async';
+
 import 'package:evie_test/api/model/user_bike_model.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../../api/colours.dart';
-import '../../../api/model/bike_model.dart';
-import '../../../api/provider/bike_provider.dart';
-import '../../../api/provider/bluetooth_provider.dart';
-import '../../../bluetooth/modelResult.dart';
+import '../../api/colours.dart';
+import '../../api/model/bike_model.dart';
+import '../../api/provider/bike_provider.dart';
+import '../../api/provider/bluetooth_provider.dart';
+import '../../bluetooth/modelResult.dart';
 
 class BikeContainer extends StatefulWidget {
   final BikeModel bikeModel;
@@ -82,7 +86,7 @@ class _BikeContainerState extends State<BikeContainer> {
               width: 20.w,
             ),
             Text(getCurrentBikeStatusString(
-                isDeviceConnected!,
+                isDeviceConnected,
                 widget.bikeModel.location!.status)),
           ],
         ),
@@ -93,10 +97,28 @@ class _BikeContainerState extends State<BikeContainer> {
           trackColor: const Color(0xff6A51CA).withOpacity(0.5),
           onChanged: (value) async {
             if (value) {
+              ///Cannot await because listen cannot end
+              ///Create and change connection state result
               await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
-              //_bluetoothProvider.startScanAndConnect();
+              StreamSubscription? subscription;
+              subscription = _bikeProvider.switchBike().listen((result) {
+                if(result == SwitchBikeResult.success){
+                  _bluetoothProvider.startScanAndConnect();
+                  Navigator.pop(context);
+                }else if(result == SwitchBikeResult.failure){
+                  subscription?.cancel();
+                  SmartDialog.show(
+                      widget: EvieSingleButtonDialog(
+                          title: "Error",
+                          content: "Cannot change bike, please try again.",
+                          rightContent: "OK",
+                          onPressedRight: () {
+                            SmartDialog.dismiss();
+                          }));
 
-              Navigator.pop(context);
+                }
+              });
+
             } else {
               _bluetoothProvider.disconnectDevice();
             }
