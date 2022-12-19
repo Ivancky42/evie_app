@@ -1,0 +1,255 @@
+import 'dart:io';
+import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/screen/my_account/my_account_widget.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:evie_test/widgets/widgets.dart';
+import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:evie_test/widgets/evie_double_button_dialog.dart';
+import 'package:evie_test/widgets/evie_button.dart';
+
+import '../../api/navigator.dart';
+
+///User profile page with user account information
+
+class MyAccount extends StatefulWidget {
+  const MyAccount({Key? key}) : super(key: key);
+
+  @override
+  _MyAccountState createState() => _MyAccountState();
+}
+
+class _MyAccountState extends State<MyAccount> {
+  late CurrentUserProvider _currentUserProvider;
+  late AuthProvider _authProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    _authProvider = Provider.of<AuthProvider>(context);
+
+    return WillPopScope(
+      onWillPop: () async {
+        return true;
+      },
+      child: Scaffold(
+          body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(16.w, 51.h, 0.w, 7.h),
+            child: Container(
+              child: Text(
+                "My Account",
+                style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+          Container(
+            height: 96.h,
+            child: Row(
+              children: [
+                Padding(
+                  padding:
+                      EdgeInsets.fromLTRB(27.7.w, 14.67.h, 18.67.w, 14.67.h),
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      //imageUrl: document['profileIMG'],
+                      imageUrl:
+                          _currentUserProvider.currentUserModel!.profileIMG,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      width: 66.67.h,
+                      height: 66.67.h,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _currentUserProvider.currentUserModel?.name ?? "",
+                      style: TextStyle(
+                          fontSize: 18.sp, fontWeight: FontWeight.w500),
+                    ),
+                    Text(
+                      _currentUserProvider.currentUserModel?.email ?? "",
+                      style:
+                          TextStyle(fontSize: 16.sp, color: Color(0xff5F6060)),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Divider(
+                  thickness: 0.5.h,
+                  color: const Color(0xff8E8E8E),
+                  height: 0,
+                ),
+                AccountPageContainer(
+                    content: "Edit Personal Info",
+                    onPress: () {},
+                    trailingImage: "assets/buttons/next.svg"),
+                AccountPageDivider(),
+                AccountPageContainer(
+                    content: "My Garage",
+                    onPress: () {},
+                    trailingImage: "assets/buttons/next.svg"),
+                Divider(
+                  thickness: 11.h,
+                  color: const Color(0xffF4F4F4),
+                ),
+                AccountPageContainer(
+                    content: "Push Notification",
+                    onPress: () {},
+                    trailingImage: "assets/buttons/next.svg"),
+                AccountPageDivider(),
+                AccountPageContainer(
+                    content: "Email Notification",
+                    onPress: () {},
+                    trailingImage: "assets/buttons/next.svg"),
+                AccountPageDivider(),
+                AccountPageContainer(
+                    content: "Display Setting",
+                    onPress: () {},
+                    trailingImage: "assets/buttons/next.svg"),
+                Divider(
+                  thickness: 11.h,
+                  color: const Color(0xffF4F4F4),
+                ),
+                AccountPageContainer(
+                    content: "Help Center",
+                    onPress: () {},
+                    trailingImage: "assets/buttons/external_link.svg"),
+                AccountPageDivider(),
+                AccountPageContainer(
+                    content: "Privacy Policy",
+                    onPress: () {},
+                    trailingImage: "assets/buttons/external_link.svg"),
+                AccountPageDivider(),
+                AccountPageContainer(
+                    content: "Terms & Conditions",
+                    onPress: () {},
+                    trailingImage: "assets/buttons/external_link.svg"),
+                AccountPageDivider(),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                left: 16.w, right: 16.w, top: 24.h, bottom: 10.h),
+            child: Container(
+              height: 56.h,
+              width: double.infinity,
+              child: ElevatedButton(
+                child: Text(
+                  "Logout",
+                  style: TextStyle(
+                    fontSize: 11.sp,
+                    color: Color(0xff7A7A79), fontWeight: FontWeight.w700
+                  ),
+                ),
+                onPressed: () {
+                  try {
+                    _authProvider.signOut(context).then((result) {
+                      if (result == true) {
+                        // _authProvider.clear();
+
+                        changeToWelcomeScreen(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Signed out'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Error, Try Again'),
+                            duration: Duration(seconds: 4),
+                          ),
+                        );
+                      }
+                    });
+                  } catch (e) {
+                    debugPrint(e.toString());
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14.0),
+                      side:  BorderSide(color: Color(0xff7A7A79), width: 1.5.w)),
+                  elevation: 0.0,
+                  backgroundColor: Colors.transparent,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 120, vertical: 20),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                left: 16.w, right: 16.w, top: 0.h, bottom: 10.h),
+            child: Container(
+              height: 56.h,
+              width: double.infinity,
+              child: ElevatedButton(
+                child: Text(
+                  "Revoke Account",
+                  style: TextStyle(
+                      fontSize: 11.sp,
+                      color: Color(0xff7A7A79),
+                      fontWeight: FontWeight.w700),
+                ),
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14.0),
+                      side:  BorderSide(color: Color(0xff7A7A79), width: 1.5.w)),
+                  elevation: 0.0,
+                  backgroundColor: Colors.transparent,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 120, vertical: 20),
+                ),
+              ),
+            ),
+          ),
+          Center(
+            child: Column(
+              children: [
+                Text(
+                  "Evie v0.0.1",
+                  style: TextStyle(
+                      fontSize: 12.sp,
+                    color: Color(0xff8E8E8E),
+                  ),
+                ),
+                Text(
+                  "Copyright 2022 by Beno Inc",
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: Color(0xff8E8E8E),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      )),
+    );
+  }
+}

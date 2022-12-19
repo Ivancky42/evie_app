@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
 import '../../bluetooth/modelResult.dart';
-import '../evie_switch.dart';
+import '../../widgets/evie_switch.dart';
 
 ///Pass is connected
 ///Pass current bike model

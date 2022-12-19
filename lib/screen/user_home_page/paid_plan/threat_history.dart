@@ -140,7 +140,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                           );
                         },
                         // orderBy is compulsory to enable pagination
-                        query: FirebaseFirestore.instance.collection('bikes').doc(widget.bikeProvider.currentBikeModel!.deviceIMEI!).collection("events").orderBy("created", descending: true),
+                        query: FirebaseFirestore.instance.collection("bikes").doc(widget.bikeProvider.currentBikeModel!.deviceIMEI!).collection("events").orderBy("created", descending: true),
                         itemsPerPage: 10,
                         // to fetch real-time data
                         isLive: true,

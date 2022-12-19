@@ -8,4 +8,7 @@ class EvieLength {
   static var buttonWord_WordBottom = 60.h;
 
   static var button_Bottom = 56.h;
+
+  static var bottom_bar_icon_height = 51.67.h;
+
 }

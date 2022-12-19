@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../bluetooth/modelResult.dart';
-import '../../../widgets/page_widget/home_page_widet_change_bike_bottom_sheet.dart';
+import '../home_page_widet_change_bike_bottom_sheet.dart';
 
 class Bike_Name_Row extends StatelessWidget {
   String bikeName;

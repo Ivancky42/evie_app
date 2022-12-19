@@ -29,6 +29,7 @@ class BikeProvider extends ChangeNotifier {
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
   String bikesCollection = dotenv.env['DB_COLLECTION_BIKES'] ?? 'DB not found';
   String rfidCollection = dotenv.env['DB_COLLECTION_RFID'] ?? 'DB not found';
+  String eventsCollection = dotenv.env['DB_COLLECTION_EVENTS'] ?? 'DB not found';
   String inventoryCollection =
       dotenv.env['DB_COLLECTION_INVENTORY'] ?? 'DB not found';
 
@@ -673,6 +674,9 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
+  queryBikeEvents()async{
+    return FirebaseFirestore.instance.collection(bikesCollection).doc(currentBikeModel!.deviceIMEI!).collection(eventsCollection).orderBy("created", descending: true);
+  }
   clear() async {
     SharedPreferences prefs = await _prefs;
     prefs.remove('currentBikeName');

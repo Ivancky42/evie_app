@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/page_widget/home_page_widet_change_bike_bottom_sheet.dart';
+import 'package:evie_test/screen/user_home_page/home_page_widet_change_bike_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

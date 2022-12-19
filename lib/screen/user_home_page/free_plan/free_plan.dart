@@ -5,7 +5,7 @@ import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/free_plan/mapbox_widget.dart';
-import 'package:evie_test/widgets/page_widget/home_page_widget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +24,7 @@ import '../../../api/provider/location_provider.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_double_button_dialog.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
+import '../home_page_widget.dart';
 import '../paid_plan/paid_plan.dart';
 import 'bottom_sheet_widget.dart';
 
