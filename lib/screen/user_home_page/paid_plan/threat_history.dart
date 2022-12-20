@@ -185,7 +185,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14.0),
+                              borderRadius: BorderRadius.circular(10.0),
                               side:  BorderSide(color: Color(0xff7A7A79), width: 1.5.w)),
                           elevation: 0.0,
                           backgroundColor: Colors.transparent,

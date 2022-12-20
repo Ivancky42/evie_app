@@ -29,6 +29,7 @@ import '../../../widgets/evie_double_button_dialog.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../free_plan/free_plan.dart';
 import '../home_page_widget.dart';
+import 'bike_security_status/safe/bike_safe.dart';
 import 'bottom_sheet_widget.dart';
 import 'package:location/location.dart';
 import 'package:latlong2/latlong.dart';
@@ -49,7 +50,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
   ///When get data from _bluetoothProvider.cableLockState is not equal to unknown
   ///Need either lock/unlock
-  bool? isDeviceConnected;
+  bool isDeviceConnected = false;
   String carbonFootprint = "D";
   String mileage = "D";
 
@@ -351,245 +352,10 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                             currentScroll <= 0.8
                                 ? Stack(children: [
                                     ///Bike Connected
-                                    if (isDeviceConnected == true) ...{
-                                      Container(
-                                          height: 636.h,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFECEDEB),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Center(
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 11.h),
-                                                      child: Image.asset(
-                                                        "assets/buttons/home_indicator.png",
-                                                        width: 40.w,
-                                                        height: 4.h,
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.fromLTRB(
-                                                              16.w, 9.h, 0, 0),
-                                                      child: Bike_Name_Row(
-                                                        bikeName: _bikeProvider
-                                                                .currentBikeModel
-                                                                ?.deviceName ??
-                                                            "",
-                                                        distanceBetween:
-                                                            distanceBetween ??
-                                                                "-",
-                                                        currentBikeStatusImage:
-                                                            currentBikeStatusImage, isDeviceConnected: isDeviceConnected!,
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.fromLTRB(
-                                                              16.w,
-                                                              17.15.h,
-                                                              0,
-                                                              0),
-                                                      child: IntrinsicHeight(
-                                                        child: Bike_Status_Row(
-                                                          batteryImage: getBatteryImage(
-                                                              _bikeProvider
-                                                                      .currentBikeModel
-                                                                      ?.batteryPercent ??
-                                                                  0),
-                                                          batteryPercentage:
-                                                              _bikeProvider
-                                                                      .currentBikeModel
-                                                                      ?.batteryPercent ??
-                                                                  0,
-                                                          currentSecurityIcon:
-                                                          getSecurityImageWidgetBluetooth(
-                                                              _bluetoothProvider
-                                                                  .cableLockState
-                                                                  ?.lockState ??
-                                                                  LockState
-                                                                      .unknown,
-                                                              _bikeProvider
-                                                                  .currentBikeModel
-                                                                  ?.location!
-                                                                  .status ??
-                                                                  ""),
-                                                          child: getSecurityTextWidget(
-                                                              _bluetoothProvider
-                                                                      .cableLockState
-                                                                      ?.lockState ??
-                                                                  LockState
-                                                                      .unknown,
-                                                              _bikeProvider
-                                                                      .currentBikeModel
-                                                                      ?.location!
-                                                                      .status ??
-                                                                  ""),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 31.h),
-                                                      child: Column(
-                                                        children: [
-                                                          SizedBox(
-                                                            height: 96.h,
-                                                            width: 96.w,
-                                                            child:
-                                                                FloatingActionButton(
-                                                              elevation: 0,
-                                                              backgroundColor: cableLockState
-                                                                          ?.lockState ==
-                                                                      LockState
-                                                                          .lock
-                                                                  ? lockColour
-                                                                  : const Color(
-                                                                      0xffC1B7E8),
-                                                              onPressed: cableLockState
-                                                                          ?.lockState ==
-                                                                      LockState
-                                                                          .lock
-                                                                  ? () {
-                                                                      ///Check is connected
-
-                                                                      SmartDialog
-                                                                          .showLoading(
-                                                                              msg: "Unlocking");
-                                                                      StreamSubscription?
-                                                                          subscription;
-                                                                      subscription = _bluetoothProvider
-                                                                          .cableUnlock()
-                                                                          .listen(
-                                                                              (unlockResult) {
-                                                                        SmartDialog.dismiss(
-                                                                            status:
-                                                                                SmartStatus.loading);
-                                                                        subscription
-                                                                            ?.cancel();
-                                                                        if (unlockResult.result ==
-                                                                            CommandResult.success) {
-                                                                          ScaffoldMessenger.of(context)
-                                                                              .showSnackBar(
-                                                                            SnackBar(
-                                                                              content: Text(
-                                                                                'Bike is unlocked. To lock bike, pull the lock handle on the bike.',
-                                                                                style: TextStyle(fontSize: 16.sp),
-                                                                              ),
-                                                                              duration: Duration(seconds: 2),
-                                                                            ),
-                                                                          );
-                                                                        } else {
-                                                                          SmartDialog.dismiss(
-                                                                              status: SmartStatus.loading);
-                                                                          subscription
-                                                                              ?.cancel();
-                                                                          ScaffoldMessenger.of(context)
-                                                                              .showSnackBar(
-                                                                            SnackBar(
-                                                                              width: 358.w,
-                                                                              behavior: SnackBarBehavior.floating,
-                                                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                                                                              content: Container(
-                                                                                height: 80.h,
-                                                                                child: Text(
-                                                                                  'Bike is unlocked. To lock bike, pull the lock handle on the bike.',
-                                                                                  style: TextStyle(fontSize: 16.sp),
-                                                                                ),
-                                                                              ),
-                                                                              duration: const Duration(seconds: 4),
-                                                                            ),
-                                                                          );
-                                                                        }
-                                                                      }, onError: (error) {
-                                                                        SmartDialog.dismiss(
-                                                                            status:
-                                                                                SmartStatus.loading);
-                                                                        subscription
-                                                                            ?.cancel();
-                                                                        SmartDialog.show(
-                                                                            widget: EvieSingleButtonDialogCupertino(
-                                                                                title: "Error",
-                                                                                content: "Cannot unlock bike, please place the phone near the bike and try again.",
-                                                                                rightContent: "OK",
-                                                                                onPressedRight: () {
-                                                                                  SmartDialog.dismiss();
-                                                                                }));
-                                                                      });
-                                                                    }
-                                                                  : null,
-                                                              //icon inside button
-                                                              child: lockImage,
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 12.h,
-                                                          ),
-                                                          if (connectionState
-                                                                  ?.name ==
-                                                              "connecting") ...{
-                                                            Text(
-                                                              "Connecting bike",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      12.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  color: const Color(
-                                                                      0xff3F3F3F)),
-                                                            ),
-                                                          } else if (connectionState
-                                                                  ?.name ==
-                                                              "connected") ...{
-                                                            Text(
-                                                              "Tap to unlock bike",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      12.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  color: Color(
-                                                                      0xff3F3F3F)),
-                                                            ),
-                                                          } else ...{
-                                                            Text(
-                                                              "",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      12.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  color: Color(
-                                                                      0xff3F3F3F)),
-                                                            ),
-                                                          },
-                                                           SizedBox(
-                                                             height: 11.h,
-                                                           ),
-                                                          SvgPicture.asset(
-                                                            "assets/buttons/up.svg",
-
-                                                          ),
-
-                                                        ],
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          )),
+                                    if (isDeviceConnected) ...{
+                                      ///Switch bike state
+                                      ///safe, warning, danger
+                                      BikeSafe(currentBikeStatusImage: currentBikeStatusImage, lockImage: lockImage, distanceBetween: distanceBetween, lockColor: lockColour, isDeviceConnected: isDeviceConnected,),
                                     }
 
                                     ///Bike Not Connected
