@@ -179,8 +179,8 @@ class BluetoothProvider extends ChangeNotifier {
     });
   }
 
-  void stopScan() {
-    scanSubscription?.cancel();
+  stopScan() async {
+    await scanSubscription?.cancel();
   }
 
   setAutoConnect() {
@@ -194,6 +194,7 @@ class BluetoothProvider extends ChangeNotifier {
       connectDevice(currentBikeModel!.macAddr!);
     }
     else {
+      await stopScan();
       scanSubscription = flutterReactiveBle.scanForDevices(
           scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
         if (device.name == currentBikeModel?.bleName) {
@@ -208,8 +209,7 @@ class BluetoothProvider extends ChangeNotifier {
 
   connectDevice(String foundDeviceId) async {
 
-    stopScan();
-    scanSubscription?.cancel();
+    await scanSubscription?.cancel();
 
     selectedDeviceId = foundDeviceId;
 
@@ -248,7 +248,10 @@ class BluetoothProvider extends ChangeNotifier {
   disconnectDevice() async {
 
     await notifySubscription?.cancel();
+    await Future.delayed(const Duration(milliseconds: 300));
     await connectSubscription?.cancel();
+    await Future.delayed(const Duration(milliseconds: 300));
+
 
     if (connectionStateUpdate != null) {
       connectionStateUpdate = ConnectionStateUpdate(
