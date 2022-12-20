@@ -32,6 +32,7 @@ class Threat_History extends StatefulWidget {
 class _Threat_HistoryState extends State<Threat_History> {
 
   PaginateRefreshedChangeListener refreshChangeListener = PaginateRefreshedChangeListener();
+  int? snapshotLength;
 
   @override
   Widget build(BuildContext context) {
@@ -43,14 +44,20 @@ class _Threat_HistoryState extends State<Threat_History> {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-
+          Padding(
+            padding:  EdgeInsets.only(top: 13.h),
+            child: SvgPicture.asset(
+              "assets/buttons/down.svg",
+            ),
+          ),
           Row(
             mainAxisAlignment:
             MainAxisAlignment.spaceBetween,
             children: [
+
               Padding(
                 padding:
-                EdgeInsets.only(left: 17.w, top: 38.h, bottom: 11.h),
+                EdgeInsets.only(left: 17.w, top: 10.h, bottom: 11.h),
                 child: Text(
                   "Threat History",
                   style: TextStyle(
@@ -100,6 +107,8 @@ class _Threat_HistoryState extends State<Threat_History> {
                         itemBuilder: (context, documentSnapshots, index) {
                           final data = documentSnapshots[index].data() as Map?;
 
+                           snapshotLength = data?.length;
+
                           return Column(
                             children: [
                               ListTile(
@@ -141,9 +150,9 @@ class _Threat_HistoryState extends State<Threat_History> {
                         },
                         // orderBy is compulsory to enable pagination
                         query: FirebaseFirestore.instance.collection("bikes").doc(widget.bikeProvider.currentBikeModel!.deviceIMEI!).collection("events").orderBy("created", descending: true),
-                        itemsPerPage: 10,
+                        itemsPerPage: snapshotLength ?? 10,
                         // to fetch real-time data
-                        isLive: true,
+                        isLive: false,
                         listeners: [
                           refreshChangeListener,
                         ],
@@ -159,34 +168,29 @@ class _Threat_HistoryState extends State<Threat_History> {
                 Padding(
                   padding:
                   const EdgeInsets.all(6),
-                  child: Container(
-                    child: ElevatedButton(
-                      child: Text(
-                        "Show All Data",
-                        style: TextStyle(
-                          fontSize: 11.sp,
-                          color:
-                          Color(0xff7A7A79),
+                  child:  Padding(
+                    padding: EdgeInsets.only(
+                        left: 16.w, right: 16.w, top: 0.h, bottom: 6.h),
+                    child: Container(
+                      height: 45.h,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        child: Text(
+                          "Show All Data",
+                          style: TextStyle(
+                              fontSize: 17.sp,
+                              color: Color(0xff7A7A79),
+                              fontWeight: FontWeight.w700),
                         ),
-                      ),
-                      onPressed: () {},
-                      style: ElevatedButton
-                          .styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius
-                                .circular(
-                                14.0),
-                            side: const BorderSide(
-                                color: Color(
-                                    0xff7A7A79))),
-                        elevation: 0.0,
-                        backgroundColor:
-                        Colors.transparent,
-                        padding: const EdgeInsets
-                            .symmetric(
-                            horizontal: 120,
-                            vertical: 20),
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14.0),
+                              side:  BorderSide(color: Color(0xff7A7A79), width: 1.5.w)),
+                          elevation: 0.0,
+                          backgroundColor: Colors.transparent,
+
+                        ),
                       ),
                     ),
                   ),

@@ -104,7 +104,7 @@ class _BikeContainerState extends State<BikeContainer> {
 
 
                     _bluetoothProvider.startScanAndConnect();
-                    
+
 
                   subscription?.cancel();
                   Navigator.pop(context);
@@ -118,7 +118,6 @@ class _BikeContainerState extends State<BikeContainer> {
                           onPressedRight: () {
                             SmartDialog.dismiss();
                           }));
-
                 }
               });
 
