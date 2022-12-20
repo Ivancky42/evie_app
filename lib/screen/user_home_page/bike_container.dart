@@ -101,11 +101,10 @@ class _BikeContainerState extends State<BikeContainer> {
               StreamSubscription? subscription;
               subscription = _bikeProvider.switchBike().listen((result) {
                 if(result == SwitchBikeResult.success){
-
-
-                    _bluetoothProvider.startScanAndConnect();
-
-
+                  ///set auto connect flag on bluetooth provider,
+                  ///once bluetooth provider received new current bike model,
+                  ///it will connect follow by the flag.
+                  _bluetoothProvider.setAutoConnect();
                   subscription?.cancel();
                   Navigator.pop(context);
                 }else if(result == SwitchBikeResult.failure){
@@ -122,7 +121,7 @@ class _BikeContainerState extends State<BikeContainer> {
               });
 
             } else {
-              _bluetoothProvider.disconnectDevice();
+              await _bluetoothProvider.disconnectDevice();
             }
           },
         ),

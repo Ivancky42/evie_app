@@ -51,6 +51,7 @@ class BluetoothProvider extends ChangeNotifier {
   String? deviceIMEI;
   String? firmwareVer;
   File? fwFile;
+  bool isAutoConnect = false;
 
   LinkedHashMap<String, DiscoveredDevice> discoverDeviceList = LinkedHashMap<String, DiscoveredDevice>();
 
@@ -110,10 +111,16 @@ class BluetoothProvider extends ChangeNotifier {
 
   Future<void> init(currentBikeModel) async {
     if (currentBikeModel != null) {
-      checkBLEStatus();
-      disconnectDevice();
-      this.currentBikeModel = currentBikeModel;
-      notifyListeners();
+      if (this.currentBikeModel != currentBikeModel) {
+        checkBLEStatus();
+        this.currentBikeModel = currentBikeModel;
+        notifyListeners();
+
+        if (isAutoConnect) {
+          startScanAndConnect();
+          isAutoConnect = false;
+        }
+      }
     }
   }
 
@@ -176,7 +183,13 @@ class BluetoothProvider extends ChangeNotifier {
     scanSubscription?.cancel();
   }
 
+  setAutoConnect() {
+    isAutoConnect = true;
+    notifyListeners();
+  }
+
   startScanAndConnect() async {
+    await disconnectDevice();
     if (Platform.isAndroid) {
       connectDevice(currentBikeModel!.macAddr!);
     }

@@ -160,9 +160,7 @@ class BikeProvider extends ChangeNotifier {
     currentBikeModel = null;
     SharedPreferences prefs = await _prefs;
 
-    if (currentBikeSubscription != null) {
-      await currentBikeSubscription?.cancel();
-    }
+    await currentBikeSubscription?.cancel();
 
     for (int index = 0; index < userBikeList.length; index++) {
       if (userBikeList.keys.elementAt(index) == imei) {
@@ -226,7 +224,6 @@ class BikeProvider extends ChangeNotifier {
     currentBikeList = 0;
     await prefs.setInt('currentBikeList', currentBikeList);
     await getBike(deviceIMEI);
-    notifyListeners();
   }
 
   Future<void> controlBikeList(String action) async {
