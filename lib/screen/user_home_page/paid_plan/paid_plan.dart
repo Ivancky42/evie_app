@@ -355,7 +355,10 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                     if (isDeviceConnected) ...{
                                       ///Switch bike state
                                       ///safe, warning, danger
-                                      BikeSafe(currentBikeStatusImage: currentBikeStatusImage, lockImage: lockImage, distanceBetween: distanceBetween, lockColor: lockColour, isDeviceConnected: isDeviceConnected,),
+
+                                      BikeSafe(lockImage: lockImage, distanceBetween: distanceBetween, lockColor: lockColour, isDeviceConnected: isDeviceConnected,),
+
+
                                     }
 
                                     ///Bike Not Connected

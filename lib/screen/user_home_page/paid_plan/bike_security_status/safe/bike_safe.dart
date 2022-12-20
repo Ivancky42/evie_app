@@ -21,22 +21,15 @@ class BikeSafe extends StatefulWidget {
   final SvgPicture? lockImage;
   final Color? lockColor;
   final String? distanceBetween;
-  final String? currentBikeStatusImage;
   final bool? isDeviceConnected;
-  // final String bikeName;
-  // final String distanceBetween;
-  // final String currentBikeStatusImage;
+
 
   const BikeSafe({
     Key? key,
-  required this.currentBikeStatusImage,
   required this.lockImage,
   required this.distanceBetween,
   required this.lockColor,
     required this.isDeviceConnected,
-    // required this.bikeName,
-    // required this.distanceBetween,
-    // required this.currentBikeStatusImage,
   }) : super(key: key);
 
   @override
@@ -100,7 +93,8 @@ class _BikeSafeState extends State<BikeSafe> {
                           distanceBetween: widget.distanceBetween ??
                               "-",
                           currentBikeStatusImage:
-                          widget.currentBikeStatusImage!, isDeviceConnected: widget.isDeviceConnected!,
+                          "assets/images/bike_HPStatus/bike_safe.png",
+                          isDeviceConnected: widget.isDeviceConnected!,
                         ),
                       ),
                       Padding(

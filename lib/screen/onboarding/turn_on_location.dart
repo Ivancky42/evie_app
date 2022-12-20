@@ -100,6 +100,8 @@ class _TurnOnLocationState extends State<TurnOnLocation> {
                     ),
                   ),
                   onPressed: () async {
+                    print(Permission.location.status);
+
                     if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
                       var bluetoothStatus = await Permission.bluetooth.status;
 
