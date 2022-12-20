@@ -97,13 +97,16 @@ class _BikeContainerState extends State<BikeContainer> {
           trackColor: const Color(0xff6A51CA).withOpacity(0.5),
           onChanged: (value) async {
             if (value) {
-              ///Cannot await because listen cannot end
-              ///Create and change connection state result
               await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
               StreamSubscription? subscription;
               subscription = _bikeProvider.switchBike().listen((result) {
                 if(result == SwitchBikeResult.success){
-                  _bluetoothProvider.startScanAndConnect();
+
+
+                    _bluetoothProvider.startScanAndConnect();
+                    
+
+                  subscription?.cancel();
                   Navigator.pop(context);
                 }else if(result == SwitchBikeResult.failure){
                   subscription?.cancel();
