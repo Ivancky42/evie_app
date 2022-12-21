@@ -8,14 +8,14 @@ import '../../bluetooth/modelResult.dart';
 
 
 ///Double button dialog
-class HomePageWidget_Status extends StatefulWidget{
+class HomePageWidget_StatusBar extends StatefulWidget{
   String currentDangerState;
   String? lastSeen;
   Placemark? location;
   String? minutesAgo;
 
 
-  HomePageWidget_Status({
+  HomePageWidget_StatusBar({
     Key? key,
     required this.currentDangerState,
     this.lastSeen,
@@ -25,10 +25,10 @@ class HomePageWidget_Status extends StatefulWidget{
   }) : super(key: key);
 
   @override
-  State<HomePageWidget_Status> createState() => _HomePageWidget_StatusState();
+  State<HomePageWidget_StatusBar> createState() => _HomePageWidget_StatusBarState();
 }
 
-class _HomePageWidget_StatusState extends State<HomePageWidget_Status> {
+class _HomePageWidget_StatusBarState extends State<HomePageWidget_StatusBar> {
   @override
   Widget build(BuildContext context) {
     Color dangerColor = Colors.transparent;
@@ -39,11 +39,11 @@ class _HomePageWidget_StatusState extends State<HomePageWidget_Status> {
       dangerColor = Colors.transparent;
       fontColor = Color(0xff383838);
       alertImage = "assets/buttons/location_pin.svg";
-    } else if(widget.currentDangerState == "warning"){
+    } else if(widget.currentDangerState == "warning" || widget.currentDangerState == "fall"){
       dangerColor = Color(0xffE59200);
       fontColor = Color(0xffECEDEB);
     alertImage = "assets/buttons/warning.svg";
-    }else if(widget.currentDangerState == "danger"){
+    }else if(widget.currentDangerState == "danger" || widget.currentDangerState == "crash"){
       dangerColor = Color(0xffCA0D0D);
       fontColor = Color(0xffECEDEB);
        alertImage = "assets/buttons/alert.svg";
@@ -98,32 +98,12 @@ Widget getSecurityTextWidget(LockState isLocked, String status) {
           "LOCKED AND SECURE",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
-      } else if (status == "warning") {
-        return Text(
-          "MOVEMENT DETECTED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
-        );
-      } else if (status == "danger") {
-        return  Text(
-          "UNDER THREAT",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
-        );
       }
       break;
     case LockState.unlock:
       if (status == "safe") {
         return Text(
           "UNLOCKED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
-        );
-      } else if (status == "warning") {
-        return Text(
-          "MOVEMENT DETECTED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
-        );
-      } else if (status == "danger") {
-        return Text(
-          "UNDER THREAT",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
       }
@@ -134,24 +114,10 @@ Widget getSecurityTextWidget(LockState isLocked, String status) {
           "UNKNOWN",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
-      } else if (status == "warning") {
-        return Text(
-          "MOVEMENT DETECTED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
-        );
-      } else if (status == "danger") {
-        return Text(
-          "UNDER THREAT",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
-        );
       }
       break;
   }
-
-  return Text(
-    "LOCKED AND SECURE",
-    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
-  );
+  return CircularProgressIndicator();
 }
 
 getSecurityImageWidget(bool isLocked, String status) {
@@ -159,37 +125,17 @@ getSecurityImageWidget(bool isLocked, String status) {
     case true:
       if (status == "safe") {
         return "assets/buttons/bike_security_lock_and_secure.svg";
-          //height: 5.h,
-      } else if (status == "warning") {
-        return  "assets/buttons/bike_security_warning.svg";
-          //height: 5.h,
-
-      } else if (status == "danger") {
-        return "assets/buttons/bike_security_danger.svg";
-          //height: 5.h,
-
       }
       break;
     case false:
       if (status == "safe") {
         return "assets/buttons/bike_security_unlock.svg";
-          //height: 5.h,
-
-      } else if (status == "warning") {
-        return "assets/buttons/bike_security_warning.svg";
-          //height: 5.h,
-
-      } else if (status == "danger") {
-        return "assets/buttons/bike_security_danger.svg";
-          //height: 5.h,
       }
       break;
     default:
-    // TODO: Handle this case.
-      break;
+    return "";
   }
-  return "assets/buttons/bike_security_lock_and_secure.svg";
-    //height: 5.h,
+  return "";
 }
 
 
@@ -198,37 +144,17 @@ getSecurityImageWidgetBluetooth(LockState isLocked, String status) {
     case LockState.lock:
       if (status == "safe") {
         return "assets/buttons/bike_security_lock_and_secure.svg";
-        //height: 5.h,
-      } else if (status == "warning") {
-        return  "assets/buttons/bike_security_warning.svg";
-        //height: 5.h,
-
-      } else if (status == "danger") {
-        return "assets/buttons/bike_security_danger.svg";
-        //height: 5.h,
-
       }
       break;
     case LockState.unlock:
       if (status == "safe") {
         return "assets/buttons/bike_security_unlock.svg";
-        //height: 5.h,
-
-      } else if (status == "warning") {
-        return "assets/buttons/bike_security_warning.svg";
-        //height: 5.h,
-
-      } else if (status == "danger") {
-        return "assets/buttons/bike_security_danger.svg";
-        //height: 5.h,
       }
       break;
     default:
-    // TODO: Handle this case.
-      break;
+      return "";
   }
-  return "assets/buttons/bike_security_lock_and_secure.svg";
-  //height: 5.h,
+  return "";
 }
 
 Widget getFirestoreSecurityTextWidget(bool? isLocked, String status) {
@@ -239,16 +165,6 @@ Widget getFirestoreSecurityTextWidget(bool? isLocked, String status) {
           "LOCKED & SECURE",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
-      } else if (status == "warning") {
-        return  Text(
-          "MOVEMENT DETECTED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
-        );
-      } else if (status == "danger") {
-        return Text(
-          "UNDER THREAT",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
-        );
       }
       break;
     case false:
@@ -257,30 +173,16 @@ Widget getFirestoreSecurityTextWidget(bool? isLocked, String status) {
           "UNLOCKED",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
-      } else if (status == "warning") {
-        return  Text(
-          "MOVEMENT DETECTED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
-        );
-      } else if (status == "danger") {
-        return Text(
-          "UNDER THREAT",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
-        );
       }
       break;
   }
-  return Text(
-    "LOCKED & SECURE",
-    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
-  );
+  return CircularProgressIndicator();
 }
 
 String getBatteryImage(int batteryPercent) {
 
   if (batteryPercent > 50 && batteryPercent <= 100) {
     return "assets/icons/battery_full.svg";
-
   } else if (batteryPercent > 10 && batteryPercent <= 50) {
     return "assets/icons/battery_half.svg";
   } else if (batteryPercent >= 0 && batteryPercent <= 10) {
@@ -297,7 +199,6 @@ batteryPercent = int.parse(batteryPercentage!);
 
   if (batteryPercent > 50 && batteryPercent <= 100) {
     return "assets/icons/battery_full.svg";
-
   } else if (batteryPercent > 10 && batteryPercent <= 50) {
     return "assets/icons/battery_half.svg";
   } else if (batteryPercent >= 0 && batteryPercent <= 10) {
@@ -307,62 +208,7 @@ batteryPercent = int.parse(batteryPercentage!);
   }
 }
 
-///Load image according danger status
-Future<Uint8List> loadMarkerImage(String dangerStatus) async {
-  switch (dangerStatus) {
-    case 'safe':
-      {
-        var byteData = await rootBundle.load("assets/icons/marker_safe.png");
-        return byteData.buffer.asUint8List();
-      }
-    case 'warning':
-      {
-        var byteData =
-        await rootBundle.load("assets/icons/marker_warning.png");
 
-        return byteData.buffer.asUint8List();
-      }
-    case 'danger':
-      {
-        var byteData =
-        await rootBundle.load("assets/icons/marker_danger.png");
-
-        return byteData.buffer.asUint8List();
-      }
-    default:
-      {
-        var byteData = await rootBundle.load("assets/icons/marker_safe.png");
-
-        return byteData.buffer.asUint8List();
-      }
-  }
-}
-
-
-///Load image according danger status
-loadMarkerImageString(String dangerStatus){
-  switch (dangerStatus) {
-    case 'safe':
-      {
-        return "assets/icons/marker_safe.png";
-      }
-    case 'warning':
-      {
-
-        return "assets/icons/marker_warning.png";
-      }
-    case 'danger':
-      {
-
-        return "assets/icons/marker_danger.png";
-      }
-    default:
-      {
-
-        return "assets/icons/marker_safe.png";
-      }
-  }
-}
 
 String getDateTime() {
   final now = DateTime.now();

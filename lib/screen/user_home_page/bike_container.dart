@@ -140,19 +140,17 @@ class _BikeContainerState extends State<BikeContainer> {
           }
         }
       case 'warning':
-        {
           return "assets/images/bike_HPStatus/bike_warning.png";
-        }
 
       case 'danger':
-        {
           return "assets/images/bike_HPStatus/bike_danger.png";
-        }
+      case 'fall':
+        return "assets/images/bike_HPStatus/bike_warning.png";
+      case 'crash':
+        return "assets/images/bike_HPStatus/bike_danger.png";
 
       default:
-        {
           return "assets/images/bike_HPStatus/bike_safe.png";
-        }
     }
   }
 
@@ -167,17 +165,16 @@ class _BikeContainerState extends State<BikeContainer> {
           }
         }
       case 'warning':
-        {
           return "assets/buttons/bike_security_warning.svg";
-        }
       case 'danger':
-        {
           return "assets/buttons/bike_security_danger.svg";
-        }
+      case 'fall':
+        return "assets/buttons/bike_security_warning.svg";
+      case 'crash':
+        return "assets/buttons/bike_security_danger.svg";
+
       default:
-        {
           return "assets/buttons/bike_security_lock_and_secure.svg";
-        }
     }
   }
 
@@ -190,6 +187,10 @@ class _BikeContainerState extends State<BikeContainer> {
           return "Movement Detected";
         } else if (status == "danger") {
           return "Under Threat";
+        }else if (status == "fall") {
+          return "Fall Detected";
+        }else if (status == "crash") {
+          return "Crash Alert";
         }
         break;
       case false:
@@ -199,6 +200,10 @@ class _BikeContainerState extends State<BikeContainer> {
           return "Movement Detected";
         } else if (status == "danger") {
           return "Under Threat";
+        }else if (status == "fall") {
+          return "Fall Detected";
+        }else if (status == "crash") {
+          return "Crash Alert";
         }
         break;
     }

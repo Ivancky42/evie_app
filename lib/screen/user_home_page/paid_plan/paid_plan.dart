@@ -1,10 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'dart:math';
-import 'dart:ui';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:evie_test/api/navigator.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/mapbox_widget.dart';
@@ -29,7 +25,12 @@ import '../../../widgets/evie_double_button_dialog.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../free_plan/free_plan.dart';
 import '../home_page_widget.dart';
+import 'bike_security_status/connection_lost/connection_lost.dart';
+import 'bike_security_status/crash/crash_alert.dart';
+import 'bike_security_status/danger/theft_attempt.dart';
+import 'bike_security_status/fall/fall_detected.dart';
 import 'bike_security_status/safe/bike_safe.dart';
+import 'bike_security_status/warning/movement_detected.dart';
 import 'bottom_sheet_widget.dart';
 import 'package:location/location.dart';
 import 'package:latlong2/latlong.dart';
@@ -48,11 +49,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
   Color lockColour = const Color(0xff6A51CA);
 
-  ///When get data from _bluetoothProvider.cableLockState is not equal to unknown
-  ///Need either lock/unlock
   bool isDeviceConnected = false;
-  String carbonFootprint = "D";
-  String mileage = "D";
 
   DeviceConnectionState? connectionState;
   ConnectionStateUpdate? connectionStateUpdate;
@@ -60,16 +57,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
   SvgPicture? connectImage;
   SvgPicture? lockImage;
-
-  List<String> imgList = [
-    'assets/images/bike_HPStatus/bike_normal.png',
-  ];
-
-  final List<String> dangerStatus = ['safe', 'warning', 'danger'];
-  String currentDangerStatus = 'safe';
-  String currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
-  String currentSecurityIcon =
-      "assets/buttons/bike_security_lock_and_secure.svg";
 
   late LocationProvider _locationProvider;
   late LatLngBounds latLngBounds;
@@ -94,6 +81,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   final Location _locationService = Location();
 
   bool isScanned = false;
+  var markers = <Marker>[];
 
   @override
   void initState() {
@@ -195,28 +183,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
       currentLatLng = LatLng(0, 0);
     }
 
-    var markers = <Marker>[
-      Marker(
-        width: 42.w,
-        height: 56.h,
-        point: LatLng(_locationProvider.locationModel?.geopoint.latitude ?? 0,
-            _locationProvider.locationModel?.geopoint.longitude ?? 0),
-        builder: (ctx) => Image(
-          image: AssetImage(loadMarkerImageString(currentDangerStatus)),
-        ),
-      ),
-
-      Marker(
-        width: 42.w,
-        height: 56.h,
-        point: currentLatLng,
-        builder: (ctx) {
-          return _buildCompass();
-        },
-      ),
-    ];
-
-
+    loadMarker(currentLatLng);
 
     return WillPopScope(
       onWillPop: () async {
@@ -251,9 +218,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                       future: _currentUserProvider.fetchCurrentUserModel,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return HomePageWidget_Status(
-                                  currentDangerState: currentDangerStatus,
-                                  location: _locationProvider.currentPlaceMark);
+                          return switchBikeStatusBar(_locationProvider.locationModel?.status ?? "");
                         } else {
                           return const Center(
                             child: Text("Good Morning"),
@@ -293,7 +258,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                   longitude: _locationProvider
                                       .locationModel!.geopoint.longitude,
                                   onMapReady: () {
-                                    loadImage(currentDangerStatus);
+
                                   },
                                 ),
 
@@ -331,8 +296,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                     if(userLocation != null && _locationProvider.locationModel?.status != null){
                     animateBounce();
                     }
-
-
                     return false;
                   },
                   child: DraggableScrollableSheet(
@@ -351,250 +314,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                             navigateButton(),
                             currentScroll <= 0.8
                                 ? Stack(children: [
-                                    ///Bike Connected
-                                    if (isDeviceConnected) ...{
-                                      ///Switch bike state
-                                      ///safe, warning, danger
-
-                                      BikeSafe(lockImage: lockImage, distanceBetween: distanceBetween, lockColor: lockColour, isDeviceConnected: isDeviceConnected,),
-
-
-                                    }
-
-                                    ///Bike Not Connected
-                                    else ...{
-                                      Container(
-                                          height: 636.h,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFECEDEB),
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Center(
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 11.h),
-                                                      child: Image.asset(
-                                                        "assets/buttons/home_indicator.png",
-                                                        width: 40.w,
-                                                        height: 4.h,
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.fromLTRB(
-                                                              16.w, 9.h, 0, 0),
-                                                      child: Bike_Name_Row(
-                                                        bikeName: _bikeProvider
-                                                                .currentBikeModel
-                                                                ?.deviceName ??
-                                                            "",
-                                                        distanceBetween:
-                                                            distanceBetween ??
-                                                                "-",
-                                                        currentBikeStatusImage:
-                                                            currentBikeStatusImage,
-                                                          isDeviceConnected: isDeviceConnected!
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.fromLTRB(
-                                                              16.w,
-                                                              17.15.h,
-                                                              0,
-                                                              0),
-                                                      child: IntrinsicHeight(
-                                                        child: Bike_Status_Row(
-                                                          currentSecurityIcon:
-                                                          getSecurityImageWidget(
-                                                              _bikeProvider.currentBikeModel?.isLocked ??
-                                                                  false,
-                                                              _bikeProvider
-                                                                  .currentBikeModel
-                                                                  ?.location!
-                                                                  .status ??
-                                                                  ""),
-                                                          batteryImage: getBatteryImage(
-                                                              _bikeProvider
-                                                                      .currentBikeModel
-                                                                      ?.batteryPercent ??
-                                                                  0),
-                                                          batteryPercentage:
-                                                              _bikeProvider
-                                                                      .currentBikeModel
-                                                                      ?.batteryPercent ??
-                                                                  0,
-                                                          child: getFirestoreSecurityTextWidget(
-                                                              _bikeProvider
-                                                                  .currentBikeModel
-                                                                  ?.isLocked,
-                                                              _bikeProvider
-                                                                      .currentBikeModel
-                                                                      ?.location!
-                                                                      .status ??
-                                                                  ""),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 31.h),
-                                                      child: Column(
-                                                        children: [
-                                                          SizedBox(
-                                                              height: 96.h,
-                                                              width: 96.w,
-                                                              child:
-                                                                  FloatingActionButton(
-                                                                elevation: 0,
-                                                                backgroundColor:
-                                                                    lockColour,
-                                                                onPressed: () {
-                                                                  ///Check bluetooth status
-
-                                                                  var bleStatus =
-                                                                      _bluetoothProvider
-                                                                          .bleStatus;
-                                                                  switch (
-                                                                      bleStatus) {
-                                                                    case BleStatus
-                                                                        .poweredOff:
-                                                                      SmartDialog.show(
-                                                                          keepSingle: true,
-                                                                          widget: EvieSingleButtonDialogCupertino(
-                                                                              title: "Error",
-                                                                              content: "Bluetooth is off, please turn on your bluetooth",
-                                                                              rightContent: "OK",
-                                                                              onPressedRight: () {
-                                                                                SmartDialog.dismiss();
-                                                                              }));
-                                                                      break;
-                                                                    case BleStatus
-                                                                        .unknown:
-                                                                      // TODO: Handle this case.
-                                                                      break;
-                                                                    case BleStatus
-                                                                        .unsupported:
-                                                                      SmartDialog.show(
-                                                                          keepSingle: true,
-                                                                          widget: EvieSingleButtonDialogCupertino(
-                                                                              title: "Error",
-                                                                              content: "Bluetooth unsupported",
-                                                                              rightContent: "OK",
-                                                                              onPressedRight: () {
-                                                                                SmartDialog.dismiss();
-                                                                              }));
-                                                                      break;
-                                                                    case BleStatus
-                                                                        .unauthorized:
-                                                                      SmartDialog.show(
-                                                                          keepSingle:
-                                                                          true,
-                                                                          widget: EvieSingleButtonDialogCupertino(
-                                                                              title: "Error",
-                                                                              content: "Bluetooth Permission is off",
-                                                                              rightContent: "OK",
-                                                                              onPressedRight: () {
-                                                                                SmartDialog
-                                                                                    .dismiss();
-                                                                              }));
-                                                                      break;
-                                                                    case BleStatus
-                                                                        .locationServicesDisabled:
-                                                                      SmartDialog.show(
-                                                                          keepSingle: true,
-                                                                          widget: EvieSingleButtonDialogCupertino(
-                                                                              title: "Error",
-                                                                              content: "Location service disabled",
-                                                                              rightContent: "OK",
-                                                                              onPressedRight: () {
-                                                                                SmartDialog.dismiss();
-                                                                              }));
-                                                                      break;
-                                                                    case BleStatus
-                                                                        .ready:
-                                                                      if (connectionState ==
-                                                                              null ||
-                                                                          connectionState ==
-                                                                              DeviceConnectionState.disconnected) {
-                                                                        _bluetoothProvider
-                                                                            .startScanAndConnect();
-
-                                                                        // if(connectionStateUpdate != null){
-                                                                        //   if(connectionStateUpdate?.failure.toString() != null){
-                                                                        //     SmartDialog.show(
-                                                                        //         keepSingle: true,
-                                                                        //         widget: EvieSingleButtonDialogCupertino(
-                                                                        //             title: "Error",
-                                                                        //             content: "Cannot connect bike, please place the phone near the bike and try again.",
-                                                                        //             rightContent: "OK",
-                                                                        //             onPressedRight: (){SmartDialog.dismiss();})
-                                                                        //     );
-                                                                        //   }
-                                                                        // }
-                                                                      } else {}
-                                                                      break;
-                                                                    default:
-                                                                      break;
-                                                                  }
-                                                                },
-                                                                //icon inside button
-                                                                child:
-                                                                    connectImage,
-                                                              )),
-                                                          SizedBox(
-                                                            height: 12.h,
-                                                          ),
-                                                          if (connectionState
-                                                                  ?.name ==
-                                                              "connecting") ...{
-                                                            Text(
-                                                              "Connecting bike",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      12.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  color: Color(
-                                                                      0xff3F3F3F)),
-                                                            ),
-                                                          } else ...{
-                                                            Text(
-                                                              "Tap to connect bike",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      12.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  color: Color(
-                                                                      0xff3F3F3F)),
-                                                            ),
-                                                          },
-                                                          SizedBox(
-                                                            height: 11.h,
-                                                          ),
-                                                          SvgPicture.asset(
-                                                            "assets/buttons/up.svg",
-
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          )),
-                                    }
+                                      switchBikeStatusBottom(_locationProvider.locationModel?.status ?? ""),
                                   ])
                                 : Threat_History(bikeProvider: _bikeProvider, bluetoothProvider: _bluetoothProvider, locationProvider: _locationProvider,),
                           ],
@@ -625,13 +345,10 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
             child: CircularProgressIndicator(),
           );
         }
-
         double? direction = snapshot.data!.heading;
 
-        // if direction is null, then device does not support this sensor
-        // show error message
         if (direction == null) {
-          return Center(
+          return const Center(
             child: Text("Device does not have sensors !"),
           );
         }
@@ -806,46 +523,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     }
   }
 
-  void setBikeImage() {
-    if (isDeviceConnected == true) {
-      switch (_bikeProvider.currentBikeModel!.location!.status) {
-        case "safe":
-          setState(() {
-            imgList = [
-              'assets/images/bike_HPStatus/bike_safe.png',
-            ];
-          });
-          break;
-        case "warning":
-          setState(() {
-            imgList = [
-              'assets/images/bike_HPStatus/bike_warning.png',
-            ];
-          });
-          break;
-        case "danger":
-          setState(() {
-            imgList = [
-              'assets/images/bike_HPStatus/bike_danger.png',
-            ];
-          });
-          break;
-        default:
-          setState(() {
-            imgList = [
-              'assets/images/bike_HPStatus/bike_normal.png',
-            ];
-          });
-      }
-    } else {
-      setState(() {
-        imgList = [
-          'assets/images/bike_HPStatus/bike_normal.png',
-        ];
-      });
-    }
-  }
-
   Future<LocationModel?> getLocationModel() async {
     return _locationProvider.locationModel;
   }
@@ -892,15 +569,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
       latLngBounds = LatLngBounds(southwest, northeast);
 
-      final LatLng center = LatLng(
-        ((_locationProvider.locationModel!.geopoint.latitude +
-                userLocation!.latitude!) /
-            2),
-        ((_locationProvider.locationModel!.geopoint.longitude +
-                userLocation!.longitude!) /
-            2),
-      );
-
       if (currentScroll <= (initialRatio) && currentScroll > minRatio + 0.01) {
         mapController?.fitBounds(latLngBounds,
             options: FitBoundsOptions(
@@ -916,55 +584,96 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   }
 
   void locationListener() {
-    currentDangerStatus = _locationProvider.locationModel!.status;
-
-    loadImage(currentDangerStatus);
     setConnectImage();
     setLockImage();
-    setBikeImage();
 
     getDistanceBetween();
     animateBounce();
-
     // loadImage(currentDangerStatus);
   }
 
-  void loadImage(String dangerStatus) {
+  switchBikeStatusBar(String status) {
+    if(_locationProvider.locationModel?.isConnected == false){
+      return HomePageWidget_StatusBar(currentDangerState: 'warning',location: _locationProvider.currentPlaceMark);
+    }else{
+      switch(status) {
+        case "safe":
+          return HomePageWidget_StatusBar(currentDangerState: status,location: _locationProvider.currentPlaceMark);
+        case "warning":
+          return HomePageWidget_StatusBar(currentDangerState: status,location: _locationProvider.currentPlaceMark);
+        case "danger":
+          return HomePageWidget_StatusBar(currentDangerState: status,location: _locationProvider.currentPlaceMark);
+        case "fall":
+          return HomePageWidget_StatusBar(currentDangerState: status,location: _locationProvider.currentPlaceMark);
+        case "crash":
+          return HomePageWidget_StatusBar(currentDangerState: status,location: _locationProvider.currentPlaceMark);
+        default:
+          return const CircularProgressIndicator();
+      }
+    }
+  }
+
+  switchBikeStatusBottom(String status) {
+    if(_locationProvider.locationModel?.isConnected == false){
+      return ConnectionLost(lockImage: lockImage, connectImage:connectImage,distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: isDeviceConnected,);
+    }else{
+      switch(status) {
+        case "safe":
+          return BikeSafe(lockImage: lockImage, connectImage:connectImage,distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: isDeviceConnected,);
+        case "warning":
+          return BikeWarning(lockImage: lockImage, connectImage:connectImage, distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: isDeviceConnected,);
+        case "danger":
+          return BikeDanger(lockImage: lockImage, connectImage:connectImage, distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: isDeviceConnected,);
+        case "fall":
+          return FallDetected(lockImage: lockImage, connectImage:connectImage, distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: isDeviceConnected,);
+        case "crash":
+          return CrashAlert(lockImage: lockImage,  connectImage:connectImage,distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: isDeviceConnected,);
+        default:
+          return const CircularProgressIndicator();
+      }
+    }
+  }
+
+  void loadMarker(LatLng currentLatLng) {
+    markers = <Marker>[
+      ///
+      Marker(
+        width: 42.w,
+        height: 56.h,
+        point: LatLng(_locationProvider.locationModel?.geopoint.latitude ?? 0,
+            _locationProvider.locationModel?.geopoint.longitude ?? 0),
+        builder: (ctx) => Image(
+          image: AssetImage(!_locationProvider.locationModel!.isConnected ? "assets/icons/marker_warning.png" : loadMarkerImageString(_locationProvider.locationModel?.status ?? "")),
+        ),
+      ),
+
+      Marker(
+        width: 42.w,
+        height: 56.h,
+        point: currentLatLng,
+        builder: (ctx) {
+          return _buildCompass();
+        },
+      ),
+    ];
+
+  }
+
+  ///Load image according danger status
+  loadMarkerImageString(String dangerStatus){
     switch (dangerStatus) {
       case 'safe':
-        {
-          if (cableLockState?.lockState == LockState.unlock) {
-            currentBikeStatusImage =
-                "assets/images/bike_HPStatus/bike_safe.png";
-            currentSecurityIcon = "assets/buttons/bike_security_unlock.svg";
-          } else {
-            currentBikeStatusImage =
-                "assets/images/bike_HPStatus/bike_safe.png";
-            currentSecurityIcon =
-                "assets/buttons/bike_security_lock_and_secure.svg";
-          }
-        }
-        break;
+        return "assets/icons/marker_safe.png";
       case 'warning':
-        {
-          currentBikeStatusImage =
-              "assets/images/bike_HPStatus/bike_warning.png";
-          currentSecurityIcon = "assets/buttons/bike_security_warning.svg";
-        }
-        break;
+        return "assets/icons/marker_warning.png";
+      case 'fall':
+        return "assets/icons/marker_warning.png";
       case 'danger':
-        {
-          currentBikeStatusImage =
-              "assets/images/bike_HPStatus/bike_danger.png";
-          currentSecurityIcon = "assets/buttons/bike_security_danger.svg";
-        }
-        break;
+        return "assets/icons/marker_danger.png";
+      case 'crash':
+        return "assets/icons/marker_danger.png";
       default:
-        {
-          currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
-          currentSecurityIcon =
-              "assets/buttons/bike_security_lock_and_secure.svg";
-        }
+        return "assets/icons/marker_safe.png";
     }
   }
 }

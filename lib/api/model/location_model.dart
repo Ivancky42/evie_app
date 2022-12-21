@@ -6,12 +6,14 @@ class LocationModel {
   String? eventId;
   String status;
   GeoPoint geopoint;
+  bool isConnected;
   Timestamp? updated;
 
   LocationModel({
     this.eventId,
     required this.status,
     required this.geopoint,
+    required this.isConnected,
     this.updated,
   });
 
@@ -19,6 +21,7 @@ class LocationModel {
     "eventId" : eventId,
     "status" : status,
     "geopoint" : geopoint,
+    "isConnected" : isConnected,
     "updated": timestampToJson(updated)
   };
 
@@ -26,6 +29,7 @@ class LocationModel {
     return LocationModel(
       eventId: json['eventId']?? '',
       status: json['status']?? '',
+      isConnected: json['isConnected']?? true,
       geopoint: fromJsonGeoPoint(json['geopoint'] as GeoPoint),
       updated: timestampFromJson(json['updated']),
     );
