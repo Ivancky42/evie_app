@@ -15,6 +15,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../api/backend/stripe_api_caller.dart';
 import '../api/navigator.dart';
 import '../api/provider/auth_provider.dart';
 import '../api/provider/bike_provider.dart';
@@ -932,9 +933,9 @@ class _TestBleState extends State<TestBle> {
                     ),
                   ),
                   onPressed: () {
-                    // StripeApiCaller.redirectToCheckout("price_1Lp0yCBjvoM881zMsahs6rkP", customerId).then((sessionId) {
-                    //   changeToCheckoutScreen(context, sessionId);
-                    // });
+                    StripeApiCaller.redirectToCheckout("price_1M6WhSBjvoM881zMdhgNSmRq", "cus_MqU42nA51o3Nis").then((sessionId) {
+                      changeToStripeCheckoutScreen(context, sessionId);
+                    });
                   },
                 ),
 

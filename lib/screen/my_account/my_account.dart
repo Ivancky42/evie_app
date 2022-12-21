@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/plan_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
 
