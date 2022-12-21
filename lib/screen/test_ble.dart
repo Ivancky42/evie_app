@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
+import 'package:evie_test/api/backend/sim_api_caller.dart';
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
@@ -718,7 +719,71 @@ class _TestBleState extends State<TestBle> {
                 ),
 
 
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Get token",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    SimApiCaller.getAccessToken();
+                  },
+                ),
 
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Activate Sim",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    SimApiCaller.activateSim("64e85bf1b5bb40c773b159dfda5ba98e7eec2f154ff78c3029a5b21596d4e961", "8944502701221855684").then((value) {
+                      print(value);
+                    });
+                  },
+                ),
+
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Deactivate Sim",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    SimApiCaller.deactivateSim("64e85bf1b5bb40c773b159dfda5ba98e7eec2f154ff78c3029a5b21596d4e961", "8944502701221855684").then((value) {
+                      print(value);
+                    });
+                  },
+                ),
+
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Get Sim Status",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    SimApiCaller.getSimStatus("64e85bf1b5bb40c773b159dfda5ba98e7eec2f154ff78c3029a5b21596d4e961", "8944502701221855684").then((value) {
+                      print(value);
+                    });
+                  },
+                ),
 
                 EvieButton(
                   height: 12.2.h,

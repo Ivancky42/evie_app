@@ -18,26 +18,26 @@ class ServerApiBase {
         textColor: Colors.black);
   }
 
-  static Future postRequest(String auth, String url, Map<dynamic, dynamic> body) async {
+  static Future getRequest(String auth, String url, Map<String, dynamic> query) async {
     try {
       bool _hasConnection = await checkInternetConnection();
       if (!_hasConnection) {
         showServerErrorMsg('No internet connection');
-        return null;
+        return "No internet connection";
       }
 
       try {
-        final result = await Dio().post(
+        final result = await Dio().get(
           url,
-          data: body,
+          queryParameters: query,
           options: Options(
             headers: {HttpHeaders.authorizationHeader: auth},
-            contentType: "application/x-www-form-urlencoded",
+            contentType: Headers.jsonContentType,
           ),
         );
         return result.data;
       } on DioError catch (e, s) {
-        var errorMessage = e.response?.data['error']['message'];
+        var errorMessage = e.response?.data['error_description'];
         showServerErrorMsg(errorMessage);
         return errorMessage;
       }
@@ -56,8 +56,87 @@ class ServerApiBase {
       log('exception: $e');
       showServerErrorMsg('Something went wrong');
       return null;
-    } catch (error) {
-      log('general error: $error');
+    }
+  }
+
+  static Future postRequest(String auth, String url, Map<dynamic, dynamic> body) async {
+    try {
+      bool _hasConnection = await checkInternetConnection();
+      if (!_hasConnection) {
+        showServerErrorMsg('No internet connection');
+        return "No internet connection";
+      }
+
+      try {
+        final result = await Dio().post(
+          url,
+          data: body,
+          options: Options(
+            headers: {HttpHeaders.authorizationHeader: auth},
+            contentType: Headers.jsonContentType,
+          ),
+        );
+        return result.data;
+      } on DioError catch (e, s) {
+        var errorMessage = e.response?.data['error_description'];
+        showServerErrorMsg(errorMessage);
+        return errorMessage;
+      }
+
+    } on TimeoutException catch (err) {
+      log('timeout exception: $err');
+      showServerErrorMsg(
+          'Connection timed out. Please try switch to other internet connection or check your internet connection.');
+      return null;
+    } on SocketException catch (eror) {
+      log('timeout exception: $eror');
+      showServerErrorMsg(
+          'Connection timed out. Please try switch to other internet connection or check your internet connection.');
+      return null;
+    } on Exception catch (e) {
+      log('exception: $e');
+      showServerErrorMsg('Something went wrong');
+      return null;
+    }
+  }
+
+  static Future putRequestWithQuery(String auth, String url, Map<String, dynamic> query) async {
+
+    try {
+      bool _hasConnection = await checkInternetConnection();
+      if (!_hasConnection) {
+        showServerErrorMsg('No internet connection');
+        return "No internet connection";
+      }
+
+      try {
+        final result = await Dio().put(
+          url,
+          queryParameters: query,
+          options: Options(
+            headers: {HttpHeaders.authorizationHeader: auth},
+            contentType: Headers.jsonContentType,
+          ),
+        );
+        return result.data;
+      } on DioError catch (e, s) {
+        var errorMessage = e.response?.data['error_description'];
+        showServerErrorMsg(errorMessage);
+        return errorMessage;
+      }
+
+    } on TimeoutException catch (err) {
+      log('timeout exception: $err');
+      showServerErrorMsg(
+          'Connection timed out. Please try switch to other internet connection or check your internet connection.');
+      return null;
+    } on SocketException catch (eror) {
+      log('timeout exception: $eror');
+      showServerErrorMsg(
+          'Connection timed out. Please try switch to other internet connection or check your internet connection.');
+      return null;
+    } on Exception catch (e) {
+      log('exception: $e');
       showServerErrorMsg('Something went wrong');
       return null;
     }
@@ -68,7 +147,7 @@ class ServerApiBase {
       bool _hasConnection = await checkInternetConnection();
       if (!_hasConnection) {
         showServerErrorMsg('No internet connection');
-        return null;
+        return "No internet connection";
       }
 
       try {
@@ -98,10 +177,6 @@ class ServerApiBase {
       return null;
     } on Exception catch (e) {
       log('exception: $e');
-      showServerErrorMsg('Something went wrong');
-      return null;
-    } catch (error) {
-      log('general error: $error');
       showServerErrorMsg('Something went wrong');
       return null;
     }
