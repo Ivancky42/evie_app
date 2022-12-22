@@ -75,9 +75,9 @@ class ErrorPromptResult {
     /// 3: The communication KEY has been obtained, but the communication KEY is wrong
 
     errorMessage =
-      data[6] == 1 ? ErrorMessage.crcAuthErr :
-      data[6] == 2 ? ErrorMessage.comKeyNotObtained :
-      ErrorMessage.wrongComKey;
+    data[6] == 1 ? ErrorMessage.crcAuthErr :
+    data[6] == 2 ? ErrorMessage.comKeyNotObtained :
+    ErrorMessage.wrongComKey;
     print(errorMessage);
   }
 }
@@ -289,6 +289,7 @@ class IotInfoModel {
   String? port;
   String? deviceIMEI;
   String? iccid;
+  String? qrCode;
   String? firmwareVer;
 
   IotInfoModel(String iotInfoString) {
@@ -326,8 +327,12 @@ class IotInfoModel {
         iccid = ((IotDataList[8].toString()).split(":"))[1];
       }
 
-      if (IotDataList[11].toString().contains("VERSION")) {
-        firmwareVer = ((IotDataList[11].toString()).split(":"))[1];
+      if (IotDataList[9].toString().contains("QRCODE")) {
+        qrCode = ((IotDataList[9].toString()).split(":"))[1];
+      }
+
+      if (IotDataList[12].toString().contains("VERSION")) {
+        firmwareVer = ((IotDataList[12].toString()).split(":"))[1];
       }
     }
   }

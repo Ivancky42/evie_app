@@ -1,5 +1,6 @@
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/provider/plan_provider.dart';
 import 'package:evie_test/profile/user_profile.dart';
 import 'package:evie_test/screen/account_verified.dart';
 import 'package:evie_test/screen/input_name.dart';
@@ -143,7 +144,7 @@ class AppProviders extends StatelessWidget {
               create: (_) => BluetoothProvider(),
               update: (_, bikeProvider, bluetoothProvider) {
                 return bluetoothProvider!
-                  ..init(bikeProvider.currentBikeModel);
+                  ..update(bikeProvider.currentBikeModel);
               }
           ),
           ChangeNotifierProxyProvider<CurrentUserProvider, NotificationProvider>(
@@ -162,6 +163,13 @@ class AppProviders extends StatelessWidget {
                   ..init(bikeProvider.currentBikeModel?.location);
               }
           ),
+          ChangeNotifierProxyProvider2<CurrentUserProvider, BikeProvider, PlanProvider>(
+              lazy: true,
+              create: (context) => PlanProvider(),
+              update: (_, currentUserProvider, bikeProvider, planProvider) {
+                return planProvider!..update(currentUserProvider.getCurrentUserModel, bikeProvider.currentBikeModel);
+              }
+          )
         ],
         child: child
     );
@@ -175,6 +183,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthProvider _authProvider = Provider.of<AuthProvider>(context);
+    PlanProvider _planProvider = Provider.of<PlanProvider>(context);
+    BluetoothProvider _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     decideMainPage() {
       if (_authProvider.isLogin == true) {

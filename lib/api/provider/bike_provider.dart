@@ -8,6 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/bike_model.dart';
+import '../model/bike_plan_model.dart';
 import '../model/bike_user_model.dart';
 import '../model/location_model.dart';
 import '../model/plan_model.dart';
@@ -51,7 +52,7 @@ class BikeProvider extends ChangeNotifier {
   BikeModel? currentBikeModel;
   BikeUserModel? bikeUserModel;
   UserBikeModel? userBikeModel;
-  PlanModel? currentPlanModel;
+  BikePlanModel? currentBikePlanModel;
   RFIDModel? currentRFID;
 
   int currentBikeList = 0;
@@ -63,6 +64,7 @@ class BikeProvider extends ChangeNotifier {
   StreamSubscription? bikeUserSubscription;
   StreamSubscription? currentBikeUserSubscription;
   StreamSubscription? currentUserBikeSubscription;
+  StreamSubscription? currentBikePlanSubscription;
   StreamSubscription? rfidListSubscription;
 
   ScanQRCodeResult scanQRCodeResult = ScanQRCodeResult.unknown;
@@ -89,9 +91,6 @@ class BikeProvider extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     currentBikeModel = null;
 
-    // if(userBikeDetails.isNotEmpty){
-    //   userBikeDetails.clear();
-    // }
     try {
       ///read doc change
       bikeListSubscription = FirebaseFirestore.instance
@@ -199,29 +198,66 @@ class BikeProvider extends ChangeNotifier {
   }
 
   getPlanSubscript() async {
-    final snapshot = await FirebaseFirestore.instance
+     currentBikePlanSubscription = FirebaseFirestore.instance
         .collection(bikesCollection)
         .doc(currentBikeModel!.deviceIMEI)
-        .collection("plan")
-        .get();
+        .collection("plans")
+        .snapshots()
+    .listen((snapshot) {
+      {
 
-    if ( snapshot.size == 0 ) {
-      isPlanSubscript = false;
-    }else {
-      for(int i=0;i<snapshot.docs.length;i++){
-        currentPlanModel = PlanModel.fromJson(snapshot.docs[i].data());
-      }
-      final result = calculateDateDifference(currentPlanModel!.periodEnd!.toDate());
-      if(result < 0){
-        isPlanSubscript = false;
+        if (snapshot.docs.isNotEmpty) {
+          for (var docChange in snapshot.docChanges) {
+            switch (docChange.type) {
+            ///element.type
+              case DocumentChangeType.added:
+                Map<String, dynamic>? obj = docChange.doc.data();
+                if ( snapshot.size == 0 ) {
+                  isPlanSubscript = false;
+                }else {
+                  for(int i=0;i<snapshot.docs.length;i++){
+                    currentBikePlanModel = BikePlanModel.fromJson(obj!);
+                  }
+                  final result = calculateDateDifference(currentBikePlanModel!.periodEnd!.toDate());
+                  if(result < 0){
+                    isPlanSubscript = false;
+                  }else{
+                    isPlanSubscript = true;
+                  }
+                }
+                notifyListeners();
+                break;
+              case DocumentChangeType.removed:
+                currentBikePlanModel = null;
+                notifyListeners();
+                break;
+              case DocumentChangeType.modified:
+                Map<String, dynamic>? obj = docChange.doc.data();
+                for(int i=0;i<snapshot.docs.length;i++){
+                  currentBikePlanModel = BikePlanModel.fromJson(obj!);
+                }
+                final result = calculateDateDifference(currentBikePlanModel!.periodEnd!.toDate());
+                if(result < 0){
+                  isPlanSubscript = false;
+                }else{
+                  isPlanSubscript = true;
+                }
+                notifyListeners();
+                break;
+            }
+          }
+
+
       }else{
-        isPlanSubscript = true;
-      }
-    }
-    notifyListeners();
+          currentBikePlanModel = null;
+          isPlanSubscript = false;
+        }
+
+      }});
+
   }
 
-  ///Yesterday : calculateDifference(date) == -1.
+  /// Yesterday : calculateDifference(date) == -1.
   /// Today : calculateDifference(date) == 0.
   /// Tomorrow : calculateDifference(date) == 1
   int calculateDateDifference(DateTime date) {

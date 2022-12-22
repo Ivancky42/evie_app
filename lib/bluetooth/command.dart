@@ -25,8 +25,10 @@ class BluetoothCommand {
   static const int requestTotalPacketCmd = 0xFA; /// 4.5.20
   static const int dataTransferCmd = 0xFB; /// 4.5.21
   static const int upgradeFirmwareCmd = 0xFB; /// 4.5.21
+  static const int updateIotInfoCmd = 0xFB; /// 4.5.21
   static const int fetchDataCommand = 0xFC; /// 4.5.22
   static const int getFirmwareUpgradeDataCmd = 0xFC; /// 4.5.22
+  static const int getUpdateIotInfoCmd = 0xFC; /// 4.5.22
 
   static const int addRFIDCmd = 0x85; ///4.5.11
   static const int deleteRFIDCmd = 0x86; ///4.5.11
@@ -53,7 +55,7 @@ class BluetoothCommand {
     data[0] = header[0]; /// header
     data[1] = header[1]; /// header
     data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[3] = rand;/// random number
     data[4] = 0x00; ///  key will be zero.
     data[5] = requestComKeyCmd; /// cmd : 0x01
 
@@ -61,7 +63,7 @@ class BluetoothCommand {
       data[i + 6] = (utf8.encode(deviceKey[i])[0]); //device key
     }
 
-    return encodeData(dataSize, rand, data);
+    return encodeData(dataSize, data);
   }
 
   List<int> getBikeInfo(int comKey) {
@@ -73,12 +75,12 @@ class BluetoothCommand {
     data[0] = header[0]; /// header
     data[1] = header[1]; /// header
     data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[3] = rand; /// random number
     data[4] = comKey;
     data[5] = requestBikeInfo; /// cmd : 0x60
     data[6] = 0x01;
 
-    return encodeData(dataSize, rand, data);
+    return encodeData(dataSize, data);
   }
 
   List<int> unlockBike(int comKey, int userId, int timestamp) {
@@ -96,7 +98,7 @@ class BluetoothCommand {
     data[0] = header[0]; /// header
     data[1] = header[1]; /// header
     data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[3] = rand; /// random number
     data[4] = comKey; ///  Communication key
     data[5] = unlockBikeCmd; /// cmd : 0x05
 
@@ -113,35 +115,36 @@ class BluetoothCommand {
 
     data[15] = 0x00; /// Normal unlock
 
-    return encodeData(dataSize, rand, data);
+    return encodeData(dataSize, data);
   }
 
   List<int> changeBleKey(int comKey) {
     /// Current EVIE app not required to have this function. Disable it to prevent ble key changed.
-    // int dataSize = 8;
-    // int totalDataSize = 6 + dataSize;
-    // List<int> data = List<int>.filled(totalDataSize, 0, growable: true);
-    // int rand = random.nextInt(255);
-    // String randBleKey = getRandomString(8);
-    // List<int> bytesBleKey = utf8.encode(randBleKey);
-    //
-    // data[0] = header[0]; /// header
-    // data[1] = header[1]; /// header
-    // data[2] = dataSize; /// data length
-    // data[3] = (rand + 0x32) & 0xFF; /// random number
-    // data[4] = comKey; ///  Communication key
-    // data[5] = changeBleKeyCmd; /// cmd : 0x32
-    //
-    // data[6] = bytesBleKey[0];
-    // data[7] = bytesBleKey[1];
-    // data[8] = bytesBleKey[2];
-    // data[9] = bytesBleKey[3];
-    // data[10] = bytesBleKey[4];
-    // data[11] = bytesBleKey[5];
-    // data[12] = bytesBleKey[6];
-    // data[13] = bytesBleKey[7];
-    //
-    // return encodeData(dataSize, rand, data);
+    int dataSize = 8;
+    int totalDataSize = 6 + dataSize;
+    List<int> data = List<int>.filled(totalDataSize, 0, growable: true);
+    int rand = random.nextInt(255);
+    //String randBleKey = getRandomString(8);
+    String randBleKey = "abcdefgh";
+    List<int> bytesBleKey = utf8.encode(randBleKey);
+
+    data[0] = header[0]; /// header
+    data[1] = header[1]; /// header
+    data[2] = dataSize; /// data length
+    data[3] = rand; /// random number
+    data[4] = comKey; ///  Communication key
+    data[5] = changeBleKeyCmd; /// cmd : 0x32
+
+    data[6] = bytesBleKey[0];
+    data[7] = bytesBleKey[1];
+    data[8] = bytesBleKey[2];
+    data[9] = bytesBleKey[3];
+    data[10] = bytesBleKey[4];
+    data[11] = bytesBleKey[5];
+    data[12] = bytesBleKey[6];
+    data[13] = bytesBleKey[7];
+
+    return encodeData(dataSize, data);
     return [];
   }
 
@@ -159,7 +162,7 @@ class BluetoothCommand {
     data[0] = header[0]; /// header
     data[1] = header[1]; /// header
     data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[3] = rand; /// random number
     data[4] = comKey; ///  Communication key
     data[5] = changeBleNameCmd; /// cmd : 0x33
 
@@ -170,7 +173,7 @@ class BluetoothCommand {
     data[10] = bytesBleKey[4];
     data[11] = bytesBleKey[5];
 
-    return encodeData(dataSize, rand, data);
+    return encodeData(dataSize, data);
   }
 
   List<int> addRFID(int comKey) {
@@ -184,13 +187,13 @@ class BluetoothCommand {
     data[0] = header[0]; /// header
     data[1] = header[1]; /// header
     data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[3] = rand; /// random number
     data[4] = comKey; ///  Communication key
     data[5] = addRFIDCmd; /// cmd : 0x85
 
     data[6] = 0x01;
 
-    return encodeData(dataSize, rand, data);
+    return encodeData(dataSize, data);
   }
 
   List<int> queryRFID(int comKey, int rfidIndex) {
@@ -204,12 +207,12 @@ class BluetoothCommand {
     data[0] = header[0]; /// header
     data[1] = header[1]; /// header
     data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[3] = rand; /// random number
     data[4] = comKey; ///  Communication key
     data[5] = queryRFIDCmd; /// cmd : 0x87
     data[6] = rfidIndex;
 
-    return encodeData(dataSize, rand, data);
+    return encodeData(dataSize, data);
   }
 
   List<int> deleteRFID(int comKey, String rfidID) {
@@ -221,7 +224,7 @@ class BluetoothCommand {
     data[0] = header[0]; /// header
     data[1] = header[1]; /// header
     data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[3] = rand; /// random number
     data[4] = comKey; ///  Communication key
     data[5] = deleteRFIDCmd; /// cmd : 0x86
 
@@ -236,7 +239,7 @@ class BluetoothCommand {
     data[12] = rfidBytes[6];
     data[13] = rfidBytes[7];
 
-    return encodeData(dataSize, rand, data);
+    return encodeData(dataSize, data);
   }
 
   List<int> cableLock(int comKey) {
@@ -248,14 +251,14 @@ class BluetoothCommand {
     data[0] = header[0]; /// header
     data[1] = header[1]; /// header
     data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[3] = rand; /// random number
     data[4] = comKey; ///  Communication key
     data[5] = externalCableLock; /// cmd : 0x81
 
     data[6] = 0x13; /// 3: Cable lock unlock   13: Cable lock lock
     data[7] = 0x00; /// Normal unlock
 
-    return encodeData(dataSize, rand, data);
+    return encodeData(dataSize, data);
   }
 
   List<int> cableUnlock(int comKey) {
@@ -267,14 +270,14 @@ class BluetoothCommand {
     data[0] = header[0]; /// header
     data[1] = header[1]; /// header
     data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[3] = rand; /// random number
     data[4] = comKey; ///  Communication key
     data[5] = externalCableLock; /// cmd : 0x81
 
     data[6] = 0x03; /// 3: Cable lock unlock   13: Cable lock lock
     //data[7] = 0x00; /// Normal unlock
 
-    return encodeData(dataSize, rand, data);
+    return encodeData(dataSize, data);
   }
 
   List<int> getCableLockStatus(int comKey) {
@@ -286,14 +289,14 @@ class BluetoothCommand {
     data[0] = header[0]; /// header
     data[1] = header[1]; /// header
     data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[3] = rand; /// random number
     data[4] = comKey; ///  Communication key
     data[5] = externalCableLock; /// cmd : 0x81
 
     data[6] = 0x23;
     //data[7] = 0x00; /// Normal unlock
 
-    return encodeData(dataSize, rand, data);
+    return encodeData(dataSize, data);
   }
 
   List<int> changeMovementSetting(int comKey) {
@@ -305,14 +308,14 @@ class BluetoothCommand {
     data[0] = header[0]; /// header
     data[1] = header[1]; /// header
     data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[3] = rand; /// random number
     data[4] = comKey; ///  Communication key
     data[5] = changeMovementSettingCmd; /// cmd : 0x81
 
     data[6] = 0x01; /// 1 = enable, 0 = disable
     data[7] = 0x03; /// 1 = low, 2 = medium, 3 = high
 
-    return encodeData(dataSize, rand, data);
+    return encodeData(dataSize, data);
   }
 
   List<int> factoryReset(int comKey) {
@@ -324,7 +327,7 @@ class BluetoothCommand {
     data[0] = header[0]; /// header
     data[1] = header[1]; /// header
     data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[3] = rand; /// random number
     data[4] = comKey; ///  Communication key
     data[5] = factoryResetCmd; /// cmd : 0x39
 
@@ -334,7 +337,10 @@ class BluetoothCommand {
     data[9] = 0xff;
     data[10] = 0x01;
 
-    return encodeData(dataSize, rand, data);
+    var hexValue = const HexCodec().encode(data);
+    print("Original: " + hexValue);//For debugging purpose
+
+    return encodeData(dataSize, data);
   }
 
   List<int> requestTotalPacketOfIotInfo(int comKey) {
@@ -346,11 +352,66 @@ class BluetoothCommand {
     data[0] = header[0]; /// header
     data[1] = header[1]; /// header
     data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[3] = rand; /// random number
     data[4] = comKey; ///  Communication key
     data[5] = requestTotalPacketCmd; /// cmd : 0xFA
 
-    return encodeData(dataSize, rand, data);
+    return encodeData(dataSize, data);
+  }
+
+  List<int> updateIotInfo(int comKey, List<int> bytes, List<int> totalPacketByte) {
+    int dataSize = 0x0A;
+    int totalDataSize = 6 + dataSize;
+    List<int> data = List<int>.filled(totalDataSize, 0, growable: true);
+    int rand = random.nextInt(255);
+
+    int totalFileSize = bytes.length;
+    List<int> totalFileByte = integerTo32bytes(totalFileSize);
+
+    CrcValue crc = Crc16Modbus().convert(bytes);
+    List<int> fileCrcByte = integerTo16bytes(int.parse(crc.toString()));
+
+    data[0] = header[0]; /// header
+    data[1] = header[1]; /// header
+    data[2] = dataSize; /// data length
+    data[3] = rand; /// random number
+    data[4] = comKey; ///  Communication key
+    data[5] = updateIotInfoCmd; /// cmd : 0xFB
+    data[6] = 0x01; /// 0x00 = Upgrade firmware type, 0x01 get system information
+    data[7] = totalPacketByte[1];
+    data[8] = totalPacketByte[0];
+    data[9] = fileCrcByte[1];
+    data[10] = fileCrcByte[0];
+    data[11] = 0x86; ///For Mqtt protocol device type
+    data[12] = 0x31;
+    data[13] = 0x31;
+    data[14] = 0x4F;
+    data[15] = 0x35;
+
+    var hexValue = const HexCodec().encode(data);
+    print("Original A " + hexValue);
+    return encodeData(dataSize, data);
+  }
+
+  List<int> sendIotDataByte(List<int> dataPacket, List<int> indexPacket) {
+    List<int> dataBeforeCrc = List<int>.filled(2, 0, growable: true);
+    dataBeforeCrc[0] = indexPacket[0];
+    dataBeforeCrc[1] = indexPacket[1];
+    dataBeforeCrc.insertAll(2, dataPacket);
+    var hexValue = const HexCodec().encode(dataBeforeCrc);
+    print("Original D " + hexValue);
+
+    List<int> dataWithCrc = List<int>.filled(2, 0, growable: true);
+    CrcValue crc = Crc16Modbus().convert(dataBeforeCrc);
+    //print("CRC :" + crc.toString());x
+    List<int> fileCrcByte = integerTo16bytes(int.parse(crc.toString()));
+    dataWithCrc[0] = fileCrcByte[1];
+    dataWithCrc[1] = fileCrcByte[0];
+    dataWithCrc.insertAll(2, dataBeforeCrc);
+    var hexValue2 = const HexCodec().encode(dataWithCrc);
+    print("With CRC D " + hexValue2);
+
+    return dataWithCrc;
   }
 
   List<int> upgradeFirmwareCommand(int comKey, List<int> fileBytes, List<int> totalPacketByte) {
@@ -368,7 +429,7 @@ class BluetoothCommand {
     data[0] = header[0]; /// header
     data[1] = header[1]; /// header
     data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[3] = rand; /// random number
     data[4] = comKey; ///  Communication key
     data[5] = upgradeFirmwareCmd; /// cmd : 0xFB
     data[6] = 0x00; /// 0x00 = Upgrade firmware type, 0x01 get system information
@@ -382,7 +443,7 @@ class BluetoothCommand {
     data[14] = totalFileByte[1];
     data[15] = totalFileByte[0];
 
-    return encodeData(dataSize, rand, data);
+    return encodeData(dataSize, data);
   }
 
   List<int> getPacketDataByIndex(int dataIndex, int comKey) {
@@ -394,14 +455,14 @@ class BluetoothCommand {
     data[0] = header[0]; /// header
     data[1] = header[1]; /// header
     data[2] = dataSize; /// data length
-    data[3] = (rand + 0x32) & 0xFF; /// random number
+    data[3] = rand; /// random number
     data[4] = comKey; ///  Communication key
     data[5] = fetchDataCommand; /// cmd : 0xFC
     data[6] = 0x00;
     data[7] = dataIndex;
     data[8] = 0x57; //deviceType
 
-    return encodeData(dataSize, rand, data);
+    return encodeData(dataSize, data);
   }
 
   List<int> sendFwFileBytesByIndex(List<int> dataPacket, List<int> indexPacket, int fwUpgradeDataIndex) {
@@ -424,18 +485,21 @@ class BluetoothCommand {
     return dataWithCrc;
   }
 
-  List<int> encodeData(int dataSize, int rand, List<int> data) {
+  List<int> encodeData(int dataSize, List<int> data) {
     for (var i = 0; i < dataSize + 2; i++) {
-      data[i + 4] = data[i + 4] ^ rand; /// device key
+      data[i + 4] = data[i + 4] ^ data[3]; /// device key
       print(data[i + 4].toString());
     }
 
-    var hexValue = const HexCodec().encode(data);
-    print(hexValue);//For debugging purpose
+    int rand = (data[3] + 0x32) & 0xFF;
+    data[3] = rand;
 
     CrcValue crc = Crc8Maxim().convert(data);
     print("CRC :" + crc.toString());
     data.add(int.parse(crc.toString()));
+
+    var hexValue = const HexCodec().encode(data);
+    print("Encoded data: " + hexValue);//For debugging purpose
 
     return data;
   }
@@ -483,7 +547,7 @@ class BluetoothCommand {
     const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
     Random _rnd = Random();
     return String.fromCharCodes(Iterable.generate(
-      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+        length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
   }
 
   String randomHexString(int length) {

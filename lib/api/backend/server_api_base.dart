@@ -18,7 +18,7 @@ class ServerApiBase {
         textColor: Colors.black);
   }
 
-  static Future getRequest(String auth, String url, Map<String, dynamic> query) async {
+  static Future getRequest(String auth, String url, Map<String, dynamic> query, String headers) async {
     try {
       bool _hasConnection = await checkInternetConnection();
       if (!_hasConnection) {
@@ -32,7 +32,7 @@ class ServerApiBase {
           queryParameters: query,
           options: Options(
             headers: {HttpHeaders.authorizationHeader: auth},
-            contentType: Headers.jsonContentType,
+            contentType: headers,
           ),
         );
         return result.data;
@@ -59,7 +59,7 @@ class ServerApiBase {
     }
   }
 
-  static Future postRequest(String auth, String url, Map<dynamic, dynamic> body) async {
+  static Future postRequest(String auth, String url, Map<dynamic, dynamic> body, String headers) async {
     try {
       bool _hasConnection = await checkInternetConnection();
       if (!_hasConnection) {
@@ -73,7 +73,7 @@ class ServerApiBase {
           data: body,
           options: Options(
             headers: {HttpHeaders.authorizationHeader: auth},
-            contentType: Headers.jsonContentType,
+            contentType: headers,
           ),
         );
         return result.data;
@@ -100,7 +100,7 @@ class ServerApiBase {
     }
   }
 
-  static Future putRequestWithQuery(String auth, String url, Map<String, dynamic> query) async {
+  static Future putRequestWithQuery(String auth, String url, Map<String, dynamic> query, String headers) async {
 
     try {
       bool _hasConnection = await checkInternetConnection();
@@ -115,7 +115,7 @@ class ServerApiBase {
           queryParameters: query,
           options: Options(
             headers: {HttpHeaders.authorizationHeader: auth},
-            contentType: Headers.jsonContentType,
+            contentType: headers,
           ),
         );
         return result.data;

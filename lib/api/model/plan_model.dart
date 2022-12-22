@@ -1,40 +1,31 @@
-import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PlanModel {
-  String? planId;
+  bool? active;
+  String? description;
+  List<dynamic>? images;
   String? name;
-  String? product;
-  Timestamp? periodStart;
-  Timestamp? periodEnd;
-  Timestamp? created;
+  String? role;
+  String? taxCode;
 
   PlanModel({
-    this.planId,
-    this.name,
-    this.product,
-    this.periodStart,
-    this.periodEnd,
-    this.created,
+    required this.active,
+    required this.description,
+    required this.images,
+    required this.name,
+    required this.role,
+    required this.taxCode,
   });
-
-  Map<String, dynamic> toJson() => {
-
-  };
 
   factory PlanModel.fromJson(Map json) {
     return PlanModel(
-      planId: json['eventId']?? '',
-      name: json['name']?? '',
-      product: json['product']?? '',
-      periodStart: timestampFromJson(json['periodStart']),
-      periodEnd: timestampFromJson(json['periodEnd']),
-      created: timestampFromJson(json['created']),
+        active: json['active'] ?? false,
+        description: json['description'] ?? "",
+        images: json['images'] ?? [],
+        name: json['name'] ?? "",
+        role: json['role'] ?? "",
+        taxCode: json['tax_code'] ?? ""
     );
-  }
-
-  static Timestamp? timestampFromJson(Timestamp? timestamp) {
-    return timestamp;
   }
 }

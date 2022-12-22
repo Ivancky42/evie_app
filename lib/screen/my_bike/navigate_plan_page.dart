@@ -34,9 +34,6 @@ class _NavigatePlanPageState extends State<NavigatePlanPage> {
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
 
-    print("hi");
-print(_bikeProvider.isPlanSubscript);
-
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -47,9 +44,9 @@ print(_bikeProvider.isPlanSubscript);
   Widget _buildChild() {
     ///Future user page
     if (_bikeProvider.isPlanSubscript == true) {
-      return AdminPaidPlan();
+      return const AdminPaidPlan();
     } else {
-      return AdminFreePlan();
+      return const AdminFreePlan();
     }
   }
 }

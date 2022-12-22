@@ -1,4 +1,5 @@
 
+import 'package:dio/dio.dart';
 import 'package:evie_test/api/backend/server_api_base.dart';
 
 class SimApiCaller {
@@ -10,6 +11,7 @@ class SimApiCaller {
 
   static Future getAccessToken() async {
     const auth = 'Bearer ';
+    const header = Headers.jsonContentType;
     final body = {
       "grant_type": "password",
       "username": clientId,
@@ -18,7 +20,7 @@ class SimApiCaller {
     };
 
     var accessToken;
-    await ServerApiBase.postRequest(auth, base_url + "/oauth/token", body).then((value) {
+    await ServerApiBase.postRequest(auth, base_url + "/oauth/token", body, header).then((value) {
       accessToken = value['access_token'];
     });
     return accessToken;
@@ -26,11 +28,12 @@ class SimApiCaller {
 
   static Future getSimStatus(String accessToken, String iccid) async {
     final auth = 'Bearer ' + accessToken;
+    const header = Headers.jsonContentType;
     Map<String, dynamic> query = {
       "iccid": iccid,
     };
     var result;
-    await ServerApiBase.getRequest(auth, base_url + "/get_sim", query).then((value) {
+    await ServerApiBase.getRequest(auth, base_url + "/get_sim", query, header).then((value) {
       result = value;
     });
 
@@ -39,11 +42,12 @@ class SimApiCaller {
 
   static Future activateSim(String accessToken, String iccid) async {
     final auth = 'Bearer ' + accessToken;
+    const header = Headers.jsonContentType;
     Map<String, dynamic> query = {
       "iccid": iccid,
     };
     var result;
-    await ServerApiBase.putRequestWithQuery(auth, base_url + "/activate", query).then((value) {
+    await ServerApiBase.putRequestWithQuery(auth, base_url + "/activate", query, header).then((value) {
       result = value;
     });
 
@@ -52,11 +56,12 @@ class SimApiCaller {
 
   static Future deactivateSim(String accessToken, String iccid) async {
     final auth = 'Bearer ' + accessToken;
+    const header = Headers.jsonContentType;
     Map<String, dynamic> query = {
       "iccid": iccid,
     };
     var result;
-    await ServerApiBase.putRequestWithQuery(auth, base_url + "/deactivate", query).then((value) {
+    await ServerApiBase.putRequestWithQuery(auth, base_url + "/deactivate", query, header).then((value) {
       result = value;
     });
 

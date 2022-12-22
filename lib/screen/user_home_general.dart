@@ -327,12 +327,13 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     if (_bikeProvider.currentBikeIMEI != null && !userBikeList.isNotEmpty) {
       return const AddNewBike();
     } else {
-      ///Free and paid plan
       ///Future user page
       if (_bikeProvider.isPlanSubscript == true) {
-        return PaidPlan();
-      } else {
-        return FreePlan();
+        return const PaidPlan();
+      } else if (_bikeProvider.isPlanSubscript == false) {
+        return const FreePlan();
+      }else{
+        return const CircularProgressIndicator();
       }
     }
   }
