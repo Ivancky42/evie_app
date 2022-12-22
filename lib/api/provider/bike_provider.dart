@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../model/bike_model.dart';
 import '../model/bike_user_model.dart';
 import '../model/location_model.dart';
+import '../model/plan_model.dart';
 import '../model/rfid_model.dart';
 import '../model/user_bike_model.dart';
 import '../model/user_model.dart';
@@ -50,10 +51,12 @@ class BikeProvider extends ChangeNotifier {
   BikeModel? currentBikeModel;
   BikeUserModel? bikeUserModel;
   UserBikeModel? userBikeModel;
+  PlanModel? currentPlanModel;
   RFIDModel? currentRFID;
 
   int currentBikeList = 0;
   String? currentBikeIMEI;
+  bool? isPlanSubscript;
 
   StreamSubscription? bikeListSubscription;
   StreamSubscription? currentBikeSubscription;
@@ -125,18 +128,11 @@ class BikeProvider extends ChangeNotifier {
             }
           }
 
-          if (prefs.containsKey('currentBikeIMEI')) {
-            currentBikeIMEI = prefs.getString('currentBikeIMEI') ?? "";
+          if (prefs.containsKey('currentBikeImei')) {
+            currentBikeIMEI = prefs.getString('currentBikeImei') ?? "";
             notifyListeners();
           } else {
             currentBikeIMEI = userBikeList.keys.first.toString();
-          }
-
-          if (prefs.containsKey('currentBikeList')) {
-            currentBikeList = prefs.getInt('currentBikeList') ?? 0;
-            notifyListeners();
-          } else {
-            currentBikeList = 0;
           }
 
           if (currentBikeIMEI != "") {
@@ -159,6 +155,7 @@ class BikeProvider extends ChangeNotifier {
   Future getBike(String? imei) async {
     currentBikeModel = null;
     SharedPreferences prefs = await _prefs;
+    isPlanSubscript = null;
 
     await currentBikeSubscription?.cancel();
 
@@ -174,12 +171,13 @@ class BikeProvider extends ChangeNotifier {
             Map<String, dynamic>? obj = event.data();
             if (obj != null) {
               currentBikeModel = BikeModel.fromJson(obj);
-              prefs.setString('currentBikeIMEI', imei!);
-              prefs.setInt('currentBikeList', index);
+              prefs.setString('currentBikeImei', imei!);
 
               ///Switch case
               switchBikeResult = SwitchBikeResult.success;
               switchBikeResultListener.add(switchBikeResult);
+
+              getPlanSubscript();
 
               notifyListeners();
             } else {
@@ -198,6 +196,37 @@ class BikeProvider extends ChangeNotifier {
         });
       }
     }
+  }
+
+  getPlanSubscript() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection(bikesCollection)
+        .doc(currentBikeModel!.deviceIMEI)
+        .collection("plan")
+        .get();
+
+    if ( snapshot.size == 0 ) {
+      isPlanSubscript = false;
+    }else {
+      for(int i=0;i<snapshot.docs.length;i++){
+        currentPlanModel = PlanModel.fromJson(snapshot.docs[i].data());
+      }
+      final result = calculateDateDifference(currentPlanModel!.periodEnd!.toDate());
+      if(result < 0){
+        isPlanSubscript = false;
+      }else{
+        isPlanSubscript = true;
+      }
+    }
+    notifyListeners();
+  }
+
+  ///Yesterday : calculateDifference(date) == -1.
+  /// Today : calculateDifference(date) == 0.
+  /// Tomorrow : calculateDifference(date) == 1
+  int calculateDateDifference(DateTime date) {
+    DateTime now = DateTime.now();
+    return DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
   }
 
   Stream<SwitchBikeResult> switchBike() {
@@ -221,8 +250,8 @@ class BikeProvider extends ChangeNotifier {
 
    changeBikeUsingIMEI(String deviceIMEI) async {
     SharedPreferences prefs = await _prefs;
-    currentBikeList = 0;
-    await prefs.setInt('currentBikeList', currentBikeList);
+    await prefs.setString('currentBikeImei', deviceIMEI);
+
     await getBike(deviceIMEI);
   }
 

@@ -328,8 +328,12 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       return const AddNewBike();
     } else {
       ///Free and paid plan
-      return const PaidPlan();
-      //return const FreePlan();
+      ///Future user page
+      if (_bikeProvider.isPlanSubscript == true) {
+        return PaidPlan();
+      } else {
+        return FreePlan();
+      }
     }
   }
 }

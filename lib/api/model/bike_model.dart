@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/model/plan_model.dart';
 
 import 'location_model.dart';
 
@@ -16,6 +17,7 @@ class BikeModel {
   bool? isLocked;
   Timestamp? lastUpdated;
   LocationModel? location;
+  PlanModel? planModel;
   String? macAddr;
   int? networkSignal;
   String? protVersion;
