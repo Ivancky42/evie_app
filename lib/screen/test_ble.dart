@@ -23,6 +23,7 @@ import '../test/test qr scanner.dart';
 import '../widgets/evie_button.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
+import '../widgets/evie_textform.dart';
 
 class TestBle extends StatefulWidget {
   const TestBle({Key? key}) : super(key: key);
@@ -37,6 +38,17 @@ class _TestBleState extends State<TestBle> {
   late AuthProvider _authProvider;
   DeviceConnectionState? connectionState;
   ConnectionStateUpdate? connectionStateUpdate;
+  final TextEditingController _qrCodeController = TextEditingController();
+  final TextEditingController _ipAddressController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _qrCodeController.text = "QRCODE:";
+    _ipAddressController.text = "IP:";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +122,26 @@ class _TestBleState extends State<TestBle> {
 
                 SizedBox(
                   height: 2,
+                ),
+
+                Text(
+                  "QR Code : " + (bluetoothProvider.iotInfoModel?.qrCode ?? "No QR Code"),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                ),
+
+                SizedBox(
+                  height: 2,
+                ),
+
+                Text(
+                  "IP Address : " + (bluetoothProvider.iotInfoModel?.ipAddress ?? "No IP Address"),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
                 ),
 
                 Text(
@@ -348,6 +380,86 @@ class _TestBleState extends State<TestBle> {
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 2, 20, 2),
+                  child: EvieButton(
+                    onPressed: () {
+                      SmartDialog.show(
+                          widget: Form(
+                            key: _formKey,
+                            child: EvieDoubleButtonDialog(
+                                title: "Update",
+                                childContent: Container(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:  EdgeInsets.fromLTRB(0.h, 2.h, 0.h, 2.h),
+                                        child: EvieTextFormField(
+                                          controller: _qrCodeController,
+                                          obscureText: false,
+                                          keyboardType: TextInputType.name,
+                                          hintText: "QRCODE:XXXXX",
+                                          labelText: "Update QR Code",
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:  EdgeInsets.fromLTRB(0.h, 2.h, 0.h, 2.h),
+                                        child: EvieTextFormField(
+                                          controller: _ipAddressController,
+                                          obscureText: false,
+                                          keyboardType: TextInputType.name,
+                                          hintText: "IP Address:XXX.XXX.XXX.XXX",
+                                          labelText: "Update IP Address",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                leftContent: "Cancel",
+                                rightContent: "Save",
+                                onPressedLeft: (){
+                                  SmartDialog.dismiss();
+                                  _qrCodeController.text = "QRCODE:";
+                                  _ipAddressController.text = "IP:";
+                                },
+                                onPressedRight: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    if (bluetoothProvider.bleStatus == BleStatus.ready) {
+                                      if (bluetoothProvider.connectionStateUpdate?.connectionState == DeviceConnectionState.connected) {
+                                        if (_qrCodeController.text != "QRCODE:" && _ipAddressController.text != "IP:") {
+                                          bluetoothProvider.updateIotData(_qrCodeController.text.trim() + "," + _ipAddressController.text.trim() + ",");
+                                        }
+                                        else if (_ipAddressController.text != "IP:") {
+                                          bluetoothProvider.updateIotData(_ipAddressController.text.trim() + ",");
+                                        }
+                                        else if (_qrCodeController.text != "QRCODE:") {
+                                          bluetoothProvider.updateIotData(_qrCodeController.text.trim() + ",");
+                                        }
+
+                                        SmartDialog.dismiss();
+                                        _qrCodeController.text = "QRCODE:";
+                                        _ipAddressController.text = "IP:";
+                                      }
+                                    }
+                                  }
+                                }),
+                          )
+                      );
+                    },
+                    height: 12.2,
+                    width: double.infinity,
+                    child: const Text(
+                      "Update IOT Data",
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold
                       ),
                     ),
                   ),

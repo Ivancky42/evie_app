@@ -15,6 +15,7 @@ import '../model/bike_model.dart';
 enum NotifyDataState {
   notifying,
   getIotInfo,
+  updateIotInfo,
   firmwareUpgrade,
 }
 
@@ -51,6 +52,7 @@ class BluetoothProvider extends ChangeNotifier {
   String? deviceIMEI;
   String? firmwareVer;
   File? fwFile;
+  String? iotData;
   bool isAutoConnect = false;
 
   LinkedHashMap<String, DiscoveredDevice> discoverDeviceList = LinkedHashMap<String, DiscoveredDevice>();
@@ -72,10 +74,14 @@ class BluetoothProvider extends ChangeNotifier {
   NotifyDataState notifyDataState = NotifyDataState.notifying;
 
   /// * Get Iot Info **********/
-  int iotDataIndex = 0;
   String iotInfoString = "";
   int totalIotPacketData = 0;
   ///*/////////////////////////
+
+  /// * Update Iot Info *******/
+  int iotDataIndex = 0;
+  int totalPacketOfIotData = 0;
+  ///*////////////////////////////
 
   /// * Firmware Upgrade *****/
   int fwUpgradeDataIndex = 0;
@@ -287,21 +293,11 @@ class BluetoothProvider extends ChangeNotifier {
       printLog("Notify Error", error.toString());
     });
 
-    ///Dummy data device keys
-    //sendCommand(bluetoothCommand.getComKey('yOTmK50z'));
-    //sendCommand(bluetoothCommand.getComKey('abcdefgh'));
-    sendCommand(bluetoothCommand.getComKey(bleKey));
-    //sendCommand(bluetoothCommand.getComKey('Ijdn8V2o'));
-    //sendCommand(bluetoothCommand.getComKey('EVIE+'));
-    //sendCommand(bluetoothCommand.cableUnlock(0));
-    //sendCommand(bluetoothCommand.getComKey('REw40n21'));
-    //sendCommand(bluetoothCommand.getComKey('RIiOU5wK'));
-
     /// Get communication key from device.
+    sendCommand(bluetoothCommand.getComKey(bleKey));
   }
 
   void stopServices() async {
-    await flutterReactiveBle.clearGattCache(connectionStateUpdate!.deviceId);
     await notifySubscription?.cancel();
   }
 
@@ -327,6 +323,9 @@ class BluetoothProvider extends ChangeNotifier {
         break;
       case NotifyDataState.getIotInfo:
         getIotInfo(data);
+        break;
+      case NotifyDataState.updateIotInfo:
+        getUpdateIotData(data);
         break;
       case NotifyDataState.firmwareUpgrade:
         getFirmwareUpgradeData(data);
@@ -794,6 +793,99 @@ class BluetoothProvider extends ChangeNotifier {
     notifyDataState = NotifyDataState.notifying;
     iotDataIndex = 0;
     totalIotPacketData = 0;
+    iotInfoString = "";
+  }
+
+  /// ************************* ///
+  /// Update IoT Data Function  ///
+  /// ************************* ///
+  void getUpdateIotData(data) {
+    printLog("Original C", HexCodec().encode(data));
+    List<int> decodedData = bluetoothCommand.decodeData(data);
+    printLog("Decode C", HexCodec().encode(decodedData));//Decode data and get actual data
+    if (decodedData.isEmpty) {
+      /// CRC value not valid. Failed decoded. Ignore invalid data.
+    }
+    else {
+      var command = decodedData[5];
+      switch (command) {
+        case BluetoothCommand.getUpdateIotInfoCmd:
+          sendIotDataBytes(decodedData);
+          break;
+      }
+    }
+  }
+
+  void updateIotData(String value) async {
+    iotData = value;
+    List<int> iotDataBytes = utf8.encode(iotData!);
+    double iotDataBytesSize = iotDataBytes.length /16;
+    List<int> iotDataFullBytes = List<int>.filled(0, 0, growable: true);
+    iotDataFullBytes.insertAll(0, iotDataBytes.sublist(0, iotDataBytes.length));
+    ///If the packet not enough 16bytes then filled remaining byte to 0x00
+    ///Make sure total packet do not have decimal places, if do, then increment as one packet.
+    int totalIotDataPacket = 0;
+    if(iotDataBytesSize % 1 == 0) {
+      totalIotDataPacket = iotDataBytesSize.toInt();
+    }
+    else {
+      totalIotDataPacket = iotDataBytesSize.toInt() + 1;
+    }
+    ///Convert totalPacketByte to Integer, for easier calculation.
+    totalPacketOfIotData = totalIotDataPacket;
+    List<int> remainingList = List<int>.filled((16 * totalIotDataPacket) - iotDataBytes.length, 0, growable: true);
+    iotDataFullBytes.insertAll(iotDataBytes.length, remainingList);
+    print("IOT Data: " + iotDataFullBytes.toString());
+    notifyDataState = NotifyDataState.updateIotInfo;
+
+    List<int> totalPacketByte = bluetoothCommand.integerTo16bytes(totalIotDataPacket);
+    bool result = sendCommand(bluetoothCommand.updateIotInfo(requestComKeyResult!.communicationKey, iotDataFullBytes, totalPacketByte));
+
+    notifyListeners();
+  }
+
+  void sendIotDataBytes(List<int> decodedData) async {
+    ///Get Data Index that request by IOT
+    List<int> packetIndexBytes = decodedData.sublist(6, 8);
+
+    ///Convert data Index to Integer for further calculation
+    iotDataIndex = bluetoothCommand.hexToInt(packetIndexBytes);
+    printLog("Current Index", iotDataIndex.toString());
+
+    /// Current Iot data
+    List<int> iotDataBytes = utf8.encode(iotData!);
+
+    /// Extract IOT data bytes follow by index
+    int startIndex = iotDataIndex * 16;
+    int endIndex = ((iotDataIndex + 1) * 16);
+    List<int> iotDataBytesByIndex = List<int>.filled(0, 0, growable: true);
+    if (endIndex > iotDataBytes.length) {
+      iotDataBytesByIndex.insertAll(0, iotDataBytes.sublist(startIndex, iotDataBytes.length));
+      ///If the packet not enough 16bytes then filled remaining byte to 0x00
+      List<int> remainingList = List<int>.filled(16 - iotDataBytesByIndex.length, 0, growable: true);
+      iotDataBytesByIndex.insertAll(iotDataBytesByIndex.length, remainingList);
+    }
+    else {
+      iotDataBytesByIndex = iotDataBytes.sublist(startIndex, endIndex);
+    }
+
+    /// Send IOT data bytes packet follow by index
+    sendCommand(bluetoothCommand.sendIotDataByte(iotDataBytesByIndex, packetIndexBytes));
+
+    if (iotDataIndex == totalPacketOfIotData - 1) {
+      exitUpdateNotifyIotInfoState();
+    }
+
+    notifyListeners();
+  }
+
+  /// Return to NotifyDataState.notifying : search this --> @getNotifyingData()
+  void exitUpdateNotifyIotInfoState() {
+    notifyDataState = NotifyDataState.notifying;
+    iotData = "";
+    iotDataIndex = 0;
+    totalPacketOfIotData = 0;
+    notifyListeners();
   }
 
   /// ************************* ///
