@@ -144,7 +144,7 @@ class AppProviders extends StatelessWidget {
               create: (_) => BluetoothProvider(),
               update: (_, bikeProvider, bluetoothProvider) {
                 return bluetoothProvider!
-                  ..init(bikeProvider.currentBikeModel);
+                  ..update(bikeProvider.currentBikeModel);
               }
           ),
           ChangeNotifierProxyProvider<CurrentUserProvider, NotificationProvider>(
@@ -184,6 +184,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     AuthProvider _authProvider = Provider.of<AuthProvider>(context);
     PlanProvider _planProvider = Provider.of<PlanProvider>(context);
+    BluetoothProvider _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     decideMainPage() {
       if (_authProvider.isLogin == true) {

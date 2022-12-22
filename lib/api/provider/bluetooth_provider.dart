@@ -109,10 +109,13 @@ class BluetoothProvider extends ChangeNotifier {
   StreamController.broadcast();
   late Stream<IotInfoModel> iotInfoModelStream;
 
-  Future<void> init(currentBikeModel) async {
+  BluetoothProvider() {
+    checkBLEStatus();
+  }
+
+  Future<void> update(currentBikeModel) async {
     if (currentBikeModel != null) {
       if (this.currentBikeModel != currentBikeModel) {
-        checkBLEStatus();
         this.currentBikeModel = currentBikeModel;
         notifyListeners();
 

@@ -23,10 +23,12 @@ class PlanProvider extends ChangeNotifier {
   Future<void> update(UserModel? userModel, BikeModel? bikeModel) async {
     if (userModel != null) {
       currentUserModel = userModel;
+      notifyListeners();
     }
 
     if (bikeModel != null) {
       currentBikeModel = bikeModel;
+      notifyListeners();
     }
   }
 
