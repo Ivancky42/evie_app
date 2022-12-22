@@ -126,7 +126,7 @@ class _TurnOnBluetoothState extends State<TurnOnBluetooth> {
                           await _bluetoothProvider.handlePermission();
                         }
                         else if (status == PermissionStatus.permanentlyDenied) {
-                          // TODO: Display a dialog to show user have permanetly denied the bluetooth permission
+                          OpenSettings.openBluetoothSetting();
                         }
                       },
                     ),

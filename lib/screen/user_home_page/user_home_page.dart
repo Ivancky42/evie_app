@@ -1,16 +1,15 @@
 import 'package:evie_test/api/length.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:evie_test/profile/user_profile.dart';
 import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/screen/user_home_page/free_plan/free_plan.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/screen/user_home_general.dart';
-import 'package:evie_test/screen/user_home_bluetooth.dart';
-import 'package:evie_test/screen/user_home_setting.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../my_account/my_account.dart';
+import '../my_bike/admin_free_plan/admin_free_plan.dart';
+import '../my_bike/admin_paid_plan/admin_paid_plan.dart';
+import '../my_bike/navigate_plan_page.dart';
+import '../my_bike/user_bike/user_bike.dart';
 
 ///User default home page when login condition is true
 
@@ -32,8 +31,8 @@ class _UserHomePageState extends State<UserHomePage> {
   ///Body Screen navigation by bottom navigation bar
   final screen = [
     UserHomeGeneral(),
-    FreePlan(),
-    UserHomeBluetooth(),
+    TestBle(),
+    NavigatePlanPage(),
     TestBle(),
     MyAccount(),
   ];
