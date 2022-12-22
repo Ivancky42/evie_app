@@ -9,6 +9,8 @@ class UserModel {
   String? phoneNumber;
   Timestamp? created;
   Timestamp? updated;
+  String? stripeId;
+  String? stripeLink;
 
   UserModel({
     required this.uid,
@@ -19,6 +21,8 @@ class UserModel {
     this.phoneNumber,
     this.created,
     this.updated,
+    this.stripeId,
+    this.stripeLink,
   });
 
   Map<String, dynamic> toJson() => {
@@ -42,6 +46,8 @@ class UserModel {
       phoneNumber:        json['phoneNumber']?? '',
       created:            timestampFromJson(json['created'] as Timestamp?),
       updated:            timestampFromJson(json['updated'] as Timestamp?),
+      stripeId:           json['stripeId']?? '',
+      stripeLink:         json['stripeLink']?? ''
     );
   }
 

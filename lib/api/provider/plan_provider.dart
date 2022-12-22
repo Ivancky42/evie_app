@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/backend/stripe_api_caller.dart';
 import 'package:evie_test/api/model/bike_model.dart';
 import 'package:evie_test/api/model/plan_model.dart';
 import 'package:evie_test/api/model/price_model.dart';
@@ -40,7 +41,7 @@ class PlanProvider extends ChangeNotifier {
           switch (docChange.type) {
             case DocumentChangeType.added:
               Map<String, dynamic>? obj = docChange.doc.data();
-              availablePlanList.putIfAbsent(docChange.doc.id, () => PlanModel.fromJson(obj!));
+              availablePlanList.putIfAbsent(docChange.doc.id, () => PlanModel.fromJson(obj!, docChange.doc.id));
               notifyListeners();
               break;
             case DocumentChangeType.removed:
@@ -49,7 +50,7 @@ class PlanProvider extends ChangeNotifier {
               break;
             case DocumentChangeType.modified:
               Map<String, dynamic>? obj = docChange.doc.data();
-              availablePlanList.update(docChange.doc.id, (value) => PlanModel.fromJson(obj!));
+              availablePlanList.update(docChange.doc.id, (value) => PlanModel.fromJson(obj!, docChange.doc.id));
               notifyListeners();
               break;
           }
@@ -62,9 +63,9 @@ class PlanProvider extends ChangeNotifier {
     });
   }
 
-  Future<void> getPriceList(String deviceIMEI) async {
+  Future<void> getPriceList(String planId) async {
     priceListSubscription?.cancel();
-    priceListSubscription = FirebaseFirestore.instance.collection("bikes").doc(deviceIMEI)
+    priceListSubscription = FirebaseFirestore.instance.collection("plans").doc(planId)
             .collection("prices").snapshots()
             .listen((snapshot) {
           if (snapshot.docs.isNotEmpty) {
@@ -72,7 +73,7 @@ class PlanProvider extends ChangeNotifier {
               switch (docChange.type) {
                 case DocumentChangeType.added:
                   Map<String, dynamic>? obj = docChange.doc.data();
-                  priceList.putIfAbsent(docChange.doc.id, () => PriceModel.fromJson(obj!));
+                  priceList.putIfAbsent(docChange.doc.id, () => PriceModel.fromJson(obj!, docChange.doc.id));
                   notifyListeners();
                   break;
                 case DocumentChangeType.removed:
@@ -82,7 +83,7 @@ class PlanProvider extends ChangeNotifier {
                   break;
                 case DocumentChangeType.modified:
                   Map<String, dynamic>? obj = docChange.doc.data();
-                  priceList.update(docChange.doc.id, (value) => PriceModel.fromJson(obj!));
+                  priceList.update(docChange.doc.id, (value) => PriceModel.fromJson(obj!, docChange.doc.id));
                   notifyListeners();
                   break;
               }
@@ -93,5 +94,9 @@ class PlanProvider extends ChangeNotifier {
             notifyListeners();
           }
         });
+  }
+
+  void purchasePlan(PlanModel planModel, PriceModel priceModel) {
+    StripeApiCaller.redirectToCheckout(priceModel.id!, currentUserModel!.stripeId!);
   }
 }

@@ -1,4 +1,5 @@
 class PlanModel {
+  String? id;
   bool? active;
   String? description;
   List<dynamic>? images;
@@ -7,6 +8,7 @@ class PlanModel {
   String? taxCode;
 
   PlanModel({
+    this.id,
     required this.active,
     required this.description,
     required this.images,
@@ -15,8 +17,9 @@ class PlanModel {
     required this.taxCode,
   });
 
-  factory PlanModel.fromJson(Map json) {
+  factory PlanModel.fromJson(Map json, String id) {
     return PlanModel(
+        id: id,
         active: json['active'] ?? false,
         description: json['description'] ?? "",
         images: json['images'] ?? [],

@@ -69,15 +69,17 @@ class BikeProvider extends ChangeNotifier {
   StreamController.broadcast();
 
   ///Get current user model
-  Future<void> init(UserModel? user) async {
-    userBikeList.clear();
-    if (user == null) {
-      clear();
-    } else {
+  Future<void> update(UserModel? user) async {
+    if (user != null) {
+      if (currentUserModel?.uid != user.uid) {
+        userBikeList.clear();
+        getBikeList(user.uid);
+      }
       currentUserModel = user;
-      getBikeList(currentUserModel?.uid);
-
       notifyListeners();
+    }
+    else {
+      clear();
     }
   }
 
