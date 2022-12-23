@@ -200,6 +200,7 @@ class BikeProvider extends ChangeNotifier {
   }
 
   getPlanSubscript() async {
+     currentBikePlanSubscription?.cancel();
      currentBikePlanSubscription = FirebaseFirestore.instance
         .collection(bikesCollection)
         .doc(currentBikeModel!.deviceIMEI)
@@ -253,6 +254,7 @@ class BikeProvider extends ChangeNotifier {
       }else{
           currentBikePlanModel = null;
           isPlanSubscript = false;
+          notifyListeners();
         }
 
       }});
@@ -754,6 +756,30 @@ class BikeProvider extends ChangeNotifier {
   queryBikeEvents()async{
     return FirebaseFirestore.instance.collection(bikesCollection).doc(currentBikeModel!.deviceIMEI!).collection(eventsCollection).orderBy("created", descending: true);
   }
+
+  updatePurchasedPlan(String deviceIMEI, PlanModel planModel) async {
+    DocumentReference ref = FirebaseFirestore.instance.collection("plans").doc(planModel.id);
+    try {
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(deviceIMEI)
+          .collection("plans")
+          .doc(planModel.id)
+          .set({
+            'name': planModel.name,
+            'updated': Timestamp.now(),
+            'created': Timestamp.now(),
+            'periodStart': Timestamp.now(),
+            'periodEnd': Timestamp.fromDate(DateTime.now().add(const Duration(days: 365))),
+            'product': ref
+          });
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
   clear() async {
     SharedPreferences prefs = await _prefs;
     prefs.remove('currentBikeName');

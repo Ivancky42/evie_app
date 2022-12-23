@@ -16,9 +16,11 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../api/backend/stripe_api_caller.dart';
+import '../api/model/plan_model.dart';
 import '../api/navigator.dart';
 import '../api/provider/auth_provider.dart';
 import '../api/provider/bike_provider.dart';
+import '../api/provider/plan_provider.dart';
 import '../test/test qr scanner.dart';
 import '../widgets/evie_button.dart';
 import '../widgets/evie_double_button_dialog.dart';
@@ -36,6 +38,7 @@ class _TestBleState extends State<TestBle> {
   late BluetoothProvider bluetoothProvider;
   late BikeProvider _bikeProvider;
   late AuthProvider _authProvider;
+  late PlanProvider _planProvider;
   DeviceConnectionState? connectionState;
   ConnectionStateUpdate? connectionStateUpdate;
   final TextEditingController _qrCodeController = TextEditingController();
@@ -56,6 +59,7 @@ class _TestBleState extends State<TestBle> {
     bluetoothProvider = context.watch<BluetoothProvider>();
     _bikeProvider = Provider.of<BikeProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
+    _planProvider = Provider.of<PlanProvider>(context);
     connectionStateUpdate = bluetoothProvider.connectionStateUpdate;
     connectionState = bluetoothProvider.connectionStateUpdate?.connectionState;
 
@@ -1034,20 +1038,36 @@ class _TestBleState extends State<TestBle> {
                   },
                 ),
 
-                EvieButton(
-                  height: 12.2.h,
-                  width: double.infinity,
-                  child: const Text(
-                    "Checkout plan",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12.0,
-                    ),
-                  ),
-                  onPressed: () {
-                    StripeApiCaller.redirectToCheckout("price_1M6WhSBjvoM881zMdhgNSmRq", "cus_MqU42nA51o3Nis").then((sessionId) {
-                      changeToStripeCheckoutScreen(context, sessionId);
-                    });
+                Text("Available Plans", style: TextStyle(
+                  fontSize: 16, color: Colors.black,
+                ),),
+
+                ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: _planProvider.availablePlanList.length,
+                  itemBuilder: (context, index) {
+                    String key = _planProvider.availablePlanList.keys.elementAt(index);
+                    PlanModel planModel = _planProvider.availablePlanList[key];
+                    return EvieButton(
+                      height: 12.2.h,
+                      width: double.infinity,
+                      child: Text(
+                        "Checkout plan : " + planModel.name.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        _planProvider.getPrice(planModel).then((priceModel) {
+                          _planProvider.purchasePlan(priceModel.id).then((value) {
+                            changeToStripeCheckoutScreen(context, value, _bikeProvider.currentBikeModel!, planModel, priceModel);
+                          });
+                        });
+                      },
+                    );
                   },
                 ),
 

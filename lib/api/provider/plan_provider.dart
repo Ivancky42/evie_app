@@ -62,6 +62,17 @@ class PlanProvider extends ChangeNotifier {
       }
     });
   }
+  
+  Future <PriceModel> getPrice(PlanModel planModel) async {
+    return FirebaseFirestore.instance
+        .collection("plans")
+        .doc(planModel.id)
+        .collection("prices")
+        .get().then((querySnapshot) {
+            Map<String, dynamic>? obj = querySnapshot.docs[0].data();
+            return PriceModel.fromJson(obj, querySnapshot.docs[0].id);
+        });
+  }
 
   Future<void> getPriceList(String planId) async {
     priceListSubscription?.cancel();
@@ -96,7 +107,9 @@ class PlanProvider extends ChangeNotifier {
         });
   }
 
-  void purchasePlan(PlanModel planModel, PriceModel priceModel) {
-    StripeApiCaller.redirectToCheckout(priceModel.id!, currentUserModel!.stripeId!);
+  Future <String> purchasePlan(String priceId) {
+    return StripeApiCaller.redirectToCheckout(priceId, currentUserModel!.stripeId!).then((value) {
+      return value;
+    });
   }
 }

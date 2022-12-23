@@ -24,6 +24,9 @@ import '../screen/onboarding/qr_scanning.dart';
 import '../screen/signup_method.dart';
 import '../screen/signup_page.dart';
 import '../screen/user_notification_details.dart';
+import 'model/bike_model.dart';
+import 'model/plan_model.dart';
+import 'model/price_model.dart';
 
 void changeToWelcomeScreen(BuildContext context) {
   Navigator.of(context).pushNamedAndRemoveUntil("/welcome", (route) => false);
@@ -277,9 +280,19 @@ void changeToNotificationDetailsScreen(BuildContext context, key, value) {
   );
 }
 
-void changeToStripeCheckoutScreen(BuildContext context, value) {
+void changeToStripeCheckoutScreen(
+    BuildContext context,
+    String value,
+    BikeModel bikeModel,
+    PlanModel planModel,
+    PriceModel priceModel) {
   Navigator.push(context,
-    MaterialPageRoute(builder: (context) => StripeCheckoutScreen(sessionId: value,)),
+    MaterialPageRoute(builder: (context) => StripeCheckoutScreen(
+      sessionId: value,
+      bikeModel: bikeModel,
+      planModel: planModel,
+      priceModel: priceModel,
+    )),
   );
 }
 

@@ -1,14 +1,14 @@
 class PriceModel {
-  String? id;
+  String id;
   bool? active;
   String? billingScheme;
   String? currency;
   String? description;
   String? type;
-  String? unitAmount;
+  int unitAmount;
 
   PriceModel({
-    this.id,
+    required this.id,
     required this.active,
     required this.billingScheme,
     required this.currency,
@@ -19,13 +19,13 @@ class PriceModel {
 
   factory PriceModel.fromJson(Map json, String id) {
     return PriceModel(
-        id: id,
+        id: id ?? "",
         active: json['active'] ?? false,
         billingScheme: json['billing_scheme'] ?? "",
         currency: json['currency'] ?? [],
         description: json['description'] ?? "",
         type: json['type'] ?? "",
-        unitAmount: json['unit_amount'] ?? ""
+        unitAmount: json['unit_amount'] ?? 0
     );
   }
 }

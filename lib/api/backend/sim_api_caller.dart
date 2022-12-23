@@ -11,7 +11,7 @@ class SimApiCaller {
 
   static Future getAccessToken() async {
     const auth = 'Bearer ';
-    const header = Headers.jsonContentType;
+    const header = Headers.formUrlEncodedContentType;
     final body = {
       "grant_type": "password",
       "username": clientId,

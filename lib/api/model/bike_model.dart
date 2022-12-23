@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/plan_model.dart';
+import 'package:evie_test/api/model/simcard_model.dart';
 
 import 'location_model.dart';
 
@@ -17,6 +18,7 @@ class BikeModel {
   bool? isLocked;
   Timestamp? lastUpdated;
   LocationModel? location;
+  SimSettingModel? simSetting;
   PlanModel? planModel;
   String? macAddr;
   int? networkSignal;
@@ -36,6 +38,7 @@ class BikeModel {
     required this.isLocked,
     required this.lastUpdated,
     required this.location,
+    required this.simSetting,
     required this.macAddr,
     required this.networkSignal,
     required this.protVersion,
@@ -65,6 +68,7 @@ class BikeModel {
       isLocked:   json['isLocked']?? false,
       lastUpdated:    timestampFromJson(json['lastUpdated']),
       location:   LocationModel.fromJson(json['location'] as Map<String, dynamic>),
+      simSetting:   SimSettingModel.fromJson(json['simSetting'] as Map<String, dynamic>),
       macAddr: json['macAddr']?? '',
       networkSignal: json['networkSignal']?? 0,
       protVersion: json['protVersion']?? '',

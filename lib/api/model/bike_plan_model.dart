@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class BikePlanModel {
   String? planId;
   String? name;
-  String? product;
+  DocumentReference? product;
   Timestamp? periodStart;
   Timestamp? periodEnd;
   Timestamp? created;
@@ -25,7 +25,7 @@ class BikePlanModel {
     return BikePlanModel(
       planId: json['eventId'] ?? '',
       name: json['name'] ?? '',
-      product: json['product'] ?? '',
+      product: json['product'] ?? null,
       periodStart: timestampFromJson(json['periodStart']),
       periodEnd: timestampFromJson(json['periodEnd']),
       created: timestampFromJson(json['created']),
