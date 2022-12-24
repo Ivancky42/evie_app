@@ -56,20 +56,22 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
         },
         navigationDelegate: (NavigationRequest request) {
           if (request.url.startsWith('https://evie-6952d.web.app/success.html')) {
-            ///Added BikePlanModel in firestore.
-            _bikeProvider.updatePurchasedPlan(widget.bikeModel.deviceIMEI!, widget.planModel).then((result) {
-              if (result) {
-                SimApiCaller.getAccessToken().then((accessToken) {
-                  SimApiCaller.activateSim(accessToken, widget.bikeModel.simSetting!.iccid!).then((value) {
-                    if (value['status']['primary'] == "PENDING" && value['status']['secondary'] == "LIVE") {
-                      ///Successfully activate sim but in pending state.
-                      SmartDialog.show(widget: EvieSingleButtonDialogCupertino(title: 'Successfully subscribed', content: 'Plan Already subscribed.', rightContent: 'View Plan', onPressedRight: () {Navigator.of(context).pop();},));
-                    }
-                  });
-                });
-              }
-            });
-            
+            // ///Added BikePlanModel in firestore.
+            // _bikeProvider.updatePurchasedPlan(widget.bikeModel.deviceIMEI!, widget.planModel).then((result) {
+            //   if (result) {
+            //     SimApiCaller.getAccessToken().then((accessToken) {
+            //       SimApiCaller.activateSim(accessToken, widget.bikeModel.simSetting!.iccid!).then((value) {
+            //         if (value['status']['primary'] == "PENDING" && value['status']['secondary'] == "LIVE") {
+            //           ///Successfully activate sim but in pending state.
+            //           SmartDialog.show(widget: EvieSingleButtonDialogCupertino(title: 'Successfully subscribed', content: 'Plan Already subscribed.', rightContent: 'View Plan', onPressedRight: () {Navigator.of(context).pop();},));
+            //         }
+            //       });
+            //     });
+            //   }
+            // });
+
+            SmartDialog.show(widget: EvieSingleButtonDialogCupertino(title: 'Successfully subscribed', content: 'Plan Already subscribed.', rightContent: 'View Plan', onPressedRight: () {Navigator.of(context).pop();},));
+
 
           } else if (request.url.startsWith('https://evie-6952d.web.app/cancel.html')) {
             SmartDialog.show(widget: EvieSingleButtonDialogCupertino(title: 'Operation failed', content: 'User cancelled the action', rightContent: 'BACK', onPressedRight: () {Navigator.of(context).pop();},));

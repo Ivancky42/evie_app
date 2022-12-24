@@ -30,10 +30,10 @@ dependencies:
       url: https://github.com/flutter-mapbox-gl/maps.git
       ref: f505fcf5c79b75c165703028af77f3af62d382ae
 
-  flutter_map:
-    git:
-      url: https://github.com/fleaflet/flutter_map.git
-      ref: 89f6c2bc2e773f13a4555a1bd2d5a72d4d8043c3
+#  flutter_map:
+#    git:
+#      url: https://github.com/fleaflet/flutter_map.git
+#      ref: 89f6c2bc2e773f13a4555a1bd2d5a72d4d8043c3
 
   mobile_scanner:
     git:
@@ -94,6 +94,7 @@ dependencies:
   flutter_compass: ^0.7.0
   paginate_firestore: ^1.0.3+1
   slider_button: ^2.0.0
+  flutter_map: ^3.1.0
 
 
 dev_dependencies:

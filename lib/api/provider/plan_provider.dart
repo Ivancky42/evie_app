@@ -107,8 +107,8 @@ class PlanProvider extends ChangeNotifier {
         });
   }
 
-  Future <String> purchasePlan(String priceId) {
-    return StripeApiCaller.redirectToCheckout(priceId, currentUserModel!.stripeId!).then((value) {
+  Future <String> purchasePlan(String deviceIMEI, String planId, String priceId) {
+    return StripeApiCaller.redirectToCheckout(deviceIMEI, planId, priceId, currentUserModel!.stripeId!).then((value) {
       return value;
     });
   }
