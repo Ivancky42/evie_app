@@ -53,13 +53,14 @@ class _EditProfileState extends State<EditProfile> {
 
     return WillPopScope(
       onWillPop: () async {
+        changeToMyAccount(context);
         return false;
       },
       child: Scaffold(
           appBar: AccountPageAppbar(
             title: 'Edit My Profile',
             onPressed: () {
-              changeToUserHomePageScreen(context);
+     changeToMyAccount(context);
             },
           ),
           body: Column(
@@ -117,7 +118,7 @@ class _EditProfileState extends State<EditProfile> {
               EditProfileContainer(
                 subtitle: 'Name',
                 content: _currentUserProvider.currentUserModel?.name ?? "",
-                  trailingImage:   "assets/buttons/pen_edit.svg",
+                  trailingImage:  "assets/buttons/pen_edit.svg",
                 onPress: (){
                   SmartDialog.show(
                       widget: Form(

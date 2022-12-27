@@ -1,3 +1,7 @@
+import 'package:evie_test/screen/add_rfid/add_new_rfid.dart';
+import 'package:evie_test/screen/add_rfid/name_rfid.dart';
+import 'package:evie_test/screen/add_rfid/rfid_card.dart';
+import 'package:evie_test/screen/add_rfid/rfid_card_list.dart';
 import 'package:evie_test/screen/my_account/edit_profile.dart';
 import 'package:evie_test/screen/my_account/my_account.dart';
 import 'package:evie_test/screen/onboarding/email_preference_control.dart';
@@ -10,11 +14,13 @@ import 'package:evie_test/screen/onboarding/turn_on_location.dart';
 import 'package:evie_test/screen/onboarding/turn_on_notifications.dart';
 import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/screen/test_ble.dart';
+import 'package:evie_test/screen/user_home_page/user_home_page.dart';
 import 'package:evie_test/screen/verify_email.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../screen/my_bike/navigate_plan_page.dart';
 import '../screen/onboarding/bike_connect_failed.dart';
 import '../screen/onboarding/bike_connect_success.dart';
 import '../screen/onboarding/congratulation.dart';
@@ -80,11 +86,6 @@ void changeToUserProfileScreen(BuildContext context) {
       .pushNamedAndRemoveUntil("/userProfile", (route) => false);
 }
 
-void changeToUserHomePageScreen(BuildContext context) {
-  Navigator.of(context)
-      .pushNamedAndRemoveUntil("/userHomePage", (route) => false);
-}
-
 void changeToUserBluetoothScreen(BuildContext context) {
   Navigator.of(context)
       .pushNamedAndRemoveUntil("/userBluetooth", (route) => false);
@@ -116,6 +117,15 @@ void changeToRFIDScreen(BuildContext context) {
       .pushNamedAndRemoveUntil("/rfid", (route) => false);
 }
 
+void changeToUserHomePageScreen(BuildContext context ) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.bottomToTop,
+      child: const UserHomePage(0),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
 void changeToLetsGoScreen(BuildContext context) {
   Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (context) => const LetsGo())
@@ -240,6 +250,18 @@ void changeToEmailPreferenceControlScreen(BuildContext context) {
   ),
   );
 }
+
+void changeToNavigatePlanScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const UserHomePage(2),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+
 void changeToDisplayControlScreen(BuildContext context) {
   Navigator.pushReplacement(context,
   PageTransition(
@@ -250,6 +272,46 @@ void changeToDisplayControlScreen(BuildContext context) {
   );
 }
 
+
+
+void changeToRFIDCardScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const RFIDCard(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+void changeToAddNewRFIDScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const AddNewRFID(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+void changeToNameRFIDScreen(BuildContext context, String rfidNumber) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: NameRFID(rfidNumber),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+void changeToRFIDListScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const RFIDCardList(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
 
 void changeToEditProfile(BuildContext context) {
     Navigator.of(context)
@@ -268,8 +330,13 @@ void changeToEnterNewPassword(BuildContext context) {
 
 
 void changeToMyAccount(BuildContext context) {
-  Navigator.of(context)
-      .pushNamedAndRemoveUntil("/myAccount", (route) => false);
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const UserHomePage(4),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
 }
 
 

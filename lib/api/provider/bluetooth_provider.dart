@@ -515,7 +515,6 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   /// 6). Function for delete RFID card and listening for acknowledge status from bike. *4.5.11
-
   Stream<DeleteRFIDCardResult> deleteRFID(String rfidID) {
     if (requestComKeyResult != null) {
       bool isConnected = sendCommand(

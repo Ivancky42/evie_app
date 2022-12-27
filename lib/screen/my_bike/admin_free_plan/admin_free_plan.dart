@@ -5,12 +5,10 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evie_test/widgets/widgets.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
@@ -20,10 +18,11 @@ import '../../../api/colours.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
+import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../../../widgets/evie_textform.dart';
+import '../my_bike_function.dart';
 import '../my_bike_widget.dart';
-
 
 
 ///User profile page with user account information
@@ -44,13 +43,31 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
   final TextEditingController _bikeNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-
+  DeviceConnectionState? connectionState;
+  CableLockResult? cableLockState;
+  bool isDeviceConnected = false;
 
   @override
   Widget build(BuildContext context) {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+
+    connectionState = _bluetoothProvider.connectionStateUpdate?.connectionState;
+    cableLockState = _bluetoothProvider.cableLockState;
+
+    ///Handle all data if bool isDeviceConnected is true
+    if (connectionState == DeviceConnectionState.connected &&
+        cableLockState?.lockState == LockState.lock ||
+        cableLockState?.lockState == LockState.unlock) {
+      setState(() {
+        isDeviceConnected = true;
+      });
+    } else {
+      setState(() {
+        isDeviceConnected = false;
+      });
+    }
 
     Future.delayed(Duration.zero, () {
       if (_bluetoothProvider.connectionStateUpdate?.failure != null) {
@@ -226,8 +243,28 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
                       ),
                       BikePageContainer (
                           subtitle: "RFID Car/Flash Key/E-key/Smart Key",
-                          content: "1 card",
-                          onPress: () {},
+                          content: _bikeProvider.rfidList.length.toString(),
+                          onPress: () {
+                            if(isDeviceConnected){
+                              if(_bikeProvider.rfidList.isNotEmpty){
+                                changeToRFIDListScreen(context);
+                              }else{
+                                changeToRFIDCardScreen(context);
+                              }
+
+                            }else{
+                              SmartDialog.show(widget: EvieDoubleButtonDialog(
+                                  title: "Please Connect Your Bike",
+                                  childContent: Text("Please connect your bike to access the function...?",style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.w400),),
+                                  leftContent: "Cancel",
+                                  rightContent: "Connect Bike",
+                                  onPressedLeft: (){SmartDialog.dismiss();},
+                                  onPressedRight: (){
+                                    SmartDialog.dismiss();
+                                    _bluetoothProvider.startScanAndConnect();
+                                  }));
+                            }
+                          },
                           trailingImage: "assets/buttons/next.svg"),
                       BikePageDivider(),
                       BikePageContainer (

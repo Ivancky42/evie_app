@@ -150,10 +150,8 @@ class _QRAddManuallyState extends State<QRAddManually> {
                   await _bikeProvider.handleBarcodeData(code);
 
                   if(_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success){
-
                    changeToBikeConnectSuccessScreen(context);
                   }else{
-
                     changeToBikeConnectFailedScreen(context);
                   }
 

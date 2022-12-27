@@ -14,7 +14,8 @@ import '../my_bike/user_bike/user_bike.dart';
 ///User default home page when login condition is true
 
 class UserHomePage extends StatefulWidget {
-  const UserHomePage({Key? key}) : super(key: key);
+  final int? currentIndex;
+  const UserHomePage(this.currentIndex, {Key? key}) : super(key: key);
 
   @override
   _UserHomePageState createState() => _UserHomePageState();
@@ -22,11 +23,15 @@ class UserHomePage extends StatefulWidget {
 
 class _UserHomePageState extends State<UserHomePage> {
   //Current index is 0, init state body[screen] is user home page general screen
-  int currentIndex = 0;
+  late int currentIndex;
 
   ///Appbar title
   String _title = '';
 
+  @override
+  void initState() {
+    currentIndex = widget.currentIndex ?? 0;
+  }
 
   ///Body Screen navigation by bottom navigation bar
   final screen = [

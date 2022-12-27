@@ -1,0 +1,135 @@
+import 'dart:async';
+import 'dart:io';
+import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/bike_provider.dart';
+import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/screen/my_account/my_account_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:evie_test/api/provider/current_user_provider.dart';
+
+import '../../api/navigator.dart';
+import '../../api/provider/bluetooth_provider.dart';
+import '../../bluetooth/modelResult.dart';
+import '../../widgets/evie_single_button_dialog.dart';
+import '../../widgets/evie_textform.dart';
+
+///User profile page with user account information
+
+class AddNewRFID extends StatefulWidget {
+  const AddNewRFID({Key? key}) : super(key: key);
+
+  @override
+  _AddNewRFIDState createState() => _AddNewRFIDState();
+}
+
+class _AddNewRFIDState extends State<AddNewRFID> {
+
+  late BluetoothProvider _bluetoothProvider;
+  late StreamSubscription addRFIDStream;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => startScanRFIDCard());
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    _bluetoothProvider =  Provider.of<BluetoothProvider>(context);
+
+    return WillPopScope(
+      onWillPop: () async {
+        changeToNavigatePlanScreen(context);
+        return false;
+      },
+      child: Scaffold(
+        appBar: AccountPageAppbar(
+          title: 'Add New RFID Card',
+          onPressed: () {
+            changeToNavigatePlanScreen(context);
+          },
+        ),
+        body: Stack(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
+                  child: Text(
+                    "Add New RFID Card",
+                    style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 155.h),
+                  child: Text(
+                    "Scan your RFID card",
+                    style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(45.w, 0.h, 45.2.w,221.h),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      "assets/images/mention_amigo.svg",
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),),
+    );
+  }
+
+  startScanRFIDCard(){
+    SmartDialog.showLoading(msg: "register RFID....");
+    addRFIDStream = _bluetoothProvider.addRFID().listen((addRFIDStatus)  {
+      SmartDialog.dismiss(status: SmartStatus.loading);
+
+      if (addRFIDStatus.addRFIDState == AddRFIDState.startReadCard) {
+      }else if(addRFIDStatus.addRFIDState == AddRFIDState.addCardSuccess){
+          addRFIDStream.cancel();
+          SmartDialog.dismiss(status: SmartStatus.loading);
+
+            changeToNameRFIDScreen(context, addRFIDStatus.rfidNumber!);
+
+      }else if(addRFIDStatus.addRFIDState == AddRFIDState.cardIsExist){
+        addRFIDStream.cancel();
+        SmartDialog.dismiss(status: SmartStatus.loading);
+        SmartDialog.show(
+            keepSingle: true,
+            widget: EvieSingleButtonDialog(
+                title: "Error",
+                content: "RFID already exist",
+                rightContent: "OK",
+                onPressedRight: (){
+                  SmartDialog.dismiss();
+                  changeToRFIDCardScreen(context);
+                }));
+      }
+    }, onError: (error) {
+      addRFIDStream.cancel();
+      SmartDialog.dismiss(status: SmartStatus.loading);
+      SmartDialog.show(
+          keepSingle: true,
+          widget: EvieSingleButtonDialog(
+          title: "Error",
+          content: error.toString(),
+          rightContent: "OK",
+          onPressedRight: (){
+            SmartDialog.dismiss();
+          changeToRFIDCardScreen(context);
+          }));
+    });
+  }
+
+}

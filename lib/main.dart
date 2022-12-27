@@ -29,7 +29,6 @@ import 'package:evie_test/screen/login_page.dart';
 import 'package:evie_test/profile/user_profile.dart';
 import 'package:evie_test/screen/forget_your_password.dart';
 import 'package:evie_test/theme/AppTheme.dart';
-import 'package:evie_test/api/routes.dart';
 import 'package:evie_test/screen/user_home_page/user_home_page.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -231,7 +230,7 @@ class MyApp extends StatelessWidget {
           "/signIn": (context) => const SignIn(),
           "/forgetPassword": (context) => const ForgetYourPassword(),
           "/userProfile": (context) => const UserProfile(),
-          "/userHomePage": (context) => const UserHomePage(),
+          "/userHomePage": (context) => const UserHomePage(0),
           "/userBluetooth": (context) => const UserHomeBluetooth(),
           "/userChangePassword": (context) => const UserChangePassword(),
           "/testBle": (context) => const TestBle(),

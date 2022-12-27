@@ -39,6 +39,7 @@ class BikeProvider extends ChangeNotifier {
   String bikesCollection = dotenv.env['DB_COLLECTION_BIKES'] ?? 'DB not found';
   String rfidCollection = dotenv.env['DB_COLLECTION_RFID'] ?? 'DB not found';
   String eventsCollection = dotenv.env['DB_COLLECTION_EVENTS'] ?? 'DB not found';
+  String plansCollection = dotenv.env['DB_COLLECTION_PLANS'] ?? 'DB not found';
   String inventoryCollection =
       dotenv.env['DB_COLLECTION_INVENTORY'] ?? 'DB not found';
 
@@ -204,11 +205,10 @@ class BikeProvider extends ChangeNotifier {
      currentBikePlanSubscription = FirebaseFirestore.instance
         .collection(bikesCollection)
         .doc(currentBikeModel!.deviceIMEI)
-        .collection("plans")
+        .collection(plansCollection)
         .snapshots()
     .listen((snapshot) {
       {
-
         if (snapshot.docs.isNotEmpty) {
           for (var docChange in snapshot.docChanges) {
             switch (docChange.type) {
@@ -249,16 +249,12 @@ class BikeProvider extends ChangeNotifier {
                 break;
             }
           }
-
-
       }else{
           currentBikePlanModel = null;
           isPlanSubscript = false;
           notifyListeners();
         }
-
       }});
-
   }
 
   /// Yesterday : calculateDifference(date) == -1.
@@ -701,13 +697,12 @@ class BikeProvider extends ChangeNotifier {
 
   getRFIDList() {
     rfidList.clear();
-
     try {
       rfidListSubscription = FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(currentBikeModel!.deviceIMEI)
           .collection(rfidCollection)
-          .orderBy("created", descending: false)
+          .orderBy("created", descending: true)
           .snapshots()
           .listen((snapshot) {
         if (snapshot.docs.isNotEmpty) {
@@ -716,7 +711,7 @@ class BikeProvider extends ChangeNotifier {
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
                 rfidList.putIfAbsent(docChange.doc.id,
-                    () => RFIDModel.fromJson(obj!, docChange.doc.id));
+                    () => RFIDModel.fromJson(obj!));
                 notifyListeners();
                 break;
               case DocumentChangeType.removed:
@@ -726,11 +721,13 @@ class BikeProvider extends ChangeNotifier {
               case DocumentChangeType.modified:
                 Map<String, dynamic>? obj = docChange.doc.data();
                 rfidList.update(docChange.doc.id,
-                    (value) => RFIDModel.fromJson(obj!, docChange.doc.id));
+                    (value) => RFIDModel.fromJson(obj!));
                 notifyListeners();
                 break;
             }
           }
+        }else{
+          rfidList.clear();
         }
       });
     } catch (e) {
@@ -738,7 +735,7 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
-  uploadRFIDtoFireStore(List<int> rfidID) {
+  uploadRFIDtoFireStore(String rfidID, String rfidName) {
     try {
       FirebaseFirestore.instance
           .collection(bikesCollection)
@@ -746,12 +743,67 @@ class BikeProvider extends ChangeNotifier {
           .collection(rfidCollection)
           .doc(rfidID.toString())
           .set({
+        'rfidID' : rfidID,
+        'rfidName' : rfidName,
         'created': Timestamp.now(),
       }, SetOptions(merge: true));
+
+      return true;
     } catch (e) {
       debugPrint(e.toString());
+      return false;
     }
   }
+
+  updateRFIDCardName(String rfidID, String rfidName) {
+    try {
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI)
+          .collection(rfidCollection)
+          .doc(rfidID.toString())
+          .update({
+        'rfidName': rfidName,
+      });
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  deleteRFIDFirestore(String rfidID) {
+    try {
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI)
+          .collection(rfidCollection)
+          .doc(rfidID.toString())
+          .delete();
+
+      notifyListeners();
+
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  // uploadRFIDtoFireStore(List<int> rfidID) {
+  //   try {
+  //     FirebaseFirestore.instance
+  //         .collection(bikesCollection)
+  //         .doc(currentBikeModel!.deviceIMEI)
+  //         .collection(rfidCollection)
+  //         .doc(rfidID.toString())
+  //         .set({
+  //       'created': Timestamp.now(),
+  //     }, SetOptions(merge: true));
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //   }
+  // }
 
   queryBikeEvents()async{
     return FirebaseFirestore.instance.collection(bikesCollection).doc(currentBikeModel!.deviceIMEI!).collection(eventsCollection).orderBy("created", descending: true);

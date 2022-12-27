@@ -92,7 +92,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
     initLocationService();
     WidgetsBinding.instance.addObserver(this);
-
   }
 
   void initLocationService() async {
