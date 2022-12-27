@@ -21,6 +21,7 @@ import '../api/navigator.dart';
 import '../api/provider/auth_provider.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/provider/plan_provider.dart';
+import '../api/provider/theme_provider.dart';
 import '../test/test qr scanner.dart';
 import '../widgets/evie_button.dart';
 import '../widgets/evie_double_button_dialog.dart';
@@ -39,6 +40,7 @@ class _TestBleState extends State<TestBle> {
   late BikeProvider _bikeProvider;
   late AuthProvider _authProvider;
   late PlanProvider _planProvider;
+  late ThemeProvider _themeProvider;
   DeviceConnectionState? connectionState;
   ConnectionStateUpdate? connectionStateUpdate;
   final TextEditingController _qrCodeController = TextEditingController();
@@ -60,6 +62,7 @@ class _TestBleState extends State<TestBle> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
     _planProvider = Provider.of<PlanProvider>(context);
+    _themeProvider = Provider.of<ThemeProvider>(context);
     connectionStateUpdate = bluetoothProvider.connectionStateUpdate;
     connectionState = bluetoothProvider.connectionStateUpdate?.connectionState;
 
@@ -863,6 +866,51 @@ class _TestBleState extends State<TestBle> {
                       ),
                     ),
                   ),
+                ),
+
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "System Theme Mode",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    _themeProvider.enableSystemTheme();
+                  },
+                ),
+
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Light Theme Mode",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    _themeProvider.enableLightTheme();
+                  },
+                ),
+
+                EvieButton(
+                  height: 12.2.h,
+                  width: double.infinity,
+                  child: const Text(
+                    "Dark Theme Mode",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    _themeProvider.enableDarkTheme();
+                  },
                 ),
 
 
