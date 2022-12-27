@@ -5,6 +5,8 @@ import 'package:crclib/catalog.dart';
 import 'package:crclib/crclib.dart';
 import 'package:hex/hex.dart';
 
+import 'modelResult.dart';
+
 
 class BluetoothCommand {
 
@@ -299,7 +301,7 @@ class BluetoothCommand {
     return encodeData(dataSize, data);
   }
 
-  List<int> changeMovementSetting(int comKey) {
+  List<int> changeMovementSetting(int comKey, bool isEnabled, MovementSensitivity movementSensitivity) {
     int dataSize = 2;
     int totalDataSize = 6 + dataSize;
     List<int> data = List<int>.filled(totalDataSize, 0, growable: true);
@@ -312,8 +314,23 @@ class BluetoothCommand {
     data[4] = comKey; ///  Communication key
     data[5] = changeMovementSettingCmd; /// cmd : 0x81
 
-    data[6] = 0x01; /// 1 = enable, 0 = disable
-    data[7] = 0x03; /// 1 = low, 2 = medium, 3 = high
+    /// 1 = enable, 0 = disable
+    if (isEnabled) {
+      data[6] = 0x01;
+    }
+    else {
+      data[6] = 0x00;
+    }
+
+    if (movementSensitivity == MovementSensitivity.low) {
+      data[7] = 0x01;
+    }
+    else if (movementSensitivity == MovementSensitivity.medium) {
+      data[7] = 0x02;
+    }
+    else if (movementSensitivity == MovementSensitivity.high) {
+      data[7] = 0x03;
+    }
 
     return encodeData(dataSize, data);
   }

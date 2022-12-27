@@ -40,6 +40,12 @@ enum PairingState {
   pairDeviceFailed,
 }
 
+enum MovementSensitivity {
+  low,
+  medium,
+  high
+}
+
 class RequestComKeyResult {
 
   int dataSize = 0;

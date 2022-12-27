@@ -780,7 +780,7 @@ class _TestBleState extends State<TestBle> {
                   child: EvieButton(
                     onPressed: () {
                       SmartDialog.showLoading(msg: "Changing Movement Setting....");
-                      bluetoothProvider.changeMovementSetting().listen((changeBleNameResult) {
+                      bluetoothProvider.changeMovementSetting(true, MovementSensitivity.low).listen((changeBleNameResult) {
                         SmartDialog.dismiss(status: SmartStatus.loading);
                         if (changeBleNameResult.result == CommandResult.success) {
                           /// Successfully Changed BLE Key
@@ -796,7 +796,37 @@ class _TestBleState extends State<TestBle> {
                     height: 12.2,
                     width: double.infinity,
                     child: const Text(
-                      "Change Movement Setting",
+                      "Enable Movement Setting with low mode",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: EvieButton(
+                    onPressed: () {
+                      SmartDialog.showLoading(msg: "Changing Movement Setting....");
+                      bluetoothProvider.changeMovementSetting(false, MovementSensitivity.low).listen((changeBleNameResult) {
+                        SmartDialog.dismiss(status: SmartStatus.loading);
+                        if (changeBleNameResult.result == CommandResult.success) {
+                          /// Successfully Changed BLE Key
+                        }
+                        else {
+                          /// Failed to change BLE key
+                        }
+                      }, onError: (error) {
+                        SmartDialog.dismiss(status: SmartStatus.loading);
+                        print(error);
+                      });
+                    },
+                    height: 12.2,
+                    width: double.infinity,
+                    child: const Text(
+                      "Disable Movement Setting with low mode",
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.black,
