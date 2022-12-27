@@ -41,7 +41,10 @@ class PlanProvider extends ChangeNotifier {
           switch (docChange.type) {
             case DocumentChangeType.added:
               Map<String, dynamic>? obj = docChange.doc.data();
-              availablePlanList.putIfAbsent(docChange.doc.id, () => PlanModel.fromJson(obj!, docChange.doc.id));
+              if (obj!['active']) {
+                availablePlanList.putIfAbsent(docChange.doc.id, () =>
+                    PlanModel.fromJson(obj!, docChange.doc.id));
+              }
               notifyListeners();
               break;
             case DocumentChangeType.removed:
@@ -50,7 +53,13 @@ class PlanProvider extends ChangeNotifier {
               break;
             case DocumentChangeType.modified:
               Map<String, dynamic>? obj = docChange.doc.data();
-              availablePlanList.update(docChange.doc.id, (value) => PlanModel.fromJson(obj!, docChange.doc.id));
+              if (obj!['active']) {
+                availablePlanList.putIfAbsent(docChange.doc.id, () =>
+                    PlanModel.fromJson(obj!, docChange.doc.id));
+              }
+              else {
+                availablePlanList.removeWhere((key, value) => key == docChange.doc.id);
+              }
               notifyListeners();
               break;
           }
@@ -107,8 +116,8 @@ class PlanProvider extends ChangeNotifier {
         });
   }
 
-  Future <String> purchasePlan(String priceId) {
-    return StripeApiCaller.redirectToCheckout(priceId, currentUserModel!.stripeId!).then((value) {
+  Future <String> purchasePlan(String deviceIMEI, String planId, String priceId) {
+    return StripeApiCaller.redirectToCheckout(deviceIMEI, planId, priceId, currentUserModel!.stripeId!).then((value) {
       return value;
     });
   }

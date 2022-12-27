@@ -614,10 +614,10 @@ class BluetoothProvider extends ChangeNotifier {
     }
   }
 
-  Stream<MovementSettingResult> changeMovementSetting() {
+  Stream<MovementSettingResult> changeMovementSetting(bool isEnabled, MovementSensitivity movementSensitivity) {
     if (requestComKeyResult != null) {
       bool isConnected = sendCommand(
-          bluetoothCommand.changeMovementSetting(requestComKeyResult!.communicationKey));
+          bluetoothCommand.changeMovementSetting(requestComKeyResult!.communicationKey, isEnabled, movementSensitivity));
       if (isConnected) {
         return chgMoveSettingResultListener.stream
             .timeout(const Duration(seconds: 6), onTimeout: (sink) {

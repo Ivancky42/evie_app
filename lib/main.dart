@@ -1,6 +1,7 @@
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
+import 'package:evie_test/api/provider/theme_provider.dart';
 import 'package:evie_test/profile/user_profile.dart';
 import 'package:evie_test/screen/account_verified.dart';
 import 'package:evie_test/screen/input_name.dart';
@@ -119,6 +120,9 @@ class AppProviders extends StatelessWidget {
           ChangeNotifierProvider<ThemeChangeNotifier>(
             create: (context) => ThemeChangeNotifier(),
           ),
+          ChangeNotifierProvider<ThemeProvider>(
+            create: (context) => ThemeProvider(),
+          ),
       ///    ChangeNotifierProvider<LocationProvider>(
       ///      create: (context) => LocationProvider(),
       ///    ),
@@ -184,6 +188,8 @@ class MyApp extends StatelessWidget {
     AuthProvider _authProvider = Provider.of<AuthProvider>(context);
     PlanProvider _planProvider = Provider.of<PlanProvider>(context);
     BluetoothProvider _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    ThemeProvider _themeProvider = Provider.of<ThemeProvider>(context);
+    _themeProvider.init();
 
     decideMainPage() {
       if (_authProvider.isLogin == true) {
@@ -206,7 +212,7 @@ class MyApp extends StatelessWidget {
       return MaterialApp(
         title: 'Evie',
 
-        themeMode: ThemeMode.system,
+        themeMode: _themeProvider.themeMode,
 
         //Light theme data
         theme: AppTheme.lightTheme,
