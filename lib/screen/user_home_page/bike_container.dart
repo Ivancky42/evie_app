@@ -66,7 +66,7 @@ class _BikeContainerState extends State<BikeContainer> {
       height: 59.h,
       child: ListTile(
         leading: Padding(
-          padding: EdgeInsets.fromLTRB(16.w, 0.h, 6.w, 17.h),
+          padding: EdgeInsets.fromLTRB(16.w, 17.h, 0.w, 0.h),
           child: Image(
             image: AssetImage(getCurrentBikeStatusImage(widget.bikeModel.location!.status)),
             height: 25.h,
@@ -76,7 +76,7 @@ class _BikeContainerState extends State<BikeContainer> {
         title: Text(
             widget.bikeModel.deviceName!,
             style: TextStyle(
-                fontSize: 16.sp, fontWeight: FontWeight.w700),
+                fontSize: 16.sp, fontWeight: FontWeight.w900),
         ),
         subtitle: Row(
           children: [
@@ -87,7 +87,9 @@ class _BikeContainerState extends State<BikeContainer> {
             ),
             Text(getCurrentBikeStatusString(
                 isDeviceConnected,
-                widget.bikeModel.location!.status)),
+                widget.bikeModel.location!.status), style: TextStyle(
+              fontSize: 16.sp, fontWeight: FontWeight.w400
+            ),),
           ],
         ),
         trailing: CupertinoSwitch(

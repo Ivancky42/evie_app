@@ -60,8 +60,9 @@ class _HomePageWidget_StatusBarState extends State<HomePageWidget_StatusBar> {
         color: dangerColor,
       ),
       child: Padding(padding:
-           EdgeInsets.only(left:16.0, top: 8.0, bottom: 8.0),
+           EdgeInsets.only(left:22.w),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SvgPicture.asset(
              alertImage,
@@ -69,14 +70,13 @@ class _HomePageWidget_StatusBarState extends State<HomePageWidget_StatusBar> {
             SizedBox(width:12.25.w,),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Last seen",style: TextStyle(fontSize: 12,color: fontColor),),
-                Text(widget.location?.name ?? "Not available",style: TextStyle(fontSize: 20, color: fontColor),),
-                Text("1 minutes ago",style: TextStyle(fontSize: 12,color: fontColor),),
-
+                Text("Last seen",style: TextStyle(fontSize: 12.sp, color: fontColor, fontWeight: FontWeight.w400),),
+                Text(widget.location?.name ?? "Not available",style: TextStyle(fontSize: 20.sp, color: fontColor, fontWeight: FontWeight.w900),),
+                Text("1 minutes ago",style: TextStyle(fontSize: 16.sp,color: fontColor, fontWeight: FontWeight.w400),),
               ],
-            )
+            ),
           ],
 
         ),

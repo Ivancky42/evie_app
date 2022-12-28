@@ -133,7 +133,7 @@ class EvieDoubleButtonDialog extends StatelessWidget{
 
                 Padding(
                   padding:  EdgeInsets.only(bottom: 8.h),
-                  child: Text(title, style: TextStyle(fontSize: 24.sp),),
+                  child: Text(title, style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),),
                 ),
                 Padding(
                   padding:  EdgeInsets.only(bottom: 11.h),
