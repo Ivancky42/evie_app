@@ -1,7 +1,10 @@
-import 'package:evie_test/screen/add_rfid/add_new_rfid.dart';
-import 'package:evie_test/screen/add_rfid/name_rfid.dart';
-import 'package:evie_test/screen/add_rfid/rfid_card.dart';
-import 'package:evie_test/screen/add_rfid/rfid_card_list.dart';
+import 'package:evie_test/screen/my_bike/detection_sensitivity.dart';
+import 'package:evie_test/screen/my_bike/motion_sensitivity.dart';
+import 'package:evie_test/screen/rfid_card/add_new_rfid.dart';
+import 'package:evie_test/screen/rfid_card/name_rfid.dart';
+import 'package:evie_test/screen/rfid_card/rfid_add_failed.dart';
+import 'package:evie_test/screen/rfid_card/rfid_card.dart';
+import 'package:evie_test/screen/rfid_card/rfid_card_list.dart';
 import 'package:evie_test/screen/my_account/edit_profile.dart';
 import 'package:evie_test/screen/my_account/my_account.dart';
 import 'package:evie_test/screen/onboarding/email_preference_control.dart';
@@ -261,7 +264,6 @@ void changeToNavigatePlanScreen(BuildContext context) {
   );
 }
 
-
 void changeToDisplayControlScreen(BuildContext context) {
   Navigator.pushReplacement(context,
   PageTransition(
@@ -313,6 +315,48 @@ void changeToRFIDListScreen(BuildContext context) {
   );
 }
 
+void changeToRFIDAddFailedScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const RFIDAddFailed(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+void changeToMotionSensitivityScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const MotionSensitivity(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+
+void changeToDetectionSensitivityScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const DetectionSensitivity(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+
+void changeToMyAccount(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const UserHomePage(4),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
 void changeToEditProfile(BuildContext context) {
     Navigator.of(context)
         .pushNamedAndRemoveUntil("/editProfile", (route) => false);
@@ -326,17 +370,6 @@ void changeToVerifyPassword(BuildContext context) {
 void changeToEnterNewPassword(BuildContext context) {
   Navigator.of(context)
       .pushNamedAndRemoveUntil("/enterNewPassword", (route) => false);
-}
-
-
-void changeToMyAccount(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const UserHomePage(4),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
 }
 
 

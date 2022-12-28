@@ -48,6 +48,21 @@ class _NameRFIDState extends State<NameRFID> {
 
     return WillPopScope(
       onWillPop: () async {
+        SmartDialog.show(
+            widget: EvieDoubleButtonDialog(
+                title: "Are you sure you want to quit adding RFID?",
+                childContent: const Text("?"),
+                leftContent: "Cancel",
+                rightContent: "Yes",
+                onPressedLeft: () {
+                  SmartDialog.dismiss();
+                },
+                onPressedRight: () {
+                  SmartDialog.dismiss();
+                  _bikeProvider.deleteRFIDFirestore(widget.rfidNumber);
+                  _bluetoothProvider.deleteRFID(widget.rfidNumber);
+                  changeToNavigatePlanScreen(context);
+                }));
         return false;
       },
       child: Scaffold(
@@ -56,7 +71,7 @@ class _NameRFIDState extends State<NameRFID> {
           onPressed: () {
             SmartDialog.show(
                 widget: EvieDoubleButtonDialog(
-                    title: "Are you sure you want to quit?",
+                    title: "Are you sure you want to quit adding RFID?",
                     childContent: const Text("?"),
                     leftContent: "Cancel",
                     rightContent: "Yes",
@@ -65,7 +80,9 @@ class _NameRFIDState extends State<NameRFID> {
                     },
                     onPressedRight: () {
                       SmartDialog.dismiss();
+                      _bikeProvider.deleteRFIDFirestore(widget.rfidNumber);
                       _bluetoothProvider.deleteRFID(widget.rfidNumber);
+                      changeToNavigatePlanScreen(context);
                     }));
           },
         ),

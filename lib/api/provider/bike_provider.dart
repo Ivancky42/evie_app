@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/model/movement_setting_model.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -40,8 +41,7 @@ class BikeProvider extends ChangeNotifier {
   String rfidCollection = dotenv.env['DB_COLLECTION_RFID'] ?? 'DB not found';
   String eventsCollection = dotenv.env['DB_COLLECTION_EVENTS'] ?? 'DB not found';
   String plansCollection = dotenv.env['DB_COLLECTION_PLANS'] ?? 'DB not found';
-  String inventoryCollection =
-      dotenv.env['DB_COLLECTION_INVENTORY'] ?? 'DB not found';
+  String inventoryCollection = dotenv.env['DB_COLLECTION_INVENTORY'] ?? 'DB not found';
 
   LinkedHashMap bikeUserList = LinkedHashMap<String, BikeUserModel>();
   LinkedHashMap bikeUserDetails = LinkedHashMap<String, UserModel>();
@@ -54,7 +54,7 @@ class BikeProvider extends ChangeNotifier {
   BikeUserModel? bikeUserModel;
   UserBikeModel? userBikeModel;
   BikePlanModel? currentBikePlanModel;
-  RFIDModel? currentRFID;
+  RFIDModel? currentRFIDModel;
 
   int currentBikeList = 0;
   String? currentBikeIMEI;
@@ -790,20 +790,25 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
-  // uploadRFIDtoFireStore(List<int> rfidID) {
-  //   try {
-  //     FirebaseFirestore.instance
-  //         .collection(bikesCollection)
-  //         .doc(currentBikeModel!.deviceIMEI)
-  //         .collection(rfidCollection)
-  //         .doc(rfidID.toString())
-  //         .set({
-  //       'created': Timestamp.now(),
-  //     }, SetOptions(merge: true));
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //   }
-  // }
+
+  updateMotionSensitivity(bool isEnabled, String sensitivity) {
+    try {
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI)
+          .set({
+        "movementSetting" : {
+          'enabled' : isEnabled,
+          'sensitivity' : sensitivity,
+        }
+      }, SetOptions(merge: true));
+
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
 
   queryBikeEvents()async{
     return FirebaseFirestore.instance.collection(bikesCollection).doc(currentBikeModel!.deviceIMEI!).collection(eventsCollection).orderBy("created", descending: true);
