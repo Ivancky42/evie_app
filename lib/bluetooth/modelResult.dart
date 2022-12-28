@@ -3,6 +3,18 @@ import 'dart:convert';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:hex/hex.dart';
 
+enum DeviceConnectResult {
+  scanning,
+  scanTimeout,
+  scanError,
+  connecting,
+  partialConnected,
+  connected,
+  disconnecting,
+  disconnected,
+  connectError,
+}
+
 enum CommandResult {
   unknown,
   success,

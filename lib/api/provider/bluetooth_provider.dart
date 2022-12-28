@@ -73,6 +73,11 @@ class BluetoothProvider extends ChangeNotifier {
 
   NotifyDataState notifyDataState = NotifyDataState.notifying;
 
+  /// * Device Connect Status ****/
+  StreamController<DeviceConnectResult> deviceConnectStream =
+  StreamController.broadcast();
+  DeviceConnectResult? deviceConnectResult;
+
   /// * Get Iot Info **********/
   String iotInfoString = "";
   int totalIotPacketData = 0;
@@ -92,7 +97,6 @@ class BluetoothProvider extends ChangeNotifier {
   ///*/////////////////////////
 
   /// * Command Listener ***/
-
   StreamController<UnlockResult> unlockResultListener =
   StreamController.broadcast();
   StreamController<ChangeBleKeyResult> chgBleKeyResultListener =
@@ -197,23 +201,28 @@ class BluetoothProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  startScanAndConnect() async {
-    await disconnectDevice();
+  Stream<DeviceConnectResult> startScanAndConnect() {
+    //await disconnectDevice();
     if (Platform.isAndroid) {
       connectDevice(currentBikeModel!.macAddr!);
     }
     else {
-      await stopScan();
+      //await stopScan();
+      deviceConnectStream.add(DeviceConnectResult.scanning);
+      deviceConnectResult = DeviceConnectResult.scanning;
       scanSubscription = flutterReactiveBle.scanForDevices(
           scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
         if (device.name == currentBikeModel?.bleName) {
           connectDevice(device.id);
         }
       }, onError: (error) {
+        deviceConnectStream.add(DeviceConnectResult.scanError);
+        deviceConnectResult = DeviceConnectResult.scanError;
         stopScan();
         scanSubscription = null;
       });
     }
+    return deviceConnectStream.stream;
   }
 
   connectDevice(String foundDeviceId) async {
@@ -231,16 +240,24 @@ class BluetoothProvider extends ChangeNotifier {
 
       switch (connectionStateUpdate?.connectionState) {
         case DeviceConnectionState.connecting:
+          deviceConnectStream.add(DeviceConnectResult.connecting);
+          deviceConnectResult = DeviceConnectResult.connecting;
         // TODO: Handle this case.
           break;
         case DeviceConnectionState.connected:
+          deviceConnectStream.add(DeviceConnectResult.partialConnected);
+          deviceConnectResult = DeviceConnectResult.partialConnected;
           discoverServices(currentBikeModel!.bleKey!);
           break;
         case DeviceConnectionState.disconnecting:
+          deviceConnectStream.add(DeviceConnectResult.disconnecting);
+          deviceConnectResult = DeviceConnectResult.disconnecting;
           stopServices();
           break;
         case DeviceConnectionState.disconnected:
         // TODO: Handle this case.
+          deviceConnectStream.add(DeviceConnectResult.disconnected);
+          deviceConnectResult = DeviceConnectResult.disconnected;
           clearBluetoothStatus();
           connectSubscription?.cancel();
           break;
@@ -249,6 +266,8 @@ class BluetoothProvider extends ChangeNotifier {
       }
       notifyListeners();
     }, onError: (error) {
+      deviceConnectStream.add(DeviceConnectResult.connectError);
+      deviceConnectResult = DeviceConnectResult.connectError;
       printLog("Connect Error", error.toString());
       connectSubscription?.cancel();
     });
@@ -693,6 +712,8 @@ class BluetoothProvider extends ChangeNotifier {
         case BluetoothCommand.externalCableLock:
           cableLockResult.add(CableLockResult(decodedData));
           cableLockState = CableLockResult(decodedData);
+          deviceConnectStream.add(DeviceConnectResult.connected);
+          deviceConnectResult = DeviceConnectResult.connected;
           notifyListeners();
           break;
         case BluetoothCommand.addRFIDCmd:
