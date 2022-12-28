@@ -230,7 +230,7 @@ class _UserBikeState extends State<UserBike> {
                                   borderRadius: BorderRadius.circular(20.w)),
                               elevation: 0.0,
                               backgroundColor: EvieColors.PrimaryColor,
-                              padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 14.h),
+                              //padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 14.h),
 
                             ),
                           ),

@@ -30,16 +30,16 @@ class BikePageContainer extends StatelessWidget {
         child: Container(
           height: 62.h,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
+            padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(subtitle ?? "",style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
-                    SizedBox(height: 4.h,),
                     content != null ? Text(
                       content!,
                       style: TextStyle(fontSize: 16.sp),

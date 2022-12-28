@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:evie_test/api/model/location_model.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,6 @@ import 'package:geocoding_platform_interface/src/models/placemark.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:sizer/sizer.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../api/navigator.dart';
@@ -426,12 +426,12 @@ class _BikeLocationState extends State<BikeLocation> {
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      const Text(
+                                                      Text(
                                                         "Last Seen",
                                                         style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w400,
-                                                            fontSize: 12),
+                                                            fontSize: 12.sp),
                                                       ),
                                                       SizedBox(
                                                         height: 0.5.h,

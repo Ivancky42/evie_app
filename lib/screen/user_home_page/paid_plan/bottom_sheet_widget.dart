@@ -56,9 +56,6 @@ bool isDeviceConnected;
                 ),
               ],
             ),
-            SizedBox(
-              height: 4.h,
-            ),
             Text(
               "Est. ${distanceBetween}m",
               style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400),
@@ -76,8 +73,8 @@ bool isDeviceConnected;
           },
           child: Image(
             image: AssetImage(currentBikeStatusImage),
-            height: 60.h,
-            width: 87.w,
+            height: 59.h,
+            width: 86.w,
           ),
         ),
       ],
