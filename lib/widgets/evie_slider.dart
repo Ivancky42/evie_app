@@ -5,6 +5,7 @@ import '../api/colours.dart';
 ///Cupertino switch widget
 class EvieSlider extends StatelessWidget {
   final ValueChanged<double?> onChanged;
+  final ValueChanged<double?>? onChangedEnd;
   final double value;
   final double max;
   final String label;
@@ -14,6 +15,7 @@ class EvieSlider extends StatelessWidget {
   const EvieSlider({
     Key? key,
     required this.onChanged,
+    this.onChangedEnd,
     required this.value,
     required this.max,
     required this.label,
@@ -33,6 +35,7 @@ class EvieSlider extends StatelessWidget {
       thumbColor: Color(0xffFAFAFA),
       label: label,
       onChanged: onChanged,
+      onChangeEnd: onChangedEnd,
     );
   }
 

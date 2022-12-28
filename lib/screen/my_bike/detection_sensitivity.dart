@@ -94,48 +94,49 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
                           division: 2,
                           max: 2,
                           label: _bikeProvider.currentBikeModel!.movementSetting?.sensitivity ?? "medium",
-                          onChanged: (value) async {
+                          onChanged: (value) {
                             setState(() {
                               currentSliderValue = value!;
                             });
-
+                          },
+                          onChangedEnd: (value)async{
                             if(value == 0 || value == 1 || value == 2){
-                            MovementSensitivity sensitivity = MovementSensitivity.medium;
+                              MovementSensitivity sensitivity = MovementSensitivity.medium;
 
-                            if(value == 0 ){
-                              sensitivity = MovementSensitivity.low;
-                            }else if(value == 1){
-                              sensitivity = MovementSensitivity.medium;
-                            }else if(value == 2){
-                              sensitivity = MovementSensitivity.high;
-                            }
+                              if(value == 0 ){
+                                sensitivity = MovementSensitivity.low;
+                              }else if(value == 1){
+                                sensitivity = MovementSensitivity.medium;
+                              }else if(value == 2){
+                                sensitivity = MovementSensitivity.high;
+                              }
 
-                            SmartDialog.showLoading(msg: "Changing");
-                            final uploadResult = await _bikeProvider.updateMotionSensitivity(true, sensitivity.toString().split(".").last);
-                            if(uploadResult == true){
+                              SmartDialog.showLoading(msg: "Changing");
+                              final uploadResult = await _bikeProvider.updateMotionSensitivity(true, sensitivity.toString().split(".").last);
+                              if(uploadResult == true){
 
-                              StreamSubscription? subscription;
-                              subscription = _bluetoothProvider.changeMovementSetting(true, sensitivity).listen((changeMovementResult) {
-                                if (changeMovementResult.result == CommandResult.success) {
-                                  SmartDialog.dismiss(status: SmartStatus.loading);
-                                  subscription?.cancel();
-                                } else {
-                                  SmartDialog.dismiss(status: SmartStatus.loading);
-                                  subscription?.cancel();
-                                  SmartDialog.show(widget: EvieSingleButtonDialog(
-                                      title: "Error",
-                                      content: "Error change motion sensitivity",
-                                      rightContent: "Ok",
-                                      onPressedRight: (){SmartDialog.dismiss();}));
-                                }
-                              });
-                            }else{
-                              SmartDialog.show(widget: EvieSingleButtonDialog(
-                                  title: "Error",
-                                  content: "Error update motion sensitivity",
-                                  rightContent: "Ok",
-                                  onPressedRight: (){SmartDialog.dismiss();}));
-                            }
+                                StreamSubscription? subscription;
+                                subscription = _bluetoothProvider.changeMovementSetting(true, sensitivity).listen((changeMovementResult) {
+                                  if (changeMovementResult.result == CommandResult.success) {
+                                    SmartDialog.dismiss(status: SmartStatus.loading);
+                                    subscription?.cancel();
+                                  } else {
+                                    SmartDialog.dismiss(status: SmartStatus.loading);
+                                    subscription?.cancel();
+                                    SmartDialog.show(widget: EvieSingleButtonDialog(
+                                        title: "Error",
+                                        content: "Error change motion sensitivity",
+                                        rightContent: "Ok",
+                                        onPressedRight: (){SmartDialog.dismiss();}));
+                                  }
+                                });
+                              }else{
+                                SmartDialog.show(widget: EvieSingleButtonDialog(
+                                    title: "Error",
+                                    content: "Error update motion sensitivity",
+                                    rightContent: "Ok",
+                                    onPressedRight: (){SmartDialog.dismiss();}));
+                              }
                             }
                           },
                         ),

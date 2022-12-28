@@ -49,6 +49,8 @@ class _AdminPaidPlanState extends State<AdminPaidPlan> {
   bool isDeviceConnected = false;
   StreamController? connectStream;
 
+  int? pageNavigate;
+
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
@@ -64,6 +66,25 @@ class _AdminPaidPlanState extends State<AdminPaidPlan> {
       connectStream?.close();
       setState(() {
         isDeviceConnected = true;
+      });
+      Future.delayed(Duration.zero, () {
+        if(pageNavigate != null){
+          switch(pageNavigate){
+            case 0:
+              pageNavigate = null;
+              if(_bikeProvider.rfidList.isNotEmpty){
+                changeToRFIDListScreen(context);
+              }else{
+                changeToRFIDCardScreen(context);
+              }
+
+              break;
+            case 1:
+              pageNavigate = null;
+              changeToMotionSensitivityScreen(context);
+              break;
+          }
+        }
       });
     } else {
       connectStream?.close();
@@ -257,21 +278,20 @@ class _AdminPaidPlanState extends State<AdminPaidPlan> {
                               }else{
                                 changeToRFIDCardScreen(context);
                               }
-
                             }else{
-                              SmartDialog.show(widget: EvieDoubleButtonDialog(
-                                  title: "Please Connect Your Bike",
-                                  childContent: Text("Please connect your bike to access the function...?",style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.w400),),
-                                  leftContent: "Cancel",
-                                  rightContent: "Connect Bike",
-                                  onPressedLeft: (){SmartDialog.dismiss();},
-                                  onPressedRight: (){
-                                    SmartDialog.dismiss();
-                                    checkBLEPermissionAndAction(_bluetoothProvider, connectionState,connectStream);
-                                    if (connectionState == DeviceConnectionState.disconnected) {
-                                      _bluetoothProvider.startScanAndConnect();
-                                    }
-                                  }));
+                              if (_bluetoothProvider.connectionStateUpdate?.connectionState.name != "connecting" && _bluetoothProvider.connectionStateUpdate?.connectionState.name != "connected") {
+                                SmartDialog.show(widget: EvieDoubleButtonDialog(
+                                    title: "Please Connect Your Bike",
+                                    childContent: Text("Please connect your bike to access the function...?",style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.w400),),
+                                    leftContent: "Cancel",
+                                    rightContent: "Connect Bike",
+                                    onPressedLeft: (){SmartDialog.dismiss();},
+                                    onPressedRight: (){
+                                      SmartDialog.dismiss();
+                                      checkBLEPermissionAndAction(_bluetoothProvider, connectionState,connectStream);
+                                      pageNavigate = 0;
+                                    }));
+                              }
                             }
                           },
                           trailingImage: "assets/buttons/next.svg"),
@@ -282,17 +302,27 @@ class _AdminPaidPlanState extends State<AdminPaidPlan> {
                           onPress: () {
                             if(isDeviceConnected){
                               changeToMotionSensitivityScreen(context);
-                            }else{
-                              SmartDialog.show(widget: EvieDoubleButtonDialog(
-                                  title: "Please Connect Your Bike",
-                                  childContent: Text("Please connect your bike to access the function...?",style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.w400),),
-                                  leftContent: "Cancel",
-                                  rightContent: "Connect Bike",
-                                  onPressedLeft: (){SmartDialog.dismiss();},
-                                  onPressedRight: (){
-                                    SmartDialog.dismiss();
-                                    checkBLEPermissionAndAction(_bluetoothProvider, connectionState,connectStream);
-                                  }));
+                            }else {
+                              if (_bluetoothProvider.connectionStateUpdate?.connectionState.name != "connecting" && _bluetoothProvider.connectionStateUpdate?.connectionState.name != "connected") {
+                                SmartDialog.show(widget: EvieDoubleButtonDialog(
+                                    title: "Please Connect Your Bike",
+                                    childContent: Text(
+                                      "Please connect your bike to access the function...?",
+                                      style: TextStyle(fontSize: 16.sp,
+                                          fontWeight: FontWeight.w400),),
+                                    leftContent: "Cancel",
+                                    rightContent: "Connect Bike",
+                                    onPressedLeft: () {
+                                      SmartDialog.dismiss();
+                                    },
+                                    onPressedRight: () {
+                                      SmartDialog.dismiss();
+                                      checkBLEPermissionAndAction(
+                                          _bluetoothProvider, connectionState,
+                                          connectStream);
+                                      pageNavigate = 1;
+                                    }));
+                              }
                             }
                           },
                           trailingImage: "assets/buttons/next.svg"),

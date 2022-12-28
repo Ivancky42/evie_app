@@ -53,7 +53,6 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
 
-
     return WillPopScope(
       onWillPop: () async {
         changeToNavigatePlanScreen(context);
