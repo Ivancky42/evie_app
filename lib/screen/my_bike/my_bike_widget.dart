@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../theme/ThemeChangeNotifier.dart';
 
 class BikePageContainer extends StatelessWidget {
-  final String? subtitle;
+  final Widget? subtitle;
   final Widget? contents;
   final String? content;
   final VoidCallback onPress;
@@ -39,7 +39,7 @@ class BikePageContainer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(subtitle ?? "",style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
+                   subtitle!,
                     content != null ? Text(
                       content!,
                       style: TextStyle(fontSize: 16.sp),

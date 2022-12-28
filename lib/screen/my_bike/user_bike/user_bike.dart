@@ -270,7 +270,20 @@ class _UserBikeState extends State<UserBike> {
                         height: 0,
                       ),
                       BikePageContainer (
-                          subtitle: "RFID Car/Flash Key/E-key/Smart Key",
+                          subtitle:  Row(
+                            children: [
+                              Text("RFID Car/Flash Key/E-key/Smart Key",style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
+                              isDeviceConnected ? SvgPicture.asset(
+                                "assets/icons/bluetooth_disconnect_filled.svg",
+                                height: 15.h,
+                                width: 15.w,
+                              ) : SvgPicture.asset(
+                                "assets/icons/bluetooth_disconnect.svg",
+                                height: 15.h,
+                                width: 15.w,
+                              ),
+                            ],
+                          ),
                           content: _bikeProvider.rfidList.length.toString(),
                           onPress: () {
                             if(isDeviceConnected){
@@ -308,7 +321,20 @@ class _UserBikeState extends State<UserBike> {
                       Opacity(
                         opacity: 0.3,
                         child: BikePageContainer (
-                            subtitle: "Motion Sensitivity",
+                            subtitle:  Row(
+                              children: [
+                                Text("Motion Sensitivity",style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
+                                isDeviceConnected ? SvgPicture.asset(
+                                  "assets/icons/bluetooth_disconnect_filled.svg",
+                                  height: 15.h,
+                                  width: 15.w,
+                                ) : SvgPicture.asset(
+                                  "assets/icons/bluetooth_disconnect.svg",
+                                  height: 15.h,
+                                  width: 15.w,
+                                ),
+                              ],
+                            ),
                             content:     _bikeProvider.currentBikeModel?.movementSetting?.sensitivity ?? "None",
                             onPress: () {
                               if(isDeviceConnected){
@@ -346,7 +372,7 @@ class _UserBikeState extends State<UserBike> {
                       Opacity(
                         opacity: 0.3,
                         child: BikePageContainer (
-                            subtitle: "Subscription",
+                            subtitle:  Text("Subscription",style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
                             contents: Row(
                               children: [
                                 Text(
@@ -368,7 +394,7 @@ class _UserBikeState extends State<UserBike> {
                       Opacity(
                         opacity: 0.3,
                         child: BikePageContainer (
-                            subtitle: "Share Bike",
+                            subtitle:  Text("Share Bike",style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
                             contents: Row(
                               children: [
                                 Text(
@@ -447,7 +473,7 @@ class _UserBikeState extends State<UserBike> {
                           trailingImage: "assets/buttons/next.svg"),
                       BikePageDivider(),
                       BikePageContainer (
-                          subtitle: "Firmware Version",
+                          subtitle:  Text("Firmware Version",style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
                           content: "0.3.3",
                           onPress: () {},
                           trailingImage: "assets/buttons/next.svg"),
