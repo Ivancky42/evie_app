@@ -86,7 +86,7 @@ class AccountPageAppbar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       title: Text(
         title,
-        style: TextStyle(fontSize: 24.sp),
+        style: TextStyle(fontSize: 24.sp, color: Color(0xff171617), fontWeight: FontWeight.w500, letterSpacing: 0.1.w),
       ),
     );
   }

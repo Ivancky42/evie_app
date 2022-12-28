@@ -28,30 +28,42 @@ class AddNewRFID extends StatefulWidget {
 class _AddNewRFIDState extends State<AddNewRFID> {
 
   late BluetoothProvider _bluetoothProvider;
+  late BikeProvider _bikeProvider;
   late StreamSubscription addRFIDStream;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => startScanRFIDCard());
+    WidgetsBinding.instance.addPostFrameCallback((_) => startScanRFIDCard());
   }
 
 
   @override
   Widget build(BuildContext context) {
     _bluetoothProvider =  Provider.of<BluetoothProvider>(context);
+    _bikeProvider = Provider.of<BikeProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
-        changeToNavigatePlanScreen(context);
+        addRFIDStream.cancel();
+        if(_bikeProvider.rfidList.length >0){
+          changeToRFIDListScreen(context);
+        }else{
+          changeToNavigatePlanScreen(context);
+        }
+
         return false;
       },
       child: Scaffold(
         appBar: AccountPageAppbar(
           title: 'Add New RFID Card',
           onPressed: () {
-            changeToNavigatePlanScreen(context);
+            addRFIDStream.cancel();
+            if(_bikeProvider.rfidList.length >0){
+              changeToRFIDListScreen(context);
+            }else{
+              changeToNavigatePlanScreen(context);
+            }
           },
         ),
         body: Stack(
@@ -92,7 +104,7 @@ class _AddNewRFIDState extends State<AddNewRFID> {
 
   startScanRFIDCard(){
     SmartDialog.showLoading(msg: "register RFID....");
-    addRFIDStream = _bluetoothProvider.addRFID().listen((addRFIDStatus)  {
+    addRFIDStream = _bluetoothProvider.addRFID().listen((addRFIDStatus)  async {
       SmartDialog.dismiss(status: SmartStatus.loading);
 
       if (addRFIDStatus.addRFIDState == AddRFIDState.startReadCard) {
@@ -100,21 +112,56 @@ class _AddNewRFIDState extends State<AddNewRFID> {
           addRFIDStream.cancel();
           SmartDialog.dismiss(status: SmartStatus.loading);
 
-            changeToNameRFIDScreen(context, addRFIDStatus.rfidNumber!);
+          final result = await _bikeProvider.uploadRFIDtoFireStore(addRFIDStatus.rfidNumber!, "RFID Card");
+          if (result == true) {
+            SmartDialog.show(
+                widget: EvieSingleButtonDialog(
+                    title: "Success",
+                    content: "Card added",
+                    rightContent: "OK",
+                    onPressedRight: () {
+                      SmartDialog.dismiss();
+
+                      changeToNameRFIDScreen(context, addRFIDStatus.rfidNumber!);
+                    }));
+          } else {
+            SmartDialog.show(
+                widget: EvieSingleButtonDialog(
+                    title: "Error",
+                    content: "Error upload rfid to firestore",
+                    rightContent: "OK",
+                    onPressedRight: () {
+                      SmartDialog.dismiss();
+                      changeToRFIDAddFailedScreen(context);
+                    }));
+          }
 
       }else if(addRFIDStatus.addRFIDState == AddRFIDState.cardIsExist){
+        ///Upload to firestore and change to name bike page
         addRFIDStream.cancel();
-        SmartDialog.dismiss(status: SmartStatus.loading);
-        SmartDialog.show(
-            keepSingle: true,
-            widget: EvieSingleButtonDialog(
-                title: "Error",
-                content: "RFID already exist",
-                rightContent: "OK",
-                onPressedRight: (){
-                  SmartDialog.dismiss();
-                  changeToRFIDCardScreen(context);
-                }));
+        final result = await _bikeProvider.uploadRFIDtoFireStore(addRFIDStatus.rfidNumber!, "RFID Card");
+        if (result == true) {
+          SmartDialog.show(
+              widget: EvieSingleButtonDialog(
+                  title: "Success",
+                  content: "Card already exists, data uploaded",
+                  rightContent: "OK",
+                  onPressedRight: () {
+                    SmartDialog.dismiss();
+
+                    changeToNameRFIDScreen(context, addRFIDStatus.rfidNumber!);
+                  }));
+        } else {
+          SmartDialog.show(
+              widget: EvieSingleButtonDialog(
+                  title: "Error",
+                  content: "Error upload rfid to firestore",
+                  rightContent: "OK",
+                  onPressedRight: () {
+                    SmartDialog.dismiss();
+                    changeToRFIDAddFailedScreen(context);
+                  }));
+        }
       }
     }, onError: (error) {
       addRFIDStream.cancel();
@@ -127,7 +174,7 @@ class _AddNewRFIDState extends State<AddNewRFID> {
           rightContent: "OK",
           onPressedRight: (){
             SmartDialog.dismiss();
-          changeToRFIDCardScreen(context);
+            changeToRFIDAddFailedScreen(context);
           }));
     });
   }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -37,7 +38,6 @@ class AdminPaidPlan extends StatefulWidget {
 
 class _AdminPaidPlanState extends State<AdminPaidPlan> {
 
-  late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
 
@@ -47,10 +47,10 @@ class _AdminPaidPlanState extends State<AdminPaidPlan> {
   DeviceConnectionState? connectionState;
   CableLockResult? cableLockState;
   bool isDeviceConnected = false;
+  StreamController? connectStream;
 
   @override
   Widget build(BuildContext context) {
-    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
@@ -61,10 +61,12 @@ class _AdminPaidPlanState extends State<AdminPaidPlan> {
     if (connectionState == DeviceConnectionState.connected &&
         cableLockState?.lockState == LockState.lock ||
         cableLockState?.lockState == LockState.unlock) {
+      connectStream?.close();
       setState(() {
         isDeviceConnected = true;
       });
     } else {
+      connectStream?.close();
       setState(() {
         isDeviceConnected = false;
       });
@@ -73,6 +75,7 @@ class _AdminPaidPlanState extends State<AdminPaidPlan> {
 
     Future.delayed(Duration.zero, () {
       if (_bluetoothProvider.connectionStateUpdate?.failure != null) {
+        connectStream?.close();
         _bluetoothProvider.disconnectDevice();
         SmartDialog.show(
             keepSingle: true,
@@ -145,7 +148,7 @@ class _AdminPaidPlanState extends State<AdminPaidPlan> {
                                                   controller: _bikeNameController,
                                                   obscureText: false,
                                                   keyboardType: TextInputType.name,
-                                                  hintText: "give your bike a unique name",
+                                                  hintText: _bikeProvider.currentBikeModel?.deviceName ?? "Bike Name",
                                                   labelText: "Bike Name",
                                                   validator: (value) {
                                                     if (value == null || value.isEmpty) {
@@ -217,7 +220,7 @@ class _AdminPaidPlanState extends State<AdminPaidPlan> {
                       ],
                     ),
                     onPressed: (){
-                      _bluetoothProvider.startScanAndConnect();
+                      checkBLEPermissionAndAction(_bluetoothProvider, connectionState,connectStream);
 
                     },
                     style: ElevatedButton.styleFrom(
@@ -264,7 +267,10 @@ class _AdminPaidPlanState extends State<AdminPaidPlan> {
                                   onPressedLeft: (){SmartDialog.dismiss();},
                                   onPressedRight: (){
                                     SmartDialog.dismiss();
-                                    _bluetoothProvider.startScanAndConnect();
+                                    checkBLEPermissionAndAction(_bluetoothProvider, connectionState,connectStream);
+                                    if (connectionState == DeviceConnectionState.disconnected) {
+                                      _bluetoothProvider.startScanAndConnect();
+                                    }
                                   }));
                             }
                           },
@@ -272,8 +278,23 @@ class _AdminPaidPlanState extends State<AdminPaidPlan> {
                       BikePageDivider(),
                       BikePageContainer (
                           subtitle: "Motion Sensitivity",
-                          content: "Medium",
-                          onPress: () {},
+                          content:    _bikeProvider.currentBikeModel?.movementSetting?.sensitivity ?? "None",
+                          onPress: () {
+                            if(isDeviceConnected){
+                              changeToMotionSensitivityScreen(context);
+                            }else{
+                              SmartDialog.show(widget: EvieDoubleButtonDialog(
+                                  title: "Please Connect Your Bike",
+                                  childContent: Text("Please connect your bike to access the function...?",style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.w400),),
+                                  leftContent: "Cancel",
+                                  rightContent: "Connect Bike",
+                                  onPressedLeft: (){SmartDialog.dismiss();},
+                                  onPressedRight: (){
+                                    SmartDialog.dismiss();
+                                    checkBLEPermissionAndAction(_bluetoothProvider, connectionState,connectStream);
+                                  }));
+                            }
+                          },
                           trailingImage: "assets/buttons/next.svg"),
                       Divider(
                         thickness: 11.h,

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
 
@@ -36,12 +37,12 @@ class RFIDAddFailed extends StatefulWidget {
 class _RFIDAddFailedState extends State<RFIDAddFailed> {
 
   late CurrentUserProvider _currentUserProvider;
-  late AuthProvider _authProvider;
+  late BikeProvider _bikeProvider;
 
   @override
   Widget build(BuildContext context) {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
-    _authProvider = Provider.of<AuthProvider>(context);
+    _bikeProvider = Provider.of<BikeProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -117,7 +118,11 @@ class _RFIDAddFailedState extends State<RFIDAddFailed> {
                       "Cancel add new RFID Card",style: TextStyle(fontSize: 12.sp,color: EvieColors.PrimaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
-                 changeToNavigatePlanScreen(context);
+                      if(_bikeProvider.rfidList.length >0){
+                        changeToRFIDListScreen(context);
+                      }else{
+                        changeToNavigatePlanScreen(context);
+                      }
                     },
                   ),
                 ),

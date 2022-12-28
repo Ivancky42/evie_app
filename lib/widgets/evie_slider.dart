@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../api/colours.dart';
+
 ///Cupertino switch widget
 class EvieSlider extends StatelessWidget {
   final ValueChanged<double?> onChanged;
   final double value;
   final double max;
   final String label;
+  final int? division;
 
 
   const EvieSlider({
@@ -14,18 +17,20 @@ class EvieSlider extends StatelessWidget {
     required this.value,
     required this.max,
     required this.label,
+    this.division,
 
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Slider(
+
       value: value,
-      max: 10,
-      //divisions: 10,
-      activeColor: Color(0xff00B6F1),
-      inactiveColor: Color(0xffFFFFFF),
-      thumbColor: Color(0xff00B6F1),
+      max: max,
+      divisions: division,
+      activeColor: EvieColors.PrimaryColor,
+      inactiveColor: Color(0xffD4D4D4),
+      thumbColor: Color(0xffFAFAFA),
       label: label,
       onChanged: onChanged,
     );

@@ -35,13 +35,8 @@ class RFIDCard extends StatefulWidget {
 
 class _RFIDCardState extends State<RFIDCard> {
 
-  late CurrentUserProvider _currentUserProvider;
-  late AuthProvider _authProvider;
-
   @override
   Widget build(BuildContext context) {
-    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
-    _authProvider = Provider.of<AuthProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {

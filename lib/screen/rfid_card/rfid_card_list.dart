@@ -209,8 +209,7 @@ class _RFIDCardListState extends State<RFIDCardList> {
                                                controller:
                                                _rfidNameController,
                                                obscureText: false,
-                                               keyboardType:
-                                               TextInputType.name,
+                                               keyboardType: TextInputType.name,
                                                hintText:
                                                "give your RFID card a unique name",
                                                labelText: "RFID Card Name",
