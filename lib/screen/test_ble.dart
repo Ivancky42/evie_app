@@ -43,6 +43,7 @@ class _TestBleState extends State<TestBle> {
   late ThemeProvider _themeProvider;
   DeviceConnectionState? connectionState;
   ConnectionStateUpdate? connectionStateUpdate;
+  String connectionStatus = "";
   final TextEditingController _qrCodeController = TextEditingController();
   final TextEditingController _ipAddressController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -236,7 +237,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Text(
-                  "Connection status : " + (connectionState?.name ?? ""),
+                  "Connection status : " + connectionStatus,
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -274,21 +275,81 @@ class _TestBleState extends State<TestBle> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: EvieButton(
-                    onPressed: () {
-                      if (connectionState == null) {
-                        bluetoothProvider.startScanAndConnect();
-                      }
-                      else {
-                        if (connectionState!.name == "connected") {
-                          bluetoothProvider.disconnectDevice();
+                    onPressed: () async {
+                      await bluetoothProvider.disconnectDevice();
+                      await bluetoothProvider.stopScan();
+                      bluetoothProvider.startScanAndConnect().listen((deviceConnectStatus) {
+                        switch (deviceConnectStatus) {
+                          case DeviceConnectResult.scanning:
+                            // TODO: Handle this case.
+                            setState(() {
+                              connectionStatus = deviceConnectStatus.name.toString();
+                            });
+                            break;
+                          case DeviceConnectResult.scanTimeout:
+                            // TODO: Handle this case.
+                            setState(() {
+                              connectionStatus = deviceConnectStatus.name.toString();
+                            });
+                            break;
+                          case DeviceConnectResult.scanError:
+                            // TODO: Handle this case.
+                            setState(() {
+                              connectionStatus = deviceConnectStatus.name.toString();
+                            });
+                            break;
+                          case DeviceConnectResult.connecting:
+                            // TODO: Handle this case.
+                            setState(() {
+                              connectionStatus = deviceConnectStatus.name.toString();
+                            });
+                            break;
+                          case DeviceConnectResult.partialConnected:
+                            // TODO: Handle this case.
+                            setState(() {
+                              connectionStatus = deviceConnectStatus.name.toString();
+                            });
+                            break;
+                          case DeviceConnectResult.connected:
+                            // TODO: Handle this case.
+                            setState(() {
+                              connectionStatus = deviceConnectStatus.name.toString();
+                            });
+                            break;
+                          case DeviceConnectResult.disconnecting:
+                            // TODO: Handle this case.
+                            setState(() {
+                              connectionStatus = deviceConnectStatus.name.toString();
+                            });
+                            break;
+                          case DeviceConnectResult.disconnected:
+                            // TODO: Handle this case.
+                            setState(() {
+                              connectionStatus = deviceConnectStatus.name.toString();
+                            });
+                            break;
+                          case DeviceConnectResult.connectError:
+                            // TODO: Handle this case.
+                            setState(() {
+                              connectionStatus = deviceConnectStatus.name.toString();
+                            });
+                            break;
                         }
-                        else if (connectionState!.name == "connecting") {
-
-                        }
-                        else {
-                          bluetoothProvider.startScanAndConnect();
-                        }
-                      }
+                      });
+                      // if (connectionState == null) {
+                      //   bluetoothProvider.startScanAndConnect();
+                      // }
+                      // else {
+                      //   if (connectionState!.name == "connected") {
+                      //     bluetoothProvider.disconnectDevice();
+                      //   }
+                      //   else if (connectionState!.name == "connecting") {
+                      //
+                      //   }
+                      //   else {
+                      //     bluetoothProvider.startScanAndConnect();
+                      //   }
+                      // }
                     },
                     height: 12.2,
                     width: double.infinity,
