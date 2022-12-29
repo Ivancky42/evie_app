@@ -43,6 +43,7 @@ class _TestBleState extends State<TestBle> {
   late ThemeProvider _themeProvider;
   DeviceConnectionState? connectionState;
   ConnectionStateUpdate? connectionStateUpdate;
+  StreamSubscription? connectSubscription;
   String connectionStatus = "";
   final TextEditingController _qrCodeController = TextEditingController();
   final TextEditingController _ipAddressController = TextEditingController();
@@ -54,6 +55,13 @@ class _TestBleState extends State<TestBle> {
     super.initState();
     _qrCodeController.text = "QRCODE:";
     _ipAddressController.text = "IP:";
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    connectSubscription?.cancel();
   }
 
   @override
@@ -276,80 +284,76 @@ class _TestBleState extends State<TestBle> {
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: EvieButton(
                     onPressed: () async {
-                      await bluetoothProvider.disconnectDevice();
-                      await bluetoothProvider.stopScan();
-                      bluetoothProvider.startScanAndConnect().listen((deviceConnectStatus) {
-                        switch (deviceConnectStatus) {
-                          case DeviceConnectResult.scanning:
+                      if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.partialConnected || bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
+                        await bluetoothProvider.disconnectDevice();
+                        await bluetoothProvider.stopScan();
+                        await connectSubscription?.cancel();
+                      }
+                      else {
+                        await bluetoothProvider.disconnectDevice();
+                        await bluetoothProvider.stopScan();
+                        await connectSubscription?.cancel();
+                        connectSubscription = bluetoothProvider.startScanAndConnect().listen((deviceConnectStatus) {
+                          print(deviceConnectStatus.name);
+                          switch (deviceConnectStatus) {
+                            case DeviceConnectResult.scanning:
                             // TODO: Handle this case.
-                            setState(() {
-                              connectionStatus = deviceConnectStatus.name.toString();
-                            });
-                            break;
-                          case DeviceConnectResult.scanTimeout:
+                              setState(() {
+                                connectionStatus = deviceConnectStatus.name.toString();
+                              });
+                              break;
+                            case DeviceConnectResult.scanTimeout:
                             // TODO: Handle this case.
-                            setState(() {
-                              connectionStatus = deviceConnectStatus.name.toString();
-                            });
-                            break;
-                          case DeviceConnectResult.scanError:
+                              setState(() {
+                                connectionStatus = deviceConnectStatus.name.toString();
+                              });
+                              break;
+                            case DeviceConnectResult.scanError:
                             // TODO: Handle this case.
-                            setState(() {
-                              connectionStatus = deviceConnectStatus.name.toString();
-                            });
-                            break;
-                          case DeviceConnectResult.connecting:
+                              setState(() {
+                                connectionStatus = deviceConnectStatus.name.toString();
+                              });
+                              break;
+                            case DeviceConnectResult.connecting:
                             // TODO: Handle this case.
-                            setState(() {
-                              connectionStatus = deviceConnectStatus.name.toString();
-                            });
-                            break;
-                          case DeviceConnectResult.partialConnected:
+                              setState(() {
+                                connectionStatus = deviceConnectStatus.name.toString();
+                              });
+                              break;
+                            case DeviceConnectResult.partialConnected:
                             // TODO: Handle this case.
-                            setState(() {
-                              connectionStatus = deviceConnectStatus.name.toString();
-                            });
-                            break;
-                          case DeviceConnectResult.connected:
+                              setState(() {
+                                connectionStatus = deviceConnectStatus.name.toString();
+                              });
+                              break;
+                            case DeviceConnectResult.connected:
                             // TODO: Handle this case.
-                            setState(() {
-                              connectionStatus = deviceConnectStatus.name.toString();
-                            });
-                            break;
-                          case DeviceConnectResult.disconnecting:
+                              setState(() {
+                                connectionStatus = deviceConnectStatus.name.toString();
+                              });
+                              connectSubscription?.cancel();
+                              break;
+                            case DeviceConnectResult.disconnecting:
                             // TODO: Handle this case.
-                            setState(() {
-                              connectionStatus = deviceConnectStatus.name.toString();
-                            });
-                            break;
-                          case DeviceConnectResult.disconnected:
+                              setState(() {
+                                connectionStatus = deviceConnectStatus.name.toString();
+                              });
+                              break;
+                            case DeviceConnectResult.disconnected:
                             // TODO: Handle this case.
-                            setState(() {
-                              connectionStatus = deviceConnectStatus.name.toString();
-                            });
-                            break;
-                          case DeviceConnectResult.connectError:
+                              setState(() {
+                                connectionStatus = deviceConnectStatus.name.toString();
+                              });
+                              break;
+                            case DeviceConnectResult.connectError:
                             // TODO: Handle this case.
-                            setState(() {
-                              connectionStatus = deviceConnectStatus.name.toString();
-                            });
-                            break;
-                        }
-                      });
-                      // if (connectionState == null) {
-                      //   bluetoothProvider.startScanAndConnect();
-                      // }
-                      // else {
-                      //   if (connectionState!.name == "connected") {
-                      //     bluetoothProvider.disconnectDevice();
-                      //   }
-                      //   else if (connectionState!.name == "connecting") {
-                      //
-                      //   }
-                      //   else {
-                      //     bluetoothProvider.startScanAndConnect();
-                      //   }
-                      // }
+                              setState(() {
+                                connectionStatus = deviceConnectStatus.name.toString();
+                              });
+                              break;
+                          }
+                        });
+                      }
                     },
                     height: 12.2,
                     width: double.infinity,

@@ -54,6 +54,7 @@ class BluetoothProvider extends ChangeNotifier {
   File? fwFile;
   String? iotData;
   bool isAutoConnect = false;
+  Timer? startScanTimer;
 
   LinkedHashMap<String, DiscoveredDevice> discoverDeviceList = LinkedHashMap<String, DiscoveredDevice>();
 
@@ -119,6 +120,8 @@ class BluetoothProvider extends ChangeNotifier {
   StreamController.broadcast();
   late Stream<IotInfoModel> iotInfoModelStream;
 
+
+
   BluetoothProvider() {
     checkBLEStatus();
   }
@@ -130,8 +133,11 @@ class BluetoothProvider extends ChangeNotifier {
         notifyListeners();
 
         if (isAutoConnect) {
-          startScanAndConnect();
           isAutoConnect = false;
+          await disconnectDevice();
+          await stopScan();
+          await connectSubscription?.cancel();
+          startScanAndConnect();
         }
       }
     }
@@ -203,27 +209,40 @@ class BluetoothProvider extends ChangeNotifier {
 
   Stream<DeviceConnectResult> startScanAndConnect() {
     //await disconnectDevice();
-    if (Platform.isAndroid) {
-      connectDevice(currentBikeModel!.macAddr!);
-    }
-    else {
-      //await stopScan();
-      deviceConnectStream.add(DeviceConnectResult.scanning);
-      deviceConnectResult = DeviceConnectResult.scanning;
-      scanSubscription = flutterReactiveBle.scanForDevices(
-          scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
-        if (device.name == currentBikeModel?.bleName) {
-          connectDevice(device.id);
-        }
-      }, onError: (error) {
-        deviceConnectStream.add(DeviceConnectResult.scanError);
-        deviceConnectResult = DeviceConnectResult.scanError;
+    //await stopScan();
+    startScanTimer?.cancel();
+    startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      print("Scan Timer: " + timer.tick.toString() + "s");
+      if (timer.tick == 6) {
+        print("Scan Timeout");
+        deviceConnectStream.add(DeviceConnectResult.scanTimeout);
+        deviceConnectResult = DeviceConnectResult.scanTimeout;
         stopScan();
-        scanSubscription = null;
-      });
-    }
+        timer.cancel();
+      }
+    });
+    scanSubscription = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
+      if (deviceConnectResult != DeviceConnectResult.scanning) {
+        deviceConnectResult = DeviceConnectResult.scanning;
+        deviceConnectStream.add(DeviceConnectResult.scanning);
+      }
+
+      if (device.name == currentBikeModel?.bleName) {
+        print("Connecting.... cancelling timer");
+        startScanTimer?.cancel();
+        connectDevice(device.id);
+      }
+
+      }, onError: (error) {
+          deviceConnectStream.add(DeviceConnectResult.scanError);
+          deviceConnectResult = DeviceConnectResult.scanError;
+          stopScan();
+          scanSubscription = null;
+    });
     return deviceConnectStream.stream;
   }
+
+
 
   connectDevice(String foundDeviceId) async {
 
@@ -353,6 +372,7 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   void clearBluetoothStatus() {
+    deviceConnectResult = null;
     requestComKeyResult = null;
     cableLockState = null;
     mainBatteryLevel = "";
