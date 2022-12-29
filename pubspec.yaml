@@ -57,7 +57,7 @@ dependencies:
   flutter_dotenv: ^5.0.2
   json_serializable: ^6.3.1
   flutter_smart_dialog: ^3.0.2
-  flutter_reactive_ble: ^5.0.2
+  flutter_reactive_ble: ^5.0.3
   permission_handler: ^10.0.0
   crclib: ^3.0.0
   hex: ^0.2.0

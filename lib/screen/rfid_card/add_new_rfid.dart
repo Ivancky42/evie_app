@@ -37,7 +37,6 @@ class _AddNewRFIDState extends State<AddNewRFID> {
     WidgetsBinding.instance.addPostFrameCallback((_) => startScanRFIDCard());
   }
 
-
   @override
   Widget build(BuildContext context) {
     _bluetoothProvider =  Provider.of<BluetoothProvider>(context);
