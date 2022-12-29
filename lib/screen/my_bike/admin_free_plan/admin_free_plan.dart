@@ -374,7 +374,9 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
                               ),
                             ],
                           ),
-                          onPress: () {},
+                          onPress: () {
+                            changeToCurrentPlanScreen(context);
+                          },
                           trailingImage: "assets/buttons/next.svg"),
                       BikePageDivider(),
                       Opacity(

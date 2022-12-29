@@ -387,7 +387,9 @@ class _UserBikeState extends State<UserBike> {
                                 ),
                               ],
                             ),
-                            onPress: () {},
+                            onPress: () {
+                              changeToCurrentPlanScreen(context);
+                            },
                             trailingImage: "assets/buttons/next.svg"),
                       ),
                       BikePageDivider(),

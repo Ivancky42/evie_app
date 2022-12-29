@@ -372,7 +372,9 @@ class _AdminPaidPlanState extends State<AdminPaidPlan> {
                               ),
                             ],
                           ),
-                          onPress: () {},
+                          onPress: () {
+                            changeToCurrentPlanScreen(context);
+                          },
                           trailingImage: "assets/buttons/next.svg"),
                       BikePageDivider(),
                       BikePageContainer (

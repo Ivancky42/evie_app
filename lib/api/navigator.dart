@@ -32,6 +32,8 @@ import '../screen/onboarding/notification_control.dart';
 import '../screen/onboarding/qr_scanning.dart';
 import '../screen/signup_method.dart';
 import '../screen/signup_page.dart';
+import '../screen/subscription/current_plan.dart';
+import '../screen/subscription/manage_plan.dart';
 import '../screen/user_notification_details.dart';
 import 'model/bike_model.dart';
 import 'model/plan_model.dart';
@@ -346,6 +348,25 @@ void changeToDetectionSensitivityScreen(BuildContext context) {
   );
 }
 
+void changeToCurrentPlanScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const CurrentPlan(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+void changeToManagePlanScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const ManagePlan(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
 
 void changeToMyAccount(BuildContext context) {
   Navigator.pushReplacement(context,
