@@ -13,6 +13,7 @@ import '../../../../../api/provider/bluetooth_provider.dart';
 import '../../../../../api/provider/current_user_provider.dart';
 import '../../../../../api/provider/location_provider.dart';
 import '../../../../../bluetooth/modelResult.dart';
+import '../../../../user_home_page/home_page_function.dart';
 import '../../../../../widgets/evie_single_button_dialog.dart';
 import '../../../paid_plan/bottom_sheet_widget.dart';
 import '../../../home_page_widget.dart';
@@ -40,21 +41,17 @@ class BikeSafe extends StatefulWidget {
 
 class _BikeSafeState extends State<BikeSafe> {
 
-  DeviceConnectionState? connectionState;
-  ConnectionStateUpdate? connectionStateUpdate;
+  DeviceConnectResult? deviceConnectResult;
   CableLockResult? cableLockState;
-
+  StreamController? connectStream;
 
   @override
   Widget build(BuildContext context) {
 
-    CurrentUserProvider _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     BikeProvider _bikeProvider = Provider.of<BikeProvider>(context);
     BluetoothProvider _bluetoothProvider = Provider.of<BluetoothProvider>(context);
-    LocationProvider _locationProvider = Provider.of<LocationProvider>(context);
 
-    connectionState = _bluetoothProvider.connectionStateUpdate?.connectionState;
-    connectionStateUpdate = _bluetoothProvider.connectionStateUpdate;
+    deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
 
     if(widget.isDeviceConnected!){
@@ -240,9 +237,7 @@ class _BikeSafeState extends State<BikeSafe> {
                               SizedBox(
                                 height: 12.h,
                               ),
-                              if (connectionState
-                                  ?.name ==
-                                  "connecting") ...{
+                              if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning) ...{
                                 Text(
                                   "Connecting bike",
                                   style: TextStyle(
@@ -254,9 +249,7 @@ class _BikeSafeState extends State<BikeSafe> {
                                       color: const Color(
                                           0xff3F3F3F)),
                                 ),
-                              } else if (connectionState
-                                  ?.name ==
-                                  "connected") ...{
+                              } else if (deviceConnectResult == DeviceConnectResult.connected) ...{
                                 Text(
                                   "Tap to unlock bike",
                                   style: TextStyle(
@@ -458,25 +451,9 @@ class _BikeSafeState extends State<BikeSafe> {
                                       break;
                                     case BleStatus
                                         .ready:
-                                      if (connectionState ==
-                                          null ||
-                                          connectionState ==
-                                              DeviceConnectionState.disconnected) {
-                                        _bluetoothProvider
-                                            .startScanAndConnect();
+                                      if (deviceConnectResult == null || deviceConnectResult != DeviceConnectResult.connected) {
+                                        checkBLEPermissionAndAction(_bluetoothProvider,deviceConnectResult ?? DeviceConnectResult.disconnected, connectStream);
 
-                                        // if(connectionStateUpdate != null){
-                                        //   if(connectionStateUpdate?.failure.toString() != null){
-                                        //     SmartDialog.show(
-                                        //         keepSingle: true,
-                                        //         widget: EvieSingleButtonDialogCupertino(
-                                        //             title: "Error",
-                                        //             content: "Cannot connect bike, please place the phone near the bike and try again.",
-                                        //             rightContent: "OK",
-                                        //             onPressedRight: (){SmartDialog.dismiss();})
-                                        //     );
-                                        //   }
-                                        // }
                                       } else {}
                                       break;
                                     default:
@@ -490,9 +467,7 @@ class _BikeSafeState extends State<BikeSafe> {
                           SizedBox(
                             height: 12.h,
                           ),
-                          if (connectionState
-                              ?.name ==
-                              "connecting") ...{
+                          if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning) ...{
                             Text(
                               "Connecting bike",
                               style: TextStyle(

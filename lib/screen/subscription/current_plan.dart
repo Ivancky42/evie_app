@@ -82,7 +82,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
                     child: Text("Status",style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
                   ),
                   ///Active Color (0xff05A454)    Expired Color (0xffF42525)
-                  Text("Active",style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500, color: Color(0xff05A454)),),
+                  Text("Active",style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500, color: Color(0xff05A454)),),
                   BikePageDivider(),
 
 
@@ -104,7 +104,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
                         ),
 
                         ///Active Color (0xff05A454)    Expired Color (0xffF42525)
-                        Text("Expired",style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500, color: Color(0xffF42525)),),
+                        Text("Expired",style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500, color: Color(0xffF42525)),),
                         BikePageDivider(),
                       ],
                     ),
