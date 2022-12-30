@@ -38,13 +38,10 @@ class _BikeContainerState extends State<BikeContainer> {
 
     /// get bluetooth connection state and lock unlock to detect isConnected
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
-    cableLockState = _bluetoothProvider.cableLockState;
 
 
     ///Handle all data if bool isDeviceConnected is true
-    if (deviceConnectResult == DeviceConnectionState.connected &&
-        cableLockState?.lockState == LockState.lock ||
-        cableLockState?.lockState == LockState.unlock) {
+    if (deviceConnectResult == DeviceConnectionState.connected) {
       if (_bluetoothProvider.currentBikeModel?.deviceIMEI == widget.bikeModel.deviceIMEI) {
         setState(() {
           isSpecificDeviceConnected = true;

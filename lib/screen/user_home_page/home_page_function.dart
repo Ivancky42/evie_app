@@ -79,7 +79,7 @@ handleConnection(connectStream, _bluetoothProvider){
       case DeviceConnectResult.scanTimeout:
         connectStream?.cancel();
         SmartDialog.show(
-            keepSingle: true,
+            tag: "SCAN_TIMEOUT",
             widget: EvieSingleButtonDialogCupertino(
                 title: "Cannot connect bike",
                 content: "Scan timeout",

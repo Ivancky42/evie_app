@@ -156,39 +156,40 @@ class _FreePlanState extends State<FreePlan> {
     ///Bike Container pop page to here cannot cannot listen to deviceConnectionResult as this page button on Press,
     ///this function works
     ///but this function will let dialog pop up twice
-    // Future.delayed(Duration.zero, () {
-    //   if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanError ) {
-    //     SmartDialog.show(
-    //         keepSingle: true,
-    //         widget: EvieSingleButtonDialogCupertino(
-    //             title: "Cannot connect bike",
-    //             content: "Move your device near the bike and try again",
-    //             rightContent: "OK",
-    //             onPressedRight: () {
-    //               SmartDialog.dismiss();
-    //             }));
-    //   } else if(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanTimeout){
-    //     SmartDialog.show(
-    //         keepSingle: true,
-    //         widget: EvieSingleButtonDialogCupertino(
-    //             title: "Cannot connect bike",
-    //             content: "Scan timeout",
-    //             rightContent: "OK",
-    //             onPressedRight: () {
-    //               SmartDialog.dismiss();
-    //             }));
-    //   }else if(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connectError){
-    //     SmartDialog.show(
-    //         keepSingle: true,
-    //         widget: EvieSingleButtonDialogCupertino(
-    //             title: "Cannot connect bike",
-    //             content: "Connection Error",
-    //             rightContent: "OK",
-    //             onPressedRight: () {
-    //               SmartDialog.dismiss();
-    //             }));
-    //   }
-    // });
+    print(_bluetoothProvider.deviceConnectResult.toString());
+    Future.delayed(Duration.zero, () {
+      if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanError ) {
+        SmartDialog.show(
+            keepSingle: true,
+            widget: EvieSingleButtonDialogCupertino(
+                title: "Cannot connect bike",
+                content: "Move your device near the bike and try again",
+                rightContent: "OK",
+                onPressedRight: () {
+                  SmartDialog.dismiss();
+                }));
+      } else if(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanTimeout){
+        SmartDialog.show(
+            tag: "SCAN_TIMEOUT",
+            widget: EvieSingleButtonDialogCupertino(
+                title: "Cannot connect bike",
+                content: "Scan timeout",
+                rightContent: "OK",
+                onPressedRight: () {
+                  SmartDialog.dismiss();
+                }),);
+      }else if(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connectError){
+        SmartDialog.show(
+            keepSingle: true,
+            widget: EvieSingleButtonDialogCupertino(
+                title: "Cannot connect bike",
+                content: "Connection Error",
+                rightContent: "OK",
+                onPressedRight: () {
+                  SmartDialog.dismiss();
+                }));
+      }
+    });
 
     return WillPopScope(
       onWillPop: () async {
@@ -652,7 +653,7 @@ class _FreePlanState extends State<FreePlan> {
                                                                             case DeviceConnectResult.scanTimeout:
                                                                               connectionStream?.cancel();
                                                                               SmartDialog.show(
-                                                                                  keepSingle: true,
+                                                                                  tag: "SCAN_TIMEOUT",
                                                                                   widget: EvieSingleButtonDialogCupertino(
                                                                                       title: "Cannot connect bike",
                                                                                       content: "Scan timeout",

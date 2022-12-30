@@ -214,17 +214,19 @@ class BluetoothProvider extends ChangeNotifier {
     startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       print("Scan Timer: " + timer.tick.toString() + "s");
       if (timer.tick == 6) {
-        print("Scan Timeout");
         deviceConnectStream.add(DeviceConnectResult.scanTimeout);
         deviceConnectResult = DeviceConnectResult.scanTimeout;
+        notifyListeners();
         stopScan();
         timer.cancel();
+        deviceConnectResult = null;
       }
     });
     scanSubscription = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
-      if (deviceConnectResult != DeviceConnectResult.scanning) {
+      if (deviceConnectResult == null || deviceConnectResult != DeviceConnectResult.scanning) {
         deviceConnectResult = DeviceConnectResult.scanning;
         deviceConnectStream.add(DeviceConnectResult.scanning);
+        notifyListeners();
       }
 
       if (device.name == currentBikeModel?.bleName) {
