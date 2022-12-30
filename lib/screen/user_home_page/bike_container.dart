@@ -5,7 +5,6 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,10 +26,9 @@ class BikeContainer extends StatefulWidget {
 
 class _BikeContainerState extends State<BikeContainer> {
 
-  DeviceConnectionState? connectionState;
+  DeviceConnectResult? deviceConnectResult;
   CableLockResult? cableLockState;
-
-  bool isDeviceConnected = false;
+  bool isSpecificDeviceConnected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,28 +37,65 @@ class _BikeContainerState extends State<BikeContainer> {
     BluetoothProvider _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     /// get bluetooth connection state and lock unlock to detect isConnected
-    connectionState = _bluetoothProvider.connectionStateUpdate?.connectionState;
+    deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
 
+
     ///Handle all data if bool isDeviceConnected is true
-    if (connectionState == DeviceConnectionState.connected &&
+    if (deviceConnectResult == DeviceConnectionState.connected &&
         cableLockState?.lockState == LockState.lock ||
         cableLockState?.lockState == LockState.unlock) {
       if (_bluetoothProvider.currentBikeModel?.deviceIMEI == widget.bikeModel.deviceIMEI) {
         setState(() {
-          isDeviceConnected = true;
+          isSpecificDeviceConnected = true;
         });
       }
       else {
         setState(() {
-          isDeviceConnected = false;
+          isSpecificDeviceConnected = false;
         });
       }
     } else {
       setState(() {
-        isDeviceConnected = false;
+        isSpecificDeviceConnected = false;
       });
     }
+
+
+    // Future.delayed(Duration.zero, () {
+    //   if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanError ) {
+    //     SmartDialog.show(
+    //         keepSingle: true,
+    //         widget: EvieSingleButtonDialogCupertino(
+    //             title: "Cannot connect bike",
+    //             content: "Move your device near the bike and try again",
+    //             rightContent: "OK",
+    //             onPressedRight: () {
+    //               SmartDialog.dismiss();
+    //             }));
+    //   } else if(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanTimeout){
+    //     SmartDialog.show(
+    //         keepSingle: true,
+    //         widget: EvieSingleButtonDialogCupertino(
+    //             title: "Cannot connect bike",
+    //             content: "Scan timeout",
+    //             rightContent: "OK",
+    //             onPressedRight: () {
+    //               SmartDialog.dismiss();
+    //             }));
+    //   }else if(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connectError){
+    //     SmartDialog.show(
+    //         keepSingle: true,
+    //         widget: EvieSingleButtonDialogCupertino(
+    //             title: "Cannot connect bike",
+    //             content: "Connection Error",
+    //             rightContent: "OK",
+    //             onPressedRight: () {
+    //               SmartDialog.dismiss();
+    //             }));
+    //   }
+    // });
+
 
     return Container(
       height: 59.h,
@@ -86,14 +121,14 @@ class _BikeContainerState extends State<BikeContainer> {
               width: 20.w,
             ),
             Text(getCurrentBikeStatusString(
-                isDeviceConnected,
+                deviceConnectResult == DeviceConnectResult.connected,
                 widget.bikeModel.location!.status), style: TextStyle(
               fontSize: 16.sp, fontWeight: FontWeight.w400
             ),),
           ],
         ),
         trailing: CupertinoSwitch(
-          value: isDeviceConnected,
+          value: isSpecificDeviceConnected,
           activeColor: const Color(0xff6A51CA),
           thumbColor: EvieColors.ThumbColorTrue,
           trackColor: const Color(0xff6A51CA).withOpacity(0.5),

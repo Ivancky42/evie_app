@@ -49,10 +49,8 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
   Color lockColour = const Color(0xff6A51CA);
 
-  bool isDeviceConnected = false;
 
-  DeviceConnectionState? connectionState;
-  ConnectionStateUpdate? connectionStateUpdate;
+  DeviceConnectResult? deviceConnectResult;
   CableLockResult? cableLockState;
 
   SvgPicture? connectImage;
@@ -138,37 +136,9 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
 
-    connectionState = _bluetoothProvider.connectionStateUpdate?.connectionState;
-    connectionStateUpdate = _bluetoothProvider.connectionStateUpdate;
+
+    deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
-
-    ///Handle all data if bool isDeviceConnected is true
-    if (connectionState == DeviceConnectionState.connected &&
-            cableLockState?.lockState == LockState.lock ||
-        cableLockState?.lockState == LockState.unlock) {
-      setState(() {
-        isDeviceConnected = true;
-      });
-    } else {
-      setState(() {
-        isDeviceConnected = false;
-      });
-    }
-
-    Future.delayed(Duration.zero, () {
-      if (_bluetoothProvider.connectionStateUpdate?.failure != null) {
-        _bluetoothProvider.disconnectDevice();
-        SmartDialog.show(
-            keepSingle: true,
-            widget: EvieSingleButtonDialogCupertino(
-                title: "Cannot connect bike",
-                content: "Move your device near the bike and try again",
-                rightContent: "OK",
-                onPressedRight: () {
-                  SmartDialog.dismiss();
-                }));
-      }
-    });
 
 
       setConnectImage();
@@ -183,6 +153,44 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     }
 
     loadMarker(currentLatLng);
+
+
+    ///Bike Container pop page to here cannot cannot listen to deviceConnectionResult as this page button on Press,
+    ///this function works
+    ///but this function will let dialog pop up twice
+    // Future.delayed(Duration.zero, () {
+    //   if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanError ) {
+    //     SmartDialog.show(
+    //         keepSingle: true,
+    //         widget: EvieSingleButtonDialogCupertino(
+    //             title: "Cannot connect bike",
+    //             content: "Move your device near the bike and try again",
+    //             rightContent: "OK",
+    //             onPressedRight: () {
+    //               SmartDialog.dismiss();
+    //             }));
+    //   } else if(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanTimeout){
+    //     SmartDialog.show(
+    //         keepSingle: true,
+    //         widget: EvieSingleButtonDialogCupertino(
+    //             title: "Cannot connect bike",
+    //             content: "Scan timeout",
+    //             rightContent: "OK",
+    //             onPressedRight: () {
+    //               SmartDialog.dismiss();
+    //             }));
+    //   }else if(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connectError){
+    //     SmartDialog.show(
+    //         keepSingle: true,
+    //         widget: EvieSingleButtonDialogCupertino(
+    //             title: "Cannot connect bike",
+    //             content: "Connection Error",
+    //             rightContent: "OK",
+    //             onPressedRight: () {
+    //               SmartDialog.dismiss();
+    //             }));
+    //   }
+    // });
 
     return WillPopScope(
       onWillPop: () async {
@@ -468,21 +476,21 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   }
 
   void setConnectImage() {
-    if (connectionState?.name == "connected") {
+    if (deviceConnectResult == DeviceConnectResult.connected) {
         connectImage = SvgPicture.asset(
           "assets/buttons/loading.svg",
           width: 52.w,
           height: 50.h,
         );
         lockColour = const Color(0xff6A51CA);
-    } else if (connectionState?.name == "connecting") {
+    } else if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning) {
         connectImage = SvgPicture.asset(
           "assets/buttons/loading.svg",
           width: 52.w,
           height: 50.h,
         );
         lockColour = const Color(0xff6A51CA);
-    } else if (connectionState?.name == "disconnected") {
+    } else if (deviceConnectResult == DeviceConnectResult.disconnected) {
         connectImage = SvgPicture.asset(
           "assets/buttons/bluetooth_not_connected.svg",
           width: 52.w,
@@ -614,19 +622,19 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
   switchBikeStatusBottom(String status) {
     if(_locationProvider.locationModel?.isConnected == false){
-      return ConnectionLost(lockImage: lockImage, connectImage:connectImage,distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: isDeviceConnected,);
+      return ConnectionLost(lockImage: lockImage, connectImage:connectImage,distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected);
     }else{
       switch(status) {
         case "safe":
-          return BikeSafe(lockImage: lockImage, connectImage:connectImage,distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: isDeviceConnected,);
+          return BikeSafe(lockImage: lockImage, connectImage:connectImage,distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
         case "warning":
-          return BikeWarning(lockImage: lockImage, connectImage:connectImage, distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: isDeviceConnected,);
+          return BikeWarning(lockImage: lockImage, connectImage:connectImage, distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
         case "danger":
-          return BikeDanger(lockImage: lockImage, connectImage:connectImage, distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: isDeviceConnected,);
+          return BikeDanger(lockImage: lockImage, connectImage:connectImage, distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
         case "fall":
-          return FallDetected(lockImage: lockImage, connectImage:connectImage, distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: isDeviceConnected,);
+          return FallDetected(lockImage: lockImage, connectImage:connectImage, distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
         case "crash":
-          return CrashAlert(lockImage: lockImage,  connectImage:connectImage,distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: isDeviceConnected,);
+          return CrashAlert(lockImage: lockImage,  connectImage:connectImage,distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
         default:
           return const CircularProgressIndicator();
       }

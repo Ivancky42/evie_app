@@ -43,9 +43,8 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
   final TextEditingController _bikeNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  DeviceConnectionState? connectionState;
+  DeviceConnectResult? deviceConnectResult;
   CableLockResult? cableLockState;
-  bool isDeviceConnected = false;
   StreamController? connectStream;
 
   int? pageNavigate;
@@ -55,58 +54,31 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
-    connectionState = _bluetoothProvider.connectionStateUpdate?.connectionState;
+    deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
 
-    ///Handle all data if bool isDeviceConnected is true
-    if (connectionState == DeviceConnectionState.connected &&
-        cableLockState?.lockState == LockState.lock ||
-        cableLockState?.lockState == LockState.unlock) {
-      connectStream?.close();
-      setState(() {
-        isDeviceConnected = true;
-      });
-      Future.delayed(Duration.zero, () {
-        if(pageNavigate != null){
-          switch(pageNavigate){
-            case 0:
-              pageNavigate = null;
-              if(_bikeProvider.rfidList.isNotEmpty){
-                changeToRFIDListScreen(context);
-              }else{
-                changeToRFIDCardScreen(context);
-              }
+   if(deviceConnectResult == DeviceConnectResult.connected){
+     Future.delayed(Duration.zero, () {
+       if(pageNavigate != null){
+         switch(pageNavigate){
+           case 0:
+             pageNavigate = null;
+             if(_bikeProvider.rfidList.isNotEmpty){
+               changeToRFIDListScreen(context);
+             }else{
+               changeToRFIDCardScreen(context);
+             }
 
-              break;
-            case 1:
-              pageNavigate = null;
-              changeToMotionSensitivityScreen(context);
-              break;
-          }
-        }
-      });
-    } else {
-      connectStream?.close();
-      setState(() {
-        isDeviceConnected = false;
-      });
-    }
+             break;
+           case 1:
+             pageNavigate = null;
+             changeToMotionSensitivityScreen(context);
+             break;
+         }
+       }
+     });
+   }
 
-    Future.delayed(Duration.zero, () {
-      if (_bluetoothProvider.connectionStateUpdate?.failure != null) {
-        connectStream?.close();
-        _bluetoothProvider.disconnectDevice();
-        SmartDialog.show(
-            keepSingle: true,
-            widget: EvieSingleButtonDialogCupertino(
-                title: "Cannot connect bike",
-                content: "Move your device near the bike and try again",
-                rightContent: "OK",
-                onPressedRight: () {
-                  SmartDialog.dismiss();
-                }));
-      }
-    });
 
     return WillPopScope(
       onWillPop: () async {
@@ -235,10 +207,10 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
                                   height:16.h,
                                   width: 16.w,
                                 ),
-                                Text(_bluetoothProvider.connectionStateUpdate?.connectionState.name == "connecting" ? "Connecting" :_bluetoothProvider.connectionStateUpdate?.connectionState.name == "connected" ?  "Connected" : "Connect Bike", style: TextStyle(fontSize: 12.sp, color: Color(0xffECEDEB)),),],
+                                Text(deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning ? "Connecting" :_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?  "Connected" : "Connect Bike", style: TextStyle(fontSize: 12.sp, color: Color(0xffECEDEB)),),]
                             ),
                             onPressed: () {
-                              checkBLEPermissionAndAction(_bluetoothProvider, connectionState, connectStream);
+                              checkBLEPermissionAndAction(_bluetoothProvider, deviceConnectResult ?? DeviceConnectResult.disconnected, connectStream);
 
                             },
                             style: ElevatedButton.styleFrom(
@@ -269,7 +241,7 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
                           subtitle:  Row(
                             children: [
                               Text("RFID Car/Flash Key/E-key/Smart Key",style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
-                              isDeviceConnected ? SvgPicture.asset(
+                              deviceConnectResult == DeviceConnectResult.connected ? SvgPicture.asset(
                                 "assets/icons/bluetooth_disconnect_filled.svg",
                                 height: 15.h,
                                 width: 15.w,
@@ -282,14 +254,14 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
                           ),
                           content: _bikeProvider.rfidList.length.toString(),
                           onPress: () {
-                            if(isDeviceConnected){
+                            if(deviceConnectResult == DeviceConnectResult.connected){
                               if(_bikeProvider.rfidList.isNotEmpty){
                                 changeToRFIDListScreen(context);
                               }else{
                                 changeToRFIDCardScreen(context);
                               }
                             }else{
-                              if (_bluetoothProvider.connectionStateUpdate?.connectionState.name != "connecting" && _bluetoothProvider.connectionStateUpdate?.connectionState.name != "connected") {
+                              if (_bluetoothProvider.deviceConnectResult != DeviceConnectResult.connecting && _bluetoothProvider.deviceConnectResult != DeviceConnectResult.connected) {
                                   SmartDialog.show(widget: EvieDoubleButtonDialog(
                                       title: "Please Connect Your Bike",
                                       childContent: Text(
@@ -303,7 +275,7 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
                                       onPressedRight: () {
                                         SmartDialog.dismiss();
                                         checkBLEPermissionAndAction(
-                                            _bluetoothProvider, connectionState, connectStream);
+                                            _bluetoothProvider, deviceConnectResult ?? DeviceConnectResult.disconnected, connectStream);
                                         pageNavigate = 0;
                                       }));
                                 }
@@ -315,7 +287,7 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
                           subtitle:  Row(
                             children: [
                               Text("Motion Sensitivity",style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
-                              isDeviceConnected ? SvgPicture.asset(
+                              deviceConnectResult == DeviceConnectResult.connected ? SvgPicture.asset(
                                 "assets/icons/bluetooth_disconnect_filled.svg",
                                 height: 15.h,
                                 width: 15.w,
@@ -328,10 +300,10 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
                           ),
                           content:   _bikeProvider.currentBikeModel?.movementSetting?.sensitivity ?? "None",
                           onPress: () {
-                            if(isDeviceConnected){
+                            if(deviceConnectResult == DeviceConnectResult.connected){
                               changeToMotionSensitivityScreen(context);
                             }else {
-                              if (_bluetoothProvider.connectionStateUpdate?.connectionState.name != "connecting" && _bluetoothProvider.connectionStateUpdate?.connectionState.name != "connected") {
+                              if (_bluetoothProvider.deviceConnectResult != DeviceConnectResult.connecting && _bluetoothProvider.deviceConnectResult != DeviceConnectResult.connected) {
                                 SmartDialog.show(widget: EvieDoubleButtonDialog(
                                     title: "Please Connect Your Bike",
                                     childContent: Text(
@@ -346,7 +318,7 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
                                     onPressedRight: () {
                                       SmartDialog.dismiss();
                                       checkBLEPermissionAndAction(
-                                          _bluetoothProvider, connectionState,
+                                          _bluetoothProvider, deviceConnectResult ?? DeviceConnectResult.disconnected,
                                           connectStream);
                                       pageNavigate = 1;
                                     }));

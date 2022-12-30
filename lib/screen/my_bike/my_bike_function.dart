@@ -1,9 +1,11 @@
+import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 import '../../api/provider/bluetooth_provider.dart';
 import '../../widgets/evie_single_button_dialog.dart';
+
 
 returnBikeStatusImage(bool isConnected,String status) {
   if (isConnected == false) {
@@ -25,7 +27,7 @@ returnBikeStatusImage(bool isConnected,String status) {
 }
 
 
-checkBLEPermissionAndAction(BluetoothProvider _bluetoothProvider, DeviceConnectionState? connectionState, connectStream){
+checkBLEPermissionAndAction(BluetoothProvider _bluetoothProvider, DeviceConnectResult deviceConnectResult, connectStream){
   var bleStatus = _bluetoothProvider.bleStatus;
   switch (bleStatus) {
     case BleStatus.poweredOff:
@@ -78,8 +80,9 @@ checkBLEPermissionAndAction(BluetoothProvider _bluetoothProvider, DeviceConnecti
               }));
       break;
     case BleStatus.ready:
-      if (connectionState == null || connectionState == DeviceConnectionState.disconnected) {
-        connectStream = _bluetoothProvider.startScanAndConnect();
+      if (deviceConnectResult != DeviceConnectResult.connected) {
+      handleConnection(connectStream, _bluetoothProvider);
+
       } else {}
       break;
     default:
@@ -87,3 +90,65 @@ checkBLEPermissionAndAction(BluetoothProvider _bluetoothProvider, DeviceConnecti
   }
 }
 
+
+handleConnection(connectStream, _bluetoothProvider){
+  connectStream = _bluetoothProvider.startScanAndConnect().listen((deviceConnectResult) {
+    switch(deviceConnectResult){
+      case DeviceConnectResult.scanning:
+      // TODO: Handle this case.
+        break;
+      case DeviceConnectResult.scanTimeout:
+        connectStream?.cancel();
+        SmartDialog.show(
+            keepSingle: true,
+            widget: EvieSingleButtonDialogCupertino(
+                title: "Cannot connect bike",
+                content: "Scan timeout",
+                rightContent: "OK",
+                onPressedRight: () {
+                  SmartDialog.dismiss();
+                }));
+        break;
+      case DeviceConnectResult.scanError:
+        connectStream?.cancel();
+        SmartDialog.show(
+            keepSingle: true,
+            widget: EvieSingleButtonDialogCupertino(
+                title: "Cannot connect bike",
+                content: "Scan error",
+                rightContent: "OK",
+                onPressedRight: () {
+                  SmartDialog.dismiss();
+                }));
+        // TODO: Handle this case.
+        break;
+      case DeviceConnectResult.connecting:
+      // TODO: Handle this case.
+        break;
+      case DeviceConnectResult.partialConnected:
+      // TODO: Handle this case.
+        break;
+      case DeviceConnectResult.connected:
+      // TODO: Handle this case.
+        break;
+      case DeviceConnectResult.disconnecting:
+      // TODO: Handle this case.
+        break;
+      case DeviceConnectResult.disconnected:
+      // TODO: Handle this case.
+        break;
+      case DeviceConnectResult.connectError:
+        connectStream?.cancel();
+        SmartDialog.show(
+            keepSingle: true,
+            widget: EvieSingleButtonDialogCupertino(
+                title: "Cannot connect bike",
+                content: "Connect error",
+                rightContent: "OK",
+                onPressedRight: () {
+                  SmartDialog.dismiss();
+                }));
+        break;
+    }
+  });
+}
