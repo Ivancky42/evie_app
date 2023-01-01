@@ -78,6 +78,7 @@ handleConnection(connectStream, _bluetoothProvider){
         break;
       case DeviceConnectResult.scanTimeout:
         connectStream?.cancel();
+        _bluetoothProvider.clearDeviceConnectStatus();
         SmartDialog.show(
             tag: "SCAN_TIMEOUT",
             widget: EvieSingleButtonDialogCupertino(
@@ -89,6 +90,7 @@ handleConnection(connectStream, _bluetoothProvider){
                 }));
         break;
       case DeviceConnectResult.scanError:
+        _bluetoothProvider.clearDeviceConnectStatus();
         connectStream?.cancel();
         SmartDialog.show(
             keepSingle: true,
@@ -117,6 +119,7 @@ handleConnection(connectStream, _bluetoothProvider){
       // TODO: Handle this case.
         break;
       case DeviceConnectResult.connectError:
+        _bluetoothProvider.clearDeviceConnectStatus();
         connectStream?.cancel();
         SmartDialog.show(
             keepSingle: true,

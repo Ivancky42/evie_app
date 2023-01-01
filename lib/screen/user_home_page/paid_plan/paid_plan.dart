@@ -159,36 +159,44 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     ///this function works
     ///but this function will let dialog pop up twice
     Future.delayed(Duration.zero, () {
-      if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanError ) {
-        SmartDialog.show(
-            keepSingle: true,
-            widget: EvieSingleButtonDialogCupertino(
-                title: "Cannot connect bike",
-                content: "Move your device near the bike and try again",
-                rightContent: "OK",
-                onPressedRight: () {
-                  SmartDialog.dismiss();
-                }));
-      } else if(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanTimeout){
-        SmartDialog.show(
-            tag: "SCAN_TIMEOUT",
-            widget: EvieSingleButtonDialogCupertino(
-                title: "Cannot connect bike",
-                content: "Scan timeout",
-                rightContent: "OK",
-                onPressedRight: () {
-                  SmartDialog.dismiss();
-                }));
-      }else if(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connectError){
-        SmartDialog.show(
-            keepSingle: true,
-            widget: EvieSingleButtonDialogCupertino(
-                title: "Cannot connect bike",
-                content: "Connection Error",
-                rightContent: "OK",
-                onPressedRight: () {
-                  SmartDialog.dismiss();
-                }));
+      if (!SmartDialog.config.isExist) {
+        if (_bluetoothProvider.deviceConnectResult ==
+            DeviceConnectResult.scanError) {
+          _bluetoothProvider.clearDeviceConnectStatus();
+          SmartDialog.show(
+              keepSingle: true,
+              widget: EvieSingleButtonDialogCupertino(
+                  title: "Cannot connect bike",
+                  content: "Move your device near the bike and try again",
+                  rightContent: "OK",
+                  onPressedRight: () {
+                    SmartDialog.dismiss();
+                  }));
+        } else if (_bluetoothProvider.deviceConnectResult ==
+            DeviceConnectResult.scanTimeout) {
+          _bluetoothProvider.clearDeviceConnectStatus();
+          SmartDialog.show(
+              tag: "SCAN_TIMEOUT",
+              widget: EvieSingleButtonDialogCupertino(
+                  title: "Cannot connect bike",
+                  content: "Scan timeout",
+                  rightContent: "OK",
+                  onPressedRight: () {
+                    SmartDialog.dismiss();
+                  }));
+        } else if (_bluetoothProvider.deviceConnectResult ==
+            DeviceConnectResult.connectError) {
+          _bluetoothProvider.clearDeviceConnectStatus();   
+          SmartDialog.show(
+              keepSingle: true,
+              widget: EvieSingleButtonDialogCupertino(
+                  title: "Cannot connect bike",
+                  content: "Connection Error",
+                  rightContent: "OK",
+                  onPressedRight: () {
+                    SmartDialog.dismiss();
+                  }));
+        }
       }
     });
 

@@ -219,7 +219,6 @@ class BluetoothProvider extends ChangeNotifier {
         notifyListeners();
         stopScan();
         timer.cancel();
-        deviceConnectResult = null;
       }
     });
     scanSubscription = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
@@ -279,6 +278,7 @@ class BluetoothProvider extends ChangeNotifier {
         // TODO: Handle this case.
           deviceConnectStream.add(DeviceConnectResult.disconnected);
           deviceConnectResult = DeviceConnectResult.disconnected;
+          notifyListeners();
           clearBluetoothStatus();
           connectSubscription?.cancel();
           break;
@@ -382,6 +382,11 @@ class BluetoothProvider extends ChangeNotifier {
     iotInfoModel = null;
     exitNotifyIotInfoState();
     exitNotifyFirmwareUpgradeState();
+    notifyListeners();
+  }
+
+  void clearDeviceConnectStatus() {
+    deviceConnectResult = null;
     notifyListeners();
   }
 
