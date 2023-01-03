@@ -6,7 +6,7 @@ import '../../bluetooth/modelResult.dart';
 import '../../widgets/evie_single_button_dialog.dart';
 
 
-checkBLEPermissionAndAction(BluetoothProvider _bluetoothProvider, DeviceConnectResult deviceConnectResult, connectStream){
+checkBLEPermissionAndAction(BluetoothProvider _bluetoothProvider, DeviceConnectResult? deviceConnectResult, connectStream){
   var bleStatus = _bluetoothProvider.bleStatus;
   switch (bleStatus) {
     case BleStatus.poweredOff:
@@ -59,10 +59,18 @@ checkBLEPermissionAndAction(BluetoothProvider _bluetoothProvider, DeviceConnectR
               }));
       break;
     case BleStatus.ready:
-      if (deviceConnectResult != DeviceConnectResult.connected) {
+      if (deviceConnectResult == null) {
         handleConnection(connectStream, _bluetoothProvider);
-
-      } else {}
+      }
+      else {
+        if (deviceConnectResult == DeviceConnectResult.disconnected
+            || deviceConnectResult == DeviceConnectResult.scanTimeout
+            || deviceConnectResult == DeviceConnectResult.connectError
+            || deviceConnectResult == DeviceConnectResult.scanError
+        ) {
+          handleConnection(connectStream, _bluetoothProvider);
+        } else {}
+      }
       break;
     default:
       break;
@@ -70,7 +78,9 @@ checkBLEPermissionAndAction(BluetoothProvider _bluetoothProvider, DeviceConnectR
 }
 
 
-handleConnection(connectStream, _bluetoothProvider){
+handleConnection(connectStream, _bluetoothProvider) async {
+  await _bluetoothProvider.disconnectDevice();
+  await _bluetoothProvider.stopScan();
   connectStream = _bluetoothProvider.startScanAndConnect().listen((deviceConnectResult) {
     switch(deviceConnectResult){
       case DeviceConnectResult.scanning:
