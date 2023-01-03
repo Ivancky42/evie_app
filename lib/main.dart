@@ -13,7 +13,7 @@ import 'package:evie_test/screen/my_account/verify_password.dart';
 import 'package:evie_test/screen/my_bike/detection_sensitivity.dart';
 import 'package:evie_test/screen/onboarding/lets_go.dart';
 import 'package:evie_test/screen/rfid_card_manage.dart';
-import 'package:evie_test/screen/share_bike.dart';
+import 'package:evie_test/screen/shares_bike.dart';
 import 'package:evie_test/screen/signup_method.dart';
 import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/screen/user_notification.dart';
@@ -241,7 +241,7 @@ class MyApp extends StatelessWidget {
           "/userBluetooth": (context) => const UserHomeBluetooth(),
           "/userChangePassword": (context) => const UserChangePassword(),
           "/testBle": (context) => const TestBle(),
-          "/shareBike": (context) => const ShareBike(),
+          "/shareBike": (context) => const SharesBike(),
           "/notification": (context) => const UserNotification(),
           "/rfid": (context) => const RFIDCardManage(),
           "/myAccount": (context) => const MyAccount(),

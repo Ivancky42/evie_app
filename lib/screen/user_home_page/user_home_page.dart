@@ -10,6 +10,7 @@ import '../my_bike/admin_free_plan/admin_free_plan.dart';
 import '../my_bike/admin_paid_plan/admin_paid_plan.dart';
 import '../my_bike/navigate_plan_page.dart';
 import '../my_bike/user_bike/user_bike.dart';
+import '../user_notification.dart';
 
 ///User default home page when login condition is true
 
@@ -38,7 +39,7 @@ class _UserHomePageState extends State<UserHomePage> {
     UserHomeGeneral(),
     TestBle(),
     NavigatePlanPage(),
-    TestBle(),
+    UserNotification(),
     MyAccount(),
   ];
 

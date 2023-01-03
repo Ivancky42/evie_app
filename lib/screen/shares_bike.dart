@@ -21,13 +21,13 @@ import '../widgets/evie_double_button_dialog.dart';
 
 ///User profile page with user account information
 
-class ShareBike extends StatefulWidget{
-  const ShareBike({ Key? key }) : super(key: key);
+class SharesBike extends StatefulWidget{
+  const SharesBike({ Key? key }) : super(key: key);
   @override
-  _ShareBikeState createState() => _ShareBikeState();
+  _SharesBikeState createState() => _SharesBikeState();
 }
 
-class _ShareBikeState extends State<ShareBike> {
+class _SharesBikeState extends State<SharesBike> {
 
   final TextEditingController _emailController = TextEditingController();
 
@@ -149,7 +149,8 @@ class _ShareBikeState extends State<ShareBike> {
                                                         _bikeProvider.updateSharedBikeStatus(result).
                                                         then((update){
                                                           if(update == true){
-                                                            SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
+                                                            SmartDialog.show(
+                                                                widget: EvieSingleButtonDialogCupertino(
                                                                 title: "Success",
                                                                 content: "Shared bike with ${_emailController.text.trim()}",
                                                                 rightContent: "Close",
@@ -157,7 +158,8 @@ class _ShareBikeState extends State<ShareBike> {
                                                             ));
                                                           }
                                                           else {
-                                                            SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
+                                                            SmartDialog.show(
+                                                                widget: EvieSingleButtonDialogCupertino(
                                                                 title: "Not success",
                                                                 content: "Try again",
                                                                 rightContent: "Close",
@@ -302,11 +304,12 @@ class _ShareBikeState extends State<ShareBike> {
                     title: "Success",
                     content: "Cancelled",
                     rightContent: "Close",
-                    onPressedRight: ()=>SmartDialog.dismiss()
+                    onPressedRight: ()=> SmartDialog.dismiss()
                 ));
               }
               else {
-                SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
+                SmartDialog.show(
+                    widget: EvieSingleButtonDialogCupertino(
                     title: "Not success",
                     content: "Try again",
                     rightContent: "Close",

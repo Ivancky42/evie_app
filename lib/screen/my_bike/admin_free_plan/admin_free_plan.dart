@@ -358,7 +358,7 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
                             contents: Row(
                               children: [
                                 Text(
-                                  "2 Riders",
+                                  "1 Riders",
                                   style: TextStyle(fontSize: 16.sp),
                                 ),
                                 SizedBox(width: 8.17.w,),
@@ -369,7 +369,9 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
                                 ),
                               ],
                             ),
-                            onPress: () {},
+                            onPress: () {
+
+                            },
                             trailingImage: "assets/buttons/next.svg"),
                       ),
                       BikePageDivider(),

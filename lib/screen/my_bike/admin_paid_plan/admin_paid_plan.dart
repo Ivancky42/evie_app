@@ -353,7 +353,7 @@ class _AdminPaidPlanState extends State<AdminPaidPlan> {
                           contents: Row(
                             children: [
                               Text(
-                                "2 Riders",
+                                "${_bikeProvider.bikeUserList.length} Riders",
                                 style: TextStyle(fontSize: 16.sp),
                               ),
                               SizedBox(width: 8.17.w,),
@@ -364,7 +364,15 @@ class _AdminPaidPlanState extends State<AdminPaidPlan> {
                               ),
                             ],
                           ),
-                          onPress: () {},
+                          onPress: () {
+
+                            if(_bikeProvider.bikeUserList.length == 1 ){
+                              changeToShareBikeScreen(context);
+                            }else{
+                              changeToShareBikeUserListScreen(context);
+                            }
+
+                          },
                           trailingImage: "assets/buttons/next.svg"),
                       BikePageDivider(),
                       BikePageContainer (

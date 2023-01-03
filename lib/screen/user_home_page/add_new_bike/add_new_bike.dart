@@ -379,7 +379,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                         ),
                       ),
                       onPressed: () {
-                        changeToShareBikeScreen(context);
+                        changeToSharesBikeScreen(context);
                       },
                     ),
 

@@ -1177,7 +1177,7 @@ class _TestBleState extends State<TestBle> {
                     ),
                   ),
                   onPressed: () {
-                    changeToShareBikeScreen(context);
+                    changeToSharesBikeScreen(context);
                   },
                 ),
 

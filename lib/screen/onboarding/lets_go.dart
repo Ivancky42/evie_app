@@ -46,7 +46,8 @@ class _LetsGoState extends State<LetsGo> {
       },
 
       child: Scaffold(
-          body: Stack(children: [
+          body: Stack(
+              children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

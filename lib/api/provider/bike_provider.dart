@@ -425,7 +425,7 @@ class BikeProvider extends ChangeNotifier {
 
     try {
       //Update
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(currentBikeModel!.deviceIMEI)
           .collection(usersCollection)
@@ -436,7 +436,7 @@ class BikeProvider extends ChangeNotifier {
       }, SetOptions(merge: true));
 
       ///Update user notification id status == removed
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(targetUID)
           .collection("notifications")

@@ -185,7 +185,6 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const AccountPageDivider(),
 
-
               Visibility(
                 visible: _isEmail,
                 child: GestureDetector(

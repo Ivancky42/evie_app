@@ -115,7 +115,7 @@ class EditProfileContainer extends StatelessWidget {
     return Container(
       height: 59.h,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
+        padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,

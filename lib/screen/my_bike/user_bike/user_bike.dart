@@ -372,7 +372,7 @@ DeviceConnectResult? deviceConnectResult;
                             contents: Row(
                               children: [
                                 Text(
-                                  "2 Riders",
+                                  "${_bikeProvider.bikeUserList.length} Riders",
                                   style: TextStyle(fontSize: 16.sp),
                                 ),
                                 SizedBox(width: 8.17.w,),
@@ -383,7 +383,9 @@ DeviceConnectResult? deviceConnectResult;
                                 ),
                               ],
                             ),
-                            onPress: () {},
+                            onPress: () {
+                            changeToShareBikeUserListScreen(context);
+                            },
                             trailingImage: "assets/buttons/next.svg"),
                       ),
                       BikePageDivider(),

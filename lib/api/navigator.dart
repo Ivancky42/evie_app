@@ -15,6 +15,8 @@ import 'package:evie_test/screen/onboarding/turn_on_QRScanner.dart';
 import 'package:evie_test/screen/onboarding/turn_on_bluetooth.dart';
 import 'package:evie_test/screen/onboarding/turn_on_location.dart';
 import 'package:evie_test/screen/onboarding/turn_on_notifications.dart';
+import 'package:evie_test/screen/share_bike/share_bike.dart';
+import 'package:evie_test/screen/share_bike/share_bike_user_list.dart';
 import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/screen/user_home_page/user_home_page.dart';
@@ -30,6 +32,9 @@ import '../screen/onboarding/congratulation.dart';
 import '../screen/onboarding/display_control.dart';
 import '../screen/onboarding/notification_control.dart';
 import '../screen/onboarding/qr_scanning.dart';
+import '../screen/share_bike/invitation_sent.dart';
+import '../screen/share_bike/share_bike_invitation.dart';
+import '../screen/share_bike/user_not_found.dart';
 import '../screen/signup_method.dart';
 import '../screen/signup_page.dart';
 import '../screen/subscription/current_plan.dart';
@@ -101,7 +106,7 @@ void changeToChangePasswordScreen(BuildContext context) {
       .pushNamedAndRemoveUntil("/userChangePassword", (route) => false);
 }
 
-void changeToShareBikeScreen(BuildContext context) {
+void changeToSharesBikeScreen(BuildContext context) {
   Navigator.of(context)
       .pushNamedAndRemoveUntil("/shareBike", (route) => false);
 }
@@ -373,6 +378,57 @@ void changeToMyAccount(BuildContext context) {
     PageTransition(
       type: PageTransitionType.rightToLeft,
       child: const UserHomePage(4),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+
+void changeToShareBikeScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const ShareBike(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+void changeToShareBikeInvitationScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const ShareBikeInvitation(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+void changeToInvitationSentScreen(BuildContext context, String email) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child:  InvitationSent(email),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+void changeToUserNotFoundScreen(BuildContext context, String email) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: UserNotFound(email),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+void changeToShareBikeUserListScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const ShareBikeUserList(),
       duration: const Duration(milliseconds: 300),
     ),
   );
