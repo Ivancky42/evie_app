@@ -77,7 +77,13 @@ class BikeProvider extends ChangeNotifier {
   ///Get current user model
   Future<void> update(UserModel? user) async {
     if (user != null) {
-      if (currentUserModel?.uid != user.uid) {
+      if (currentUserModel != null) {
+        if (currentUserModel!.uid != user.uid) {
+          userBikeList.clear();
+          getBikeList(user.uid);
+        }
+      }
+      else {
         userBikeList.clear();
         getBikeList(user.uid);
       }
@@ -856,6 +862,7 @@ class BikeProvider extends ChangeNotifier {
     userBikeList.clear();
     userBikeDetails.clear();
 
+    currentUserModel = null;
     currentBikeModel = null;
     userBikeModel = null;
     bikeUserModel = null;
