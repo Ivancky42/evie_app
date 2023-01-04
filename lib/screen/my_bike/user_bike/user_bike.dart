@@ -107,7 +107,8 @@ DeviceConnectResult? deviceConnectResult;
                       EdgeInsets.fromLTRB(27.7.w, 14.67.h, 18.67.w, 14.67.h),
                       child: Image(
                         ///Change based on status
-                        image: AssetImage(returnBikeStatusImage(_bikeProvider.currentBikeModel?.location?.isConnected ?? true, _bikeProvider.currentBikeModel?.location?.status ?? "")),
+                        image: AssetImage(
+                            returnBikeStatusImage(_bikeProvider.currentBikeModel?.location?.isConnected ?? true, _bikeProvider.currentBikeModel?.location?.status ?? "")),
                         width: 86.86.h,
                         height: 54.85.h,
                       ),

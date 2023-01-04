@@ -97,7 +97,6 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
 
                             title: Text(
                                 _bikeProvider.bikeUserDetails.values.elementAt(index).name, style: TextStyle(fontSize: 16.sp),),
-
                             subtitle: Text(
                               "${_bikeProvider.bikeUserDetails.values.elementAt(index).email}",
                               style: TextStyle(fontSize:12.sp, color: ThemeChangeNotifier().isDarkMode(context)
@@ -123,7 +122,6 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                 ),
               ],
             ),
-
 
 
 

@@ -508,7 +508,7 @@ class AuthProvider extends ChangeNotifier {
       }
 
       BikeProvider().clear();
-    CurrentUserProvider().cancelSubscription();
+      CurrentUserProvider().cancelSubscription();
       NotificationProvider().unsubscribeFromTopic(_uid);
       NotificationProvider().unsubscribeFromTopic("fcm_test");
 

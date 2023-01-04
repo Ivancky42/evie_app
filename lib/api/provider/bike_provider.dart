@@ -51,8 +51,6 @@ class BikeProvider extends ChangeNotifier {
 
   UserModel? currentUserModel;
   BikeModel? currentBikeModel;
-  BikeUserModel? bikeUserModel;
-  UserBikeModel? userBikeModel;
   BikePlanModel? currentBikePlanModel;
   RFIDModel? currentRFIDModel;
 
@@ -219,7 +217,6 @@ class BikeProvider extends ChangeNotifier {
   }
 
 
-
   /// ****************************************** ///
   /// Share bike
   /// ****************************************** ///
@@ -357,9 +354,9 @@ class BikeProvider extends ChangeNotifier {
               ///element.type
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
-
                 bikeUserList.putIfAbsent(
                     docChange.doc.id, () => BikeUserModel.fromJson(obj!));
+
                 bikeUserList.forEach((key, value) {
                   getBikeUserDetails(key);
                 });
@@ -622,7 +619,7 @@ class BikeProvider extends ChangeNotifier {
 
   deleteBike(String imei) async {
     try {
-      controlBikeList("first");
+
       FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(currentUserModel?.uid)
@@ -637,8 +634,11 @@ class BikeProvider extends ChangeNotifier {
           .doc(currentUserModel?.uid)
           .delete();
 
+      currentBikeIMEI = null;
       currentBikeModel = null;
       notifyListeners();
+
+      controlBikeList("first");
 
       return true;
     } catch (e) {
@@ -851,24 +851,36 @@ class BikeProvider extends ChangeNotifier {
     return DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
   }
 
-
   clear() async {
     SharedPreferences prefs = await _prefs;
     prefs.remove('currentBikeName');
     prefs.remove('currentBikeList');
     prefs.remove('currentBikeIMEI');
 
-    userBikeList.keys.forEach((element) {
+    for (var element in userBikeList.keys) {
       NotificationProvider().unsubscribeFromTopic(element);
-    });
+    }
+
+    bikeListSubscription?.cancel();
+    currentBikeSubscription?.cancel();
+    bikeUserSubscription?.cancel();
+    currentBikeUserSubscription?.cancel();
+    currentUserBikeSubscription?.cancel();
+    currentBikePlanSubscription?.cancel();
+    rfidListSubscription?.cancel();
 
     userBikeList.clear();
     userBikeDetails.clear();
+    bikeUserList.clear();
+    bikeUserDetails.clear();
 
+
+    isPlanSubscript = null;
+    currentBikeIMEI = null;
     currentUserModel = null;
     currentBikeModel = null;
-    userBikeModel = null;
-    bikeUserModel = null;
+    currentBikePlanModel = null;
+    currentRFIDModel = null;
     currentBikeList = 0;
     notifyListeners();
   }
