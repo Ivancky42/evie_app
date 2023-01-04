@@ -213,7 +213,7 @@ class BluetoothProvider extends ChangeNotifier {
     startScanTimer?.cancel();
     startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       print("Scan Timer: " + timer.tick.toString() + "s");
-      if (timer.tick == 6) {
+      if (timer.tick == 12) {
         deviceConnectStream.add(DeviceConnectResult.scanTimeout);
         deviceConnectResult = DeviceConnectResult.scanTimeout;
         notifyListeners();
@@ -275,12 +275,30 @@ class BluetoothProvider extends ChangeNotifier {
           stopServices();
           break;
         case DeviceConnectionState.disconnected:
-        // TODO: Handle this case.
-          deviceConnectStream.add(DeviceConnectResult.disconnected);
-          deviceConnectResult = DeviceConnectResult.disconnected;
-          notifyListeners();
-          clearBluetoothStatus();
-          connectSubscription?.cancel();
+          if (connectionStateUpdate?.failure != null) {
+            if (bleStatus == BleStatus.poweredOff) {
+              deviceConnectStream.add(DeviceConnectResult.disconnected);
+              deviceConnectResult = DeviceConnectResult.disconnected;
+              notifyListeners();
+              clearBluetoothStatus();
+              connectSubscription?.cancel();
+            }
+            else {
+              deviceConnectStream.add(DeviceConnectResult.connectError);
+              deviceConnectResult = DeviceConnectResult.connectError;
+              notifyListeners();
+              clearBluetoothStatus();
+              connectSubscription?.cancel();
+            }
+          }
+          else {
+            deviceConnectStream.add(DeviceConnectResult.disconnected);
+            deviceConnectResult = DeviceConnectResult.disconnected;
+            notifyListeners();
+            clearBluetoothStatus();
+            connectSubscription?.cancel();
+          }
+
           break;
         default:
           break;

@@ -25,20 +25,33 @@ class LocationProvider extends ChangeNotifier {
   UserLocation? userPosition;
   Placemark? currentPlaceMark;
 
-  Future<void> init(LocationModel? locationModel) async {
+  LocationProvider() {
     checkLocationPermissionStatus();
-    if (locationModel == null) {}
-    else {
-      this.locationModel = locationModel;
+  }
 
-      LocationPermission permission;
-      permission = await Geolocator.requestPermission();
+  Future<void> update(LocationModel? locationModel) async {
 
-      getPlaceMarks(locationModel.geopoint.latitude, locationModel.geopoint.longitude);
-      //userPosition = updateUserPosition();
-
-      notifyListeners();
+    if (locationModel != null) {
+      if (this.locationModel != locationModel) {
+        this.locationModel = locationModel;
+        getPlaceMarks(locationModel.geopoint.latitude, locationModel.geopoint.longitude);
+        notifyListeners();
+      }
     }
+
+    // checkLocationPermissionStatus();
+    // if (locationModel == null) {}
+    // else {
+    //   this.locationModel = locationModel;
+    //
+    //   LocationPermission permission;
+    //   permission = await Geolocator.requestPermission();
+    //
+    //   getPlaceMarks(locationModel.geopoint.latitude, locationModel.geopoint.longitude);
+    //   //userPosition = updateUserPosition();
+    //
+    //   notifyListeners();
+    // }
   }
 
   checkLocationPermissionStatus() async {

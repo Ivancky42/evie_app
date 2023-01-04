@@ -41,7 +41,7 @@ class _BikeContainerState extends State<BikeContainer> {
 
 
     ///Handle all data if bool isDeviceConnected is true
-    if (deviceConnectResult == DeviceConnectionState.connected) {
+    if (deviceConnectResult == DeviceConnectResult.connected) {
       if (_bluetoothProvider.currentBikeModel?.deviceIMEI == widget.bikeModel.deviceIMEI) {
         setState(() {
           isSpecificDeviceConnected = true;

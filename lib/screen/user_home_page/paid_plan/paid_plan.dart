@@ -186,7 +186,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                   }));
         } else if (_bluetoothProvider.deviceConnectResult ==
             DeviceConnectResult.connectError) {
-          _bluetoothProvider.clearDeviceConnectStatus();   
+          _bluetoothProvider.clearDeviceConnectStatus();
           SmartDialog.show(
               keepSingle: true,
               widget: EvieSingleButtonDialogCupertino(
@@ -491,7 +491,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
           height: 50.h,
         );
         lockColour = const Color(0xff6A51CA);
-    } else if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning) {
+    } else if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning || deviceConnectResult == DeviceConnectResult.partialConnected) {
         connectImage = SvgPicture.asset(
           "assets/buttons/loading.svg",
           width: 52.w,

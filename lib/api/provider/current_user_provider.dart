@@ -35,6 +35,10 @@ class CurrentUserProvider extends ChangeNotifier {
 
       notifyListeners();
     }
+    else {
+      currentUserModel = null;
+      notifyListeners();
+    }
   }
 
   ///Get user information
