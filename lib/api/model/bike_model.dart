@@ -72,7 +72,7 @@ class BikeModel {
       lastUpdated:    timestampFromJson(json['lastUpdated']),
       location:   LocationModel.fromJson(json['location'] as Map<String, dynamic>),
       movementSetting: json['movementSetting'] != null ? MovementSettingModel.fromJson(json['movementSetting'] as Map<String, dynamic>) : null,
- //     simSetting:   SimSettingModel.fromJson(json['simSetting'] as Map<String, dynamic>),
+      simSetting:   json['simSetting'] != null ? SimSettingModel.fromJson(json['simSetting'] as Map<String, dynamic>) : null,
       macAddr: json['macAddr']?? '',
       networkSignal: json['networkSignal']?? 0,
       protVersion: json['protVersion']?? '',
