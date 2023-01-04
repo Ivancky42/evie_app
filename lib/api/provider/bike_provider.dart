@@ -200,89 +200,10 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
-  getPlanSubscript() async {
-     currentBikePlanSubscription?.cancel();
-     currentBikePlanSubscription = FirebaseFirestore.instance
-        .collection(bikesCollection)
-        .doc(currentBikeModel!.deviceIMEI)
-        .collection(plansCollection)
-        .snapshots()
-    .listen((snapshot) {
-      {
-        if (snapshot.docs.isNotEmpty) {
-          for (var docChange in snapshot.docChanges) {
-            switch (docChange.type) {
-            ///element.type
-              case DocumentChangeType.added:
-                Map<String, dynamic>? obj = docChange.doc.data();
-                if ( snapshot.size == 0 ) {
-                  isPlanSubscript = false;
-                }else {
-                  for(int i=0;i<snapshot.docs.length;i++){
-                    currentBikePlanModel = BikePlanModel.fromJson(obj!);
-                  }
-                  final result = calculateDateDifference(currentBikePlanModel!.periodEnd!.toDate());
-                  if(result < 0){
-                    isPlanSubscript = false;
-                  }else{
-                    isPlanSubscript = true;
-                  }
-                }
-                notifyListeners();
-                break;
-              case DocumentChangeType.removed:
-                currentBikePlanModel = null;
-                notifyListeners();
-                break;
-              case DocumentChangeType.modified:
-                Map<String, dynamic>? obj = docChange.doc.data();
-                for(int i=0;i<snapshot.docs.length;i++){
-                  currentBikePlanModel = BikePlanModel.fromJson(obj!);
-                }
-                final result = calculateDateDifference(currentBikePlanModel!.periodEnd!.toDate());
-                if(result < 0){
-                  isPlanSubscript = false;
-                }else{
-                  isPlanSubscript = true;
-                }
-                notifyListeners();
-                break;
-            }
-          }
-      }else{
-          currentBikePlanModel = null;
-          isPlanSubscript = false;
-          notifyListeners();
-        }
-      }});
-  }
-
-  /// Yesterday : calculateDifference(date) == -1.
-  /// Today : calculateDifference(date) == 0.
-  /// Tomorrow : calculateDifference(date) == 1
-  int calculateDateDifference(DateTime date) {
-    DateTime now = DateTime.now();
-    return DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
-  }
-
   Stream<SwitchBikeResult> switchBike() {
   return switchBikeResultListener.stream;
     }
 
-  updateBikeName(name) async {
-    try {
-      var docUser = FirebaseFirestore.instance.collection(bikesCollection);
-      docUser.doc(currentBikeModel?.deviceIMEI).update({
-        'deviceName': name,
-        'updated': Timestamp.now(),
-      });
-      notifyListeners();
-      return true;
-    } catch (e) {
-      debugPrint(e.toString());
-      return false;
-    }
-  }
 
    changeBikeUsingIMEI(String deviceIMEI) async {
     SharedPreferences prefs = await _prefs;
@@ -291,53 +212,13 @@ class BikeProvider extends ChangeNotifier {
     await getBike(deviceIMEI);
   }
 
-  Future<void> controlBikeList(String action) async {
-    SharedPreferences prefs = await _prefs;
-    switch (action) {
-      case "next":
-        {
-          if (currentBikeList < userBikeList.length - 1) {
-            currentBikeList += 1;
-            prefs.setInt('currentBikeList', currentBikeList);
-            getBike(userBikeList.keys.elementAt(currentBikeList));
-            notifyListeners();
-          } else if (currentBikeList == userBikeList.length - 1) {
-            controlBikeList("first");
-          }
-        }
-        break;
-      case "back":
-        {
-          if (currentBikeList > 0) {
-            currentBikeList -= 1;
-            prefs.setInt('currentBikeList', currentBikeList);
-            getBike(userBikeList.keys.elementAt(currentBikeList));
-            notifyListeners();
-          } else if (currentBikeList <= 0) {
-            controlBikeList("last");
-          }
-        }
-        break;
-      case "first":
-        {
-          currentBikeList = 0;
-          prefs.setInt('currentBikeList', currentBikeList);
-          getBike(userBikeList.keys.elementAt(currentBikeList));
-          notifyListeners();
-        }
-        break;
-      case "last":
-        {
-          currentBikeList = userBikeList.length - 1;
-          prefs.setInt('currentBikeList', currentBikeList);
-          getBike(userBikeList.keys.elementAt(currentBikeList));
-          notifyListeners();
-        }
-        break;
-    }
-    notifyListeners();
-  }
 
+
+  /// ****************************************** ///
+  /// Share bike
+  /// ****************************************** ///
+  /// Command for share bike
+  ///
   updateSharedBikeStatus(String targetID) async {
     bool result;
 
@@ -422,7 +303,6 @@ class BikeProvider extends ChangeNotifier {
 
   cancelSharedBikeStatus(String targetUID, String notificationId) async {
     bool result;
-
     try {
       //Update
       await FirebaseFirestore.instance
@@ -561,6 +441,25 @@ class BikeProvider extends ChangeNotifier {
     return false;
   }
 
+  Future<bool> checkIsUserExist(String targetEmail) async {
+    if (bikeUserDetails.isNotEmpty) {
+      for (var i = 0; i < bikeUserDetails.length;i++) {
+          if (bikeUserDetails.values.elementAt(i).email == targetEmail) {
+            return true;
+          } else {
+            return false;
+          }
+      }
+    }
+    return false;
+  }
+
+  /// ****************************************** ///
+  /// Connect bike
+  /// ****************************************** ///
+  /// Command for connect bike
+
+
   handleBarcodeData(String code) async {
     List<String> splitCode = code.split(',');
     String serialNumber = splitCode[0].split(':').last;
@@ -609,6 +508,35 @@ class BikeProvider extends ChangeNotifier {
     });
   }
 
+
+  queryBikeEvents()async{
+    return FirebaseFirestore.instance.collection(bikesCollection).doc(currentBikeModel!.deviceIMEI!).collection(eventsCollection).orderBy("created", descending: true);
+  }
+
+  /// ****************************************** ///
+  /// Firestore update
+  /// ****************************************** ///
+  /// Command for firestore function
+
+  updateMotionSensitivity(bool isEnabled, String sensitivity) {
+    try {
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI)
+          .set({
+        "movementSetting" : {
+          'enabled' : isEnabled,
+          'sensitivity' : sensitivity,
+        }
+      }, SetOptions(merge: true));
+
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
   Future uploadUserToFireStore(selectedDeviceId) async {
     try {
       ///uploadBikeToUserFireStore
@@ -618,10 +546,10 @@ class BikeProvider extends ChangeNotifier {
           .collection(bikesCollection)
           .doc(selectedDeviceId)
           .set(UserBikeModel(
-            deviceIMEI: selectedDeviceId!,
-            deviceType: "Evie",
-            created: Timestamp.now(),
-          ).toJson());
+        deviceIMEI: selectedDeviceId!,
+        deviceType: "Evie",
+        created: Timestamp.now(),
+      ).toJson());
 
       ///uploadUserToBikeFireStore
       var role = "owner";
@@ -631,11 +559,11 @@ class BikeProvider extends ChangeNotifier {
           .collection(usersCollection)
           .doc(currentUserModel!.uid)
           .set(BikeUserModel(
-            uid: currentUserModel!.uid,
-            role: role,
-            userId: 0,
-            created: Timestamp.now(),
-          ).toJson());
+        uid: currentUserModel!.uid,
+        role: role,
+        userId: 0,
+        created: Timestamp.now(),
+      ).toJson());
 
       scanQRCodeResult = ScanQRCodeResult.success;
       notifyListeners();
@@ -668,6 +596,21 @@ class BikeProvider extends ChangeNotifier {
   }
 
 
+  updateBikeName(name) async {
+    try {
+      var docUser = FirebaseFirestore.instance.collection(bikesCollection);
+      docUser.doc(currentBikeModel?.deviceIMEI).update({
+        'deviceName': name,
+        'updated': Timestamp.now(),
+      });
+      notifyListeners();
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
   deleteBike(String imei) {
     controlBikeList("first");
     try {
@@ -695,6 +638,100 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
+
+  /// ****************************************** ///
+  /// Plan Subscription
+  /// ****************************************** ///
+  /// Command for plan
+
+  getPlanSubscript() async {
+    currentBikePlanSubscription?.cancel();
+    currentBikePlanSubscription = FirebaseFirestore.instance
+        .collection(bikesCollection)
+        .doc(currentBikeModel!.deviceIMEI)
+        .collection(plansCollection)
+        .snapshots()
+        .listen((snapshot) {
+      {
+        if (snapshot.docs.isNotEmpty) {
+          for (var docChange in snapshot.docChanges) {
+            switch (docChange.type) {
+            ///element.type
+              case DocumentChangeType.added:
+                Map<String, dynamic>? obj = docChange.doc.data();
+                if ( snapshot.size == 0 ) {
+                  isPlanSubscript = false;
+                }else {
+                  for(int i=0;i<snapshot.docs.length;i++){
+                    currentBikePlanModel = BikePlanModel.fromJson(obj!);
+                  }
+                  final result = calculateDateDifference(currentBikePlanModel!.periodEnd!.toDate());
+                  if(result < 0){
+                    isPlanSubscript = false;
+                  }else{
+                    isPlanSubscript = true;
+                  }
+                }
+                notifyListeners();
+                break;
+              case DocumentChangeType.removed:
+                currentBikePlanModel = null;
+                notifyListeners();
+                break;
+              case DocumentChangeType.modified:
+                Map<String, dynamic>? obj = docChange.doc.data();
+                for(int i=0;i<snapshot.docs.length;i++){
+                  currentBikePlanModel = BikePlanModel.fromJson(obj!);
+                }
+                final result = calculateDateDifference(currentBikePlanModel!.periodEnd!.toDate());
+                if(result < 0){
+                  isPlanSubscript = false;
+                }else{
+                  isPlanSubscript = true;
+                }
+                notifyListeners();
+                break;
+            }
+          }
+        }else{
+          currentBikePlanModel = null;
+          isPlanSubscript = false;
+          notifyListeners();
+        }
+      }});
+  }
+
+  updatePurchasedPlan(String deviceIMEI, PlanModel planModel) async {
+    DocumentReference ref = FirebaseFirestore.instance.collection("plans").doc(planModel.id);
+    try {
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(deviceIMEI)
+          .collection("plans")
+          .doc(planModel.id)
+          .set({
+        'name': planModel.name,
+        'updated': Timestamp.now(),
+        'created': Timestamp.now(),
+        'periodStart': Timestamp.now(),
+        'periodEnd': Timestamp.fromDate(DateTime.now().add(const Duration(days: 365))),
+        'product': ref
+      });
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+
+
+  /// ****************************************** ///
+  /// RFID
+  /// ****************************************** ///
+  /// Command for RFID
+
+
   getRFIDList() {
     rfidList.clear();
     try {
@@ -711,7 +748,7 @@ class BikeProvider extends ChangeNotifier {
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
                 rfidList.putIfAbsent(docChange.doc.id,
-                    () => RFIDModel.fromJson(obj!));
+                        () => RFIDModel.fromJson(obj!));
                 notifyListeners();
                 break;
               case DocumentChangeType.removed:
@@ -721,7 +758,7 @@ class BikeProvider extends ChangeNotifier {
               case DocumentChangeType.modified:
                 Map<String, dynamic>? obj = docChange.doc.data();
                 rfidList.update(docChange.doc.id,
-                    (value) => RFIDModel.fromJson(obj!));
+                        (value) => RFIDModel.fromJson(obj!));
                 notifyListeners();
                 break;
             }
@@ -791,51 +828,20 @@ class BikeProvider extends ChangeNotifier {
   }
 
 
-  updateMotionSensitivity(bool isEnabled, String sensitivity) {
-    try {
-      FirebaseFirestore.instance
-          .collection(bikesCollection)
-          .doc(currentBikeModel!.deviceIMEI)
-          .set({
-        "movementSetting" : {
-          'enabled' : isEnabled,
-          'sensitivity' : sensitivity,
-        }
-      }, SetOptions(merge: true));
+  /// ****************************************** ///
+  /// Calculation
+  /// ****************************************** ///
+  /// Command for calculation
 
-      return true;
-    } catch (e) {
-      debugPrint(e.toString());
-      return false;
-    }
+
+  /// Yesterday : calculateDifference(date) == -1.
+  /// Today : calculateDifference(date) == 0.
+  /// Tomorrow : calculateDifference(date) == 1
+  int calculateDateDifference(DateTime date) {
+    DateTime now = DateTime.now();
+    return DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
   }
 
-  queryBikeEvents()async{
-    return FirebaseFirestore.instance.collection(bikesCollection).doc(currentBikeModel!.deviceIMEI!).collection(eventsCollection).orderBy("created", descending: true);
-  }
-
-  updatePurchasedPlan(String deviceIMEI, PlanModel planModel) async {
-    DocumentReference ref = FirebaseFirestore.instance.collection("plans").doc(planModel.id);
-    try {
-      FirebaseFirestore.instance
-          .collection(bikesCollection)
-          .doc(deviceIMEI)
-          .collection("plans")
-          .doc(planModel.id)
-          .set({
-            'name': planModel.name,
-            'updated': Timestamp.now(),
-            'created': Timestamp.now(),
-            'periodStart': Timestamp.now(),
-            'periodEnd': Timestamp.fromDate(DateTime.now().add(const Duration(days: 365))),
-            'product': ref
-          });
-      return true;
-    } catch (e) {
-      debugPrint(e.toString());
-      return false;
-    }
-  }
 
   clear() async {
     SharedPreferences prefs = await _prefs;
@@ -855,4 +861,57 @@ class BikeProvider extends ChangeNotifier {
     currentBikeList = 0;
     notifyListeners();
   }
+
+  /// ****************************************** ///
+  /// Likely abandon
+  /// ****************************************** ///
+  ///
+
+  Future<void> controlBikeList(String action) async {
+    SharedPreferences prefs = await _prefs;
+    switch (action) {
+      case "next":
+        {
+          if (currentBikeList < userBikeList.length - 1) {
+            currentBikeList += 1;
+            prefs.setInt('currentBikeList', currentBikeList);
+            getBike(userBikeList.keys.elementAt(currentBikeList));
+            notifyListeners();
+          } else if (currentBikeList == userBikeList.length - 1) {
+            controlBikeList("first");
+          }
+        }
+        break;
+      case "back":
+        {
+          if (currentBikeList > 0) {
+            currentBikeList -= 1;
+            prefs.setInt('currentBikeList', currentBikeList);
+            getBike(userBikeList.keys.elementAt(currentBikeList));
+            notifyListeners();
+          } else if (currentBikeList <= 0) {
+            controlBikeList("last");
+          }
+        }
+        break;
+      case "first":
+        {
+          currentBikeList = 0;
+          prefs.setInt('currentBikeList', currentBikeList);
+          getBike(userBikeList.keys.elementAt(currentBikeList));
+          notifyListeners();
+        }
+        break;
+      case "last":
+        {
+          currentBikeList = userBikeList.length - 1;
+          prefs.setInt('currentBikeList', currentBikeList);
+          getBike(userBikeList.keys.elementAt(currentBikeList));
+          notifyListeners();
+        }
+        break;
+    }
+    notifyListeners();
+  }
+
 }

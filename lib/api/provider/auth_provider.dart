@@ -481,8 +481,7 @@ class AuthProvider extends ChangeNotifier {
   checkIfFirestoreUserExist(String email) async {
     var result = "false";
 
-    QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection(usersCollection).get();
+    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection(usersCollection).get();
 
     for (var element in snapshot.docs) {
       if (element['email'] == email) {

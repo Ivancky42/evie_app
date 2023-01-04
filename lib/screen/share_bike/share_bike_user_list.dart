@@ -231,7 +231,18 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                           fontWeight: FontWeight.w700),
                     ),
                     onPressed: () {
-            changeToShareBikeScreen(context);
+
+                      ///Check if bike already have 5 user
+                      if(_bikeProvider.bikeUserList.length <= 5 ){
+                        changeToShareBikeScreen(context);
+                      }else{
+                        SmartDialog.show(widget: EvieSingleButtonDialog(
+                            title: "Exist Limit",
+                            content: "Only 5 user are allowed",
+                            rightContent: "OK",
+                            onPressedRight: (){SmartDialog.dismiss();}));
+                      }
+
                     },
                   ),
               ),

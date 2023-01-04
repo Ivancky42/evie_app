@@ -119,9 +119,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                       if (_formKey.currentState!.validate()) {
 
                         try {
-                          _authProvider.checkIfFirestoreUserExist(
-                            _emailController.text.trim(),
-                          ).then((result){
+                          _authProvider.checkIfFirestoreUserExist(_emailController.text.trim(),).then((result) async {
 
                             switch(result){
                               case "false":
@@ -138,6 +136,11 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                 ));
                                 break;
                               default:
+
+                              ///check bike user list if the user already own this bike
+                              var existResult = await _bikeProvider.checkIsUserExist(_emailController.text.trim());
+
+                              if(existResult == false){
                                 SmartDialog.show(widget: EvieDoubleButtonDialogCupertino(
                                   title: "Share Bike",
                                   content: "Share ${_bikeProvider.currentBikeModel!.deviceName}"
@@ -147,10 +150,6 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                   rightContent: "Share",
                                   onPressedRight: () async {
                                     SmartDialog.dismiss();
-
-                                    ///Check if already reach limit 5 ppl
-                                    ///check bike user list if the user already own this bike
-
 
                                     _bikeProvider.updateSharedBikeStatus(result).
                                     then((update){
@@ -180,6 +179,20 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
 
                                   },
                                 ));
+                              }else{
+                                SmartDialog.show(
+                                    backDismiss: false,
+                                    widget: EvieSingleButtonDialogCupertino(
+                                        title: "User already exist",
+                                        content: "The target user owned the bike",
+                                        rightContent: "Close",
+                                        onPressedRight: (){
+                                          SmartDialog.dismiss();
+                                        }
+                                    ));
+
+                              }
+
                                 break;
                             }
                           });
