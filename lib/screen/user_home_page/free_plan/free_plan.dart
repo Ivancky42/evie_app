@@ -1006,7 +1006,7 @@ class _FreePlanState extends State<FreePlan> {
         );
         lockColour = const Color(0xff6A51CA);
       });
-    } else if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning) {
+    } else if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning || deviceConnectResult == DeviceConnectResult.partialConnected) {
       setState(() {
         connectImage = SvgPicture.asset(
           "assets/buttons/loading.svg",

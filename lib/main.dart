@@ -164,7 +164,7 @@ class AppProviders extends StatelessWidget {
               create: (_) => LocationProvider(),
               update: (_, bikeProvider, locationProvider) {
                 return locationProvider!
-                  ..init(bikeProvider.currentBikeModel?.location);
+                  ..update(bikeProvider.currentBikeModel?.location);
               }
           ),
           ChangeNotifierProxyProvider2<CurrentUserProvider, BikeProvider, PlanProvider>(

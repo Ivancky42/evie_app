@@ -212,7 +212,7 @@ DeviceConnectResult? deviceConnectResult;
                                   height:16.h,
                                   width: 16.w,
                                 ),
-                            Text(deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning ? "Connecting" :_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?  "Connected" : "Connect Bike", style: TextStyle(fontSize: 12.sp, color: Color(0xffECEDEB)),),]
+                            Text(deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning || deviceConnectResult == DeviceConnectResult.partialConnected ? "Connecting" :_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?  "Connected" : "Connect Bike", style: TextStyle(fontSize: 12.sp, color: Color(0xffECEDEB)),),]
                             ),
                             onPressed: (){
                              checkBLEPermissionAndAction(_bluetoothProvider, deviceConnectResult ?? DeviceConnectResult.disconnected,connectStream);
