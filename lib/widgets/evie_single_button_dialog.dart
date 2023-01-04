@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:evie_test/api/sizer.dart';
 
 import '../api/colours.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,8 +25,7 @@ class EvieSingleButtonDialogCupertino extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (BuildContext context, Orientation orientation, DeviceType deviceType) {
-      return CupertinoAlertDialog(
+     return CupertinoAlertDialog(
         title: Text(
           title,
           style: TextStyle(
@@ -60,7 +59,6 @@ class EvieSingleButtonDialogCupertino extends StatelessWidget{
 
 
       );
-    },);
   }
 }
 
@@ -88,7 +86,6 @@ class EvieSingleButtonDialog extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (BuildContext context, Orientation orientation, DeviceType deviceType) {
       return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -186,6 +183,5 @@ class EvieSingleButtonDialog extends StatelessWidget{
 
           )
       );
-    },);
   }
 }

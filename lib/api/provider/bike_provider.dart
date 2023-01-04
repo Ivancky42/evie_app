@@ -59,6 +59,7 @@ class BikeProvider extends ChangeNotifier {
   int currentBikeList = 0;
   String? currentBikeIMEI;
   bool? isPlanSubscript;
+  bool? isOwner;
 
   StreamSubscription? bikeListSubscription;
   StreamSubscription? currentBikeSubscription;
@@ -108,7 +109,6 @@ class BikeProvider extends ChangeNotifier {
               ///element.type
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
-
                 ///Key = imei, Val = get json object
                 userBikeList.putIfAbsent(
                     docChange.doc.id, () => UserBikeModel.fromJson(obj!));
@@ -278,7 +278,7 @@ class BikeProvider extends ChangeNotifier {
     return result;
   }
 
-  updateAcceptSharedBikeStatus(String targetIMEI) async {
+  updateAcceptSharedBikeStatus(String targetIMEI, String currentUid) async {
     bool result;
 
     try {
@@ -287,7 +287,7 @@ class BikeProvider extends ChangeNotifier {
           .collection(bikesCollection)
           .doc(targetIMEI)
           .collection(usersCollection)
-          .doc(currentUserModel!.uid)
+          .doc(currentUid)
           .set({
         'status': 'shared',
         'justInvited': true,
@@ -305,7 +305,7 @@ class BikeProvider extends ChangeNotifier {
     bool result;
     try {
       //Update
-      await FirebaseFirestore.instance
+       FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(currentBikeModel!.deviceIMEI)
           .collection(usersCollection)
@@ -316,7 +316,7 @@ class BikeProvider extends ChangeNotifier {
       }, SetOptions(merge: true));
 
       ///Update user notification id status == removed
-      await FirebaseFirestore.instance
+      FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(targetUID)
           .collection("notifications")
@@ -373,6 +373,7 @@ class BikeProvider extends ChangeNotifier {
             }
           }
         }
+        checkIsOwner();
       });
     } catch (e) {
       debugPrint(e.toString());
@@ -426,19 +427,21 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
-  bool checkIsOwner() {
+  checkIsOwner() {
     if (bikeUserList.isNotEmpty) {
       for (var key in bikeUserList.keys) {
         if (currentUserModel!.uid == key) {
           if (bikeUserList[key].role == "owner") {
-            return true;
+            isOwner = true;
+            notifyListeners();
           } else {
-            return false;
+            isOwner = false;
+            notifyListeners();
           }
         }
       }
     }
-    return false;
+    notifyListeners();
   }
 
   Future<bool> checkIsUserExist(String targetEmail) async {
@@ -611,9 +614,9 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
-  deleteBike(String imei) {
-    controlBikeList("first");
+  deleteBike(String imei) async {
     try {
+      controlBikeList("first");
       FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(currentUserModel?.uid)

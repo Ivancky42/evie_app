@@ -5,6 +5,7 @@ import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
+import 'package:evie_test/screen/share_bike/share_bike_function.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -16,6 +17,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 import '../../api/colours.dart';
 import '../../api/length.dart';
 import '../../api/navigator.dart';
+import '../../api/provider/current_user_provider.dart';
 import '../../bluetooth/modelResult.dart';
 import '../../theme/ThemeChangeNotifier.dart';
 import '../../widgets/evie_single_button_dialog.dart';
@@ -35,20 +37,19 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
 
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
+  late CurrentUserProvider _currentUserProvider;
   late StreamSubscription deleteRFIDStream;
 
   bool isManageList = false;
   bool isOwner = false;
 
-
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
-    if(_bikeProvider.checkIsOwner()){
-      isOwner = true;
-    }
+    isOwner = _bikeProvider.isOwner!;
 
     return WillPopScope(
       onWillPop: () async {
@@ -79,10 +80,8 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                     itemCount: _bikeProvider.bikeUserList.length,
                     itemBuilder: (context, index) {
                         return ListTile(
-
                           ///Put user profile image here
                             leading: ClipOval(
-
                               child: CachedNetworkImage(
                                 //imageUrl: document['profileIMG'],
                                 imageUrl: _bikeProvider.bikeUserDetails.values.elementAt(index).profileIMG,
@@ -95,87 +94,28 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                                 fit: BoxFit.cover,
                               ),
                             ),
+
                             title: Text(
                                 _bikeProvider.bikeUserDetails.values.elementAt(index).name, style: TextStyle(fontSize: 16.sp),),
+
                             subtitle: Text(
                               "${_bikeProvider.bikeUserDetails.values.elementAt(index).email}",
                               style: TextStyle(fontSize:12.sp, color: ThemeChangeNotifier().isDarkMode(context)
                                   == true ? Colors.white70: Colors.black54,),
                           ),
 
-                          trailing: isManageList ? Container(
-                            width: 107.w,
-                            height: 43.h,
-                            child: ElevatedButton(
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/icons/delete.svg",
-                                    height: 20.h,
-                                    width: 20.w,
-                                  ),
-                                  Text(
-                                    "Delete",
-                                    style: TextStyle(
-                                        fontSize: 12.sp,
-                                        color: Color(0xffECEDEB)),
-                                  ),
-                                ],
-                              ),
-                              onPressed: (){
-                                SmartDialog.show(
-                                    widget: EvieDoubleButtonDialogCupertino(
-                                        title: "Are you sure you want to delete this user",
-                                      content: 'Are you sure you want to delete this user',
-                                      leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
-                                        rightContent: "Yes",
-
-                                        onPressedRight: () async {
-                                          await _bikeProvider.cancelSharedBikeStatus(_bikeProvider.bikeUserList.values.elementAt(index).uid, _bikeProvider.bikeUserList.values.elementAt(index).notificationId!).then((result){
-                                            ///Update user notification id status == removed
-                                            if(result == true){
-                                              SmartDialog.dismiss();
-                                              SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
-                                                  title: "Success",
-                                                  content: "Cancelled",
-                                                  rightContent: "Close",
-                                                  onPressedRight: ()=> SmartDialog.dismiss()
-                                              ));
-                                            }
-                                            else {
-                                              SmartDialog.show(
-                                                  widget: EvieSingleButtonDialogCupertino(
-                                                      title: "Not success",
-                                                      content: "Try again",
-                                                      rightContent: "Close",
-                                                      onPressedRight: ()=>SmartDialog.dismiss()
-                                                  ));
-                                            }
-                                          });
-
-                                },
-                                    ));
-
-                              },
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(20.w)),
-                                elevation: 0.0,
-                                backgroundColor: EvieColors.PrimaryColor,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 14.h, vertical: 14.h),
-                              ),
-                            ),
-                          )
+                          trailing: isOwner == true && isManageList && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
+                          Text(_bikeProvider.bikeUserList.values.elementAt(index).role,
+                              style: TextStyle(fontSize: 12.sp, color: Color(0xff7A7A79)))
+                              : isManageList ?
+                                    ShareBikeDelete(bikeProvider: _bikeProvider, index: index,)
+                              : isOwner == false && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
+                                    ShareBikeLeave(bikeProvider: _bikeProvider, index: index,)
                               : _bikeProvider.bikeUserList.values.elementAt(index).status == "pending" ?
                           SvgPicture.asset(
                             "assets/icons/pending_tag.svg",
                           )
-                              :
-                          Text(_bikeProvider.bikeUserList.values.elementAt(index).role,
+                              : Text(_bikeProvider.bikeUserList.values.elementAt(index).role,
                               style: TextStyle(fontSize: 12.sp, color: Color(0xff7A7A79)))
                         );
                     },
@@ -183,6 +123,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                 ),
               ],
             ),
+
 
 
 
@@ -231,7 +172,6 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                           fontWeight: FontWeight.w700),
                     ),
                     onPressed: () {
-
                       ///Check if bike already have 5 user
                       if(_bikeProvider.bikeUserList.length <= 5 ){
                         changeToShareBikeScreen(context);
@@ -242,12 +182,12 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                             rightContent: "OK",
                             onPressedRight: (){SmartDialog.dismiss();}));
                       }
-
                     },
                   ),
               ),
             ),
                 ),
+
 
 
             ///Bottom page button
@@ -256,12 +196,12 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 48.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 52.h),
                   child: SizedBox(
                     width: double.infinity,
                     child: EvieButton_ReversedColor(
                       width: double.infinity,
-                      height: 48.h,
+                      height: 52.h,
                       child: Text(
                         "Cancel",
                         style: TextStyle(
@@ -284,12 +224,12 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                   child: Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 48.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 52.h),
                   child: SizedBox(
                     width: double.infinity,
                     child: EvieButton_ReversedColor(
                       width: double.infinity,
-                      height: 48.h,
+                      height: 52.h,
                       child: Text(
                         "Manage List",
                         style: TextStyle(

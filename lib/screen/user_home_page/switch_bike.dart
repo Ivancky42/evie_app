@@ -50,7 +50,7 @@ class _SwitchBikeState extends State<SwitchBike> {
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: _bikeProvider.userBikeDetails.length,
+                itemCount: _bikeProvider.userBikeList.length,
                 itemBuilder: (context, index) {
                   return BikeContainer(bikeModel: _bikeProvider.userBikeDetails.values.elementAt(index));
                 },

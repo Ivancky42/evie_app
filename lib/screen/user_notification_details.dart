@@ -35,6 +35,7 @@ class UserNotificationDetails extends StatefulWidget {
 class _UserNotificationDetailsState extends State<UserNotificationDetails> {
   late NotificationProvider _notificationProvider;
   late BikeProvider _bikeProvider;
+  late CurrentUserProvider _currentUserProvider;
 
   String? conditionType;
 
@@ -44,6 +45,7 @@ class _UserNotificationDetailsState extends State<UserNotificationDetails> {
   Widget build(BuildContext context) {
     _notificationProvider = Provider.of<NotificationProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -121,7 +123,7 @@ class _UserNotificationDetailsState extends State<UserNotificationDetails> {
                               onPressed: () {
                                 _bikeProvider
                                     .updateAcceptSharedBikeStatus(
-                                        widget.notificationValues.deviceIMEI!)
+                                        widget.notificationValues.deviceIMEI!, _currentUserProvider.currentUserModel!.uid)
                                     .then((result) {
                                   if (result == true) {
                                     _notificationProvider

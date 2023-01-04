@@ -75,10 +75,6 @@ DeviceConnectResult? deviceConnectResult;
               }
 
               break;
-            case 1:
-              pageNavigate = null;
-              changeToMotionSensitivityScreen(context);
-              break;
           }
         }
       });
@@ -309,31 +305,7 @@ DeviceConnectResult? deviceConnectResult;
                             ),
                             content:     _bikeProvider.currentBikeModel?.movementSetting?.sensitivity ?? "None",
                             onPress: () {
-                              if(deviceConnectResult == DeviceConnectResult.connected){
-                                changeToMotionSensitivityScreen(context);
-                              }else {
-                                if (_bluetoothProvider.deviceConnectResult != DeviceConnectResult.connecting && _bluetoothProvider.deviceConnectResult != DeviceConnectResult.connected) {
-                                  SmartDialog.show(
-                                      widget: EvieDoubleButtonDialog(
-                                          title: "Please Connect Your Bike",
-                                          childContent: Text(
-                                            "Please connect your bike to access the function...?",
-                                            style: TextStyle(fontSize: 16.sp,
-                                                fontWeight: FontWeight.w400),),
-                                          leftContent: "Cancel",
-                                          rightContent: "Connect Bike",
-                                          onPressedLeft: () {
-                                            SmartDialog.dismiss();
-                                          },
-                                          onPressedRight: () {
-                                            SmartDialog.dismiss();
-                                            checkBLEPermissionAndAction(
-                                                _bluetoothProvider,
-                                                deviceConnectResult ?? DeviceConnectResult.disconnected, connectStream);
-                                            pageNavigate = 1;
-                                          }));
-                                }
-                              }
+
                             },
                             trailingImage: "assets/buttons/next.svg"),
                       ),
@@ -360,34 +332,31 @@ DeviceConnectResult? deviceConnectResult;
                               ],
                             ),
                             onPress: () {
-                              changeToCurrentPlanScreen(context);
+
                             },
                             trailingImage: "assets/buttons/next.svg"),
                       ),
                       BikePageDivider(),
-                      Opacity(
-                        opacity: 0.3,
-                        child: BikePageContainer (
-                            subtitle:  Text("Share Bike",style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
-                            contents: Row(
-                              children: [
-                                Text(
-                                  "${_bikeProvider.bikeUserList.length} Riders",
-                                  style: TextStyle(fontSize: 16.sp),
-                                ),
-                                SizedBox(width: 8.17.w,),
-                                SvgPicture.asset(
-                                  "assets/icons/batch_tick.svg",
-                                  height: 20.h,
-                                  width: 20.w,
-                                ),
-                              ],
-                            ),
-                            onPress: () {
-                            changeToShareBikeUserListScreen(context);
-                            },
-                            trailingImage: "assets/buttons/next.svg"),
-                      ),
+                      BikePageContainer (
+                          subtitle:  Text("Share Bike",style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
+                          contents: Row(
+                            children: [
+                              Text(
+                                "${_bikeProvider.bikeUserList.length} Riders",
+                                style: TextStyle(fontSize: 16.sp),
+                              ),
+                              SizedBox(width: 8.17.w,),
+                              SvgPicture.asset(
+                                "assets/icons/batch_tick.svg",
+                                height: 20.h,
+                                width: 20.w,
+                              ),
+                            ],
+                          ),
+                          onPress: () {
+                          changeToShareBikeUserListScreen(context);
+                          },
+                          trailingImage: "assets/buttons/next.svg"),
                       BikePageDivider(),
                       BikePageContainer (
                           contents: Row(

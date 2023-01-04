@@ -324,17 +324,17 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
   Widget _buildChild(LinkedHashMap userBikeList) {
 
-    if (_bikeProvider.currentBikeIMEI != null && !userBikeList.isNotEmpty) {
+    if (_bikeProvider.currentBikeModel?.deviceIMEI == null && userBikeList.isEmpty) {
       return const AddNewBike();
     } else {
-      ///Future user page
-      if (_bikeProvider.isPlanSubscript == true) {
+        if (_bikeProvider.isPlanSubscript == true) {
           return const PaidPlan();
-      } else if (_bikeProvider.isPlanSubscript == false) {
-        return const FreePlan();
-      }else{
-        return const CircularProgressIndicator();
-      }
+        } else if (_bikeProvider.isPlanSubscript == false) {
+          return const FreePlan();
+        }else{
+          return const CircularProgressIndicator();
+        }
     }
   }
+
 }

@@ -118,6 +118,7 @@ class EvieButton_ReversedColor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: height,
         width: width,
         child: Padding(
           padding: const EdgeInsets.all(2),

@@ -30,15 +30,14 @@ class UserNotification extends StatefulWidget {
 class _UserNotificationState extends State<UserNotification> {
   late NotificationProvider _notificationProvider;
   late BikeProvider _bikeProvider;
-
+  late CurrentUserProvider _currentUserProvider;
 
 
   @override
   Widget build(BuildContext context) {
     _notificationProvider = Provider.of<NotificationProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
-
-
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -215,7 +214,7 @@ class _UserNotificationState extends State<UserNotification> {
                     ? () async {
                         _bikeProvider
                             .updateAcceptSharedBikeStatus(
-                                notificationModel.deviceIMEI!)
+                                notificationModel.deviceIMEI!, _currentUserProvider.currentUserModel!.uid)
                             .then((result) {
                           if (result == true) {
                             SmartDialog.dismiss();

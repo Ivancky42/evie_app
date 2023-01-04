@@ -45,11 +45,7 @@ class _NavigatePlanPageState extends State<NavigatePlanPage> {
   }
   Widget _buildChild() {
     if (_bikeProvider.isPlanSubscript == true) {
-
-      var result = _bikeProvider.checkIsOwner();
-
-      if(result == true){
-        ///bikeUser - role is owner ?
+      if(_bikeProvider.isOwner == true){
         return const AdminPaidPlan();
       }else{
         return const UserBike();
