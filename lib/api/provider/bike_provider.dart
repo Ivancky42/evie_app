@@ -854,6 +854,7 @@ class BikeProvider extends ChangeNotifier {
     });
 
     userBikeList.clear();
+    userBikeDetails.clear();
 
     currentBikeModel = null;
     userBikeModel = null;

@@ -63,8 +63,7 @@ class _MyAccountState extends State<MyAccount> {
                   child: ClipOval(
                     child: CachedNetworkImage(
                       //imageUrl: document['profileIMG'],
-                      imageUrl:
-                          _currentUserProvider.currentUserModel!.profileIMG,
+                      imageUrl: _currentUserProvider.currentUserModel != null ? _currentUserProvider.currentUserModel!.profileIMG : "",
                       placeholder: (context, url) =>
                           const CircularProgressIndicator(),
                       errorWidget: (context, url, error) => Icon(Icons.error),
