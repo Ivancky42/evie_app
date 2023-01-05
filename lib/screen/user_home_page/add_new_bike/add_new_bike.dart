@@ -386,8 +386,8 @@ class _AddNewBikeState extends State<AddNewBike> {
                                                                 elevation: 0,
                                                                 backgroundColor: Color(0xff6A51CA),
                                                                 onPressed:(){
-
-                                                                  changeToLetsGoScreen(context);
+                                                                  _bikeProvider.setIsAddBike(true);
+                                                                 changeToTurnOnQRScannerScreen(context);
                                                                 },
                                                                 //icon inside button
                                                                 child: Image(

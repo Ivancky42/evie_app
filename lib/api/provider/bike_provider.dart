@@ -58,6 +58,7 @@ class BikeProvider extends ChangeNotifier {
   String? currentBikeIMEI;
   bool? isPlanSubscript;
   bool? isOwner;
+  bool? isAddBike = false;
 
   StreamSubscription? bikeListSubscription;
   StreamSubscription? currentBikeSubscription;
@@ -849,6 +850,11 @@ class BikeProvider extends ChangeNotifier {
   int calculateDateDifference(DateTime date) {
     DateTime now = DateTime.now();
     return DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
+  }
+
+  setIsAddBike(bool isAddBike){
+    this.isAddBike = isAddBike;
+    notifyListeners();
   }
 
   clear() async {

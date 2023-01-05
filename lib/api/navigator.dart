@@ -25,6 +25,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../screen/add_bike/congrats_bike_added.dart';
 import '../screen/my_bike/navigate_plan_page.dart';
 import '../screen/onboarding/bike_connect_failed.dart';
 import '../screen/onboarding/bike_connect_success.dart';
@@ -260,6 +261,17 @@ void changeToEmailPreferenceControlScreen(BuildContext context) {
   ),
   );
 }
+
+void changeToCongratsBikeAdded(BuildContext context, String bikeName) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: CongratsBikeAdded(bikeName),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
 
 void changeToNavigatePlanScreen(BuildContext context) {
   Navigator.pushReplacement(context,

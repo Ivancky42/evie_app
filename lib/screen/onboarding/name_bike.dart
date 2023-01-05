@@ -132,7 +132,15 @@ class _NameBikeState extends State<NameBike> {
                               rightContent: "Ok",
                               onPressedRight: (){
                               SmartDialog.dismiss();
-                              changeToTurnOnNotificationsScreen(context);
+
+                              if(_bikeProvider.isAddBike == true){
+                               _bikeProvider.setIsAddBike(false);
+                               changeToCongratsBikeAdded(context, _bikeNameController.text.trim());
+
+                              }else{
+                                changeToTurnOnNotificationsScreen(context);
+                              }
+
                             } ));
                         } else{
                           SmartDialog.show(
