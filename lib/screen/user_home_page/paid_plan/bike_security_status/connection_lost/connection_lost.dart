@@ -45,6 +45,7 @@ class _ConnectionLostState extends State<ConnectionLost> {
   CableLockResult? cableLockState;
   StreamController? connectStream;
 
+
   @override
   Widget build(BuildContext context) {
 
@@ -252,13 +253,7 @@ class _ConnectionLostState extends State<ConnectionLost> {
                                           0xff3F3F3F)),
                                 ),
                               },
-                              SizedBox(
-                                height: 11.h,
-                              ),
-                              SvgPicture.asset(
-                                "assets/buttons/up.svg",
 
-                              ),
 
                             ],
                           ),
@@ -457,13 +452,8 @@ class _ConnectionLostState extends State<ConnectionLost> {
                                       0xff3F3F3F)),
                             ),
                           },
-                          SizedBox(
-                            height: 11.h,
-                          ),
-                          SvgPicture.asset(
-                            "assets/buttons/up.svg",
 
-                          ),
+
                         ],
                       ),
                     )

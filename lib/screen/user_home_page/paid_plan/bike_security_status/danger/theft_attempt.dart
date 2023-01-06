@@ -144,9 +144,7 @@ class _BikeDangerState extends State<BikeDanger> {
                             padding:  EdgeInsets.only(top:0.h,bottom:29.h),
                             child: EvieSliderButton(action: (){SmartDialog.showLoading();}, text: "I'm with my bike",),
                           ),
-                          SvgPicture.asset(
-                            "assets/buttons/up.svg",
-                          ),
+
                         ],
                       ),
                     )

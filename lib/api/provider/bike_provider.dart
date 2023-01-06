@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/movement_setting_model.dart';
+import 'package:evie_test/api/model/notification_setting_model.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,8 @@ class BikeProvider extends ChangeNotifier {
   bool? isPlanSubscript;
   bool? isOwner;
   bool? isAddBike = false;
+  List userNotificationList = ["~general", "~firmware-update"];
+  List userBikeNotificationList = ["~connection-lost","~movement-detect","~theft-attempt","~lock-reminder","~plan-reminder","~fall-detect", "crash"];
 
   StreamSubscription? bikeListSubscription;
   StreamSubscription? currentBikeSubscription;
@@ -91,7 +94,7 @@ class BikeProvider extends ChangeNotifier {
       notifyListeners();
     }
     else {
-      clear();
+    //  clear();
     }
   }
 
@@ -119,21 +122,44 @@ class BikeProvider extends ChangeNotifier {
                     docChange.doc.id, () => UserBikeModel.fromJson(obj!));
                 getUserBikeDetails(docChange.doc.id);
                 NotificationProvider().subscribeToTopic(docChange.doc.id);
+
+                userBikeList.forEach((key, value) {
+                  if(value?.notificationSettings?.connectionLost == true ) {
+                    NotificationProvider().subscribeToTopic("$key~connection-lost");
+                  }
+                  if(value?.notificationSettings?.movementDetect == true ) {
+                    NotificationProvider().subscribeToTopic("$key~movement-detect");
+                  }
+                  if(value?.notificationSettings?.theftAttempt == true ) {
+                    NotificationProvider().subscribeToTopic("$key~theft-attempt");
+                  }
+                  if(value?.notificationSettings?.lock == true ) {
+                    NotificationProvider().subscribeToTopic("$key~lock-reminder");
+                  }
+                  if(value?.notificationSettings?.planReminder == true ) {
+                    NotificationProvider().subscribeToTopic("$key~plan-reminder");
+                  }
+                });
+
                 notifyListeners();
                 break;
               case DocumentChangeType.removed:
-                userBikeList
-                    .removeWhere((key, value) => key == docChange.doc.id);
+                userBikeList.removeWhere((key, value) => key == docChange.doc.id);
+                NotificationProvider().unsubscribeFromTopic(docChange.doc.id);
+
                 notifyListeners();
                 break;
               case DocumentChangeType.modified:
                 Map<String, dynamic>? obj = docChange.doc.data();
-                userBikeList.update(
-                    docChange.doc.id, (value) => UserBikeModel.fromJson(obj!));
+                userBikeList.update(docChange.doc.id, (value) => UserBikeModel.fromJson(obj!));
                 notifyListeners();
                 break;
             }
           }
+
+
+          ///Subscript to topic based on looping (for first time open app only)
+
 
           if (prefs.containsKey('currentBikeImei')) {
             currentBikeIMEI = prefs.getString('currentBikeImei') ?? "";
@@ -217,6 +243,50 @@ class BikeProvider extends ChangeNotifier {
     await getBike(deviceIMEI);
   }
 
+  /// ****************************************** ///
+  /// Notification Setting
+  /// ****************************************** ///
+  ///
+
+  Future updateFirestoreNotification(String type, bool value) async {
+
+    switch(type){
+      case "general":
+      case "firmwareUpdate":
+      try {
+        await FirebaseFirestore.instance
+            .collection(usersCollection)
+            .doc(currentUserModel!.uid)
+            .set({
+          "notificationSettings": {
+            type: value,
+          }
+        }, SetOptions(merge: true));
+
+        return true;
+      }catch(e){
+        return false;
+      }
+        break;
+      default:
+        try {
+          await FirebaseFirestore.instance
+              .collection(usersCollection)
+              .doc(currentUserModel!.uid)
+              .collection(bikesCollection)
+              .doc(currentBikeModel!.deviceIMEI)
+              .set({
+            "notificationSettings": {
+              type: value,
+            }
+          }, SetOptions(merge: true));
+
+          return true;
+        }catch(e){
+          return false;
+        }
+    }
+  }
 
   /// ****************************************** ///
   /// Share bike
@@ -355,23 +425,20 @@ class BikeProvider extends ChangeNotifier {
               ///element.type
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
-                bikeUserList.putIfAbsent(
-                    docChange.doc.id, () => BikeUserModel.fromJson(obj!));
-
+                bikeUserList.putIfAbsent(docChange.doc.id, () => BikeUserModel.fromJson(obj!));
                 bikeUserList.forEach((key, value) {
                   getBikeUserDetails(key);
                 });
                 notifyListeners();
                 break;
               case DocumentChangeType.removed:
-                bikeUserList
-                    .removeWhere((key, value) => key == docChange.doc.id);
+                bikeUserList.removeWhere((key, value) => key == docChange.doc.id);
+
                 notifyListeners();
                 break;
               case DocumentChangeType.modified:
                 Map<String, dynamic>? obj = docChange.doc.data();
-                bikeUserList.update(
-                    docChange.doc.id, (value) => BikeUserModel.fromJson(obj!));
+                bikeUserList.update(docChange.doc.id, (value) => BikeUserModel.fromJson(obj!));
                 notifyListeners();
                 break;
             }
@@ -858,14 +925,24 @@ class BikeProvider extends ChangeNotifier {
   }
 
   clear() async {
+
+    for (var element in userBikeList.keys) {
+      await NotificationProvider().unsubscribeFromTopic(element);
+      for (var list in userBikeNotificationList) {
+        await NotificationProvider().unsubscribeFromTopic("$element$list");
+      }
+    }
+
+    for (var element in userNotificationList) {
+      await NotificationProvider().unsubscribeFromTopic(element);
+    }
+
+
     SharedPreferences prefs = await _prefs;
     prefs.remove('currentBikeName');
     prefs.remove('currentBikeList');
     prefs.remove('currentBikeIMEI');
 
-    for (var element in userBikeList.keys) {
-      NotificationProvider().unsubscribeFromTopic(element);
-    }
 
     bikeListSubscription?.cancel();
     currentBikeSubscription?.cancel();

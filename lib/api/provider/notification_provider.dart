@@ -56,11 +56,13 @@ class NotificationProvider extends ChangeNotifier {
   ///Subscribe function block
   subscribeToTopic(String? topic) async {
     await messaging.subscribeToTopic(topic!);
+    debugPrint("Subscribe to : $topic");
   }
 
   ///Unsubscribe function block
   unsubscribeFromTopic(String? topic) async {
     await messaging.unsubscribeFromTopic(topic!);
+    debugPrint("Unsubscribe to : $topic");
   }
 
   Future<void> getNotification(String? uid) async {

@@ -381,7 +381,7 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
                             contents: Row(
                               children: [
                                 Text(
-                                  "Bike Notification",
+                                  "Bike Status Alert",
                                   style: TextStyle(fontSize: 16.sp),
                                 ),
                                 SizedBox(width: 8.17.w,),
@@ -400,7 +400,7 @@ class _AdminFreePlanState extends State<AdminFreePlan> {
                             contents: Row(
                               children: [
                                 Text(
-                                  "Crash Alert",
+                                  "SOS Center",
                                   style: TextStyle(fontSize: 16.sp),
                                 ),
                                 SizedBox(width: 8.17.w,),

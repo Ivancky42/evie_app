@@ -1,5 +1,6 @@
 import 'package:evie_test/screen/my_bike/detection_sensitivity.dart';
 import 'package:evie_test/screen/my_bike/motion_sensitivity.dart';
+import 'package:evie_test/screen/push_notification/push_notification.dart';
 import 'package:evie_test/screen/rfid_card/add_new_rfid.dart';
 import 'package:evie_test/screen/rfid_card/name_rfid.dart';
 import 'package:evie_test/screen/rfid_card/rfid_add_failed.dart';
@@ -26,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../screen/add_bike/congrats_bike_added.dart';
+import '../screen/bike_status_alert/bike_status_alert.dart';
 import '../screen/my_bike/navigate_plan_page.dart';
 import '../screen/onboarding/bike_connect_failed.dart';
 import '../screen/onboarding/bike_connect_success.dart';
@@ -38,6 +40,7 @@ import '../screen/share_bike/share_bike_invitation.dart';
 import '../screen/share_bike/user_not_found.dart';
 import '../screen/signup_method.dart';
 import '../screen/signup_page.dart';
+import '../screen/sos_center/sos_center.dart';
 import '../screen/subscription/current_plan.dart';
 import '../screen/subscription/manage_plan.dart';
 import '../screen/user_notification_details.dart';
@@ -365,6 +368,27 @@ void changeToDetectionSensitivityScreen(BuildContext context) {
   );
 }
 
+
+void changeToBikeStatusAlertScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const BikeStatusAlert(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+void changeToSOSCenterScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const SOSCenter(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
 void changeToCurrentPlanScreen(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(
@@ -394,6 +418,27 @@ void changeToMyAccount(BuildContext context) {
     ),
   );
 }
+
+
+void changeToPushNotification(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const PushNotification(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+// void changeToEmailNewsletter(BuildContext context) {
+//   Navigator.pushReplacement(context,
+//     PageTransition(
+//       type: PageTransitionType.rightToLeft,
+//       child: const EmailNewsletter(),
+//       duration: const Duration(milliseconds: 300),
+//     ),
+//   );
+// }
 
 
 void changeToShareBikeScreen(BuildContext context) {

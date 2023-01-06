@@ -8,6 +8,7 @@ import 'package:sizer/sizer.dart';
 
 import '../api/colours.dart';
 import '../api/provider/auth_provider.dart';
+import '../api/provider/bike_provider.dart';
 import '../theme/ThemeChangeNotifier.dart';
 import '../widgets/evie_appbar.dart';
 import '../widgets/evie_button.dart';
@@ -22,10 +23,14 @@ class SignInMethod extends StatefulWidget {
 
 class _SignInMethodState extends State<SignInMethod> {
   late AuthProvider _authProvider;
+  late BikeProvider _bikeProvider;
 
   @override
   Widget build(BuildContext context) {
+
     _authProvider = Provider.of<AuthProvider>(context);
+    _bikeProvider = Provider.of<BikeProvider>(context);
+
     return WillPopScope(
       onWillPop: () async {
         changeToWelcomeScreen(context);

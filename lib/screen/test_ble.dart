@@ -1268,9 +1268,12 @@ class _TestBleState extends State<TestBle> {
                     ),
                   ),
                   onPressed: () async {
+                    SmartDialog.showLoading();
                     try {
-                      _authProvider.signOut(context).then((result) {
+                      await _bikeProvider.clear();
+                      await _authProvider.signOut(context).then((result) {
                         if (result == true) {
+                          SmartDialog.dismiss();
                           // _authProvider.clear();
 
                           changeToWelcomeScreen(context);
@@ -1281,6 +1284,7 @@ class _TestBleState extends State<TestBle> {
                             ),
                           );
                         } else {
+                          SmartDialog.dismiss();
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Error, Try Again'),

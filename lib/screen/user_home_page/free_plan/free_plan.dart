@@ -508,12 +508,7 @@ class _FreePlanState extends State<FreePlan> {
                                                                         0xff3F3F3F)),
                                                               ),
                                                             },
-                                                            SizedBox(
-                                                              height: 11.h,
-                                                            ),
-                                                            SvgPicture.asset(
-                                                              "assets/buttons/up.svg",
-                                                            ),
+
                                                           ],
                                                         ),
                                                       )
@@ -837,12 +832,7 @@ class _FreePlanState extends State<FreePlan> {
                                                                         0xff3F3F3F)),
                                                               ),
                                                             },
-                                                            SizedBox(
-                                                              height: 11.h,
-                                                            ),
-                                                            SvgPicture.asset(
-                                                              "assets/buttons/up.svg",
-                                                            ),
+
                                                           ],
                                                         ),
                                                       )

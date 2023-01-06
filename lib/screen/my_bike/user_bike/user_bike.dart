@@ -363,7 +363,7 @@ DeviceConnectResult? deviceConnectResult;
                           contents: Row(
                             children: [
                               Text(
-                                "Bike Notification",
+                                "Bike Status Alert",
                                 style: TextStyle(fontSize: 16.sp),
                               ),
                               SizedBox(width: 8.17.w,),
@@ -372,14 +372,16 @@ DeviceConnectResult? deviceConnectResult;
                               ),
                             ],
                           ),
-                          onPress: () {},
+                          onPress: () {
+                            changeToBikeStatusAlertScreen(context);
+                          },
                           trailingImage: "assets/buttons/next.svg"),
                       BikePageDivider(),
                       BikePageContainer (
                           contents: Row(
                             children: [
                               Text(
-                                "Crash Alert",
+                                "SOS Center",
                                 style: TextStyle(fontSize: 16.sp),
                               ),
                               SizedBox(width: 8.17.w,),
@@ -388,7 +390,9 @@ DeviceConnectResult? deviceConnectResult;
                               ),
                             ],
                           ),
-                          onPress: () {},
+                          onPress: () {
+                            changeToSOSCenterScreen(context);
+                          },
                           trailingImage: "assets/buttons/next.svg"),
                       BikePageDivider(),
                       Opacity(

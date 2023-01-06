@@ -257,13 +257,7 @@ class _BikeWarningState extends State<BikeWarning> {
                                           0xff3F3F3F)),
                                 ),
                               },
-                              SizedBox(
-                                height: 11.h,
-                              ),
-                              SvgPicture.asset(
-                                "assets/buttons/up.svg",
 
-                              ),
 
                             ],
                           ),
@@ -461,13 +455,7 @@ class _BikeWarningState extends State<BikeWarning> {
                                       0xff3F3F3F)),
                             ),
                           },
-                          SizedBox(
-                            height: 11.h,
-                          ),
-                          SvgPicture.asset(
-                            "assets/buttons/up.svg",
 
-                          ),
                         ],
                       ),
                     )

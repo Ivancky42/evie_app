@@ -274,13 +274,7 @@ class _BikeSafeState extends State<BikeSafe> {
                                           0xff3F3F3F)),
                                 ),
                               },
-                              SizedBox(
-                                height: 11.h,
-                              ),
-                              SvgPicture.asset(
-                                "assets/buttons/up.svg",
 
-                              ),
 
                             ],
                           ),
@@ -492,13 +486,7 @@ class _BikeSafeState extends State<BikeSafe> {
                                       0xff3F3F3F)),
                             ),
                           },
-                          SizedBox(
-                            height: 11.h,
-                          ),
-                          SvgPicture.asset(
-                            "assets/buttons/up.svg",
 
-                          ),
                         ],
                       ),
                     )

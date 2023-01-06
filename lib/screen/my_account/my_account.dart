@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
@@ -7,6 +8,7 @@ import 'package:evie_test/screen/my_account/my_account_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -30,11 +32,14 @@ class MyAccount extends StatefulWidget {
 class _MyAccountState extends State<MyAccount> {
   late CurrentUserProvider _currentUserProvider;
   late AuthProvider _authProvider;
+  late BikeProvider _bikeProvider;
 
   @override
   Widget build(BuildContext context) {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
+    _bikeProvider = Provider.of<BikeProvider>(context);
+
 
     return WillPopScope(
       onWillPop: () async {
@@ -116,7 +121,9 @@ class _MyAccountState extends State<MyAccount> {
                   ),
                   AccountPageContainer(
                       content: "Push Notification",
-                      onPress: () {},
+                      onPress: () {
+                        changeToPushNotification(context);
+                      },
                       trailingImage: "assets/buttons/next.svg"),
                   AccountPageDivider(),
                   AccountPageContainer(
@@ -165,10 +172,13 @@ class _MyAccountState extends State<MyAccount> {
                     color: Color(0xff7A7A79), fontWeight: FontWeight.w700
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
+                  SmartDialog.showLoading();
                   try {
-                    _authProvider.signOut(context).then((result) {
+                    await _bikeProvider.clear();
+                    await _authProvider.signOut(context).then((result) {
                       if (result == true) {
+                        SmartDialog.dismiss();
                         // _authProvider.clear();
 
                         changeToWelcomeScreen(context);
@@ -179,6 +189,7 @@ class _MyAccountState extends State<MyAccount> {
                           ),
                         );
                       } else {
+                        SmartDialog.dismiss();
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Error, Try Again'),

@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../api/colours.dart';
 import '../api/navigator.dart';
+import '../api/provider/bike_provider.dart';
 import '../theme/ThemeChangeNotifier.dart';
 import '../widgets/evie_appbar.dart';
 import '../widgets/evie_double_button_dialog.dart';
@@ -35,6 +36,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   bool isEmailVerified = false;
 
   late AuthProvider _authProvider;
+  late BikeProvider _bikeProvider;
   late CurrentUserProvider _currentUserProvider;
 
   Duration myDuration = const Duration(seconds: 30);
@@ -97,6 +99,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   @override
   Widget build(BuildContext context) {
     _authProvider = Provider.of<AuthProvider>(context);
+    _bikeProvider = Provider.of<BikeProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -108,10 +111,12 @@ class _VerifyEmailState extends State<VerifyEmail> {
                 leftContent: "No",
                 rightContent: "Yes",
                 onPressedLeft: (){SmartDialog.dismiss();},
-                onPressedRight: (){
-                  _authProvider.signOut(context).then((result){
+                onPressedRight: () async {
+                  SmartDialog.showLoading();
+                  await _bikeProvider.clear();
+                  await _authProvider.signOut(context).then((result){
                     if(result == true){
-
+                      SmartDialog.dismiss();
                       // _authProvider.clear();
 
                       changeToWelcomeScreen(context);
@@ -124,6 +129,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                               seconds: 2),),
                       );
                     }else{
+                      SmartDialog.dismiss();
                       ScaffoldMessenger.of(context)
                           .showSnackBar(
                         const SnackBar(
@@ -148,10 +154,12 @@ class _VerifyEmailState extends State<VerifyEmail> {
                   leftContent: "No",
                   rightContent: "Yes",
                   onPressedLeft: (){SmartDialog.dismiss();},
-                  onPressedRight: (){
-                    _authProvider.signOut(context).then((result){
+                  onPressedRight: () async{
+                    await _bikeProvider.clear();
+                    await _authProvider.signOut(context).then((result){
+                      SmartDialog.showLoading();
                       if(result == true){
-
+                        SmartDialog.dismiss();
                         // _authProvider.clear();
 
                         changeToWelcomeScreen(context);
@@ -164,6 +172,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                 seconds: 2),),
                         );
                       }else{
+                        SmartDialog.dismiss();
                         ScaffoldMessenger.of(context)
                             .showSnackBar(
                           const SnackBar(

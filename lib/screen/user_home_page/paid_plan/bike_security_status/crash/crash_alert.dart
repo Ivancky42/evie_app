@@ -139,9 +139,7 @@ class _CrashAlertState extends State<CrashAlert> {
                             padding:  EdgeInsets.only(top:41.h,bottom:29.h),
                             child: EvieSliderButton(action: (){SmartDialog.showLoading();}, text: "I am OK",),
                           ),
-                        SvgPicture.asset(
-                            "assets/buttons/up.svg",
-                          ),
+
                         ],
                       ),
                     )

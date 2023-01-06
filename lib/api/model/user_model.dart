@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'notification_setting_model.dart';
+
 class UserModel {
   String uid;
   String email;
@@ -11,6 +13,7 @@ class UserModel {
   Timestamp? updated;
   String? stripeId;
   String? stripeLink;
+  NotificationSettingModel? notificationSettings;
 
   UserModel({
     required this.uid,
@@ -23,18 +26,8 @@ class UserModel {
     this.updated,
     this.stripeId,
     this.stripeLink,
+    this.notificationSettings,
   });
-
-  Map<String, dynamic> toJson() => {
-    "uid" : uid,
-    "email": email,
-    "name": name,
-    "credentialProvider": credentialProvider,
-    "profileIMG": profileIMG,
-    "phoneNumber" : phoneNumber,
-    "created": timestampToJson(created),
-    "updated": timestampToJson(updated)
-  };
 
   factory UserModel.fromJson(Map json) {
     return UserModel(
@@ -47,9 +40,21 @@ class UserModel {
       created:            timestampFromJson(json['created'] as Timestamp?),
       updated:            timestampFromJson(json['updated'] as Timestamp?),
       stripeId:           json['stripeId']?? '',
-      stripeLink:         json['stripeLink']?? ''
+      stripeLink:         json['stripeLink']?? '',
+      notificationSettings:  json['notificationSettings'] != null ? NotificationSettingModel.fromJson(json['notificationSettings'] as Map<String, dynamic>) : null,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    "uid" : uid,
+    "email": email,
+    "name": name,
+    "credentialProvider": credentialProvider,
+    "profileIMG": profileIMG,
+    "phoneNumber" : phoneNumber,
+    "created": timestampToJson(created),
+    "updated": timestampToJson(updated)
+  };
 
   Timestamp? timestampToJson(Timestamp? timestamp) {
     return timestamp;

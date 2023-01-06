@@ -501,16 +501,17 @@ class AuthProvider extends ChangeNotifier {
   ///User sign out
   Future signOut(BuildContext context) async {
     try {
+
+      //await BikeProvider().clear();
+      await CurrentUserProvider().cancelSubscription();
+      await NotificationProvider().unsubscribeFromTopic(_uid);
+      await NotificationProvider().unsubscribeFromTopic("fcm_test");
+
       await _auth.signOut();
 
       if(userChangeSubscription != null){
         userChangeSubscription?.cancel();
       }
-
-      BikeProvider().clear();
-      CurrentUserProvider().cancelSubscription();
-      NotificationProvider().unsubscribeFromTopic(_uid);
-      NotificationProvider().unsubscribeFromTopic("fcm_test");
 
       _uid = null;
       isLogin = false;

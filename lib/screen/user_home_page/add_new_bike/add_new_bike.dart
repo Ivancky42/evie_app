@@ -409,12 +409,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                                                                   color: Color(
                                                                       0xff3F3F3F)),
                                                             ),
-                                                            SizedBox(
-                                                              height: 11.h,
-                                                            ),
-                                                            SvgPicture.asset(
-                                                              "assets/buttons/up.svg",
-                                                            ),
+
                                                           ],
                                                         ),
                                                       )

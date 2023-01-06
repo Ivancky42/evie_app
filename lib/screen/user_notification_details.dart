@@ -122,21 +122,23 @@ class _UserNotificationDetailsState extends State<UserNotificationDetails> {
                               height: 20,
                               onPressed: () {
                                 _bikeProvider
-                                    .updateAcceptSharedBikeStatus(
-                                        widget.notificationValues.deviceIMEI!, _currentUserProvider.currentUserModel!.uid)
+                                    .updateAcceptSharedBikeStatus(widget.notificationValues.deviceIMEI!, _currentUserProvider.currentUserModel!.uid)
                                     .then((result) {
                                   if (result == true) {
-                                    _notificationProvider
-                                        .updateUserNotificationSharedBikeStatus(
-                                            widget.notificationKeys);
+                                    _notificationProvider.updateUserNotificationSharedBikeStatus(widget.notificationKeys);
+
                                     SmartDialog.show(
+                                      backDismiss: false,
                                         widget: EvieSingleButtonDialogCupertino(
                                             title: "Success",
                                             content: "Bike added",
                                             rightContent: "OK",
-                                            onPressedRight: () {
+                                            onPressedRight: () async {
                                               SmartDialog.dismiss();
                                               changeToNotificationScreen(context);
+                                              for (var element in _bikeProvider.userBikeNotificationList) {
+                                                await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}$element");
+                                              }
                                             }));
                                   }
                                 });

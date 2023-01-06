@@ -144,7 +144,7 @@ class _LetsGoState extends State<LetsGo> {
                           style: TextStyle(fontSize: 12.sp,color: EvieColors.PrimaryColor,decoration: TextDecoration.underline,),
                         ),
                         onPressed: () {
-                          changeToTurnOnNotificationsScreen(context);
+                          changeToNotificationsControlScreen(context);
                         },
                       ),
                 ),

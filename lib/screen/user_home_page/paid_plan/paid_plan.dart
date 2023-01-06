@@ -247,7 +247,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
                           return SizedBox(
                             width: double.infinity,
-                            height: 636.h,
+                            height: 600.h,
                             child: Stack(
                               children: [
                                 Mapbox_Widget(

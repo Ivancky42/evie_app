@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:sizer/sizer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -324,11 +325,13 @@ class _UserProfileState extends State<UserProfile> {
                                         child: EvieButton(height: 12,
                                             width: double.infinity,
                                             onPressed: () async {
+                                          SmartDialog.showLoading();
                                               try {
-
-                                                _authProvider.signOut(context).then((result){
+                                                await _bikeProvider.clear();
+                                                await _authProvider.signOut(context).then((result){
                                                   if(result == true){
 
+                                                    SmartDialog.dismiss();
                                                    // _authProvider.clear();
 
                                                     changeToWelcomeScreen(context);
@@ -340,6 +343,7 @@ class _UserProfileState extends State<UserProfile> {
                                                             seconds: 2),),
                                                     );
                                                   }else{
+                                                    SmartDialog.dismiss();
                                                     ScaffoldMessenger.of(context)
                                                         .showSnackBar(
                                                       const SnackBar(

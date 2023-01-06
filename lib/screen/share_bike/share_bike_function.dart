@@ -4,13 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
 import '../../api/navigator.dart';
+import '../../api/provider/notification_provider.dart';
 import '../../widgets/evie_double_button_dialog.dart';
 import '../../widgets/evie_single_button_dialog.dart';
 
-class ShareBikeDelete extends StatelessWidget {
+class ShareBikeDelete extends StatefulWidget {
 
   final BikeProvider bikeProvider;
   final int index;
@@ -23,7 +25,14 @@ class ShareBikeDelete extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<ShareBikeDelete> createState() => _ShareBikeDeleteState();
+}
+
+class _ShareBikeDeleteState extends State<ShareBikeDelete> {
+
+  @override
   Widget build(BuildContext context) {
+
     return Container(
       width: 107.w,
       height: 35.h,
@@ -53,7 +62,7 @@ class ShareBikeDelete extends StatelessWidget {
                 leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
                 rightContent: "Yes",
                 onPressedRight: () async {
-                  await bikeProvider.cancelSharedBikeStatus(bikeProvider.bikeUserList.values.elementAt(index).uid, bikeProvider.bikeUserList.values.elementAt(index).notificationId!).then((result){
+                  await widget.bikeProvider.cancelSharedBikeStatus(widget.bikeProvider.bikeUserList.values.elementAt(widget.index).uid, widget.bikeProvider.bikeUserList.values.elementAt(widget.index).notificationId!).then((result){
                     ///Update user notification id status == removed
                     if(result == true){
                       SmartDialog.dismiss();
@@ -93,7 +102,7 @@ class ShareBikeDelete extends StatelessWidget {
 
 
 
-class ShareBikeLeave extends StatelessWidget {
+class ShareBikeLeave extends StatefulWidget {
 
   final BikeProvider bikeProvider;
   final int index;
@@ -106,7 +115,18 @@ class ShareBikeLeave extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<ShareBikeLeave> createState() => _ShareBikeLeaveState();
+}
+
+class _ShareBikeLeaveState extends State<ShareBikeLeave> {
+
+  late NotificationProvider _notificationProvider;
+
+  @override
   Widget build(BuildContext context) {
+
+    _notificationProvider = Provider.of<NotificationProvider>(context);
+
     return Container(
       width: 82.w,
       height: 35.h,
@@ -125,11 +145,18 @@ class ShareBikeLeave extends StatelessWidget {
                 leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
                 rightContent: "Yes",
                 onPressedRight: () async {
-                  await bikeProvider.cancelSharedBikeStatus(bikeProvider.bikeUserList.values.elementAt(index).uid, bikeProvider.bikeUserList.values.elementAt(index).notificationId!).then((result){
+                  SmartDialog.dismiss();
+                  SmartDialog.showLoading();
+                  await widget.bikeProvider.cancelSharedBikeStatus(widget.bikeProvider.bikeUserList.values.elementAt(widget.index).uid, widget.bikeProvider.bikeUserList.values.elementAt(widget.index).notificationId!).then((result) {
                     ///Update user notification id status == removed
                     if(result == true){
                       SmartDialog.dismiss();
                       changeToUserHomePageScreen(context);
+
+                      for (var element in widget.bikeProvider.userBikeNotificationList) {
+                        _notificationProvider.unsubscribeFromTopic("${widget.bikeProvider.currentBikeModel!.deviceIMEI}$element");
+                      }
+
                       SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
                           title: "Success",
                           content: "You leave the bike",
@@ -140,6 +167,7 @@ class ShareBikeLeave extends StatelessWidget {
                       ));
                     }
                     else {
+                      SmartDialog.dismiss();
                       SmartDialog.show(
                           widget: EvieSingleButtonDialogCupertino(
                               title: "Not success",
