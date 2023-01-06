@@ -545,7 +545,23 @@ class _TestBleState extends State<TestBle> {
 
                       if (result != null) {
                         File file = File(result.files.single.path!);
+                        bluetoothProvider.firmwareUpgradeListener.stream.listen((firmwareUpgradeResult) {
+                          if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgrading) {
+                            print("Upgrading firmware: " +
+                                (firmwareUpgradeResult.progress * 100)
+                                    .toString() + "%");
+                          }
+                          else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeSuccessfully) {
+                            ///go to success page
+                            print("OTA State: " + firmwareUpgradeResult.firmwareUpgradeState.toString());
+                          }
+                          else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeFailed) {
+                            print("OTA State: " + firmwareUpgradeResult.firmwareUpgradeState.toString());
+                          }
+                        });
+
                         bluetoothProvider.startUpgradeFirmware(file);
+
                       } else {
                         // User canceled the picker
                       }

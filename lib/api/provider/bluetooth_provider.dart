@@ -95,6 +95,7 @@ class BluetoothProvider extends ChangeNotifier {
   double fwUpgradeProgress = 0;
   bool isFwUpgraded = false;
   FirmwareUpgradeState firmwareUpgradeState = FirmwareUpgradeState.unknown;
+  StreamController<FirmwareUpgradeResult> firmwareUpgradeListener = StreamController.broadcast();
   ///*/////////////////////////
 
   /// * Command Listener ***/
@@ -985,11 +986,18 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   /// Entering NotifyDataState.firmwareUpgrade : search this --> @getFirmwareUpgradeData()
-  void startUpgradeFirmware(File file) async {
+   startUpgradeFirmware(File file) async {
+
     List<int>? fileBytes = await file.readAsBytes();
     fwFile = file;
     notifyDataState = NotifyDataState.firmwareUpgrade;
     firmwareUpgradeState = FirmwareUpgradeState.startUpgrade;
+    firmwareUpgradeListener.add(FirmwareUpgradeResult(
+        firmwareUpgradeState: FirmwareUpgradeState.startUpgrade,
+        progress: 0,
+        duration: Duration(seconds: 0)
+    ));
+
 
     /// Get totalPacket with divided by 128. it might be decimal places.
     double doubleTotalPacket = fileBytes.length / 128;
@@ -1018,7 +1026,7 @@ class BluetoothProvider extends ChangeNotifier {
 
     ///Convert data Index to Integer for further calculation
     fwUpgradeDataIndex = bluetoothCommand.hexToInt(packetIndexBytes);
-    printLog("Current Index", fwUpgradeDataIndex.toString());
+    //printLog("Current Index", fwUpgradeDataIndex.toString());
 
     /// Current firmware bin file
     List<int> fwFileBytes = await fwFile!.readAsBytes();
@@ -1042,15 +1050,25 @@ class BluetoothProvider extends ChangeNotifier {
 
     /// Count on firmware upgrading progress %
     fwUpgradeProgress = fwUpgradeDataIndex/(totalPacketOfFwFile - 1);
-    printLog("Upgrading firmware ", (fwUpgradeProgress * 100).toString() + "%");
+    //printLog("Upgrading firmware ", (fwUpgradeProgress * 100).toString() + "%");
 
     if (fwUpgradeDataIndex == totalPacketOfFwFile - 1) {
       Future.delayed(const Duration(seconds: 5)).then((value) {
+        firmwareUpgradeListener.add(FirmwareUpgradeResult(
+            firmwareUpgradeState: FirmwareUpgradeState.upgradeSuccessfully,
+            progress: fwUpgradeProgress,
+            duration: Duration(seconds: 0)
+        ));
         return firmwareUpgradeState = FirmwareUpgradeState.upgradeSuccessfully;
       });
     }
     else {
       firmwareUpgradeState = FirmwareUpgradeState.upgrading;
+      firmwareUpgradeListener.add(FirmwareUpgradeResult(
+          firmwareUpgradeState: FirmwareUpgradeState.upgrading,
+          progress: fwUpgradeProgress,
+          duration: Duration(seconds: 0)
+      ));
     }
 
     notifyListeners();
@@ -1061,6 +1079,11 @@ class BluetoothProvider extends ChangeNotifier {
     if (firmwareUpgradeState == FirmwareUpgradeState.upgrading) {
       if (fwUpgradeDataIndex < totalPacketOfFwFile - 1) {
         firmwareUpgradeState = FirmwareUpgradeState.upgradeFailed;
+        firmwareUpgradeListener.add(FirmwareUpgradeResult(
+            firmwareUpgradeState: FirmwareUpgradeState.upgradeFailed,
+            progress: fwUpgradeProgress,
+            duration: Duration(seconds: 0)
+        ));
       }
     }
 

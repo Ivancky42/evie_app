@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:hex/hex.dart';
 
@@ -290,12 +291,7 @@ class FactoryResetResult {
   CommandResult result = CommandResult.unknown;
   FactoryResetResult(List<int> data) {
     result = data[6] == 0 ? CommandResult.success : CommandResult.failed;
-    if (result == CommandResult.success) {
-      print("Successfully factory reset");
-    }
-    else {
-      print("Failed to factory reset");
-    }
+    print(result);
   }
 }
 
@@ -362,4 +358,12 @@ class PairDeviceResult {
   DeviceConnectionState? deviceConnectionState;
 
   PairDeviceResult(this.iotInfoModel, this.pairingState, this.deviceConnectionState);
+}
+
+class FirmwareUpgradeResult {
+  FirmwareUpgradeState firmwareUpgradeState;
+  double progress;
+  Duration duration;
+
+  FirmwareUpgradeResult({this.firmwareUpgradeState = FirmwareUpgradeState.startUpgrade, this.progress = 0, this.duration = const Duration(seconds: 0)});
 }
