@@ -9,5 +9,6 @@ class EvieColors {
   static const greyFill = Color(0xff717171);
   static const ThumbColorTrue = Color(0xffFAFAFA);
   static const ThumbColorFalse = Color(0xffFAFAFA);
+  //static const Color greyFill = Color(0xffefefef);
 // etc.
 }

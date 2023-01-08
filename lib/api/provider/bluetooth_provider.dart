@@ -10,6 +10,7 @@ import 'package:hex/hex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../bluetooth/modelResult.dart';
 
+import '../dialog.dart';
 import '../model/bike_model.dart';
 
 enum NotifyDataState {
@@ -211,36 +212,41 @@ class BluetoothProvider extends ChangeNotifier {
   Stream<DeviceConnectResult> startScanAndConnect() {
     //await disconnectDevice();
     //await stopScan();
-    startScanTimer?.cancel();
-    startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      print("Scan Timer: " + timer.tick.toString() + "s");
-      if (timer.tick == 12) {
-        deviceConnectStream.add(DeviceConnectResult.scanTimeout);
-        deviceConnectResult = DeviceConnectResult.scanTimeout;
-        notifyListeners();
-        stopScan();
-        timer.cancel();
-      }
-    });
-    scanSubscription = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
-      if (deviceConnectResult == null || deviceConnectResult != DeviceConnectResult.scanning) {
-        deviceConnectResult = DeviceConnectResult.scanning;
-        deviceConnectStream.add(DeviceConnectResult.scanning);
-        notifyListeners();
-      }
+    if (bleStatus == BleStatus.ready) {
+      startScanTimer?.cancel();
+      startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+        print("Scan Timer: " + timer.tick.toString() + "s");
+        if (timer.tick == 12) {
+          deviceConnectStream.add(DeviceConnectResult.scanTimeout);
+          deviceConnectResult = DeviceConnectResult.scanTimeout;
+          notifyListeners();
+          stopScan();
+          timer.cancel();
+        }
+      });
+      scanSubscription = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
+        if (deviceConnectResult == null || deviceConnectResult != DeviceConnectResult.scanning) {
+          deviceConnectResult = DeviceConnectResult.scanning;
+          deviceConnectStream.add(DeviceConnectResult.scanning);
+          notifyListeners();
+        }
 
-      if (device.name == currentBikeModel?.bleName) {
-        print("Connecting.... cancelling timer");
-        startScanTimer?.cancel();
-        connectDevice(device.id);
-      }
+        if (device.name == currentBikeModel?.bleName) {
+          print("Connecting.... cancelling timer");
+          startScanTimer?.cancel();
+          connectDevice(device.id);
+        }
 
       }, onError: (error) {
-          deviceConnectStream.add(DeviceConnectResult.scanError);
-          deviceConnectResult = DeviceConnectResult.scanError;
-          stopScan();
-          scanSubscription = null;
-    });
+        deviceConnectStream.add(DeviceConnectResult.scanError);
+        deviceConnectResult = DeviceConnectResult.scanError;
+        stopScan();
+        scanSubscription = null;
+      });
+    }
+    else {
+      showBluetoothNotTurnOn();
+    }
     return deviceConnectStream.stream;
   }
 
