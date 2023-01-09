@@ -114,6 +114,7 @@ class _BikeSettingState extends State<BikeSetting> {
         break;
       case DeviceConnectResult.disconnected:
         Future.delayed(Duration.zero).then((value) {
+          _bluetoothProvider.clearDeviceConnectStatus();
           return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showDisconnectedToast());
         });
         break;

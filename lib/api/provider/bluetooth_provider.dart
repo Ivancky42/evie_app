@@ -399,7 +399,7 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   void clearBluetoothStatus() {
-    deviceConnectResult = null;
+    //deviceConnectResult = null;
     requestComKeyResult = null;
     cableLockState = null;
     mainBatteryLevel = "";
