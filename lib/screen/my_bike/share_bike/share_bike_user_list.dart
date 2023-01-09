@@ -5,7 +5,8 @@ import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
-import 'package:evie_test/screen/share_bike/share_bike_function.dart';
+import 'package:evie_test/screen/my_bike/share_bike/share_bike_function.dart';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -14,15 +15,13 @@ import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
-import '../../api/colours.dart';
-import '../../api/length.dart';
-import '../../api/navigator.dart';
-import '../../api/provider/current_user_provider.dart';
-import '../../bluetooth/modelResult.dart';
-import '../../theme/ThemeChangeNotifier.dart';
-import '../../widgets/evie_single_button_dialog.dart';
-import '../../widgets/evie_textform.dart';
-import '../user_home_page/user_home_page.dart';
+import '../../../api/colours.dart';
+import '../../../api/length.dart';
+import '../../../api/navigator.dart';
+import '../../../api/provider/current_user_provider.dart';
+import '../../../theme/ThemeChangeNotifier.dart';
+import '../../../widgets/evie_single_button_dialog.dart';
+
 
 ///User profile page with user account information
 

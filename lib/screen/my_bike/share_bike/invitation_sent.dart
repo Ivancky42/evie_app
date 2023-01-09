@@ -6,10 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
-import '../../api/colours.dart';
-import '../../api/length.dart';
+import '../../../api/length.dart';
+import '../../../api/navigator.dart';
 
-import '../../api/navigator.dart';
+
 
 class InvitationSent extends StatefulWidget{
   final String email;

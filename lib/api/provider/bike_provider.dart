@@ -122,24 +122,6 @@ class BikeProvider extends ChangeNotifier {
                 getUserBikeDetails(docChange.doc.id);
                 NotificationProvider().subscribeToTopic(docChange.doc.id);
 
-                userBikeList.forEach((key, value) {
-                  if(value?.notificationSettings?.connectionLost == true ) {
-                    NotificationProvider().subscribeToTopic("${docChange.doc.id}~connection-lost");
-                  }
-                  if(value?.notificationSettings?.movementDetect == true ) {
-                    NotificationProvider().subscribeToTopic("${docChange.doc.id}~movement-detect");
-                  }
-                  if(value?.notificationSettings?.theftAttempt == true ) {
-                    NotificationProvider().subscribeToTopic("${docChange.doc.id}~theft-attempt");
-                  }
-                  if(value?.notificationSettings?.lock == true ) {
-                    NotificationProvider().subscribeToTopic("${docChange.doc.id}~lock-reminder");
-                  }
-                  if(value?.notificationSettings?.planReminder == true ) {
-                    NotificationProvider().subscribeToTopic("${docChange.doc.id}~plan-reminder");
-                  }
-                });
-
                 notifyListeners();
                 break;
               case DocumentChangeType.removed:
@@ -156,6 +138,23 @@ class BikeProvider extends ChangeNotifier {
             }
           }
 
+          userBikeList.forEach((key, value) {
+            if(value?.notificationSettings?.connectionLost == true ) {
+              NotificationProvider().subscribeToTopic("${key}~connection-lost");
+            }
+            if(value?.notificationSettings?.movementDetect == true ) {
+              NotificationProvider().subscribeToTopic("${key}~movement-detect");
+            }
+            if(value?.notificationSettings?.theftAttempt == true ) {
+              NotificationProvider().subscribeToTopic("${key}~theft-attempt");
+            }
+            if(value?.notificationSettings?.lock == true ) {
+              NotificationProvider().subscribeToTopic("${key}~lock-reminder");
+            }
+            if(value?.notificationSettings?.planReminder == true ) {
+              NotificationProvider().subscribeToTopic("${key}~plan-reminder");
+            }
+          });
 
           ///Subscript to topic based on looping (for first time open app only)
 

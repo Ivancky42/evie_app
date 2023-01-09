@@ -56,6 +56,8 @@ class CurrentUserProvider extends ChangeNotifier {
           Map<String, dynamic>? obj = event.data();
           if (obj != null) {
             currentUserModel = UserModel.fromJson(obj);
+            NotificationProvider().subscribeToTopic("fcm_test");
+            NotificationProvider().subscribeToTopic(currentUserModel!.uid);
             notifyListeners();
           }
         } on Exception catch (exception) {
@@ -149,7 +151,6 @@ class CurrentUserProvider extends ChangeNotifier {
     }
     currentUserSubscription?.cancel();
   }
-
 
   todayRandomQuote() {
     Random random = Random();

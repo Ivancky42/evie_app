@@ -6,29 +6,21 @@ import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evie_test/screen/subscription/essential_plan/essential_plan.dart';
-import 'package:evie_test/screen/subscription/pro_plan/pro_plan.dart';
+import 'package:evie_test/screen/my_bike/subscription/pro_plan/pro_plan.dart';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evie_test/widgets/widgets.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
-import 'package:evie_test/widgets/evie_button.dart';
 
-import '../../api/colours.dart';
-import '../../api/length.dart';
-import '../../api/navigator.dart';
-import '../../api/provider/bike_provider.dart';
-import '../../api/provider/bluetooth_provider.dart';
-import '../../widgets/evie_single_button_dialog.dart';
-import '../../widgets/evie_switch.dart';
-import '../../widgets/evie_textform.dart';
+import 'package:provider/provider.dart';
+
+
+import '../../../api/colours.dart';
+import '../../../api/navigator.dart';
+import '../../../api/provider/bike_provider.dart';
+import '../../../api/provider/bluetooth_provider.dart';
+import 'essential_plan/essential_plan.dart';
+
+
 
 class ManagePlan extends StatefulWidget {
   const ManagePlan({Key? key}) : super(key: key);
@@ -121,7 +113,7 @@ class _ManagePlanState extends State<ManagePlan> {
                     ),
                   ),
 
-                  const Expanded(
+                 Expanded(
                     child: TabBarView(children: [
                        EssentialPlan(),
                        ProPlan(),

@@ -1,11 +1,6 @@
 import 'package:evie_test/screen/my_bike/detection_sensitivity.dart';
 import 'package:evie_test/screen/my_bike/motion_sensitivity.dart';
-import 'package:evie_test/screen/push_notification/push_notification.dart';
-import 'package:evie_test/screen/rfid_card/add_new_rfid.dart';
-import 'package:evie_test/screen/rfid_card/name_rfid.dart';
-import 'package:evie_test/screen/rfid_card/rfid_add_failed.dart';
-import 'package:evie_test/screen/rfid_card/rfid_card.dart';
-import 'package:evie_test/screen/rfid_card/rfid_card_list.dart';
+
 import 'package:evie_test/screen/my_account/edit_profile.dart';
 import 'package:evie_test/screen/my_account/my_account.dart';
 import 'package:evie_test/screen/onboarding/email_preference_control.dart';
@@ -16,8 +11,7 @@ import 'package:evie_test/screen/onboarding/turn_on_QRScanner.dart';
 import 'package:evie_test/screen/onboarding/turn_on_bluetooth.dart';
 import 'package:evie_test/screen/onboarding/turn_on_location.dart';
 import 'package:evie_test/screen/onboarding/turn_on_notifications.dart';
-import 'package:evie_test/screen/share_bike/share_bike.dart';
-import 'package:evie_test/screen/share_bike/share_bike_user_list.dart';
+
 import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/screen/user_home_page/user_home_page.dart';
@@ -27,22 +21,33 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../screen/add_bike/congrats_bike_added.dart';
-import '../screen/bike_status_alert/bike_status_alert.dart';
+
+import '../screen/my_account/push_notification/push_notification.dart';
+import '../screen/my_bike/bike_status_alert/bike_status_alert.dart';
 import '../screen/my_bike/navigate_plan_page.dart';
+import '../screen/my_bike/rfid_card/add_new_rfid.dart';
+import '../screen/my_bike/rfid_card/name_rfid.dart';
+import '../screen/my_bike/rfid_card/rfid_add_failed.dart';
+import '../screen/my_bike/rfid_card/rfid_card.dart';
+import '../screen/my_bike/rfid_card/rfid_card_list.dart';
+import '../screen/my_bike/share_bike/invitation_sent.dart';
+import '../screen/my_bike/share_bike/share_bike.dart';
+import '../screen/my_bike/share_bike/share_bike_invitation.dart';
+import '../screen/my_bike/share_bike/share_bike_user_list.dart';
+import '../screen/my_bike/share_bike/user_not_found.dart';
+import '../screen/my_bike/sos_center/sos_center.dart';
+import '../screen/my_bike/subscription/current_plan.dart';
+import '../screen/my_bike/subscription/manage_plan.dart';
 import '../screen/onboarding/bike_connect_failed.dart';
 import '../screen/onboarding/bike_connect_success.dart';
 import '../screen/onboarding/congratulation.dart';
 import '../screen/onboarding/display_control.dart';
 import '../screen/onboarding/notification_control.dart';
 import '../screen/onboarding/qr_scanning.dart';
-import '../screen/share_bike/invitation_sent.dart';
-import '../screen/share_bike/share_bike_invitation.dart';
-import '../screen/share_bike/user_not_found.dart';
+
 import '../screen/signup_method.dart';
 import '../screen/signup_page.dart';
-import '../screen/sos_center/sos_center.dart';
-import '../screen/subscription/current_plan.dart';
-import '../screen/subscription/manage_plan.dart';
+
 import '../screen/user_notification_details.dart';
 import 'model/bike_model.dart';
 import 'model/plan_model.dart';

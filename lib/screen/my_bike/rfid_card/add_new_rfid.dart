@@ -10,11 +10,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 
-import '../../api/navigator.dart';
-import '../../api/provider/bluetooth_provider.dart';
-import '../../bluetooth/modelResult.dart';
-import '../../widgets/evie_single_button_dialog.dart';
-import '../../widgets/evie_textform.dart';
+import '../../../api/navigator.dart';
+import '../../../api/provider/bluetooth_provider.dart';
+import '../../../bluetooth/modelResult.dart';
+import '../../../widgets/evie_single_button_dialog.dart';
+
 
 ///User profile page with user account information
 
