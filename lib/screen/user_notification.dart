@@ -100,12 +100,8 @@ class _UserNotificationState extends State<UserNotification> {
                                           if (result == true) {
                                             changeToNotificationDetailsScreen(
                                                 context,
-                                                _notificationProvider
-                                                    .notificationList.keys
-                                                    .elementAt(index),
-                                                _notificationProvider
-                                                    .notificationList.values
-                                                    .elementAt(index));
+                                                _notificationProvider.notificationList.keys.elementAt(index),
+                                                _notificationProvider.notificationList.values.elementAt(index));
                                           } else {
                                             SmartDialog.show(
                                                 widget: EvieSingleButtonDialogCupertino(

@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -79,8 +80,9 @@ class _FeedsState extends State<Feeds> {
                         motion: const ScrollMotion(),
                         children: [
                           SlidableAction(
+                            spacing:2,
                             onPressed: (context){
-                              print("slide");
+                              decline();
                             },
                             backgroundColor: Color(0xFFFE4A49),
                             foregroundColor: Colors.white,
@@ -92,8 +94,6 @@ class _FeedsState extends State<Feeds> {
 
                       child: GestureDetector(
                           onTap: () async {
-
-
                              _notificationProvider.updateIsReadStatus(_notificationProvider
                                     .notificationList.keys
                                     .elementAt(index));
@@ -134,6 +134,8 @@ class _FeedsState extends State<Feeds> {
 
                                              */
                           },
+
+
                           child: Padding(
                             padding:  EdgeInsets.only(top: 14.h, bottom: 14.h),
                             child: ListTile(
@@ -190,13 +192,16 @@ class _FeedsState extends State<Feeds> {
                                     ),
 
                                     Visibility(
-                                      visible: true,
+                                      ///type == shareBike, status == pending
+                                      visible: _notificationProvider.notificationList.values.elementAt(index).status == "pending",
                                       child: Row(
                                         children: [
                                           Align(
                                               alignment: AlignmentDirectional.bottomStart,
                                               child: EvieButton_ReversedColor(
                                                   onPressed: (){
+
+                                                    decline();
 
                                                   },
                                                   child: Text(
@@ -211,8 +216,60 @@ class _FeedsState extends State<Feeds> {
                                           Align(
                                               alignment: AlignmentDirectional.bottomEnd,
                                               child: EvieButton(
-                                                  onPressed: (){
+                                                  onPressed: () async {
+                                                    SmartDialog.show(
+                                                      backDismiss: false,
+                                                        widget: Container(
+                                                          color: Color(0xffECEDEB),
+                                                      width: double.infinity,
+                                                      height: double.infinity,
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        children: [
+                                                          SvgPicture.asset(
+                                                            "assets/icons/loading.svg",
+                                                            height: 48.h,
+                                                            width: 48.w,
+                                                          ),
+                                                          Text("Accepting invitation and adding bike...", style: TextStyle(fontSize: 16.sp, color: Color(0xff3F3F3F)),)
+                                                        ],
 
+                                                      )
+                                                    ));
+                                                    await _bikeProvider
+                                                        .updateAcceptSharedBikeStatus(_notificationProvider.notificationList.values.elementAt(index).deviceIMEI!, _currentUserProvider.currentUserModel!.uid)
+                                                        .then((result) async {
+                                                      if (result == true) {
+                                                        SmartDialog.dismiss();
+                                                        _notificationProvider.updateUserNotificationSharedBikeStatus(_notificationProvider.notificationList.keys.elementAt(index));
+
+                                                        ScaffoldMessenger.of(context)
+                                                            .showSnackBar(
+                                                          const SnackBar(
+                                                            content: Text('Bike added successfully!'),
+                                                            duration: Duration(
+                                                                seconds: 3),),
+                                                        );
+
+                                                        changeToUserHomePageScreen(context);
+                                                        for (var element in _bikeProvider.userBikeNotificationList) {
+                                                          await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}$element");
+                                                        }
+
+
+                                                      }else{
+                                                        SmartDialog.show(
+                                                            backDismiss: false,
+                                                            widget: EvieSingleButtonDialogCupertino(
+                                                                title: "Error",
+                                                                content: "Try again",
+                                                                rightContent: "OK",
+                                                                onPressedRight: () async {
+                                                                  SmartDialog.dismiss();
+                                                                }));
+                                                      }
+                                                    });
                                                   },
                                                   child: Text(
                                                     "OK",
@@ -238,11 +295,44 @@ class _FeedsState extends State<Feeds> {
                   },
                 ),
               ),
-
-
-
             ],
           )),
     );
+  }
+
+  decline(){
+    SmartDialog.show(
+        widget: EvieDoubleButtonDialogCupertino(
+          title: "Are you sure you want to decline?",
+          content: 'Are you sure you want to decline?',
+          leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
+          rightContent: "Yes",
+          onPressedRight: () async {
+            await _bikeProvider.cancelSharedBikeStatus(
+                _bikeProvider.bikeUserList.values.firstWhere((element) => element.uid == _currentUserProvider.currentUserModel!.uid).uid!,
+                _bikeProvider.bikeUserList.values.firstWhere((element) => element.uid == _currentUserProvider.currentUserModel!.uid).notificationId!).then((result){
+              ///Update user notification id status == removed
+              if(result == true){
+                SmartDialog.dismiss();
+                SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
+                    title: "Success",
+                    content: "You deleted the bike",
+                    rightContent: "Close",
+                    onPressedRight: ()=> SmartDialog.dismiss()
+                ));
+              }
+              else {
+                SmartDialog.show(
+                    widget: EvieSingleButtonDialogCupertino(
+                        title: "Not success",
+                        content: "Try again",
+                        rightContent: "Close",
+                        onPressedRight: ()=>SmartDialog.dismiss()
+                    ));
+              }
+            });
+
+          },
+        ));
   }
 }

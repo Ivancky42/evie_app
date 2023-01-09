@@ -352,10 +352,9 @@ class BikeProvider extends ChangeNotifier {
 
   updateAcceptSharedBikeStatus(String targetIMEI, String currentUid) async {
     bool result;
-
     try {
       //Update
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(targetIMEI)
           .collection(usersCollection)
