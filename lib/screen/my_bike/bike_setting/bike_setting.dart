@@ -96,19 +96,33 @@ class _BikeSettingState extends State<BikeSetting> {
         Future.delayed(Duration.zero).then((value) => showConnectingToast());
         break;
       case DeviceConnectResult.scanTimeout:
-        Future.delayed(Duration.zero).then((value) =>SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showScanTimeoutToast()));
+        Future.delayed(Duration.zero).then((value) {
+          _bluetoothProvider.clearDeviceConnectStatus();
+          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showScanTimeoutToast());
+        });
         break;
       case DeviceConnectResult.scanError:
-        Future.delayed(Duration.zero).then((value) =>SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showScanErrorToast()));
+        Future.delayed(Duration.zero).then((value) {
+          _bluetoothProvider.clearDeviceConnectStatus();
+          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showScanErrorToast());
+        });
         break;
       case DeviceConnectResult.connected:
-        Future.delayed(Duration.zero).then((value) =>SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showConnectedToast()));
+        Future.delayed(Duration.zero).then((value) {
+          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showConnectedToast());
+        });
         break;
       case DeviceConnectResult.disconnected:
-        Future.delayed(Duration.zero).then((value) =>SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showDisconnectedToast()));
+        Future.delayed(Duration.zero).then((value) {
+          _bluetoothProvider.clearDeviceConnectStatus();
+          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showDisconnectedToast());
+        });
         break;
       case DeviceConnectResult.connectError:
-        Future.delayed(Duration.zero).then((value) =>SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showConnectErrorToast()));
+        Future.delayed(Duration.zero).then((value) {
+          _bluetoothProvider.clearDeviceConnectStatus();
+          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showConnectErrorToast());
+        });
         break;
     }
 
@@ -237,6 +251,36 @@ class _BikeSettingState extends State<BikeSetting> {
                         SizedBox(
                           height: 5.h,
                         ),
+                        deviceConnectResult == DeviceConnectResult.connected ?
+                        Container(
+                          width: 143.w,
+                          height: 30.h,
+                          child: OutlinedButton(
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/icons/bluetooth_small_white.svg",
+                                    height:16.h,
+                                    width: 16.w,
+                                    color: EvieColors.PrimaryColor,
+                                  ),
+                                  Text("Disconnect Bike", style: TextStyle(fontSize: 12.sp, color: EvieColors.PrimaryColor,)),]
+                            ),
+                            onPressed: () async {
+                              await _bluetoothProvider.stopScan();
+                              await _bluetoothProvider.disconnectDevice();
+                            },
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(width: 1.0, color: EvieColors.PrimaryColor),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)
+                              ),
+                              elevation: 0.0,
+                              backgroundColor: Colors.transparent,
+                            ),
+                          ),
+                        ) :
                         Container(
                           width: 143.w,
                           height: 30.h,
@@ -249,7 +293,12 @@ class _BikeSettingState extends State<BikeSetting> {
                                     height:16.h,
                                     width: 16.w,
                                   ),
-                                  Text(deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning || deviceConnectResult == DeviceConnectResult.partialConnected ? "Connecting" :_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?  "Connected" : "Connect Bike", style: TextStyle(fontSize: 12.sp, color: Color(0xffECEDEB)),),]
+                                  Text(
+                                    deviceConnectResult == DeviceConnectResult.connecting
+                                        || deviceConnectResult == DeviceConnectResult.scanning
+                                        || deviceConnectResult == DeviceConnectResult.partialConnected ? "Connecting"
+                                        :_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected
+                                        ?  "Connected" : "Connect Bike", style: TextStyle(fontSize: 12.sp, color: Color(0xffECEDEB)),),]
                             ),
                             onPressed: () async {
                               if (deviceConnectResult == null
