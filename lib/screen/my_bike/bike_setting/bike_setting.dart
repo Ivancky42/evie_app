@@ -96,19 +96,32 @@ class _BikeSettingState extends State<BikeSetting> {
         Future.delayed(Duration.zero).then((value) => showConnectingToast());
         break;
       case DeviceConnectResult.scanTimeout:
-        Future.delayed(Duration.zero).then((value) =>SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showScanTimeoutToast()));
+        Future.delayed(Duration.zero).then((value) {
+          _bluetoothProvider.clearDeviceConnectStatus();
+          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showScanTimeoutToast());
+        });
         break;
       case DeviceConnectResult.scanError:
-        Future.delayed(Duration.zero).then((value) =>SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showScanErrorToast()));
+        Future.delayed(Duration.zero).then((value) {
+          _bluetoothProvider.clearDeviceConnectStatus();
+          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showScanErrorToast());
+        });
         break;
       case DeviceConnectResult.connected:
-        Future.delayed(Duration.zero).then((value) =>SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showConnectedToast()));
+        Future.delayed(Duration.zero).then((value) {
+          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showConnectedToast());
+        });
         break;
       case DeviceConnectResult.disconnected:
-        Future.delayed(Duration.zero).then((value) =>SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showDisconnectedToast()));
+        Future.delayed(Duration.zero).then((value) {
+          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showDisconnectedToast());
+        });
         break;
       case DeviceConnectResult.connectError:
-        Future.delayed(Duration.zero).then((value) =>SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showConnectErrorToast()));
+        Future.delayed(Duration.zero).then((value) {
+          _bluetoothProvider.clearDeviceConnectStatus();
+          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showConnectErrorToast());
+        });
         break;
     }
 
