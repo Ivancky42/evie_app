@@ -62,6 +62,7 @@ DeviceConnectResult? deviceConnectResult;
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
 
+
     if(deviceConnectResult == DeviceConnectResult.connected){
       Future.delayed(Duration.zero, () {
         if(pageNavigate != null){

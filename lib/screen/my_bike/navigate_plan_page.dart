@@ -5,6 +5,7 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_bike/admin_free_plan/admin_free_plan.dart';
 import 'package:evie_test/screen/my_bike/admin_paid_plan/admin_paid_plan.dart';
 import 'package:evie_test/screen/my_bike/user_bike/user_bike.dart';
+import 'package:evie_test/screen/my_bike/bike_setting/bike_setting.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
@@ -48,7 +49,7 @@ class _NavigatePlanPageState extends State<NavigatePlanPage> {
       if(_bikeProvider.isOwner == true){
         return const AdminPaidPlan();
       }else{
-        return const UserBike();
+        return const BikeSetting();
       }
     } else {
       return const AdminFreePlan();
