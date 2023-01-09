@@ -20,8 +20,7 @@ showBluetoothNotTurnOn() {
           }));
 }
 
-Future<String?> showConnectDialog(BluetoothProvider bluetoothProvider, String? label) async {
-  String? result;
+showConnectDialog(BluetoothProvider bluetoothProvider) async {
    await SmartDialog.show(
       widget: EvieDoubleButtonDialog(
       title: "Please Connect Your Bike",
@@ -34,20 +33,13 @@ Future<String?> showConnectDialog(BluetoothProvider bluetoothProvider, String? l
       onPressedLeft: () async {
         await bluetoothProvider.disconnectDevice();
         await bluetoothProvider.stopScan();
+        SmartDialog.dismiss();
+      },
+      onPressedRight: () async {
+        await bluetoothProvider.disconnectDevice();
+        await bluetoothProvider.stopScan();
         bluetoothProvider.startScanAndConnect();
         SmartDialog.dismiss();
-        result = "CANCEL";
-      },
-      onPressedRight: () {
-        SmartDialog.dismiss();
-        result = "OK";
       })
-  ).then((value) {
-    if (result == "OK") {
-      return label;
-    }
-    else {
-      return null;
-    }
-  });
+  );
 }

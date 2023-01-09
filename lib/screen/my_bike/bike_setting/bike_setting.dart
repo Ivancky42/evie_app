@@ -64,6 +64,7 @@ class _BikeSettingState extends State<BikeSetting> {
   List<BikeSettingModel> _searchFirstResult = [];
   LinkedHashMap<String, BikeSettingModel> _searchSecondResult = LinkedHashMap<String, BikeSettingModel>();
   bool _isSearching = false;
+  late Future loadDataFuture;
 
   List<BikeSettingModel> bikeSettingList = [];
 
@@ -79,6 +80,7 @@ class _BikeSettingState extends State<BikeSetting> {
   @override
   void initState() {
     super.initState();
+    loadDataFuture = loadData();
   }
 
   @override
@@ -129,6 +131,20 @@ class _BikeSettingState extends State<BikeSetting> {
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
                 child: CustomSearchController(
+                  suffixIcon: _isSearching ?
+                  GestureDetector(
+                    onTap: () {
+                      _debouncer.run(() {
+                        searchController.text = "";
+                        _searchFirstResult.clear();
+                        _searchSecondResult.clear();
+                        _isSearching = false;
+                        setState(() {
+                        });
+                      });
+                    },
+                    child: const Icon(Icons.cancel),
+                  ) : null,
                   searchController: searchController,
                   onChanged: (value) {
                     if (value == "") {
@@ -323,7 +339,7 @@ class _BikeSettingState extends State<BikeSetting> {
                 height: 0,
               ),
               FutureBuilder(
-                  future: loadData(),
+                  future: loadDataFuture,
                   builder: (context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
