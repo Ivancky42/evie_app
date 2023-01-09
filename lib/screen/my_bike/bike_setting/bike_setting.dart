@@ -1,39 +1,22 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:io';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/toast.dart';
 import 'package:evie_test/screen/my_bike/bike_setting/bike_setting_container.dart';
 import 'package:evie_test/screen/my_bike/bike_setting/bike_setting_search_container.dart';
 import 'package:evie_test/widgets/custom_search_controller.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evie_test/widgets/widgets.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
-import 'package:evie_test/widgets/evie_button.dart';
-
 import '../../../api/backend/debouncer.dart';
 import '../../../api/colours.dart';
-import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../bluetooth/modelResult.dart';
-import '../../../widgets/evie_single_button_dialog.dart';
-import '../../../widgets/evie_textform.dart';
 import '../my_bike_function.dart';
-import '../my_bike_widget.dart';
 import 'bike_setting_model.dart';
 
 
@@ -107,6 +90,27 @@ class _BikeSettingState extends State<BikeSetting> {
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
 
+    switch(deviceConnectResult) {
+      case DeviceConnectResult.scanning:
+        SmartDialog.dismiss(status: SmartStatus.allToast);
+        Future.delayed(Duration.zero).then((value) => showConnectingToast());
+        break;
+      case DeviceConnectResult.scanTimeout:
+        Future.delayed(Duration.zero).then((value) =>SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showScanTimeoutToast()));
+        break;
+      case DeviceConnectResult.scanError:
+        Future.delayed(Duration.zero).then((value) =>SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showScanErrorToast()));
+        break;
+      case DeviceConnectResult.connected:
+        Future.delayed(Duration.zero).then((value) =>SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showConnectedToast()));
+        break;
+      case DeviceConnectResult.disconnected:
+        Future.delayed(Duration.zero).then((value) =>SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showDisconnectedToast()));
+        break;
+      case DeviceConnectResult.connectError:
+        Future.delayed(Duration.zero).then((value) =>SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showConnectErrorToast()));
+        break;
+    }
 
     return WillPopScope(
       onWillPop: () async {
@@ -247,8 +251,16 @@ class _BikeSettingState extends State<BikeSetting> {
                                   ),
                                   Text(deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning || deviceConnectResult == DeviceConnectResult.partialConnected ? "Connecting" :_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?  "Connected" : "Connect Bike", style: TextStyle(fontSize: 12.sp, color: Color(0xffECEDEB)),),]
                             ),
-                            onPressed: (){
-                              checkBLEPermissionAndAction(_bluetoothProvider, deviceConnectResult ?? DeviceConnectResult.disconnected,connectStream);
+                            onPressed: () async {
+                              if (deviceConnectResult == null
+                                  || deviceConnectResult == DeviceConnectResult.disconnected
+                                  || deviceConnectResult == DeviceConnectResult.scanTimeout
+                                  || deviceConnectResult == DeviceConnectResult.connectError
+                                  || deviceConnectResult == DeviceConnectResult.scanError) {
+                                await _bluetoothProvider.stopScan();
+                                await _bluetoothProvider.disconnectDevice();
+                                _bluetoothProvider.startScanAndConnect();
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
