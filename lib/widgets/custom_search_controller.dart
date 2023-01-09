@@ -8,7 +8,8 @@ import '../api/colours.dart';
 class CustomSearchController extends StatelessWidget {
   final TextEditingController searchController;
   final Function(String) onChanged;
-  const CustomSearchController({Key? key, required this.searchController, required this.onChanged}) : super(key: key);
+  final Widget? suffixIcon;
+  const CustomSearchController({Key? key, required this.searchController, required this.onChanged, this.suffixIcon}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class CustomSearchController extends StatelessWidget {
         cursorColor: EvieColors.PrimaryColor,
         decoration: InputDecoration(
             filled: true,
-            fillColor: EvieColors.greyFill.withOpacity(0.2),
+            fillColor: EvieColors.greyFill.withOpacity(0.1),
             focusColor: Colors.white,
             contentPadding: EdgeInsets.zero,
             enabledBorder: OutlineInputBorder(
@@ -36,7 +37,7 @@ class CustomSearchController extends StatelessWidget {
                 borderSide: const BorderSide(color: EvieColors.PrimaryColor)),
             prefixIcon: const Icon(Icons.search),
             prefixIconColor: EvieColors.greyFill,
-            suffixIcon: const Icon(Icons.cancel),
+            suffixIcon: suffixIcon,
             suffixIconColor: EvieColors.greyFill,
             hintText: "Search",
             hintStyle: TextStyle(

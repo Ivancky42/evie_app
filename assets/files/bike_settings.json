@@ -1,5 +1,9 @@
 [
   {
+    "id": 0,
+    "label": "Bike Name"
+  },
+  {
     "id":1,
     "label":"EV-Key"
   },
@@ -33,5 +37,25 @@
       "Fall Detection",
       "Crash Alert"
     ]
+  },
+  {
+    "id":7,
+    "label": "View Data"
+  },
+  {
+    "id": 8,
+    "label": "About Bike"
+  },
+  {
+    "id": 9,
+    "label": "Firmware Version"
+  },
+  {
+    "id": 10,
+    "label": "User Manual"
+  },
+  {
+    "id": 11,
+    "label": "Reset Bike"
   }
 ]

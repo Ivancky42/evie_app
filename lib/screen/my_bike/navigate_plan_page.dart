@@ -45,14 +45,15 @@ class _NavigatePlanPageState extends State<NavigatePlanPage> {
 
   }
   Widget _buildChild() {
-    if (_bikeProvider.isPlanSubscript == true) {
-      if(_bikeProvider.isOwner == true){
-        return const AdminPaidPlan();
-      }else{
-        return const BikeSetting();
-      }
-    } else {
-      return const AdminFreePlan();
-    }
+    return BikeSetting();
+    // if (_bikeProvider.isPlanSubscript == true) {
+    //   if(_bikeProvider.isOwner == true){
+    //     return const AdminPaidPlan();
+    //   }else{
+    //     return const UserBike();
+    //   }
+    // } else {
+    //   return const AdminFreePlan();
+    // }
   }
 }
