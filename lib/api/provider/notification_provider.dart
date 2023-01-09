@@ -35,8 +35,6 @@ class NotificationProvider extends ChangeNotifier {
     } else {
       this.currentUserModel = currentUserModel;
       isReadAll = true;
-      subscribeToTopic("fcm_test");
-      subscribeToTopic(this.currentUserModel!.uid);
       getNotification(this.currentUserModel!.uid);
 
       //  firebaseCloudMessaging_Listeners();

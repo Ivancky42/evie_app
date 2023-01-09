@@ -18,12 +18,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
-import '../../api/colours.dart';
-import '../../api/length.dart';
-import '../../api/navigator.dart';
-import '../../widgets/evie_single_button_dialog.dart';
-import '../../widgets/evie_textform.dart';
-import '../user_home_page/user_home_page.dart';
+import '../../../api/colours.dart';
+import '../../../api/length.dart';
+import '../../../api/navigator.dart';
+
 
 ///User profile page with user account information
 

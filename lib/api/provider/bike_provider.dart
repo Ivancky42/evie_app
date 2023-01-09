@@ -60,7 +60,6 @@ class BikeProvider extends ChangeNotifier {
   bool? isPlanSubscript;
   bool? isOwner;
   bool? isAddBike = false;
-  List userNotificationList = ["~general", "~firmware-update"];
   List userBikeNotificationList = ["~connection-lost","~movement-detect","~theft-attempt","~lock-reminder","~plan-reminder","~fall-detect", "crash"];
 
   StreamSubscription? bikeListSubscription;
@@ -94,7 +93,7 @@ class BikeProvider extends ChangeNotifier {
       notifyListeners();
     }
     else {
-    //  clear();
+      //  clear();
     }
   }
 
@@ -114,7 +113,7 @@ class BikeProvider extends ChangeNotifier {
         if (snapshot.docs.isNotEmpty) {
           for (var docChange in snapshot.docChanges) {
             switch (docChange.type) {
-              ///element.type
+            ///element.type
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
                 ///Key = imei, Val = get json object
@@ -122,24 +121,6 @@ class BikeProvider extends ChangeNotifier {
                     docChange.doc.id, () => UserBikeModel.fromJson(obj!));
                 getUserBikeDetails(docChange.doc.id);
                 NotificationProvider().subscribeToTopic(docChange.doc.id);
-
-                userBikeList.forEach((key, value) {
-                  if(value?.notificationSettings?.connectionLost == true ) {
-                    NotificationProvider().subscribeToTopic("$key~connection-lost");
-                  }
-                  if(value?.notificationSettings?.movementDetect == true ) {
-                    NotificationProvider().subscribeToTopic("$key~movement-detect");
-                  }
-                  if(value?.notificationSettings?.theftAttempt == true ) {
-                    NotificationProvider().subscribeToTopic("$key~theft-attempt");
-                  }
-                  if(value?.notificationSettings?.lock == true ) {
-                    NotificationProvider().subscribeToTopic("$key~lock-reminder");
-                  }
-                  if(value?.notificationSettings?.planReminder == true ) {
-                    NotificationProvider().subscribeToTopic("$key~plan-reminder");
-                  }
-                });
 
                 notifyListeners();
                 break;
@@ -157,6 +138,23 @@ class BikeProvider extends ChangeNotifier {
             }
           }
 
+          userBikeList.forEach((key, value) {
+            if(value?.notificationSettings?.connectionLost == true ) {
+              NotificationProvider().subscribeToTopic("${key}~connection-lost");
+            }
+            if(value?.notificationSettings?.movementDetect == true ) {
+              NotificationProvider().subscribeToTopic("${key}~movement-detect");
+            }
+            if(value?.notificationSettings?.theftAttempt == true ) {
+              NotificationProvider().subscribeToTopic("${key}~theft-attempt");
+            }
+            if(value?.notificationSettings?.lock == true ) {
+              NotificationProvider().subscribeToTopic("${key}~lock-reminder");
+            }
+            if(value?.notificationSettings?.planReminder == true ) {
+              NotificationProvider().subscribeToTopic("${key}~plan-reminder");
+            }
+          });
 
           ///Subscript to topic based on looping (for first time open app only)
 
@@ -232,11 +230,11 @@ class BikeProvider extends ChangeNotifier {
   }
 
   Stream<SwitchBikeResult> switchBike() {
-  return switchBikeResultListener.stream;
-    }
+    return switchBikeResultListener.stream;
+  }
 
 
-   changeBikeUsingIMEI(String deviceIMEI) async {
+  changeBikeUsingIMEI(String deviceIMEI) async {
     SharedPreferences prefs = await _prefs;
     await prefs.setString('currentBikeImei', deviceIMEI);
 
@@ -253,20 +251,20 @@ class BikeProvider extends ChangeNotifier {
     switch(type){
       case "general":
       case "firmwareUpdate":
-      try {
-        await FirebaseFirestore.instance
-            .collection(usersCollection)
-            .doc(currentUserModel!.uid)
-            .set({
-          "notificationSettings": {
-            type: value,
-          }
-        }, SetOptions(merge: true));
+        try {
+          await FirebaseFirestore.instance
+              .collection(usersCollection)
+              .doc(currentUserModel!.uid)
+              .set({
+            "notificationSettings": {
+              type: value,
+            }
+          }, SetOptions(merge: true));
 
-        return true;
-      }catch(e){
-        return false;
-      }
+          return true;
+        }catch(e){
+          return false;
+        }
         break;
       default:
         try {
@@ -379,7 +377,7 @@ class BikeProvider extends ChangeNotifier {
     bool result;
     try {
       //Update
-       FirebaseFirestore.instance
+      FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(currentBikeModel!.deviceIMEI)
           .collection(usersCollection)
@@ -422,7 +420,7 @@ class BikeProvider extends ChangeNotifier {
         if (snapshot.docs.isNotEmpty) {
           for (var docChange in snapshot.docChanges) {
             switch (docChange.type) {
-              ///element.type
+            ///element.type
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
                 bikeUserList.putIfAbsent(docChange.doc.id, () => BikeUserModel.fromJson(obj!));
@@ -518,11 +516,11 @@ class BikeProvider extends ChangeNotifier {
   Future<bool> checkIsUserExist(String targetEmail) async {
     if (bikeUserDetails.isNotEmpty) {
       for (var i = 0; i < bikeUserDetails.length;i++) {
-          if (bikeUserDetails.values.elementAt(i).email == targetEmail) {
-            return true;
-          } else {
-            return false;
-          }
+        if (bikeUserDetails.values.elementAt(i).email == targetEmail) {
+          return true;
+        } else {
+          return false;
+        }
       }
     }
     return false;
@@ -925,17 +923,26 @@ class BikeProvider extends ChangeNotifier {
   }
 
   clear() async {
+    userBikeList.forEach((key, value) async {
+      await NotificationProvider().unsubscribeFromTopic(key);
 
-    for (var element in userBikeList.keys) {
-      await NotificationProvider().unsubscribeFromTopic(element);
-      for (var list in userBikeNotificationList) {
-        await NotificationProvider().unsubscribeFromTopic("$element$list");
+      if(value?.notificationSettings?.connectionLost == true ) {
+        NotificationProvider().unsubscribeFromTopic("$key~connection-lost");
       }
-    }
+      if(value?.notificationSettings?.movementDetect == true ) {
+        NotificationProvider().unsubscribeFromTopic("$key~movement-detect");
+      }
+      if(value?.notificationSettings?.theftAttempt == true ) {
+        NotificationProvider().unsubscribeFromTopic("$key~theft-attempt");
+      }
+      if(value?.notificationSettings?.lock == true ) {
+        NotificationProvider().unsubscribeFromTopic("$key~lock-reminder");
+      }
+      if(value?.notificationSettings?.planReminder == true ) {
+        NotificationProvider().unsubscribeFromTopic("$key~plan-reminder");
+      }
+    });
 
-    for (var element in userNotificationList) {
-      await NotificationProvider().unsubscribeFromTopic(element);
-    }
 
 
     SharedPreferences prefs = await _prefs;

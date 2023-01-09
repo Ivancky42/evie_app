@@ -9,18 +9,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
-import '../../api/colours.dart';
-import '../../api/length.dart';
-import '../../api/model/bike_user_model.dart';
-import '../../api/model/user_model.dart';
-import '../../api/navigator.dart';
-import '../../api/provider/bike_provider.dart';
-import '../../theme/ThemeChangeNotifier.dart';
-import '../../widgets/evie_double_button_dialog.dart';
-import '../../widgets/evie_single_button_dialog.dart';
-import '../../widgets/evie_switch.dart';
-import '../my_account/my_account_widget.dart';
-import '../my_bike/my_bike_widget.dart';
+import '../../../api/colours.dart';
+import '../../../api/model/bike_user_model.dart';
+import '../../../api/navigator.dart';
+import '../../../api/provider/bike_provider.dart';
+import '../../../widgets/evie_single_button_dialog.dart';
+import '../../../widgets/evie_switch.dart';
+
+import '../../my_account/my_account_widget.dart';
+import '../my_bike_widget.dart';
 
 
 

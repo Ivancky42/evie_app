@@ -13,12 +13,15 @@ import '../../widgets/evie_single_button_dialog.dart';
 import '../model/user_model.dart';
 import '../todays_quote.dart';
 import 'auth_provider.dart';
+import 'notification_provider.dart';
 
 class CurrentUserProvider extends ChangeNotifier {
 
 
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
   String? randomQuote;
+
+  List userNotificationList = ["~general", "~firmware-update"];
 
   UserModel? currentUserModel;
   UserModel? get getCurrentUserModel => currentUserModel;
@@ -53,6 +56,8 @@ class CurrentUserProvider extends ChangeNotifier {
           Map<String, dynamic>? obj = event.data();
           if (obj != null) {
             currentUserModel = UserModel.fromJson(obj);
+            NotificationProvider().subscribeToTopic("fcm_test");
+            NotificationProvider().subscribeToTopic(currentUserModel!.uid);
             notifyListeners();
           }
         } on Exception catch (exception) {
@@ -66,7 +71,7 @@ class CurrentUserProvider extends ChangeNotifier {
   }
 
   ///User update user profile
-   Future updateUserName(String name) async {
+  Future updateUserName(String name) async {
     try {
       final FirebaseAuth auth = FirebaseAuth.instance;
       final User? user = auth.currentUser;
@@ -74,7 +79,7 @@ class CurrentUserProvider extends ChangeNotifier {
 
       //Update
       var docUser = FirebaseFirestore.instance.collection(usersCollection);
-          await docUser
+      await docUser
           .doc(uid)
           .update({
         'name': name,
@@ -90,7 +95,7 @@ class CurrentUserProvider extends ChangeNotifier {
   }
 
   ///User update user profile
- Future updateUserProfileImage(String imageURL) async {
+  Future updateUserProfileImage(String imageURL) async {
     try {
       ///Get current user id, might get from provider
       final FirebaseAuth auth = FirebaseAuth.instance;
@@ -137,7 +142,13 @@ class CurrentUserProvider extends ChangeNotifier {
     }
   }
 
-  cancelSubscription(){
+  cancelSubscription() async {
+    if(currentUserModel?.notificationSettings?.firmwareUpdate == true ){
+      await NotificationProvider().unsubscribeFromTopic("~firmware-update");
+    }
+    if( currentUserModel?.notificationSettings?.general == true ){
+      await NotificationProvider().unsubscribeFromTopic("~general");
+    }
     currentUserSubscription?.cancel();
   }
 
@@ -149,3 +160,4 @@ class CurrentUserProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
+

@@ -19,15 +19,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
-import '../../api/colours.dart';
-import '../../api/length.dart';
-import '../../api/navigator.dart';
-import '../../api/provider/bike_provider.dart';
-import '../../api/provider/bluetooth_provider.dart';
-import '../../widgets/evie_single_button_dialog.dart';
-import '../../widgets/evie_switch.dart';
-import '../../widgets/evie_textform.dart';
-import '../my_bike/my_bike_widget.dart';
+import '../../../api/length.dart';
+import '../../../api/navigator.dart';
+import '../../../api/provider/bike_provider.dart';
+import '../../../api/provider/bluetooth_provider.dart';
+import '../my_bike_widget.dart';
+
+
 
 
 class CurrentPlan extends StatefulWidget {

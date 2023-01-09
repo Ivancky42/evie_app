@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
-import '../../../api/length.dart';
-import '../../../api/model/plan_model.dart';
-import '../../../api/navigator.dart';
-import '../../../api/provider/bike_provider.dart';
-import '../../../widgets/evie_button.dart';
+
+import '../../../../api/model/plan_model.dart';
+import '../../../../api/navigator.dart';
+import '../../../../api/provider/bike_provider.dart';
+import '../../../../widgets/evie_button.dart';
 import '../plan_page_widget.dart';
 
 class ProPlan extends StatefulWidget{
@@ -125,7 +125,7 @@ class _ProPlanState extends State<ProPlan> {
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, 16.h),
-                      child:  EvieButton(
+                      child:   EvieButton(
                         width: double.infinity,
                         height: 48.h,
                         child: Text(
