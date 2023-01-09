@@ -7,6 +7,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import '../screen/my_bike/my_bike_function.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
+import '../widgets/evie_textform.dart';
 
 showBluetoothNotTurnOn() {
   SmartDialog.show(
@@ -31,8 +32,6 @@ showConnectDialog(BluetoothProvider bluetoothProvider) async {
       leftContent: "Cancel",
       rightContent: "Connect Bike",
       onPressedLeft: () async {
-        await bluetoothProvider.disconnectDevice();
-        await bluetoothProvider.stopScan();
         SmartDialog.dismiss();
       },
       onPressedRight: () async {
@@ -42,4 +41,78 @@ showConnectDialog(BluetoothProvider bluetoothProvider) async {
         SmartDialog.dismiss();
       })
   );
+}
+
+showEditBikeNameDialog(_formKey, _bikeNameController, _bikeProvider) {
+  SmartDialog.show(
+      widget: Form(
+        key: _formKey,
+        child: EvieDoubleButtonDialog(
+            title: "Name Your Bike",
+            childContent: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding:  EdgeInsets.fromLTRB(0.h, 12.h, 0.h, 8.h),
+                    child: EvieTextFormField(
+                      controller: _bikeNameController,
+                      obscureText: false,
+                      keyboardType: TextInputType.name,
+                      hintText: _bikeProvider.currentBikeModel?.deviceName ?? "Bike Name",
+                      labelText: "Bike Name",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter bike name';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 25.h),
+                    child: Text("100 Maximum Character", style: TextStyle(fontSize: 12.sp, color: Color(0xff252526)),),
+                  ),
+                ],
+              ),
+            ),
+            leftContent: "Cancel",
+            rightContent: "Save",
+            onPressedLeft: (){SmartDialog.dismiss();},
+            onPressedRight: (){
+              if (_formKey.currentState!.validate()) {
+                _bikeProvider.updateBikeName(_bikeNameController.text.trim()).then((result){
+                  SmartDialog.dismiss();
+                  if(result == true){
+                    showUpdateSuccessDialog();
+                  } else{
+                    showUpdateFailedDialog();
+                  }
+                });
+              }
+
+            }),
+      ));
+}
+
+showUpdateSuccessDialog() {
+  SmartDialog.show(
+      keepSingle: true,
+      widget: EvieSingleButtonDialogCupertino
+        (title: "Success",
+          content: "Update successful",
+          rightContent: "Ok",
+          onPressedRight: (){
+            SmartDialog.dismiss();
+          } ));
+}
+
+showUpdateFailedDialog() {
+  SmartDialog.show(
+      keepSingle: true,
+      widget: EvieSingleButtonDialogCupertino
+        (title: "Not Success",
+          content: "An error occur, try again",
+          rightContent: "Ok",
+          onPressedRight: (){SmartDialog.dismiss();} ));
 }

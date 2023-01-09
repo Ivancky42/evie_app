@@ -26,7 +26,7 @@ class CustomSearchController extends StatelessWidget {
         cursorColor: EvieColors.PrimaryColor,
         decoration: InputDecoration(
             filled: true,
-            fillColor: EvieColors.greyFill.withOpacity(0.2),
+            fillColor: EvieColors.greyFill.withOpacity(0.1),
             focusColor: Colors.white,
             contentPadding: EdgeInsets.zero,
             enabledBorder: OutlineInputBorder(

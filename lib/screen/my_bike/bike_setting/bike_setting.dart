@@ -52,9 +52,6 @@ class _BikeSettingState extends State<BikeSetting> {
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
 
-  final TextEditingController _bikeNameController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-
 
   DeviceConnectResult? deviceConnectResult;
   CableLockResult? cableLockState;
@@ -218,92 +215,27 @@ class _BikeSettingState extends State<BikeSetting> {
                       ),
                     ),
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Row(
                           children: [
-                            Text(
-                              _bikeProvider.currentBikeModel?.deviceName ?? "",
-                              style: TextStyle(
-                                  fontSize: 18.sp, fontWeight: FontWeight.w500),
+                            Padding(
+                              padding: EdgeInsets.only(left: 6.w),
+                              child: Text(
+                                _bikeProvider.currentBikeModel?.deviceName ?? "",
+                                style: TextStyle(
+                                    fontSize: 18.sp, fontWeight: FontWeight.w500),
+                              ),
                             ),
-                            IconButton(
-                              onPressed: (){
-                                SmartDialog.show(
-                                    widget: Form(
-                                      key: _formKey,
-                                      child: EvieDoubleButtonDialog(
-                                          title: "Name Your Bike",
-                                          childContent: Container(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:  EdgeInsets.fromLTRB(0.h, 12.h, 0.h, 8.h),
-                                                  child: EvieTextFormField(
-                                                    controller: _bikeNameController,
-                                                    obscureText: false,
-                                                    keyboardType: TextInputType.name,
-                                                    hintText: _bikeProvider.currentBikeModel?.deviceName ?? "Bike Name",
-                                                    labelText: "Bike Name",
-                                                    validator: (value) {
-                                                      if (value == null || value.isEmpty) {
-                                                        return 'Please enter bike name';
-                                                      }
-                                                      return null;
-                                                    },
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(bottom: 25.h),
-                                                  child: Text("100 Maximum Character", style: TextStyle(fontSize: 12.sp, color: Color(0xff252526)),),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          leftContent: "Cancel",
-                                          rightContent: "Save",
-                                          onPressedLeft: (){SmartDialog.dismiss();},
-                                          onPressedRight: (){
-                                            if (_formKey.currentState!.validate()) {
-                                              _bikeProvider.updateBikeName(_bikeNameController.text.trim()).then((result){
-                                                SmartDialog.dismiss();
-                                                if(result == true){
-                                                  SmartDialog.show(
-                                                      keepSingle: true,
-                                                      widget: EvieSingleButtonDialogCupertino
-                                                        (title: "Success",
-                                                          content: "Update successful",
-                                                          rightContent: "Ok",
-                                                          onPressedRight: (){
-                                                            SmartDialog.dismiss();
-                                                          } ));
-                                                } else{
-                                                  SmartDialog.show(
-                                                      keepSingle: true,
-                                                      widget: EvieSingleButtonDialogCupertino
-                                                        (title: "Not Success",
-                                                          content: "An error occur, try again",
-                                                          rightContent: "Ok",
-                                                          onPressedRight: (){SmartDialog.dismiss();} ));
-                                                }
-                                              });
-                                            }
-
-                                          }),
-                                    ));
-                              },
-                              icon:   SvgPicture.asset(
-                                "assets/buttons/pen_edit.svg",
-                                height:20.h,
-                                width: 20.w,
-                              ),),
                           ],
+                        ),
+                        SizedBox(
+                          height: 5.h,
                         ),
                         Container(
                           width: 143.w,
-                          height: 40.h,
+                          height: 30.h,
                           child: ElevatedButton(
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -320,11 +252,9 @@ class _BikeSettingState extends State<BikeSetting> {
                             },
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.w)),
+                                  borderRadius: BorderRadius.circular(20)),
                               elevation: 0.0,
                               backgroundColor: EvieColors.PrimaryColor,
-                              //padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 14.h),
-
                             ),
                           ),
                         ),

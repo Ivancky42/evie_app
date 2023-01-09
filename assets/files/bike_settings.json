@@ -1,5 +1,9 @@
 [
   {
+    "id": 0,
+    "label": "Bike Name"
+  },
+  {
     "id":1,
     "label":"EV-Key"
   },
