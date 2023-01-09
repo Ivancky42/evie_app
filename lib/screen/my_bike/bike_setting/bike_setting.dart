@@ -147,7 +147,7 @@ class _BikeSettingState extends State<BikeSetting> {
                   ) : null,
                   searchController: searchController,
                   onChanged: (value) {
-                    if (value == "") {
+                    if (value.trim().isEmpty) {
                       _debouncer.run(() {
                         _searchFirstResult.clear();
                         _searchSecondResult.clear();
