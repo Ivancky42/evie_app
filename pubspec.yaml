@@ -95,6 +95,7 @@ dependencies:
   paginate_firestore: ^1.0.3+1
   slider_button: ^2.0.0
   flutter_map: ^3.1.0
+  flutter_slidable: ^2.0.0
 
 
 dev_dependencies:

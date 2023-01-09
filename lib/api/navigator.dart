@@ -22,6 +22,7 @@ import 'package:page_transition/page_transition.dart';
 
 import '../screen/add_bike/congrats_bike_added.dart';
 
+import '../screen/feeds/feeds.dart';
 import '../screen/my_account/push_notification/push_notification.dart';
 import '../screen/my_bike/bike_status_alert/bike_status_alert.dart';
 import '../screen/my_bike/navigate_plan_page.dart';
@@ -495,6 +496,17 @@ void changeToShareBikeUserListScreen(BuildContext context) {
     ),
   );
 }
+
+void changeToFeedsScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const UserHomePage(3),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
 
 void changeToEditProfile(BuildContext context) {
     Navigator.of(context)

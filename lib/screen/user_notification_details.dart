@@ -49,7 +49,7 @@ class _UserNotificationDetailsState extends State<UserNotificationDetails> {
 
     return WillPopScope(
       onWillPop: () async {
-       changeToNotificationScreen(context);
+     changeToFeedsScreen(context);
         return true;
       },
 
@@ -113,8 +113,7 @@ class _UserNotificationDetailsState extends State<UserNotificationDetails> {
                             height: 10.h,
                           ),
                           Visibility(
-                            visible:
-                                widget.notificationValues.status == "pending",
+                            visible: widget.notificationValues.status == "pending",
 
                             ///Another button for declined
                             child: EvieButton(

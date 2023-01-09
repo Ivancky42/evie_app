@@ -133,8 +133,8 @@ class _UserNotificationState extends State<UserNotification> {
                                          */
                                       },
                                       child: ListTile(
-                                          leading: CircleAvatar(
-                                            ///If mail unread then icon mailunread
+                                           leading: CircleAvatar(
+                                            ///If mail unread then icon mail unread
                                             child: _notificationProvider
                                                     .notificationList.values
                                                     .elementAt(index)
@@ -154,10 +154,9 @@ class _UserNotificationState extends State<UserNotification> {
                                               .elementAt(index)
                                               .title!),
                                           subtitle: Text(
-                                            "${_notificationProvider.notificationList.values.elementAt(index).body!}\n\n${_notificationProvider.notificationList.values.elementAt(index).created!.toDate()}",
+                                            "${_notificationProvider.notificationList.values.elementAt(index).body!} \n\n ${_notificationProvider.notificationList.values.elementAt(index).created!.toDate()}",
                                             style: TextStyle(
-                                              color: ThemeChangeNotifier()
-                                                          .isDarkMode(context) ==
+                                              color: ThemeChangeNotifier().isDarkMode(context) ==
                                                       true
                                                   ? Colors.white70
                                                   : Colors.black54,

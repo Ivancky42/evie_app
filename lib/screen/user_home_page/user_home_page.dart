@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:evie_test/screen/user_home_general.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import '../feeds/feeds.dart';
 import '../my_account/my_account.dart';
 import '../my_bike/admin_free_plan/admin_free_plan.dart';
 import '../my_bike/admin_paid_plan/admin_paid_plan.dart';
@@ -39,7 +40,7 @@ class _UserHomePageState extends State<UserHomePage> {
     UserHomeGeneral(),
     TestBle(),
     NavigatePlanPage(),
-    UserNotification(),
+    Feeds(),
     MyAccount(),
   ];
 
@@ -160,7 +161,7 @@ class _UserHomePageState extends State<UserHomePage> {
                 ),
                 activeIcon: Container(
                   child: SvgPicture.asset(
-                    "assets/buttons/notification.svg",
+                    "assets/buttons/notification_selected.svg",
                   ),
            //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
                   height: EvieLength.bottom_bar_icon_height,

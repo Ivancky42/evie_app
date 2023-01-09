@@ -74,25 +74,20 @@ class EvieButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: width,
-        child: Padding(
-          padding: const EdgeInsets.all(2),
-          child: Container(
-            width: width,
-            child: ElevatedButton(
-              child: child,
-              onPressed: onPressed,
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.w)),
-                  elevation: 0.0,
-                  backgroundColor: backgroundColor ?? EvieColors.PrimaryColor,
-                  padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 14.h),
+      height: height,
+      width: width,
+      child: ElevatedButton(
+        child: child,
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.w)),
+            elevation: 0.0,
+            backgroundColor: backgroundColor ?? EvieColors.PrimaryColor,
 
-              ),
-            ),
-          ),
-        )
+
+        ),
+      ),
     );
   }
 }
@@ -120,21 +115,15 @@ class EvieButton_ReversedColor extends StatelessWidget {
     return Container(
       height: height,
         width: width,
-        child: Padding(
-          padding: const EdgeInsets.all(2),
-          child: Container(
-            width: width,
-            child: ElevatedButton(
-              child: child,
-              onPressed: onPressed,
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.w)),
-                  elevation: 0.0,
-                  backgroundColor: const Color(0xffDFE0E0),
-                  padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 14.h),
-              ),
-            ),
+        child: ElevatedButton(
+          child: child,
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.w)),
+              elevation: 0.0,
+              backgroundColor: const Color(0xffDFE0E0),
+
           ),
         )
     );
