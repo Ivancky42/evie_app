@@ -328,15 +328,17 @@ class BluetoothProvider extends ChangeNotifier {
 
 
     if (connectionStateUpdate != null) {
-      connectionStateUpdate = ConnectionStateUpdate(
-          deviceId: connectionStateUpdate!.deviceId,
-          connectionState: DeviceConnectionState.disconnected,
-          failure: null);
-    }
+      if (connectionStateUpdate!.connectionState != DeviceConnectionState.disconnected) {
+        connectionStateUpdate = ConnectionStateUpdate(
+            deviceId: connectionStateUpdate!.deviceId,
+            connectionState: DeviceConnectionState.disconnected,
+            failure: null);
 
-    deviceConnectStream.add(DeviceConnectResult.disconnected);
-    deviceConnectResult = DeviceConnectResult.disconnected;
-    notifyListeners();
+        deviceConnectStream.add(DeviceConnectResult.disconnected);
+        deviceConnectResult = DeviceConnectResult.disconnected;
+        notifyListeners();
+      }
+    }
 
     clearBluetoothStatus();
     notifyListeners();

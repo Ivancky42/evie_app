@@ -92,8 +92,9 @@ class _BikeSettingState extends State<BikeSetting> {
 
     switch(deviceConnectResult) {
       case DeviceConnectResult.scanning:
-        SmartDialog.dismiss(status: SmartStatus.allToast);
-        Future.delayed(Duration.zero).then((value) => showConnectingToast());
+        Future.delayed(Duration.zero).then((value) {
+          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showConnectingToast());
+        });
         break;
       case DeviceConnectResult.scanTimeout:
         Future.delayed(Duration.zero).then((value) {

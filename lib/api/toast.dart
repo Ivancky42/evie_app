@@ -211,3 +211,43 @@ showDisconnectedToast() {
       ));
 }
 
+showControlAdmissionToast() {
+  SmartDialog.showToast("",
+      alignment: Alignment.bottomLeft,
+      widget: Container(
+        alignment: Alignment.bottomCenter,
+        width: double.infinity,
+        height: double.infinity,
+        child: Wrap(
+          children: [
+            Container(
+              width: 358.w,
+              alignment: Alignment.bottomLeft,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(16.w, 8.h, 0.w, 8.h),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 320.w,
+                      height: 44.h,
+                      child: Text(
+                        "Your account doesn't have control admission for this setting.",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.w),
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+      ));
+}
+

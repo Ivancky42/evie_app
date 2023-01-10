@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
+import '../../../api/toast.dart';
 import '../../../bluetooth/modelResult.dart';
 
 class BikeSettingContainer extends StatefulWidget {
@@ -374,6 +375,9 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 if (checkFunctionByRole()) {
                   changeToShareBikeUserListScreen(context);
                 }
+                else {
+                  showControlAdmissionToast();
+                }
               },
               child: Opacity(
                 opacity: getOpacityByRole(),
@@ -449,6 +453,9 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 if (checkFunctionByRole()) {
                   changeToBikeStatusAlertScreen(context);
                 }
+                else {
+                  showControlAdmissionToast();
+                }
               },
               child: Opacity(
                 opacity: getOpacityByRole(),
@@ -492,6 +499,9 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 if (checkFunctionByRole()) {
                   changeToSOSCenterScreen(context);
                 }
+                else {
+                  showControlAdmissionToast();
+                }
               },
               child: Opacity(
                 opacity: getOpacityByRole(),
@@ -534,6 +544,9 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
               onTap: () {
                 if (checkFunctionByRole()) {
 
+                }
+                else {
+                  showControlAdmissionToast();
                 }
               },
               child: Opacity(
@@ -755,11 +768,11 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
     else {
       ///Premium user
       if (_bikeProvider.isPlanSubscript == true) {
-        return 0.3;
+        return 1.0;
       }
       ///Starter user
       else {
-        return 0.3;
+        return 1.0;
       }
     }
   }
