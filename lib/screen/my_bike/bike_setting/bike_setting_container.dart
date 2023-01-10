@@ -376,7 +376,12 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                   changeToShareBikeUserListScreen(context);
                 }
                 else {
-                  showControlAdmissionToast();
+                  if (getOpacityByRole() == 0.3) {
+                    showUpgradePlanToast();
+                  }
+                  else {
+                    showControlAdmissionToast();
+                  }
                 }
               },
               child: Opacity(
@@ -454,7 +459,12 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                   changeToBikeStatusAlertScreen(context);
                 }
                 else {
-                  showControlAdmissionToast();
+                  if (getOpacityByRole() == 0.3) {
+                    showUpgradePlanToast();
+                  }
+                  else {
+                    showControlAdmissionToast();
+                  }
                 }
               },
               child: Opacity(
@@ -500,7 +510,12 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                   changeToSOSCenterScreen(context);
                 }
                 else {
-                  showControlAdmissionToast();
+                  if (getOpacityByRole() == 0.3) {
+                    showUpgradePlanToast();
+                  }
+                  else {
+                    showControlAdmissionToast();
+                  }
                 }
               },
               child: Opacity(
@@ -546,7 +561,12 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
 
                 }
                 else {
-                  showControlAdmissionToast();
+                  if (getOpacityByRole() == 0.3) {
+                    showUpgradePlanToast();
+                  }
+                  else {
+                    showControlAdmissionToast();
+                  }
                 }
               },
               child: Opacity(
