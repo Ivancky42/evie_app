@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -382,77 +383,7 @@ class _BikeSafeState extends State<BikeSafe> {
                                 backgroundColor:
                                 widget.lockColour,
                                 onPressed: () {
-                                  ///Check bluetooth status
-
-                                  var bleStatus =
-                                      _bluetoothProvider
-                                          .bleStatus;
-                                  switch (
-                                  bleStatus) {
-                                    case BleStatus
-                                        .poweredOff:
-                                      SmartDialog.show(
-                                          keepSingle: true,
-                                          widget: EvieSingleButtonDialogCupertino(
-                                              title: "Error",
-                                              content: "Bluetooth is off, please turn on your bluetooth",
-                                              rightContent: "OK",
-                                              onPressedRight: () {
-                                                SmartDialog.dismiss();
-                                              }));
-                                      break;
-                                    case BleStatus
-                                        .unknown:
-                                    // TODO: Handle this case.
-                                      break;
-                                    case BleStatus
-                                        .unsupported:
-                                      SmartDialog.show(
-                                          keepSingle: true,
-                                          widget: EvieSingleButtonDialogCupertino(
-                                              title: "Error",
-                                              content: "Bluetooth unsupported",
-                                              rightContent: "OK",
-                                              onPressedRight: () {
-                                                SmartDialog.dismiss();
-                                              }));
-                                      break;
-                                    case BleStatus
-                                        .unauthorized:
-                                      SmartDialog.show(
-                                          keepSingle:
-                                          true,
-                                          widget: EvieSingleButtonDialogCupertino(
-                                              title: "Error",
-                                              content: "Bluetooth Permission is off",
-                                              rightContent: "OK",
-                                              onPressedRight: () {
-                                                SmartDialog
-                                                    .dismiss();
-                                              }));
-                                      break;
-                                    case BleStatus
-                                        .locationServicesDisabled:
-                                      SmartDialog.show(
-                                          keepSingle: true,
-                                          widget: EvieSingleButtonDialogCupertino(
-                                              title: "Error",
-                                              content: "Location service disabled",
-                                              rightContent: "OK",
-                                              onPressedRight: () {
-                                                SmartDialog.dismiss();
-                                              }));
-                                      break;
-                                    case BleStatus
-                                        .ready:
-                                      if (deviceConnectResult == null || deviceConnectResult != DeviceConnectResult.connected) {
-                                        checkBLEPermissionAndAction(_bluetoothProvider,deviceConnectResult ?? DeviceConnectResult.disconnected, connectStream);
-
-                                      } else {}
-                                      break;
-                                    default:
-                                      break;
-                                  }
+                                  checkBleStatusAndConnectDevice(_bluetoothProvider);
                                 },
                                 //icon inside button
                                 child:

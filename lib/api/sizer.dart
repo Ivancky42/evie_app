@@ -5,6 +5,9 @@ import 'package:sizer/sizer.dart';
 extension Sizer on num {
   double get h => Platform.isAndroid ? this / 844 * SizerUtil.height : this / 928.4 * SizerUtil.height;
 
+  ///Calculate for bottom navigation bar padding size.
+  double get sh => Platform.isAndroid ? this / 844 * SizerUtil.height : this / 600 * SizerUtil.height;
+
   /// Calculates the width depending on the device's screen size
   ///
   /// Eg: 20.w -> will take 20% of the screen's width

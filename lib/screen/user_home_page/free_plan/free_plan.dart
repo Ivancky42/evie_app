@@ -18,9 +18,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import '../../../api/function.dart';
 import '../../../api/model/location_model.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/location_provider.dart';
+import '../../../api/toast.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_double_button_dialog.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
@@ -80,6 +82,7 @@ class _FreePlanState extends State<FreePlan> {
   static const double minRatio = 136 / 700;
   static const double maxRatio = 1.0;
   bool isBottomSheetExpanded = false;
+  bool isFirstTimeConnected = false;
 
   @override
   void initState() {
@@ -151,53 +154,6 @@ class _FreePlanState extends State<FreePlan> {
     // final TextEditingController _bikeNameController = TextEditingController();
     // final FocusNode _textFocus = FocusNode();
 
-
-
-    ///Bike Container pop page to here cannot cannot listen to deviceConnectionResult as this page button on Press,
-    ///this function works
-    ///but this function will let dialog pop up twice
-    Future.delayed(Duration.zero, () {
-      if (!SmartDialog.config.isExist) {
-        if (_bluetoothProvider.deviceConnectResult ==
-            DeviceConnectResult.scanError) {
-          _bluetoothProvider.clearDeviceConnectStatus();
-          SmartDialog.show(
-              keepSingle: true,
-              widget: EvieSingleButtonDialogCupertino(
-                  title: "Cannot connect bike",
-                  content: "Move your device near the bike and try again",
-                  rightContent: "OK",
-                  onPressedRight: () {
-                    SmartDialog.dismiss();
-                  }));
-        } else if (_bluetoothProvider.deviceConnectResult ==
-            DeviceConnectResult.scanTimeout) {
-          _bluetoothProvider.clearDeviceConnectStatus();
-          SmartDialog.show(
-            keepSingle: true,
-            widget: EvieSingleButtonDialogCupertino(
-                title: "Cannot connect bike",
-                content: "Scan timeout",
-                rightContent: "OK",
-                onPressedRight: () {
-                  SmartDialog.dismiss();
-                }),);
-        } else if (_bluetoothProvider.deviceConnectResult ==
-            DeviceConnectResult.connectError) {
-          _bluetoothProvider.clearDeviceConnectStatus();
-          SmartDialog.show(
-              keepSingle: true,
-              widget: EvieSingleButtonDialogCupertino(
-                  title: "Cannot connect bike",
-                  content: "Connection Error",
-                  rightContent: "OK",
-                  onPressedRight: () {
-                    SmartDialog.dismiss();
-                  }));
-        }
-      }
-    });
-
     return WillPopScope(
       onWillPop: () async {
         bool? exitApp = await SmartDialog.show(
@@ -231,12 +187,15 @@ class _FreePlanState extends State<FreePlan> {
                               return GestureDetector(
                                 onTap: (){},
                                 child:Padding(
-                                  padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w, 28.h),
+                                  padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
                                   child: Container(
-                                      height: 24.h,
-                                      child: Text(
-                                        "Good Morning ${_currentUserProvider.currentUserModel!.name}",
-                                        style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                                      height: 60.h,
+                                      child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          "Good Morning ${_currentUserProvider.currentUserModel!.name}",
+                                          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                                        ),
                                       )
                                   ),
                                 ),
@@ -577,232 +536,7 @@ class _FreePlanState extends State<FreePlan> {
                                                                 backgroundColor:
                                                                 lockColour,
                                                                 onPressed: () async {
-
-                                                                  ///Check bluetooth status
-                                                                  var bleStatus =
-                                                                      _bluetoothProvider
-                                                                          .bleStatus;
-                                                                  switch (bleStatus) {
-                                                                    case BleStatus
-                                                                        .poweredOff:
-                                                                      SmartDialog.show(
-                                                                          keepSingle:
-                                                                          true,
-                                                                          widget: EvieSingleButtonDialogCupertino(
-                                                                              title: "Error",
-                                                                              content: "Bluetooth is off, please turn on your bluetooth",
-                                                                              rightContent: "OK",
-                                                                              onPressedRight: () {
-                                                                                SmartDialog
-                                                                                    .dismiss();
-                                                                              }));
-                                                                      break;
-                                                                    case BleStatus
-                                                                        .unknown:
-                                                                    // TODO: Handle this case.
-                                                                      break;
-                                                                    case BleStatus
-                                                                        .unsupported:
-                                                                      SmartDialog.show(
-                                                                          keepSingle:
-                                                                          true,
-                                                                          widget: EvieSingleButtonDialogCupertino(
-                                                                              title: "Error",
-                                                                              content: "Bluetooth unsupported",
-                                                                              rightContent: "OK",
-                                                                              onPressedRight: () {
-                                                                                SmartDialog
-                                                                                    .dismiss();
-                                                                              }));
-                                                                      break;
-                                                                    case BleStatus
-                                                                        .unauthorized:
-                                                                      SmartDialog.show(
-                                                                          keepSingle:
-                                                                          true,
-                                                                          widget: EvieSingleButtonDialogCupertino(
-                                                                              title: "Error",
-                                                                              content: "Bluetooth Permission is off",
-                                                                              rightContent: "OK",
-                                                                              onPressedRight: () {
-                                                                                SmartDialog
-                                                                                    .dismiss();
-                                                                              }));
-                                                                      break;
-                                                                    case BleStatus
-                                                                        .locationServicesDisabled:
-                                                                      SmartDialog.show(
-                                                                          keepSingle:
-                                                                          true,
-                                                                          widget: EvieSingleButtonDialogCupertino(
-                                                                              title: "Error",
-                                                                              content: "Location service disabled",
-                                                                              rightContent: "OK",
-                                                                              onPressedRight: () {
-                                                                                SmartDialog
-                                                                                    .dismiss();
-                                                                              }));
-                                                                      break;
-                                                                    case BleStatus
-                                                                        .ready:
-                                                                      if (deviceConnectResult == null) {
-                                                                        await _bluetoothProvider.disconnectDevice();
-                                                                        await _bluetoothProvider.stopScan();
-                                                                        connectionStream = _bluetoothProvider.startScanAndConnect().listen((deviceConnectResult) {
-                                                                          switch(deviceConnectResult){
-                                                                            case DeviceConnectResult.scanning:
-                                                                            // TODO: Handle this case.
-                                                                              break;
-                                                                            case DeviceConnectResult.scanTimeout:
-                                                                              connectionStream?.cancel();
-                                                                              _bluetoothProvider.clearDeviceConnectStatus();
-                                                                              SmartDialog.show(
-                                                                                  keepSingle: true,
-                                                                                  widget: EvieSingleButtonDialogCupertino(
-                                                                                      title: "Cannot connect bike",
-                                                                                      content: "Scan timeout",
-                                                                                      rightContent: "OK",
-                                                                                      onPressedRight: () {
-                                                                                        SmartDialog.dismiss();
-                                                                                      }));
-                                                                              break;
-                                                                            case DeviceConnectResult.scanError:
-                                                                              connectionStream?.cancel();
-                                                                              _bluetoothProvider.clearDeviceConnectStatus();
-                                                                              SmartDialog.show(
-                                                                                  keepSingle: true,
-                                                                                  widget: EvieSingleButtonDialogCupertino(
-                                                                                      title: "Cannot connect bike",
-                                                                                      content: "Scan error",
-                                                                                      rightContent: "OK",
-                                                                                      onPressedRight: () {
-                                                                                        SmartDialog.dismiss();
-                                                                                      }));
-                                                                              // TODO: Handle this case.
-                                                                              break;
-                                                                            case DeviceConnectResult.connecting:
-                                                                            // TODO: Handle this case.
-                                                                              break;
-                                                                            case DeviceConnectResult.partialConnected:
-                                                                            // TODO: Handle this case.
-                                                                              break;
-                                                                            case DeviceConnectResult.connected:
-                                                                            // TODO: Handle this case.
-                                                                              break;
-                                                                            case DeviceConnectResult.disconnecting:
-                                                                            // TODO: Handle this case.
-                                                                              break;
-                                                                            case DeviceConnectResult.disconnected:
-                                                                            // TODO: Handle this case.
-                                                                              break;
-                                                                            case DeviceConnectResult.connectError:
-                                                                              connectionStream?.cancel();
-                                                                              _bluetoothProvider.clearDeviceConnectStatus();
-                                                                              SmartDialog.show(
-                                                                                  keepSingle: true,
-                                                                                  widget: EvieSingleButtonDialogCupertino(
-                                                                                      title: "Cannot connect bike",
-                                                                                      content: "Connect error",
-                                                                                      rightContent: "OK",
-                                                                                      onPressedRight: () {
-                                                                                        SmartDialog.dismiss();
-                                                                                      }));
-                                                                              break;
-                                                                          }
-                                                                        });
-                                                                      }
-                                                                      else {
-                                                                        if (deviceConnectResult == DeviceConnectResult.disconnected
-                                                                            || deviceConnectResult == DeviceConnectResult.scanTimeout
-                                                                            || deviceConnectResult == DeviceConnectResult.connectError
-                                                                            || deviceConnectResult == DeviceConnectResult.scanError
-                                                                        ) {
-                                                                          await _bluetoothProvider.disconnectDevice();
-                                                                          await _bluetoothProvider.stopScan();
-                                                                          connectionStream = _bluetoothProvider.startScanAndConnect().listen((deviceConnectResult) {
-                                                                            switch(deviceConnectResult){
-                                                                              case DeviceConnectResult.scanning:
-                                                                              // TODO: Handle this case.
-                                                                                break;
-                                                                              case DeviceConnectResult.scanTimeout:
-                                                                                connectionStream?.cancel();
-                                                                                _bluetoothProvider.clearDeviceConnectStatus();
-                                                                                SmartDialog.show(
-                                                                                    keepSingle: true,
-                                                                                    widget: EvieSingleButtonDialogCupertino(
-                                                                                        title: "Cannot connect bike",
-                                                                                        content: "Scan timeout",
-                                                                                        rightContent: "OK",
-                                                                                        onPressedRight: () {
-                                                                                          SmartDialog.dismiss();
-                                                                                        }));
-                                                                                break;
-                                                                              case DeviceConnectResult.scanError:
-                                                                                connectionStream?.cancel();
-                                                                                _bluetoothProvider.clearDeviceConnectStatus();
-                                                                                SmartDialog.show(
-                                                                                    keepSingle: true,
-                                                                                    widget: EvieSingleButtonDialogCupertino(
-                                                                                        title: "Cannot connect bike",
-                                                                                        content: "Scan error",
-                                                                                        rightContent: "OK",
-                                                                                        onPressedRight: () {
-                                                                                          SmartDialog.dismiss();
-                                                                                        }));
-                                                                                // TODO: Handle this case.
-                                                                                break;
-                                                                              case DeviceConnectResult.connecting:
-                                                                              // TODO: Handle this case.
-                                                                                break;
-                                                                              case DeviceConnectResult.partialConnected:
-                                                                              // TODO: Handle this case.
-                                                                                break;
-                                                                              case DeviceConnectResult.connected:
-                                                                              // TODO: Handle this case.
-                                                                                break;
-                                                                              case DeviceConnectResult.disconnecting:
-                                                                              // TODO: Handle this case.
-                                                                                break;
-                                                                              case DeviceConnectResult.disconnected:
-                                                                              // TODO: Handle this case.
-                                                                                break;
-                                                                              case DeviceConnectResult.connectError:
-                                                                                connectionStream?.cancel();
-                                                                                _bluetoothProvider.clearDeviceConnectStatus();
-                                                                                SmartDialog.show(
-                                                                                    keepSingle: true,
-                                                                                    widget: EvieSingleButtonDialogCupertino(
-                                                                                        title: "Cannot connect bike",
-                                                                                        content: "Connect error",
-                                                                                        rightContent: "OK",
-                                                                                        onPressedRight: () {
-                                                                                          SmartDialog.dismiss();
-                                                                                        }));
-                                                                                break;
-                                                                            }
-                                                                          });
-
-                                                                          // if(connectionStateUpdate != null){
-                                                                          //   if(connectionStateUpdate?.failure.toString() != null){
-                                                                          //     SmartDialog.show(
-                                                                          //         keepSingle: true,
-                                                                          //         widget: EvieSingleButtonDialogCupertino(
-                                                                          //             title: "Error",
-                                                                          //             content: "Cannot connect bike, please place the phone near the bike and try again.",
-                                                                          //             rightContent: "OK",
-                                                                          //             onPressedRight: (){SmartDialog.dismiss();})
-                                                                          //     );
-                                                                          //   }
-                                                                          // }
-
-                                                                        } else {
-
-                                                                        }
-                                                                      }
-                                                                      break;
-                                                                    default:
-                                                                      break;
-                                                                  }
+                                                                  checkBleStatusAndConnectDevice(_bluetoothProvider);
                                                                 },
                                                                 //icon inside button
                                                                 child: connectImage,

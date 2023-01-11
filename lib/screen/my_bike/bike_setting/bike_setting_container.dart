@@ -377,10 +377,10 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 }
                 else {
                   if (getOpacityByRole() == 0.3) {
-                    showUpgradePlanToast();
+                    showUpgradePlanToast(10.h);
                   }
                   else {
-                    showControlAdmissionToast();
+                    showControlAdmissionToast(10.h);
                   }
                 }
               },
@@ -460,10 +460,10 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 }
                 else {
                   if (getOpacityByRole() == 0.3) {
-                    showUpgradePlanToast();
+                    showUpgradePlanToast(10.h);
                   }
                   else {
-                    showControlAdmissionToast();
+                    showControlAdmissionToast(10.h);
                   }
                 }
               },
@@ -511,10 +511,10 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 }
                 else {
                   if (getOpacityByRole() == 0.3) {
-                    showUpgradePlanToast();
+                    showUpgradePlanToast(10.h);
                   }
                   else {
-                    showControlAdmissionToast();
+                    showControlAdmissionToast(10.h);
                   }
                 }
               },
@@ -562,10 +562,10 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 }
                 else {
                   if (getOpacityByRole() == 0.3) {
-                    showUpgradePlanToast();
+                    showUpgradePlanToast(10.h);
                   }
                   else {
-                    showControlAdmissionToast();
+                    showControlAdmissionToast(10.h);
                   }
                 }
               },
