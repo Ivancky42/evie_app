@@ -298,10 +298,8 @@ class _ConnectionLostState extends State<ConnectionLost> {
                   ),
                 ],
               )),
-
         ],
       );
-
   }
 }
 

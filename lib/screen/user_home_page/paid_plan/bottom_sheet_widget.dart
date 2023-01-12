@@ -18,7 +18,7 @@ class Bike_Name_Row extends StatelessWidget {
   String bikeName;
   String distanceBetween;
   String currentBikeStatusImage;
-bool isDeviceConnected;
+  bool isDeviceConnected;
 
   Bike_Name_Row({
     Key? key,

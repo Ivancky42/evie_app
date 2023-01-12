@@ -117,87 +117,98 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         try {
-                          await _authProvider.checkIfFirestoreUserExist(_emailController.text.trim(),).then((result) async {
-                            switch(result){
-                              case "false":
-                                SmartDialog.show(
-                                  backDismiss: false,
-                                    widget: EvieSingleButtonDialogCupertino(
-                                    title: "User not found",
-                                    content: "Email not register in database",
-                                    rightContent: "Close",
-                                    onPressedRight: (){
-                                      SmartDialog.dismiss();
-                                      changeToUserNotFoundScreen(context, _emailController.text.trim());
-                                    }
-                                ));
-                                break;
-                              default:
-                              ///check bike user list if the user already own this bike
-                              var existResult = await _bikeProvider.checkIsUserExist(_emailController.text.trim());
+                                await _authProvider.checkIfFirestoreUserExist(_emailController.text.trim(),).then((
+                                    result) async {
+                                  if (result == null) {
+                                    SmartDialog.show(
+                                        backDismiss: false,
+                                        widget: EvieSingleButtonDialogCupertino(
+                                            title: "User not found",
+                                            content: "Email not register in database",
+                                            rightContent: "Close",
+                                            onPressedRight: () {
+                                              SmartDialog.dismiss();
+                                              changeToUserNotFoundScreen(
+                                                  context,
+                                                  _emailController.text.trim());
+                                            }
+                                        ));
+                                    return;
+                                  }
+                                  else {
+                                    ///check bike user list if the user already own this bike
+                                    var existResult = await _bikeProvider
+                                        .checkIsUserExist(
+                                        _emailController.text.trim());
 
-                              if(existResult == false){
-                                SmartDialog.show(widget: EvieDoubleButtonDialogCupertino(
-                                  title: "Share Bike",
-                                  content: "Share ${_bikeProvider.currentBikeModel!.deviceName}"
-                                      " with ${_emailController.text.trim()} ?",
-                                  leftContent: "Cancel",
-                                  onPressedLeft: () => SmartDialog.dismiss(),
-                                  rightContent: "Share",
-                                  onPressedRight: () async {
-                                    SmartDialog.dismiss();
+                                    if (existResult == false) {
+                                      SmartDialog.show(
+                                          widget: EvieDoubleButtonDialogCupertino(
+                                            title: "Share Bike",
+                                            content: "Share ${_bikeProvider
+                                                .currentBikeModel!.deviceName}"
+                                                " with ${_emailController.text
+                                                .trim()} ?",
+                                            leftContent: "Cancel",
+                                            onPressedLeft: () =>
+                                                SmartDialog.dismiss(),
+                                            rightContent: "Share",
+                                            onPressedRight: () async {
+                                              SmartDialog.dismiss();
 
-                                    _bikeProvider.updateSharedBikeStatus(result).
-                                    then((update){
-                                      if(update == true){
-                                        SmartDialog.show(
-                                            widget: EvieSingleButtonDialogCupertino(
-                                                title: "Success",
-                                                content: "Shared bike with ${_emailController.text.trim()}",
-                                                rightContent: "Close",
-                                                onPressedRight: (){
-                                                  SmartDialog.dismiss();
-                                                  changeToInvitationSentScreen(context, _emailController.text.trim());
+                                              await _bikeProvider.updateSharedBikeStatus(result).
+                                              then((update) {
+                                                if (update == true) {
+                                                  SmartDialog.show(
+                                                      widget: EvieSingleButtonDialogCupertino(
+                                                          title: "Success",
+                                                          content: "Shared bike with ${_emailController
+                                                              .text.trim()}",
+                                                          rightContent: "Close",
+                                                          onPressedRight: () {
+                                                            SmartDialog.dismiss();
+                                                            changeToInvitationSentScreen(
+                                                                context,
+                                                                _emailController
+                                                                    .text
+                                                                    .trim());
+                                                          }
+                                                      ));
                                                 }
-                                            ));
-                                      }
-                                      else {
-                                        SmartDialog.show(
-                                            widget: EvieSingleButtonDialogCupertino(
-                                                title: "Not success",
-                                                content: "Try again",
-                                                rightContent: "Close",
-                                                onPressedRight: ()=>SmartDialog.dismiss()
-                                            ));
-                                      }
-                                    });
-                                  },
-                                ));
-                              }else{
-                                SmartDialog.show(
-                                    backDismiss: false,
-                                    widget: EvieSingleButtonDialogCupertino(
-                                        title: "User already exist",
-                                        content: "The target user owned the bike",
-                                        rightContent: "Close",
-                                        onPressedRight: (){
-                                          SmartDialog.dismiss();
-                                        }
-                                    ));
-
-                              }
-
-                                break;
-                            }
-                          });
-                        }
-                        catch (e) {
+                                                else {
+                                                  SmartDialog.show(
+                                                      widget: EvieSingleButtonDialogCupertino(
+                                                          title: "Not success",
+                                                          content: "Try again",
+                                                          rightContent: "Close",
+                                                          onPressedRight: () =>
+                                                              SmartDialog
+                                                                  .dismiss()
+                                                      ));
+                                                }
+                                              });
+                                            },
+                                          ));
+                                    } else {
+                                      SmartDialog.show(
+                                          backDismiss: false,
+                                          widget: EvieSingleButtonDialogCupertino(
+                                              title: "User already exist",
+                                              content: "The target user owned the bike",
+                                              rightContent: "Close",
+                                              onPressedRight: () {
+                                                SmartDialog.dismiss();
+                                              }
+                                          ));
+                                    }
+                                  }
+                                });
+                        } catch (e) {
                           debugPrint(e.toString());
                         }
-
                       }
-                    },
-                  ),
+                    }
+                    )
                 ),
               ),
 

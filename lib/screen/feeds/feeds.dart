@@ -51,7 +51,6 @@ class _FeedsState extends State<Feeds> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _notificationProvider = Provider.of<NotificationProvider>(context);
 
-
     return WillPopScope(
       onWillPop: () async {
         return false;

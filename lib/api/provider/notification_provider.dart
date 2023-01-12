@@ -82,18 +82,15 @@ class NotificationProvider extends ChangeNotifier {
             switch (docChange.type) {
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
-                notificationList.putIfAbsent(docChange.doc.id,
-                    () => NotificationModel.fromJson(obj!, docChange.doc.id));
+                notificationList.putIfAbsent(docChange.doc.id, () => NotificationModel.fromJson(obj!, docChange.doc.id));
 
-                var sortedByValueMap = LinkedHashMap.fromEntries(
-                    notificationList.entries.toList()..sort((e1, e2) => e2.value.created!.compareTo(e1.value.created!)));
+                var sortedByValueMap = LinkedHashMap.fromEntries(notificationList.entries.toList()..sort((e1, e2) => e2.value.created!.compareTo(e1.value.created!)));
                 notificationList = sortedByValueMap;
 
                 notifyListeners();
                 break;
               case DocumentChangeType.removed:
-                notificationList
-                    .removeWhere((key, value) => key == docChange.doc.id);
+                notificationList.removeWhere((key, value) => key == docChange.doc.id);
                 notifyListeners();
                 break;
               case DocumentChangeType.modified:
@@ -106,6 +103,9 @@ class NotificationProvider extends ChangeNotifier {
                 break;
             }
           }
+        }else{
+          notificationList.clear();
+          notifyListeners();
         }
 
       ///Is Read all
@@ -217,7 +217,8 @@ class NotificationProvider extends ChangeNotifier {
           .collection(notificationsCollection)
           .doc(targetNotifyId)
           .set({
-        'body': 'You already owned this bike',
+        'title': 'Join Team Successful',
+        'body': 'You have successfully join team.',
         'status': 'shared',
       }, SetOptions(merge: true));
       result = true;

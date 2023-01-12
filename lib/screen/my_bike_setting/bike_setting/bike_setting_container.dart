@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
-import '../../../api/toast.dart';
+import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 
 class BikeSettingContainer extends StatefulWidget {
@@ -372,8 +372,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                if (checkFunctionByRole()) {
-                  changeToShareBikeUserListScreen(context);
+                if (getOpacityByRole() == 0.3) {
+                  showUpgradePlanToast(context);
                 }
                 else {
                   if (getOpacityByRole() == 0.3) {
@@ -461,10 +461,10 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 }
                 else {
                   if (getOpacityByRole() == 0.3) {
-                    showUpgradePlanToast(10.h);
+                    showUpgradePlanToast(context);
                   }
                   else {
-                    showControlAdmissionToast(10.h);
+                    showControlAdmissionToast(context);
                   }
                 }
               },
@@ -512,10 +512,10 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 }
                 else {
                   if (getOpacityByRole() == 0.3) {
-                    showUpgradePlanToast(10.h);
+                    showUpgradePlanToast(context);
                   }
                   else {
-                    showControlAdmissionToast(10.h);
+                    showControlAdmissionToast(context);
                   }
                 }
               },
@@ -563,10 +563,10 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 }
                 else {
                   if (getOpacityByRole() == 0.3) {
-                    showUpgradePlanToast(10.h);
+                    showUpgradePlanToast(context);
                   }
                   else {
-                    showControlAdmissionToast(10.h);
+                    showControlAdmissionToast(context);
                   }
                 }
               },

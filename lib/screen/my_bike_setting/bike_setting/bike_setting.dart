@@ -3,9 +3,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/api/toast.dart';
-import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_container.dart';
-import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_search_container.dart';
+
 import 'package:evie_test/widgets/custom_search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,9 +14,12 @@ import '../../../api/backend/debouncer.dart';
 import '../../../api/colours.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
+import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../my_bike_function.dart';
+import 'bike_setting_container.dart';
 import 'bike_setting_model.dart';
+import 'bike_setting_search_container.dart';
 
 
 
@@ -49,6 +50,7 @@ class _BikeSettingState extends State<BikeSetting> {
   late Future loadDataFuture;
 
   List<BikeSettingModel> bikeSettingList = [];
+  late ScaffoldMessengerState _navigator;
 
   Future<List<BikeSettingModel>> loadData() async {
     var data = json.decode(await rootBundle.loadString("assets/files/bike_settings.json"));
@@ -66,7 +68,14 @@ class _BikeSettingState extends State<BikeSetting> {
   }
 
   @override
+  void didChangeDependencies() {
+    _navigator = ScaffoldMessenger.of(context);
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
+    hideCurrentSnackBar(_navigator);
     searchController.dispose();
     super.dispose();
   }
@@ -94,13 +103,13 @@ class _BikeSettingState extends State<BikeSetting> {
 
     if (deviceConnectResult == DeviceConnectResult.connected) {
       if (!isFirstTimeConnected) {
-        showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, 10.h);
+        showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, context, _navigator);
         isFirstTimeConnected = true;
       }
     }
     else {
       isFirstTimeConnected = false;
-      showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, 10.h);
+      showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, context, _navigator);
     }
 
     return WillPopScope(

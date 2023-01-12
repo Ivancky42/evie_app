@@ -291,7 +291,7 @@ class BikeProvider extends ChangeNotifier {
   /// ****************************************** ///
   /// Command for share bike
   ///
-  updateSharedBikeStatus(String targetID) async {
+  updateSharedBikeStatus(UserModel userModel) async {
     bool result;
 
     try {
@@ -320,14 +320,19 @@ class BikeProvider extends ChangeNotifier {
           .collection(bikesCollection)
           .doc(currentBikeModel!.deviceIMEI)
           .collection(usersCollection)
-          .doc(targetID)
+          .doc(userModel.uid)
           .set({
         'created': Timestamp.now(),
-        'uid': targetID,
+        'uid': userModel.uid,
+        'userName': userModel.name,
+        'userEmail': userModel.email,
         'role': 'user',
         'status': 'pending',
         'justInvited': false,
         'userId': userId,
+        'ownerUid': currentUserModel!.uid,
+        'ownerEmail': currentUserModel!.email,
+        'ownerName': currentUserModel!.name
       }, SetOptions(merge: true));
 
       Future.delayed(const Duration(milliseconds: 500), () {
@@ -335,7 +340,7 @@ class BikeProvider extends ChangeNotifier {
             .collection(bikesCollection)
             .doc(currentBikeModel!.deviceIMEI)
             .collection(usersCollection)
-            .doc(targetID)
+            .doc(userModel.uid)
             .set({
           'justInvited': true,
         }, SetOptions(merge: true));
