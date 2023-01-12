@@ -479,13 +479,15 @@ class AuthProvider extends ChangeNotifier {
   }
 
   checkIfFirestoreUserExist(String email) async {
-    var result = "false";
+    var result;
 
     QuerySnapshot snapshot = await FirebaseFirestore.instance.collection(usersCollection).get();
 
     for (var element in snapshot.docs) {
       if (element['email'] == email) {
-        result = element.id;
+        Map<String, dynamic>? obj = element.data() as Map<String, dynamic>?;
+        UserModel userModel = UserModel.fromJson(obj!);
+        result = userModel;
       }
     }
 

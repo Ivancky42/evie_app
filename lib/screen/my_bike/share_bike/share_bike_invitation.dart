@@ -120,22 +120,21 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                         try {
                           _authProvider.checkIfFirestoreUserExist(_emailController.text.trim(),).then((result) async {
 
-                            switch(result){
-                              case "false":
-                                SmartDialog.show(
+                            if (result == null) {
+                              SmartDialog.show(
                                   backDismiss: false,
-                                    widget: EvieSingleButtonDialogCupertino(
-                                    title: "User not found",
-                                    content: "Email not register in database",
-                                    rightContent: "Close",
-                                    onPressedRight: (){
-                                      SmartDialog.dismiss();
-                                      changeToUserNotFoundScreen(context, _emailController.text.trim());
-                                    }
-                                ));
-                                break;
-                              default:
-
+                                  widget: EvieSingleButtonDialogCupertino(
+                                      title: "User not found",
+                                      content: "Email not register in database",
+                                      rightContent: "Close",
+                                      onPressedRight: (){
+                                        SmartDialog.dismiss();
+                                        changeToUserNotFoundScreen(context, _emailController.text.trim());
+                                      }
+                                  ));
+                              return;
+                            }
+                            else {
                               ///check bike user list if the user already own this bike
                               var existResult = await _bikeProvider.checkIsUserExist(_emailController.text.trim());
 
@@ -191,8 +190,6 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                     ));
 
                               }
-
-                                break;
                             }
                           });
                         }

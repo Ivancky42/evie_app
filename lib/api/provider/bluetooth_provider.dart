@@ -244,9 +244,6 @@ class BluetoothProvider extends ChangeNotifier {
         scanSubscription = null;
       });
     }
-    else {
-      showBluetoothNotTurnOn();
-    }
     return deviceConnectStream.stream;
   }
 
