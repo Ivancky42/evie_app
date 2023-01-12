@@ -9,6 +9,7 @@ import 'package:evie_test/screen/my_bike/share_bike/share_bike_function.dart';
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -78,43 +79,60 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                     },
                     itemCount: _bikeProvider.bikeUserList.length,
                     itemBuilder: (context, index) {
-                        return ListTile(
-                          ///Put user profile image here
-                            leading: ClipOval(
-                              child: CachedNetworkImage(
-                                //imageUrl: document['profileIMG'],
-                                imageUrl: _bikeProvider.bikeUserDetails.values.elementAt(index).profileIMG,
-                                placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                    Icon(Icons.error),
-                                width: 50,
-                                height: 50,
-                                fit: BoxFit.cover,
+                        return Slidable(
+                          endActionPane:  ActionPane(
+                            motion: const ScrollMotion(),
+                            children: [
+                              SlidableAction(
+                                spacing:10,
+                                onPressed: (context){
+                                  ShareBikeDelete(bikeProvider: _bikeProvider, index: index,);
+                                },
+                                backgroundColor: Color(0xFFFE4A49),
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete,
+                                label: 'Delete',
                               ),
+                            ],
+                          ),
+                          child: ListTile(
+                            ///Put user profile image here
+                              leading: ClipOval(
+                                child: CachedNetworkImage(
+                                  //imageUrl: document['profileIMG'],
+                                  imageUrl: _bikeProvider.bikeUserDetails.values.elementAt(index).profileIMG,
+                                  placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                  width: 50,
+                                  height: 50,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+
+                              title: Text(
+                                  _bikeProvider.bikeUserDetails.values.elementAt(index).name, style: TextStyle(fontSize: 16.sp),),
+                              subtitle: Text(
+                                "${_bikeProvider.bikeUserDetails.values.elementAt(index).email}",
+                                style: TextStyle(fontSize:12.sp, color: ThemeChangeNotifier().isDarkMode(context)
+                                    == true ? Colors.white70: Colors.black54,),
                             ),
 
-                            title: Text(
-                                _bikeProvider.bikeUserDetails.values.elementAt(index).name, style: TextStyle(fontSize: 16.sp),),
-                            subtitle: Text(
-                              "${_bikeProvider.bikeUserDetails.values.elementAt(index).email}",
-                              style: TextStyle(fontSize:12.sp, color: ThemeChangeNotifier().isDarkMode(context)
-                                  == true ? Colors.white70: Colors.black54,),
+                            trailing: isOwner == true && isManageList && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
+                            Text(_bikeProvider.bikeUserList.values.elementAt(index).role,
+                                style: TextStyle(fontSize: 12.sp, color: Color(0xff7A7A79)))
+                                : isManageList ?
+                                      ShareBikeDelete(bikeProvider: _bikeProvider, index: index,)
+                                : isOwner == false && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
+                                      ShareBikeLeave(bikeProvider: _bikeProvider, index: index,)
+                                : _bikeProvider.bikeUserList.values.elementAt(index).status == "pending" ?
+                            SvgPicture.asset(
+                              "assets/icons/pending_tag.svg",
+                            )
+                                : Text(_bikeProvider.bikeUserList.values.elementAt(index).role,
+                                style: TextStyle(fontSize: 12.sp, color: Color(0xff7A7A79)))
                           ),
-
-                          trailing: isOwner == true && isManageList && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
-                          Text(_bikeProvider.bikeUserList.values.elementAt(index).role,
-                              style: TextStyle(fontSize: 12.sp, color: Color(0xff7A7A79)))
-                              : isManageList ?
-                                    ShareBikeDelete(bikeProvider: _bikeProvider, index: index,)
-                              : isOwner == false && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
-                                    ShareBikeLeave(bikeProvider: _bikeProvider, index: index,)
-                              : _bikeProvider.bikeUserList.values.elementAt(index).status == "pending" ?
-                          SvgPicture.asset(
-                            "assets/icons/pending_tag.svg",
-                          )
-                              : Text(_bikeProvider.bikeUserList.values.elementAt(index).role,
-                              style: TextStyle(fontSize: 12.sp, color: Color(0xff7A7A79)))
                         );
                     },
                   ),
@@ -162,7 +180,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                     width: double.infinity,
                     height: 48.h,
                     child: Text(
-                      "Add \"Sharee\"?",
+                      "Add Rider?",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 16.sp,
@@ -216,7 +234,35 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                 ),
               ),
             )
-                : Visibility(
+                :
+            Visibility(
+              visible: isOwner,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 52.h),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: EvieButton_ReversedColor(
+                      width: double.infinity,
+                      height: 52.h,
+                      child: Text(
+                        "Remove All Rider",
+                        style: TextStyle(
+                            color: EvieColors.PrimaryColor,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      onPressed: () {
+
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+                /*
+            Visibility(
               visible: isOwner,
                   child: Align(
               alignment: Alignment.bottomCenter,
@@ -244,6 +290,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
               ),
             ),
                 ),
+            */
           ],
         ),
       ),
