@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:evie_test/api/backend/sim_api_caller.dart';
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:evie_test/widgets/widgets.dart';
 import 'package:file_picker/file_picker.dart';
@@ -13,7 +14,7 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
+
 
 import '../api/backend/stripe_api_caller.dart';
 import '../api/model/plan_model.dart';
@@ -355,7 +356,6 @@ class _TestBleState extends State<TestBle> {
                         });
                       }
                     },
-                    height: 12.2,
                     width: double.infinity,
                     child: Text(
                       connectionState?.name == "connected" ? "Disconnect Device"
@@ -391,7 +391,6 @@ class _TestBleState extends State<TestBle> {
                         showAlertDialog(context);
                       }
                     },
-                    height: 12.2,
                     width: double.infinity,
                     child: const Text(
                       "Unlock Cable Lock",
@@ -426,7 +425,7 @@ class _TestBleState extends State<TestBle> {
                         showAlertDialog(context);
                       }
                     },
-                    height: 12.2,
+
                     width: double.infinity,
                     child: const Text(
                       "Get Cable Lock Status",
@@ -445,7 +444,7 @@ class _TestBleState extends State<TestBle> {
                       ///Send command to get total packet of IOT information
                       bluetoothProvider.requestTotalPacketOfIotInfo();
                     },
-                    height: 12.2,
+
                     width: double.infinity,
                     child: const Text(
                       "Get IOT Info",
@@ -524,7 +523,7 @@ class _TestBleState extends State<TestBle> {
                           )
                       );
                     },
-                    height: 12.2,
+
                     width: double.infinity,
                     child: const Text(
                       "Update IOT Data",
@@ -566,8 +565,7 @@ class _TestBleState extends State<TestBle> {
                         // User canceled the picker
                       }
                     },
-                    height: 12.2,
-                    width: double.infinity,
+                       width: double.infinity,
                     child: const Text(
                       "Upgrade Firmware",
                       style: TextStyle(
@@ -603,7 +601,7 @@ class _TestBleState extends State<TestBle> {
                             ),
                           ),
                           linearStrokeCap: LinearStrokeCap.roundAll,
-                          progressColor: EvieColors.PrimaryColor,
+                          progressColor: EvieColors.primaryColor,
                           backgroundColor: EvieColors.greyFill,
                         ),
                       ],
@@ -628,7 +626,7 @@ class _TestBleState extends State<TestBle> {
                         print(error);
                       });
                     },
-                    height: 12.2,
+
                     width: double.infinity,
                     child: const Text(
                       "Register RFID",
@@ -662,7 +660,7 @@ class _TestBleState extends State<TestBle> {
                         SmartDialog.show(widget: Text("No Query RFID available", style: TextStyle(color: Colors.black),));
                       }
                     },
-                    height: 12.2,
+
                     width: double.infinity,
                     child: const Text(
                       "Delete RFID",
@@ -686,8 +684,7 @@ class _TestBleState extends State<TestBle> {
                         print(error);
                       });
                     },
-                    height: 12.2,
-                    width: double.infinity,
+                             width: double.infinity,
                     child: const Text(
                       "Query RFID 0",
                       style: TextStyle(
@@ -710,7 +707,7 @@ class _TestBleState extends State<TestBle> {
                         print(error);
                       });
                     },
-                    height: 12.2,
+
                     width: double.infinity,
                     child: const Text(
                       "Query RFID 1",
@@ -734,7 +731,7 @@ class _TestBleState extends State<TestBle> {
                         print(error);
                       });
                     },
-                    height: 12.2,
+
                     width: double.infinity,
                     child: const Text(
                       "Query RFID 2",
@@ -758,7 +755,7 @@ class _TestBleState extends State<TestBle> {
                         print(error);
                       });
                     },
-                    height: 12.2,
+
                     width: double.infinity,
                     child: const Text(
                       "Query RFID 3",
@@ -782,7 +779,7 @@ class _TestBleState extends State<TestBle> {
                         print(error);
                       });
                     },
-                    height: 12.2,
+
                     width: double.infinity,
                     child: const Text(
                       "Query RFID 4",
@@ -817,7 +814,7 @@ class _TestBleState extends State<TestBle> {
                         print(error);
                       });
                     },
-                    height: 12.2,
+
                     width: double.infinity,
                     child: const Text(
                       "Change BLE Key",
@@ -847,7 +844,7 @@ class _TestBleState extends State<TestBle> {
                         print(error);
                       });
                     },
-                    height: 12.2,
+
                     width: double.infinity,
                     child: const Text(
                       "Change BLE Name",
@@ -877,7 +874,7 @@ class _TestBleState extends State<TestBle> {
                         print(error);
                       });
                     },
-                    height: 12.2,
+
                     width: double.infinity,
                     child: const Text(
                       "Enable Movement Setting with low mode",
@@ -907,7 +904,7 @@ class _TestBleState extends State<TestBle> {
                         print(error);
                       });
                     },
-                    height: 12.2,
+
                     width: double.infinity,
                     child: const Text(
                       "Disable Movement Setting with low mode",
@@ -937,7 +934,6 @@ class _TestBleState extends State<TestBle> {
                         print(error);
                       });
                     },
-                    height: 12.2,
                     width: double.infinity,
                     child: const Text(
                       "Factory Reset",
@@ -950,7 +946,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 EvieButton(
-                  height: 12.2.h,
+
                   width: double.infinity,
                   child: const Text(
                     "System Theme Mode",
@@ -965,7 +961,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 EvieButton(
-                  height: 12.2.h,
+
                   width: double.infinity,
                   child: const Text(
                     "Light Theme Mode",
@@ -980,7 +976,6 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 EvieButton(
-                  height: 12.2.h,
                   width: double.infinity,
                   child: const Text(
                     "Dark Theme Mode",
@@ -996,7 +991,7 @@ class _TestBleState extends State<TestBle> {
 
 
                 EvieButton(
-                  height: 12.2.h,
+
                   width: double.infinity,
                   child: const Text(
                     "Get token",
@@ -1011,7 +1006,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 EvieButton(
-                  height: 12.2.h,
+
                   width: double.infinity,
                   child: const Text(
                     "Activate Sim",
@@ -1028,7 +1023,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 EvieButton(
-                  height: 12.2.h,
+
                   width: double.infinity,
                   child: const Text(
                     "Deactivate Sim",
@@ -1045,7 +1040,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 EvieButton(
-                  height: 12.2.h,
+
                   width: double.infinity,
                   child: const Text(
                     "Get Sim Status",
@@ -1062,7 +1057,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 EvieButton(
-                  height: 12.2.h,
+
                   width: double.infinity,
                   child: const Text(
                     "Qr code",
@@ -1078,7 +1073,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 EvieButton(
-                  height: 12.2.h,
+
                   width: double.infinity,
                   child: const Text(
                     "Onboarding",
@@ -1093,7 +1088,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 EvieButton(
-                  height: 12.2.h,
+
                   width: double.infinity,
                   child: const Text(
                     "Unlock bike",
@@ -1124,7 +1119,7 @@ class _TestBleState extends State<TestBle> {
 
                 ///Delete bike for development purpose
                 EvieButton(
-                  height: 12.2.h,
+
                   width: double.infinity,
                   child: const Text(
                     "Delete Bike",
@@ -1183,7 +1178,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 EvieButton(
-                  height: 12.2.h,
+
                   width: double.infinity,
                   child: const Text(
                     "Share Bike",
@@ -1210,7 +1205,7 @@ class _TestBleState extends State<TestBle> {
                     String key = _planProvider.availablePlanList.keys.elementAt(index);
                     PlanModel planModel = _planProvider.availablePlanList[key];
                     return EvieButton(
-                      height: 12.2.h,
+
                       width: double.infinity,
                       child: Text(
                         "Checkout plan : " + planModel.name.toString(),
@@ -1231,7 +1226,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 EvieButton(
-                  height: 12.2.h,
+
                   width: double.infinity,
                   child: const Text(
                     "Change Plan",
@@ -1246,7 +1241,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 EvieButton(
-                  height: 12.2.h,
+
                   width: double.infinity,
                   child: const Text(
                     "Cancel Plan",
@@ -1260,7 +1255,7 @@ class _TestBleState extends State<TestBle> {
                   },
                 ),
                 EvieButton(
-                  height: 12.2.h,
+
                   width: double.infinity,
                   child: const Text(
                     "RFID card",
@@ -1274,7 +1269,7 @@ class _TestBleState extends State<TestBle> {
                   },
                 ),
                 EvieButton(
-                  height: 12.2.h,
+
                   width: double.infinity,
                   child: const Text(
                     "Sign out",

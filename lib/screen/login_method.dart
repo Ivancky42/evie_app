@@ -136,6 +136,9 @@ class _SignInMethodState extends State<SignInMethod> {
                         }
                       });
                     }) : Container(),
+                SizedBox(
+                  height: 0.5.h,
+                ),
                 EvieButton(
                     backgroundColor: Color(0xffDFE0E0),
                     width: double.infinity,
@@ -174,6 +177,9 @@ class _SignInMethodState extends State<SignInMethod> {
                         }
                       });
                     }),
+                SizedBox(
+                  height: 0.5.h,
+                ),
                 EvieButton(
                     backgroundColor: Color(0xffDFE0E0),
                     width: double.infinity,
@@ -212,6 +218,9 @@ class _SignInMethodState extends State<SignInMethod> {
                         }
                       });
                     }),
+                SizedBox(
+                  height: 0.5.h,
+                ),
                 EvieButton(
                     backgroundColor: Color(0xffDFE0E0),
                     width: double.infinity,
@@ -263,7 +272,7 @@ class _SignInMethodState extends State<SignInMethod> {
                     child: Text(
                       "I don't have an account yet",
                       style: TextStyle(
-                        color: EvieColors.PrimaryColor,
+                        color: EvieColors.primaryColor,
                         fontSize: 10.sp,
                         decoration: TextDecoration.underline,
                       ),

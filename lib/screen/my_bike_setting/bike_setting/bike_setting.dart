@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/api/toast.dart';
-import 'package:evie_test/screen/my_bike/bike_setting/bike_setting_container.dart';
-import 'package:evie_test/screen/my_bike/bike_setting/bike_setting_search_container.dart';
+import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_container.dart';
+import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_search_container.dart';
 import 'package:evie_test/widgets/custom_search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -240,16 +240,16 @@ class _BikeSettingState extends State<BikeSetting> {
                                     "assets/icons/bluetooth_small_white.svg",
                                     height:16.h,
                                     width: 16.w,
-                                    color: EvieColors.PrimaryColor,
+                                    color: EvieColors.primaryColor,
                                   ),
-                                  Text("Disconnect Bike", style: TextStyle(fontSize: 12.sp, color: EvieColors.PrimaryColor,)),]
+                                  Text("Disconnect Bike", style: TextStyle(fontSize: 12.sp, color: EvieColors.primaryColor,)),]
                             ),
                             onPressed: () async {
                               await _bluetoothProvider.stopScan();
                               await _bluetoothProvider.disconnectDevice();
                             },
                             style: OutlinedButton.styleFrom(
-                              side: BorderSide(width: 1.0, color: EvieColors.PrimaryColor),
+                              side: BorderSide(width: 1.0, color: EvieColors.primaryColor),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20)
                               ),
@@ -284,7 +284,7 @@ class _BikeSettingState extends State<BikeSetting> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20)),
                               elevation: 0.0,
-                              backgroundColor: EvieColors.PrimaryColor,
+                              backgroundColor: EvieColors.primaryColor,
                             ),
                           ),
                         ),

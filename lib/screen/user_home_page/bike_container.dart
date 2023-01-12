@@ -91,7 +91,7 @@ class _BikeContainerState extends State<BikeContainer> {
         trailing: CupertinoSwitch(
           value: isSpecificDeviceConnected,
           activeColor: const Color(0xff6A51CA),
-          thumbColor: EvieColors.ThumbColorTrue,
+          thumbColor: EvieColors.thumbColorTrue,
           trackColor: const Color(0xff6A51CA).withOpacity(0.5),
           onChanged: (value) async {
             if (value) {

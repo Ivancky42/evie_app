@@ -115,7 +115,7 @@ class _TurnOnQRScannerState extends State<TurnOnQRScanner> {
                         child: Text(
                           "Maybe Later",
                           softWrap: false,
-                          style: TextStyle(fontSize: 12.sp,color: EvieColors.PrimaryColor,decoration: TextDecoration.underline,),
+                          style: TextStyle(fontSize: 12.sp,color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                         ),
                         onPressed: () {
                           changeToTurnOnNotificationsScreen(context);

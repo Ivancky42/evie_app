@@ -6,7 +6,7 @@ import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evie_test/screen/my_bike/subscription/pro_plan/pro_plan.dart';
+import 'package:evie_test/screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -91,9 +91,9 @@ class _ManagePlanState extends State<ManagePlan> {
                                   height: 23.h,
                                   width: 70.w,
                                   decoration: BoxDecoration(
-                                      color: EvieColors.PrimaryColor,
+                                      color: EvieColors.primaryColor,
                                       border: Border.all(
-                                        color: EvieColors.PrimaryColor,
+                                        color: EvieColors.primaryColor,
                                       ),
                                       borderRadius: BorderRadius.all(Radius.circular(5))),
                                   child: Center(

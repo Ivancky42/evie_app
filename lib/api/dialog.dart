@@ -1,10 +1,11 @@
+import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-import '../screen/my_bike/my_bike_function.dart';
+import '../screen/my_bike_setting/my_bike_function.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
 import '../widgets/evie_textform.dart';
@@ -157,4 +158,62 @@ showUpdateFailedDialog() {
           content: "An error occur, try again",
           rightContent: "Ok",
           onPressedRight: (){SmartDialog.dismiss();} ));
+}
+
+
+showDeleteShareBikeUser(BikeProvider _bikeProvider, index){
+  SmartDialog.show(
+      widget: EvieDoubleButtonDialogCupertino(
+        title: "Are you sure you want to delete this user",
+        content: 'Are you sure you want to delete ${_bikeProvider.bikeUserDetails.values.elementAt(index).name!}',
+        leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
+        rightContent: "Yes",
+        onPressedRight: () async {
+          SmartDialog.dismiss();
+          SmartDialog.showLoading();
+          await _bikeProvider.cancelSharedBikeStatus(_bikeProvider.bikeUserList.values.elementAt(index).uid,_bikeProvider.bikeUserList.values.elementAt(index).notificationId!).then((result){
+            ///Update user notification id status == removed
+            if(result == true){
+              SmartDialog.dismiss();
+              SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
+                  title: "Success",
+                  content: "You deleted the user",
+                  rightContent: "Close",
+                  onPressedRight: ()=> SmartDialog.dismiss()
+              ));
+            }
+            else {
+              SmartDialog.dismiss();
+              SmartDialog.show(
+                  widget: EvieSingleButtonDialogCupertino(
+                      title: "Not success",
+                      content: "Try again",
+                      rightContent: "Close",
+                      onPressedRight: ()=>SmartDialog.dismiss()
+                  ));
+            }
+          });
+        },
+      ));
+}
+
+showDeleteNotificationSuccess(){
+  SmartDialog.show(
+      widget: EvieSingleButtonDialogCupertino(
+          title: "Deleted",
+          content: "Notification deleted",
+          rightContent: "OK",
+          onPressedRight: ()=>SmartDialog.dismiss()
+      ));
+}
+
+
+showDeleteNotificationFailed(){
+  SmartDialog.show(
+      widget: EvieSingleButtonDialogCupertino(
+          title: "Failed",
+          content: "Try again",
+          rightContent: "OK",
+          onPressedRight: ()=>SmartDialog.dismiss()
+      ));
 }

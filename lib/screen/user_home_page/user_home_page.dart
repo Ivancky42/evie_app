@@ -7,10 +7,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../feeds/feeds.dart';
 import '../my_account/my_account.dart';
-import '../my_bike/admin_free_plan/admin_free_plan.dart';
-import '../my_bike/admin_paid_plan/admin_paid_plan.dart';
-import '../my_bike/navigate_plan_page.dart';
-import '../my_bike/user_bike/user_bike.dart';
+import '../my_bike_setting/navigate_plan_page.dart';
+import '../my_bike_setting/user_bike/user_bike.dart';
 import '../user_notification.dart';
 
 ///User default home page when login condition is true

@@ -1,7 +1,7 @@
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/my_bike/bike_setting/bike_setting_model.dart';
+import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
 import 'package:evie_test/widgets/custom_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -67,7 +67,7 @@ class _BikeSettingSearchContainerState extends State<BikeSettingSearchContainer>
                             style: TextStyle(
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.w400,
-                                color: Color(0xff5F6060)
+                              color: EvieColors.darkGrayishCyan,
                             ),
                           )
                         ],
@@ -113,7 +113,7 @@ class _BikeSettingSearchContainerState extends State<BikeSettingSearchContainer>
                             style: TextStyle(
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.w400,
-                                color: Color(0xff5F6060)
+                                color: EvieColors.darkGrayishCyan,
                             ),
                           )
                         ],
@@ -147,7 +147,7 @@ class _BikeSettingSearchContainerState extends State<BikeSettingSearchContainer>
       if (refinedMatch.substring(0, refinedSearch.length) == refinedSearch) {
         return TextSpan(
           style: TextStyle(
-            color: EvieColors.PrimaryColor,
+            color: EvieColors.primaryColor,
             fontSize: 16.sp
           ),
           text: match.substring(0, refinedSearch.length),
@@ -161,7 +161,7 @@ class _BikeSettingSearchContainerState extends State<BikeSettingSearchContainer>
         );
       } else if (refinedMatch.length == refinedSearch.length) {
         return TextSpan(text: match, style: TextStyle(
-          color: EvieColors.PrimaryColor,
+          color: EvieColors.primaryColor,
             fontSize: 16.sp
         ));
       } else {

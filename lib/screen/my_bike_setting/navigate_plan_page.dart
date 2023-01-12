@@ -2,10 +2,10 @@ import 'dart:collection';
 import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/my_bike/admin_free_plan/admin_free_plan.dart';
-import 'package:evie_test/screen/my_bike/admin_paid_plan/admin_paid_plan.dart';
-import 'package:evie_test/screen/my_bike/user_bike/user_bike.dart';
-import 'package:evie_test/screen/my_bike/bike_setting/bike_setting.dart';
+import 'package:evie_test/screen/my_bike_setting/admin_free_plan/admin_free_plan.dart';
+import 'package:evie_test/screen/my_bike_setting/admin_paid_plan/admin_paid_plan.dart';
+import 'package:evie_test/screen/my_bike_setting/user_bike/user_bike.dart';
+import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 

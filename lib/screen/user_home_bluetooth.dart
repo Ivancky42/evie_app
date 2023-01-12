@@ -241,14 +241,14 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
                         height: 2.h,
                         width: 4.w,
                         child: const CircularProgressIndicator(
-                          color: EvieColors.PrimaryColor,
+                          color: EvieColors.primaryColor,
                         ),
                       ),
                       SizedBox(width: 5.w),
                       Text(
                         "Scanning",
                         style: TextStyle(
-                          color: EvieColors.PrimaryColor,
+                          color: EvieColors.primaryColor,
                           fontSize: 10.sp,
                           fontWeight: FontWeight.bold,
                         ),
@@ -258,7 +258,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
                       : Text(
                     "Scan Again",
                     style: TextStyle(
-                      color: EvieColors.PrimaryColor,
+                      color: EvieColors.primaryColor,
                       fontSize: 10.sp,
                       fontWeight: FontWeight.bold,
                     ),
@@ -287,7 +287,7 @@ class _UserHomeBluetoothState extends State<UserHomeBluetooth> {
                       "Stop Scanning",
                       style: TextStyle(
                         fontSize: 9.sp,
-                        color: EvieColors.PrimaryColor,
+                        color: EvieColors.primaryColor,
                         decoration: TextDecoration.underline,
                       ),
                     ),

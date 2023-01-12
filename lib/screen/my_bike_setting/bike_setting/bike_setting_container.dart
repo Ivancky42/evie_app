@@ -1,6 +1,6 @@
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/my_bike/bike_setting/bike_setting_model.dart';
+import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
 import 'package:evie_test/widgets/custom_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -380,7 +380,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                     showUpgradePlanToast(10.h);
                   }
                   else {
-                    showControlAdmissionToast(10.h);
+                    changeToShareBikeUserListScreen(context);
+                    //showControlAdmissionToast(10.h);
                   }
                 }
               },

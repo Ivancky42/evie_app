@@ -5,7 +5,7 @@ import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
-import 'package:evie_test/screen/my_bike/share_bike/share_bike_function.dart';
+import 'package:evie_test/screen/my_bike_setting/share_bike/share_bike_function.dart';
 
 
 import 'package:flutter/material.dart';
@@ -17,6 +17,7 @@ import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/dialog.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/current_user_provider.dart';
@@ -80,15 +81,17 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                     itemCount: _bikeProvider.bikeUserList.length,
                     itemBuilder: (context, index) {
                         return Slidable(
+                          enabled: isOwner && _bikeProvider.bikeUserList.keys.elementAt(index) != _currentUserProvider.currentUserModel!.uid,
                           endActionPane:  ActionPane(
+                            extentRatio: 0.3,
                             motion: const ScrollMotion(),
                             children: [
                               SlidableAction(
                                 spacing:10,
                                 onPressed: (context){
-                                  ShareBikeDelete(bikeProvider: _bikeProvider, index: index,);
+                                  showDeleteShareBikeUser(_bikeProvider, index);
                                 },
-                                backgroundColor: Color(0xFFFE4A49),
+                                backgroundColor: EvieColors.red,
                                 foregroundColor: Colors.white,
                                 icon: Icons.delete,
                                 label: 'Delete',
@@ -121,7 +124,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
 
                             trailing: isOwner == true && isManageList && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
                             Text(_bikeProvider.bikeUserList.values.elementAt(index).role,
-                                style: TextStyle(fontSize: 12.sp, color: Color(0xff7A7A79)))
+                                style: TextStyle(fontSize: 12.sp, color: EvieColors.darkGrayish))
                                 : isManageList ?
                                       ShareBikeDelete(bikeProvider: _bikeProvider, index: index,)
                                 : isOwner == false && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
@@ -131,7 +134,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                               "assets/icons/pending_tag.svg",
                             )
                                 : Text(_bikeProvider.bikeUserList.values.elementAt(index).role,
-                                style: TextStyle(fontSize: 12.sp, color: Color(0xff7A7A79)))
+                                style: TextStyle(fontSize: 12.sp, color: EvieColors.darkGrayish))
                           ),
                         );
                     },
@@ -196,13 +199,12 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                             content: "Only 5 user are allowed",
                             rightContent: "OK",
                             onPressedRight: (){SmartDialog.dismiss();}));
-                      }
-                    },
-                  ),
-              ),
-            ),
+                              }
+                            },
+                          ),
+                      ),
+                    ),
                 ),
-
 
 
             ///Bottom page button
@@ -220,7 +222,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                       child: Text(
                         "Cancel",
                         style: TextStyle(
-                            color: EvieColors.PrimaryColor,
+                            color: EvieColors.primaryColor,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w700),
                       ),
@@ -249,7 +251,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                       child: Text(
                         "Remove All Rider",
                         style: TextStyle(
-                            color: EvieColors.PrimaryColor,
+                            color: EvieColors.primaryColor,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w700),
                       ),

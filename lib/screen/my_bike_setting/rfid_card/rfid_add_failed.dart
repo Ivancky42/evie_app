@@ -113,7 +113,7 @@ class _RFIDAddFailedState extends State<RFIDAddFailed> {
                   width: double.infinity,
                   child: TextButton(
                     child: Text(
-                      "Cancel add new RFID Card",style: TextStyle(fontSize: 12.sp,color: EvieColors.PrimaryColor,decoration: TextDecoration.underline,),
+                      "Cancel add new RFID Card",style: TextStyle(fontSize: 12.sp,color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
                       if(_bikeProvider.rfidList.length >0){

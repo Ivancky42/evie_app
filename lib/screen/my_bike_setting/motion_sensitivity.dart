@@ -44,7 +44,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
 
-  final Color _thumbColor = EvieColors.ThumbColorTrue;
+  final Color _thumbColor = EvieColors.thumbColorTrue;
 
   @override
   Widget build(BuildContext context) {

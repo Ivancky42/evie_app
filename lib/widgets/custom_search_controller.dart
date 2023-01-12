@@ -16,14 +16,14 @@ class CustomSearchController extends StatelessWidget {
     return Theme(
       data: ThemeData(
         colorScheme: ThemeData().colorScheme.copyWith(
-          primary: EvieColors.PrimaryColor,
+          primary: EvieColors.primaryColor,
         ),
       ),
       child: TextFormField(
         controller: searchController,
         onChanged: onChanged,
         style: TextStyle(fontSize: 16.sp),
-        cursorColor: EvieColors.PrimaryColor,
+        cursorColor: EvieColors.primaryColor,
         decoration: InputDecoration(
             filled: true,
             fillColor: EvieColors.greyFill.withOpacity(0.1),
@@ -34,7 +34,7 @@ class CustomSearchController extends StatelessWidget {
                 borderSide: const BorderSide(color: Colors.transparent)),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: EvieColors.PrimaryColor)),
+                borderSide: const BorderSide(color: EvieColors.primaryColor)),
             prefixIcon: const Icon(Icons.search),
             prefixIconColor: EvieColors.greyFill,
             suffixIcon: suffixIcon,

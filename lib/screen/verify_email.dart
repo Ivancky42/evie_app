@@ -255,7 +255,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                   child: Text(
                     "resend email.",
                     style:
-                        TextStyle(fontSize: 9.sp, color: EvieColors.PrimaryColor),
+                        TextStyle(fontSize: 9.sp, color: EvieColors.primaryColor),
                   ),
                   onPressed: () async {
                     if(isCountDownOver == false){

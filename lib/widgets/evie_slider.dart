@@ -30,7 +30,7 @@ class EvieSlider extends StatelessWidget {
       value: value,
       max: max,
       divisions: division,
-      activeColor: EvieColors.PrimaryColor,
+      activeColor: EvieColors.primaryColor,
       inactiveColor: Color(0xffD4D4D4),
       thumbColor: Color(0xffFAFAFA),
       label: label,

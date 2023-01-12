@@ -26,7 +26,7 @@ class _EmailPreferenceControlState extends State<EmailPreferenceControl> {
   bool _switchValue2 = true;
   bool _switchValue3 = true;
 
-  final Color _thumbColor = EvieColors.ThumbColorTrue;
+  final Color _thumbColor = EvieColors.thumbColorTrue;
 
   @override
   Widget build(BuildContext context) {

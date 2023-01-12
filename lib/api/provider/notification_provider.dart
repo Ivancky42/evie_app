@@ -119,6 +119,26 @@ class NotificationProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> deleteNotification(String targetNotifyId) async {
+    bool result;
+
+    try {
+      //Update
+      await FirebaseFirestore.instance
+          .collection(usersCollection)
+          .doc(currentUserModel!.uid)
+          .collection(notificationsCollection)
+          .doc(targetNotifyId)
+          .delete();
+      result = true;
+    } catch (e) {
+      debugPrint(e.toString());
+      result = false;
+    }
+    return result;
+  }
+
+
   Future<Object?> getNotificationFromNotificationId(String? notificationId) async {
     currentSingleNotification = null;
     try {

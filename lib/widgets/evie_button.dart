@@ -38,7 +38,7 @@ class EvieButton_Dark extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0)),
-                  backgroundColor: backgroundColor ?? EvieColors.PrimaryColor,
+                  backgroundColor: backgroundColor ?? EvieColors.primaryColor,
                   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
                   textStyle: const TextStyle(
                       fontSize: 30,
@@ -58,7 +58,7 @@ class EvieButton extends StatelessWidget {
 
   final VoidCallback? onPressed;
   final Widget child;
-  final double width;
+  final double? width;
   final double? height;
   final Color? backgroundColor;
 
@@ -66,7 +66,7 @@ class EvieButton extends StatelessWidget {
     Key? key,
     required this.onPressed,
     required this.child,
-    required this.width,
+    this.width,
     this.height,
     this.backgroundColor,
   }) : super(key: key);
@@ -74,8 +74,8 @@ class EvieButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
-      width: width,
+      height: height ?? 48.h,
+      width: width ?? double.infinity,
       child: ElevatedButton(
         child: child,
         onPressed: onPressed,
@@ -83,7 +83,7 @@ class EvieButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.w)),
             elevation: 0.0,
-            backgroundColor: backgroundColor ?? EvieColors.PrimaryColor,
+            backgroundColor: backgroundColor ?? EvieColors.primaryColor,
 
 
         ),
@@ -97,7 +97,7 @@ class EvieButton_ReversedColor extends StatelessWidget {
 
   final VoidCallback? onPressed;
   final Widget child;
-  final double width;
+  final double? width;
   final double? height;
   final Color? backgroundColor;
 
@@ -105,7 +105,7 @@ class EvieButton_ReversedColor extends StatelessWidget {
     Key? key,
     required this.onPressed,
     required this.child,
-    required this.width,
+    this.width,
     this.height,
     this.backgroundColor,
   }) : super(key: key);
@@ -113,8 +113,8 @@ class EvieButton_ReversedColor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
-        width: width,
+      height: height ?? 48.h,
+        width: width ?? double.infinity,
         child: ElevatedButton(
           child: child,
           onPressed: onPressed,

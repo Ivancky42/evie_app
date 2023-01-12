@@ -116,10 +116,8 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                   ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-
                         try {
-                          _authProvider.checkIfFirestoreUserExist(_emailController.text.trim(),).then((result) async {
-
+                          await _authProvider.checkIfFirestoreUserExist(_emailController.text.trim(),).then((result) async {
                             switch(result){
                               case "false":
                                 SmartDialog.show(
@@ -135,7 +133,6 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                 ));
                                 break;
                               default:
-
                               ///check bike user list if the user already own this bike
                               var existResult = await _bikeProvider.checkIsUserExist(_emailController.text.trim());
 
@@ -174,8 +171,6 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                             ));
                                       }
                                     });
-
-
                                   },
                                 ));
                               }else{

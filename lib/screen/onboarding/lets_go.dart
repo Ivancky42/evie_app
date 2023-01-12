@@ -79,7 +79,7 @@ class _LetsGoState extends State<LetsGo> {
 
                       },
                       child: Text("How to assemble my bike?",
-                        style: TextStyle( fontSize: 16.sp, color: EvieColors.PrimaryColor, decoration: TextDecoration.underline,),)),
+                        style: TextStyle( fontSize: 16.sp, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),)),
               )
             ],
           ),
@@ -141,7 +141,7 @@ class _LetsGoState extends State<LetsGo> {
                         child: Text(
                           "Maybe Later",
                           softWrap: false,
-                          style: TextStyle(fontSize: 12.sp,color: EvieColors.PrimaryColor,decoration: TextDecoration.underline,),
+                          style: TextStyle(fontSize: 12.sp,color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                         ),
                         onPressed: () {
                           changeToNotificationsControlScreen(context);

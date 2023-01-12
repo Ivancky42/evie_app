@@ -52,7 +52,7 @@ class _ShareBikeDeleteState extends State<ShareBikeDelete> {
               "Delete",
               style: TextStyle(
                   fontSize: 12.sp,
-                  color: Color(0xffECEDEB)),
+                  color: EvieColors.grayishWhite),
             ),
           ],
         ),
@@ -94,7 +94,7 @@ class _ShareBikeDeleteState extends State<ShareBikeDelete> {
               borderRadius:
               BorderRadius.circular(20.w)),
           elevation: 0.0,
-          backgroundColor: EvieColors.PrimaryColor,
+          backgroundColor: EvieColors.primaryColor,
 
         ),
       ),
@@ -137,7 +137,7 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
           "Leave",
           style: TextStyle(
               fontSize: 12.sp,
-              color: EvieColors.PrimaryColor),
+              color: EvieColors.primaryColor),
         ),
         onPressed: (){
           SmartDialog.show(
@@ -188,7 +188,7 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
               borderRadius:
               BorderRadius.circular(20.w)),
           elevation: 0.0,
-          backgroundColor: Color(0xffDFE0E0),
+          backgroundColor: EvieColors.lightGrayishCyan,
         ),
       ),
     );

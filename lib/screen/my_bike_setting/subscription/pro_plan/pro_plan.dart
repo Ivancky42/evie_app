@@ -100,9 +100,9 @@ class _ProPlanState extends State<ProPlan> {
                       height: 28.h,
                       width: 200.w,
                       decoration: BoxDecoration(
-                          color: EvieColors.PrimaryColor,
+                          color: EvieColors.primaryColor,
                           border: Border.all(
-                            color: EvieColors.PrimaryColor,
+                            color: EvieColors.primaryColor,
                           ),
                           borderRadius:
                           BorderRadius.all(Radius.circular(5))),

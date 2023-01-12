@@ -17,6 +17,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
 import 'package:provider/provider.dart';
+import '../../../api/colours.dart';
 import '../../../api/model/location_model.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/location_provider.dart';
@@ -48,14 +49,12 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
 
-  Color lockColour = const Color(0xff6A51CA);
-
+  Color lockColour = EvieColors.primaryColor;
 
   DeviceConnectResult? deviceConnectResult;
   CableLockResult? cableLockState;
 
-  SvgPicture? connectImage;
-  SvgPicture? lockImage;
+  SvgPicture? buttonImage;
 
   late LocationProvider _locationProvider;
   late LatLngBounds latLngBounds;
@@ -141,11 +140,9 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
 
-    setConnectImage();
-    setLockImage();
+    setButtonImage();
 
     LatLng currentLatLng;
-
     if (userLocation != null) {
       currentLatLng = LatLng(userLocation!.latitude!, userLocation!.longitude!);
     } else {
@@ -180,9 +177,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                 //mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // SizedBox(
-                  //   height: 34.h,
-                  // ),
                   FutureBuilder(
                       future: _currentUserProvider.fetchCurrentUserModel,
                       builder: (context, snapshot) {
@@ -222,10 +216,8 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                   //     runSymbol();
                                   //   }
                                   // },
-                                  latitude: _locationProvider
-                                      .locationModel!.geopoint.latitude,
-                                  longitude: _locationProvider
-                                      .locationModel!.geopoint.longitude,
+                                  latitude: _locationProvider.locationModel!.geopoint.latitude,
+                                  longitude: _locationProvider.locationModel!.geopoint.longitude,
                                   onMapReady: () {
 
                                   },
@@ -437,29 +429,42 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     }
   }
 
-  void setConnectImage() {
+  void setButtonImage() {
     if (deviceConnectResult == DeviceConnectResult.connected) {
-        connectImage = SvgPicture.asset(
+      if (cableLockState?.lockState == LockState.unlock) {
+        buttonImage = SvgPicture.asset(
+          "assets/buttons/lock_unlock.svg",
+          width: 52.w,
+          height: 50.h,
+        );
+      } else if (cableLockState?.lockState == LockState.lock) {
+        buttonImage = SvgPicture.asset(
+          "assets/buttons/lock_lock.svg",
+          width: 52.w,
+          height: 50.h,
+        );
+      } else if (cableLockState?.lockState == LockState.unknown) {
+        buttonImage = SvgPicture.asset(
           "assets/buttons/loading.svg",
           width: 52.w,
           height: 50.h,
         );
-        lockColour = const Color(0xff6A51CA);
+      }
+
     } else if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning || deviceConnectResult == DeviceConnectResult.partialConnected) {
-        connectImage = SvgPicture.asset(
+        buttonImage = SvgPicture.asset(
           "assets/buttons/loading.svg",
           width: 52.w,
           height: 50.h,
         );
-        lockColour = const Color(0xff6A51CA);
     } else if (deviceConnectResult == DeviceConnectResult.disconnected) {
-        connectImage = SvgPicture.asset(
+        buttonImage = SvgPicture.asset(
           "assets/buttons/bluetooth_not_connected.svg",
           width: 52.w,
           height: 50.h,
         );
     } else {
-        connectImage = SvgPicture.asset(
+        buttonImage = SvgPicture.asset(
           "assets/buttons/bluetooth_not_connected.svg",
           width: 52.w,
           height: 50.h,
@@ -467,30 +472,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     }
   }
 
-  void setLockImage() {
-    if (cableLockState?.lockState == LockState.unlock) {
-        lockImage = SvgPicture.asset(
-          "assets/buttons/lock_unlock.svg",
-          width: 52.w,
-          height: 50.h,
-        );
-        lockColour = const Color(0xff6A51CA);
-    } else if (cableLockState?.lockState == LockState.lock) {
-        lockImage = SvgPicture.asset(
-          "assets/buttons/lock_lock.svg",
-          width: 52.w,
-          height: 50.h,
-        );
-        lockColour = const Color(0xff6A51CA);
-    } else if (cableLockState?.lockState == LockState.unknown) {
-        lockImage = SvgPicture.asset(
-          "assets/buttons/loading.svg",
-          width: 52.w,
-          height: 50.h,
-        );
-        lockColour = const Color(0xff6A51CA);
-    }
-  }
 
   Future<LocationModel?> getLocationModel() async {
     return _locationProvider.locationModel;
@@ -553,9 +534,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   }
 
   void locationListener() {
-    setConnectImage();
-    setLockImage();
-
+    setButtonImage();
     getDistanceBetween();
     animateBounce();
     // loadImage(currentDangerStatus);
@@ -584,19 +563,19 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
   switchBikeStatusBottom(String status) {
     if(_locationProvider.locationModel?.isConnected == false){
-      return ConnectionLost(lockImage: lockImage, connectImage:connectImage,distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected);
+      return ConnectionLost( connectImage:buttonImage,distanceBetween: distanceBetween, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected);
     }else{
       switch(status) {
         case "safe":
-          return BikeSafe(lockImage: lockImage, connectImage:connectImage,distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
+          return BikeSafe(connectImage:buttonImage,distanceBetween: distanceBetween, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
         case "warning":
-          return BikeWarning(lockImage: lockImage, connectImage:connectImage, distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
+          return BikeWarning( connectImage:buttonImage, distanceBetween: distanceBetween, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
         case "danger":
-          return BikeDanger(lockImage: lockImage, connectImage:connectImage, distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
+          return BikeDanger( connectImage:buttonImage, distanceBetween: distanceBetween,  isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
         case "fall":
-          return FallDetected(lockImage: lockImage, connectImage:connectImage, distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
+          return FallDetected( connectImage:buttonImage, distanceBetween: distanceBetween, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
         case "crash":
-          return CrashAlert(lockImage: lockImage,  connectImage:connectImage,distanceBetween: distanceBetween, lockColour: lockColour, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
+          return CrashAlert(  connectImage:buttonImage,distanceBetween: distanceBetween,  isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
         default:
           return const CircularProgressIndicator();
       }

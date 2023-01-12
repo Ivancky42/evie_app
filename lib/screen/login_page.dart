@@ -153,7 +153,7 @@ class _LoginScreenState extends State<Login> {
                         child: Text(
                           "Forgot Password?",
                           style: TextStyle(
-                              color: EvieColors.PrimaryColor,
+                              color: EvieColors.primaryColor,
                               fontSize: 10.sp,
                               fontWeight: FontWeight.w400),
                         ),
@@ -249,7 +249,7 @@ class _LoginScreenState extends State<Login> {
                   child: Text(
                     "I don't have an account yet",
                     style: TextStyle(
-                      color: EvieColors.PrimaryColor,
+                      color: EvieColors.primaryColor,
                       fontSize: 10.sp,
                       decoration: TextDecoration.underline,
                     ),

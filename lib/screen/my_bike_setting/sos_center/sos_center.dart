@@ -35,7 +35,7 @@ class _SOSCentertState extends State<SOSCenter> {
   late NotificationProvider _notificationProvider;
   late BikeProvider _bikeProvider;
 
-  final Color _thumbColor = EvieColors.ThumbColorTrue;
+  final Color _thumbColor = EvieColors.thumbColorTrue;
 
   @override
   Widget build(BuildContext context) {

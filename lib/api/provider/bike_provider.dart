@@ -512,16 +512,18 @@ class BikeProvider extends ChangeNotifier {
   }
 
   Future<bool> checkIsUserExist(String targetEmail) async {
+    bool result = false;
     if (bikeUserDetails.isNotEmpty) {
       for (var i = 0; i < bikeUserDetails.length;i++) {
         if (bikeUserDetails.values.elementAt(i).email == targetEmail) {
-          return true;
+          result =  true;
         } else {
-          return false;
+          result = false;
         }
       }
-    }
-    return false;
+    }else {result = false;}
+
+    return result;
   }
 
   /// ****************************************** ///

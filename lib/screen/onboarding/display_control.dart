@@ -87,7 +87,7 @@ class _DisplayControlState extends State<DisplayControl> {
                       ),
                       Radio<Display>(
                         fillColor: MaterialStateColor.resolveWith(
-                                (states) => EvieColors.PrimaryColor),
+                                (states) => EvieColors.primaryColor),
                         value: Display.defaultMode,
                         groupValue: _display,
                         onChanged: (Display? value) {
@@ -107,7 +107,7 @@ class _DisplayControlState extends State<DisplayControl> {
                       ),
                       Radio<Display>(
                         fillColor: MaterialStateColor.resolveWith(
-                                (states) => EvieColors.PrimaryColor),
+                                (states) => EvieColors.primaryColor),
                         value: Display.lightMode,
                         groupValue: _display,
                         onChanged: (Display? value) {
@@ -127,7 +127,7 @@ class _DisplayControlState extends State<DisplayControl> {
                       ),
                       Radio<Display>(
                         fillColor: MaterialStateColor.resolveWith(
-                                (states) => EvieColors.PrimaryColor),
+                                (states) => EvieColors.primaryColor),
                         value: Display.darkMode,
                         groupValue: _display,
                         onChanged: (Display? value) {

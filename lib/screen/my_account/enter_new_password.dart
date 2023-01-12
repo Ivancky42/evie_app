@@ -157,7 +157,7 @@ class _EnterNewPasswordState extends State<EnterNewPassword> {
                     child: Text(
                       "Skip",
                       softWrap: false,
-                      style: TextStyle(fontSize: 12.sp,color: EvieColors.PrimaryColor,decoration: TextDecoration.underline,),
+                      style: TextStyle(fontSize: 12.sp,color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
 

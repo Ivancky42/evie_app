@@ -98,7 +98,7 @@ class _WelcomeState extends State<Welcome> {
                 child: Text(
                   "I already have an account",
                   style: TextStyle(
-                    color: EvieColors.PrimaryColor,
+                    color: EvieColors.primaryColor,
                     fontSize: 12.sp,
                     decoration: TextDecoration.underline,
                   ),

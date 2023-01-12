@@ -33,7 +33,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
   late NotificationProvider _notificationProvider;
   late BikeProvider _bikeProvider;
 
-  final Color _thumbColor = EvieColors.ThumbColorTrue;
+  final Color _thumbColor = EvieColors.thumbColorTrue;
 
 
   @override

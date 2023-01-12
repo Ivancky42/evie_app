@@ -177,7 +177,7 @@ class _RFIDCardListState extends State<RFIDCardList> {
                                borderRadius:
                                BorderRadius.circular(20.w)),
                            elevation: 0.0,
-                           backgroundColor: EvieColors.PrimaryColor,
+                           backgroundColor: EvieColors.primaryColor,
                            padding: EdgeInsets.symmetric(
                                horizontal: 14.h, vertical: 14.h),
                          ),
@@ -349,7 +349,7 @@ class _RFIDCardListState extends State<RFIDCardList> {
                           child: Text(
                             "Cancel",
                             style: TextStyle(
-                                color: EvieColors.PrimaryColor,
+                                color: EvieColors.primaryColor,
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.w700),
                           ),
@@ -374,7 +374,7 @@ class _RFIDCardListState extends State<RFIDCardList> {
                           child: Text(
                             "Manage List",
                             style: TextStyle(
-                                color: EvieColors.PrimaryColor,
+                                color: EvieColors.primaryColor,
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.w700),
                           ),

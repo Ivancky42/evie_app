@@ -133,7 +133,9 @@ class _SignUpMethodState extends State<SignUpMethod> {
                       });
                     }
                 ) : Container(),
-
+                SizedBox(
+                  height: 0.5.h,
+                ),
                 EvieButton(
                     backgroundColor: Color(0xffDFE0E0),
                     width: double.infinity,
@@ -174,6 +176,9 @@ class _SignUpMethodState extends State<SignUpMethod> {
                       });
                     }
                 ),
+                SizedBox(
+                  height: 0.5.h,
+                ),
                 EvieButton(
                     backgroundColor: Color(0xffDFE0E0),
                     width: double.infinity,
@@ -213,6 +218,9 @@ class _SignUpMethodState extends State<SignUpMethod> {
                         }
                       });
                     }
+                ),
+                SizedBox(
+                  height: 0.5.h,
                 ),
                 EvieButton(
                     backgroundColor: Color(0xffDFE0E0),
@@ -268,7 +276,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                     child: Text(
                       "I already have an account",
                       style: TextStyle(
-                        color: EvieColors.PrimaryColor,
+                        color: EvieColors.primaryColor,
                         fontSize: 10.sp,
                         decoration: TextDecoration.underline,
                       ),

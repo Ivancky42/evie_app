@@ -137,7 +137,7 @@ class EvieSingleButtonDialog extends StatelessWidget{
                               style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0)),
-                                  backgroundColor: EvieColors.PrimaryColor),
+                                  backgroundColor: EvieColors.primaryColor),
                               child: Padding(
                                 padding: EdgeInsets.fromLTRB(3.w, 0, 3.w, 0),
                                 child: Text(

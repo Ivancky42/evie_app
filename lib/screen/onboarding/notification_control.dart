@@ -35,7 +35,7 @@ class _NotificationsControlState extends State<NotificationsControl> {
   late BikeProvider _bikeProvider;
   late NotificationProvider _notificationProvider;
 
-  final Color _thumbColor = EvieColors.ThumbColorTrue;
+  final Color _thumbColor = EvieColors.thumbColorTrue;
 
   @override
   Widget build(BuildContext context) {

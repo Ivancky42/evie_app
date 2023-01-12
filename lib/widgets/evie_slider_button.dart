@@ -29,12 +29,12 @@ class EvieSliderButton extends StatelessWidget {
       label: Text(
         text,
         style: TextStyle(
-            color: EvieColors.PrimaryColor,
+            color: EvieColors.primaryColor,
             fontWeight: FontWeight.w700,
             fontSize: 20.sp),
       ),
       alignLabel: Alignment(0.2.w,0),
-      buttonColor: EvieColors.PrimaryColor,
+      buttonColor: EvieColors.primaryColor,
       shimmer: false,
       icon:  SvgPicture.asset(
         "assets/buttons/arrow_slider.svg",

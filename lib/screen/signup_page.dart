@@ -182,7 +182,7 @@ class _SignUpState extends State<SignUp> {
                   children: [
                 Checkbox(
                   value: isCheckTermsCondition,
-                  activeColor: EvieColors.PrimaryColor,
+                  activeColor: EvieColors.primaryColor,
                   onChanged: (bool? value) {
                     setState(() {
                       isCheckTermsCondition = value!;

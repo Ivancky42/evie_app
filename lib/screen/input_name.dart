@@ -114,7 +114,7 @@ class _InputNameState extends State<InputName> {
                     child: Text(
                       "I already have an account",
                       style: TextStyle(
-                        color: EvieColors.PrimaryColor,
+                        color: EvieColors.primaryColor,
                         fontSize: 10.sp,
                         decoration: TextDecoration.underline,
                       ),

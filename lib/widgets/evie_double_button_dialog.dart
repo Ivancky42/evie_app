@@ -160,7 +160,7 @@ class EvieDoubleButtonDialog extends StatelessWidget{
                           child: Text(
                             leftContent,
                             style: TextStyle(
-                                color: EvieColors.PrimaryColor,
+                                color: EvieColors.primaryColor,
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.w700
                             ),

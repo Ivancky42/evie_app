@@ -170,7 +170,7 @@ class _NameBikeState extends State<NameBike> {
                   TextButton(
                     child: Text(
                       "Maybe Later",
-                      style: TextStyle(fontSize: 9.sp,color: EvieColors.PrimaryColor,decoration: TextDecoration.underline,),
+                      style: TextStyle(fontSize: 9.sp,color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
                      changeToTurnOnNotificationsScreen(context);

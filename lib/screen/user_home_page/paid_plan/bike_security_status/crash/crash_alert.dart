@@ -22,19 +22,16 @@ import '../../../paid_plan/bottom_sheet_widget.dart';
 import '../../../home_page_widget.dart';
 
 class CrashAlert extends StatefulWidget {
-  final SvgPicture? lockImage;
   final SvgPicture? connectImage;
-  final Color? lockColour;
   final String? distanceBetween;
   final bool? isDeviceConnected;
 
 
   const CrashAlert({
     Key? key,
-    required this.lockImage,
+
     required this.connectImage,
     required this.distanceBetween,
-    required this.lockColour,
     required this.isDeviceConnected,
   }) : super(key: key);
 
