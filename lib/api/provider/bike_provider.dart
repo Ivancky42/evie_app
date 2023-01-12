@@ -481,8 +481,7 @@ class BikeProvider extends ChangeNotifier {
         Map<String, dynamic>? obj = snapshot.data();
 
         if (obj != null) {
-          userBikeDetails.putIfAbsent(
-              snapshot.id, () => BikeModel.fromJson(obj));
+          userBikeDetails.update(snapshot.id, (value) => BikeModel.fromJson(obj), ifAbsent: () => BikeModel.fromJson(obj));
           notifyListeners();
         }
         if (obj == null) {

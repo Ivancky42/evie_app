@@ -2,6 +2,7 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/switch_bike.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -61,6 +62,7 @@ class Bike_Name_Row extends StatelessWidget {
 
         GestureDetector(
           onTap: () {
+            SmartDialog.dismiss(status: SmartStatus.allToast);
             showMaterialModalBottomSheet(
                 expand: false,
                 context: context,

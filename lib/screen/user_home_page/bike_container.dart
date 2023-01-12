@@ -58,42 +58,6 @@ class _BikeContainerState extends State<BikeContainer> {
       });
     }
 
-
-    // Future.delayed(Duration.zero, () {
-    //   if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanError ) {
-    //     SmartDialog.show(
-    //         keepSingle: true,
-    //         widget: EvieSingleButtonDialogCupertino(
-    //             title: "Cannot connect bike",
-    //             content: "Move your device near the bike and try again",
-    //             rightContent: "OK",
-    //             onPressedRight: () {
-    //               SmartDialog.dismiss();
-    //             }));
-    //   } else if(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanTimeout){
-    //     SmartDialog.show(
-    //         keepSingle: true,
-    //         widget: EvieSingleButtonDialogCupertino(
-    //             title: "Cannot connect bike",
-    //             content: "Scan timeout",
-    //             rightContent: "OK",
-    //             onPressedRight: () {
-    //               SmartDialog.dismiss();
-    //             }));
-    //   }else if(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connectError){
-    //     SmartDialog.show(
-    //         keepSingle: true,
-    //         widget: EvieSingleButtonDialogCupertino(
-    //             title: "Cannot connect bike",
-    //             content: "Connection Error",
-    //             rightContent: "OK",
-    //             onPressedRight: () {
-    //               SmartDialog.dismiss();
-    //             }));
-    //   }
-    // });
-
-
     return Container(
       height: 59.h,
       child: ListTile(
@@ -141,7 +105,8 @@ class _BikeContainerState extends State<BikeContainer> {
                   _bluetoothProvider.setAutoConnect();
                   subscription?.cancel();
                   Navigator.pop(context);
-                }else if(result == SwitchBikeResult.failure){
+                }
+                else if(result == SwitchBikeResult.failure){
                   subscription?.cancel();
                   SmartDialog.show(
                       widget: EvieSingleButtonDialog(

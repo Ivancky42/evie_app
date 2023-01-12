@@ -3,6 +3,8 @@ import 'dart:io';
 import 'dart:math';
 import 'package:crclib/catalog.dart';
 import 'package:crclib/crclib.dart';
+import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/screen/user_home_page/add_new_bike/add_new_bike.dart';
@@ -23,14 +25,15 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
-import 'package:sizer/sizer.dart';
 import '../api/backend/stripe_api_caller.dart';
 import '../api/provider/auth_provider.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/provider/current_user_provider.dart';
 import '../api/provider/notification_provider.dart';
+import '../api/toast.dart';
 import '../api/todays_quote.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import '../bluetooth/modelResult.dart';
 import '../main.dart';
 import 'user_home_page/user_home_page.dart';
 import 'login_page.dart';
@@ -46,9 +49,12 @@ class UserHomeGeneral extends StatefulWidget {
 
 class _UserHomeGeneralState extends State<UserHomeGeneral> {
   late BikeProvider _bikeProvider;
+  late BluetoothProvider _bluetoothProvider;
   late NotificationProvider _notificationProvider;
   late CurrentUserProvider _currentUserProvider;
   late AuthProvider _authProvider;
+  DeviceConnectResult? deviceConnectResult;
+  bool isFirstTimeConnected = false;
 
   final FocusNode _textFocus = FocusNode();
 
@@ -266,6 +272,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
   @override
   void dispose() {
+    SmartDialog.dismiss(status: SmartStatus.allToast);
     _textFocus.dispose();
     super.dispose();
   }
@@ -287,6 +294,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _notificationProvider = Provider.of<NotificationProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
@@ -305,6 +313,19 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       });
     }
 
+    deviceConnectResult = _bluetoothProvider.deviceConnectResult;
+
+    if (deviceConnectResult == DeviceConnectResult.connected) {
+      if (!isFirstTimeConnected) {
+        showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, 90.sh);
+        isFirstTimeConnected = true;
+      }
+    }
+    else {
+      isFirstTimeConnected = false;
+      showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, 90.sh);
+    }
+
     return WillPopScope(
         onWillPop: () async {
           bool? exitApp = await SmartDialog.show(
@@ -319,7 +340,10 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
           return exitApp ?? false;
         },
 
-        child: Scaffold(body: _buildChild(userBikeList)));
+        child: Scaffold(
+            body: _buildChild(userBikeList),
+        )
+    );
   }
 
   Widget _buildChild(LinkedHashMap userBikeList) {

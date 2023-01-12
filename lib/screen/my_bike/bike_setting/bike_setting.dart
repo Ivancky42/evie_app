@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/api/toast.dart';
 import 'package:evie_test/screen/my_bike/bike_setting/bike_setting_container.dart';
@@ -44,6 +45,7 @@ class _BikeSettingState extends State<BikeSetting> {
   List<BikeSettingModel> _searchFirstResult = [];
   LinkedHashMap<String, BikeSettingModel> _searchSecondResult = LinkedHashMap<String, BikeSettingModel>();
   bool _isSearching = false;
+  bool isFirstTimeConnected = false;
   late Future loadDataFuture;
 
   List<BikeSettingModel> bikeSettingList = [];
@@ -90,40 +92,15 @@ class _BikeSettingState extends State<BikeSetting> {
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
 
-    switch(deviceConnectResult) {
-      case DeviceConnectResult.scanning:
-        SmartDialog.dismiss(status: SmartStatus.allToast);
-        Future.delayed(Duration.zero).then((value) => showConnectingToast());
-        break;
-      case DeviceConnectResult.scanTimeout:
-        Future.delayed(Duration.zero).then((value) {
-          _bluetoothProvider.clearDeviceConnectStatus();
-          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showScanTimeoutToast());
-        });
-        break;
-      case DeviceConnectResult.scanError:
-        Future.delayed(Duration.zero).then((value) {
-          _bluetoothProvider.clearDeviceConnectStatus();
-          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showScanErrorToast());
-        });
-        break;
-      case DeviceConnectResult.connected:
-        Future.delayed(Duration.zero).then((value) {
-          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showConnectedToast());
-        });
-        break;
-      case DeviceConnectResult.disconnected:
-        Future.delayed(Duration.zero).then((value) {
-          _bluetoothProvider.clearDeviceConnectStatus();
-          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showDisconnectedToast());
-        });
-        break;
-      case DeviceConnectResult.connectError:
-        Future.delayed(Duration.zero).then((value) {
-          _bluetoothProvider.clearDeviceConnectStatus();
-          return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showConnectErrorToast());
-        });
-        break;
+    if (deviceConnectResult == DeviceConnectResult.connected) {
+      if (!isFirstTimeConnected) {
+        showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, 10.h);
+        isFirstTimeConnected = true;
+      }
+    }
+    else {
+      isFirstTimeConnected = false;
+      showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, 10.h);
     }
 
     return WillPopScope(
@@ -301,15 +278,7 @@ class _BikeSettingState extends State<BikeSetting> {
                                         ?  "Connected" : "Connect Bike", style: TextStyle(fontSize: 12.sp, color: Color(0xffECEDEB)),),]
                             ),
                             onPressed: () async {
-                              if (deviceConnectResult == null
-                                  || deviceConnectResult == DeviceConnectResult.disconnected
-                                  || deviceConnectResult == DeviceConnectResult.scanTimeout
-                                  || deviceConnectResult == DeviceConnectResult.connectError
-                                  || deviceConnectResult == DeviceConnectResult.scanError) {
-                                await _bluetoothProvider.stopScan();
-                                await _bluetoothProvider.disconnectDevice();
-                                _bluetoothProvider.startScanAndConnect();
-                              }
+                              checkBleStatusAndConnectDevice(_bluetoothProvider);
                             },
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(

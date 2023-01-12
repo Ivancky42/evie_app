@@ -21,6 +21,48 @@ showBluetoothNotTurnOn() {
           }));
 }
 
+showBluetoothNotSupport() {
+  SmartDialog.show(
+      keepSingle:
+      true,
+      widget: EvieSingleButtonDialogCupertino(
+          title: "Error",
+          content: "Bluetooth unsupported",
+          rightContent: "OK",
+          onPressedRight: () {
+            SmartDialog
+                .dismiss();
+          }));
+}
+
+showBluetoothNotAuthorized() {
+  SmartDialog.show(
+      keepSingle:
+      true,
+      widget: EvieSingleButtonDialogCupertino(
+          title: "Error",
+          content: "Bluetooth Permission is off",
+          rightContent: "OK",
+          onPressedRight: () {
+            SmartDialog
+                .dismiss();
+          }));
+}
+
+showLocationServiceDisable() {
+  SmartDialog.show(
+      keepSingle:
+      true,
+      widget: EvieSingleButtonDialogCupertino(
+          title: "Error",
+          content: "Location service disabled",
+          rightContent: "OK",
+          onPressedRight: () {
+            SmartDialog
+                .dismiss();
+          }));
+}
+
 showConnectDialog(BluetoothProvider bluetoothProvider) async {
    await SmartDialog.show(
       widget: EvieDoubleButtonDialog(

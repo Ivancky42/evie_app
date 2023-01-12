@@ -84,6 +84,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
                   BikePageDivider(),
 
 
+                  _bikeProvider.currentBikePlanModel != null ?
                   Visibility(
                     visible: _bikeProvider.currentBikePlanModel != null && _bikeProvider.isPlanSubscript == false,
                     child: Column(
@@ -106,7 +107,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
                         BikePageDivider(),
                       ],
                     ),
-                  ),
+                  ) : Container(),
                 ],
               ),
             ),
