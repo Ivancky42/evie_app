@@ -197,7 +197,8 @@ class NotificationProvider extends ChangeNotifier {
           .collection(notificationsCollection)
           .doc(targetNotifyId)
           .set({
-        'body': 'You already owned this bike',
+        'title': 'Join Team Successful',
+        'body': 'You have successfully join team.',
         'status': 'shared',
       }, SetOptions(merge: true));
       result = true;
