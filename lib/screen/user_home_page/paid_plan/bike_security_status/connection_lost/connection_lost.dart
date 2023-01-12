@@ -352,8 +352,7 @@ class _ConnectionLostState extends State<ConnectionLost> {
                                   checkBleStatusAndConnectDevice(_bluetoothProvider);
                                 },
                                 //icon inside button
-                                child:
-                                widget.connectImage,
+                                child: widget.connectImage,
                               )),
                           SizedBox(
                             height: 12.h,

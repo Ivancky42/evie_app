@@ -30,7 +30,7 @@ import '../api/provider/auth_provider.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/provider/current_user_provider.dart';
 import '../api/provider/notification_provider.dart';
-import '../api/toast.dart';
+import '../api/snackbar.dart';
 import '../api/todays_quote.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import '../bluetooth/modelResult.dart';
@@ -65,6 +65,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   bool isScroll = false;
+  late ScaffoldMessengerState _navigator;
 
   @override
   void initState() {
@@ -271,8 +272,15 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    _navigator = ScaffoldMessenger.of(context);
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
-    SmartDialog.dismiss(status: SmartStatus.allToast);
+    hideCurrentSnackBar(_navigator);
     _textFocus.dispose();
     super.dispose();
   }
@@ -317,13 +325,13 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
     if (deviceConnectResult == DeviceConnectResult.connected) {
       if (!isFirstTimeConnected) {
-        showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, 90.sh);
+        showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, context, _navigator);
         isFirstTimeConnected = true;
       }
     }
     else {
       isFirstTimeConnected = false;
-      showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, 90.sh);
+      showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, context, _navigator);
     }
 
     return WillPopScope(

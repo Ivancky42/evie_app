@@ -299,11 +299,11 @@ class BluetoothProvider extends ChangeNotifier {
             }
           }
           else {
-            // deviceConnectStream.add(DeviceConnectResult.disconnected);
-            // deviceConnectResult = DeviceConnectResult.disconnected;
-            // notifyListeners();
-            // clearBluetoothStatus();
-            // connectSubscription?.cancel();
+            deviceConnectStream.add(DeviceConnectResult.disconnected);
+            deviceConnectResult = DeviceConnectResult.disconnected;
+            notifyListeners();
+            clearBluetoothStatus();
+            connectSubscription?.cancel();
           }
 
           break;
