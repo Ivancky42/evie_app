@@ -356,8 +356,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
   Widget _buildChild(LinkedHashMap userBikeList) {
 
-
-    if (_bikeProvider.currentBikeModel == null && !userBikeList.isNotEmpty) {
+    if (_bikeProvider.isReadBike && _bikeProvider.currentBikeModel == null && !userBikeList.isNotEmpty) {
       return const AddNewBike();
     } else {
         if (_bikeProvider.isPlanSubscript == true) {

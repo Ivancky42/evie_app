@@ -59,7 +59,8 @@ class BikeProvider extends ChangeNotifier {
   String? currentBikeIMEI;
   bool? isPlanSubscript;
   bool? isOwner;
-  bool? isAddBike = false;
+  bool isAddBike = false;
+  bool isReadBike = false;
   List userBikeNotificationList = ["~connection-lost","~movement-detect","~theft-attempt","~lock-reminder","~plan-reminder","~fall-detect", "crash"];
 
   StreamSubscription? bikeListSubscription;
@@ -158,7 +159,6 @@ class BikeProvider extends ChangeNotifier {
 
           ///Subscript to topic based on looping (for first time open app only)
 
-
           if (prefs.containsKey('currentBikeImei')) {
             currentBikeIMEI = prefs.getString('currentBikeImei') ?? "";
             notifyListeners();
@@ -174,6 +174,10 @@ class BikeProvider extends ChangeNotifier {
           currentBikeModel = null;
           notifyListeners();
         }
+
+        isReadBike = true;
+        notifyListeners();
+
       });
     } on Exception catch (exception) {
       debugPrint(exception.toString());
