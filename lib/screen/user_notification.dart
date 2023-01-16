@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
@@ -207,34 +208,43 @@ class _UserNotificationState extends State<UserNotification> {
                 notificationModel.status == "pending" ||
                         notificationModel.status == null
                     ? () async {
-                        _bikeProvider
-                            .updateAcceptSharedBikeStatus(
-                                notificationModel.deviceIMEI!, _currentUserProvider.currentUserModel!.uid)
-                            .then((result) {
-                          if (result == true) {
-                            SmartDialog.dismiss();
-                            _notificationProvider
-                                .updateUserNotificationSharedBikeStatus(key);
-                            SmartDialog.show(
-                                widget: EvieSingleButtonDialogCupertino(
-                                    title: "Success",
-                                    content: "Bike added",
-                                    rightContent: "OK",
-                                    onPressedRight: () {
-                                      SmartDialog.dismiss();
-                                    }));
-                          } else {
-                            SmartDialog.dismiss();
-                            SmartDialog.show(
-                                widget: EvieSingleButtonDialogCupertino(
-                                    title: "Error",
-                                    content: "Bike not added, try again",
-                                    rightContent: "OK",
-                                    onPressedRight: () {
-                                      SmartDialog.dismiss();
-                                    }));
-                          }
-                        });
+
+                  StreamSubscription? currentSubscription;
+                  currentSubscription = _bikeProvider.acceptSharedBikeStatus( notificationModel.deviceIMEI!, _currentUserProvider.currentUserModel!.uid)
+                      .listen((uploadStatus) async {
+
+                    if(uploadStatus == UploadFirestoreResult.success){
+                      SmartDialog.dismiss();
+                      _notificationProvider.updateUserNotificationSharedBikeStatus(notificationModel.deviceIMEI!);
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(
+                        const SnackBar(
+                          content: Text('Bike added successfully!'),
+                          duration: Duration(
+                              seconds: 3),),
+                      );
+
+                      changeToUserHomePageScreen(context);
+                      for (var element in _bikeProvider.userBikeNotificationList) {
+                        await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}$element");
+                      }
+
+                      currentSubscription?.cancel();
+                    } else if(uploadStatus == UploadFirestoreResult.failed) {
+                      SmartDialog.dismiss();
+                      SmartDialog.show(
+                          backDismiss: false,
+                          widget: EvieSingleButtonDialogCupertino(
+                              title: "Error",
+                              content: "Try again",
+                              rightContent: "OK",
+                              onPressedRight: () async {
+                                SmartDialog.dismiss();
+                              }));
+                    }
+                  },
+                  );
+
                       }
                     : null,
           ));

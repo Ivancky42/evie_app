@@ -137,15 +137,11 @@ class _ConnectionLostState extends State<ConnectionLost> {
                                 width: 96.w,
                                 child: FloatingActionButton(
                                   elevation: 0,
-                                  backgroundColor: cableLockState?.lockState ==
-                                      LockState.lock ? EvieColors.primaryColor : EvieColors.softPurple,
-                                  onPressed: cableLockState
-                                      ?.lockState == LockState.lock
-                                      ? () {
+                                  backgroundColor: cableLockState?.lockState == LockState.lock ? EvieColors.primaryColor : EvieColors.softPurple,
+                                  onPressed: cableLockState?.lockState == LockState.lock ? () {
                                     ///Check is connected
 
                                     SmartDialog.showLoading(msg: "Unlocking");
-
                                     StreamSubscription?subscription;
 
                                     subscription = _bluetoothProvider.cableUnlock().listen((unlockResult) {
@@ -200,8 +196,7 @@ class _ConnectionLostState extends State<ConnectionLost> {
                                                 SmartDialog.dismiss();
                                               }));
                                     });
-                                  }
-                                      : null,
+                                  } : null,
                                   //icon inside button
                                   child: widget.connectImage,
                                 ),

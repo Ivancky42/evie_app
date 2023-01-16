@@ -8,6 +8,7 @@ class BikeUserModel {
   String? status;
   String? notificationId;
   int? userId;
+  String? userEmail;
   Timestamp? created;
 
   BikeUserModel({
@@ -17,6 +18,7 @@ class BikeUserModel {
     this.status,
     this.notificationId,
     this.userId,
+    this.userEmail,
     this.created,
   });
 
@@ -34,6 +36,7 @@ class BikeUserModel {
       status: json['status']?? '',
       userId: json['userId'] ?? 10,
       notificationId: json['notificationId']?? '',
+      userEmail: json['userEmail']?? '',
       created: timestampFromJson(json['created']),
     );
   }

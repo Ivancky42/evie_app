@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
@@ -70,7 +71,8 @@ class _FeedsState extends State<Feeds> {
               ),
 
               Expanded(
-                child: ListView.separated(
+                child: _notificationProvider.notificationList.isNotEmpty ?
+                ListView.separated(
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
                   itemCount: _notificationProvider.notificationList.length,
@@ -116,10 +118,8 @@ class _FeedsState extends State<Feeds> {
                               if(_notificationProvider.notificationList.values.elementAt(index).status == "pending"){
                                 decline();
                               }else {
-                                var result = await _notificationProvider
-                                    .deleteNotification(
-                                    _notificationProvider.notificationList.keys
-                                        .elementAt(index));
+                                var result = await _notificationProvider.deleteNotification(
+                                    _notificationProvider.notificationList.keys.elementAt(index));
                                 if (result) {
                                   showDeleteNotificationSuccess();
                                 } else {
@@ -130,7 +130,6 @@ class _FeedsState extends State<Feeds> {
                             backgroundColor: EvieColors.red,
                             foregroundColor: Colors.white,
                             icon: Icons.delete,
-                            label: 'Delete',
                           ),
                         ],
                       ),
@@ -216,16 +215,18 @@ class _FeedsState extends State<Feeds> {
                                                             ),
                                                             Text("Accepting invitation and adding bike...", style: TextStyle(fontSize: 16.sp, color: Color(0xff3F3F3F)),)
                                                           ],
-
                                                         )
                                                       ));
-                                                      await _bikeProvider
-                                                          .updateAcceptSharedBikeStatus(_notificationProvider.notificationList.values.elementAt(index).deviceIMEI!, _currentUserProvider.currentUserModel!.uid)
-                                                          .then((result) async {
-                                                        if (result == true) {
+
+                                                      StreamSubscription? currentSubscription;
+                                                      currentSubscription = _bikeProvider.acceptSharedBikeStatus(
+                                                          _notificationProvider.notificationList.values.elementAt(index).deviceIMEI!,
+                                                          _currentUserProvider.currentUserModel!.uid)
+                                                          .listen((uploadStatus) async {
+
+                                                        if(uploadStatus == UploadFirestoreResult.success){
                                                           SmartDialog.dismiss();
                                                           _notificationProvider.updateUserNotificationSharedBikeStatus(_notificationProvider.notificationList.keys.elementAt(index));
-
                                                           ScaffoldMessenger.of(context)
                                                               .showSnackBar(
                                                             const SnackBar(
@@ -239,8 +240,9 @@ class _FeedsState extends State<Feeds> {
                                                             await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}$element");
                                                           }
 
-
-                                                        }else{
+                                                          currentSubscription?.cancel();
+                                                        } else if(uploadStatus == UploadFirestoreResult.failed) {
+                                                          SmartDialog.dismiss();
                                                           SmartDialog.show(
                                                               backDismiss: false,
                                                               widget: EvieSingleButtonDialogCupertino(
@@ -251,7 +253,39 @@ class _FeedsState extends State<Feeds> {
                                                                     SmartDialog.dismiss();
                                                                   }));
                                                         }
-                                                      });
+                                                      },
+                                                      );
+
+
+                                                      // _bikeProvider
+                                                      //     .acceptSharedBikeStatus(
+                                                      //     notificationModel.deviceIMEI!, _currentUserProvider.currentUserModel!.uid)
+                                                      //     .then((result) {
+                                                      //   if (result == true) {
+                                                      //     SmartDialog.dismiss();
+                                                      //     _notificationProvider
+                                                      //         .updateUserNotificationSharedBikeStatus(key);
+                                                      //     SmartDialog.show(
+                                                      //         widget: EvieSingleButtonDialogCupertino(
+                                                      //             title: "Success",
+                                                      //             content: "Bike added",
+                                                      //             rightContent: "OK",
+                                                      //             onPressedRight: () {
+                                                      //               SmartDialog.dismiss();
+                                                      //             }));
+                                                      //   } else {
+                                                      //     SmartDialog.dismiss();
+                                                      //     SmartDialog.show(
+                                                      //         widget: EvieSingleButtonDialogCupertino(
+                                                      //             title: "Error",
+                                                      //             content: "Bike not added, try again",
+                                                      //             rightContent: "OK",
+                                                      //             onPressedRight: () {
+                                                      //               SmartDialog.dismiss();
+                                                      //             }));
+                                                      //   }
+                                                      // });
+
                                                     },
                                                     child: Text(
                                                       "OK",
@@ -276,6 +310,24 @@ class _FeedsState extends State<Feeds> {
                       (BuildContext context, int index) {
                     return Divider(height: 1.5.h,);
                   },
+                ) : Padding(
+                  padding:  EdgeInsets.only(top:180.h ),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        SvgPicture.asset(
+                              "assets/images/mention_amigo.svg",
+                            ),
+                          SizedBox(
+                            height: 60.h,
+                          ),
+                          Text(
+                              "You're all caught up!",
+                              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
+                            ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -291,20 +343,27 @@ class _FeedsState extends State<Feeds> {
           leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
           rightContent: "Yes",
           onPressedRight: () async {
-            await _bikeProvider.cancelSharedBikeStatus(
-                _bikeProvider.bikeUserList.values.firstWhere((element) => element.uid == _currentUserProvider.currentUserModel!.uid).uid!,
-                _bikeProvider.bikeUserList.values.firstWhere((element) => element.uid == _currentUserProvider.currentUserModel!.uid).notificationId!).then((result){
+            StreamSubscription? currentSubscription;
+
+            currentSubscription = _bikeProvider.cancelSharedBikeStatus(
+                 _bikeProvider.bikeUserList.values.firstWhere((element) => element.uid == _currentUserProvider.currentUserModel!.uid).uid!,
+                 _bikeProvider.bikeUserList.values.firstWhere((element) => element.uid == _currentUserProvider.currentUserModel!.uid).notificationId!).listen((cancelStatus) {
               ///Update user notification id status == removed
-              if(result == true){
+              if(cancelStatus == UploadFirestoreResult.success){
+                ///listen to firestore result, delete user, user quit group, user accept bike
+
+                SmartDialog.dismiss(status: SmartStatus.loading);
+                SmartDialog.show(
+                    keepSingle: true,
+                    widget: EvieSingleButtonDialogCupertino(
+                        title: "Success",
+                        content: "You deleted the user",
+                        rightContent: "Close",
+                        onPressedRight: () => SmartDialog.dismiss()
+                    ));
+                currentSubscription?.cancel();
+              } else if(cancelStatus == UploadFirestoreResult.failed) {
                 SmartDialog.dismiss();
-                SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
-                    title: "Success",
-                    content: "You deleted the bike",
-                    rightContent: "Close",
-                    onPressedRight: ()=> SmartDialog.dismiss()
-                ));
-              }
-              else {
                 SmartDialog.show(
                     widget: EvieSingleButtonDialogCupertino(
                         title: "Not success",
@@ -313,7 +372,9 @@ class _FeedsState extends State<Feeds> {
                         onPressedRight: ()=>SmartDialog.dismiss()
                     ));
               }
-            });
+
+            },
+            );
 
           },
         ));

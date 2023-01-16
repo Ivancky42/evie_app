@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -296,28 +297,38 @@ class _SharesBikeState extends State<SharesBike> {
 
         leftContent: isOwner&&bikeUserModel.status == "pending"? "Delete User" : "Cancel",
         onPressedLeft: isOwner&&bikeUserModel.status == "pending" ? () async {
-            _bikeProvider.cancelSharedBikeStatus(bikeUserModel.uid, bikeUserModel.notificationId!).then((result){
-              ///Update user notification id status == removed
-              if(result == true){
-                SmartDialog.dismiss();
-                SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
-                    title: "Success",
-                    content: "Cancelled",
-                    rightContent: "Close",
-                    onPressedRight: ()=> SmartDialog.dismiss()
-                ));
-              }
-              else {
-                SmartDialog.show(
-                    widget: EvieSingleButtonDialogCupertino(
-                    title: "Not success",
-                    content: "Try again",
-                    rightContent: "Close",
-                    onPressedRight: ()=>SmartDialog.dismiss()
-                ));
-              }
 
-            });
+          StreamSubscription? currentSubscription;
+          currentSubscription = _bikeProvider.cancelSharedBikeStatus(bikeUserModel.uid, bikeUserModel.notificationId!).listen((uploadStatus) {
+
+            ///Update user notification id status == removed
+            if(uploadStatus == UploadFirestoreResult.success){
+              ///listen to firestore result, delete user, user quit group, user accept bike
+
+              SmartDialog.dismiss(status: SmartStatus.loading);
+              SmartDialog.show(
+                  keepSingle: true,
+                  widget: EvieSingleButtonDialogCupertino(
+                      title: "Success",
+                      content: "You deleted the user",
+                      rightContent: "Close",
+                      onPressedRight: () => SmartDialog.dismiss()
+                  ));
+              currentSubscription?.cancel();
+            } else if(uploadStatus == UploadFirestoreResult.failed) {
+              SmartDialog.dismiss();
+              SmartDialog.show(
+                  widget: EvieSingleButtonDialogCupertino(
+                      title: "Not success",
+                      content: "Try again",
+                      rightContent: "Close",
+                      onPressedRight: ()=>SmartDialog.dismiss()
+                  ));
+            }
+
+          },
+          );
+
         }:(){
             SmartDialog.dismiss();
             },

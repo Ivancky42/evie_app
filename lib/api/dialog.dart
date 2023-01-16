@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -161,7 +164,7 @@ showUpdateFailedDialog() {
 }
 
 
-showDeleteShareBikeUser(BikeProvider _bikeProvider, index){
+showDeleteShareBikeUser(BikeProvider _bikeProvider, int index){
   SmartDialog.show(
       widget: EvieDoubleButtonDialogCupertino(
         title: "Are you sure you want to delete this user",
@@ -171,18 +174,28 @@ showDeleteShareBikeUser(BikeProvider _bikeProvider, index){
         onPressedRight: () async {
           SmartDialog.dismiss();
           SmartDialog.showLoading();
-          await _bikeProvider.cancelSharedBikeStatus(_bikeProvider.bikeUserList.values.elementAt(index).uid,_bikeProvider.bikeUserList.values.elementAt(index).notificationId!).then((result){
+
+          StreamSubscription? currentSubscription;
+
+          currentSubscription = _bikeProvider.cancelSharedBikeStatus(
+              _bikeProvider.bikeUserList.values.elementAt(index).uid,
+              _bikeProvider.bikeUserList.values.elementAt(index).notificationId!).listen((uploadStatus) {
+
             ///Update user notification id status == removed
-            if(result == true){
-              SmartDialog.dismiss();
-              SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
-                  title: "Success",
-                  content: "You deleted the user",
-                  rightContent: "Close",
-                  onPressedRight: ()=> SmartDialog.dismiss()
-              ));
-            }
-            else {
+            if(uploadStatus == UploadFirestoreResult.success){
+             ///listen to firestore result, delete user, user quit group, user accept bike
+
+              SmartDialog.dismiss(status: SmartStatus.loading);
+              SmartDialog.show(
+                  keepSingle: true,
+                  widget: EvieSingleButtonDialogCupertino(
+                      title: "Success",
+                      content: "You deleted the user",
+                      rightContent: "Close",
+                      onPressedRight: () => SmartDialog.dismiss()
+                  ));
+              currentSubscription?.cancel();
+            } else if(uploadStatus == UploadFirestoreResult.failed) {
               SmartDialog.dismiss();
               SmartDialog.show(
                   widget: EvieSingleButtonDialogCupertino(
@@ -192,10 +205,11 @@ showDeleteShareBikeUser(BikeProvider _bikeProvider, index){
                       onPressedRight: ()=>SmartDialog.dismiss()
                   ));
             }
-          });
+
         },
-      ));
-}
+          );
+    }));
+    }
 
 showDeleteNotificationSuccess(){
   SmartDialog.show(

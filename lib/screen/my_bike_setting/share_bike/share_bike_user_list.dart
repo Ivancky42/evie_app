@@ -94,7 +94,6 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                                 backgroundColor: EvieColors.red,
                                 foregroundColor: Colors.white,
                                 icon: Icons.delete,
-                                label: 'Delete',
                               ),
                             ],
                           ),

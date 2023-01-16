@@ -34,6 +34,12 @@ enum SwitchBikeResult {
   success,
 }
 
+enum UploadFirestoreResult {
+  failed,
+  partiallySuccess,
+  success,
+}
+
 class BikeProvider extends ChangeNotifier {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
@@ -42,6 +48,7 @@ class BikeProvider extends ChangeNotifier {
   String rfidCollection = dotenv.env['DB_COLLECTION_RFID'] ?? 'DB not found';
   String eventsCollection = dotenv.env['DB_COLLECTION_EVENTS'] ?? 'DB not found';
   String plansCollection = dotenv.env['DB_COLLECTION_PLANS'] ?? 'DB not found';
+  String notificationsCollection = dotenv.env['DB_COLLECTION_NOTIFICATIONS'] ?? 'DB not found';
   String inventoryCollection = dotenv.env['DB_COLLECTION_INVENTORY'] ?? 'DB not found';
 
   LinkedHashMap bikeUserList = LinkedHashMap<String, BikeUserModel>();
@@ -71,11 +78,13 @@ class BikeProvider extends ChangeNotifier {
   StreamSubscription? currentBikePlanSubscription;
   StreamSubscription? rfidListSubscription;
 
+  StreamSubscription? currentSubscription;
+
   ScanQRCodeResult scanQRCodeResult = ScanQRCodeResult.unknown;
   SwitchBikeResult switchBikeResult = SwitchBikeResult.unknown;
 
-  StreamController<SwitchBikeResult> switchBikeResultListener =
-  StreamController.broadcast();
+  StreamController<SwitchBikeResult> switchBikeResultListener = StreamController.broadcast();
+  StreamController<UploadFirestoreResult> firestoreStatusListener = StreamController.broadcast();
 
   ///Get current user model
   Future<void> update(UserModel? user) async {
@@ -300,9 +309,9 @@ class BikeProvider extends ChangeNotifier {
 
     try {
       final ubsnapshot = await FirebaseFirestore.instance
-          .collection('bikes')
+          .collection(bikesCollection)
           .doc(currentBikeModel!.deviceIMEI)
-          .collection('users')
+          .collection(usersCollection)
           .get();
 
       List<int> aList = [];
@@ -320,7 +329,7 @@ class BikeProvider extends ChangeNotifier {
       }
 
       //Update
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(currentBikeModel!.deviceIMEI)
           .collection(usersCollection)
@@ -359,11 +368,14 @@ class BikeProvider extends ChangeNotifier {
     return result;
   }
 
-  updateAcceptSharedBikeStatus(String targetIMEI, String currentUid) async {
-    bool result;
+
+  Stream<UploadFirestoreResult> acceptSharedBikeStatus(String targetIMEI, String currentUid) {
+
+    StreamSubscription? currentSubscription;
+
     try {
       //Update
-      await FirebaseFirestore.instance
+      FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(targetIMEI)
           .collection(usersCollection)
@@ -373,19 +385,39 @@ class BikeProvider extends ChangeNotifier {
         'justInvited': true,
       }, SetOptions(merge: true));
 
-      result = true;
     } catch (e) {
+      currentSubscription?.cancel();
       debugPrint(e.toString());
-      result = false;
+      firestoreStatusListener.add(UploadFirestoreResult.failed);
     }
-    return result;
+
+    currentSubscription = FirebaseFirestore.instance
+        .collection(bikesCollection)
+        .doc(targetIMEI)
+        .collection(usersCollection)
+        .doc(currentUid)
+        .snapshots()
+        .listen((event) async {
+      Map<String, dynamic>? obj = event.data();
+
+      if(obj!['justInvited'] == false){
+        currentSubscription?.cancel();
+        firestoreStatusListener.add(UploadFirestoreResult.success);
+      }else{
+        firestoreStatusListener.add(UploadFirestoreResult.partiallySuccess);
+      }
+    });
+
+
+    return firestoreStatusListener.stream;
   }
 
-  cancelSharedBikeStatus(String targetUID, String notificationId) async {
-    bool result;
-    try {
-      //Update
-      FirebaseFirestore.instance
+
+  Stream<UploadFirestoreResult> cancelSharedBikeStatus(String targetUID, String notificationId) {
+
+
+    try{
+       FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(currentBikeModel!.deviceIMEI)
           .collection(usersCollection)
@@ -396,22 +428,41 @@ class BikeProvider extends ChangeNotifier {
       }, SetOptions(merge: true));
 
       ///Update user notification id status == removed
-      FirebaseFirestore.instance
+     FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(targetUID)
-          .collection("notifications")
+          .collection(notificationsCollection)
           .doc(notificationId)
           .set({
         'status': 'removed',
       }, SetOptions(merge: true));
 
-      result = true;
     } catch (e) {
+      currentSubscription?.cancel();
       debugPrint(e.toString());
-      result = false;
+      firestoreStatusListener.add(UploadFirestoreResult.failed);
     }
-    return result;
+
+    currentSubscription = FirebaseFirestore.instance
+        .collection(bikesCollection)
+        .doc(currentBikeModel!.deviceIMEI)
+        .collection(usersCollection)
+        .doc(targetUID)
+        .snapshots()
+        .listen((event) async {
+      Map<String, dynamic>? obj = event.data();
+      if(obj!['justInvited'] == false){
+        currentSubscription?.cancel();
+        firestoreStatusListener.add(UploadFirestoreResult.success);
+      }else{
+        firestoreStatusListener.add(UploadFirestoreResult.partiallySuccess);
+      }
+    });
+
+    return firestoreStatusListener.stream;
   }
+
+
 
   getBikeUserList() {
     bikeUserList.clear();
@@ -522,16 +573,15 @@ class BikeProvider extends ChangeNotifier {
 
   Future<bool> checkIsUserExist(String targetEmail) async {
     bool result = false;
-    if (bikeUserDetails.isNotEmpty) {
-      for (var i = 0; i < bikeUserDetails.length;i++) {
-        if (bikeUserDetails.values.elementAt(i).email == targetEmail) {
+    if (bikeUserList.isNotEmpty) {
+      for (var i = 0; i < bikeUserList.length;i++) {
+        if (bikeUserList.values.elementAt(i).userEmail == targetEmail) {
           result =  true;
         } else {
           result = false;
         }
       }
     }else {result = false;}
-
     return result;
   }
 

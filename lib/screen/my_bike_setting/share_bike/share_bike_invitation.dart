@@ -137,8 +137,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                   }
                                   else {
                                     ///check bike user list if the user already own this bike
-                                    var existResult = await _bikeProvider
-                                        .checkIsUserExist(
+                                    var existResult = await _bikeProvider.checkIsUserExist(
                                         _emailController.text.trim());
 
                                     if (existResult == false) {

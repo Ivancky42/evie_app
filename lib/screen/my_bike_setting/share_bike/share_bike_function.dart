@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,18 +66,28 @@ class _ShareBikeDeleteState extends State<ShareBikeDelete> {
                 leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
                 rightContent: "Yes",
                 onPressedRight: () async {
-                  await widget.bikeProvider.cancelSharedBikeStatus(widget.bikeProvider.bikeUserList.values.elementAt(widget.index).uid, widget.bikeProvider.bikeUserList.values.elementAt(widget.index).notificationId!).then((result){
+                  StreamSubscription? currentSubscription;
+
+                  currentSubscription = widget.bikeProvider.cancelSharedBikeStatus(
+               widget.bikeProvider.bikeUserList.values.elementAt(widget.index).uid,
+               widget.bikeProvider.bikeUserList.values.elementAt(widget.index).notificationId!).listen((uploadStatus) {
+
                     ///Update user notification id status == removed
-                    if(result == true){
+                    if(uploadStatus == UploadFirestoreResult.success){
+                      ///listen to firestore result, delete user, user quit group, user accept bike
+
+                      SmartDialog.dismiss(status: SmartStatus.loading);
+                      SmartDialog.show(
+                          keepSingle: true,
+                          widget: EvieSingleButtonDialogCupertino(
+                              title: "Success",
+                              content: "You deleted the user",
+                              rightContent: "Close",
+                              onPressedRight: () => SmartDialog.dismiss()
+                          ));
+                      currentSubscription?.cancel();
+                    } else if(uploadStatus == UploadFirestoreResult.failed) {
                       SmartDialog.dismiss();
-                      SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
-                          title: "Success",
-                          content: "You deleted the bike",
-                          rightContent: "Close",
-                          onPressedRight: ()=> SmartDialog.dismiss()
-                      ));
-                    }
-                    else {
                       SmartDialog.show(
                           widget: EvieSingleButtonDialogCupertino(
                               title: "Not success",
@@ -84,7 +96,9 @@ class _ShareBikeDeleteState extends State<ShareBikeDelete> {
                               onPressedRight: ()=>SmartDialog.dismiss()
                           ));
                     }
-                  });
+
+                  },
+                  );
 
                 },
               ));
@@ -142,33 +156,31 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
         onPressed: (){
           SmartDialog.show(
               widget: EvieDoubleButtonDialogCupertino(
-                title: "Are you sure you want to delete this user",
-                content: 'Are you sure you want to delete this user',
+                title: "Are you sure you want to leave",
+                content: 'Are you sure you want to leave',
                 leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
                 rightContent: "Yes",
                 onPressedRight: () async {
                   SmartDialog.dismiss();
                   SmartDialog.showLoading();
-                  await widget.bikeProvider.cancelSharedBikeStatus(widget.bikeProvider.bikeUserList.values.elementAt(widget.index).uid, widget.bikeProvider.bikeUserList.values.elementAt(widget.index).notificationId!).then((result) {
-                    ///Update user notification id status == removed
-                    if(result == true){
-                      SmartDialog.dismiss();
-                      changeToUserHomePageScreen(context);
+                  StreamSubscription? currentSubscription;
 
-                      for (var element in widget.bikeProvider.userBikeNotificationList) {
-                        _notificationProvider.unsubscribeFromTopic("${widget.bikeProvider.currentBikeModel!.deviceIMEI}$element");
-                      }
+                  currentSubscription = widget.bikeProvider.cancelSharedBikeStatus(
+                  widget.bikeProvider.bikeUserList.values.elementAt(widget.index).uid,
+                  widget.bikeProvider.bikeUserList.values.elementAt(widget.index).notificationId!).listen((uploadStatus) {
 
-                      SmartDialog.show(widget: EvieSingleButtonDialogCupertino(
-                          title: "Success",
-                          content: "You leave the bike",
-                          rightContent: "Close",
-                          onPressedRight: () {
-                      SmartDialog.dismiss();
-                          }
-                      ));
-                    }
-                    else {
+                    if(uploadStatus == UploadFirestoreResult.success){
+                      SmartDialog.dismiss(status: SmartStatus.loading);
+                      SmartDialog.show(
+                          keepSingle: true,
+                          widget: EvieSingleButtonDialogCupertino(
+                              title: "Success",
+                              content: "You leave",
+                              rightContent: "Close",
+                              onPressedRight: () => SmartDialog.dismiss()
+                          ));
+                      currentSubscription?.cancel();
+                    } else if(uploadStatus == UploadFirestoreResult.failed) {
                       SmartDialog.dismiss();
                       SmartDialog.show(
                           widget: EvieSingleButtonDialogCupertino(
@@ -178,8 +190,8 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
                               onPressedRight: ()=>SmartDialog.dismiss()
                           ));
                     }
-                  });
-
+                  },
+                  );
                 },
               ));
         },
