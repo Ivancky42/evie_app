@@ -363,7 +363,6 @@ class PairDeviceResult {
 class FirmwareUpgradeResult {
   FirmwareUpgradeState firmwareUpgradeState;
   double progress;
-  Duration duration;
 
-  FirmwareUpgradeResult({this.firmwareUpgradeState = FirmwareUpgradeState.startUpgrade, this.progress = 0, this.duration = const Duration(seconds: 0)});
+  FirmwareUpgradeResult({this.firmwareUpgradeState = FirmwareUpgradeState.startUpgrade, this.progress = 0});
 }

@@ -338,15 +338,12 @@ class BikeProvider extends ChangeNotifier {
           .set({
         'created': Timestamp.now(),
         'uid': userModel.uid,
-        'userName': userModel.name,
         'userEmail': userModel.email,
         'role': 'user',
         'status': 'pending',
         'justInvited': false,
         'userId': userId,
         'ownerUid': currentUserModel!.uid,
-        'ownerEmail': currentUserModel!.email,
-        'ownerName': currentUserModel!.name
       }, SetOptions(merge: true));
 
       Future.delayed(const Duration(milliseconds: 500), () {

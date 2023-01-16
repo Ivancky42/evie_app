@@ -1007,8 +1007,7 @@ class BluetoothProvider extends ChangeNotifier {
     firmwareUpgradeState = FirmwareUpgradeState.startUpgrade;
     firmwareUpgradeListener.add(FirmwareUpgradeResult(
         firmwareUpgradeState: FirmwareUpgradeState.startUpgrade,
-        progress: 0,
-        duration: Duration(seconds: 0)
+        progress: 0
     ));
 
 
@@ -1069,8 +1068,7 @@ class BluetoothProvider extends ChangeNotifier {
       Future.delayed(const Duration(seconds: 5)).then((value) {
         firmwareUpgradeListener.add(FirmwareUpgradeResult(
             firmwareUpgradeState: FirmwareUpgradeState.upgradeSuccessfully,
-            progress: fwUpgradeProgress,
-            duration: Duration(seconds: 0)
+            progress: fwUpgradeProgress
         ));
         return firmwareUpgradeState = FirmwareUpgradeState.upgradeSuccessfully;
       });
@@ -1079,8 +1077,7 @@ class BluetoothProvider extends ChangeNotifier {
       firmwareUpgradeState = FirmwareUpgradeState.upgrading;
       firmwareUpgradeListener.add(FirmwareUpgradeResult(
           firmwareUpgradeState: FirmwareUpgradeState.upgrading,
-          progress: fwUpgradeProgress,
-          duration: Duration(seconds: 0)
+          progress: fwUpgradeProgress
       ));
     }
 
@@ -1094,8 +1091,7 @@ class BluetoothProvider extends ChangeNotifier {
         firmwareUpgradeState = FirmwareUpgradeState.upgradeFailed;
         firmwareUpgradeListener.add(FirmwareUpgradeResult(
             firmwareUpgradeState: FirmwareUpgradeState.upgradeFailed,
-            progress: fwUpgradeProgress,
-            duration: Duration(seconds: 0)
+            progress: fwUpgradeProgress
         ));
       }
     }
