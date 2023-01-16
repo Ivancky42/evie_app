@@ -545,7 +545,10 @@ class _TestBleState extends State<TestBle> {
                       if (result != null) {
                         File file = File(result.files.single.path!);
                         bluetoothProvider.firmwareUpgradeListener.stream.listen((firmwareUpgradeResult) {
-                          if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgrading) {
+                          if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.startUpgrade) {
+                            print("Start Upgrade Firmware");
+                          }
+                          else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgrading) {
                             print("Upgrading firmware: " +
                                 (firmwareUpgradeResult.progress * 100)
                                     .toString() + "%");
