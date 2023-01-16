@@ -113,29 +113,8 @@ class _BikeSafeState extends State<BikeSafe> {
                                   .currentBikeModel
                                   ?.batteryPercent ??
                                   0,
-                              currentSecurityIcon:
-                              getSecurityImageWidgetBluetooth(
-                                  _bluetoothProvider
-                                      .cableLockState
-                                      ?.lockState ??
-                                      LockState
-                                          .unknown,
-                                  _bikeProvider
-                                      .currentBikeModel
-                                      ?.location!
-                                      .status ??
-                                      ""),
-                              child: getSecurityTextWidget(
-                                  _bluetoothProvider
-                                      .cableLockState
-                                      ?.lockState ??
-                                      LockState
-                                          .unknown,
-                                  _bikeProvider
-                                      .currentBikeModel
-                                      ?.location!
-                                      .status ??
-                                      ""),
+                              currentSecurityIcon: getSecurityImageWidget(_bikeProvider.currentBikeModel!.isLocked!),
+                              child: getSecurityTextWidget(_bikeProvider.currentBikeModel!.isLocked!),
                             ),
                           ),
                         ),

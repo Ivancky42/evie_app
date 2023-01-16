@@ -55,6 +55,7 @@ class BikeProvider extends ChangeNotifier {
   LinkedHashMap bikeUserDetails = LinkedHashMap<String, UserModel>();
   LinkedHashMap userBikeList = LinkedHashMap<String, UserBikeModel>();
   LinkedHashMap userBikeDetails = LinkedHashMap<String, BikeModel>();
+  LinkedHashMap userBikePlans = LinkedHashMap<String, BikePlanModel>();
   LinkedHashMap rfidList = LinkedHashMap<String, RFIDModel>();
 
   UserModel? currentUserModel;
@@ -682,6 +683,38 @@ class BikeProvider extends ChangeNotifier {
           userBikeDetails.removeWhere((key, value) => key == obj?.keys);
           notifyListeners();
         }
+      });
+
+      currentUserBikeSubscription = FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(deviceIMEI)
+          .collection(plansCollection)
+          .snapshots()
+          .listen((snapshot) {
+        if (snapshot.docs.isNotEmpty) {
+          for (var docChange in snapshot.docChanges) {
+            switch (docChange.type) {
+            ///element.type
+              case DocumentChangeType.added:
+                Map<String, dynamic>? obj = docChange.doc.data();
+                userBikePlans.putIfAbsent(docChange.doc.id, () => BikePlanModel.fromJson(obj!));
+                notifyListeners();
+                break;
+              case DocumentChangeType.removed:
+                Map<String, dynamic>? obj = docChange.doc.data();
+                userBikePlans.removeWhere((key, value) => key == obj?.keys);
+                notifyListeners();
+                break;
+              case DocumentChangeType.modified:
+                notifyListeners();
+                break;
+            }
+          }
+        }else{
+          notifyListeners();
+        }
+
+
       });
     } catch (e) {
       debugPrint(e.toString());

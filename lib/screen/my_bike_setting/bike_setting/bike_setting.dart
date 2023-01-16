@@ -12,10 +12,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../../../api/backend/debouncer.dart';
 import '../../../api/colours.dart';
+import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
+import '../../my_account/my_account_widget.dart';
 import '../my_bike_function.dart';
 import 'bike_setting_container.dart';
 import 'bike_setting_model.dart';
@@ -113,22 +115,22 @@ class _BikeSettingState extends State<BikeSetting> {
     }
 
     return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
+        onWillPop: () async {
+          changeToMyGarageScreen(context);
+      return false;
+    },
+
       child: Scaffold(
+          appBar: AccountPageAppbar(
+            title: 'My Bike Setting',
+            onPressed: () {
+              changeToMyGarageScreen(context);
+            },
+          ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(16.w, 51.h, 0.w, 7.h),
-                child: Container(
-                  child: Text(
-                    "My Bike Setting",
-                    style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w700),
-                  ),
-                ),
-              ),
+
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
                 child: CustomSearchController(

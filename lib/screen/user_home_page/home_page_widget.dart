@@ -90,52 +90,36 @@ class _HomePageWidget_StatusBarState extends State<HomePageWidget_StatusBar> {
 
 
 
-Widget getSecurityTextWidget(LockState isLocked, String status) {
+Widget getSecurityTextWidget(bool isLocked) {
   switch (isLocked) {
-    case LockState.lock:
-      if (status == "safe") {
+    case true:
         return Text(
           "LOCKED AND SECURE",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
-      }
-      break;
-    case LockState.unlock:
-      if (status == "safe") {
+
+    case false:
         return Text(
           "UNLOCKED",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
-      }
-      break;
-    case LockState.unknown:
-      if (status == "safe") {
+    default:
         return Text(
           "UNKNOWN",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         );
-      }
-      break;
   }
-  return CircularProgressIndicator();
 }
 
-getSecurityImageWidget(bool isLocked, String status) {
-  switch (isLocked) {
-    case true:
-      if (status == "safe") {
-        return "assets/buttons/bike_security_lock_and_secure.svg";
-      }
-      break;
-    case false:
-      if (status == "safe") {
-        return "assets/buttons/bike_security_unlock.svg";
-      }
-      break;
-    default:
-    return "";
+getSecurityImageWidget(bool isLocked) {
+
+  if(isLocked){
+    return "assets/buttons/bike_security_lock_and_secure.svg";
+
+  }else{
+    return "assets/buttons/bike_security_unlock.svg";
   }
-  return "";
+
 }
 
 

@@ -3,6 +3,7 @@ import 'package:evie_test/api/model/movement_setting_model.dart';
 import 'package:evie_test/api/model/plan_model.dart';
 import 'package:evie_test/api/model/simcard_model.dart';
 
+import 'bike_plan_model.dart';
 import 'location_model.dart';
 
 class BikeModel {
@@ -21,6 +22,7 @@ class BikeModel {
   LocationModel? location;
   MovementSettingModel? movementSetting;
   SimSettingModel? simSetting;
+  BikePlanModel? bikePlanModel;
   PlanModel? planModel;
   String? macAddr;
   int? networkSignal;
@@ -41,6 +43,7 @@ class BikeModel {
     required this.lastUpdated,
     required this.location,
     this.movementSetting,
+    this.bikePlanModel,
     this.simSetting,
     required this.macAddr,
     required this.networkSignal,
@@ -73,6 +76,7 @@ class BikeModel {
       location:   LocationModel.fromJson(json['location'] as Map<String, dynamic>),
       movementSetting: json['movementSetting'] != null ? MovementSettingModel.fromJson(json['movementSetting'] as Map<String, dynamic>) : null,
       simSetting:   json['simSetting'] != null ? SimSettingModel.fromJson(json['simSetting'] as Map<String, dynamic>) : null,
+      bikePlanModel:   json['plans'] != null ? BikePlanModel.fromJson(json['plans'] as Map<String, dynamic>) : null,
       macAddr: json['macAddr']?? '',
       networkSignal: json['networkSignal']?? 0,
       protVersion: json['protVersion']?? '',

@@ -37,7 +37,7 @@ class _UserHomePageState extends State<UserHomePage> {
   final screen = [
     UserHomeGeneral(),
     TestBle(),
-    NavigatePlanPage(),
+  //  NavigatePlanPage(),
     Feeds(),
     MyAccount(),
   ];
@@ -126,28 +126,24 @@ class _UserHomePageState extends State<UserHomePage> {
                 tooltip: 'User Profile',
                 label: '',
               ),
-
-
-              BottomNavigationBarItem(
-                icon: Container(
-                  child: SvgPicture.asset(
-                    "assets/buttons/bike.svg",
-                  ),
-                  //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                  height: EvieLength.bottom_bar_icon_height,
-                ),
-                activeIcon: Container(
-                  child: SvgPicture.asset(
-                    "assets/buttons/bike_selected.svg",
-                  ),
-                  //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                  height: EvieLength.bottom_bar_icon_height,
-                ),
-                tooltip: 'User Profile',
-                label: '',
-              ),
-
-
+              // BottomNavigationBarItem(
+              //   icon: Container(
+              //     child: SvgPicture.asset(
+              //       "assets/buttons/bike.svg",
+              //     ),
+              //     //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+              //     height: EvieLength.bottom_bar_icon_height,
+              //   ),
+              //   activeIcon: Container(
+              //     child: SvgPicture.asset(
+              //       "assets/buttons/bike_selected.svg",
+              //     ),
+              //     //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+              //     height: EvieLength.bottom_bar_icon_height,
+              //   ),
+              //   tooltip: 'User Profile',
+              //   label: '',
+              // ),
               BottomNavigationBarItem(
                 icon: Container(
                   child: SvgPicture.asset(

@@ -84,14 +84,15 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
           future: _notificationProvider.getNotificationFromNotificationId(data),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              changeToNotificationDetailsScreen(
-                context,
-                _notificationProvider.currentSingleNotification?.notificationId,
-                _notificationProvider.currentSingleNotification,
-
-                //   _notificationProvider.singleNotificationList.keys.first,
-                //   _notificationProvider.singleNotificationList.values.first
-              );
+              changeToNotificationScreen(context);
+              // changeToNotificationDetailsScreen(
+              //   context,
+              //   _notificationProvider.currentSingleNotification?.notificationId,
+              //   _notificationProvider.currentSingleNotification,
+              //
+              //   //   _notificationProvider.singleNotificationList.keys.first,
+              //   //   _notificationProvider.singleNotificationList.values.first
+              // );
               return const Text("");
             } else {
               return const Center(
@@ -171,14 +172,15 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
             _notificationProvider.getNotificationFromNotificationId(payload),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            changeToNotificationDetailsScreen(
-              context,
-              _notificationProvider.currentSingleNotification?.notificationId,
-              _notificationProvider.currentSingleNotification,
-
-              //   _notificationProvider.singleNotificationList.keys.first,
-              //   _notificationProvider.singleNotificationList.values.first
-            );
+            changeToNotificationScreen(context);
+            // changeToNotificationDetailsScreen(
+            //   context,
+            //   _notificationProvider.currentSingleNotification?.notificationId,
+            //   _notificationProvider.currentSingleNotification,
+            //
+            //   //   _notificationProvider.singleNotificationList.keys.first,
+            //   //   _notificationProvider.singleNotificationList.values.first
+            // );
             return const Text("");
           } else {
             return const Center(
@@ -217,14 +219,15 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
     if (_notificationProvider.currentSingleNotification?.notificationId !=
         null) {
-      changeToNotificationDetailsScreen(
-        context,
-        _notificationProvider.currentSingleNotification?.notificationId,
-        _notificationProvider.currentSingleNotification,
-
-        //   _notificationProvider.singleNotificationList.keys.first,
-        //   _notificationProvider.singleNotificationList.values.first
-      );
+      changeToNotificationScreen(context);
+      // changeToNotificationDetailsScreen(
+      //   context,
+      //   _notificationProvider.currentSingleNotification?.notificationId,
+      //   _notificationProvider.currentSingleNotification,
+      //
+      //   //   _notificationProvider.singleNotificationList.keys.first,
+      //   //   _notificationProvider.singleNotificationList.values.first
+      // );
     }
 
     /*

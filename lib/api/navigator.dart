@@ -292,24 +292,16 @@ void changeToMyGarageScreen(BuildContext context) {
   );
 }
 
+
 void changeToNavigatePlanScreen(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: const UserHomePage(2),
+      child: const NavigatePlanPage(),
       duration: const Duration(milliseconds: 300),
     ),
   );
 }
-// void changeToNavigatePlanScreen(BuildContext context) {
-//   Navigator.pushReplacement(context,
-//     PageTransition(
-//       type: PageTransitionType.rightToLeft,
-//       child: const NavigatePlanPage(),
-//       duration: const Duration(milliseconds: 300),
-//     ),
-//   );
-// }
 
 void changeToDisplayControlScreen(BuildContext context) {
   Navigator.pushReplacement(context,
@@ -438,7 +430,7 @@ void changeToMyAccount(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: const UserHomePage(4),
+      child: const UserHomePage(3),
       duration: const Duration(milliseconds: 300),
     ),
   );
@@ -544,11 +536,11 @@ void changeToEnterNewPassword(BuildContext context) {
 
 
 ///Future builder
-void changeToNotificationDetailsScreen(BuildContext context, key, value) {
-  Navigator.push(context,
-    MaterialPageRoute(builder: (context) => UserNotificationDetails(key, value)),
-  );
-}
+// void changeToNotificationDetailsScreen(BuildContext context, key, value) {
+//   Navigator.push(context,
+//     MaterialPageRoute(builder: (context) => UserNotificationDetails(key, value)),
+//   );
+// }
 
 void changeToStripeCheckoutScreen(
     BuildContext context,

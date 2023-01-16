@@ -241,7 +241,7 @@ class MyApp extends StatelessWidget {
           "/userBluetooth": (context) => const UserHomeBluetooth(),
           "/userChangePassword": (context) => const UserChangePassword(),
           "/testBle": (context) => const TestBle(),
-          "/notification": (context) => const UserNotification(),
+      //    "/notification": (context) => const UserNotification(),
           "/rfid": (context) => const RFIDCardManage(),
           "/myAccount": (context) => const MyAccount(),
           "/editProfile": (context) => const EditProfile(),

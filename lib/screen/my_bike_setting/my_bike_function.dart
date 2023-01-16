@@ -21,7 +21,7 @@ returnBikeStatusImage(bool isConnected,String status) {
       case "crash":
         return "assets/images/bike_HPStatus/bike_danger.png";
       default:
-        return CircularProgressIndicator();
+        return "assets/images/bike_HPStatus/bike_normal.png";
     }
   }
 }
