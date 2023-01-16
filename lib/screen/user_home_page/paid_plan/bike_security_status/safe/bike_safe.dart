@@ -147,27 +147,20 @@ class _BikeSafeState extends State<BikeSafe> {
 
                               if(widget.isDeviceConnected!)...{
 
-
                               SizedBox(
                                 height: 96.h,
                                 width: 96.w,
                                 child:
                                 FloatingActionButton(
                                   elevation: 0,
-                                  backgroundColor: cableLockState
-                                      ?.lockState ==
-                                      LockState
-                                          .lock
+                                  backgroundColor: cableLockState?.lockState == LockState.lock
                                       ?  EvieColors.primaryColor : EvieColors.softPurple,
                                   onPressed: cableLockState
-                                      ?.lockState ==
-                                      LockState
-                                          .lock
+                                      ?.lockState == LockState.lock
                                       ? () {
                                     ///Check is connected
 
-                                    SmartDialog
-                                        .showLoading(
+                                    SmartDialog.showLoading(
                                         msg: "Unlocking");
                                     StreamSubscription?
                                     subscription;

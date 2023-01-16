@@ -1,3 +1,4 @@
+import 'package:evie_test/screen/my_account/my_garage/my_garage.dart';
 import 'package:evie_test/screen/my_bike_setting/detection_sensitivity.dart';
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity.dart';
 
@@ -281,6 +282,15 @@ void changeToCongratsBikeAdded(BuildContext context, String bikeName) {
   );
 }
 
+void changeToMyGarageScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const MyGarage(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
 
 void changeToNavigatePlanScreen(BuildContext context) {
   Navigator.pushReplacement(context,
@@ -291,6 +301,15 @@ void changeToNavigatePlanScreen(BuildContext context) {
     ),
   );
 }
+// void changeToNavigatePlanScreen(BuildContext context) {
+//   Navigator.pushReplacement(context,
+//     PageTransition(
+//       type: PageTransitionType.rightToLeft,
+//       child: const NavigatePlanPage(),
+//       duration: const Duration(milliseconds: 300),
+//     ),
+//   );
+// }
 
 void changeToDisplayControlScreen(BuildContext context) {
   Navigator.pushReplacement(context,

@@ -102,7 +102,7 @@ class _FeedsState extends State<Feeds> {
                           onDismissed: () async {
 
                             if(_notificationProvider.notificationList.values.elementAt(index).status == "pending"){
-                              decline();
+                              decline(index);
                             }else{
                               var result = await _notificationProvider.deleteNotification(_notificationProvider.notificationList.keys.elementAt(index));
                               if(!result){
@@ -116,7 +116,7 @@ class _FeedsState extends State<Feeds> {
                             spacing:10,
                             onPressed: (context) async{
                               if(_notificationProvider.notificationList.values.elementAt(index).status == "pending"){
-                                decline();
+                                decline(index);
                               }else {
                                 var result = await _notificationProvider.deleteNotification(
                                     _notificationProvider.notificationList.keys.elementAt(index));
@@ -182,7 +182,7 @@ class _FeedsState extends State<Feeds> {
                                                 child: EvieButton_ReversedColor(
                                                     onPressed: (){
 
-                                                      decline();
+                                                      decline(index);
 
                                                     },
                                                     child: Text(
@@ -219,7 +219,7 @@ class _FeedsState extends State<Feeds> {
                                                       ));
 
                                                       StreamSubscription? currentSubscription;
-                                                      currentSubscription = _bikeProvider.acceptSharedBikeStatus(
+                                                      currentSubscription = _bikeProvider.acceptSharedBike(
                                                           _notificationProvider.notificationList.values.elementAt(index).deviceIMEI!,
                                                           _currentUserProvider.currentUserModel!.uid)
                                                           .listen((uploadStatus) async {
@@ -335,7 +335,7 @@ class _FeedsState extends State<Feeds> {
     );
   }
 
-  decline(){
+  decline(int index){
     SmartDialog.show(
         widget: EvieDoubleButtonDialogCupertino(
           title: "Are you sure you want to decline?",
@@ -343,21 +343,21 @@ class _FeedsState extends State<Feeds> {
           leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
           rightContent: "Yes",
           onPressedRight: () async {
+            SmartDialog.dismiss();
+            SmartDialog.showLoading();
             StreamSubscription? currentSubscription;
 
-            currentSubscription = _bikeProvider.cancelSharedBikeStatus(
-                 _bikeProvider.bikeUserList.values.firstWhere((element) => element.uid == _currentUserProvider.currentUserModel!.uid).uid!,
-                 _bikeProvider.bikeUserList.values.firstWhere((element) => element.uid == _currentUserProvider.currentUserModel!.uid).notificationId!).listen((cancelStatus) {
-              ///Update user notification id status == removed
+            currentSubscription = _bikeProvider.declineSharedBike(
+                _notificationProvider.notificationList.values.elementAt(index).deviceIMEI!,
+                _notificationProvider.notificationList.values.elementAt(index).notificationId).listen((cancelStatus) {
               if(cancelStatus == UploadFirestoreResult.success){
-                ///listen to firestore result, delete user, user quit group, user accept bike
 
                 SmartDialog.dismiss(status: SmartStatus.loading);
                 SmartDialog.show(
                     keepSingle: true,
                     widget: EvieSingleButtonDialogCupertino(
                         title: "Success",
-                        content: "You deleted the user",
+                        content: "You declined the invitation",
                         rightContent: "Close",
                         onPressedRight: () => SmartDialog.dismiss()
                     ));

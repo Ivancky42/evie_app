@@ -303,8 +303,9 @@ class BikeProvider extends ChangeNotifier {
   /// Share bike
   /// ****************************************** ///
   /// Command for share bike
-  ///
-  updateSharedBikeStatus(UserModel userModel) async {
+
+
+  Future updateSharedBike(UserModel userModel) async {
     bool result;
 
     try {
@@ -359,20 +360,17 @@ class BikeProvider extends ChangeNotifier {
         }, SetOptions(merge: true));
       });
 
+
       result = true;
     } catch (e) {
       debugPrint(e.toString());
       result = false;
     }
-
     return result;
   }
 
 
-  Stream<UploadFirestoreResult> acceptSharedBikeStatus(String targetIMEI, String currentUid) {
-
-    StreamSubscription? currentSubscription;
-
+  Stream<UploadFirestoreResult> acceptSharedBike(String targetIMEI, String currentUid) {
     try {
       //Update
       FirebaseFirestore.instance
@@ -407,17 +405,61 @@ class BikeProvider extends ChangeNotifier {
         firestoreStatusListener.add(UploadFirestoreResult.partiallySuccess);
       }
     });
+    return firestoreStatusListener.stream;
+  }
 
+
+  Stream<UploadFirestoreResult> cancelSharedBike(String targetUID, String notificationId) {
+    try{
+       FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI)
+          .collection(usersCollection)
+          .doc(targetUID)
+          .set({
+        'status': 'cancel',
+        'justInvited': true,
+      }, SetOptions(merge: true));
+
+      ///Update user notification id status == removed
+     FirebaseFirestore.instance
+          .collection(usersCollection)
+          .doc(targetUID)
+          .collection(notificationsCollection)
+          .doc(notificationId)
+          .set({
+        'status': 'cancel',
+      }, SetOptions(merge: true));
+
+    } catch (e) {
+      currentSubscription?.cancel();
+      debugPrint(e.toString());
+      firestoreStatusListener.add(UploadFirestoreResult.failed);
+    }
+
+    currentSubscription = FirebaseFirestore.instance
+        .collection(bikesCollection)
+        .doc(currentBikeModel!.deviceIMEI)
+        .collection(usersCollection)
+        .doc(targetUID)
+        .snapshots()
+        .listen((event) async {
+      Map<String, dynamic>? obj = event.data();
+      if(obj == null){
+        currentSubscription?.cancel();
+        firestoreStatusListener.add(UploadFirestoreResult.success);
+      }else{
+        firestoreStatusListener.add(UploadFirestoreResult.partiallySuccess);
+      }
+    });
 
     return firestoreStatusListener.stream;
   }
 
 
-  Stream<UploadFirestoreResult> cancelSharedBikeStatus(String targetUID, String notificationId) {
-
-
+  Stream<UploadFirestoreResult> removedSharedBike(String targetUID, String notificationId) {
     try{
-       FirebaseFirestore.instance
+      FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(currentBikeModel!.deviceIMEI)
           .collection(usersCollection)
@@ -428,7 +470,7 @@ class BikeProvider extends ChangeNotifier {
       }, SetOptions(merge: true));
 
       ///Update user notification id status == removed
-     FirebaseFirestore.instance
+      FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(targetUID)
           .collection(notificationsCollection)
@@ -451,7 +493,7 @@ class BikeProvider extends ChangeNotifier {
         .snapshots()
         .listen((event) async {
       Map<String, dynamic>? obj = event.data();
-      if(obj!['justInvited'] == false){
+      if(obj == null){
         currentSubscription?.cancel();
         firestoreStatusListener.add(UploadFirestoreResult.success);
       }else{
@@ -462,6 +504,101 @@ class BikeProvider extends ChangeNotifier {
     return firestoreStatusListener.stream;
   }
 
+
+  Stream<UploadFirestoreResult> leaveSharedBike(String targetUID, String notificationId) {
+    try{
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI)
+          .collection(usersCollection)
+          .doc(targetUID)
+          .set({
+        'status': 'leave',
+        'justInvited': true,
+      }, SetOptions(merge: true));
+
+      ///Update user notification id status == removed
+      FirebaseFirestore.instance
+          .collection(usersCollection)
+          .doc(targetUID)
+          .collection(notificationsCollection)
+          .doc(notificationId)
+          .set({
+        'status': 'leave',
+      }, SetOptions(merge: true));
+
+    } catch (e) {
+      currentSubscription?.cancel();
+      debugPrint(e.toString());
+      firestoreStatusListener.add(UploadFirestoreResult.failed);
+    }
+
+    currentSubscription = FirebaseFirestore.instance
+        .collection(bikesCollection)
+        .doc(currentBikeModel!.deviceIMEI)
+        .collection(usersCollection)
+        .doc(targetUID)
+        .snapshots()
+        .listen((event) async {
+      Map<String, dynamic>? obj = event.data();
+      if(obj == null){
+        currentSubscription?.cancel();
+        firestoreStatusListener.add(UploadFirestoreResult.success);
+      }else{
+        firestoreStatusListener.add(UploadFirestoreResult.partiallySuccess);
+      }
+    });
+
+    return firestoreStatusListener.stream;
+  }
+
+
+  Stream<UploadFirestoreResult> declineSharedBike(String targetIMEI, String notificationId) {
+    try{
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(targetIMEI)
+          .collection(usersCollection)
+          .doc(currentUserModel!.uid)
+          .set({
+        'status': 'decline',
+        'justInvited': true,
+      }, SetOptions(merge: true));
+
+      ///Update user notification id status == removed
+      FirebaseFirestore.instance
+          .collection(usersCollection)
+          .doc(currentUserModel!.uid)
+          .collection(notificationsCollection)
+          .doc(notificationId)
+          .set({
+        'status': 'decline',
+      }, SetOptions(merge: true));
+
+    } catch (e) {
+      currentSubscription?.cancel();
+      debugPrint(e.toString());
+      firestoreStatusListener.add(UploadFirestoreResult.failed);
+    }
+
+    currentSubscription = FirebaseFirestore.instance
+        .collection(bikesCollection)
+        .doc(targetIMEI)
+        .collection(usersCollection)
+        .doc(currentUserModel!.uid)
+        .snapshots()
+        .listen((event) async {
+      Map<String, dynamic>? obj = event.data();
+      if(obj == null){
+        currentSubscription?.cancel();
+        firestoreStatusListener.add(UploadFirestoreResult.success);
+      }else{
+        firestoreStatusListener.add(UploadFirestoreResult.partiallySuccess);
+      }
+    });
+
+    return firestoreStatusListener.stream;
+  }
 
 
   getBikeUserList() {

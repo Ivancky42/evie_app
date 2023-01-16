@@ -125,7 +125,8 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                             Text(_bikeProvider.bikeUserList.values.elementAt(index).role,
                                 style: TextStyle(fontSize: 12.sp, color: EvieColors.darkGrayish))
                                 : isManageList ?
-                                      ShareBikeDelete(bikeProvider: _bikeProvider, index: index,)
+                                Container()
+                          //            ShareBikeDelete(bikeProvider: _bikeProvider, index: index,)
                                 : isOwner == false && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
                                       ShareBikeLeave(bikeProvider: _bikeProvider, index: index,)
                                 : _bikeProvider.bikeUserList.values.elementAt(index).status == "pending" ?

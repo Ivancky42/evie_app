@@ -16,106 +16,6 @@ import '../../../widgets/evie_single_button_dialog.dart';
 
 
 
-class ShareBikeDelete extends StatefulWidget {
-
-  final BikeProvider bikeProvider;
-  final int index;
-
-  const ShareBikeDelete({
-    Key? key,
-    required this.bikeProvider,
-    required this.index,
-
-  }) : super(key: key);
-
-  @override
-  State<ShareBikeDelete> createState() => _ShareBikeDeleteState();
-}
-
-class _ShareBikeDeleteState extends State<ShareBikeDelete> {
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Container(
-      width: 107.w,
-      height: 35.h,
-      child: ElevatedButton(
-        child: Row(
-          mainAxisAlignment:
-          MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              "assets/icons/delete.svg",
-              height: 20.h,
-              width: 20.w,
-            ),
-            Text(
-              "Delete",
-              style: TextStyle(
-                  fontSize: 12.sp,
-                  color: EvieColors.grayishWhite),
-            ),
-          ],
-        ),
-        onPressed: (){
-          SmartDialog.show(
-              widget: EvieDoubleButtonDialogCupertino(
-                title: "Are you sure you want to delete this user",
-                content: 'Are you sure you want to delete this user',
-                leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
-                rightContent: "Yes",
-                onPressedRight: () async {
-                  StreamSubscription? currentSubscription;
-
-                  currentSubscription = widget.bikeProvider.cancelSharedBikeStatus(
-               widget.bikeProvider.bikeUserList.values.elementAt(widget.index).uid,
-               widget.bikeProvider.bikeUserList.values.elementAt(widget.index).notificationId!).listen((uploadStatus) {
-
-                    ///Update user notification id status == removed
-                    if(uploadStatus == UploadFirestoreResult.success){
-                      ///listen to firestore result, delete user, user quit group, user accept bike
-
-                      SmartDialog.dismiss(status: SmartStatus.loading);
-                      SmartDialog.show(
-                          keepSingle: true,
-                          widget: EvieSingleButtonDialogCupertino(
-                              title: "Success",
-                              content: "You deleted the user",
-                              rightContent: "Close",
-                              onPressedRight: () => SmartDialog.dismiss()
-                          ));
-                      currentSubscription?.cancel();
-                    } else if(uploadStatus == UploadFirestoreResult.failed) {
-                      SmartDialog.dismiss();
-                      SmartDialog.show(
-                          widget: EvieSingleButtonDialogCupertino(
-                              title: "Not success",
-                              content: "Try again",
-                              rightContent: "Close",
-                              onPressedRight: ()=>SmartDialog.dismiss()
-                          ));
-                    }
-
-                  },
-                  );
-
-                },
-              ));
-        },
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-              borderRadius:
-              BorderRadius.circular(20.w)),
-          elevation: 0.0,
-          backgroundColor: EvieColors.primaryColor,
-
-        ),
-      ),
-    );
-  }
-}
-
 
 
 class ShareBikeLeave extends StatefulWidget {
@@ -165,7 +65,7 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
                   SmartDialog.showLoading();
                   StreamSubscription? currentSubscription;
 
-                  currentSubscription = widget.bikeProvider.cancelSharedBikeStatus(
+                  currentSubscription = widget.bikeProvider.leaveSharedBike(
                   widget.bikeProvider.bikeUserList.values.elementAt(widget.index).uid,
                   widget.bikeProvider.bikeUserList.values.elementAt(widget.index).notificationId!).listen((uploadStatus) {
 
@@ -206,3 +106,108 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
     );
   }
 }
+
+
+
+
+
+///Replace with dialog function
+// class ShareBikeDelete extends StatefulWidget {
+//
+//   final BikeProvider bikeProvider;
+//   final int index;
+//
+//   const ShareBikeDelete({
+//     Key? key,
+//     required this.bikeProvider,
+//     required this.index,
+//
+//   }) : super(key: key);
+//
+//   @override
+//   State<ShareBikeDelete> createState() => _ShareBikeDeleteState();
+// }
+//
+// class _ShareBikeDeleteState extends State<ShareBikeDelete> {
+//
+//   @override
+//   Widget build(BuildContext context) {
+//
+//     return Container(
+//       width: 107.w,
+//       height: 35.h,
+//       child: ElevatedButton(
+//         child: Row(
+//           mainAxisAlignment:
+//           MainAxisAlignment.center,
+//           children: [
+//             SvgPicture.asset(
+//               "assets/icons/delete.svg",
+//               height: 20.h,
+//               width: 20.w,
+//             ),
+//             Text(
+//               "Delete",
+//               style: TextStyle(
+//                   fontSize: 12.sp,
+//                   color: EvieColors.grayishWhite),
+//             ),
+//           ],
+//         ),
+//         onPressed: (){
+//           SmartDialog.show(
+//               widget: EvieDoubleButtonDialogCupertino(
+//                 title: "Are you sure you want to delete this user",
+//                 content: 'Are you sure you want to delete this user',
+//                 leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
+//                 rightContent: "Yes",
+//                 onPressedRight: () async {
+//                   StreamSubscription? currentSubscription;
+//
+//                   currentSubscription = widget.bikeProvider.removedSharedBikeStatus(
+//                       widget.bikeProvider.bikeUserList.values.elementAt(widget.index).uid,
+//                       widget.bikeProvider.bikeUserList.values.elementAt(widget.index).notificationId!).listen((uploadStatus) {
+//
+//                     ///Update user notification id status == removed
+//                     if(uploadStatus == UploadFirestoreResult.success){
+//                       ///listen to firestore result, delete user, user quit group, user accept bike
+//
+//                       SmartDialog.dismiss(status: SmartStatus.loading);
+//                       SmartDialog.show(
+//                           keepSingle: true,
+//                           widget: EvieSingleButtonDialogCupertino(
+//                               title: "Success",
+//                               content: "You deleted the user",
+//                               rightContent: "Close",
+//                               onPressedRight: () => SmartDialog.dismiss()
+//                           ));
+//                       currentSubscription?.cancel();
+//                     } else if(uploadStatus == UploadFirestoreResult.failed) {
+//                       SmartDialog.dismiss();
+//                       SmartDialog.show(
+//                           widget: EvieSingleButtonDialogCupertino(
+//                               title: "Not success",
+//                               content: "Try again",
+//                               rightContent: "Close",
+//                               onPressedRight: ()=>SmartDialog.dismiss()
+//                           ));
+//                     }
+//
+//                   },
+//                   );
+//
+//                 },
+//               ));
+//         },
+//         style: ElevatedButton.styleFrom(
+//           shape: RoundedRectangleBorder(
+//               borderRadius:
+//               BorderRadius.circular(20.w)),
+//           elevation: 0.0,
+//           backgroundColor: EvieColors.primaryColor,
+//
+//         ),
+//       ),
+//     );
+//   }
+// }

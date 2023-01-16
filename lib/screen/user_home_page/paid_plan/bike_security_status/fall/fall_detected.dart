@@ -124,7 +124,6 @@ class _FallDetectedState extends State<FallDetected> {
 
                       if(widget.isDeviceConnected!)...{
 
-
                         SizedBox(
                           height: 96.h,
                           width: 96.w,
@@ -138,9 +137,7 @@ class _FallDetectedState extends State<FallDetected> {
                               SmartDialog.showLoading(msg: "Unlocking");
 
                               StreamSubscription?subscription;
-                              subscription = _bluetoothProvider
-                                  .cableUnlock()
-                                  .listen(
+                              subscription = _bluetoothProvider.cableUnlock().listen(
                                       (unlockResult) {
                                     SmartDialog.dismiss(
                                         status:

@@ -155,7 +155,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                             onPressedRight: () async {
                                               SmartDialog.dismiss();
 
-                                              await _bikeProvider.updateSharedBikeStatus(result).
+                                              await _bikeProvider.updateSharedBike(result).
                                               then((update) {
                                                 if (update == true) {
                                                   SmartDialog.show(

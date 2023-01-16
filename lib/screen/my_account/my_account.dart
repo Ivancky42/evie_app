@@ -113,7 +113,12 @@ class _MyAccountState extends State<MyAccount> {
                   AccountPageDivider(),
                   AccountPageContainer(
                       content: "My Garage",
-                      onPress: () {},
+                      onPress: () {
+
+                        changeToMyGarageScreen(context);
+                        /// my garage, bike setting  = navigate plan
+                      //  changeToNavigatePlanScreen(context);
+                      },
                       trailingImage: "assets/buttons/next.svg"),
                   Divider(
                     thickness: 11.h,

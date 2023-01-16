@@ -123,7 +123,7 @@ class _UserNotificationDetailsState extends State<UserNotificationDetails> {
                               onPressed: () {
 
                                 StreamSubscription? currentSubscription;
-                                currentSubscription = _bikeProvider.acceptSharedBikeStatus(widget.notificationValues.deviceIMEI!, _currentUserProvider.currentUserModel!.uid)
+                                currentSubscription = _bikeProvider.acceptSharedBike(widget.notificationValues.deviceIMEI!, _currentUserProvider.currentUserModel!.uid)
                                     .listen((uploadStatus) async {
 
                                   if(uploadStatus == UploadFirestoreResult.success){

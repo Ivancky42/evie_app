@@ -165,6 +165,7 @@ showUpdateFailedDialog() {
 
 
 showDeleteShareBikeUser(BikeProvider _bikeProvider, int index){
+
   SmartDialog.show(
       widget: EvieDoubleButtonDialogCupertino(
         title: "Are you sure you want to delete this user",
@@ -177,38 +178,68 @@ showDeleteShareBikeUser(BikeProvider _bikeProvider, int index){
 
           StreamSubscription? currentSubscription;
 
-          currentSubscription = _bikeProvider.cancelSharedBikeStatus(
-              _bikeProvider.bikeUserList.values.elementAt(index).uid,
-              _bikeProvider.bikeUserList.values.elementAt(index).notificationId!).listen((uploadStatus) {
+          ///Cancel user invitation
+          if(_bikeProvider.bikeUserList.values.elementAt(index).status == "pending"){
+            currentSubscription = _bikeProvider.cancelSharedBike(
+                _bikeProvider.bikeUserList.values.elementAt(index).uid,
+                _bikeProvider.bikeUserList.values.elementAt(index).notificationId!).listen((uploadStatus) {
 
-            ///Update user notification id status == removed
-            if(uploadStatus == UploadFirestoreResult.success){
-             ///listen to firestore result, delete user, user quit group, user accept bike
+              if(uploadStatus == UploadFirestoreResult.success){
+                SmartDialog.dismiss(status: SmartStatus.loading);
+                SmartDialog.show(
+                    keepSingle: true,
+                    widget: EvieSingleButtonDialogCupertino(
+                        title: "Success",
+                        content: "You canceled the invitation",
+                        rightContent: "Close",
+                        onPressedRight: () => SmartDialog.dismiss()
+                    ));
+                currentSubscription?.cancel();
+              } else if(uploadStatus == UploadFirestoreResult.failed) {
+                SmartDialog.dismiss();
+                SmartDialog.show(
+                    widget: EvieSingleButtonDialogCupertino(
+                        title: "Not success",
+                        content: "Try again",
+                        rightContent: "Close",
+                        onPressedRight: ()=>SmartDialog.dismiss()
+                    ));
+              }
 
-              SmartDialog.dismiss(status: SmartStatus.loading);
-              SmartDialog.show(
-                  keepSingle: true,
-                  widget: EvieSingleButtonDialogCupertino(
-                      title: "Success",
-                      content: "You deleted the user",
-                      rightContent: "Close",
-                      onPressedRight: () => SmartDialog.dismiss()
-                  ));
-              currentSubscription?.cancel();
-            } else if(uploadStatus == UploadFirestoreResult.failed) {
-              SmartDialog.dismiss();
-              SmartDialog.show(
-                  widget: EvieSingleButtonDialogCupertino(
-                      title: "Not success",
-                      content: "Try again",
-                      rightContent: "Close",
-                      onPressedRight: ()=>SmartDialog.dismiss()
-                  ));
-            }
+            },
+            );
+          }else{
 
-        },
-          );
-    }));
+            ///Remove user
+            currentSubscription = _bikeProvider.removedSharedBike(
+                _bikeProvider.bikeUserList.values.elementAt(index).uid,
+                _bikeProvider.bikeUserList.values.elementAt(index).notificationId!).listen((uploadStatus) {
+
+              if(uploadStatus == UploadFirestoreResult.success){
+
+                SmartDialog.dismiss(status: SmartStatus.loading);
+                SmartDialog.show(
+                    keepSingle: true,
+                    widget: EvieSingleButtonDialogCupertino(
+                        title: "Success",
+                        content: "You removed the user",
+                        rightContent: "Close",
+                        onPressedRight: () => SmartDialog.dismiss()
+                    ));
+                currentSubscription?.cancel();
+              } else if(uploadStatus == UploadFirestoreResult.failed) {
+                SmartDialog.dismiss();
+                SmartDialog.show(
+                    widget: EvieSingleButtonDialogCupertino(
+                        title: "Not success",
+                        content: "Try again",
+                        rightContent: "Close",
+                        onPressedRight: ()=>SmartDialog.dismiss()
+                    ));
+              }
+
+            },
+            );}}));
     }
 
 showDeleteNotificationSuccess(){

@@ -85,11 +85,6 @@ class _UserHomePageState extends State<UserHomePage> {
                       _title = '';
                     }
                     break;
-                  case 4:
-                    {
-                      _title = '';
-                    }
-                    break;
                 }
               });
             },
@@ -131,6 +126,8 @@ class _UserHomePageState extends State<UserHomePage> {
                 tooltip: 'User Profile',
                 label: '',
               ),
+
+
               BottomNavigationBarItem(
                 icon: Container(
                   child: SvgPicture.asset(
@@ -149,6 +146,8 @@ class _UserHomePageState extends State<UserHomePage> {
                 tooltip: 'User Profile',
                 label: '',
               ),
+
+
               BottomNavigationBarItem(
                 icon: Container(
                   child: SvgPicture.asset(
