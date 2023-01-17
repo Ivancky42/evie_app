@@ -771,8 +771,6 @@ class BluetoothProvider extends ChangeNotifier {
         case BluetoothCommand.externalCableLock:
           cableLockResult.add(CableLockResult(decodedData));
           cableLockState = CableLockResult(decodedData);
-          deviceConnectStream.add(DeviceConnectResult.connected);
-          deviceConnectResult = DeviceConnectResult.connected;
           notifyListeners();
           break;
         case BluetoothCommand.addRFIDCmd:
@@ -863,6 +861,8 @@ class BluetoothProvider extends ChangeNotifier {
       exitNotifyIotInfoState();
       sendCommand(bluetoothCommand.getBikeInfo(requestComKeyResult!.communicationKey));
       sendCommand(bluetoothCommand.getCableLockStatus(requestComKeyResult!.communicationKey));
+      deviceConnectStream.add(DeviceConnectResult.connected);
+      deviceConnectResult = DeviceConnectResult.connected;
       notifyListeners();
     }
   }
