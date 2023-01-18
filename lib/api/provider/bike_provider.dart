@@ -1152,13 +1152,13 @@ class BikeProvider extends ChangeNotifier {
 
   ///Compare bluetooth firmware version and firestore bike firmware version
   checkIsCurrentVersion(String firmVer){
+    print("check ble firmware ver");
     firmVer = firmVer.split("V").last;
     if(currentBikeModel?.firmVer == null ||
         int.parse(currentBikeModel!.firmVer!.replaceAll('.', ''))
             != int.parse(firmVer.replaceAll('.', ''))) {
       FirmwareProvider().uploadFirmVerToFirestore(firmVer);
     }
-
   }
 
   clear() async {

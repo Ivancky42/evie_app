@@ -1,3 +1,4 @@
+import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
@@ -696,9 +697,26 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                                 ),
                               ],
                             ),
-                            Text(
-                              _firmwareProvider.currentFirmVer ?? "Not available",
-                              style: TextStyle(fontSize: 16.sp),
+                            Row(
+                              children: [
+                                Text(
+                                  _firmwareProvider.currentFirmVer ?? "Not available",
+                                  style: TextStyle(fontSize: 16.sp),
+                                ),
+                                SizedBox(width: 4.w,),
+                                Visibility(
+                                  visible: _bluetoothProvider.iotInfoModel?.firmwareVer != null &&_bluetoothProvider.iotInfoModel?.firmwareVer != _firmwareProvider.currentFirmVer,
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                          color: EvieColors.primaryColor,
+                                          borderRadius: BorderRadius.all(Radius.circular(5))
+                                      ),
+                                      child: Padding(
+                                        padding:EdgeInsets.fromLTRB(6.w,4.h,6.w,4.h),
+                                        child: Text("Update Available", style: TextStyle(fontSize: 12.sp, color: EvieColors.grayishWhite),),
+                                      ),
+                                    )),
+                              ],
                             )
                           ],
                         ),

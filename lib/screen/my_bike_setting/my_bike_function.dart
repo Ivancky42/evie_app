@@ -1,3 +1,4 @@
+import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -139,6 +140,7 @@ handleConnection(connectStream, _bluetoothProvider) async {
       // TODO: Handle this case.
         break;
       case DeviceConnectResult.connected:
+        BikeProvider().checkIsCurrentVersion(_bluetoothProvider.iotInfoModel!.firmwareVer!);
       // TODO: Handle this case.
         break;
       case DeviceConnectResult.disconnecting:

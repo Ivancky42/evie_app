@@ -42,8 +42,10 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
 
   bool isUpdating = false;
 
-  ///init check is current version
-  ///if no, update available
+  int totalSeconds = 105;
+
+  StreamSubscription? stream;
+
 
   @override
   void initState() {
@@ -76,6 +78,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                   onPressedLeft: (){
                     SmartDialog.dismiss();
                     changeToNavigatePlanScreen(context);
+                    stream?.cancel();
                   },
                   onPressedRight: (){
                     SmartDialog.dismiss();
@@ -99,6 +102,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                       onPressedLeft: (){
                         SmartDialog.dismiss();
                         changeToNavigatePlanScreen(context);
+                        stream?.cancel();
                       },
                       onPressedRight: (){
                         SmartDialog.dismiss();
@@ -163,12 +167,11 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                         child: Column(
                           children: [
                             LinearPercentIndicator(
-                              width: 358.w,
+                              width: 360.w,
                               animation: false,
                               lineHeight: 4.h,
                               animationDuration: 0,
                               percent: _bluetoothProvider.fwUpgradeProgress,
-                              linearStrokeCap: LinearStrokeCap.roundAll,
                               progressColor: EvieColors.primaryColor,
                               backgroundColor: EvieColors.lightGray,
                             ),
@@ -180,7 +183,8 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("Time remaining: ",
+                                    Text(  "Time remaining: ${intToTimeLeft(((_bluetoothProvider.fwUpgradeProgress * 100)*
+                                        (totalSeconds/100)-totalSeconds).abs().toInt())}",
                                       style: TextStyle(
                                         fontSize: 12.sp,
                                         color: EvieColors.mediumBlack,
@@ -263,38 +267,30 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                           onPressedRight: () async {
 
                             SmartDialog.dismiss();
+                            SmartDialog.showLoading(backDismiss: false);
 
                             Reference ref = FirebaseStorage.instance.refFromURL(_firmwareProvider.latestFirmwareModel!.url);
                             File file = await _firmwareProvider.downloadFile(ref);
 
-                            StreamSubscription? stream;
-
                             stream = _bluetoothProvider.firmwareUpgradeListener.stream.listen((firmwareUpgradeResult) {
                               if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.startUpgrade) {
-                                print("Start Upgrade Firmware");
+                                SmartDialog.dismiss();
                               }
                               else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgrading) {
-
                                 Future.delayed(Duration.zero, () {
                                   isUpdating = true;
                                 });
-
-                                print("Upgrading firmware: " + (firmwareUpgradeResult.progress * 100).toString() + "%");
                               }
                               else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeSuccessfully) {
                                 ///go to success page
                                  isUpdating = false;
                                  stream?.cancel();
-                                print("OTA State: " + firmwareUpgradeResult.firmwareUpgradeState.toString());
-
                                 _firmwareProvider.uploadFirmVerToFirestore("57_V${_firmwareProvider.latestFirmVer!}");
-
                                 changeToFirmwareUpdateCompleted(context);
                               }
                               else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeFailed) {
                                 isUpdating = false;
                                 stream?.cancel();
-                                print("OTA State: " + firmwareUpgradeResult.firmwareUpgradeState.toString());
                                 changeToFirmwareUpdateFailed(context);
                               }
                             });
@@ -311,6 +307,22 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
           ],
         ),),
     );
+  }
+
+  String intToTimeLeft(int value) {
+    int h, m, s;
+
+    h = value ~/ 3600;
+    m = ((value - h * 3600)) ~/ 60;
+    s = value - (h * 3600) - (m * 60);
+
+    String hourLeft = h.toString().length < 2 ? "0" + h.toString() : h.toString();
+    String minuteLeft = m.toString().length < 2 ? "0" + m.toString() : m.toString();
+    String secondsLeft = s.toString().length < 2 ? "0" + s.toString() : s.toString();
+
+    String result = "$hourLeft:$minuteLeft:$secondsLeft";
+
+    return result;
   }
 }
 
