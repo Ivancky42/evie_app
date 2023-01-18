@@ -15,7 +15,10 @@ DB_COLLECTION_EVENTS=events
 DB_COLLECTION_RFID=rfid
 DB_COLLECTION_NOTIFICATIONS=notifications
 DB_COLLECTION_INVENTORY=inventory
+DB_COLLECTION_NOTIFICATIONS=notifications
 DB_COLLECTION_PLANS=plans
+DB_COLLECTION_RELEASES=releases
+DB_COLLECTION_FIRMWARE=firmware
 DEFAULT_PROFILE_IMG='https://firebasestorage.googleapis.com/v0/b/evie-6952d.appspot.com/o/UserProfilePic%2FDefaultProfilePicCats.jpeg?alt=media&token=e606c97d-5f37-4d7f-bcc8-5a0b89afa0b4'
 
 #Bluetooth Data

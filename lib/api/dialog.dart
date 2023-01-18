@@ -12,6 +12,7 @@ import '../screen/my_bike_setting/my_bike_function.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
 import '../widgets/evie_textform.dart';
+import 'function.dart';
 
 showBluetoothNotTurnOn() {
   SmartDialog.show(
@@ -81,10 +82,8 @@ showConnectDialog(BluetoothProvider bluetoothProvider) async {
         SmartDialog.dismiss();
       },
       onPressedRight: () async {
-        await bluetoothProvider.disconnectDevice();
-        await bluetoothProvider.stopScan();
-        bluetoothProvider.startScanAndConnect();
         SmartDialog.dismiss();
+        checkBleStatusAndConnectDevice(bluetoothProvider);
       })
   );
 }
