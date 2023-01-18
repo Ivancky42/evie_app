@@ -1,5 +1,7 @@
 import 'package:evie_test/screen/my_account/my_garage/my_garage.dart';
 import 'package:evie_test/screen/my_bike_setting/detection_sensitivity.dart';
+import 'package:evie_test/screen/my_bike_setting/firmware/firmware_information.dart';
+import 'package:evie_test/screen/my_bike_setting/firmware/firmware_update_failed.dart';
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity.dart';
 
 import 'package:evie_test/screen/my_account/edit_profile.dart';
@@ -26,6 +28,7 @@ import '../screen/add_bike/congrats_bike_added.dart';
 import '../screen/feeds/feeds.dart';
 import '../screen/my_account/push_notification/push_notification.dart';
 import '../screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
+import '../screen/my_bike_setting/firmware/firmware_update_completed.dart';
 import '../screen/my_bike_setting/navigate_plan_page.dart';
 import '../screen/my_bike_setting/rfid_card/add_new_rfid.dart';
 import '../screen/my_bike_setting/rfid_card/name_rfid.dart';
@@ -456,6 +459,38 @@ void changeToPushNotification(BuildContext context) {
 //     ),
 //   );
 // }
+
+void changeToFirmwareInformation(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const FirmwareInformation(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+
+void changeToFirmwareUpdateCompleted(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const FirmwareUpdateCompleted(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+void changeToFirmwareUpdateFailed(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const FirmwareUpdateFailed(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
 
 
 void changeToShareBikeScreen(BuildContext context) {

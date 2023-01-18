@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/movement_setting_model.dart';
 import 'package:evie_test/api/model/notification_setting_model.dart';
+import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -322,6 +323,7 @@ class BikeProvider extends ChangeNotifier {
       for (var element in ubsnapshot.docs) {
         aList.add(element.data()["userId"]);
       }
+
       aList = aList..sort();
 
       for (var i = 4; i > 0; i--) {
@@ -1146,6 +1148,17 @@ class BikeProvider extends ChangeNotifier {
   setIsAddBike(bool isAddBike){
     this.isAddBike = isAddBike;
     notifyListeners();
+  }
+
+  ///Compare bluetooth firmware version and firestore bike firmware version
+  checkIsCurrentVersion(String firmVer){
+    firmVer = firmVer.split("V").last;
+    if(currentBikeModel?.firmVer == null ||
+        int.parse(currentBikeModel!.firmVer!.replaceAll('.', ''))
+            != int.parse(firmVer.replaceAll('.', ''))) {
+      FirmwareProvider().uploadFirmVerToFirestore(firmVer);
+    }
+
   }
 
   clear() async {

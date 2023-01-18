@@ -154,35 +154,41 @@ class EvieDoubleButtonDialog extends StatelessWidget{
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: EvieButton_ReversedColor(
-                          width: double.infinity,
-                          height: 48.h,
-                          child: Text(
-                            leftContent,
-                            style: TextStyle(
-                                color: EvieColors.primaryColor,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w700
+                        child:  Padding(
+                          padding: EdgeInsets.only(right: 4.w),
+                          child: EvieButton_ReversedColor(
+                            width: double.infinity,
+                            height: 48.h,
+                            child: Text(
+                              leftContent,
+                              style: TextStyle(
+                                  color: EvieColors.primaryColor,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w700
+                              ),
                             ),
+                            onPressed: onPressedLeft,
                           ),
-                          onPressed: onPressedLeft,
                         ),
                       ),
 
                       Expanded(
                         child:
-                      EvieButton(
-                        width: double.infinity,
-                        height: 48.h,
-                        child: Text(
-                          rightContent,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w700
+                      Padding(
+                        padding: EdgeInsets.only(left: 4.w),
+                        child: EvieButton(
+                          width: double.infinity,
+                          height: 48.h,
+                          child: Text(
+                            rightContent,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w700
+                            ),
                           ),
+                          onPressed: onPressedRight
                         ),
-                        onPressed: onPressedRight
                       ),
       ),
                     ],

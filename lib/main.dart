@@ -47,6 +47,7 @@ import 'package:upgrader/upgrader.dart';
 import 'api/model/user_model.dart';
 import 'api/provider/auth_provider.dart';
 import 'api/provider/bike_provider.dart';
+import 'api/provider/firmware_provider.dart';
 import 'api/provider/location_provider.dart';
 import 'api/provider/notification_provider.dart';
 
@@ -165,6 +166,14 @@ class AppProviders extends StatelessWidget {
               update: (_, bikeProvider, locationProvider) {
                 return locationProvider!
                   ..update(bikeProvider.currentBikeModel?.location);
+              }
+          ),
+          ChangeNotifierProxyProvider<BikeProvider, FirmwareProvider>(
+              lazy: false,
+              create: (_) => FirmwareProvider(),
+              update: (_, bikeProvider, firmwareProvider) {
+                return firmwareProvider!
+                  ..update(bikeProvider.currentBikeModel);
               }
           ),
           ChangeNotifierProxyProvider2<CurrentUserProvider, BikeProvider, PlanProvider>(

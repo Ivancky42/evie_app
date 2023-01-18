@@ -96,6 +96,7 @@ dependencies:
   slider_button: ^2.0.0
   flutter_map: ^3.1.0
   flutter_slidable: ^2.0.0
+  wakelock: ^0.6.2
 
 
 dev_dependencies:

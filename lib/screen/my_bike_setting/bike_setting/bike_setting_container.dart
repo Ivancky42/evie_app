@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
+import '../../../api/provider/firmware_provider.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 
@@ -25,6 +26,7 @@ class BikeSettingContainer extends StatefulWidget {
 class _BikeSettingContainerState extends State<BikeSettingContainer> {
 
   late BikeProvider _bikeProvider;
+  late FirmwareProvider _firmwareProvider;
   late BluetoothProvider _bluetoothProvider;
   DeviceConnectResult? deviceConnectResult;
   String? label;
@@ -36,6 +38,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
   Widget build(BuildContext context) {
     label = widget.bikeSettingModel.label;
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _firmwareProvider = Provider.of<FirmwareProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
@@ -646,7 +649,19 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
-
+                  if (deviceConnectResult == null
+                      || deviceConnectResult == DeviceConnectResult.disconnected
+                      || deviceConnectResult == DeviceConnectResult.scanTimeout
+                      || deviceConnectResult == DeviceConnectResult.connectError
+                      || deviceConnectResult == DeviceConnectResult.scanError) {
+                    setState(() {
+                      pageNavigate = label;
+                    });
+                    showConnectDialog(_bluetoothProvider);
+                  }
+                  else if (deviceConnectResult == DeviceConnectResult.connected) {
+                changeToFirmwareInformation(context);
+                  }
                 },
                 child: Container(
                   height: 62.h,
@@ -682,7 +697,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                               ],
                             ),
                             Text(
-                              "0.3.3",
+                              _firmwareProvider.currentFirmVer ?? "Not available",
                               style: TextStyle(fontSize: 16.sp),
                             )
                           ],

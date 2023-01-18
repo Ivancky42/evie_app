@@ -27,6 +27,7 @@ class BikeModel {
   String? macAddr;
   int? networkSignal;
   String? protVersion;
+  String? firmVer;
   Timestamp? registered;
 
   BikeModel({
@@ -48,6 +49,7 @@ class BikeModel {
     required this.macAddr,
     required this.networkSignal,
     required this.protVersion,
+    this.firmVer,
     required this.registered,
 
   });
@@ -80,6 +82,7 @@ class BikeModel {
       macAddr: json['macAddr']?? '',
       networkSignal: json['networkSignal']?? 0,
       protVersion: json['protVersion']?? '',
+      firmVer: json['firmVer']?? '',
       registered:    timestampFromJson(json['registered']),
     );
   }
