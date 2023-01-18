@@ -748,8 +748,7 @@ class BluetoothProvider extends ChangeNotifier {
         case BluetoothCommand.requestComKeyCmd:
           requestComKeyResult = RequestComKeyResult(decodedData);
           if (requestComKeyResult?.communicationKey != null) {
-            sendCommand(bluetoothCommand.getBikeInfo(requestComKeyResult!.communicationKey));
-            sendCommand(bluetoothCommand.getCableLockStatus(requestComKeyResult!.communicationKey));
+            requestTotalPacketOfIotInfo();
           }else{
 
           }
