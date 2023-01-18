@@ -151,6 +151,18 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
     loadMarker(currentLatLng);
 
+    Color statusBarColor = Colors.transparent;
+
+    if(_locationProvider.locationModel?.status  == "safe"){
+      statusBarColor = Colors.transparent;
+    } else if(_locationProvider.locationModel?.status == "warning" || _locationProvider.locationModel?.status == "fall"){
+      statusBarColor = Color(0xffE59200);
+    }else if(_locationProvider.locationModel?.status == "danger" || _locationProvider.locationModel?.status == "crash"){
+      statusBarColor = Color(0xffCA0D0D);
+    }else{
+      statusBarColor = Colors.transparent;
+    }
+
     return WillPopScope(
       onWillPop: () async {
         bool? exitApp = await SmartDialog.show(
@@ -168,6 +180,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
         return exitApp ?? false;
       },
       child: Scaffold(
+          backgroundColor:statusBarColor,
           body: SafeArea(
         child: Stack(
           children: [
