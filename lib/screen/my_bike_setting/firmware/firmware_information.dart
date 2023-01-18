@@ -235,7 +235,9 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
             ),
 
             Visibility(
-              visible: !_firmwareProvider.isLatestFirmVer && isUpdating == false,
+              visible: _bluetoothProvider.iotInfoModel?.firmwareVer != null &&
+                  _bluetoothProvider.iotInfoModel?.firmwareVer != _firmwareProvider.currentFirmVer &&
+                  isUpdating == false,
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
