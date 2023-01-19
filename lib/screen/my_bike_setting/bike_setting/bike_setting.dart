@@ -77,7 +77,6 @@ class _BikeSettingState extends State<BikeSetting> {
 
   @override
   void dispose() {
-    _bluetoothProvider.disconnectDevice();
     hideCurrentSnackBar(_navigator);
     searchController.dispose();
     super.dispose();
