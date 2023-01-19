@@ -269,7 +269,7 @@ showDeleteNotificationFailed(){
       ));
 }
 
-showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscription? stream, bool isUpdating, BluetoothProvider bluetoothProvider){
+showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscription? stream, BluetoothProvider bluetoothProvider){
   SmartDialog.show(
       widget:   EvieDoubleButtonDialog(
           title: "Firmware update",
@@ -296,19 +296,17 @@ showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscriptio
                 SmartDialog.dismiss();
               }
               else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgrading) {
-                Future.delayed(Duration.zero, () {
-                  isUpdating = true;
-                });
+                firmwareProvider.changeIsUpdating(true);
               }
               else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeSuccessfully) {
                 ///go to success page
-                isUpdating = false;
+                firmwareProvider.changeIsUpdating(false);
                 stream?.cancel();
                 firmwareProvider.uploadFirmVerToFirestore("57_V${firmwareProvider.latestFirmVer!}");
                 changeToFirmwareUpdateCompleted(context);
               }
               else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeFailed) {
-                isUpdating = false;
+                firmwareProvider.changeIsUpdating(false);
                 stream?.cancel();
                 changeToFirmwareUpdateFailed(context);
               }

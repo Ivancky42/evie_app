@@ -41,7 +41,6 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
   late BluetoothProvider _bluetoothProvider;
   late FirmwareProvider _firmwareProvider;
 
-  bool isUpdating = false;
   int totalSeconds = 105;
 
   StreamSubscription? stream;
@@ -68,7 +67,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
 
     return WillPopScope(
       onWillPop: () async {
-        if(isUpdating){
+        if(_firmwareProvider.isUpdating){
           showFirmwareUpdateQuit(context, stream);
         }else{
           changeToNavigatePlanScreen(context);
@@ -79,7 +78,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
         appBar: AccountPageAppbar(
           title: 'Firmware Information',
           onPressed: () {
-            if(isUpdating){
+            if(_firmwareProvider.isUpdating){
              showFirmwareUpdateQuit(context, stream);
             }else{
               changeToNavigatePlanScreen(context);
@@ -135,7 +134,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                   ),
 
                   Visibility(
-                    visible: isUpdating,
+                    visible: _firmwareProvider.isUpdating,
                     child: Padding(
                         padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 20.h),
                         child: Column(
@@ -152,7 +151,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                             ),
 
                             Visibility(
-                              visible: isUpdating,
+                              visible: _firmwareProvider.isUpdating,
                               child: Padding(
                                 padding: EdgeInsets.only(left:4.w, right: 4.w, top :4.h),
                                 child: Row(
@@ -210,7 +209,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
             ),
 
             Visibility(
-              visible: !_firmwareProvider.isLatestFirmVer && isUpdating == false,
+              visible: !_firmwareProvider.isLatestFirmVer && _firmwareProvider.isUpdating == false,
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
@@ -226,7 +225,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                           fontWeight: FontWeight.w700),
                     ),
                     onPressed: () {
-                      showFirmwareUpdate(context, _firmwareProvider, stream, isUpdating, _bluetoothProvider);
+                      showFirmwareUpdate(context, _firmwareProvider, stream, _bluetoothProvider);
                     },
                   ),
                 ),

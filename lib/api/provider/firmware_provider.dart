@@ -25,6 +25,7 @@ class FirmwareProvider extends ChangeNotifier {
   String? currentFirmVer;
 
   bool isLatestFirmVer = false;
+  bool isUpdating = false;
   BikeModel? currentBikeModel;
 
   FirmwareProvider() {
@@ -77,6 +78,10 @@ class FirmwareProvider extends ChangeNotifier {
     notifyListeners();
     }
 
+  changeIsUpdating(bool isUpdating) {
+    this.isUpdating = isUpdating;
+    notifyListeners();
+  }
 
     Future uploadFirmVerToFirestore(String firmVer) async{
       await FirebaseFirestore.instance
@@ -99,6 +104,4 @@ class FirmwareProvider extends ChangeNotifier {
     await ref.writeToFile(file);
     return file;
   }
-
-
 }

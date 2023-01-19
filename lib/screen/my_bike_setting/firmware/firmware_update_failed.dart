@@ -96,7 +96,7 @@ class _FirmwareUpdateFailedState extends State<FirmwareUpdateFailed> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(150.w,25.h,150.w,EvieLength.buttonWord_WordBottom),
+                    padding: EdgeInsets.fromLTRB(100.w,25.h,100.w,EvieLength.buttonWord_WordBottom),
                     child: SizedBox(
                       width: double.infinity,
                       child: TextButton(
