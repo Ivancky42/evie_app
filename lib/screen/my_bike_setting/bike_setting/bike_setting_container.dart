@@ -60,6 +60,10 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
               pageNavigate = null;
               changeToMotionSensitivityScreen(context);
               break;
+            case "Firmware Version":
+              pageNavigate = null;
+              changeToFirmwareInformation(context);
+              break;
           }
         }
       });
@@ -71,26 +75,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
           children: [
             GestureDetector(
               behavior: HitTestBehavior.translucent,
-              onTap: () async {
-                if (deviceConnectResult == null
-                    || deviceConnectResult == DeviceConnectResult.disconnected
-                    || deviceConnectResult == DeviceConnectResult.scanTimeout
-                    || deviceConnectResult == DeviceConnectResult.connectError
-                    || deviceConnectResult == DeviceConnectResult.scanError) {
-                  setState(() {
-                    pageNavigate = label;
-                  });
-                  showConnectDialog(_bluetoothProvider);
-                }
-                else if (deviceConnectResult == DeviceConnectResult.connected) {
-                  if (_bikeProvider.rfidList.isNotEmpty) {
-                    changeToRFIDListScreen(context);
-                  }
-                  else {
-                    changeToRFIDCardScreen(context);
-                  }
-                }
-              },
+              onTap: () {},
               child: Container(
                 height: 62.h,
                 child: Padding(
@@ -661,7 +646,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                     showConnectDialog(_bluetoothProvider);
                   }
                   else if (deviceConnectResult == DeviceConnectResult.connected) {
-                changeToFirmwareInformation(context);
+                    changeToFirmwareInformation(context);
                   }
                 },
                 child: Container(
