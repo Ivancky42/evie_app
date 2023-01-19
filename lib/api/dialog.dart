@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/firmware_provider.dart';
@@ -88,9 +89,7 @@ showConnectDialog(BluetoothProvider bluetoothProvider) async {
       },
       onPressedRight: () async {
         SmartDialog.dismiss();
-        await bluetoothProvider.disconnectDevice();
-        await bluetoothProvider.stopScan();
-        bluetoothProvider.startScanAndConnect();
+        checkBleStatusAndConnectDevice(bluetoothProvider);
       })
   );
 }
