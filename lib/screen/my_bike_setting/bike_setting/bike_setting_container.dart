@@ -43,7 +43,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
-    if(deviceConnectResult == DeviceConnectResult.connected){
+    if(deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice){
       Future.delayed(Duration.zero, () {
         if(pageNavigate != null){
           switch(pageNavigate){
@@ -98,7 +98,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                                     color: Color(0xff5F6060)
                                 ),
                               ),
-                              deviceConnectResult == DeviceConnectResult.connected ? SvgPicture.asset(
+                              deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
                                 "assets/icons/bluetooth_disconnect_filled.svg",
                                 height: 15.h,
                                 width: 15.w,
@@ -142,11 +142,13 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                     || deviceConnectResult == DeviceConnectResult.disconnected
                     || deviceConnectResult == DeviceConnectResult.scanTimeout
                     || deviceConnectResult == DeviceConnectResult.connectError
-                    || deviceConnectResult == DeviceConnectResult.scanError) {
+                    || deviceConnectResult == DeviceConnectResult.scanError
+                    || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
+                ) {
                   setState(() {
                     pageNavigate = label;
                   });
-                  showConnectDialog(_bluetoothProvider);
+                  showConnectDialog(_bluetoothProvider, _bikeProvider);
                 }
                 else if (deviceConnectResult == DeviceConnectResult.connected) {
                   if (_bikeProvider.rfidList.isNotEmpty) {
@@ -179,7 +181,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                                     color: Color(0xff5F6060)
                                 ),
                               ),
-                              deviceConnectResult == DeviceConnectResult.connected ? SvgPicture.asset(
+                              deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
                                 "assets/icons/bluetooth_disconnect_filled.svg",
                                 height: 15.h,
                                 width: 15.w,
@@ -219,11 +221,13 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                     || deviceConnectResult == DeviceConnectResult.disconnected
                     || deviceConnectResult == DeviceConnectResult.scanTimeout
                     || deviceConnectResult == DeviceConnectResult.connectError
-                    || deviceConnectResult == DeviceConnectResult.scanError) {
+                    || deviceConnectResult == DeviceConnectResult.scanError
+                    || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
+                ) {
                   setState(() {
                     pageNavigate = label;
                   });
-                  showConnectDialog(_bluetoothProvider);
+                  showConnectDialog(_bluetoothProvider, _bikeProvider);
                 }
                 else if (deviceConnectResult == DeviceConnectResult.connected) {
                   changeToMotionSensitivityScreen(context);
@@ -251,7 +255,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                                     color: Color(0xff5F6060)
                                 ),
                               ),
-                              deviceConnectResult == DeviceConnectResult.connected ? SvgPicture.asset(
+                              deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
                                 "assets/icons/bluetooth_disconnect_filled.svg",
                                 height: 15.h,
                                 width: 15.w,
@@ -315,7 +319,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                                     color: Color(0xff5F6060)
                                 ),
                               ),
-                              deviceConnectResult == DeviceConnectResult.connected ? SvgPicture.asset(
+                              deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
                                 "assets/icons/bluetooth_disconnect_filled.svg",
                                 height: 15.h,
                                 width: 15.w,
@@ -398,7 +402,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                                       color: Color(0xff5F6060)
                                   ),
                                 ),
-                                deviceConnectResult == DeviceConnectResult.connected ? SvgPicture.asset(
+                                deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
                                   "assets/icons/bluetooth_disconnect_filled.svg",
                                   height: 15.h,
                                   width: 15.w,
@@ -639,11 +643,13 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                       || deviceConnectResult == DeviceConnectResult.disconnected
                       || deviceConnectResult == DeviceConnectResult.scanTimeout
                       || deviceConnectResult == DeviceConnectResult.connectError
-                      || deviceConnectResult == DeviceConnectResult.scanError) {
+                      || deviceConnectResult == DeviceConnectResult.scanError
+                      || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
+                  ) {
                     setState(() {
                       pageNavigate = label;
                     });
-                    showConnectDialog(_bluetoothProvider);
+                    showConnectDialog(_bluetoothProvider, _bikeProvider);
                   }
                   else if (deviceConnectResult == DeviceConnectResult.connected) {
                     changeToFirmwareInformation(context);
@@ -671,7 +677,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                                       color: Color(0xff5F6060)
                                   ),
                                 ),
-                                deviceConnectResult == DeviceConnectResult.connected ? SvgPicture.asset(
+                                deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
                                   "assets/icons/bluetooth_disconnect_filled.svg",
                                   height: 15.h,
                                   width: 15.w,

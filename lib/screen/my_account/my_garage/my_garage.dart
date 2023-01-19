@@ -302,8 +302,8 @@ class _MyGarageState extends State<MyGarage> {
                                 elevation: 0.0,
                                 backgroundColor: const Color(0xffDFE0E0),
                               ),
-                              onPressed: (){
-                                _bikeProvider.changeBikeUsingIMEI(userBikeList.deviceIMEI);
+                              onPressed: () async {
+                                await _bikeProvider.changeBikeUsingIMEI(userBikeList.deviceIMEI);
                                 changeToNavigatePlanScreen(context);
                               }
                             )

@@ -103,11 +103,16 @@ class _BikeSettingState extends State<BikeSetting> {
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
 
-    if (deviceConnectResult == DeviceConnectResult.connected) {
+    if (deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr) {
+      print("BLE Connected : " + _bluetoothProvider.currentConnectedDevice!);
+      print("Current Bike : " + _bikeProvider.currentBikeModel!.macAddr!);
       if (!isFirstTimeConnected) {
         showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, context, _navigator);
         isFirstTimeConnected = true;
       }
+    }
+    else if (deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice != _bikeProvider.currentBikeModel?.macAddr) {
+        isFirstTimeConnected = false;
     }
     else {
       isFirstTimeConnected = false;
@@ -239,7 +244,7 @@ class _BikeSettingState extends State<BikeSetting> {
                         SizedBox(
                           height: 5.h,
                         ),
-                        deviceConnectResult == DeviceConnectResult.connected ?
+                        deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr?
                         Container(
                           width: 143.w,
                           height: 30.h,
@@ -285,11 +290,11 @@ class _BikeSettingState extends State<BikeSetting> {
                                     deviceConnectResult == DeviceConnectResult.connecting
                                         || deviceConnectResult == DeviceConnectResult.scanning
                                         || deviceConnectResult == DeviceConnectResult.partialConnected ? "Connecting"
-                                        :_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected
+                                        :_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr
                                         ?  "Connected" : "Connect Bike", style: TextStyle(fontSize: 12.sp, color: Color(0xffECEDEB)),),]
                             ),
                             onPressed: () async {
-                              checkBleStatusAndConnectDevice(_bluetoothProvider);
+                              checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
                             },
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(

@@ -289,7 +289,7 @@ class _FreePlanState extends State<FreePlan> {
                                 Stack(
                                     children: [
                                       ///Bike Connected
-                                      if (deviceConnectResult == DeviceConnectResult.connected) ...{
+                                      if (deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr) ...{
                                         Container(
                                             height: 636.h,
                                             decoration: BoxDecoration(
@@ -446,7 +446,7 @@ class _FreePlanState extends State<FreePlan> {
                                                                     color: Color(
                                                                         0xff3F3F3F)),
                                                               ),
-                                                            } else if(deviceConnectResult == DeviceConnectResult.connected)...{
+                                                            } else if(deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr)...{
                                                               Text(
                                                                 "Tap to unlock bike",
                                                                 style: TextStyle(
@@ -504,7 +504,7 @@ class _FreePlanState extends State<FreePlan> {
                                                           bikeName: _bikeProvider.currentBikeModel?.deviceName ?? "",
                                                           distanceBetween: "Bike is not connected",
                                                           currentBikeStatusImage: "assets/images/bike_HPStatus/bike_normal.png",
-                                                          isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected),
+                                                          isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr),
                                                       ),
 
                                                       Padding(
@@ -536,7 +536,7 @@ class _FreePlanState extends State<FreePlan> {
                                                                 backgroundColor:
                                                                 lockColour,
                                                                 onPressed: () async {
-                                                                  checkBleStatusAndConnectDevice(_bluetoothProvider);
+                                                                  checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
                                                                 },
                                                                 //icon inside button
                                                                 child: connectImage,
@@ -721,7 +721,7 @@ class _FreePlanState extends State<FreePlan> {
 
 
   void setConnectImage() {
-    if (deviceConnectResult == DeviceConnectResult.connected) {
+    if (deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr) {
       setState(() {
         connectImage = SvgPicture.asset(
           "assets/buttons/loading.svg",
@@ -791,7 +791,7 @@ class _FreePlanState extends State<FreePlan> {
 
 
   void setBikeImage() {
-    if (deviceConnectResult == DeviceConnectResult.connected) {
+    if (deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr) {
       switch (_bikeProvider.currentBikeModel!.location!.status) {
         case "safe":
           setState(() {

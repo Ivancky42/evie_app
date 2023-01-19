@@ -85,7 +85,7 @@ class _FallDetectedState extends State<FallDetected> {
                             bikeName: _bikeProvider.currentBikeModel?.deviceName ?? "",
                             distanceBetween: widget.distanceBetween ?? "-",
                             currentBikeStatusImage: "assets/images/bike_HPStatus/bike_warning.png",
-                            isDeviceConnected: widget.isDeviceConnected!,
+                            isDeviceConnected: widget.isDeviceConnected! && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr,
                           ),
                         ),
                         Padding(
@@ -122,7 +122,7 @@ class _FallDetectedState extends State<FallDetected> {
                           child: Column(
                             children: [
 
-                      if(widget.isDeviceConnected!)...{
+                      if(widget.isDeviceConnected! && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr)...{
 
                         SizedBox(
                           height: 96.h,
@@ -256,7 +256,7 @@ class _FallDetectedState extends State<FallDetected> {
                               backgroundColor:
                               EvieColors.primaryColor,
                               onPressed: () {
-                                checkBleStatusAndConnectDevice(_bluetoothProvider);
+                                checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
                               },
                               //icon inside button
                               child: widget.connectImage,

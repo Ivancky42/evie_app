@@ -91,7 +91,7 @@ class _BikeSafeState extends State<BikeSafe> {
                                 "-",
                             currentBikeStatusImage:
                             "assets/images/bike_HPStatus/bike_safe.png",
-                            isDeviceConnected: widget.isDeviceConnected!,
+                            isDeviceConnected: widget.isDeviceConnected! && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr,
                           ),
                         ),
                         Padding(
@@ -124,7 +124,7 @@ class _BikeSafeState extends State<BikeSafe> {
                           child: Column(
                             children: [
 
-                              if(widget.isDeviceConnected!)...{
+                              if(widget.isDeviceConnected! && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr)...{
 
                               SizedBox(
                                 height: 96.h,
@@ -257,7 +257,7 @@ class _BikeSafeState extends State<BikeSafe> {
                                       backgroundColor:
                                       EvieColors.primaryColor,
                                       onPressed: () {
-                                        checkBleStatusAndConnectDevice(_bluetoothProvider);
+                                        checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
                                       },
                                       //icon inside button
                                       child:

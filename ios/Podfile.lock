@@ -1008,6 +1008,8 @@ PODS:
     - Flutter
   - vibration (1.7.5):
     - Flutter
+  - wakelock (0.0.1):
+    - Flutter
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
 
@@ -1049,6 +1051,7 @@ DEPENDENCIES:
   - twitter_login (from `.symlinks/plugins/twitter_login/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - vibration (from `.symlinks/plugins/vibration/ios`)
+  - wakelock (from `.symlinks/plugins/wakelock/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
@@ -1190,6 +1193,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
   vibration:
     :path: ".symlinks/plugins/vibration/ios"
+  wakelock:
+    :path: ".symlinks/plugins/wakelock/ios"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
@@ -1292,6 +1297,7 @@ SPEC CHECKSUMS:
   twitter_login: 2794db69b7640681171b17b3c2c84ad9dfb4a57f
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
   vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
+  wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   webview_flutter_wkwebview: b7e70ef1ddded7e69c796c7390ee74180182971f
 
 PODFILE CHECKSUM: 3ff25232c473ac0801c28745f49d78d7b0c52668

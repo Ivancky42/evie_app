@@ -153,14 +153,21 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
     Color statusBarColor = Colors.transparent;
 
-    if(_locationProvider.locationModel?.status  == "safe"){
-      statusBarColor = Colors.transparent;
-    } else if(_locationProvider.locationModel?.status == "warning" || _locationProvider.locationModel?.status == "fall"){
+    if (_locationProvider.locationModel?.isConnected == false) {
       statusBarColor = Color(0xffE59200);
-    }else if(_locationProvider.locationModel?.status == "danger" || _locationProvider.locationModel?.status == "crash"){
-      statusBarColor = Color(0xffCA0D0D);
-    }else{
-      statusBarColor = Colors.transparent;
+    }
+    else {
+      if (_locationProvider.locationModel?.status == "safe") {
+        statusBarColor = Colors.transparent;
+      } else if (_locationProvider.locationModel?.status == "warning" ||
+          _locationProvider.locationModel?.status == "fall") {
+        statusBarColor = Color(0xffE59200);
+      } else if (_locationProvider.locationModel?.status == "danger" ||
+          _locationProvider.locationModel?.status == "crash") {
+        statusBarColor = Color(0xffCA0D0D);
+      } else {
+        statusBarColor = Colors.transparent;
+      }
     }
 
     return WillPopScope(
@@ -443,40 +450,44 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   }
 
   void setButtonImage() {
-    if (deviceConnectResult == DeviceConnectResult.connected) {
+    if (deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr) {
       if (cableLockState?.lockState == LockState.unlock) {
         buttonImage = SvgPicture.asset(
           "assets/buttons/lock_unlock.svg",
           width: 52.w,
           height: 50.h,
         );
-      } else if (cableLockState?.lockState == LockState.lock) {
+      }
+      else if (cableLockState?.lockState == LockState.lock) {
         buttonImage = SvgPicture.asset(
           "assets/buttons/lock_lock.svg",
           width: 52.w,
           height: 50.h,
         );
-      } else if (cableLockState?.lockState == LockState.unknown) {
+      }
+      else if (cableLockState?.lockState == LockState.unknown) {
         buttonImage = SvgPicture.asset(
           "assets/buttons/loading.svg",
           width: 52.w,
           height: 50.h,
         );
       }
-
-    } else if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning || deviceConnectResult == DeviceConnectResult.partialConnected) {
+    }
+    else if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning || deviceConnectResult == DeviceConnectResult.partialConnected) {
         buttonImage = SvgPicture.asset(
           "assets/buttons/loading.svg",
           width: 52.w,
           height: 50.h,
         );
-    } else if (deviceConnectResult == DeviceConnectResult.disconnected) {
+    }
+    else if (deviceConnectResult == DeviceConnectResult.disconnected) {
         buttonImage = SvgPicture.asset(
           "assets/buttons/bluetooth_not_connected.svg",
           width: 52.w,
           height: 50.h,
         );
-    } else {
+    }
+    else {
         buttonImage = SvgPicture.asset(
           "assets/buttons/bluetooth_not_connected.svg",
           width: 52.w,
@@ -577,7 +588,8 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   switchBikeStatusBottom(String status) {
     if(_locationProvider.locationModel?.isConnected == false){
       return ConnectionLost( connectImage:buttonImage,distanceBetween: distanceBetween, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected);
-    }else{
+    }
+    else{
       switch(status) {
         case "safe":
           return BikeSafe(connectImage:buttonImage,distanceBetween: distanceBetween, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);

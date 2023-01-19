@@ -92,7 +92,7 @@ class _BikeDangerState extends State<BikeDanger> {
                           widget.distanceBetween ??
                               "-",
                           currentBikeStatusImage: "assets/images/bike_HPStatus/bike_danger.png",
-                          isDeviceConnected: widget.isDeviceConnected!
+                          isDeviceConnected: widget.isDeviceConnected! && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr
                       ),
                     ),
                     Padding(

@@ -326,11 +326,14 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
-    if (deviceConnectResult == DeviceConnectResult.connected) {
+    if (deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr) {
       if (!isFirstTimeConnected) {
         showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, context, _navigator);
         isFirstTimeConnected = true;
       }
+    }
+    else if (deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice != _bikeProvider.currentBikeModel?.macAddr) {
+      isFirstTimeConnected = false;
     }
     else {
       isFirstTimeConnected = false;

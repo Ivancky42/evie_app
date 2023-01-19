@@ -94,7 +94,7 @@ class _ConnectionLostState extends State<ConnectionLost> {
                                 "-",
                             currentBikeStatusImage:
                             "assets/images/bike_HPStatus/bike_warning.png",
-                            isDeviceConnected: widget.isDeviceConnected!,
+                            isDeviceConnected: widget.isDeviceConnected! && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr,
                           ),
                         ),
                         Padding(
@@ -130,7 +130,7 @@ class _ConnectionLostState extends State<ConnectionLost> {
                           child: Column(
                             children: [
 
-                              if(widget.isDeviceConnected!)...{
+                              if(widget.isDeviceConnected! && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr)...{
 
                               SizedBox(
                                 height: 96.h,
@@ -250,7 +250,7 @@ class _ConnectionLostState extends State<ConnectionLost> {
                                       elevation: 0,
                                       backgroundColor: EvieColors.primaryColor,
                                       onPressed: () {
-                                        checkBleStatusAndConnectDevice(_bluetoothProvider);
+                                        checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
                                       },
                                       //icon inside button
                                       child:

@@ -74,7 +74,7 @@ showLocationServiceDisable() {
           }));
 }
 
-showConnectDialog(BluetoothProvider bluetoothProvider) async {
+showConnectDialog(BluetoothProvider bluetoothProvider, BikeProvider bikeProvider) async {
    await SmartDialog.show(
       widget: EvieDoubleButtonDialog(
       title: "Please Connect Your Bike",
@@ -89,7 +89,7 @@ showConnectDialog(BluetoothProvider bluetoothProvider) async {
       },
       onPressedRight: () async {
         SmartDialog.dismiss();
-        checkBleStatusAndConnectDevice(bluetoothProvider);
+        checkBleStatusAndConnectDevice(bluetoothProvider, bikeProvider);
       })
   );
 }

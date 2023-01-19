@@ -56,6 +56,7 @@ class BluetoothProvider extends ChangeNotifier {
   String? iotData;
   bool isAutoConnect = false;
   Timer? startScanTimer;
+  String? currentConnectedDevice;
 
   LinkedHashMap<String, DiscoveredDevice> discoverDeviceList = LinkedHashMap<String, DiscoveredDevice>();
 
@@ -210,9 +211,6 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   Stream<DeviceConnectResult> startScanAndConnect() {
-    //await disconnectDevice();
-    //await stopScan();
-    if (bleStatus == BleStatus.ready) {
       startScanTimer?.cancel();
       startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) {
         print("Scan Timer: " + timer.tick.toString() + "s");
@@ -243,10 +241,6 @@ class BluetoothProvider extends ChangeNotifier {
         stopScan();
         scanSubscription = null;
       });
-    }
-    else {
-      showBluetoothNotTurnOn();
-    }
     return deviceConnectStream.stream;
   }
 
@@ -274,6 +268,8 @@ class BluetoothProvider extends ChangeNotifier {
         case DeviceConnectionState.connected:
           deviceConnectStream.add(DeviceConnectResult.partialConnected);
           deviceConnectResult = DeviceConnectResult.partialConnected;
+          currentConnectedDevice = currentBikeModel?.macAddr;
+          notifyListeners();
           discoverServices(currentBikeModel!.bleKey!);
           break;
         case DeviceConnectionState.disconnecting:
@@ -282,6 +278,7 @@ class BluetoothProvider extends ChangeNotifier {
           stopServices();
           break;
         case DeviceConnectionState.disconnected:
+          currentConnectedDevice = null;
           if (connectionStateUpdate?.failure != null) {
             if (bleStatus == BleStatus.poweredOff) {
               deviceConnectStream.add(DeviceConnectResult.disconnected);
@@ -412,6 +409,7 @@ class BluetoothProvider extends ChangeNotifier {
     mainBatteryLevel = "";
     bikeInfoResult = null;
     iotInfoModel = null;
+    currentConnectedDevice = null;
     exitNotifyIotInfoState();
     exitNotifyFirmwareUpgradeState();
     notifyListeners();
