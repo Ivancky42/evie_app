@@ -87,10 +87,10 @@ showConnectDialog(BluetoothProvider bluetoothProvider) async {
         SmartDialog.dismiss();
       },
       onPressedRight: () async {
+        SmartDialog.dismiss();
         await bluetoothProvider.disconnectDevice();
         await bluetoothProvider.stopScan();
         bluetoothProvider.startScanAndConnect();
-        SmartDialog.dismiss();
       })
   );
 }
@@ -293,10 +293,12 @@ showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscriptio
 
             stream = bluetoothProvider.firmwareUpgradeListener.stream.listen((firmwareUpgradeResult) {
               if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.startUpgrade) {
-                SmartDialog.dismiss();
               }
               else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgrading) {
-                firmwareProvider.changeIsUpdating(true);
+                SmartDialog.dismiss();
+                Future.delayed(Duration.zero, () {
+                  firmwareProvider.changeIsUpdating(true);
+                });
               }
               else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeSuccessfully) {
                 ///go to success page
@@ -320,6 +322,8 @@ showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscriptio
 
 showFirmwareUpdateQuit(context, StreamSubscription? stream){
   SmartDialog.show(
+    keepSingle: true,
+      backDismiss: false,
       widget: EvieDoubleButtonDialog(
           title: "Quit Update",
           childContent: Text("App must stay open to complete update. Are you sure you want to quit?"),

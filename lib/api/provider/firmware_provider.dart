@@ -59,7 +59,6 @@ class FirmwareProvider extends ChangeNotifier {
       latestFirmwareModel = null;
       notifyListeners();
     }
-
   }
 
    getIsCurrentVersion() async {

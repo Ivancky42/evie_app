@@ -67,9 +67,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
 
     return WillPopScope(
       onWillPop: () async {
-        if(_firmwareProvider.isUpdating){
-          showFirmwareUpdateQuit(context, stream);
-        }else{
+        if(_firmwareProvider.isUpdating == true){}else{
           changeToNavigatePlanScreen(context);
         }
         return false;
@@ -78,9 +76,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
         appBar: AccountPageAppbar(
           title: 'Firmware Information',
           onPressed: () {
-            if(_firmwareProvider.isUpdating){
-             showFirmwareUpdateQuit(context, stream);
-            }else{
+            if(_firmwareProvider.isUpdating == true){}else{
               changeToNavigatePlanScreen(context);
             }
           },
