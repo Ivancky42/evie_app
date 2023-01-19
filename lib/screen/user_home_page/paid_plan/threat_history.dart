@@ -39,7 +39,7 @@ class _Threat_HistoryState extends State<Threat_History> {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFFECEDEB),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -200,7 +200,7 @@ class _Threat_HistoryState extends State<Threat_History> {
           ),
         ],
       ),
-      height: 720.h,
+      height: 750.h,
     );
   }
 
