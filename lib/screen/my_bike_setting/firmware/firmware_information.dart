@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -41,7 +42,6 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
   late FirmwareProvider _firmwareProvider;
 
   bool isUpdating = false;
-
   int totalSeconds = 105;
 
   StreamSubscription? stream;
@@ -69,20 +69,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
     return WillPopScope(
       onWillPop: () async {
         if(isUpdating){
-          SmartDialog.show(
-              widget: EvieDoubleButtonDialog(
-                  title: "Quit Update",
-                  childContent: Text("App must stay open to complete update. Are you sure you want to quit?"),
-                  leftContent: "Cancel Update",
-                  rightContent: "Stay",
-                  onPressedLeft: (){
-                    SmartDialog.dismiss();
-                    changeToNavigatePlanScreen(context);
-                    stream?.cancel();
-                  },
-                  onPressedRight: (){
-                    SmartDialog.dismiss();
-                  }));
+          showFirmwareUpdateQuit(context, stream);
         }else{
           changeToNavigatePlanScreen(context);
         }
@@ -93,20 +80,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
           title: 'Firmware Information',
           onPressed: () {
             if(isUpdating){
-              SmartDialog.show(
-                  widget: EvieDoubleButtonDialog(
-                      title: "Quit Update",
-                      childContent: Text("App must stay open to complete update. Are you sure you want to quit?"),
-                      leftContent: "Cancel Update",
-                      rightContent: "Stay",
-                      onPressedLeft: (){
-                        SmartDialog.dismiss();
-                        changeToNavigatePlanScreen(context);
-                        stream?.cancel();
-                      },
-                      onPressedRight: (){
-                        SmartDialog.dismiss();
-                      }));
+             showFirmwareUpdateQuit(context, stream);
             }else{
               changeToNavigatePlanScreen(context);
             }
@@ -163,11 +137,12 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                   Visibility(
                     visible: isUpdating,
                     child: Padding(
-                        padding: EdgeInsets.fromLTRB(0, 20.h, 0, 20.h),
+                        padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 20.h),
                         child: Column(
                           children: [
                             LinearPercentIndicator(
-                              width: 360.w,
+                              padding: EdgeInsets.zero,
+                              width: 355.w,
                               animation: false,
                               lineHeight: 4.h,
                               animationDuration: 0,
@@ -179,11 +154,11 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                             Visibility(
                               visible: isUpdating,
                               child: Padding(
-                                padding: EdgeInsets.only(left:16.w, right: 16.w),
+                                padding: EdgeInsets.only(left:4.w, right: 4.w, top :4.h),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(  "Time remaining: ${intToTimeLeft(((_bluetoothProvider.fwUpgradeProgress * 100)*
+                                    Text("Time remaining: ${intToTimeLeft(((_bluetoothProvider.fwUpgradeProgress * 100)*
                                         (totalSeconds/100)-totalSeconds).abs().toInt())}",
                                       style: TextStyle(
                                         fontSize: 12.sp,
@@ -235,9 +210,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
             ),
 
             Visibility(
-              visible: _bluetoothProvider.iotInfoModel?.firmwareVer != null &&
-                  _bluetoothProvider.iotInfoModel?.firmwareVer != _firmwareProvider.currentFirmVer &&
-                  isUpdating == false,
+              visible: !_firmwareProvider.isLatestFirmVer && isUpdating == false,
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
@@ -253,54 +226,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                           fontWeight: FontWeight.w700),
                     ),
                     onPressed: () {
-                      SmartDialog.show(
-                          widget:   EvieDoubleButtonDialog(
-                          title: "Firmware update",
-                          childContent: Text(
-                            "Stay close with your bike and make sure keeping EVIE app opened during firmware update. "
-                                "Firmware update will ne disrupted if you close the app.",
-                            style: TextStyle(fontSize: 16.sp),
-                          ),
-                          leftContent: "Later",
-                          rightContent: "Update Now",
-                          onPressedLeft: (){
-                            SmartDialog.dismiss();
-                          },
-                          onPressedRight: () async {
-
-                            SmartDialog.dismiss();
-                            SmartDialog.showLoading(backDismiss: false);
-
-                            Reference ref = FirebaseStorage.instance.refFromURL(_firmwareProvider.latestFirmwareModel!.url);
-                            File file = await _firmwareProvider.downloadFile(ref);
-
-                            stream = _bluetoothProvider.firmwareUpgradeListener.stream.listen((firmwareUpgradeResult) {
-                              if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.startUpgrade) {
-                                SmartDialog.dismiss();
-                              }
-                              else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgrading) {
-                                Future.delayed(Duration.zero, () {
-                                  isUpdating = true;
-                                });
-                              }
-                              else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeSuccessfully) {
-                                ///go to success page
-                                 isUpdating = false;
-                                 stream?.cancel();
-                                _firmwareProvider.uploadFirmVerToFirestore("57_V${_firmwareProvider.latestFirmVer!}");
-                                changeToFirmwareUpdateCompleted(context);
-                              }
-                              else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeFailed) {
-                                isUpdating = false;
-                                stream?.cancel();
-                                changeToFirmwareUpdateFailed(context);
-                              }
-                            });
-
-                            _bluetoothProvider.startUpgradeFirmware(file);
-
-                          })
-                      );
+                      showFirmwareUpdate(context, _firmwareProvider, stream, isUpdating, _bluetoothProvider);
                     },
                   ),
                 ),

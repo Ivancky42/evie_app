@@ -1,10 +1,15 @@
+
+
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -12,6 +17,7 @@ import '../screen/my_bike_setting/my_bike_function.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
 import '../widgets/evie_textform.dart';
+import 'navigator.dart';
 
 showBluetoothNotTurnOn() {
   SmartDialog.show(
@@ -261,4 +267,72 @@ showDeleteNotificationFailed(){
           rightContent: "OK",
           onPressedRight: ()=>SmartDialog.dismiss()
       ));
+}
+
+showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscription? stream, bool isUpdating, BluetoothProvider bluetoothProvider){
+  SmartDialog.show(
+      widget:   EvieDoubleButtonDialog(
+          title: "Firmware update",
+          childContent: Text(
+            "Stay close with your bike and make sure keeping EVIE app opened during firmware update. "
+                "Firmware update will ne disrupted if you close the app.",
+            style: TextStyle(fontSize: 16.sp),
+          ),
+          leftContent: "Later",
+          rightContent: "Update Now",
+          onPressedLeft: (){
+            SmartDialog.dismiss();
+          },
+          onPressedRight: () async {
+
+            SmartDialog.dismiss();
+            SmartDialog.showLoading(backDismiss: false);
+
+            Reference ref = FirebaseStorage.instance.refFromURL(firmwareProvider.latestFirmwareModel!.url);
+            File file = await firmwareProvider.downloadFile(ref);
+
+            stream = bluetoothProvider.firmwareUpgradeListener.stream.listen((firmwareUpgradeResult) {
+              if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.startUpgrade) {
+                SmartDialog.dismiss();
+              }
+              else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgrading) {
+                Future.delayed(Duration.zero, () {
+                  isUpdating = true;
+                });
+              }
+              else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeSuccessfully) {
+                ///go to success page
+                isUpdating = false;
+                stream?.cancel();
+                firmwareProvider.uploadFirmVerToFirestore("57_V${firmwareProvider.latestFirmVer!}");
+                changeToFirmwareUpdateCompleted(context);
+              }
+              else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeFailed) {
+                isUpdating = false;
+                stream?.cancel();
+                changeToFirmwareUpdateFailed(context);
+              }
+            });
+
+            bluetoothProvider.startUpgradeFirmware(file);
+
+          })
+  );
+}
+
+showFirmwareUpdateQuit(context, StreamSubscription? stream){
+  SmartDialog.show(
+      widget: EvieDoubleButtonDialog(
+          title: "Quit Update",
+          childContent: Text("App must stay open to complete update. Are you sure you want to quit?"),
+          leftContent: "Cancel Update",
+          rightContent: "Stay",
+          onPressedLeft: (){
+            SmartDialog.dismiss();
+            changeToNavigatePlanScreen(context);
+            stream?.cancel();
+          },
+          onPressedRight: (){
+            SmartDialog.dismiss();
+          }));
 }

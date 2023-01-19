@@ -705,7 +705,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                                 ),
                                 SizedBox(width: 4.w,),
                                 Visibility(
-                                  visible: _bluetoothProvider.iotInfoModel?.firmwareVer != null &&_bluetoothProvider.iotInfoModel?.firmwareVer != _firmwareProvider.currentFirmVer,
+                                  visible: !_firmwareProvider.isLatestFirmVer,
                                     child: Container(
                                       decoration: const BoxDecoration(
                                           color: EvieColors.primaryColor,
