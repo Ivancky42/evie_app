@@ -16,6 +16,8 @@ import '../model/bike_user_model.dart';
 import '../model/location_model.dart';
 import '../model/plan_model.dart';
 import '../model/rfid_model.dart';
+import '../model/theft_history_model.dart';
+import '../model/threat_routes_model.dart';
 import '../model/user_bike_model.dart';
 import '../model/user_model.dart';
 
@@ -51,6 +53,8 @@ class BikeProvider extends ChangeNotifier {
   String plansCollection = dotenv.env['DB_COLLECTION_PLANS'] ?? 'DB not found';
   String notificationsCollection = dotenv.env['DB_COLLECTION_NOTIFICATIONS'] ?? 'DB not found';
   String inventoryCollection = dotenv.env['DB_COLLECTION_INVENTORY'] ?? 'DB not found';
+  String theftHistoryCollection = dotenv.env['DB_COLLECTION_THEFTHISTORY'] ?? 'DB not found';
+  String routesCollection = dotenv.env['DB_COLLECTION_ROUTES'] ?? 'DB not found';
 
   LinkedHashMap bikeUserList = LinkedHashMap<String, BikeUserModel>();
   LinkedHashMap bikeUserDetails = LinkedHashMap<String, UserModel>();
@@ -58,10 +62,12 @@ class BikeProvider extends ChangeNotifier {
   LinkedHashMap userBikeDetails = LinkedHashMap<String, BikeModel>();
   LinkedHashMap userBikePlans = LinkedHashMap<String, BikePlanModel>();
   LinkedHashMap rfidList = LinkedHashMap<String, RFIDModel>();
+  LinkedHashMap threatRoutesLists = LinkedHashMap<String, ThreatRoutesModel>();
 
+  ThreatHistoryModel? currentThreatHistoryModel;
+  BikePlanModel? currentBikePlanModel;
   UserModel? currentUserModel;
   BikeModel? currentBikeModel;
-  BikePlanModel? currentBikePlanModel;
   RFIDModel? currentRFIDModel;
 
   int currentBikeList = 0;
@@ -74,6 +80,7 @@ class BikeProvider extends ChangeNotifier {
 
   StreamSubscription? bikeListSubscription;
   StreamSubscription? currentBikeSubscription;
+  StreamSubscription? currentThreatRoutesSubscription;
   StreamSubscription? bikeUserSubscription;
   StreamSubscription? currentBikeUserSubscription;
   StreamSubscription? currentUserBikeSubscription;
@@ -222,8 +229,42 @@ class BikeProvider extends ChangeNotifier {
               ///Switch case
               switchBikeResult = SwitchBikeResult.success;
               switchBikeResultListener.add(switchBikeResult);
-
               getPlanSubscript();
+
+              if(currentBikeModel?.location?.eventId != null){
+                currentThreatRoutesSubscription = FirebaseFirestore.instance
+                    .collection(bikesCollection)
+                    .doc(imei)
+                    .collection(theftHistoryCollection)
+                    .doc(currentBikeModel?.location?.eventId)
+                    .collection(routesCollection)
+                    .snapshots()
+                    .listen((snapshot) {
+                  if (snapshot.docs.isNotEmpty) {
+                    for (var docChange in snapshot.docChanges) {
+                      switch (docChange.type) {
+                        case DocumentChangeType.added:
+                          Map<String, dynamic>? obj = docChange.doc.data();
+                          threatRoutesLists.putIfAbsent(docChange.doc.id, () => ThreatRoutesModel.fromJson(obj!));
+                          notifyListeners();
+                          break;
+                        case DocumentChangeType.removed:
+                          threatRoutesLists.removeWhere((key, value) => key == docChange.doc.id);
+                          notifyListeners();
+                          break;
+                        case DocumentChangeType.modified:
+                          Map<String, dynamic>? obj = docChange.doc.data();
+                          threatRoutesLists.update(docChange.doc.id, (value) => ThreatRoutesModel.fromJson(obj!));
+                          notifyListeners();
+                          break;
+                      }
+                    }
+                  }
+                });
+              }else{
+                threatRoutesLists.clear();
+                currentThreatRoutesSubscription?.cancel();
+              }
 
               notifyListeners();
             } else {
@@ -240,6 +281,8 @@ class BikeProvider extends ChangeNotifier {
           getRFIDList();
           getBikeUserList();
         });
+
+
       }
     }
   }

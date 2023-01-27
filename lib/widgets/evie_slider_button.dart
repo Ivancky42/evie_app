@@ -11,6 +11,7 @@ class EvieSliderButton extends StatelessWidget {
 
   final Function action;
   final String text;
+  final bool? dismissible;
 
 
   const EvieSliderButton({
@@ -18,12 +19,15 @@ class EvieSliderButton extends StatelessWidget {
 
     required this.action,
     required this.text,
+    this.dismissible,
 
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SliderButton(
+
+      dismissible: false,
       action: action,
       width: 300.w,
       label: Text(

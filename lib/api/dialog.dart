@@ -337,3 +337,14 @@ showFirmwareUpdateQuit(context, StreamSubscription? stream){
             SmartDialog.dismiss();
           }));
 }
+
+showCannotUnlockBike(){
+  SmartDialog.show(
+      widget: EvieSingleButtonDialogCupertino(
+          title: "Error",
+          content: "Cannot unlock bike, please place the phone near the bike and try again.",
+          rightContent: "OK",
+          onPressedRight: () {
+            SmartDialog.dismiss();
+          }));
+}

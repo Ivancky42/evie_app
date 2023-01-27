@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/model/threat_routes_model.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/mapbox_widget.dart';
@@ -49,8 +51,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
 
-  Color lockColour = EvieColors.primaryColor;
-
   DeviceConnectResult? deviceConnectResult;
   CableLockResult? cableLockState;
 
@@ -79,8 +79,10 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   final Location _locationService = Location();
 
   bool isScanned = false;
-  var markers = <Marker>[];
   bool isFirstTimeConnected = false;
+  var markers = <Marker>[];
+
+  GeoPoint? selectedGeopoint;
 
   @override
   void initState() {
@@ -91,6 +93,8 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
     initLocationService();
     WidgetsBinding.instance.addObserver(this);
+
+    selectedGeopoint  = _locationProvider.locationModel?.geopoint;
   }
 
   void initLocationService() async {
@@ -129,6 +133,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
      // _bluetoothProvider.startScanAndConnect();
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -169,6 +174,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
         statusBarColor = Colors.transparent;
       }
     }
+
 
     return WillPopScope(
       onWillPop: () async {
@@ -387,13 +393,20 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  map_launcher.MapLauncher.showDirections(
-                                      mapType: availableMaps![index].mapType,
-                                      destination: map_launcher.Coords(
-                                          _bikeProvider.currentBikeModel!
-                                              .location!.geopoint.latitude,
-                                          _bikeProvider.currentBikeModel!
-                                              .location!.geopoint.longitude));
+                                  if(selectedGeopoint != null){
+                                    map_launcher.MapLauncher.showDirections(
+                                        mapType: availableMaps![index].mapType,
+                                        destination: map_launcher.Coords(
+                                            selectedGeopoint!.latitude,
+                                            selectedGeopoint!.longitude));
+                                  }else{
+                                    map_launcher.MapLauncher.showDirections(
+                                        mapType: availableMaps![index].mapType,
+                                        destination: map_launcher.Coords(
+                                            _bikeProvider.currentBikeModel!.location!.geopoint.latitude,
+                                            _bikeProvider.currentBikeModel!.location!.geopoint.longitude));
+                                  }
+
                                 },
                                 child: SvgPicture.asset(
                                   availableMaps![index].icon,
@@ -568,20 +581,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     if(_locationProvider.locationModel?.isConnected == false){
       return HomePageWidget_StatusBar(currentDangerState: 'warning',location: _locationProvider.currentPlaceMark);
     }else{
-      switch(status) {
-        case "safe":
-          return HomePageWidget_StatusBar(currentDangerState: status,location: _locationProvider.currentPlaceMark);
-        case "warning":
-          return HomePageWidget_StatusBar(currentDangerState: status,location: _locationProvider.currentPlaceMark);
-        case "danger":
-          return HomePageWidget_StatusBar(currentDangerState: status,location: _locationProvider.currentPlaceMark);
-        case "fall":
-          return HomePageWidget_StatusBar(currentDangerState: status,location: _locationProvider.currentPlaceMark);
-        case "crash":
-          return HomePageWidget_StatusBar(currentDangerState: status,location: _locationProvider.currentPlaceMark);
-        default:
-          return const CircularProgressIndicator();
-      }
+      return HomePageWidget_StatusBar(currentDangerState: status,location: _locationProvider.currentPlaceMark, selectedGeopoint: selectedGeopoint, locationProvider: _locationProvider,);
     }
   }
 
@@ -594,13 +594,13 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
         case "safe":
           return BikeSafe(connectImage:buttonImage,distanceBetween: distanceBetween, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
         case "warning":
-          return BikeWarning( connectImage:buttonImage, distanceBetween: distanceBetween, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
+          return BikeWarning(connectImage:buttonImage, distanceBetween: distanceBetween, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
         case "danger":
-          return BikeDanger( connectImage:buttonImage, distanceBetween: distanceBetween,  isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
+          return BikeDanger(connectImage:buttonImage, distanceBetween: distanceBetween,  isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
         case "fall":
-          return FallDetected( connectImage:buttonImage, distanceBetween: distanceBetween, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
+          return FallDetected(connectImage:buttonImage, distanceBetween: distanceBetween, isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
         case "crash":
-          return CrashAlert(  connectImage:buttonImage,distanceBetween: distanceBetween,  isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
+          return CrashAlert(connectImage:buttonImage,distanceBetween: distanceBetween,  isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected,);
         default:
           return const CircularProgressIndicator();
       }
@@ -608,28 +608,86 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   }
 
   void loadMarker(LatLng currentLatLng) {
-    markers = <Marker>[
-      ///
+
+      markers = <Marker>[
+        if(_bikeProvider.currentBikeModel?.location?.status == "danger")...{
+
+      ///load a few more marker
+      for(int i = 0; i < _bikeProvider.threatRoutesLists.length; i++)...{
+        Marker(
+          width: 30.w,
+          height: 40.h,
+          point: LatLng(_bikeProvider.threatRoutesLists.values
+              .elementAt(i)
+              .geopoint
+              .latitude ?? 0,
+              _bikeProvider.threatRoutesLists.values
+                  .elementAt(i)
+                  .geopoint
+                  .longitude ?? 0),
+          builder: (ctx) => GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  setState(() {
+                    selectedGeopoint = _bikeProvider.threatRoutesLists.values
+                        .elementAt(i)
+                        .geopoint;
+                  });
+                },
+                child: _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint == selectedGeopoint ?
+                SvgPicture.asset("assets/icons/marker_danger.svg",)
+                    : SvgPicture.asset("assets/icons/marker_danger_deactive.svg",),
+              ),
+        ),
+      },
+
       Marker(
         width: 42.w,
         height: 56.h,
         point: LatLng(_locationProvider.locationModel?.geopoint.latitude ?? 0,
             _locationProvider.locationModel?.geopoint.longitude ?? 0),
-        builder: (ctx) => Image(
-          image: AssetImage(!_locationProvider.locationModel!.isConnected ? "assets/icons/marker_warning.png" : loadMarkerImageString(_locationProvider.locationModel?.status ?? "")),
-        ),
+        builder: (ctx) =>
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                setState(() {
+                  selectedGeopoint = _locationProvider.locationModel?.geopoint;
+                });
+              },
+              child: _locationProvider.locationModel?.geopoint == selectedGeopoint ?
+              SvgPicture.asset(
+                "assets/icons/marker_danger.svg",
+                height: 56.h,
+              )
+                  : SvgPicture.asset(
+                "assets/icons/marker_danger_deactive.svg",
+                height: 56.h,
+              ),
+            ),
       ),
 
-      Marker(
-        width: 42.w,
-        height: 56.h,
-        point: currentLatLng,
-        builder: (ctx) {
-          return _buildCompass();
+        }else...{
+
+          Marker(
+            width: 42.w,
+            height: 56.h,
+            point: LatLng(_locationProvider.locationModel?.geopoint.latitude ?? 0,
+                _locationProvider.locationModel?.geopoint.longitude ?? 0),
+            builder: (ctx) => Image(
+              image: AssetImage(!_locationProvider.locationModel!.isConnected ? "assets/icons/marker_warning.png" : loadMarkerImageString(_locationProvider.locationModel?.status ?? "")),
+            ),
+          ),
         },
-      ),
-    ];
 
+        Marker(
+          width: 42.w,
+          height: 56.h,
+          point: currentLatLng,
+          builder: (ctx) {
+            return _buildCompass();
+          },
+        ),
+      ];
   }
 
   ///Load image according danger status

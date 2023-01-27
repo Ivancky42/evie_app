@@ -116,7 +116,7 @@ class LocationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  returnPlaceMarks(double latitude, double longitude) async {
+  Future<Placemark?> returnPlaceMarks(double latitude, double longitude) async {
 
     Placemark? placeMark;
 
@@ -132,11 +132,12 @@ class LocationProvider extends ChangeNotifier {
         placeMark = null;
       }
 
-      return placeMark;
     }catch(error){
       debugPrint(error.toString());
       placeMark = null;
     }
+
+    return placeMark;
   }
 
 

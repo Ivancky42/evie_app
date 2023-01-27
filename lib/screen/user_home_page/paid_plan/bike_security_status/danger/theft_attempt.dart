@@ -8,6 +8,9 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../api/colours.dart';
+import '../../../../../api/dialog.dart';
+import '../../../../../api/function.dart';
 import '../../../../../api/provider/bike_provider.dart';
 import '../../../../../api/provider/bluetooth_provider.dart';
 import '../../../../../api/provider/current_user_provider.dart';
@@ -23,7 +26,6 @@ class BikeDanger extends StatefulWidget {
   final SvgPicture? connectImage;
   final String? distanceBetween;
   final bool? isDeviceConnected;
-
 
   const BikeDanger({
     Key? key,
@@ -41,12 +43,12 @@ class _BikeDangerState extends State<BikeDanger> {
   DeviceConnectionState? connectionState;
   ConnectionStateUpdate? connectionStateUpdate;
   CableLockResult? cableLockState;
+  DeviceConnectResult? deviceConnectResult;
 
 
   @override
   Widget build(BuildContext context) {
 
-    CurrentUserProvider _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     BikeProvider _bikeProvider = Provider.of<BikeProvider>(context);
     BluetoothProvider _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     LocationProvider _locationProvider = Provider.of<LocationProvider>(context);
@@ -54,7 +56,7 @@ class _BikeDangerState extends State<BikeDanger> {
     connectionState = _bluetoothProvider.connectionStateUpdate?.connectionState;
     connectionStateUpdate = _bluetoothProvider.connectionStateUpdate;
     cableLockState = _bluetoothProvider.cableLockState;
-
+    deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
       return Container(
           height: 636.h,
@@ -73,49 +75,29 @@ class _BikeDangerState extends State<BikeDanger> {
                     Padding(
                       padding: EdgeInsets.only(
                           top: 11.h),
-                      child: Image.asset(
-                        "assets/buttons/home_indicator.png",
+                      child: Image.asset("assets/buttons/home_indicator.png",
                         width: 40.w,
                         height: 4.h,
                       ),
                     ),
                     Padding(
-                      padding:
-                      EdgeInsets.fromLTRB(
-                          16.w, 9.h, 0, 0),
+                      padding: EdgeInsets.fromLTRB(16.w, 9.h, 0, 0),
                       child: Bike_Name_Row(
-                          bikeName: _bikeProvider
-                              .currentBikeModel
-                              ?.deviceName ??
-                              "",
-                          distanceBetween:
-                          widget.distanceBetween ??
-                              "-",
+                          bikeName: _bikeProvider.currentBikeModel?.deviceName ?? "",
+                          distanceBetween: widget.distanceBetween ?? "-",
                           currentBikeStatusImage: "assets/images/bike_HPStatus/bike_danger.png",
                           isDeviceConnected: widget.isDeviceConnected! && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr
                       ),
                     ),
                     Padding(
                       padding:
-                      EdgeInsets.fromLTRB(
-                          16.w,
-                          17.15.h,
-                          0,
-                          0),
+                      EdgeInsets.fromLTRB(16.w, 17.15.h, 0, 0),
                       child: IntrinsicHeight(
                         child: Bike_Status_Row(
                           currentSecurityIcon:
                           "assets/buttons/bike_security_danger.svg",
-                          batteryImage: getBatteryImage(
-                              _bikeProvider
-                                  .currentBikeModel
-                                  ?.batteryPercent ??
-                                  0),
-                          batteryPercentage:
-                          _bikeProvider
-                              .currentBikeModel
-                              ?.batteryPercent ??
-                              0,
+                          batteryImage: getBatteryImage(_bikeProvider.currentBikeModel?.batteryPercent ?? 0),
+                          batteryPercentage: _bikeProvider.currentBikeModel?.batteryPercent ?? 0,
                           child: Text(
                             "THEFT ATTEMPT",
                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
@@ -137,11 +119,80 @@ class _BikeDangerState extends State<BikeDanger> {
                             ),
                           ),
 
-                          Padding(
-                            padding:  EdgeInsets.only(top:0.h,bottom:29.h),
-                            child: EvieSliderButton(action: (){SmartDialog.showLoading();}, text: "I'm with my bike",),
+                          Visibility(
+                            visible: deviceConnectResult == null
+                                || deviceConnectResult == DeviceConnectResult.disconnected
+                                || deviceConnectResult == DeviceConnectResult.scanTimeout
+                                || deviceConnectResult == DeviceConnectResult.connectError
+                                || deviceConnectResult == DeviceConnectResult.scanError,
+                             child:Padding(
+                                padding:  EdgeInsets.only(top:0.h,bottom:29.h),
+                                child: EvieSliderButton(
+                                  dismissible: false,
+                                  action: (){
+                                    checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
+                              }, text: "I'm with my bike",),
                           ),
+                         ),
 
+                          Visibility(
+                            visible:   deviceConnectResult == DeviceConnectResult.connected
+                                || deviceConnectResult == DeviceConnectResult.connecting
+                                || deviceConnectResult == DeviceConnectResult.scanning,
+                            child:  SizedBox(
+                                height: 96.h,
+                                width: 96.w,
+                                child:
+                                FloatingActionButton(
+                                  elevation: 0,
+                                  backgroundColor:
+                                  EvieColors.primaryColor,
+                                  onPressed: deviceConnectResult == DeviceConnectResult.connected ? () {
+                                    ///Check is connected
+                                    SmartDialog.showLoading(msg: "Unlocking");
+                                    StreamSubscription? subscription;
+                                    subscription = _bluetoothProvider.cableUnlock().listen((unlockResult) {
+                                          SmartDialog.dismiss(status: SmartStatus.loading);
+                                          subscription?.cancel();
+                                          if (unlockResult.result == CommandResult.success) {
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  'Bike is unlocked. To lock bike, pull the lock handle on the bike.',
+                                                  style: TextStyle(fontSize: 16.sp),
+                                                ),
+                                                duration: Duration(seconds: 2),
+                                              ),
+                                            );
+                                          } else {
+                                            SmartDialog.dismiss(status: SmartStatus.loading);
+                                            subscription?.cancel();
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                width: 358.w,
+                                                behavior: SnackBarBehavior.floating,
+                                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                                                content: Container(
+                                                  height: 80.h,
+                                                  child: Text(
+                                                    'Bike is unlocked. To lock bike, pull the lock handle on the bike.',
+                                                    style: TextStyle(fontSize: 16.sp),
+                                                  ),
+                                                ),
+                                                duration: const Duration(seconds: 4),
+                                              ),
+                                            );
+                                          }
+                                        }, onError: (error) {
+                                      SmartDialog.dismiss(status: SmartStatus.loading);
+                                      subscription?.cancel();
+                                      showCannotUnlockBike();
+                                    });
+                                  } : null,
+                                  //icon inside button
+                                  child:widget.connectImage,
+                                )),
+                          ),
                         ],
                       ),
                     )
@@ -150,7 +201,6 @@ class _BikeDangerState extends State<BikeDanger> {
               ),
             ],
           ));
-
     }
   }
 

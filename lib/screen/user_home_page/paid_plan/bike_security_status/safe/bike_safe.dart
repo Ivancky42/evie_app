@@ -79,9 +79,7 @@ class _BikeSafeState extends State<BikeSafe> {
                           ),
                         ),
                         Padding(
-                          padding:
-                          EdgeInsets.fromLTRB(
-                              16.w, 9.h, 0, 0),
+                          padding: EdgeInsets.fromLTRB(16.w, 9.h, 0, 0),
                           child: Bike_Name_Row(
                             bikeName: _bikeProvider
                                 .currentBikeModel
@@ -94,13 +92,9 @@ class _BikeSafeState extends State<BikeSafe> {
                             isDeviceConnected: widget.isDeviceConnected! && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr,
                           ),
                         ),
+
                         Padding(
-                          padding:
-                          EdgeInsets.fromLTRB(
-                              16.w,
-                              17.15.h,
-                              0,
-                              0),
+                          padding: EdgeInsets.fromLTRB(16.w, 17.15.h, 0, 0),
                           child: IntrinsicHeight(
                             child: Bike_Status_Row(
                               batteryImage: getBatteryImage(

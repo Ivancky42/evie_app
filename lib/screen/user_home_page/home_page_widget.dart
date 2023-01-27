@@ -1,9 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
+import '../../api/model/threat_routes_model.dart';
+import '../../api/provider/bike_provider.dart';
+import '../../api/provider/location_provider.dart';
 import '../../bluetooth/modelResult.dart';
 
 
@@ -13,7 +18,8 @@ class HomePageWidget_StatusBar extends StatefulWidget{
   String? lastSeen;
   Placemark? location;
   String? minutesAgo;
-
+  GeoPoint? selectedGeopoint;
+  LocationProvider? locationProvider;
 
   HomePageWidget_StatusBar({
     Key? key,
@@ -21,7 +27,8 @@ class HomePageWidget_StatusBar extends StatefulWidget{
     this.lastSeen,
     this.location,
     this.minutesAgo,
-
+    this.selectedGeopoint,
+    this.locationProvider,
   }) : super(key: key);
 
   @override
@@ -29,8 +36,14 @@ class HomePageWidget_StatusBar extends StatefulWidget{
 }
 
 class _HomePageWidget_StatusBarState extends State<HomePageWidget_StatusBar> {
+
+  late BikeProvider _bikeProvider;
+
   @override
   Widget build(BuildContext context) {
+
+    _bikeProvider = Provider.of<BikeProvider>(context);
+
     Color dangerColor = Colors.transparent;
     Color fontColor = Color(0xff383838);
     String alertImage = "assets/buttons/location_pin.svg";
@@ -73,15 +86,32 @@ class _HomePageWidget_StatusBarState extends State<HomePageWidget_StatusBar> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Last seen",style: TextStyle(fontSize: 12.sp, color: fontColor, fontWeight: FontWeight.w400),),
-                Text(widget.location?.name ?? "Not available",style: TextStyle(fontSize: 20.sp, color: fontColor, fontWeight: FontWeight.w900),),
-                Text("1 minutes ago",style: TextStyle(fontSize: 16.sp,color: fontColor, fontWeight: FontWeight.w400),),
+                widget.currentDangerState == "danger" && widget.selectedGeopoint != null
+                    ? FutureBuilder<dynamic>(
+                    future: widget.locationProvider?.returnPlaceMarks(widget.selectedGeopoint!.latitude, widget.selectedGeopoint!.longitude),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(
+                          snapshot.data.name.toString(),
+                          style: TextStyle(fontSize: 20.sp, color: fontColor, fontWeight: FontWeight.w900),
+                        );
+                      }else{
+                        return const Text(
+                          "loading",
+                        );
+                      }
+                    }
+                )
+                    : Text(widget.location?.name ?? "Not available",style: TextStyle(fontSize: 20.sp, color: fontColor, fontWeight: FontWeight.w900),),
+
+                ///Bike provider lastUpdated minus current timestamp
+            //    Text("1 minutes ago", style: TextStyle(fontSize: 16.sp,color: fontColor, fontWeight: FontWeight.w400),),
+                Text("${DateTime.now().difference(DateTime.parse(_bikeProvider.currentBikeModel!.lastUpdated!.toDate().toString())).inMinutes.toString()} minutes ago", style: TextStyle(fontSize: 16.sp,color: fontColor, fontWeight: FontWeight.w400),),
               ],
             ),
           ],
-
         ),
       )
-
       // Center(
       //     child:Text(location!,style: TextStyle(fontSize: 12, color: fontColor),)),
     );
