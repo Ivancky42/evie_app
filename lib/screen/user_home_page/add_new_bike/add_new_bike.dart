@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/free_plan/mapbox_widget.dart';
 
@@ -40,6 +41,7 @@ class _AddNewBikeState extends State<AddNewBike> {
   late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
+  late NotificationProvider _notificationProvider;
 
   Color lockColour = const Color(0xff6A51CA);
 
@@ -123,6 +125,7 @@ class _AddNewBikeState extends State<AddNewBike> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
+    _notificationProvider = Provider.of<NotificationProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
@@ -484,7 +487,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                           }),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           )

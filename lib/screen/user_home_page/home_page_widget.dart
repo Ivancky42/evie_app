@@ -6,10 +6,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import '../../api/colours.dart';
 import '../../api/model/threat_routes_model.dart';
+import '../../api/navigator.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../api/provider/location_provider.dart';
+import '../../api/provider/notification_provider.dart';
 import '../../bluetooth/modelResult.dart';
+import '../../widgets/actionable_bar.dart';
+import '../../widgets/evie_button.dart';
 
 
 ///Double button dialog
@@ -118,6 +123,41 @@ class _HomePageWidget_StatusBarState extends State<HomePageWidget_StatusBar> {
   }
 }
 
+
+Widget stackActionableBar(context, BikeProvider bikeProvider, NotificationProvider notificationProvider){
+
+  var items = [
+    'Try 6 hours Later',
+    'Remind Me 5 seconds',
+  ];
+
+  return Visibility(
+    visible: bikeProvider.rfidList.length == 0 && notificationProvider.isTimeArrive,
+    child: EvieActionableBar(
+        title: "Register EV-Key",
+        text: "Add EV-Key to unlock your bike without app assistance.",
+        buttonLeft: EvieButton_DropDown(
+            onChanged: (value) async {
+              if(value.toString() == items.elementAt(0)){
+                await notificationProvider.setSharedPreferenceDate("targetDateTime", DateTime.now().add(const Duration(hours: 6)));
+              }else if(value.toString() == items.elementAt(1)){
+                await notificationProvider.setSharedPreferenceDate("targetDateTime", DateTime.now().add(const Duration(seconds: 5)));
+              }
+            },
+            items: items.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            text: "Remind Me Later"),
+        buttonRight: EvieButton(
+          child: Text("Add Now",style: TextStyle(color: EvieColors.grayishWhite, fontSize: 17.sp, fontWeight: FontWeight.w900),),
+          onPressed: (){
+            changeToRFIDCardScreen(context);
+          },)),
+  );
+}
 
 
 Widget getSecurityTextWidget(bool isLocked) {

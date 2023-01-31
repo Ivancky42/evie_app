@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:evie_test/api/model/user_bike_model.dart';
+import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,6 +36,7 @@ class _BikeContainerState extends State<BikeContainer> {
 
     BikeProvider _bikeProvider = Provider.of<BikeProvider>(context);
     BluetoothProvider _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    NotificationProvider _notificationProvider = Provider.of<NotificationProvider>(context);
 
     /// get bluetooth connection state and lock unlock to detect isConnected
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
@@ -104,6 +106,7 @@ class _BikeContainerState extends State<BikeContainer> {
                   ///it will connect follow by the flag.
                   _bluetoothProvider.setAutoConnect();
                   subscription?.cancel();
+                  _notificationProvider.compareActionableBarTime();
                   Navigator.pop(context);
                 }
                 else if(result == SwitchBikeResult.failure){

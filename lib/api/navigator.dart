@@ -53,7 +53,7 @@ import '../screen/onboarding/qr_scanning.dart';
 import '../screen/signup_method.dart';
 import '../screen/signup_page.dart';
 
-import '../screen/user_notification_details.dart';
+import '../abandon/user_notification_details.dart';
 import 'model/bike_model.dart';
 import 'model/plan_model.dart';
 import 'model/price_model.dart';
@@ -108,11 +108,6 @@ void changeToForgetPasswordScreen(BuildContext context) {
 void changeToUserProfileScreen(BuildContext context) {
   Navigator.of(context)
       .pushNamedAndRemoveUntil("/userProfile", (route) => false);
-}
-
-void changeToUserBluetoothScreen(BuildContext context) {
-  Navigator.of(context)
-      .pushNamedAndRemoveUntil("/userBluetooth", (route) => false);
 }
 
 void changeToChangePasswordScreen(BuildContext context) {

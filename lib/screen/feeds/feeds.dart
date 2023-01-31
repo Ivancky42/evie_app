@@ -149,10 +149,21 @@ class _FeedsState extends State<Feeds> {
                             child: Padding(
                               padding:  EdgeInsets.only(top: 14.h, bottom: 14.h),
                               child: ListTile(
-                                  title: Text(_notificationProvider
-                                      .notificationList.values
-                                      .elementAt(index)
-                                      .title!, style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w900),),
+                                  title: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        width:260.w,
+                                        child: Text(_notificationProvider
+                                            .notificationList.values
+                                            .elementAt(index)
+                                            .title!, style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w900),),
+                                      ),
+
+                                      Text("${DateTime.now().difference(DateTime.parse(_notificationProvider.notificationList.values.elementAt(index).created!.toDate().toString())).inMinutes.toString()} minutes ago",
+                                        style: TextStyle(fontSize: 12.sp,color: EvieColors.darkGrayishCyan, fontWeight: FontWeight.w400),),
+                                    ],
+                                  ),
                                   subtitle: Column(
                                     children: [
                                       Align(

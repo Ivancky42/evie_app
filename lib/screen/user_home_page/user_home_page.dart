@@ -9,7 +9,7 @@ import '../feeds/feeds.dart';
 import '../my_account/my_account.dart';
 import '../my_bike_setting/navigate_plan_page.dart';
 import '../my_bike_setting/user_bike/user_bike.dart';
-import '../user_notification.dart';
+import '../../abandon/user_notification.dart';
 
 ///User default home page when login condition is true
 
@@ -37,7 +37,6 @@ class _UserHomePageState extends State<UserHomePage> {
   final screen = [
     UserHomeGeneral(),
     TestBle(),
-  //  NavigatePlanPage(),
     Feeds(),
     MyAccount(),
   ];

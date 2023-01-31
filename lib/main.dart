@@ -16,8 +16,8 @@ import 'package:evie_test/screen/rfid_card_manage.dart';
 import 'package:evie_test/screen/shares_bike.dart';
 import 'package:evie_test/screen/signup_method.dart';
 import 'package:evie_test/screen/test_ble.dart';
-import 'package:evie_test/screen/user_notification.dart';
-import 'package:evie_test/screen/user_notification_details.dart';
+import 'package:evie_test/abandon/user_notification.dart';
+import 'package:evie_test/abandon/user_notification_details.dart';
 import 'package:evie_test/screen/verify_email.dart';
 import 'package:evie_test/screen/welcome_page.dart';
 import 'package:evie_test/theme/ThemeChangeNotifier.dart';
@@ -40,7 +40,6 @@ import 'package:evie_test/abandon/user_change_password.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/theme/ThemeChangeNotifier.dart';
 import 'package:evie_test/screen/connect_bluetooth_device_page.dart';
-import 'package:evie_test/screen/user_home_bluetooth.dart';
 import 'package:sizer/sizer.dart';
 import 'package:upgrader/upgrader.dart';
 
@@ -247,7 +246,6 @@ class MyApp extends StatelessWidget {
           "/forgetPassword": (context) => const ForgetYourPassword(),
           "/userProfile": (context) => const UserProfile(),
           "/userHomePage": (context) => const UserHomePage(0),
-          "/userBluetooth": (context) => const UserHomeBluetooth(),
           "/userChangePassword": (context) => const UserChangePassword(),
           "/testBle": (context) => const TestBle(),
       //    "/notification": (context) => const UserNotification(),

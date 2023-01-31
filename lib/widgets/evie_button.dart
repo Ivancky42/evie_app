@@ -1,57 +1,10 @@
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/utils.dart';
 
 
 import '../api/colours.dart';
-
-///Button Widget
-class EvieButton_Dark extends StatelessWidget {
-
-  final VoidCallback? onPressed;
-  final Widget? child;
-  final double? width;
-  final double? height;
-  final Color? backgroundColor;
-
-  const EvieButton_Dark({
-    Key? key,
-    this.onPressed,
-    this.child,
-    this.width,
-    this.height,
-    this.backgroundColor,
-
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: width,
-        child: Padding(
-          padding: const EdgeInsets.all(2),
-          child: Container(
-            width: width,
-            child: ElevatedButton(
-              child: child,
-              onPressed: onPressed,
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0)),
-                  backgroundColor: backgroundColor ?? EvieColors.primaryColor,
-                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                  textStyle: const TextStyle(
-                      fontSize: 30,
-            //          fontWeight: FontWeight.bold
-                )
-              ),
-            ),
-          ),
-        )
-    );
-  }
-}
-
 
 ///Button widget
 class EvieButton extends StatelessWidget {
@@ -84,8 +37,6 @@ class EvieButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.w)),
             elevation: 0.0,
             backgroundColor: backgroundColor ?? EvieColors.primaryColor,
-
-
         ),
       ),
     );
@@ -131,6 +82,52 @@ class EvieButton_ReversedColor extends StatelessWidget {
 }
 
 
+///Button widget
+class EvieButton_DropDown extends StatelessWidget {
+  final double? width;
+  final double? height;
+  final Color? backgroundColor;
+  final ValueChanged? onChanged;
+  final List<DropdownMenuItem> items;
+  final String text;
+
+  const EvieButton_DropDown({
+    Key? key,
+    this.width,
+    this.height,
+    this.backgroundColor,
+    required this.onChanged,
+    required this.items,
+    required this.text,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: height ?? 48.h,
+        width: width ?? double.infinity,
+        child: Padding(
+          padding:  EdgeInsets.only(left: 16.w, right:16.w),
+          child: DropdownButton(
+            isExpanded: true,
+            underline: const SizedBox(),
+            onChanged: onChanged,
+            items: items,
+            icon: SvgPicture.asset(
+              "assets/buttons/down_mini.svg",
+            ),
+            style: const TextStyle(color: EvieColors.primaryColor),
+            hint: Text(text, style: TextStyle(color: EvieColors.primaryColor, fontSize: 17.sp, fontWeight: FontWeight.w500),),
+          ),
+        ),
+      decoration: BoxDecoration(
+        color: backgroundColor ?? EvieColors.lightGrayishCyan,
+          borderRadius:  BorderRadius.all(Radius.circular(10.w)),
+      ),
+    );
+  }
+}
+
 
 class EvieButton_Square extends StatelessWidget {
 
@@ -171,48 +168,6 @@ class EvieButton_Square extends StatelessWidget {
                   fontWeight: FontWeight.bold)),
         ),
       ),
-    );
-  }
-}
-
-
-
-
-///Button widget
-class EvieButton_White extends StatelessWidget {
-
-  final VoidCallback onPressed;
-  final Widget child;
-  final double width;
-  final double height;
-
-  const EvieButton_White({
-    Key? key,
-    required this.onPressed,
-    required this.child,
-    required this.width,
-    required this.height,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: width,
-        child: Padding(
-          padding: const EdgeInsets.all(2),
-            child: ElevatedButton(
-              child: child,
-              onPressed: onPressed,
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0)),
-                  elevation: 0.0,
-                  backgroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              ),
-            ),
-
-        )
     );
   }
 }

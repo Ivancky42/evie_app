@@ -6,27 +6,32 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/notification_model.dart';
 import '../model/user_model.dart';
 
+
+
 class NotificationProvider extends ChangeNotifier {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
-  String notificationsCollection =
-      dotenv.env['DB_COLLECTION_NOTIFICATIONS'] ?? 'DB not found';
+  String notificationsCollection = dotenv.env['DB_COLLECTION_NOTIFICATIONS'] ?? 'DB not found';
 
-  LinkedHashMap<String, NotificationModel> notificationList =
-      LinkedHashMap<String, NotificationModel>();
-
-  NotificationModel? currentSingleNotification;
+  LinkedHashMap<String, NotificationModel> notificationList = LinkedHashMap<String, NotificationModel>();
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
+  NotificationModel? currentSingleNotification;
   UserModel? currentUserModel;
   bool? isReadAll;
 
   StreamSubscription? notificationListSubscription;
   StreamSubscription? currentNotificationSubscription;
+
+  DateTime? targetActionableBarTime;
+  bool isTimeArrive = true;
 
   Future<void> init(UserModel? currentUserModel) async {
     ///Subscribe to user uid for notification
@@ -39,6 +44,7 @@ class NotificationProvider extends ChangeNotifier {
 
       //  firebaseCloudMessaging_Listeners();
 
+      compareActionableBarTime();
       notifyListeners();
     }
   }
@@ -228,4 +234,39 @@ class NotificationProvider extends ChangeNotifier {
     }
     return result;
   }
+
+  setSharedPreferenceDate(String target,DateTime dateTime) async{
+    SharedPreferences prefs = await _prefs;
+
+    await prefs.setString(target, dateTime.toString());
+    compareActionableBarTime();
+    notifyListeners();
+  }
+
+  compareActionableBarTime()async{
+    SharedPreferences prefs = await _prefs;
+
+    if (prefs.containsKey('targetDateTime')) {
+      targetActionableBarTime = DateTime.parse(prefs.getString('targetDateTime') ?? "");
+      calculateDateDifference(targetActionableBarTime!);
+      notifyListeners();
+    }else{
+      isTimeArrive = true;
+    }
+  }
+
+  calculateDateDifference(DateTime date) {
+
+    /// Negative : Time not yet arrive
+    /// Positive : Time arrive
+    /// 0: In between, still consider as not yet arrive
+
+    if(DateTime.now().difference(date).inMinutes > 0){
+      isTimeArrive = true;
+    }else if(DateTime.now().difference(date).inMinutes <= 0){
+      isTimeArrive = false;
+    }
+    notifyListeners();
+  }
+
 }

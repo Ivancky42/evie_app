@@ -79,7 +79,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
       ///Pass notification id to get body and key
       await _notificationProvider.getNotificationFromNotificationId(data);
-
+      changeToNotificationScreen(context);
       FutureBuilder(
           future: _notificationProvider.getNotificationFromNotificationId(data),
           builder: (context, snapshot) {
@@ -166,7 +166,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   ///Foreground select Notification android
   Future<void> onSelectNotification(String? payload) async {
     ///Pass notification id to get body and key
-
+    changeToNotificationScreen(context);
     FutureBuilder(
         future:
             _notificationProvider.getNotificationFromNotificationId(payload),
@@ -216,6 +216,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     // display a dialog with the notification details, tap ok to go to another page
     ///Pass notification id to get body and key
     _notificationProvider.getNotificationFromNotificationId(payload);
+    changeToNotificationScreen(context);
 
     if (_notificationProvider.currentSingleNotification?.notificationId !=
         null) {

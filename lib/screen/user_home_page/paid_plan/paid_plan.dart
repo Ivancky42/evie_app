@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/threat_routes_model.dart';
+import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/mapbox_widget.dart';
@@ -23,6 +24,7 @@ import '../../../api/colours.dart';
 import '../../../api/model/location_model.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/location_provider.dart';
+import '../../../api/provider/notification_provider.dart';
 import '../../../api/toast.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_double_button_dialog.dart';
@@ -50,6 +52,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
+  late NotificationProvider _notificationProvider;
 
   DeviceConnectResult? deviceConnectResult;
   CableLockResult? cableLockState;
@@ -108,7 +111,9 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
               if(userLocation != null && _locationProvider.locationModel?.status != null) {
                 getDistanceBetween();
-                animateBounce();
+
+                ///User location update will bounce every once, causing almost infinity bounce if open comment
+         //       animateBounce();
               }
             });
           }
@@ -141,6 +146,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
+    _notificationProvider = Provider.of<NotificationProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
@@ -309,7 +315,10 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                       }),
                 ),
               ),
-            )
+            ),
+
+            stackActionableBar(context, _bikeProvider, _notificationProvider),
+
           ],
         ),
       )
@@ -443,6 +452,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
         child: GestureDetector(
           onTap: () async {
 
+            animateBounce();
           },
           child: Container(
               height: 50.h,
