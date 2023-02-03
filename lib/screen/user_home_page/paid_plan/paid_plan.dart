@@ -268,6 +268,9 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                 ],
               ),
             ),
+
+            stackActionableBar(context, _bikeProvider, _notificationProvider),
+
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -317,7 +320,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
               ),
             ),
 
-            stackActionableBar(context, _bikeProvider, _notificationProvider),
+
 
           ],
         ),

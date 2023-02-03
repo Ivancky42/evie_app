@@ -42,3 +42,32 @@ connectDevice(BluetoothProvider _bluetoothProvider, BikeProvider _bikeProvider) 
     _bluetoothProvider.startScanAndConnect();
   }
 }
+
+calculateTimeAgo(DateTime dateTime){
+    Duration diff = DateTime.now().difference(dateTime);
+
+    String timeAgo;
+    if (diff.inMinutes > 0 && diff.inMinutes < 60){
+      timeAgo = "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
+    }else if(diff.inHours > 0 && diff.inHours < 24){
+      timeAgo = "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
+    }else{
+      timeAgo = "${dateTime.day.toString()} ${monthsInYear[dateTime.month]}";
+    }
+    return timeAgo;
+}
+
+const Map<int,String> monthsInYear = {
+  1: "Jan",
+  2: "Feb",
+  3: "Mar",
+  4: "Apr",
+  5: "Mar",
+  6: "Jun",
+  7: "Jul",
+  8: "Aug",
+  9: "Sep",
+  10: "Oct",
+  11: "Nov",
+  12: "Dec",
+};

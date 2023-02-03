@@ -253,6 +253,9 @@ class _FreePlanState extends State<FreePlan> {
                     ],
                   ),
                 ),
+
+                stackActionableBar(context, _bikeProvider, _notificationProvider),
+
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
@@ -639,15 +642,10 @@ class _FreePlanState extends State<FreePlan> {
                                 ),
                               ],
                             );
-
-
                           }),
                     ),
                   ),
                 ),
-
-                stackActionableBar(context, _bikeProvider, _notificationProvider),
-
               ],
             ),
           )

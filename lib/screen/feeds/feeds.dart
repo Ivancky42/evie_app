@@ -7,6 +7,7 @@ import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
+import 'package:evie_test/widgets/feeds_list_tile.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,6 +15,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/state_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -26,6 +28,8 @@ import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../api/colours.dart';
 import '../../api/dialog.dart';
+import '../../api/function.dart';
+import '../../api/model/bike_model.dart';
 import '../../api/navigator.dart';
 import '../../theme/ThemeChangeNotifier.dart';
 import '../../widgets/evie_single_button_dialog.dart';
@@ -44,6 +48,8 @@ class _FeedsState extends State<Feeds> {
   late AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
   late NotificationProvider _notificationProvider;
+
+  LinkedHashMap selectedBikeList = LinkedHashMap<String, BikeModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -71,276 +77,357 @@ class _FeedsState extends State<Feeds> {
               ),
 
               Expanded(
-                child: _notificationProvider.notificationList.isNotEmpty ?
-                ListView.separated(
+                child: ListView(
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
-                  itemCount: _notificationProvider.notificationList.length,
-                  itemBuilder: (context, index) {
-                    return Slidable(
-                      key: UniqueKey(),
-                      endActionPane:  ActionPane(
-                        extentRatio: 0.3,
-                        motion: const StretchMotion(),
-                        dismissible: DismissiblePane(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                  for(var index = 0; index < _bikeProvider.userBikePlans.length; index++ )...{
+                  if(_bikeProvider.userBikePlans.values.elementAt(index)?.periodEnd.toDate() != null)...{
+                    if(_bikeProvider.calculateDateDifference(_bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate()) >= 0)...{
+                      ///if connection lost
+                      if(_bikeProvider.userBikeDetails.values.elementAt(index).location.isConnected == false)...{
+                        FeedsListTile(
+                            image: "assets/buttons/bike_security_warning.svg",
+                            title: "Connection Lost",
+                            subtitle: "${_bikeProvider.userBikeDetails.values.elementAt(index).deviceName} has lost connection. Last update was time. "
+                                      "${_bikeProvider.userBikeDetails.values.elementAt(index).deviceName} will be back online after...",
+                            isDanger: false,
+                            date: _bikeProvider.userBikeDetails.values.elementAt(index).lastUpdated.toDate(),
+                            onPressRight: ()async{
+                            await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.elementAt(index));
+                            changeToUserHomePageScreen(context);
+                            }),
+                      }else...{
+                      ///if condition == danger or warning
+                      if(_bikeProvider.userBikeDetails.values.elementAt(index).location.status == "danger")...{
+                        FeedsListTile(
+                            image: "assets/buttons/bike_security_danger.svg",
+                            title: "Theft Attempt Alert",
+                            subtitle: "${_bikeProvider.userBikeDetails.values.elementAt(index).deviceName}, Your bike is under threat! Someone is trying to steal your bike!",
+                            isDanger: true,
+                            date: _bikeProvider.userBikeDetails.values.elementAt(index).lastUpdated.toDate(),
+                            onPressRight: ()async{
+                              await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.elementAt(index));
+                              changeToUserHomePageScreen(context);
+                            }),
+                      }else if(_bikeProvider.userBikeDetails.values.elementAt(index).location.status == "warning")...{
+                        FeedsListTile(
+                            image: "assets/buttons/bike_security_warning.svg",
+                            title: "Movement Detected",
+                            subtitle: "${_bikeProvider.userBikeDetails.values.elementAt(index).deviceName}, Movement were detected at Malaysia",
+                            isDanger: false,
+                            date: _bikeProvider.userBikeDetails.values.elementAt(index).lastUpdated.toDate(),
+                            onPressRight: ()async{
+                              await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.elementAt(index));
+                              changeToUserHomePageScreen(context);
+                            }),
+                      }else if(_bikeProvider.userBikeDetails.values.elementAt(index).location.status == "fall")...{
+                        FeedsListTile(
+                            image: "assets/buttons/bike_security_warning.svg",
+                            title: "Fall Detected",
+                            subtitle: "${_bikeProvider.userBikeDetails.values.elementAt(index).deviceName}, Fall detect detected when detection detecting detect",
+                            isDanger: false,
+                            date: _bikeProvider.userBikeDetails.values.elementAt(index).lastUpdated.toDate(),
+                            onPressRight: ()async{
+                              await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.elementAt(index));
+                              changeToUserHomePageScreen(context);
+                            }),
+                      }else if(_bikeProvider.userBikeDetails.values.elementAt(index).location.status == "crash")...{
+                        FeedsListTile(
+                            image: "assets/buttons/bike_security_danger.svg",
+                            title: "Crash Alert",
+                            subtitle:  "EVIE detected that ${_currentUserProvider.currentUserModel!.name} has fallen from bike... "
+                                "To checkout where is ${_currentUserProvider.currentUserModel!.name}, click on \"Track My Bike\"",
+                            isDanger: true,
+                            date: _bikeProvider.userBikeDetails.values.elementAt(index).lastUpdated.toDate(),
+                            onPressRight: ()async{
+                              await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.elementAt(index));
+                              changeToUserHomePageScreen(context);
+                            }),
+                      }
+                      }
+                    }
+                  },
+                    Divider(height: 1.5.h,),
+               },
 
-                          ///Confirm dismiss only when decline
-                            // confirmDismiss: () async {
-                            //   return await showDialog(
-                            //     context: context,
-                            //     builder: (BuildContext context) {
-                            //           return EvieDoubleButtonDialog(
-                            //               title: "Are you sure",
-                            //               childContent: const Text("sure ma"),
-                            //               leftContent: "Cancel",
-                            //               rightContent: "ok",
-                            //               onPressedLeft: (){Navigator.of(context).pop(false);},
-                            //               onPressedRight: (){Navigator.of(context).pop(true);});
-                            //     },
-                            //   );
-                            // },
-                          onDismissed: () async {
+                    Container(
+                      child: _notificationProvider.notificationList.isNotEmpty ?
+                      ListView.separated(
+                        physics: const ClampingScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        itemCount: _notificationProvider.notificationList.length,
+                        itemBuilder: (context, index) {
+                          return Slidable(
+                            key: UniqueKey(),
+                            endActionPane:  ActionPane(
+                              extentRatio: 0.3,
+                              motion: const StretchMotion(),
+                              dismissible: DismissiblePane(
 
-                            if(_notificationProvider.notificationList.values.elementAt(index).status == "pending"){
-                              decline(index);
-                            }else{
-                              var result = await _notificationProvider.deleteNotification(_notificationProvider.notificationList.keys.elementAt(index));
-                              if(!result){
-                                showDeleteNotificationFailed();
-                              }
-                            }
-                          },
-                        ),
-                        children: [
-                          SlidableAction(
-                            spacing:10,
-                            onPressed: (context) async{
-                              if(_notificationProvider.notificationList.values.elementAt(index).status == "pending"){
-                                decline(index);
-                              }else {
-                                var result = await _notificationProvider.deleteNotification(
-                                    _notificationProvider.notificationList.keys.elementAt(index));
-                                if (result) {
-                                  showDeleteNotificationSuccess();
-                                } else {
-                                  showDeleteNotificationFailed();
-                                }
-                              }
-                            },
-                            backgroundColor: EvieColors.red,
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                          ),
-                        ],
-                      ),
+                                ///Confirm dismiss only when decline
+                                // confirmDismiss: () async {
+                                //   return await showDialog(
+                                //     context: context,
+                                //     builder: (BuildContext context) {
+                                //           return EvieDoubleButtonDialog(
+                                //               title: "Are you sure",
+                                //               childContent: const Text("sure ma"),
+                                //               leftContent: "Cancel",
+                                //               rightContent: "ok",
+                                //               onPressedLeft: (){Navigator.of(context).pop(false);},
+                                //               onPressedRight: (){Navigator.of(context).pop(true);});
+                                //     },
+                                //   );
+                                // },
 
-                      child: GestureDetector(
-                          onTap: () async {
-                             _notificationProvider.updateIsReadStatus(_notificationProvider
-                                    .notificationList.keys
-                                    .elementAt(index));
-                          },
+                                onDismissed: () async {
+                                  if(_notificationProvider.notificationList.values.elementAt(index).status == "pending"){
+                                    decline(index);
+                                  }else{
+                                    var result = await _notificationProvider.deleteNotification(_notificationProvider.notificationList.keys.elementAt(index));
+                                    if(!result){
+                                      showDeleteNotificationFailed();
+                                    }
+                                  }
+                                },
+                              ),
+                              children: [
+                                SlidableAction(
+                                  spacing:10,
+                                  onPressed: (context) async{
+                                    if(_notificationProvider.notificationList.values.elementAt(index).status == "pending"){
+                                      decline(index);
+                                    }else {
+                                      var result = await _notificationProvider.deleteNotification(
+                                          _notificationProvider.notificationList.keys.elementAt(index));
+                                      if (result) {
+                                        showDeleteNotificationSuccess();
+                                      } else {
+                                        showDeleteNotificationFailed();
+                                      }
+                                    }
+                                  },
+                                  backgroundColor: EvieColors.red,
+                                  foregroundColor: Colors.white,
+                                  icon: Icons.delete,
+                                ),
+                              ],
+                            ),
 
-                          child: Container(
-                            color: _notificationProvider
-                                .notificationList.values
-                                .elementAt(index)
-                                .isRead! == false ? Color(0xffE6E2F6) : Colors.transparent,
-                            child: Padding(
-                              padding:  EdgeInsets.only(top: 14.h, bottom: 14.h),
-                              child: ListTile(
-                                  title: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        width:260.w,
-                                        child: Text(_notificationProvider
-                                            .notificationList.values
-                                            .elementAt(index)
-                                            .title!, style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w900),),
-                                      ),
+                            child: GestureDetector(
+                                onTap: () async {
+                                  _notificationProvider.updateIsReadStatus(_notificationProvider
+                                      .notificationList.keys
+                                      .elementAt(index));
+                                },
 
-                                      Text("${DateTime.now().difference(DateTime.parse(_notificationProvider.notificationList.values.elementAt(index).created!.toDate().toString())).inMinutes.toString()} minutes ago",
-                                        style: TextStyle(fontSize: 12.sp,color: EvieColors.darkGrayishCyan, fontWeight: FontWeight.w400),),
-                                    ],
-                                  ),
-                                  subtitle: Column(
-                                    children: [
-                                      Align(
-                                        alignment: AlignmentDirectional.centerStart,
-                                        child: Text(
-                                          "${_notificationProvider.notificationList.values.elementAt(index).body!}",
-                //                  "\n\n${_notificationProvider.notificationList.values.elementAt(index).created!.toDate()}",
-                                          style: TextStyle(
-                                            color: ThemeChangeNotifier()
-                                                .isDarkMode(context) ==
-                                                true
-                                                ? Colors.white70
-                                                : Colors.black54,
-                                          ),
-
-
-                                        ),
-                                      ),
-
-                                      Visibility(
-                                        ///type == shareBike, status == pending
-                                        visible: _notificationProvider.notificationList.values.elementAt(index).status == "pending",
-                                        child: Row(
+                                child: Container(
+                                  color: _notificationProvider
+                                      .notificationList.values
+                                      .elementAt(index)
+                                      .isRead! == false ? Color(0xffE6E2F6) : Colors.transparent,
+                                  child: Padding(
+                                    padding:  EdgeInsets.only(top: 14.h, bottom: 14.h),
+                                    child: ListTile(
+                                        title: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Align(
-                                                alignment: AlignmentDirectional.bottomStart,
-                                                child: EvieButton_ReversedColor(
-                                                    onPressed: (){
-
-                                                      decline(index);
-
-                                                    },
-                                                    child: Text(
-                                                      "Decline",
-                                                      style: TextStyle(fontSize: 17.sp,
-                                                          color: EvieColors.primaryColor),
-                                                    ),
-                                                    height: 36.h,
-                                                    width: 169.w)
+                                            Container(
+                                              width:260.w,
+                                              child: Text(_notificationProvider
+                                                  .notificationList.values
+                                                  .elementAt(index)
+                                                  .title!, style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w900),),
                                             ),
 
+                                            Text(calculateTimeAgo(_notificationProvider.notificationList.values.elementAt(index).created!.toDate()),
+                                              style: TextStyle(fontSize: 12.sp,color: EvieColors.darkGrayishCyan, fontWeight: FontWeight.w400),),
+                                          ],
+                                        ),
+                                        subtitle: Column(
+                                          children: [
                                             Align(
-                                                alignment: AlignmentDirectional.bottomEnd,
-                                                child: EvieButton(
-                                                    onPressed: () async {
-                                                      SmartDialog.show(
-                                                        backDismiss: false,
-                                                          widget: Container(
-                                                            color: EvieColors.grayishWhite,
-                                                        width: double.infinity,
-                                                        height: double.infinity,
-                                                        child: Column(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                              "assets/icons/loading.svg",
-                                                              height: 48.h,
-                                                              width: 48.w,
-                                                            ),
-                                                            Text("Accepting invitation and adding bike...", style: TextStyle(fontSize: 16.sp, color: Color(0xff3F3F3F)),)
-                                                          ],
-                                                        )
-                                                      ));
-
-                                                      StreamSubscription? currentSubscription;
-                                                      currentSubscription = _bikeProvider.acceptSharedBike(
-                                                          _notificationProvider.notificationList.values.elementAt(index).deviceIMEI!,
-                                                          _currentUserProvider.currentUserModel!.uid)
-                                                          .listen((uploadStatus) async {
-
-                                                        if(uploadStatus == UploadFirestoreResult.success){
-                                                          SmartDialog.dismiss();
-                                                          _notificationProvider.updateUserNotificationSharedBikeStatus(_notificationProvider.notificationList.keys.elementAt(index));
-                                                          ScaffoldMessenger.of(context)
-                                                              .showSnackBar(
-                                                            const SnackBar(
-                                                              content: Text('Bike added successfully!'),
-                                                              duration: Duration(
-                                                                  seconds: 3),),
-                                                          );
-
-                                                          changeToUserHomePageScreen(context);
-                                                          for (var element in _bikeProvider.userBikeNotificationList) {
-                                                            await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}$element");
-                                                          }
-
-                                                          currentSubscription?.cancel();
-                                                        } else if(uploadStatus == UploadFirestoreResult.failed) {
-                                                          SmartDialog.dismiss();
-                                                          SmartDialog.show(
-                                                              backDismiss: false,
-                                                              widget: EvieSingleButtonDialogCupertino(
-                                                                  title: "Error",
-                                                                  content: "Try again",
-                                                                  rightContent: "OK",
-                                                                  onPressedRight: () async {
-                                                                    SmartDialog.dismiss();
-                                                                  }));
-                                                        }
-                                                      },
-                                                      );
+                                              alignment: AlignmentDirectional.centerStart,
+                                              child: Text(
+                                                "${_notificationProvider.notificationList.values.elementAt(index).body!}",
+                                                //                  "\n\n${_notificationProvider.notificationList.values.elementAt(index).created!.toDate()}",
+                                                style: TextStyle(
+                                                  color: ThemeChangeNotifier()
+                                                      .isDarkMode(context) ==
+                                                      true
+                                                      ? Colors.white70
+                                                      : Colors.black54,
+                                                ),
 
 
-                                                      // _bikeProvider
-                                                      //     .acceptSharedBikeStatus(
-                                                      //     notificationModel.deviceIMEI!, _currentUserProvider.currentUserModel!.uid)
-                                                      //     .then((result) {
-                                                      //   if (result == true) {
-                                                      //     SmartDialog.dismiss();
-                                                      //     _notificationProvider
-                                                      //         .updateUserNotificationSharedBikeStatus(key);
-                                                      //     SmartDialog.show(
-                                                      //         widget: EvieSingleButtonDialogCupertino(
-                                                      //             title: "Success",
-                                                      //             content: "Bike added",
-                                                      //             rightContent: "OK",
-                                                      //             onPressedRight: () {
-                                                      //               SmartDialog.dismiss();
-                                                      //             }));
-                                                      //   } else {
-                                                      //     SmartDialog.dismiss();
-                                                      //     SmartDialog.show(
-                                                      //         widget: EvieSingleButtonDialogCupertino(
-                                                      //             title: "Error",
-                                                      //             content: "Bike not added, try again",
-                                                      //             rightContent: "OK",
-                                                      //             onPressedRight: () {
-                                                      //               SmartDialog.dismiss();
-                                                      //             }));
-                                                      //   }
-                                                      // });
+                                              ),
+                                            ),
 
-                                                    },
-                                                    child: Text(
-                                                      "OK",
-                                                      style: TextStyle(fontSize: 17.sp,
-                                                        color: EvieColors.grayishWhite,),
-                                                    ),
-                                                    height: 36.h,
-                                                    width: 169.w)
+                                            Visibility(
+                                              ///type == shareBike, status == pending
+                                              visible: _notificationProvider.notificationList.values.elementAt(index).status == "pending",
+                                              child: Row(
+                                                children: [
+                                                  Align(
+                                                      alignment: AlignmentDirectional.bottomStart,
+                                                      child: EvieButton_ReversedColor(
+                                                          onPressed: (){
+
+                                                            decline(index);
+
+                                                          },
+                                                          child: Text(
+                                                            "Decline",
+                                                            style: TextStyle(fontSize: 17.sp,
+                                                                color: EvieColors.primaryColor),
+                                                          ),
+                                                          height: 36.h,
+                                                          width: 169.w)
+                                                  ),
+
+                                                  Align(
+                                                      alignment: AlignmentDirectional.bottomEnd,
+                                                      child: EvieButton(
+                                                          onPressed: () async {
+                                                            SmartDialog.show(
+                                                                backDismiss: false,
+                                                                widget: Container(
+                                                                    color: EvieColors.grayishWhite,
+                                                                    width: double.infinity,
+                                                                    height: double.infinity,
+                                                                    child: Column(
+                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                                      children: [
+                                                                        SvgPicture.asset(
+                                                                          "assets/icons/loading.svg",
+                                                                          height: 48.h,
+                                                                          width: 48.w,
+                                                                        ),
+                                                                        Text("Accepting invitation and adding bike...", style: TextStyle(fontSize: 16.sp, color: Color(0xff3F3F3F)),)
+                                                                      ],
+                                                                    )
+                                                                ));
+
+                                                            StreamSubscription? currentSubscription;
+                                                            currentSubscription = _bikeProvider.acceptSharedBike(
+                                                                _notificationProvider.notificationList.values.elementAt(index).deviceIMEI!,
+                                                                _currentUserProvider.currentUserModel!.uid)
+                                                                .listen((uploadStatus) async {
+
+                                                              if(uploadStatus == UploadFirestoreResult.success){
+                                                                SmartDialog.dismiss();
+                                                                _notificationProvider.updateUserNotificationSharedBikeStatus(_notificationProvider.notificationList.keys.elementAt(index));
+                                                                ScaffoldMessenger.of(context)
+                                                                    .showSnackBar(
+                                                                  const SnackBar(
+                                                                    content: Text('Bike added successfully!'),
+                                                                    duration: Duration(
+                                                                        seconds: 3),),
+                                                                );
+
+                                                                changeToUserHomePageScreen(context);
+                                                                for (var element in _bikeProvider.userBikeNotificationList) {
+                                                                  await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}$element");
+                                                                }
+
+                                                                currentSubscription?.cancel();
+                                                              } else if(uploadStatus == UploadFirestoreResult.failed) {
+                                                                SmartDialog.dismiss();
+                                                                SmartDialog.show(
+                                                                    backDismiss: false,
+                                                                    widget: EvieSingleButtonDialogCupertino(
+                                                                        title: "Error",
+                                                                        content: "Try again",
+                                                                        rightContent: "OK",
+                                                                        onPressedRight: () async {
+                                                                          SmartDialog.dismiss();
+                                                                        }));
+                                                              }
+                                                            },
+                                                            );
+
+
+                                                            // _bikeProvider
+                                                            //     .acceptSharedBikeStatus(
+                                                            //     notificationModel.deviceIMEI!, _currentUserProvider.currentUserModel!.uid)
+                                                            //     .then((result) {
+                                                            //   if (result == true) {
+                                                            //     SmartDialog.dismiss();
+                                                            //     _notificationProvider
+                                                            //         .updateUserNotificationSharedBikeStatus(key);
+                                                            //     SmartDialog.show(
+                                                            //         widget: EvieSingleButtonDialogCupertino(
+                                                            //             title: "Success",
+                                                            //             content: "Bike added",
+                                                            //             rightContent: "OK",
+                                                            //             onPressedRight: () {
+                                                            //               SmartDialog.dismiss();
+                                                            //             }));
+                                                            //   } else {
+                                                            //     SmartDialog.dismiss();
+                                                            //     SmartDialog.show(
+                                                            //         widget: EvieSingleButtonDialogCupertino(
+                                                            //             title: "Error",
+                                                            //             content: "Bike not added, try again",
+                                                            //             rightContent: "OK",
+                                                            //             onPressedRight: () {
+                                                            //               SmartDialog.dismiss();
+                                                            //             }));
+                                                            //   }
+                                                            // });
+
+                                                          },
+                                                          child: Text(
+                                                            "OK",
+                                                            style: TextStyle(fontSize: 17.sp,
+                                                              color: EvieColors.grayishWhite,),
+                                                          ),
+                                                          height: 36.h,
+                                                          width: 169.w)
+                                                  ),
+
+                                                ],
+                                              ),
                                             ),
 
                                           ],
-                                        ),
-                                      ),
-
-                                    ],
-                                  )),
-                            ),
-                          )),
-                    );
-                  },
-                  separatorBuilder:
-                      (BuildContext context, int index) {
-                    return Divider(height: 1.5.h,);
-                  },
-                ) : Padding(
-                  padding:  EdgeInsets.only(top:180.h ),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        SvgPicture.asset(
-                              "assets/images/mention_amigo.svg",
-                            ),
-                          SizedBox(
-                            height: 60.h,
+                                        )),
+                                  ),
+                                )),
+                          );
+                        },
+                        separatorBuilder:
+                            (BuildContext context, int index) {
+                          return Divider(height: 1.5.h,);
+                        },
+                      ) : Padding(
+                        padding:  EdgeInsets.only(top:180.h ),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              SvgPicture.asset(
+                                "assets/images/mention_amigo.svg",
+                              ),
+                              SizedBox(
+                                height: 60.h,
+                              ),
+                              Text(
+                                "You're all caught up!",
+                                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
+                              ),
+                            ],
                           ),
-                          Text(
-                              "You're all caught up!",
-                              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
-                            ),
-                      ],
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
+
             ],
           )),
     );

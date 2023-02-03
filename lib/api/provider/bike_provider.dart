@@ -85,6 +85,7 @@ class BikeProvider extends ChangeNotifier {
   StreamSubscription? currentBikeUserSubscription;
   StreamSubscription? currentUserBikeSubscription;
   StreamSubscription? currentBikePlanSubscription;
+  StreamSubscription? bikePlanSubscription;
   StreamSubscription? rfidListSubscription;
 
   StreamSubscription? currentSubscription;
@@ -136,8 +137,7 @@ class BikeProvider extends ChangeNotifier {
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
                 ///Key = imei, Val = get json object
-                userBikeList.putIfAbsent(
-                    docChange.doc.id, () => UserBikeModel.fromJson(obj!));
+                userBikeList.putIfAbsent(docChange.doc.id, () => UserBikeModel.fromJson(obj!));
                 getUserBikeDetails(docChange.doc.id);
                 NotificationProvider().subscribeToTopic(docChange.doc.id);
 
@@ -229,7 +229,7 @@ class BikeProvider extends ChangeNotifier {
               ///Switch case
               switchBikeResult = SwitchBikeResult.success;
               switchBikeResultListener.add(switchBikeResult);
-              getPlanSubscript();
+              getCurrentPlanSubscript();
 
               if(currentBikeModel?.location?.eventId != null){
                 currentThreatRoutesSubscription = FirebaseFirestore.instance
@@ -719,18 +719,17 @@ class BikeProvider extends ChangeNotifier {
           .snapshots()
           .listen((snapshot) {
         Map<String, dynamic>? obj = snapshot.data();
-
-        if (obj != null) {
+            if (obj != null) {
           userBikeDetails.update(snapshot.id, (value) => BikeModel.fromJson(obj), ifAbsent: () => BikeModel.fromJson(obj));
           notifyListeners();
-        }
-        if (obj == null) {
+        } else if (obj == null) {
           userBikeDetails.removeWhere((key, value) => key == obj?.keys);
           notifyListeners();
         }
       });
 
-      currentUserBikeSubscription = FirebaseFirestore.instance
+
+      bikePlanSubscription = FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(deviceIMEI)
           .collection(plansCollection)
@@ -739,27 +738,32 @@ class BikeProvider extends ChangeNotifier {
         if (snapshot.docs.isNotEmpty) {
           for (var docChange in snapshot.docChanges) {
             switch (docChange.type) {
-            ///element.type
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
-                userBikePlans.putIfAbsent(docChange.doc.id, () => BikePlanModel.fromJson(obj!));
+
+                ///Put in userBikeDetails as Model
+                  //userBikeDetails[deviceIMEI].bikePlanModel = BikePlanModel.fromJson(obj!);
+
+                userBikePlans.putIfAbsent(deviceIMEI, () => BikePlanModel.fromJson(obj!));
                 notifyListeners();
                 break;
               case DocumentChangeType.removed:
                 Map<String, dynamic>? obj = docChange.doc.data();
+
                 userBikePlans.removeWhere((key, value) => key == obj?.keys);
                 notifyListeners();
                 break;
               case DocumentChangeType.modified:
-                notifyListeners();
+                 Map<String, dynamic>? obj = docChange.doc.data();
+
+                userBikePlans.update(deviceIMEI, (value) => BikePlanModel.fromJson(obj!));
                 break;
             }
           }
         }else{
+          userBikeDetails.clear();
           notifyListeners();
         }
-
-
       });
     } catch (e) {
       debugPrint(e.toString());
@@ -990,7 +994,7 @@ class BikeProvider extends ChangeNotifier {
   /// ****************************************** ///
   /// Command for plan
 
-  getPlanSubscript() async {
+  getCurrentPlanSubscript() async {
     currentBikePlanSubscription?.cancel();
     currentBikePlanSubscription = FirebaseFirestore.instance
         .collection(bikesCollection)
@@ -1046,6 +1050,65 @@ class BikeProvider extends ChangeNotifier {
         }
       }});
   }
+
+
+  // getPlanSubscript(String? imei) async {
+  //
+  //   bikePlanSubscription?.cancel();
+  //   bikePlanSubscription = FirebaseFirestore.instance
+  //       .collection(bikesCollection)
+  //       .doc(imei)
+  //       .collection(plansCollection)
+  //       .snapshots()
+  //       .listen((snapshot) {
+  //     {
+  //       if (snapshot.docs.isNotEmpty) {
+  //         for (var docChange in snapshot.docChanges) {
+  //           switch (docChange.type) {
+  //           ///element.type
+  //             case DocumentChangeType.added:
+  //               Map<String, dynamic>? obj = docChange.doc.data();
+  //               if ( snapshot.size == 0 ) {
+  //
+  //               }else {
+  //                 for(int i=0;i<snapshot.docs.length;i++){
+  //                   currentBikePlanModel = BikePlanModel.fromJson(obj!);
+  //                 }
+  //                 final result = calculateDateDifference(currentBikePlanModel!.periodEnd!.toDate());
+  //                 if(result < 0){
+  //                   isPlanSubscript = false;
+  //                 }else{
+  //                   isPlanSubscript = true;
+  //                 }
+  //               }
+  //               notifyListeners();
+  //               break;
+  //             case DocumentChangeType.removed:
+  //               currentBikePlanModel = null;
+  //               notifyListeners();
+  //               break;
+  //             case DocumentChangeType.modified:
+  //               Map<String, dynamic>? obj = docChange.doc.data();
+  //               for(int i=0;i<snapshot.docs.length;i++){
+  //                 currentBikePlanModel = BikePlanModel.fromJson(obj!);
+  //               }
+  //               final result = calculateDateDifference(currentBikePlanModel!.periodEnd!.toDate());
+  //               if(result < 0){
+  //                 isPlanSubscript = false;
+  //               }else{
+  //                 isPlanSubscript = true;
+  //               }
+  //               notifyListeners();
+  //               break;
+  //           }
+  //         }
+  //       }else{
+  //         currentBikePlanModel = null;
+  //         isPlanSubscript = false;
+  //         notifyListeners();
+  //       }
+  //     }});
+  // }
 
   updatePurchasedPlan(String deviceIMEI, PlanModel planModel) async {
     DocumentReference ref = FirebaseFirestore.instance.collection("plans").doc(planModel.id);

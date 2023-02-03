@@ -7,6 +7,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import '../../api/colours.dart';
+import '../../api/function.dart';
 import '../../api/model/threat_routes_model.dart';
 import '../../api/navigator.dart';
 import '../../api/provider/bike_provider.dart';
@@ -110,8 +111,8 @@ class _HomePageWidget_StatusBarState extends State<HomePageWidget_StatusBar> {
                     : Text(widget.location?.name ?? "Not available",style: TextStyle(fontSize: 20.sp, color: fontColor, fontWeight: FontWeight.w900),),
 
                 ///Bike provider lastUpdated minus current timestamp
-            //    Text("1 minutes ago", style: TextStyle(fontSize: 16.sp,color: fontColor, fontWeight: FontWeight.w400),),
-                Text("${DateTime.now().difference(DateTime.parse(_bikeProvider.currentBikeModel!.lastUpdated!.toDate().toString())).inMinutes.toString()} minutes ago", style: TextStyle(fontSize: 16.sp,color: fontColor, fontWeight: FontWeight.w400),),
+                Text(calculateTimeAgo(_bikeProvider.currentBikeModel!.lastUpdated!.toDate()),
+                   style: TextStyle(fontSize: 16.sp,color: fontColor, fontWeight: FontWeight.w400),),
               ],
             ),
           ],
@@ -130,6 +131,7 @@ Widget stackActionableBar(context, BikeProvider bikeProvider, NotificationProvid
     'Try 6 hours Later',
     'Remind Me 5 seconds',
   ];
+  ///Remind me 24 hours later, remind me tomorrow, remind me next week, etc
 
   return Visibility(
     visible: bikeProvider.rfidList.length == 0 && notificationProvider.isTimeArrive,
@@ -150,7 +152,9 @@ Widget stackActionableBar(context, BikeProvider bikeProvider, NotificationProvid
                 child: Text(value),
               );
             }).toList(),
-            text: "Remind Me Later"),
+            text: "Remind Me Later"
+        ),
+
         buttonRight: EvieButton(
           child: Text("Add Now",style: TextStyle(color: EvieColors.grayishWhite, fontSize: 17.sp, fontWeight: FontWeight.w900),),
           onPressed: (){

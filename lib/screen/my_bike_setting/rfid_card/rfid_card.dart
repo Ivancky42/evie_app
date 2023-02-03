@@ -17,8 +17,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
+import '../../../api/dialog.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
+import '../../../api/provider/bike_provider.dart';
+import '../../../api/provider/bluetooth_provider.dart';
+import '../../../bluetooth/modelResult.dart';
 
 
 ///User profile page with user account information
@@ -32,8 +36,15 @@ class RFIDCard extends StatefulWidget {
 
 class _RFIDCardState extends State<RFIDCard> {
 
+  late BikeProvider _bikeProvider;
+  late BluetoothProvider _bluetoothProvider;
+  DeviceConnectResult? deviceConnectResult;
+
   @override
   Widget build(BuildContext context) {
+    _bikeProvider = Provider.of<BikeProvider>(context);
+    _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
     return WillPopScope(
       onWillPop: () async {
@@ -98,10 +109,22 @@ class _RFIDCardState extends State<RFIDCard> {
                           fontWeight: FontWeight.w700
                       ),
                     ),
-                    onPressed: () async {
-changeToAddNewRFIDScreen(context);
 
-                    },
+                    onPressed: () async {
+                        if (deviceConnectResult == null
+                            || deviceConnectResult == DeviceConnectResult.disconnected
+                            || deviceConnectResult == DeviceConnectResult.scanTimeout
+                            || deviceConnectResult == DeviceConnectResult.connectError
+                            || deviceConnectResult == DeviceConnectResult.scanError
+                            || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
+                            ) {
+                             changeToNavigatePlanScreen(context);
+                            showConnectDialog(_bluetoothProvider, _bikeProvider);
+                              }
+                              else if (deviceConnectResult == DeviceConnectResult.connected) {
+                              changeToAddNewRFIDScreen(context);
+                              }
+                            },
                   ),
                 ),
               ),
