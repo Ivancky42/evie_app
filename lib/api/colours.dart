@@ -16,6 +16,9 @@ class EvieColors {
   static const lightGray = Color(0xffD4D4D4);
   static const mediumBlack = Color(0xff171617);
   static const mediumLightBlack = Color(0xff383838);
+  static const orange = Color(0xffE59200);
+  static const darkRed = Color(0xffCA0D0D);
+
 
 
 

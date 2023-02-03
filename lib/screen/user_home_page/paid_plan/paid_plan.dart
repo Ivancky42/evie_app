@@ -164,20 +164,23 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
     Color statusBarColor = Colors.transparent;
 
-    if (_locationProvider.locationModel?.isConnected == false) {
-      statusBarColor = Color(0xffE59200);
-    }
-    else {
-      if (_locationProvider.locationModel?.status == "safe") {
+    if(_bikeProvider.rfidList.length == 0 && _notificationProvider.isTimeArrive){
         statusBarColor = Colors.transparent;
-      } else if (_locationProvider.locationModel?.status == "warning" ||
-          _locationProvider.locationModel?.status == "fall") {
-        statusBarColor = Color(0xffE59200);
-      } else if (_locationProvider.locationModel?.status == "danger" ||
-          _locationProvider.locationModel?.status == "crash") {
-        statusBarColor = Color(0xffCA0D0D);
+    }else{
+      if (_locationProvider.locationModel?.isConnected == false) {
+        statusBarColor = EvieColors.orange;
       } else {
-        statusBarColor = Colors.transparent;
+        if (_locationProvider.locationModel?.status == "safe") {
+          statusBarColor = Colors.transparent;
+        } else if (_locationProvider.locationModel?.status == "warning" ||
+            _locationProvider.locationModel?.status == "fall") {
+          statusBarColor = EvieColors.orange;
+        } else if (_locationProvider.locationModel?.status == "danger" ||
+            _locationProvider.locationModel?.status == "crash") {
+          statusBarColor = EvieColors.darkRed;
+        } else {
+          statusBarColor = Colors.transparent;
+        }
       }
     }
 
