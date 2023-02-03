@@ -149,7 +149,11 @@ Widget stackActionableBar(context, BikeProvider bikeProvider, NotificationProvid
             items: items.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value),
+                child: Text(value,
+                  style: TextStyle(
+                  fontSize: 16.sp,
+                ),),
+
               );
             }).toList(),
             text: "Remind Me Later"
