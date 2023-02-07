@@ -145,6 +145,7 @@ class BikeProvider extends ChangeNotifier {
                 break;
               case DocumentChangeType.removed:
                 userBikeList.removeWhere((key, value) => key == docChange.doc.id);
+                userBikeDetails.removeWhere((key, value) => key == docChange.doc.id);
                 NotificationProvider().unsubscribeFromTopic(docChange.doc.id);
 
                 notifyListeners();
@@ -930,7 +931,7 @@ class BikeProvider extends ChangeNotifier {
       FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(deviceIMEI)
-          .collection("events")
+          .collection(eventsCollection)
           .doc(eventID)
           .set({
         'address': address,
@@ -1110,12 +1111,12 @@ class BikeProvider extends ChangeNotifier {
   // }
 
   updatePurchasedPlan(String deviceIMEI, PlanModel planModel) async {
-    DocumentReference ref = FirebaseFirestore.instance.collection("plans").doc(planModel.id);
+    DocumentReference ref = FirebaseFirestore.instance.collection(plansCollection).doc(planModel.id);
     try {
       FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(deviceIMEI)
-          .collection("plans")
+          .collection(plansCollection)
           .doc(planModel.id)
           .set({
         'name': planModel.name,
@@ -1355,7 +1356,7 @@ class BikeProvider extends ChangeNotifier {
         {
           currentBikeList = 0;
           prefs.setInt('currentBikeList', currentBikeList);
-          getBike(userBikeList.keys.elementAt(currentBikeList));
+          getBike(userBikeList.keys.first);
           notifyListeners();
         }
         break;

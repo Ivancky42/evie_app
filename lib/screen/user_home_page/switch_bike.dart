@@ -45,16 +45,18 @@ class _SwitchBikeState extends State<SwitchBike> {
                   height: 4.h,
                 ),
               ),
+
               /// bike list
               ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: _bikeProvider.userBikeList.length,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _bikeProvider.userBikeDetails.length,
                 itemBuilder: (context, index) {
                   return BikeContainer(bikeModel: _bikeProvider.userBikeDetails.values.elementAt(index));
                 },
               ),
+
               /// add new bike
               Container(
                 height: 59.h,
