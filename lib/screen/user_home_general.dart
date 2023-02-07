@@ -79,27 +79,10 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
       ///Pass notification id to get body and key
       await _notificationProvider.getNotificationFromNotificationId(data);
-      changeToNotificationScreen(context);
-      FutureBuilder(
-          future: _notificationProvider.getNotificationFromNotificationId(data),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              changeToNotificationScreen(context);
-              // changeToNotificationDetailsScreen(
-              //   context,
-              //   _notificationProvider.currentSingleNotification?.notificationId,
-              //   _notificationProvider.currentSingleNotification,
-              //
-              //   //   _notificationProvider.singleNotificationList.keys.first,
-              //   //   _notificationProvider.singleNotificationList.values.first
-              // );
-              return const Text("");
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          });
+
+      Future.delayed(Duration.zero, () {
+      changeToFeedsScreen(context);
+      });
 
       /*
       ///Future builder
@@ -166,28 +149,10 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   ///Foreground select Notification android
   Future<void> onSelectNotification(String? payload) async {
     ///Pass notification id to get body and key
-    changeToNotificationScreen(context);
-    FutureBuilder(
-        future:
-            _notificationProvider.getNotificationFromNotificationId(payload),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            changeToNotificationScreen(context);
-            // changeToNotificationDetailsScreen(
-            //   context,
-            //   _notificationProvider.currentSingleNotification?.notificationId,
-            //   _notificationProvider.currentSingleNotification,
-            //
-            //   //   _notificationProvider.singleNotificationList.keys.first,
-            //   //   _notificationProvider.singleNotificationList.values.first
-            // );
-            return const Text("");
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        });
+
+    await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
+      changeToFeedsScreen(context);
+    });
 
     /*
     await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
@@ -216,45 +181,25 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     // display a dialog with the notification details, tap ok to go to another page
     ///Pass notification id to get body and key
     _notificationProvider.getNotificationFromNotificationId(payload);
-    changeToNotificationScreen(context);
 
-    if (_notificationProvider.currentSingleNotification?.notificationId !=
-        null) {
-      changeToNotificationScreen(context);
-      // changeToNotificationDetailsScreen(
-      //   context,
-      //   _notificationProvider.currentSingleNotification?.notificationId,
-      //   _notificationProvider.currentSingleNotification,
-      //
-      //   //   _notificationProvider.singleNotificationList.keys.first,
-      //   //   _notificationProvider.singleNotificationList.values.first
-      // );
-    }
+    await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
+      changeToFeedsScreen(context);
+    });
 
-    /*
-    FutureBuilder(
-        future: _notificationProvider.getNotificationFromNotificationId(payload),
-        builder: (context, snapshot) {
-          if(snapshot.hasData) {
-            changeToNotificationDetailsScreen(
-              context,
-              _notificationProvider.currentSingleNotification?.notificationId,
-              _notificationProvider.currentSingleNotification,
+    // if (_notificationProvider.currentSingleNotification?.notificationId !=
+    //     null) {
+    //
+    //   changeToNotificationScreen(context);
+    //   // changeToNotificationDetailsScreen(
+    //   //   context,
+    //   //   _notificationProvider.currentSingleNotification?.notificationId,
+    //   //   _notificationProvider.currentSingleNotification,
+    //   //
+    //   //   //   _notificationProvider.singleNotificationList.keys.first,
+    //   //   //   _notificationProvider.singleNotificationList.values.first
+    //   // );
+    // }
 
-              //   _notificationProvider.singleNotificationList.keys.first,
-              //   _notificationProvider.singleNotificationList.values.first
-            );
-            return const Text("");
-          }
-          else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        }
-    );
-
-     */
     /*
     await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
 
@@ -371,6 +316,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
         } else if (_bikeProvider.isPlanSubscript == false) {
           return const FreePlan();
         }else{
+          _bikeProvider.controlBikeList("first");
           return const CircularProgressIndicator();
         }
     }

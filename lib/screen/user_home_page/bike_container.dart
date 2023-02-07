@@ -249,7 +249,7 @@ class _BikeContainerState extends State<BikeContainer> {
         if(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null){
           final result = bikeProvider.calculateDateDifference(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate());
           if(result < 0){
-            return "Not Available";
+            return "-";
           }else{
             switch (isLocked) {
               case true:

@@ -542,7 +542,7 @@ void changeToFeedsScreen(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: const UserHomePage(3),
+      child: const UserHomePage(2),
       duration: const Duration(milliseconds: 300),
     ),
   );

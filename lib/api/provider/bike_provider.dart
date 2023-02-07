@@ -176,7 +176,6 @@ class BikeProvider extends ChangeNotifier {
           });
 
           ///Subscript to topic based on looping (for first time open app only)
-
           if (prefs.containsKey('currentBikeImei')) {
             currentBikeIMEI = prefs.getString('currentBikeImei') ?? "";
             notifyListeners();
@@ -750,7 +749,7 @@ class BikeProvider extends ChangeNotifier {
               case DocumentChangeType.removed:
                 Map<String, dynamic>? obj = docChange.doc.data();
 
-                userBikePlans.removeWhere((key, value) => key == obj?.keys);
+                userBikePlans.removeWhere((key, value) => key == deviceIMEI);
                 notifyListeners();
                 break;
               case DocumentChangeType.modified:
@@ -761,7 +760,7 @@ class BikeProvider extends ChangeNotifier {
             }
           }
         }else{
-          userBikeDetails.clear();
+          userBikePlans.clear();
           notifyListeners();
         }
       });

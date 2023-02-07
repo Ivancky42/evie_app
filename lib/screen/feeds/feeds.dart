@@ -83,6 +83,7 @@ class _FeedsState extends State<Feeds> {
                   physics: const AlwaysScrollableScrollPhysics(),
                   children: [
                   for(var index = 0; index < _bikeProvider.userBikePlans.length; index++ )...{
+                   if(_bikeProvider.userBikeList.keys.contains(_bikeProvider.userBikePlans.keys.elementAt(index)))...{
                   if(_bikeProvider.userBikePlans.values.elementAt(index)?.periodEnd.toDate() != null)...{
                     if(_bikeProvider.calculateDateDifference(_bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate()) >= 0)...{
                       ///if connection lost
@@ -147,6 +148,7 @@ class _FeedsState extends State<Feeds> {
                             }),
                       }
                       }
+                    }
                     }
                   },
                     Divider(height: 1.5.h,),

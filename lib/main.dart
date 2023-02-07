@@ -32,6 +32,7 @@ import 'package:evie_test/profile/user_profile.dart';
 import 'package:evie_test/screen/forget_your_password.dart';
 import 'package:evie_test/theme/AppTheme.dart';
 import 'package:evie_test/screen/user_home_page/user_home_page.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
@@ -218,57 +219,62 @@ class MyApp extends StatelessWidget {
 
     return Sizer(builder: (context, orientation, deviceType) {
 
-      return MaterialApp(
-        title: 'Evie',
+      return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+        ),
+        child: MaterialApp(
+          title: 'Evie',
 
-        themeMode: _themeProvider.themeMode,
+          themeMode: _themeProvider.themeMode,
 
-        //Light theme data
-        theme: AppTheme.lightTheme,
+          //Light theme data
+          theme: AppTheme.lightTheme,
 
-        //Change the app to dark theme when user's phone is set to dark mode
-        darkTheme: AppTheme.darkTheme,
+          //Change the app to dark theme when user's phone is set to dark mode
+          darkTheme: AppTheme.darkTheme,
 
-        initialRoute:
-        decideMainPage(),
-       // _authProvider.isLogin == true ? '/userHomePage' : '/welcome',
+          initialRoute:
+          decideMainPage(),
+         // _authProvider.isLogin == true ? '/userHomePage' : '/welcome',
 
-        ///Routes setting for page navigation
-        routes: {
-          "/welcome": (context) => const Welcome(),
-          "/inputName": (context) => const InputName(),
-          "/signInMethod": (context) => const SignInMethod(),
-          "/checkMail": (context) => const CheckYourEmail(),
-          "/verifyEmail": (context) => const VerifyEmail(),
-          "/accountVerified": (context) => const AccountVerified(),
-          "/letsGo": (context) => const LetsGo(),
-          "/signIn": (context) => const SignIn(),
-          "/forgetPassword": (context) => const ForgetYourPassword(),
-          "/userProfile": (context) => const UserProfile(),
-          "/userHomePage": (context) => const UserHomePage(0),
-          "/userChangePassword": (context) => const UserChangePassword(),
-          "/testBle": (context) => const TestBle(),
-      //    "/notification": (context) => const UserNotification(),
-          "/rfid": (context) => const RFIDCardManage(),
-          "/myAccount": (context) => const MyAccount(),
-          "/editProfile": (context) => const EditProfile(),
-          "/verifyPassword": (context) => const VerifyPassword(),
-          "/enterNewPassword": (context) => const EnterNewPassword(),
-          "/detectionSensitivity": (context) => const DetectionSensitivity(),
-        },
+          ///Routes setting for page navigation
+          routes: {
+            "/welcome": (context) => const Welcome(),
+            "/inputName": (context) => const InputName(),
+            "/signInMethod": (context) => const SignInMethod(),
+            "/checkMail": (context) => const CheckYourEmail(),
+            "/verifyEmail": (context) => const VerifyEmail(),
+            "/accountVerified": (context) => const AccountVerified(),
+            "/letsGo": (context) => const LetsGo(),
+            "/signIn": (context) => const SignIn(),
+            "/forgetPassword": (context) => const ForgetYourPassword(),
+            "/userProfile": (context) => const UserProfile(),
+            "/userHomePage": (context) => const UserHomePage(0),
+            "/userChangePassword": (context) => const UserChangePassword(),
+            "/testBle": (context) => const TestBle(),
+        //    "/notification": (context) => const UserNotification(),
+            "/rfid": (context) => const RFIDCardManage(),
+            "/myAccount": (context) => const MyAccount(),
+            "/editProfile": (context) => const EditProfile(),
+            "/verifyPassword": (context) => const VerifyPassword(),
+            "/enterNewPassword": (context) => const EnterNewPassword(),
+            "/detectionSensitivity": (context) => const DetectionSensitivity(),
+          },
 
-        navigatorObservers: [FlutterSmartDialog.observer],
-        builder: FlutterSmartDialog.init(),
+          navigatorObservers: [FlutterSmartDialog.observer],
+          builder: FlutterSmartDialog.init(),
 
-        ///For user version update
-        /*
-        home: Scaffold(
-            appBar: AppBar(title: Text('Upgrader Example')),
-            body: UpgradeAlert(
-              upgrader: Upgrader(dialogStyle: UpgradeDialogStyle.cupertino, appcastConfig: cfg),
-              child: Center(child: Text('Checking...')),
-            )),
-         */
+          ///For user version update
+          /*
+          home: Scaffold(
+              appBar: AppBar(title: Text('Upgrader Example')),
+              body: UpgradeAlert(
+                upgrader: Upgrader(dialogStyle: UpgradeDialogStyle.cupertino, appcastConfig: cfg),
+                child: Center(child: Text('Checking...')),
+              )),
+           */
+        ),
       );
     });
   }
