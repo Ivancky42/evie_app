@@ -355,7 +355,9 @@ showCannotUnlockBike(){
 }
 
 showFilterTreat(BuildContext context){
-  SmartDialog.show(widget: EvieDoubleButtonDialog(
+  SmartDialog.show(
+      useSystem: true,
+      widget: EvieDoubleButtonDialog(
       title: "Filter Bike Status",
       childContent: Container(
         child: Column(
@@ -484,7 +486,8 @@ showFilterTreat(BuildContext context){
       },
       onPressedRight: (){
         SmartDialog.dismiss();
-      }));
+      })
+  );
 
 
 }
