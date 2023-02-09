@@ -220,12 +220,13 @@ class MyApp extends StatelessWidget {
     return Sizer(builder: (context, orientation, deviceType) {
 
       return AnnotatedRegion<SystemUiOverlayStyle>(
+
         value: const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
         ),
+
         child: MaterialApp(
           title: 'Evie',
-
           themeMode: _themeProvider.themeMode,
 
           //Light theme data
@@ -233,7 +234,6 @@ class MyApp extends StatelessWidget {
 
           //Change the app to dark theme when user's phone is set to dark mode
           darkTheme: AppTheme.darkTheme,
-
           initialRoute:
           decideMainPage(),
          // _authProvider.isLogin == true ? '/userHomePage' : '/welcome',

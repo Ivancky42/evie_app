@@ -10,14 +10,19 @@ import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
+import 'package:evie_test/widgets/evie_radio_button.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 import '../screen/my_bike_setting/my_bike_function.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
+import '../widgets/evie_switch.dart';
 import '../widgets/evie_textform.dart';
+import 'colours.dart';
 import 'navigator.dart';
 
 showBluetoothNotTurnOn() {
@@ -348,3 +353,140 @@ showCannotUnlockBike(){
             SmartDialog.dismiss();
           }));
 }
+
+showFilterTreat(BuildContext context){
+  SmartDialog.show(widget: EvieDoubleButtonDialog(
+      title: "Filter Bike Status",
+      childContent: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+
+            EvieSwitch(
+              text: "Movement Detected",
+              value: true,
+              thumbColor: EvieColors.thumbColorTrue,
+              onChanged: (value) async {
+
+              },
+            ),
+            EvieSwitch(
+              text: "Fall Detected",
+              value: false,
+              thumbColor: EvieColors.thumbColorTrue,
+              onChanged: (value) async {
+
+              },
+            ),
+            EvieSwitch(
+              text: "Theft Attempt",
+              value: false,
+              thumbColor: EvieColors.thumbColorTrue,
+              onChanged: (value) async {
+
+              },
+            ),
+            EvieSwitch(
+              text: "Crash Alert",
+              value: false,
+              thumbColor: EvieColors.thumbColorTrue,
+              onChanged: (value) async {
+
+              },
+            ),
+
+            Text("Filter Date", style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),),
+
+            Divider(
+              thickness: 0.5.h,
+              color: const Color(0xff8E8E8E),
+              height: 0,
+            ),
+
+            EvieRadioButton(
+                text: "Today",
+                value: true,
+                groupValue: "date",
+                onChanged: (value){
+
+                }),
+            EvieRadioButton(
+                text: "Yesterday",
+                value: true,
+                groupValue: "date",
+                onChanged: (value){
+
+                }),
+            EvieRadioButton(
+                text: "Last 7 days",
+                value: false,
+                groupValue: "date",
+                onChanged: (value){
+
+                }),
+            EvieRadioButton(
+                text: "Custom Date",
+                value: false,
+                groupValue: "date",
+                onChanged: (value){
+
+                }),
+
+            ElevatedButton(
+              onPressed: () async {
+                // SmartDialog.show(
+                //     widget: DatePickerDialog(
+                //         initialDate: DateTime.now(),
+                //         firstDate: DateTime(DateTime.now().year-2),
+                //         //DateTime.now() - not to allow to choose before today.
+                //         lastDate: DateTime(DateTime.now().year+2)));
+
+                DateTime? pickedDate = await showDatePicker(
+                    context: context,
+
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(DateTime.now().year-2),
+                    //DateTime.now() - not to allow to choose before today.
+                    lastDate: DateTime(DateTime.now().year+2));
+
+                if (pickedDate != null) {
+                  print(pickedDate);
+                  // selectedDate = pickedDate;
+                }
+              },
+              child: Text("button1"),),
+
+
+            ElevatedButton(
+              onPressed: () async {
+                DateTime? pickedDate = await showDatePicker(
+                    context: context,
+
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(DateTime.now().year-2),
+                    //DateTime.now() - not to allow to choose before today.
+                    lastDate: DateTime(DateTime.now().year+2));
+
+                if (pickedDate != null) {
+                  print(pickedDate);
+                  // selectedDate = pickedDate;
+                }
+              },
+              child: Text("button2"),),
+
+          ],
+        ),
+      ),
+      leftContent: "Cancel",
+      rightContent: "Apply Filter",
+      onPressedLeft: (){
+        SmartDialog.dismiss();
+      },
+      onPressedRight: (){
+        SmartDialog.dismiss();
+      }));
+
+
+}
+
+

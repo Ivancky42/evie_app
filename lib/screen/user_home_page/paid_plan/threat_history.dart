@@ -1,15 +1,21 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 
+import '../../../api/colours.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/location_provider.dart';
+import '../../../widgets/evie_radio_button.dart';
+import '../../../widgets/evie_switch.dart';
 
 class Threat_History extends StatefulWidget {
   BikeProvider bikeProvider;
@@ -71,6 +77,12 @@ class _Threat_HistoryState extends State<Threat_History> {
                 child: IconButton(
                   onPressed: () {
 
+
+
+                    ///Open filter dialog
+                    showFilterTreat(context);
+
+
                   },
                   icon: SvgPicture.asset(
                     "assets/buttons/filter.svg",
@@ -79,9 +91,11 @@ class _Threat_HistoryState extends State<Threat_History> {
               ),
             ],
           ),
+
           const Divider(
             thickness: 2,
           ),
+
           Align(
             alignment: Alignment.bottomCenter,
             child: Wrap(
@@ -107,6 +121,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                         itemBuilder: (context, documentSnapshots, index) {
                           final data = documentSnapshots[index].data() as Map?;
 
+                          ///Filter String
                            snapshotLength = data?.length;
 
                           return Column(
@@ -149,7 +164,14 @@ class _Threat_HistoryState extends State<Threat_History> {
                           );
                         },
                         // orderBy is compulsory to enable pagination
-                        query: FirebaseFirestore.instance.collection("bikes").doc(widget.bikeProvider.currentBikeModel!.deviceIMEI!).collection("events").orderBy("created", descending: true),
+                        query: FirebaseFirestore.instance.collection("bikes")
+                              .doc(widget.bikeProvider.currentBikeModel!.deviceIMEI!)
+                              .collection("events")
+                              //.where("string", isEqualTo:"some string")
+                              //.where("created", isGreaterThanOrEqualTo: fromDate)
+                              //.where("created", isLessThanOrEqualTo: endDate)
+                              .orderBy("created", descending: true),
+
                         itemsPerPage: snapshotLength ?? 10,
                         // to fetch real-time data
                         isLive: false,

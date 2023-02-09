@@ -9,7 +9,6 @@ class EvieColors {
   static const lightGrayishCyan = Color(0xffDFE0E0);
   static const darkGrayishCyan = Color(0xff5F6060);
   static const thumbColorTrue = Color(0xffFAFAFA);
-  static const thumbColorFalse = Color(0xffFAFAFA);
   static const greyFill = Color(0xff717171);
   static const darkGray = Color(0xff3F3F3F);
   static const lightBlack = Color(0xff252526);

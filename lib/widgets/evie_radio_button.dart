@@ -1,10 +1,12 @@
+import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../api/colours.dart';
 import 'evie_textform.dart';
 
 ///Radio button
 class EvieRadioButton extends StatelessWidget {
-  final String text;
+  final String? text;
   final bool value;
   final String groupValue;
   final ValueChanged onChanged;
@@ -12,7 +14,7 @@ class EvieRadioButton extends StatelessWidget {
 
   const EvieRadioButton({
     Key? key,
-    required this.text,
+    this.text,
     required this.value,
     required this.groupValue,
     required this.onChanged,
@@ -20,12 +22,21 @@ class EvieRadioButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Radio(
-      fillColor: MaterialStateColor.resolveWith(
-              (states) => Color(0xff00B6F1)),
-      value: value,
-      groupValue: groupValue,
-      onChanged: onChanged,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(text ?? "", style: TextStyle(fontSize: 16.sp),),
+
+        Radio(
+        fillColor: MaterialStateColor.resolveWith(
+        (states) => EvieColors.primaryColor),
+        value: value,
+        groupValue: groupValue,
+        onChanged: onChanged,
+        ),
+      ],
     );
+
+
   }
 }
