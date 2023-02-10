@@ -60,7 +60,6 @@ class _Threat_HistoryState extends State<Threat_History> {
             mainAxisAlignment:
             MainAxisAlignment.spaceBetween,
             children: [
-
               Padding(
                 padding:
                 EdgeInsets.only(left: 17.w, top: 10.h, bottom: 11.h),
@@ -77,11 +76,8 @@ class _Threat_HistoryState extends State<Threat_History> {
                 child: IconButton(
                   onPressed: () {
 
-
-
                     ///Open filter dialog
-                    showFilterTreat(context);
-
+                    showFilterTreat(context, widget.bikeProvider, setState);
 
                   },
                   icon: SvgPicture.asset(
@@ -124,52 +120,60 @@ class _Threat_HistoryState extends State<Threat_History> {
                           ///Filter String
                            snapshotLength = data?.length;
 
-                          return Column(
-                            children: [
-                              ListTile(
-                                  leading: data == null
-                                      ? const Text('Error')
-                                      : SvgPicture.asset(
-                                    getSecurityIconWidget(data['type']),
-                                    height: 36.h,
-                                    width: 36.w,
-                                  ),
-                                  title: data == null
-                                      ? const Text('Error')
-                                      : data["address"] != null
-                                      ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
-                                      : FutureBuilder<dynamic>(
-                                      future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
-                                          return Text(
-                                            snapshot.data.name.toString(),
-                                            style: TextStyle(fontSize: 18.sp),
-                                          );
-                                        }else{
-                                          return const Text(
-                                            "loading",
-                                          );
-                                        }
-                                      }
-                                  ),
-                                  subtitle: data == null
-                                      ? const Text('Error in data')
-                                      : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
+                          if(widget.bikeProvider.threatFilterArray.contains(data!['type'])){
+                            if(widget.bikeProvider.threatFilterDate1 != null && widget.bikeProvider.threatFilterDate2 != null){
 
-                              ),
-                              const Divider(height: 1),
-                            ],
-                          );
+                            }
+                            return Column(
+                              children: [
+                                ListTile(
+                                    leading: data == null
+                                        ? const Text('Error')
+                                        : SvgPicture.asset(
+                                      getSecurityIconWidget(data['type']),
+                                      height: 36.h,
+                                      width: 36.w,
+                                    ),
+                                    title: data == null
+                                        ? const Text('Error')
+                                        : data["address"] != null
+                                        ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
+                                        : FutureBuilder<dynamic>(
+                                        future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
+                                            return Text(
+                                              snapshot.data.name.toString(),
+                                              style: TextStyle(fontSize: 18.sp),
+                                            );
+                                          }else{
+                                            return const Text(
+                                              "loading",
+                                            );
+                                          }
+                                        }
+                                    ),
+                                    subtitle: data == null
+                                        ? const Text('Error in data')
+                                        : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
+
+                                ),
+                                const Divider(height: 1),
+                              ],
+                            );
+
+                          }else {
+                            return Container();
+                          }
+
                         },
                         // orderBy is compulsory to enable pagination
                         query: FirebaseFirestore.instance.collection("bikes")
                               .doc(widget.bikeProvider.currentBikeModel!.deviceIMEI!)
                               .collection("events")
-                              //.where("string", isEqualTo:"some string")
-                              //.where("created", isGreaterThanOrEqualTo: fromDate)
-                              //.where("created", isLessThanOrEqualTo: endDate)
+                              //.where('type', whereIn: ['lock'])
+                              //.where('type', whereIn: widget.bikeProvider.threatFilterArray)
                               .orderBy("created", descending: true),
 
                         itemsPerPage: snapshotLength ?? 10,

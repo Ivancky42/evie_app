@@ -1,5 +1,4 @@
 
-
 import 'dart:async';
 import 'dart:io';
 
@@ -10,12 +9,14 @@ import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
+import 'package:evie_test/widgets/evie_button.dart';
 import 'package:evie_test/widgets/evie_radio_button.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../screen/my_bike_setting/my_bike_function.dart';
 import '../widgets/evie_double_button_dialog.dart';
@@ -173,7 +174,6 @@ showUpdateFailedDialog() {
           onPressedRight: (){SmartDialog.dismiss();} ));
 }
 
-
 showDeleteShareBikeUser(BikeProvider _bikeProvider, int index){
 
   SmartDialog.show(
@@ -261,7 +261,6 @@ showDeleteNotificationSuccess(){
           onPressedRight: ()=>SmartDialog.dismiss()
       ));
 }
-
 
 showDeleteNotificationFailed(){
   SmartDialog.show(
@@ -354,142 +353,205 @@ showCannotUnlockBike(){
           }));
 }
 
-showFilterTreat(BuildContext context){
+showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
+  
+  bool a = true;
+  bool b = true;
+  bool c = true;
+  bool d = true;
+
+  int _selectedRadio = -1;
+
+  DateTime? pickedDate1;
+  DateTime? pickedDate2;
+
   SmartDialog.show(
       useSystem: true,
-      widget: EvieDoubleButtonDialog(
-      title: "Filter Bike Status",
-      childContent: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      widget: StatefulBuilder(builder: (context, setState){
+        return    EvieDoubleButtonDialog(
+            title: "Filter Bike Status",
+            childContent: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  EvieSwitch(
+                    text: "Movement Detected",
+                    value: a,
+                    thumbColor: EvieColors.thumbColorTrue,
+                    onChanged: (value) {
+                      setState(() {
+                        a = value!;
+                      });
+                    },
+                  ),
+                  EvieSwitch(
+                    text: "Fall Detected",
+                    value: b,
+                    thumbColor: EvieColors.thumbColorTrue,
+                    onChanged: (value) async {
+                      setState(() {
+                        b = value!;
+                      });
+                    },
+                  ),
+                  EvieSwitch(
+                    text: "Theft Attempt",
+                    value: c,
+                    thumbColor: EvieColors.thumbColorTrue,
+                    onChanged: (value) async {
+                      setState(() {
+                        c = value!;
+                      });
+                    },
+                  ),
+                  EvieSwitch(
+                    text: "Crash Alert",
+                    value: d,
+                    thumbColor: EvieColors.thumbColorTrue,
+                    onChanged: (value) async {
+                      setState(() {
+                        d = value!;
+                      });
+                    },
+                  ),
 
-            EvieSwitch(
-              text: "Movement Detected",
-              value: true,
-              thumbColor: EvieColors.thumbColorTrue,
-              onChanged: (value) async {
+                  Text("Filter Date", style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),),
 
-              },
+                  Divider(
+                    thickness: 0.5.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+
+                  EvieRadioButton(
+                      text: "Today",
+                      value: 0,
+                      groupValue: _selectedRadio,
+                      onChanged: (value){
+                        setState(() {
+                          _selectedRadio = value;
+                        });
+                      }),
+                  EvieRadioButton(
+                      text: "Yesterday",
+                      value: 1,
+                      groupValue: _selectedRadio,
+                      onChanged: (value){
+                        setState(() {
+                          _selectedRadio = value;
+                        });
+                      }),
+                  EvieRadioButton(
+                      text: "Last 7 days",
+                      value: 2,
+                      groupValue: _selectedRadio,
+                      onChanged: (value){
+                        setState(() {
+                          _selectedRadio = value;
+                        });
+                      }),
+                  EvieRadioButton(
+                      text: "Custom Date",
+                      value: 3,
+                      groupValue: _selectedRadio,
+                      onChanged: (value){
+                        setState(() {
+                          _selectedRadio = value;
+                        });
+                      }),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: EvieButton_PickDate(
+                          onPressed: () async {
+                            if(_selectedRadio == 3){
+                              pickedDate1 = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(DateTime.now().year-2),
+                                  lastDate: DateTime.now());
+
+                              if (pickedDate1 != null) {
+                                setState(() {
+                                  pickedDate1 = pickedDate1;
+                                });
+                              }
+                            }else{
+
+                            }
+                          },
+                          child: Row(
+                            children: [
+                              Text(pickedDate1!=null ? "${monthsInYear[pickedDate1!.month]} ${pickedDate1!.day} ${pickedDate1!.year}": "",
+                                style: TextStyle(color: EvieColors.darkGrayishCyan),),
+                              SvgPicture.asset(
+                                "assets/buttons/calendar.svg",
+                                height: 24.h,
+                                width: 24.w,
+                              ),
+                            ],
+                          ),),
+                      ),
+
+                   // Expanded(child: const Text("-"),),
+
+                    Expanded(
+                      child:   EvieButton_PickDate(
+                      width: 155.w,
+                      onPressed: () async {
+                        if(_selectedRadio == 3){
+                          pickedDate2 = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(DateTime.now().year-2),
+                              lastDate: DateTime.now());
+
+                          if (pickedDate2 != null) {
+                            setState(() {
+                              pickedDate2 = pickedDate2;
+                            });
+                          }
+                        }else{
+
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          Text(pickedDate2 != null ? "${monthsInYear[pickedDate2!.month]} ${pickedDate2!.day} ${pickedDate2!.year}": "",
+                            style: TextStyle(color: EvieColors.darkGrayishCyan),),
+                          SvgPicture.asset(
+                            "assets/buttons/calendar.svg",
+                            height: 24.h,
+                            width: 24.w,
+                          ),
+                        ],
+                      ),
+                    ),
+                    ),
+                  ],),
+                ],
+              ),
             ),
-            EvieSwitch(
-              text: "Fall Detected",
-              value: false,
-              thumbColor: EvieColors.thumbColorTrue,
-              onChanged: (value) async {
+            leftContent: "Cancel",
+            rightContent: "Apply Filter",
+            onPressedLeft: (){
+              SmartDialog.dismiss();
+            },
+            onPressedRight: () async {
+              List<String> filter = [];
 
-              },
-            ),
-            EvieSwitch(
-              text: "Theft Attempt",
-              value: false,
-              thumbColor: EvieColors.thumbColorTrue,
-              onChanged: (value) async {
+              if(a == true){filter.add("warning");}
+              if(b == true){filter.add("fall");}
+              if(c == true){filter.add("danger");}
+              if(d == true){filter.add("crash");}
 
-              },
-            ),
-            EvieSwitch(
-              text: "Crash Alert",
-              value: false,
-              thumbColor: EvieColors.thumbColorTrue,
-              onChanged: (value) async {
-
-              },
-            ),
-
-            Text("Filter Date", style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),),
-
-            Divider(
-              thickness: 0.5.h,
-              color: const Color(0xff8E8E8E),
-              height: 0,
-            ),
-
-            EvieRadioButton(
-                text: "Today",
-                value: true,
-                groupValue: "date",
-                onChanged: (value){
-
-                }),
-            EvieRadioButton(
-                text: "Yesterday",
-                value: true,
-                groupValue: "date",
-                onChanged: (value){
-
-                }),
-            EvieRadioButton(
-                text: "Last 7 days",
-                value: false,
-                groupValue: "date",
-                onChanged: (value){
-
-                }),
-            EvieRadioButton(
-                text: "Custom Date",
-                value: false,
-                groupValue: "date",
-                onChanged: (value){
-
-                }),
-
-            ElevatedButton(
-              onPressed: () async {
-                // SmartDialog.show(
-                //     widget: DatePickerDialog(
-                //         initialDate: DateTime.now(),
-                //         firstDate: DateTime(DateTime.now().year-2),
-                //         //DateTime.now() - not to allow to choose before today.
-                //         lastDate: DateTime(DateTime.now().year+2)));
-
-                DateTime? pickedDate = await showDatePicker(
-                    context: context,
-
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(DateTime.now().year-2),
-                    //DateTime.now() - not to allow to choose before today.
-                    lastDate: DateTime(DateTime.now().year+2));
-
-                if (pickedDate != null) {
-                  print(pickedDate);
-                  // selectedDate = pickedDate;
-                }
-              },
-              child: Text("button1"),),
-
-
-            ElevatedButton(
-              onPressed: () async {
-                DateTime? pickedDate = await showDatePicker(
-                    context: context,
-
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(DateTime.now().year-2),
-                    //DateTime.now() - not to allow to choose before today.
-                    lastDate: DateTime(DateTime.now().year+2));
-
-                if (pickedDate != null) {
-                  print(pickedDate);
-                  // selectedDate = pickedDate;
-                }
-              },
-              child: Text("button2"),),
-
-          ],
-        ),
-      ),
-      leftContent: "Cancel",
-      rightContent: "Apply Filter",
-      onPressedLeft: (){
-        SmartDialog.dismiss();
-      },
-      onPressedRight: (){
-        SmartDialog.dismiss();
+              await bikeProvider.applyThreatFilter(filter, pickedDate1, pickedDate2);
+              SmartDialog.dismiss();
+            });
       })
   );
-
-
 }
 
 

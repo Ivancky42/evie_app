@@ -7,8 +7,8 @@ import 'evie_textform.dart';
 ///Radio button
 class EvieRadioButton extends StatelessWidget {
   final String? text;
-  final bool value;
-  final String groupValue;
+  final int value;
+  final int groupValue;
   final ValueChanged onChanged;
 
 

@@ -71,3 +71,24 @@ const Map<int,String> monthsInYear = {
   11: "Nov",
   12: "Dec",
 };
+
+
+// List<String> itemsBetweenDates({
+//   required List<String> dates,
+//   required List<String> items,
+//   required DateTime start,
+//   required DateTime end,
+// }) {
+//   assert(dates.length == items.length);
+//
+//   var dateFormat = DateFormat('y-MM-dd');
+//
+//   var output = <String>[];
+//   for (var i = 0; i < dates.length; i += 1) {
+//     var date = dateFormat.parse(dates[i], true);
+//     if (date.compareTo(start) >= 0 && date.compareTo(end) <= 0) {
+//       output.add(items[i]);
+//     }
+//   }
+//   return output;
+// }

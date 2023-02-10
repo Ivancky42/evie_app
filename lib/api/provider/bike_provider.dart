@@ -78,6 +78,10 @@ class BikeProvider extends ChangeNotifier {
   bool isReadBike = false;
   List userBikeNotificationList = ["~connection-lost","~movement-detect","~theft-attempt","~lock-reminder","~plan-reminder","~fall-detect", "crash"];
 
+  List<String> threatFilterArray = ["warning", "danger","fall","crash","lock"];
+  DateTime? threatFilterDate1;
+  DateTime? threatFilterDate2;
+
   StreamSubscription? bikeListSubscription;
   StreamSubscription? currentBikeSubscription;
   StreamSubscription? currentThreatRoutesSubscription;
@@ -1051,65 +1055,6 @@ class BikeProvider extends ChangeNotifier {
       }});
   }
 
-
-  // getPlanSubscript(String? imei) async {
-  //
-  //   bikePlanSubscription?.cancel();
-  //   bikePlanSubscription = FirebaseFirestore.instance
-  //       .collection(bikesCollection)
-  //       .doc(imei)
-  //       .collection(plansCollection)
-  //       .snapshots()
-  //       .listen((snapshot) {
-  //     {
-  //       if (snapshot.docs.isNotEmpty) {
-  //         for (var docChange in snapshot.docChanges) {
-  //           switch (docChange.type) {
-  //           ///element.type
-  //             case DocumentChangeType.added:
-  //               Map<String, dynamic>? obj = docChange.doc.data();
-  //               if ( snapshot.size == 0 ) {
-  //
-  //               }else {
-  //                 for(int i=0;i<snapshot.docs.length;i++){
-  //                   currentBikePlanModel = BikePlanModel.fromJson(obj!);
-  //                 }
-  //                 final result = calculateDateDifference(currentBikePlanModel!.periodEnd!.toDate());
-  //                 if(result < 0){
-  //                   isPlanSubscript = false;
-  //                 }else{
-  //                   isPlanSubscript = true;
-  //                 }
-  //               }
-  //               notifyListeners();
-  //               break;
-  //             case DocumentChangeType.removed:
-  //               currentBikePlanModel = null;
-  //               notifyListeners();
-  //               break;
-  //             case DocumentChangeType.modified:
-  //               Map<String, dynamic>? obj = docChange.doc.data();
-  //               for(int i=0;i<snapshot.docs.length;i++){
-  //                 currentBikePlanModel = BikePlanModel.fromJson(obj!);
-  //               }
-  //               final result = calculateDateDifference(currentBikePlanModel!.periodEnd!.toDate());
-  //               if(result < 0){
-  //                 isPlanSubscript = false;
-  //               }else{
-  //                 isPlanSubscript = true;
-  //               }
-  //               notifyListeners();
-  //               break;
-  //           }
-  //         }
-  //       }else{
-  //         currentBikePlanModel = null;
-  //         isPlanSubscript = false;
-  //         notifyListeners();
-  //       }
-  //     }});
-  // }
-
   updatePurchasedPlan(String deviceIMEI, PlanModel planModel) async {
     DocumentReference ref = FirebaseFirestore.instance.collection(plansCollection).doc(planModel.id);
     try {
@@ -1265,6 +1210,21 @@ class BikeProvider extends ChangeNotifier {
             != int.parse(firmVer.replaceAll('.', ''))) {
       FirmwareProvider().uploadFirmVerToFirestore(firmVer);
     }
+  }
+
+  ///Apply filter for threat history
+  applyThreatFilter(List<String> filter, DateTime? pickedDate1, DateTime? pickedDate2){
+
+    threatFilterArray = filter;
+
+    if(pickedDate1 != null && pickedDate2 != null){
+      threatFilterDate1 = pickedDate1;
+      threatFilterDate2 = pickedDate2;
+    }else{
+      threatFilterDate1 = null;
+      threatFilterDate2 = null;
+    }
+    notifyListeners();
   }
 
   clear() async {

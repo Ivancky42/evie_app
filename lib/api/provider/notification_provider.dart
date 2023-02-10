@@ -12,7 +12,6 @@ import '../model/notification_model.dart';
 import '../model/user_model.dart';
 
 
-
 class NotificationProvider extends ChangeNotifier {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 

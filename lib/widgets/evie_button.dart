@@ -74,14 +74,13 @@ class EvieButton_ReversedColor extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.w)),
               elevation: 0.0,
-              backgroundColor: const Color(0xffDFE0E0),
+            backgroundColor: EvieColors.lightGrayishCyan,
 
           ),
         )
     );
   }
 }
-
 
 ///Button widget
 class EvieButton_DropDown extends StatelessWidget {
@@ -186,6 +185,47 @@ class EvieButton_DropDown extends StatelessWidget {
   }
 }
 
+class EvieButton_PickDate extends StatelessWidget {
+
+  final VoidCallback? onPressed;
+  final Widget child;
+  final double? width;
+  final double? height;
+  final Color? backgroundColor;
+
+  const EvieButton_PickDate({
+    Key? key,
+    required this.onPressed,
+    required this.child,
+    this.width,
+    this.height,
+    this.backgroundColor,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: height ?? 32.h,
+        width: width ?? double.infinity,
+        child: Row(
+          children: [
+            ElevatedButton(
+              child: child,
+              onPressed: onPressed,
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.w)),
+                elevation: 0.0,
+                backgroundColor: EvieColors.lightGrayishCyan,
+
+              ),
+            ),
+
+          ],
+        )
+    );
+  }
+}
 
 class EvieButton_Square extends StatelessWidget {
 
