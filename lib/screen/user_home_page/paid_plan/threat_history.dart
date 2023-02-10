@@ -43,8 +43,8 @@ class _Threat_HistoryState extends State<Threat_History> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFECEDEB),
+      decoration: const BoxDecoration(
+        color: EvieColors.grayishWhite,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
       ),
       child: Column(
@@ -121,52 +121,249 @@ class _Threat_HistoryState extends State<Threat_History> {
                            snapshotLength = data?.length;
 
                           if(widget.bikeProvider.threatFilterArray.contains(data!['type'])){
-                            if(widget.bikeProvider.threatFilterDate1 != null && widget.bikeProvider.threatFilterDate2 != null){
+                            switch(widget.bikeProvider.threatFilterDate){
+                              case ThreatFilterDate.all:
+                                //_proceed(context, index, data, documentSnapshots);
+                                return Column(
+                                  children: [
+                                    ListTile(
+                                        leading: data == null ? const Text('Error')
+                                            : SvgPicture.asset(
+                                          getSecurityIconWidget(data['type']),
+                                          height: 36.h,
+                                          width: 36.w,
+                                        ),
+                                        title: data == null ? const Text('Error')
+                                            : data["address"] != null
+                                            ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
+                                            : FutureBuilder<dynamic>(
+                                            future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
+                                                return Text(
+                                                  snapshot.data.name.toString(),
+                                                  style: TextStyle(fontSize: 18.sp),
+                                                );
+                                              }else{
+                                                return const Text(
+                                                  "loading",
+                                                );
+                                              }
+                                            }
+                                        ),
+                                        subtitle: data == null
+                                            ? const Text('Error in data')
+                                            : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
 
+                                    ),
+                                    const Divider(height: 1),
+                                  ],
+                                );
+                                break;
+                              case ThreatFilterDate.today:
+                                if(widget.bikeProvider.calculateDateDifference(data['created'].toDate()) == 0){
+                                  return Column(
+                                    children: [
+                                      ListTile(
+                                          leading: data == null ? const Text('Error')
+                                              : SvgPicture.asset(
+                                            getSecurityIconWidget(data['type']),
+                                            height: 36.h,
+                                            width: 36.w,
+                                          ),
+                                          title: data == null ? const Text('Error')
+                                              : data["address"] != null
+                                              ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
+                                              : FutureBuilder<dynamic>(
+                                              future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
+                                                  return Text(
+                                                    snapshot.data.name.toString(),
+                                                    style: TextStyle(fontSize: 18.sp),
+                                                  );
+                                                }else{
+                                                  return const Text(
+                                                    "loading",
+                                                  );
+                                                }
+                                              }
+                                          ),
+                                          subtitle: data == null
+                                              ? const Text('Error in data')
+                                              : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
+
+                                      ),
+                                      const Divider(height: 1),
+                                    ],
+                                  );
+                                }
+                                break;
+                              case ThreatFilterDate.yesterday:
+                                if(widget.bikeProvider.calculateDateDifference(data['created'].toDate()) == -1){
+                                  return Column(
+                                    children: [
+                                      ListTile(
+                                          leading: data == null ? const Text('Error')
+                                              : SvgPicture.asset(
+                                            getSecurityIconWidget(data['type']),
+                                            height: 36.h,
+                                            width: 36.w,
+                                          ),
+                                          title: data == null ? const Text('Error')
+                                              : data["address"] != null
+                                              ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
+                                              : FutureBuilder<dynamic>(
+                                              future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
+                                                  return Text(
+                                                    snapshot.data.name.toString(),
+                                                    style: TextStyle(fontSize: 18.sp),
+                                                  );
+                                                }else{
+                                                  return const Text(
+                                                    "loading",
+                                                  );
+                                                }
+                                              }
+                                          ),
+                                          subtitle: data == null
+                                              ? const Text('Error in data')
+                                              : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
+
+                                      ),
+                                      const Divider(height: 1),
+                                    ],
+                                  );
+                                }
+                                break;
+                              case ThreatFilterDate.last7days:
+                                if([-1,-2,-3,-4,-5,-6,-7].contains(widget.bikeProvider.calculateDateDifference(data['created'].toDate()))){
+                                  return Column(
+                                    children: [
+                                      ListTile(
+                                          leading: data == null ? const Text('Error')
+                                              : SvgPicture.asset(
+                                            getSecurityIconWidget(data['type']),
+                                            height: 36.h,
+                                            width: 36.w,
+                                          ),
+                                          title: data == null ? const Text('Error')
+                                              : data["address"] != null
+                                              ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
+                                              : FutureBuilder<dynamic>(
+                                              future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
+                                                  return Text(
+                                                    snapshot.data.name.toString(),
+                                                    style: TextStyle(fontSize: 18.sp),
+                                                  );
+                                                }else{
+                                                  return const Text(
+                                                    "loading",
+                                                  );
+                                                }
+                                              }
+                                          ),
+                                          subtitle: data == null
+                                              ? const Text('Error in data')
+                                              : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
+
+                                      ),
+                                      const Divider(height: 1),
+                                    ],
+                                  );
+                                }
+                                break;
+                              case ThreatFilterDate.custom:
+                                if(data['created'].toDate().isAfter(widget.bikeProvider.threatFilterDate1)
+                                    && data['created'].toDate().isBefore(widget.bikeProvider.threatFilterDate2)){
+                                  return Column(
+                                    children: [
+                                      ListTile(
+                                          leading: data == null ? const Text('Error')
+                                              : SvgPicture.asset(
+                                            getSecurityIconWidget(data['type']),
+                                            height: 36.h,
+                                            width: 36.w,
+                                          ),
+                                          title: data == null ? const Text('Error')
+                                              : data["address"] != null
+                                              ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
+                                              : FutureBuilder<dynamic>(
+                                              future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
+                                                  return Text(
+                                                    snapshot.data.name.toString(),
+                                                    style: TextStyle(fontSize: 18.sp),
+                                                  );
+                                                }else{
+                                                  return const Text(
+                                                    "loading",
+                                                  );
+                                                }
+                                              }
+                                          ),
+                                          subtitle: data == null
+                                              ? const Text('Error in data')
+                                              : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
+
+                                      ),
+                                      const Divider(height: 1),
+                                    ],
+                                  );
+                                }
+                                break;
+                              default:
+                                return Column(
+                                  children: [
+                                    ListTile(
+                                        leading: data == null ? const Text('Error')
+                                            : SvgPicture.asset(
+                                          getSecurityIconWidget(data['type']),
+                                          height: 36.h,
+                                          width: 36.w,
+                                        ),
+                                        title: data == null ? const Text('Error')
+                                            : data["address"] != null
+                                            ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
+                                            : FutureBuilder<dynamic>(
+                                            future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
+                                                return Text(
+                                                  snapshot.data.name.toString(),
+                                                  style: TextStyle(fontSize: 18.sp),
+                                                );
+                                              }else{
+                                                return const Text(
+                                                  "loading",
+                                                );
+                                              }
+                                            }
+                                        ),
+                                        subtitle: data == null
+                                            ? const Text('Error in data')
+                                            : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
+
+                                    ),
+                                    const Divider(height: 1),
+                                  ],
+                                );
                             }
-                            return Column(
-                              children: [
-                                ListTile(
-                                    leading: data == null
-                                        ? const Text('Error')
-                                        : SvgPicture.asset(
-                                      getSecurityIconWidget(data['type']),
-                                      height: 36.h,
-                                      width: 36.w,
-                                    ),
-                                    title: data == null
-                                        ? const Text('Error')
-                                        : data["address"] != null
-                                        ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
-                                        : FutureBuilder<dynamic>(
-                                        future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
-                                            return Text(
-                                              snapshot.data.name.toString(),
-                                              style: TextStyle(fontSize: 18.sp),
-                                            );
-                                          }else{
-                                            return const Text(
-                                              "loading",
-                                            );
-                                          }
-                                        }
-                                    ),
-                                    subtitle: data == null
-                                        ? const Text('Error in data')
-                                        : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
-
-                                ),
-                                const Divider(height: 1),
-                              ],
-                            );
-
+                            return Container();
                           }else {
                             return Container();
                           }
-
                         },
                         // orderBy is compulsory to enable pagination
                         query: FirebaseFirestore.instance.collection("bikes")
@@ -263,4 +460,44 @@ class _Threat_HistoryState extends State<Threat_History> {
         return "empty";
     }
   }
+
+  Widget _proceed(BuildContext context, index, data, documentSnapshots) {
+    return Column(
+      children: [
+        ListTile(
+            leading: data == null ? const Text('Error')
+                : SvgPicture.asset(
+              getSecurityIconWidget(data['type']),
+              height: 36.h,
+              width: 36.w,
+            ),
+            title: data == null ? const Text('Error')
+                : data["address"] != null
+                ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
+                : FutureBuilder<dynamic>(
+                future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
+                    return Text(
+                      snapshot.data.name.toString(),
+                      style: TextStyle(fontSize: 18.sp),
+                    );
+                  }else{
+                    return const Text(
+                      "loading",
+                    );
+                  }
+                }
+            ),
+            subtitle: data == null
+                ? const Text('Error in data')
+                : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
+
+        ),
+        const Divider(height: 1),
+      ],
+    );
+  }
+
 }

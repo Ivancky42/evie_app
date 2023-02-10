@@ -325,7 +325,7 @@ showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscriptio
 
 showFirmwareUpdateQuit(context, StreamSubscription? stream){
   SmartDialog.show(
-    keepSingle: true,
+      keepSingle: true,
       backDismiss: false,
       widget: EvieDoubleButtonDialog(
           title: "Quit Update",
@@ -355,13 +355,15 @@ showCannotUnlockBike(){
 
 showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
   
-  bool a = true;
-  bool b = true;
-  bool c = true;
-  bool d = true;
+  bool warning = bikeProvider.threatFilterArray.contains("warning") ? true : false;
+  bool fall = bikeProvider.threatFilterArray.contains("fall") ? true : false;
+  bool danger = bikeProvider.threatFilterArray.contains("danger") ? true : false;
+  bool crash = bikeProvider.threatFilterArray.contains("crash") ? true : false;
 
   int _selectedRadio = -1;
 
+  ///all, today, yesterday, last7days, custom
+  ThreatFilterDate pickedDate = ThreatFilterDate.all;
   DateTime? pickedDate1;
   DateTime? pickedDate2;
 
@@ -376,41 +378,41 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
                 children: [
                   EvieSwitch(
                     text: "Movement Detected",
-                    value: a,
+                    value: warning,
                     thumbColor: EvieColors.thumbColorTrue,
                     onChanged: (value) {
                       setState(() {
-                        a = value!;
+                        warning = value!;
                       });
                     },
                   ),
                   EvieSwitch(
                     text: "Fall Detected",
-                    value: b,
+                    value: fall,
                     thumbColor: EvieColors.thumbColorTrue,
                     onChanged: (value) async {
                       setState(() {
-                        b = value!;
+                        fall = value!;
                       });
                     },
                   ),
                   EvieSwitch(
                     text: "Theft Attempt",
-                    value: c,
+                    value: danger,
                     thumbColor: EvieColors.thumbColorTrue,
                     onChanged: (value) async {
                       setState(() {
-                        c = value!;
+                        danger = value!;
                       });
                     },
                   ),
                   EvieSwitch(
                     text: "Crash Alert",
-                    value: d,
+                    value: crash,
                     thumbColor: EvieColors.thumbColorTrue,
                     onChanged: (value) async {
                       setState(() {
-                        d = value!;
+                        crash = value!;
                       });
                     },
                   ),
@@ -430,8 +432,12 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
                       onChanged: (value){
                         setState(() {
                           _selectedRadio = value;
+                          pickedDate = ThreatFilterDate.today;
+                          pickedDate1 != null ? pickedDate1 = null : -1;
+                          pickedDate2 != null ? pickedDate2 = null : -1;
                         });
                       }),
+
                   EvieRadioButton(
                       text: "Yesterday",
                       value: 1,
@@ -439,17 +445,26 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
                       onChanged: (value){
                         setState(() {
                           _selectedRadio = value;
+                          pickedDate =ThreatFilterDate.yesterday;
+                          pickedDate1 != null ? pickedDate1 = null : -1;
+                          pickedDate2 != null ? pickedDate2 = null : -1;
                         });
                       }),
+
                   EvieRadioButton(
                       text: "Last 7 days",
                       value: 2,
                       groupValue: _selectedRadio,
                       onChanged: (value){
+
                         setState(() {
                           _selectedRadio = value;
+                          pickedDate = ThreatFilterDate.last7days;
+                          pickedDate1 != null ? pickedDate1 = null : -1;
+                          pickedDate2 != null ? pickedDate2 = null : -1;
                         });
                       }),
+
                   EvieRadioButton(
                       text: "Custom Date",
                       value: 3,
@@ -457,6 +472,7 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
                       onChanged: (value){
                         setState(() {
                           _selectedRadio = value;
+                          pickedDate = ThreatFilterDate.custom;
                         });
                       }),
 
@@ -469,17 +485,15 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
                             if(_selectedRadio == 3){
                               pickedDate1 = await showDatePicker(
                                   context: context,
-                                  initialDate: DateTime.now(),
+                                  initialDate: bikeProvider.threatFilterDate1 ?? pickedDate2 ?? DateTime.now(),
                                   firstDate: DateTime(DateTime.now().year-2),
-                                  lastDate: DateTime.now());
+                                  lastDate: pickedDate2 ?? DateTime.now());
 
                               if (pickedDate1 != null) {
                                 setState(() {
                                   pickedDate1 = pickedDate1;
                                 });
                               }
-                            }else{
-
                             }
                           },
                           child: Row(
@@ -498,14 +512,14 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
                    // Expanded(child: const Text("-"),),
 
                     Expanded(
-                      child:   EvieButton_PickDate(
+                      child:  EvieButton_PickDate(
                       width: 155.w,
                       onPressed: () async {
                         if(_selectedRadio == 3){
                           pickedDate2 = await showDatePicker(
                               context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(DateTime.now().year-2),
+                              initialDate: bikeProvider.threatFilterDate2 ?? pickedDate1 ?? DateTime.now(),
+                              firstDate: pickedDate1 ?? DateTime(DateTime.now().year-2),
                               lastDate: DateTime.now());
 
                           if (pickedDate2 != null) {
@@ -513,14 +527,12 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
                               pickedDate2 = pickedDate2;
                             });
                           }
-                        }else{
-
                         }
                       },
                       child: Row(
                         children: [
                           Text(pickedDate2 != null ? "${monthsInYear[pickedDate2!.month]} ${pickedDate2!.day} ${pickedDate2!.year}": "",
-                            style: TextStyle(color: EvieColors.darkGrayishCyan),),
+                            style: const TextStyle(color: EvieColors.darkGrayishCyan),),
                           SvgPicture.asset(
                             "assets/buttons/calendar.svg",
                             height: 24.h,
@@ -540,18 +552,40 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
               SmartDialog.dismiss();
             },
             onPressedRight: () async {
+
               List<String> filter = [];
 
-              if(a == true){filter.add("warning");}
-              if(b == true){filter.add("fall");}
-              if(c == true){filter.add("danger");}
-              if(d == true){filter.add("crash");}
+              if(warning == true){filter.add("warning");}
+              if(fall == true){filter.add("fall");}
+              if(danger == true){filter.add("danger");}
+              if(crash == true){filter.add("crash");}
 
-              await bikeProvider.applyThreatFilter(filter, pickedDate1, pickedDate2);
-              SmartDialog.dismiss();
+              if(pickedDate == ThreatFilterDate.custom){
+                if(pickedDate1 != null && pickedDate2 != null){
+                  await bikeProvider.applyThreatFilter(filter,pickedDate,pickedDate1, pickedDate2);
+                  SmartDialog.dismiss();
+                }else{
+                  showNoSelectDate();
+                }
+              }else{
+                await bikeProvider.applyThreatFilter(filter, pickedDate, pickedDate1, pickedDate2);
+                SmartDialog.dismiss();
+              }
             });
       })
   );
+}
+
+
+showNoSelectDate(){
+  SmartDialog.show(
+      widget: EvieSingleButtonDialog(
+          title: "Please select the date",
+          content: "Date not selected",
+          rightContent: "Ok",
+          onPressedRight: (){
+            SmartDialog.dismiss();
+          }));
 }
 
 

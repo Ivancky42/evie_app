@@ -150,6 +150,8 @@ class _FeedsState extends State<Feeds> {
                             onPressRight: ()async{
                             await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.elementAt(index));
                             changeToUserHomePageScreen(context);
+
+                            print(_bikeProvider.currentBikeModel!.deviceIMEI);
                             });
                       }else{
                         return Container();

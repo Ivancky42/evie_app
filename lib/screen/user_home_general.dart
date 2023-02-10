@@ -315,7 +315,8 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
         } else if (_bikeProvider.isPlanSubscript == false) {
           return const FreePlan();
         }else{
-          if(_bikeProvider.userBikeList.isNotEmpty) _bikeProvider.controlBikeList("first");
+          ///For not become Circular
+          // if(_bikeProvider.userBikeList.isNotEmpty) _bikeProvider.controlBikeList("first");
           return const CircularProgressIndicator();
         }
     }

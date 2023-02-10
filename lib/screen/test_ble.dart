@@ -88,6 +88,7 @@ class _TestBleState extends State<TestBle> {
                   ),
                   onPressed: () {
 
+                    changeToTripHistory(context);
                   }
               ),
 

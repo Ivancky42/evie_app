@@ -1,5 +1,6 @@
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/screen/test_ble.dart';
+import 'package:evie_test/screen/trip_history/trip_history.dart';
 import 'package:evie_test/screen/user_home_page/free_plan/free_plan.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/screen/user_home_general.dart';
@@ -36,7 +37,7 @@ class _UserHomePageState extends State<UserHomePage> {
   ///Body Screen navigation by bottom navigation bar
   final screen = [
     UserHomeGeneral(),
-    TestBle(),
+    TripHistory(),
     Feeds(),
     MyAccount(),
   ];

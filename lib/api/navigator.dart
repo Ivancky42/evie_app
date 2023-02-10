@@ -145,6 +145,17 @@ void changeToUserHomePageScreen(BuildContext context ) {
     ),
   );
 }
+
+
+void changeToTripHistory(BuildContext context){
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.bottomToTop,
+      child: const UserHomePage(1),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
 void changeToLetsGoScreen(BuildContext context) {
   Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (context) => const LetsGo())

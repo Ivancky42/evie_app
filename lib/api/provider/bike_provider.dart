@@ -43,6 +43,14 @@ enum UploadFirestoreResult {
   success,
 }
 
+enum ThreatFilterDate {
+  all,
+  today,
+  yesterday,
+  last7days,
+  custom,
+}
+
 class BikeProvider extends ChangeNotifier {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
@@ -96,6 +104,7 @@ class BikeProvider extends ChangeNotifier {
 
   ScanQRCodeResult scanQRCodeResult = ScanQRCodeResult.unknown;
   SwitchBikeResult switchBikeResult = SwitchBikeResult.unknown;
+  ThreatFilterDate threatFilterDate = ThreatFilterDate.all;
 
   StreamController<SwitchBikeResult> switchBikeResultListener = StreamController.broadcast();
   StreamController<UploadFirestoreResult> firestoreStatusListener = StreamController.broadcast();
@@ -416,7 +425,6 @@ class BikeProvider extends ChangeNotifier {
     return result;
   }
 
-
   Stream<UploadFirestoreResult> acceptSharedBike(String targetIMEI, String currentUid) {
     try {
       //Update
@@ -454,7 +462,6 @@ class BikeProvider extends ChangeNotifier {
     });
     return firestoreStatusListener.stream;
   }
-
 
   Stream<UploadFirestoreResult> cancelSharedBike(String targetUID, String notificationId) {
     try{
@@ -503,7 +510,6 @@ class BikeProvider extends ChangeNotifier {
     return firestoreStatusListener.stream;
   }
 
-
   Stream<UploadFirestoreResult> removedSharedBike(String targetUID, String notificationId) {
     try{
       FirebaseFirestore.instance
@@ -550,7 +556,6 @@ class BikeProvider extends ChangeNotifier {
 
     return firestoreStatusListener.stream;
   }
-
 
   Stream<UploadFirestoreResult> leaveSharedBike(String targetUID, String notificationId) {
     try{
@@ -599,7 +604,6 @@ class BikeProvider extends ChangeNotifier {
     return firestoreStatusListener.stream;
   }
 
-
   Stream<UploadFirestoreResult> declineSharedBike(String targetIMEI, String notificationId) {
     try{
       FirebaseFirestore.instance
@@ -646,7 +650,6 @@ class BikeProvider extends ChangeNotifier {
 
     return firestoreStatusListener.stream;
   }
-
 
   getBikeUserList() {
     bikeUserList.clear();
@@ -810,7 +813,6 @@ class BikeProvider extends ChangeNotifier {
   /// ****************************************** ///
   /// Command for connect bike
 
-
   handleBarcodeData(String code) async {
     List<String> splitCode = code.split(',');
     String serialNumber = splitCode[0].split(':').last;
@@ -858,7 +860,6 @@ class BikeProvider extends ChangeNotifier {
       }
     });
   }
-
 
   queryBikeEvents()async{
     return FirebaseFirestore.instance.collection(bikesCollection).doc(currentBikeModel!.deviceIMEI!).collection(eventsCollection).orderBy("created", descending: true);
@@ -1213,18 +1214,38 @@ class BikeProvider extends ChangeNotifier {
   }
 
   ///Apply filter for threat history
-  applyThreatFilter(List<String> filter, DateTime? pickedDate1, DateTime? pickedDate2){
+  applyThreatFilter(List<String> filter, ThreatFilterDate pickedDate, DateTime? pickedDate1, DateTime? pickedDate2){
 
     threatFilterArray = filter;
 
-    if(pickedDate1 != null && pickedDate2 != null){
-      threatFilterDate1 = pickedDate1;
-      threatFilterDate2 = pickedDate2;
-    }else{
-      threatFilterDate1 = null;
-      threatFilterDate2 = null;
+    switch(pickedDate){
+      case ThreatFilterDate.all:
+        threatFilterDate = ThreatFilterDate.all;
+        break;
+      case ThreatFilterDate.today:
+        threatFilterDate = ThreatFilterDate.today;
+        break;
+      case ThreatFilterDate.yesterday:
+        threatFilterDate = ThreatFilterDate.yesterday;
+        break;
+      case ThreatFilterDate.last7days:
+        threatFilterDate = ThreatFilterDate.last7days;
+        break;
+      case ThreatFilterDate.custom:
+        if(pickedDate1 != null && pickedDate2 != null){
+          threatFilterDate = ThreatFilterDate.custom;
+          threatFilterDate1 = pickedDate1;
+          threatFilterDate2 = pickedDate2;
+        }else{
+          threatFilterDate = ThreatFilterDate.all;
+          threatFilterDate1 = null;
+          threatFilterDate2 = null;
+        }
+        break;
     }
+
     notifyListeners();
+
   }
 
   clear() async {
