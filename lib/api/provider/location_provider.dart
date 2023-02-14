@@ -6,7 +6,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/utils.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -22,7 +21,7 @@ class LocationProvider extends ChangeNotifier {
   String mapBoxStyleToken = dotenv.env['MAPBOX_STYLE_TOKEN'] ?? 'MST not found';
 
   LocationModel? locationModel;
-  UserLocation? userPosition;
+  //UserLocation? userPosition;
   Placemark? currentPlaceMark;
 
   LocationProvider() {
@@ -141,10 +140,10 @@ class LocationProvider extends ChangeNotifier {
   }
 
 
-  updateUserPosition(UserLocation userLocation) async {
-    userPosition = userLocation;
-    //notifyListeners();
-
-  }
+  // updateUserPosition(UserLocation userLocation) async {
+  //   userPosition = userLocation;
+  //   //notifyListeners();
+  //
+  // }
 
 }

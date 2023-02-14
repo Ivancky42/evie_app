@@ -121,7 +121,7 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
                       Container(
                         child: EvieButton(
                           width: double.infinity,
-                          height: 12,
+                          height: 6.h,
                           child: const Text(
                             "Recover",
                             style: TextStyle(

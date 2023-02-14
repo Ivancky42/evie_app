@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>214110477774-kfhm26bsh97d53ojd2ol3lmsom2dupju.apps.googleusercontent.com</string>
+	<string>214110477774-ihdqjjbqbqc42kgcqpr4m2so3057sb8b.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.214110477774-kfhm26bsh97d53ojd2ol3lmsom2dupju</string>
+	<string>com.googleusercontent.apps.214110477774-ihdqjjbqbqc42kgcqpr4m2so3057sb8b</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>214110477774-v6iamegdb2ovkp9nug0mscae4cjcfghr.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyD-c6LY9UrBxdo68xHgjNWTS1KEeSsQlZc</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.evieTest</string>
+	<string>com.evie.app</string>
 	<key>PROJECT_ID</key>
 	<string>evie-6952d</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +31,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:214110477774:ios:880970df7ca3fa958b5f9f</string>
+	<string>1:214110477774:ios:35e6651e58dfcab08b5f9f</string>
+	<key>DATABASE_URL</key>
+	<string>https://evie-6952d-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>

@@ -44,7 +44,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.evie_test"
+        applicationId "com.evie.app"
         minSdkVersion 23
         //minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion

@@ -86,8 +86,8 @@ dependencies:
   file_manager: ^1.0.1
   file_picker: ^5.2.2
   percent_indicator: ^4.2.2
-  modal_bottom_sheet: ^2.1.2
-  flutter_svg: ^1.1.6
+  modal_bottom_sheet: ^3.0.0-pre
+  flutter_svg: ^2.0.0
   map_launcher: ^2.4.0
   location: ^4.4.0
   page_transition: ^2.0.9
@@ -136,9 +136,9 @@ dependency_overrides:
 flutter_icons:
   android: true
   ios: true
-  image_path: 'assets/logo/evie_logo_icon.png'
-  adaptive_icon_background: '#D7E9EF'  #masking for android
-  adaptive_icon_foreground: 'assets/logo/evie_logo_icon.png'  #masking for android
+  image_path: 'assets/logo/evie_new_logo_noAlpha.png'
+  adaptive_icon_background: '#6A51CA'  #masking for android
+  adaptive_icon_foreground: 'assets/logo/evie_new_logo.png'  #masking for android
 
 
 flutter:
