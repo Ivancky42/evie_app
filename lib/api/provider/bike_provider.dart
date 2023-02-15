@@ -52,7 +52,7 @@ enum ThreatFilterDate {
 }
 
 class BikeProvider extends ChangeNotifier {
-  
+
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
@@ -245,46 +245,7 @@ class BikeProvider extends ChangeNotifier {
               switchBikeResult = SwitchBikeResult.success;
               switchBikeResultListener.add(switchBikeResult);
               getCurrentPlanSubscript();
-
-
-              // if(currentBikeModel?.location?.eventId != null || currentBikeModel?.location?.eventId != ""){
-              //   currentThreatRoutesSubscription = FirebaseFirestore.instance
-              //       .collection(bikesCollection)
-              //       .doc(imei)
-              //       .collection(theftHistoryCollection)
-              //       .doc(currentBikeModel?.location?.eventId)
-              //       .collection(routesCollection)
-              //       .snapshots()
-              //       .listen((snapshot) async {
-              //     if (snapshot.docs.isNotEmpty) {
-              //       for (var docChange in snapshot.docChanges) {
-              //         switch (docChange.type) {
-              //           case DocumentChangeType.added:
-              //             Map<String, dynamic>? obj = docChange.doc.data();
-              //             threatRoutesLists.putIfAbsent(docChange.doc.id, () => ThreatRoutesModel.fromJson(obj!));
-              //             notifyListeners();
-              //             break;
-              //           case DocumentChangeType.removed:
-              //             threatRoutesLists.removeWhere((key, value) => key == docChange.doc.id);
-              //             notifyListeners();
-              //             break;
-              //           case DocumentChangeType.modified:
-              //             Map<String, dynamic>? obj = docChange.doc.data();
-              //             threatRoutesLists.update(docChange.doc.id, (value) => ThreatRoutesModel.fromJson(obj!));
-              //             notifyListeners();
-              //             break;
-              //         }
-              //       }
-              //     }else{
-              //       threatRoutesLists.clear();
-              //       currentThreatRoutesSubscription?.cancel();
-              //     }
-              //   });
-              // }else{
-              //   threatRoutesLists.clear();
-              //   currentThreatRoutesSubscription?.cancel();
-              // }
-
+              getThreatRoutes();
 
               notifyListeners();
             } else {
@@ -304,6 +265,47 @@ class BikeProvider extends ChangeNotifier {
 
 
       }
+    }
+  }
+
+
+  getThreatRoutes() async {
+    if(currentBikeModel!.location!.status == "danger" && currentBikeModel?.location?.eventId != null || currentBikeModel?.location?.eventId != ""){
+      currentThreatRoutesSubscription = FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI)
+          .collection(theftHistoryCollection)
+          .doc(currentBikeModel!.location!.eventId)
+          .collection(routesCollection)
+          .snapshots()
+          .listen((snapshot) async {
+        if (snapshot.docs.isNotEmpty) {
+          for (var docChange in snapshot.docChanges) {
+            switch (docChange.type) {
+              case DocumentChangeType.added:
+                Map<String, dynamic>? obj = docChange.doc.data();
+                threatRoutesLists.putIfAbsent(docChange.doc.id, () => ThreatRoutesModel.fromJson(obj!));
+                notifyListeners();
+                break;
+              case DocumentChangeType.removed:
+                threatRoutesLists.removeWhere((key, value) => key == docChange.doc.id);
+                notifyListeners();
+                break;
+              case DocumentChangeType.modified:
+                Map<String, dynamic>? obj = docChange.doc.data();
+                threatRoutesLists.update(docChange.doc.id, (value) => ThreatRoutesModel.fromJson(obj!));
+                notifyListeners();
+                break;
+            }
+          }
+        }else{
+          threatRoutesLists.clear();
+          currentThreatRoutesSubscription?.cancel();
+        }
+      });
+    }else{
+      threatRoutesLists.clear();
+      currentThreatRoutesSubscription?.cancel();
     }
   }
 
