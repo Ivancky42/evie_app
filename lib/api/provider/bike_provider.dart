@@ -262,50 +262,57 @@ class BikeProvider extends ChangeNotifier {
           getRFIDList();
           getBikeUserList();
         });
-
-
       }
     }
   }
 
 
   getThreatRoutes() async {
-    if(currentBikeModel!.location!.status == "danger" && currentBikeModel?.location?.eventId != null || currentBikeModel?.location?.eventId != ""){
-      currentThreatRoutesSubscription = FirebaseFirestore.instance
-          .collection(bikesCollection)
-          .doc(currentBikeModel!.deviceIMEI)
-          .collection(theftHistoryCollection)
-          .doc(currentBikeModel!.location!.eventId)
-          .collection(routesCollection)
-          .snapshots()
-          .listen((snapshot) async {
-        if (snapshot.docs.isNotEmpty) {
-          for (var docChange in snapshot.docChanges) {
-            switch (docChange.type) {
-              case DocumentChangeType.added:
-                Map<String, dynamic>? obj = docChange.doc.data();
-                threatRoutesLists.putIfAbsent(docChange.doc.id, () => ThreatRoutesModel.fromJson(obj!));
-                notifyListeners();
-                break;
-              case DocumentChangeType.removed:
-                threatRoutesLists.removeWhere((key, value) => key == docChange.doc.id);
-                notifyListeners();
-                break;
-              case DocumentChangeType.modified:
-                Map<String, dynamic>? obj = docChange.doc.data();
-                threatRoutesLists.update(docChange.doc.id, (value) => ThreatRoutesModel.fromJson(obj!));
-                notifyListeners();
-                break;
-            }
+    if(currentBikeModel?.location?.status == "danger"){
+      if(currentBikeModel?.location != null){
+        if(currentBikeModel?.location?.eventId != null){
+          if(currentBikeModel?.location?.eventId != ""){
+            currentThreatRoutesSubscription = FirebaseFirestore.instance
+                .collection(bikesCollection)
+                .doc(currentBikeModel!.deviceIMEI)
+                .collection(theftHistoryCollection)
+                .doc(currentBikeModel!.location!.eventId)
+                .collection(routesCollection)
+                .snapshots()
+                .listen((snapshot) async {
+              if (snapshot.docs.isNotEmpty) {
+                for (var docChange in snapshot.docChanges) {
+                  switch (docChange.type) {
+                    case DocumentChangeType.added:
+                      Map<String, dynamic>? obj = docChange.doc.data();
+                      threatRoutesLists.putIfAbsent(docChange.doc.id, () => ThreatRoutesModel.fromJson(obj!));
+                      notifyListeners();
+                      break;
+                    case DocumentChangeType.removed:
+                      threatRoutesLists.removeWhere((key, value) => key == docChange.doc.id);
+                      notifyListeners();
+                      break;
+                    case DocumentChangeType.modified:
+                      Map<String, dynamic>? obj = docChange.doc.data();
+                      threatRoutesLists.update(docChange.doc.id, (value) => ThreatRoutesModel.fromJson(obj!));
+                      notifyListeners();
+                      break;
+                  }
+                }
+              }else{
+                threatRoutesLists.clear();
+                currentThreatRoutesSubscription?.cancel();
+              }
+            });
+          }else{
+            threatRoutesLists.clear();
+            currentThreatRoutesSubscription?.cancel();
           }
         }else{
           threatRoutesLists.clear();
           currentThreatRoutesSubscription?.cancel();
         }
-      });
-    }else{
-      threatRoutesLists.clear();
-      currentThreatRoutesSubscription?.cancel();
+      }
     }
   }
 
