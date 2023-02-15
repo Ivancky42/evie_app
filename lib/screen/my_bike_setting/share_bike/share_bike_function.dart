@@ -89,7 +89,7 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
                               rightContent: "Close",
                               onPressedRight: ()=>SmartDialog.dismiss()
                           ));
-                    }
+                    }else{};
                   },
                   );
                 },

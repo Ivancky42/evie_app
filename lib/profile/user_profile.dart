@@ -258,7 +258,7 @@ class _UserProfileState extends State<UserProfile> {
 
                                     TextFormField(
                                       //controller: _nameController..text = document['name'],
-                                      controller: _nameController..text = _currentUser.currentUserModel!.name,
+                                      controller: _nameController..text = _currentUser.currentUserModel?.name ?? "",
                                       enabled: _isInputEnable,
                                       //initialValue: document['name'],
                                       decoration: InputDecoration(

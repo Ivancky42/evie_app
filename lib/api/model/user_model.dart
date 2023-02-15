@@ -5,7 +5,7 @@ import 'notification_setting_model.dart';
 class UserModel {
   String uid;
   String email;
-  String name;
+  String? name;
   String credentialProvider;
   String profileIMG;
   String? phoneNumber;
@@ -18,7 +18,7 @@ class UserModel {
   UserModel({
     required this.uid,
     required this.email,
-    required this.name,
+    this.name,
     required this.credentialProvider,
     required this.profileIMG,
     this.phoneNumber,

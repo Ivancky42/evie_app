@@ -10,11 +10,6 @@ import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/screen/user_home_page/add_new_bike/add_new_bike.dart';
 import 'package:evie_test/screen/user_home_page/free_plan/free_plan.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/paid_plan.dart';
-import 'package:evie_test/screen/verify_email.dart';
-import 'package:evie_test/widgets/evie_oval.dart';
-import 'package:evie_test/widgets/evie_single_button_dialog.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -75,14 +70,16 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
     ///BG message
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+
       String data = message.data["id"].toString();
 
       ///Pass notification id to get body and key
       await _notificationProvider.getNotificationFromNotificationId(data);
 
       Future.delayed(Duration.zero, () {
-      changeToFeedsScreen(context);
+        changeToFeedsScreen(context);
       });
+
 
       /*
       ///Future builder
@@ -105,6 +102,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
     ///android FG message
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null && !kIsWeb) {

@@ -52,6 +52,7 @@ enum ThreatFilterDate {
 }
 
 class BikeProvider extends ChangeNotifier {
+  
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
@@ -151,8 +152,6 @@ class BikeProvider extends ChangeNotifier {
                 Map<String, dynamic>? obj = docChange.doc.data();
                 ///Key = imei, Val = get json object
                 userBikeList.putIfAbsent(docChange.doc.id, () => UserBikeModel.fromJson(obj!));
-                getUserBikeDetails(docChange.doc.id);
-                NotificationProvider().subscribeToTopic(docChange.doc.id);
 
                 notifyListeners();
                 break;
@@ -172,6 +171,9 @@ class BikeProvider extends ChangeNotifier {
           }
 
           userBikeList.forEach((key, value) {
+            getUserBikeDetails(key);
+            NotificationProvider().subscribeToTopic(key);
+
             if(value?.notificationSettings?.connectionLost == true ) {
               NotificationProvider().subscribeToTopic("${key}~connection-lost");
             }
@@ -244,40 +246,45 @@ class BikeProvider extends ChangeNotifier {
               switchBikeResultListener.add(switchBikeResult);
               getCurrentPlanSubscript();
 
-              if(currentBikeModel?.location?.eventId != null){
-                currentThreatRoutesSubscription = FirebaseFirestore.instance
-                    .collection(bikesCollection)
-                    .doc(imei)
-                    .collection(theftHistoryCollection)
-                    .doc(currentBikeModel?.location?.eventId)
-                    .collection(routesCollection)
-                    .snapshots()
-                    .listen((snapshot) {
-                  if (snapshot.docs.isNotEmpty) {
-                    for (var docChange in snapshot.docChanges) {
-                      switch (docChange.type) {
-                        case DocumentChangeType.added:
-                          Map<String, dynamic>? obj = docChange.doc.data();
-                          threatRoutesLists.putIfAbsent(docChange.doc.id, () => ThreatRoutesModel.fromJson(obj!));
-                          notifyListeners();
-                          break;
-                        case DocumentChangeType.removed:
-                          threatRoutesLists.removeWhere((key, value) => key == docChange.doc.id);
-                          notifyListeners();
-                          break;
-                        case DocumentChangeType.modified:
-                          Map<String, dynamic>? obj = docChange.doc.data();
-                          threatRoutesLists.update(docChange.doc.id, (value) => ThreatRoutesModel.fromJson(obj!));
-                          notifyListeners();
-                          break;
-                      }
-                    }
-                  }
-                });
-              }else{
-                threatRoutesLists.clear();
-                currentThreatRoutesSubscription?.cancel();
-              }
+
+              // if(currentBikeModel?.location?.eventId != null || currentBikeModel?.location?.eventId != ""){
+              //   currentThreatRoutesSubscription = FirebaseFirestore.instance
+              //       .collection(bikesCollection)
+              //       .doc(imei)
+              //       .collection(theftHistoryCollection)
+              //       .doc(currentBikeModel?.location?.eventId)
+              //       .collection(routesCollection)
+              //       .snapshots()
+              //       .listen((snapshot) async {
+              //     if (snapshot.docs.isNotEmpty) {
+              //       for (var docChange in snapshot.docChanges) {
+              //         switch (docChange.type) {
+              //           case DocumentChangeType.added:
+              //             Map<String, dynamic>? obj = docChange.doc.data();
+              //             threatRoutesLists.putIfAbsent(docChange.doc.id, () => ThreatRoutesModel.fromJson(obj!));
+              //             notifyListeners();
+              //             break;
+              //           case DocumentChangeType.removed:
+              //             threatRoutesLists.removeWhere((key, value) => key == docChange.doc.id);
+              //             notifyListeners();
+              //             break;
+              //           case DocumentChangeType.modified:
+              //             Map<String, dynamic>? obj = docChange.doc.data();
+              //             threatRoutesLists.update(docChange.doc.id, (value) => ThreatRoutesModel.fromJson(obj!));
+              //             notifyListeners();
+              //             break;
+              //         }
+              //       }
+              //     }else{
+              //       threatRoutesLists.clear();
+              //       currentThreatRoutesSubscription?.cancel();
+              //     }
+              //   });
+              // }else{
+              //   threatRoutesLists.clear();
+              //   currentThreatRoutesSubscription?.cancel();
+              // }
+
 
               notifyListeners();
             } else {
@@ -702,15 +709,17 @@ class BikeProvider extends ChangeNotifier {
           .doc(uid)
           .snapshots()
           .listen((snapshot) {
-        Map<String, dynamic>? obj = snapshot.data();
-        if (obj != null) {
-          bikeUserDetails.putIfAbsent(
-              snapshot.id, () => UserModel.fromJson(obj));
-          notifyListeners();
-        }
-        if (obj == null) {
-          bikeUserDetails.removeWhere((key, value) => key == obj?.keys);
-          notifyListeners();
+        if (snapshot.data() != null) {
+          Map<String, dynamic>? obj = snapshot.data();
+          if (obj != null) {
+            bikeUserDetails.putIfAbsent(
+                snapshot.id, () => UserModel.fromJson(obj));
+            notifyListeners();
+          }
+          if (obj == null) {
+            bikeUserDetails.removeWhere((key, value) => key == obj?.keys);
+            notifyListeners();
+          };
         }
       });
     } catch (e) {
@@ -725,13 +734,17 @@ class BikeProvider extends ChangeNotifier {
           .doc(deviceIMEI)
           .snapshots()
           .listen((snapshot) {
-        Map<String, dynamic>? obj = snapshot.data();
-            if (obj != null) {
-          userBikeDetails.update(snapshot.id, (value) => BikeModel.fromJson(obj), ifAbsent: () => BikeModel.fromJson(obj));
-          notifyListeners();
-        } else if (obj == null) {
-          userBikeDetails.removeWhere((key, value) => key == obj?.keys);
-          notifyListeners();
+        if (snapshot.data() != null) {
+          Map<String, dynamic>? obj = snapshot.data();
+          if (obj != null) {
+            userBikeDetails.update(
+                snapshot.id, (value) => BikeModel.fromJson(obj),
+                ifAbsent: () => BikeModel.fromJson(obj));
+            notifyListeners();
+          } else if (obj == null) {
+            userBikeDetails.removeWhere((key, value) => key == obj?.keys);
+            notifyListeners();
+          }
         }
       });
 
@@ -1289,7 +1302,7 @@ class BikeProvider extends ChangeNotifier {
     userBikeDetails.clear();
     bikeUserList.clear();
     bikeUserDetails.clear();
-
+    threatRoutesLists.clear();
 
     isPlanSubscript = null;
     currentBikeIMEI = null;

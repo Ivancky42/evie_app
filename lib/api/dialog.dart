@@ -214,7 +214,7 @@ showDeleteShareBikeUser(BikeProvider _bikeProvider, int index){
                         rightContent: "Close",
                         onPressedRight: ()=>SmartDialog.dismiss()
                     ));
-              }
+              }else{};
 
             },
             );
@@ -246,7 +246,7 @@ showDeleteShareBikeUser(BikeProvider _bikeProvider, int index){
                         rightContent: "Close",
                         onPressedRight: ()=>SmartDialog.dismiss()
                     ));
-              }
+              }else{}
 
             },
             );}}));
@@ -314,7 +314,7 @@ showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscriptio
                 firmwareProvider.changeIsUpdating(false);
                 stream?.cancel();
                 changeToFirmwareUpdateFailed(context);
-              }
+              }else{}
             });
 
             bluetoothProvider.startUpgradeFirmware(file);
@@ -396,6 +396,7 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
                       });
                     },
                   ),
+
                   EvieSwitch(
                     text: "Theft Attempt",
                     value: danger,
@@ -406,6 +407,7 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
                       });
                     },
                   ),
+
                   EvieSwitch(
                     text: "Crash Alert",
                     value: crash,

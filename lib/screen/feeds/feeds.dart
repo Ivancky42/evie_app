@@ -362,7 +362,7 @@ class _FeedsState extends State<Feeds> {
                                                                         onPressedRight: () async {
                                                                           SmartDialog.dismiss();
                                                                         }));
-                                                              }
+                                                              }else{};
                                                             },
                                                             );
 
@@ -485,7 +485,7 @@ class _FeedsState extends State<Feeds> {
                         rightContent: "Close",
                         onPressedRight: ()=>SmartDialog.dismiss()
                     ));
-              }
+              }else{}
 
             },
             );

@@ -157,7 +157,7 @@ class _BikeContainerState extends State<BikeContainer> {
                           onPressedRight: () {
                             SmartDialog.dismiss();
                           }));
-                }
+                }else{};
               });
 
             } else {
