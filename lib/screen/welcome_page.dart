@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
@@ -44,11 +45,10 @@ class _WelcomeState extends State<Welcome> {
               height: 142.h,
             ),
 
-            SvgPicture.asset(
-              "assets/logo/evie_logo.svg",
+            Image(
+              image: AssetImage("assets/logo/evie_logo.png",),
               width: 191.w,
-              height: 42.h,
-            ),
+              height: 42.h,),
 
             SizedBox(
               height: 99.h,
@@ -74,11 +74,9 @@ class _WelcomeState extends State<Welcome> {
                 width: double.infinity,
                 child: Text(
                   "Get Started",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.sp,
-                  ),
+                  style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                 ),
+
                 onPressed: () async {
                   changeToInputNameScreen(context);
                   //changeToLetsGoScreen(context);
@@ -96,13 +94,8 @@ class _WelcomeState extends State<Welcome> {
                   changeToSignInMethodScreen(context);
                 },
                 child: Text(
-                  "I already have an account",
-                  style: TextStyle(
-                    color: EvieColors.primaryColor,
-                    fontSize: 12.sp,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
+                    "I already have an account",
+                    style: EvieTextStyles.body14.copyWith(color: EvieColors.primaryColor, decoration: TextDecoration.underline,)),
               ),
             ),
           ],

@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_appbar.dart';
 import 'package:evie_test/widgets/evie_textform.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:sizer/sizer.dart';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../api/colours.dart';
+import '../api/fonts.dart';
 import '../api/navigator.dart';
 import '../api/provider/notification_provider.dart';
 import '../theme/ThemeChangeNotifier.dart';
@@ -173,11 +175,8 @@ class _LoginScreenState extends State<Login> {
               child: EvieButton(
                 width: double.infinity,
                 child: Text(
-                  "Log In With Email",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.sp,
-                  ),
+                  "Log In",
+                  style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                 ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {

@@ -78,7 +78,7 @@ class _AccountVerifiedState extends State<AccountVerified> {
         Align(
           alignment: Alignment.center,
           child: SvgPicture.asset(
-            "account_verified.svg",
+            "assets/images/rider.svg",
           ),
         ),
         Align(

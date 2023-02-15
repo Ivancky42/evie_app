@@ -1,5 +1,7 @@
+import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_svg/svg.dart';
+
 
 import '../theme/ThemeChangeNotifier.dart';
 
@@ -17,7 +19,8 @@ class EvieAppbar_Back extends StatelessWidget implements PreferredSizeWidget {
       leading: IconButton(
         icon: ThemeChangeNotifier().isDarkMode(context) == true
             ? Image.asset('assets/buttons/back_darkMode.png')
-            : Image.asset('assets/buttons/back.png'),
+            : SvgPicture.asset('assets/buttons/back_big.svg',),
+
         onPressed: onPressed,
       ),
     );
@@ -25,5 +28,5 @@ class EvieAppbar_Back extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(8.h);
+  Size get preferredSize => Size.fromHeight(48.h);
 }

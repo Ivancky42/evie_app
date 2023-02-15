@@ -4,6 +4,8 @@ import 'package:evie_test/api/sizer.dart';
 import '../api/colours.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'evie_button.dart';
+
 ///Single button dialog
 class EvieSingleButtonDialogCupertino extends StatelessWidget{
   // final String buttonNumber;
@@ -86,6 +88,79 @@ class EvieSingleButtonDialog extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    return Dialog(
+        insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        elevation: 0.0,
+        backgroundColor: Color(0xffECEDEB),
+        child: Container(
+          padding:  EdgeInsets.only(
+              left: 17.w,
+              right: 17.w,
+              top: 16.w,
+              bottom: 16.w
+          ),
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
+              Padding(
+                padding:  EdgeInsets.only(bottom: 8.h),
+                child: Text(title, style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),),
+              ),
+              Padding(
+                padding:  EdgeInsets.only(bottom: 11.h),
+                child: Divider(
+                  thickness: 0.5.h,
+                  color: const Color(0xff8E8E8E),
+                  height: 0,
+                ),
+              ),
+
+              image != null ? image! : SizedBox(),
+
+              Text(
+                content,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18.sp,
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(top: 9.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+
+                    Expanded(
+                      child:
+                      EvieButton(
+                          width: double.infinity,
+                          height: 48.h,
+                          child: Text(
+                            rightContent,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w700
+                            ),
+                          ),
+                          onPressed: onPressedRight
+                      ),
+                    ),
+                  ],
+                ),
+              )
+
+            ],
+          ),
+        )
+    );
       return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -163,25 +238,8 @@ class EvieSingleButtonDialog extends StatelessWidget{
               bottom: 20,
             ),
             margin: const EdgeInsets.only(top: 45),
-            //decoration: BoxDecoration(
-            //  boxShadow: const [
-            //    BoxShadow(
-            //        color: Colors.black26, offset: Offset(0, 4), blurRadius: 5.0)
-            //  ],
-              //    gradient: const LinearGradient(
-              //      begin: Alignment.topLeft,
-              //      end: Alignment.bottomLeft,
-              //     stops: [0.0, 1.0],
-              //      colors: [
-              //        Color(0xffD7E9EF),
-              //        Color(0xffD7E9EF),
-              //      ],
-              //    ),
-            //  borderRadius: BorderRadius.circular(16),
-              //border: Border.all(color: ReevoColors.blue),
-            //),
-
           )
       );
+
   }
 }

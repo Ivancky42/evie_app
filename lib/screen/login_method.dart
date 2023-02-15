@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:evie_test/api/navigator.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
+
 
 import '../api/colours.dart';
+import '../api/fonts.dart';
 import '../api/provider/auth_provider.dart';
 import '../api/provider/bike_provider.dart';
 import '../theme/ThemeChangeNotifier.dart';
@@ -38,34 +40,29 @@ class _SignInMethodState extends State<SignInMethod> {
       },
 
       child:Scaffold(
-        appBar: EvieAppbar_Back(onPressed: (){ changeToWelcomeScreen(context);}),
+        appBar: EvieAppbar_Back(onPressed: (){
+          SmartDialog.show(widget:     EvieSingleButtonDialog(title: "title", content: "content", rightContent: "rightContent", onPressedRight: (){}));
+
+          changeToWelcomeScreen(context);}),
 
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.only(left: 16.w, right: 16.w, top:24.h),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                SizedBox(
-                  height: 2.h,
-                ),
 
                 Text("Welcome Back!",
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w500,
-                    )),
+                  style: EvieTextStyles.h2,),
 
                 SizedBox(
-                  height: 1.h,
+                  height: 4.h,
                 ),
 
                 Text("Choose a method to log in to your account",
-                    style: TextStyle(
-                      fontSize: 11.5.sp,
-                    )),
+                  style: EvieTextStyles.body18,),
 
                 SizedBox(
                   height: 2.h,
@@ -85,10 +82,7 @@ class _SignInMethodState extends State<SignInMethod> {
                       ),
                       Text(
                         "Login with Email",
-                        style: TextStyle(
-                          color: Color(0xffECEDEB),
-                          fontSize: 11.5.sp,
-                        ),
+                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                       ),
                     ],
                   ),
@@ -96,6 +90,7 @@ class _SignInMethodState extends State<SignInMethod> {
                     changeToSignInScreen(context);
                   },
                 ),
+
 
                 Platform.isIOS ?
                 EvieButton(
@@ -113,10 +108,7 @@ class _SignInMethodState extends State<SignInMethod> {
                         ),
                         Text(
                           "Login with Apple",
-                          style: TextStyle(
-                            color: Color(0xff7A7A79),
-                            fontSize: 11.5.sp,
-                          ),
+                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                         ),
                       ],
                     ),
@@ -137,10 +129,10 @@ class _SignInMethodState extends State<SignInMethod> {
                       });
                     }) : Container(),
                 SizedBox(
-                  height: 0.5.h,
+                  height: 8.h,
                 ),
                 EvieButton(
-                    backgroundColor: Color(0xffDFE0E0),
+                    backgroundColor: EvieColors.lightGrayishCyan,
                     width: double.infinity,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -154,10 +146,7 @@ class _SignInMethodState extends State<SignInMethod> {
                         ),
                         Text(
                           "Login with Google",
-                          style: TextStyle(
-                            color: Color(0xff7A7A79),
-                            fontSize: 11.5.sp,
-                          ),
+                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                         ),
                       ],
                     ),
@@ -178,10 +167,10 @@ class _SignInMethodState extends State<SignInMethod> {
                       });
                     }),
                 SizedBox(
-                  height: 0.5.h,
+                  height: 8.h,
                 ),
                 EvieButton(
-                    backgroundColor: Color(0xffDFE0E0),
+                    backgroundColor: EvieColors.lightGrayishCyan,
                     width: double.infinity,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -195,10 +184,7 @@ class _SignInMethodState extends State<SignInMethod> {
                         ),
                         Text(
                           "Login with Facebook",
-                          style: TextStyle(
-                            color: Color(0xff7A7A79),
-                            fontSize: 11.5.sp,
-                          ),
+                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                         ),
                       ],
                     ),
@@ -218,67 +204,8 @@ class _SignInMethodState extends State<SignInMethod> {
                         }
                       });
                     }),
-                SizedBox(
-                  height: 0.5.h,
-                ),
-                EvieButton(
-                    backgroundColor: Color(0xffDFE0E0),
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Image(
-                          image: AssetImage("assets/icons/logo_twitter.png"),
-                          height: 20.0,
-                        ),
-                        SizedBox(
-                          width: 1.5.w,
-                        ),
-                        Text(
-                          "Login with Twitter",
-                          style: TextStyle(
-                            color: Color(0xff7A7A79),
-                            fontSize: 11.5.sp,
-                          ),
-                        ),
-                      ],
-                    ),
-                    onPressed: () async {
-                      _authProvider.signInWithTwitter("").then((result) {
-                        if (result == true) {
-                          changeToUserHomePageScreen(context);
-                        } else {
-                          SmartDialog.show(
-                              widget: EvieSingleButtonDialogCupertino(
-                                  title: "Error",
-                                  content: result,
-                                  rightContent: "Ok",
-                                  onPressedRight: () {
-                                    SmartDialog.dismiss();
-                                  }));
-                        }
-                      });
-                    }),
-                SizedBox(
-                  width: double.infinity,
-                  child: RawMaterialButton(
-                    elevation: 0.0,
-                    padding: const EdgeInsets.symmetric(vertical: 20.0),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                    onPressed: () {
-                      changeToInputNameScreen(context);
-                    },
-                    child: Text(
-                      "I don't have an account yet",
-                      style: TextStyle(
-                        color: EvieColors.primaryColor,
-                        fontSize: 10.sp,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ),
+
+
               ],
             ),
           ),

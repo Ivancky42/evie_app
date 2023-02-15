@@ -212,7 +212,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
           Align(
             alignment: Alignment.center,
             child: SvgPicture.asset(
-              "assets/images/sent_message.svg",
+              "assets/images/send_email.svg",
             ),
           ),
           Align(
