@@ -591,3 +591,36 @@ showNoSelectDate(){
 }
 
 
+showResetBike(BuildContext context, BikeProvider bikeProvider){
+  SmartDialog.show(widget: EvieDoubleButtonDialog(
+      title: "Reset biker",
+      childContent: Text("Are you sure you want to reset bike?"),
+      leftContent: "Cancel",
+      rightContent: "Yes",
+      onPressedLeft: (){SmartDialog.dismiss();},
+      onPressedRight: () async {
+        SmartDialog.dismiss();
+        SmartDialog.showLoading(backDismiss: false);
+       var result =  await bikeProvider.resetBike(bikeProvider.currentBikeModel!.deviceIMEI!);
+
+       if(result == true){
+         SmartDialog.dismiss();
+         SmartDialog.show(widget: EvieSingleButtonDialog(
+             title: "Success",
+             content: "Bike reset",
+             rightContent: "Ok",
+             onPressedRight: (){
+               SmartDialog.dismiss();
+             changeToUserHomePageScreen(context);}));
+       }else{
+         SmartDialog.dismiss();
+         SmartDialog.show(widget: EvieSingleButtonDialog(
+             title: "Failed",
+             content: "Try again",
+             rightContent: "Ok",
+             onPressedRight: (){
+               SmartDialog.dismiss();}));
+       }
+      }));
+}
+

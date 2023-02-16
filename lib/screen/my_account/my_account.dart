@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
@@ -232,7 +233,8 @@ class _MyAccountState extends State<MyAccount> {
                       color: Color(0xff7A7A79),
                       fontWeight: FontWeight.w700),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),

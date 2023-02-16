@@ -763,6 +763,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
+                changeToResetBike(context);
               },
               child: Container(
                 height: 44.h,

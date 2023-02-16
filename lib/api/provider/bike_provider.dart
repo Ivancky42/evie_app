@@ -988,14 +988,14 @@ class BikeProvider extends ChangeNotifier {
   deleteBike(String imei) async {
     try {
 
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection(usersCollection)
           .doc(currentUserModel?.uid)
           .collection(bikesCollection)
           .doc(imei)
           .delete();
 
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(imei)
           .collection(usersCollection)
@@ -1015,6 +1015,37 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
+  resetBike(String imei) async {
+    try {
+
+      await Future.forEach(bikeUserList.keys, (key) async{
+        await FirebaseFirestore.instance
+            .collection(bikesCollection)
+            .doc(imei)
+            .collection(usersCollection)
+            .doc(key.toString())
+            .delete();
+
+        await FirebaseFirestore.instance
+            .collection(usersCollection)
+            .doc(key.toString())
+            .collection(bikesCollection)
+            .doc(imei)
+            .delete();
+      });
+
+      currentBikeIMEI = null;
+      currentBikeModel = null;
+      notifyListeners();
+
+      controlBikeList("first");
+
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
 
   /// ****************************************** ///
   /// Plan Subscription
