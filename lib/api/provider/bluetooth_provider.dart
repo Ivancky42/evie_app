@@ -6,10 +6,12 @@ import 'package:evie_test/bluetooth/command.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:hex/hex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../bluetooth/modelResult.dart';
 
+import '../../widgets/evie_single_button_dialog.dart';
 import '../dialog.dart';
 import '../model/bike_model.dart';
 
@@ -430,6 +432,8 @@ class BluetoothProvider extends ChangeNotifier {
         return PermissionStatus.denied;
       }
       else if (bleScanStatus.isPermanentlyDenied) {
+        ///Prompt dialog and redirect user to enable bluetooth permission
+        showBluetoothNotAuthorized();
         return PermissionStatus.permanentlyDenied;
       }
       else if (bleScanStatus.isLimited) {
@@ -446,7 +450,9 @@ class BluetoothProvider extends ChangeNotifier {
       return PermissionStatus.denied;
     }
     else if (bleConnectStatus.isPermanentlyDenied) {
+      showBluetoothNotAuthorized();
       return PermissionStatus.permanentlyDenied;
+      ///Prompt dialog and redirect user to enable bluetooth permission
     }
     else if (bleConnectStatus.isLimited) {
       return PermissionStatus.limited;

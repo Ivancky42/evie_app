@@ -61,8 +61,7 @@ showBluetoothNotAuthorized() {
           content: "Bluetooth Permission is off",
           rightContent: "OK",
           onPressedRight: () {
-            SmartDialog
-                .dismiss();
+           ///Redirect user to enable bluetooth permission.
           }));
 }
 

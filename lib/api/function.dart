@@ -14,7 +14,8 @@ checkBleStatusAndConnectDevice(BluetoothProvider _bluetoothProvider, BikeProvide
       showBluetoothNotSupport();
       break;
     case BleStatus.unauthorized:
-      showBluetoothNotAuthorized();
+      //showBluetoothNotAuthorized();
+      _bluetoothProvider.handlePermission();
       break;
     case BleStatus.locationServicesDisabled:
       showLocationServiceDisable();

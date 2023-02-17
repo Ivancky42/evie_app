@@ -57,17 +57,7 @@ checkBLEPermissionAndAction(BluetoothProvider _bluetoothProvider, DeviceConnectR
               }));
       break;
     case BleStatus.unauthorized:
-      SmartDialog.show(
-          keepSingle:
-          true,
-          widget: EvieSingleButtonDialogCupertino(
-              title: "Error",
-              content: "Bluetooth Permission is off",
-              rightContent: "OK",
-              onPressedRight: () {
-                SmartDialog
-                    .dismiss();
-              }));
+      _bluetoothProvider.handlePermission();
       break;
     case BleStatus.locationServicesDisabled:
       SmartDialog.show(
