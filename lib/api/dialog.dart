@@ -17,6 +17,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:open_settings/open_settings.dart';
 
 import '../screen/my_bike_setting/my_bike_function.dart';
 import '../widgets/evie_double_button_dialog.dart';
@@ -56,11 +57,13 @@ showBluetoothNotAuthorized() {
   SmartDialog.show(
       keepSingle:
       true,
-      widget: EvieSingleButtonDialogCupertino(
+      widget: EvieSingleButtonDialog(
           title: "Error",
-          content: "Bluetooth Permission is off",
+          content: "Bluetooth permission is off, turn on bluetooth permission in setting",
           rightContent: "OK",
           onPressedRight: () {
+            SmartDialog.dismiss();
+            OpenSettings.openBluetoothSetting();
            ///Redirect user to enable bluetooth permission.
           }));
 }

@@ -13,6 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
+import '../../api/fonts.dart';
 import '../../api/navigator.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
@@ -62,19 +63,19 @@ class _TurnOnNotificationsState extends State<TurnOnNotifications> {
 
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
-                      child: Text(
+                      child:
+
+                      Text(
                         "Stay in the know with notifications",
-                        style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
+                        style: EvieTextStyles.h2,
                       ),
                     ),
 
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 113.h),
-                      child: Text(
-                        "Get updates about updates, offers and more... "
-                            "You can always manage your notification categories in Setting anytime.",
-                        style: TextStyle(fontSize: 16.sp,height: 1.5.h),
-                      ),
+                      child:    Text(           "Get updates about updates, offers and more... "
+                          "You can always manage your notification categories in Setting anytime.", style: EvieTextStyles.body18,),
+                     
                     ),
 
                   ],
@@ -84,7 +85,7 @@ class _TurnOnNotificationsState extends State<TurnOnNotifications> {
                   alignment: Alignment.bottomCenter,
                   child: Padding(
                     padding:
-                    EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.buttonWord_ButtonBottom),
+                    EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.button_Bottom),
                     child:  EvieButton(
                       width: double.infinity,
                       height: 48.h,
@@ -107,25 +108,6 @@ class _TurnOnNotificationsState extends State<TurnOnNotifications> {
                   ),
                 ),
 
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(150.w,25.h,150.w,EvieLength.buttonWord_WordBottom),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: TextButton(
-                        child: Text(
-                          "Maybe Later",
-                          softWrap: false,
-                          style: TextStyle(fontSize: 12.sp,color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
-                        ),
-                        onPressed: () {
-                          changeToCongratulationScreen(context);
-                        },
-                      ),
-                    ),
-                  ),
-                ),
               ]
           )
       ),

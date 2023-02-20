@@ -30,21 +30,11 @@ class ResetBike extends StatefulWidget{
 
 class _ResetBikeState extends State<ResetBike> {
 
-
-  LinkedHashMap bikeUserList = LinkedHashMap<String, BikeUserModel>();
-
-  late NotificationProvider _notificationProvider;
   late BikeProvider _bikeProvider;
-
-  final Color _thumbColor = EvieColors.thumbColorTrue;
-
 
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
-    _notificationProvider = Provider.of<NotificationProvider>(context);
-
-    var currentNotificationSettings = _bikeProvider.userBikeList[_bikeProvider.currentBikeModel?.deviceIMEI];
 
     return WillPopScope(
       onWillPop: () async {

@@ -11,6 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
+import '../../api/fonts.dart';
 import '../../api/navigator.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
@@ -56,9 +57,10 @@ class _TurnOnLocationState extends State<TurnOnLocation> {
 
             Padding(
               padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
-              child: Text(
+              child:
+              Text(
                 "First Up, allow Location",
-                style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
+                style: EvieTextStyles.h2,
               ),
             ),
             SizedBox(
@@ -66,10 +68,9 @@ class _TurnOnLocationState extends State<TurnOnLocation> {
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 113.h),
-              child: Text(
-                "EVIE need to use your location to track and connect with your EVIE bike.",
-                style: TextStyle(fontSize: 16.sp,height: 1.5.h),
-              ),
+              child:
+              Text(  "EVIE need to use your location to track and connect with your EVIE bike.", style: EvieTextStyles.body18,),
+
             ),
 
             Padding(
@@ -91,13 +92,9 @@ class _TurnOnLocationState extends State<TurnOnLocation> {
                 child:  EvieButton(
                   width: double.infinity,
                   height: 48.h,
-                  child: Text(
+                  child:Text(
                     "Allow Location",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                        fontWeight: FontWeight.w700
-                    ),
+                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                   ),
                   onPressed: () async {
                     if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {

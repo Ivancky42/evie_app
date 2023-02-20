@@ -41,8 +41,6 @@ class _SignInMethodState extends State<SignInMethod> {
 
       child:Scaffold(
         appBar: EvieAppbar_Back(onPressed: (){
-          SmartDialog.show(widget:     EvieSingleButtonDialog(title: "title", content: "content", rightContent: "rightContent", onPressedRight: (){}));
-
           changeToWelcomeScreen(context);}),
 
         body: SingleChildScrollView(

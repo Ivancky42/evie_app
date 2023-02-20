@@ -450,9 +450,9 @@ class BluetoothProvider extends ChangeNotifier {
       return PermissionStatus.denied;
     }
     else if (bleConnectStatus.isPermanentlyDenied) {
+      ///Prompt dialog and redirect user to enable bluetooth permission
       showBluetoothNotAuthorized();
       return PermissionStatus.permanentlyDenied;
-      ///Prompt dialog and redirect user to enable bluetooth permission
     }
     else if (bleConnectStatus.isLimited) {
       return PermissionStatus.limited;

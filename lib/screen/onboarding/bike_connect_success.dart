@@ -3,6 +3,7 @@ import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -103,11 +104,14 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                       child:Stack(
                         alignment: Alignment.center,
                         children: <Widget>[
-
-                          const Image(
-                            fit: BoxFit.fitWidth,
-                            image: AssetImage("assets/images/bike_HPStatus/bike_normal.png"),
+                          SvgPicture.asset(
+                            ///Animation
+                            "assets/images/bike_fall.svg",
                           ),
+                          // const Image(
+                          //   fit: BoxFit.fitWidth,
+                          //   image: AssetImage("assets/images/bike_HPStatus/bike_normal.png"),
+                          // ),
                           IconButton(
                             iconSize: 100.h,
                             icon: Image.asset("assets/icons/connect_success.png"),

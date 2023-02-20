@@ -1,11 +1,6 @@
 import 'dart:collection';
-import 'dart:io';
-import 'dart:math';
-import 'package:crclib/catalog.dart';
-import 'package:crclib/crclib.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/screen/user_home_page/add_new_bike/add_new_bike.dart';
 import 'package:evie_test/screen/user_home_page/free_plan/free_plan.dart';
@@ -19,20 +14,13 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
-import 'package:evie_test/widgets/evie_button.dart';
-import '../api/backend/stripe_api_caller.dart';
 import '../api/provider/auth_provider.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/provider/current_user_provider.dart';
 import '../api/provider/notification_provider.dart';
 import '../api/snackbar.dart';
-import '../api/todays_quote.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import '../bluetooth/modelResult.dart';
 import '../main.dart';
-import 'user_home_page/user_home_page.dart';
-import 'login_page.dart';
-import 'onboarding/lets_go.dart';
 
 ///Default user home page if login is true(display bicycle info)
 class UserHomeGeneral extends StatefulWidget {
@@ -79,7 +67,6 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       Future.delayed(Duration.zero, () {
         changeToFeedsScreen(context);
       });
-
 
       /*
       ///Future builder

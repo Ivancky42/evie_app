@@ -1,4 +1,5 @@
 import 'package:evie_test/api/length.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/screen/trip_history/trip_history.dart';
 import 'package:evie_test/screen/user_home_page/free_plan/free_plan.dart';
@@ -36,10 +37,10 @@ class _UserHomePageState extends State<UserHomePage> {
 
   ///Body Screen navigation by bottom navigation bar
   final screen = [
-    UserHomeGeneral(),
-    TripHistory(),
-    Feeds(),
-    MyAccount(),
+    const UserHomeGeneral(),
+    const TripHistory(),
+    const Feeds(),
+    const MyAccount(),
   ];
 
 
@@ -52,43 +53,18 @@ class _UserHomePageState extends State<UserHomePage> {
         body: screen[currentIndex],
 
         bottomNavigationBar: BottomAppBar(
-
+         // height: 80.h,
           child: BottomNavigationBar(
             //For disable animation
             //type: BottomNavigationBarType.fixed,
-            iconSize: 23,
-            selectedItemColor: Color(0xff69489D),
+         //   iconSize: 15,
+            //selectedItemColor: Color(0xff69489D),
             currentIndex: currentIndex,
             onTap: (index) {
               setState(() {
                 currentIndex = index;
-
-                ///Change title according pages index
-                switch (index) {
-                  case 0:
-                    {
-                      _title = '';
-                    }
-                    break;
-                  case 1:
-                    {
-                      _title = '';
-                    }
-                    break;
-                  case 2:
-                    {
-                      _title = '';
-                    }
-                    break;
-                  case 3:
-                    {
-                      _title = '';
-                    }
-                    break;
-                }
               });
             },
-
             items: [
               BottomNavigationBarItem(
                 icon: Container(
@@ -110,6 +86,7 @@ class _UserHomePageState extends State<UserHomePage> {
               ),
               BottomNavigationBarItem(
                 icon: Container(
+       //          alignment: Alignment(0,-1.0),
                   child: SvgPicture.asset(
                     "assets/buttons/statistic.svg",
                   ),
@@ -117,6 +94,7 @@ class _UserHomePageState extends State<UserHomePage> {
                   height: EvieLength.bottom_bar_icon_height,
                 ),
                 activeIcon: Container(
+      //            alignment: Alignment(0,-1.0),
                   child: SvgPicture.asset(
                     "assets/buttons/statistic_selected.svg",
                   ),
@@ -126,24 +104,7 @@ class _UserHomePageState extends State<UserHomePage> {
                 tooltip: 'User Profile',
                 label: '',
               ),
-              // BottomNavigationBarItem(
-              //   icon: Container(
-              //     child: SvgPicture.asset(
-              //       "assets/buttons/bike.svg",
-              //     ),
-              //     //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-              //     height: EvieLength.bottom_bar_icon_height,
-              //   ),
-              //   activeIcon: Container(
-              //     child: SvgPicture.asset(
-              //       "assets/buttons/bike_selected.svg",
-              //     ),
-              //     //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-              //     height: EvieLength.bottom_bar_icon_height,
-              //   ),
-              //   tooltip: 'User Profile',
-              //   label: '',
-              // ),
+
               BottomNavigationBarItem(
                 icon: Container(
                   child: SvgPicture.asset(
@@ -185,3 +146,18 @@ class _UserHomePageState extends State<UserHomePage> {
         ));
   }
 }
+
+// class CustomBottomNavigationBarItem extends BottomNavigationBarItem {
+//   CustomBottomNavigationBarItem({required Widget icon, required Widget title})
+//       : super(
+//     icon: Column(
+//       mainAxisAlignment: MainAxisAlignment.start,
+//       children: [icon],
+//     ),
+//   );
+// }
+//
+// CustomBottomNavigationBarItem(
+// icon: Icon(Icons.home),
+// title: Text('Home'),
+// ),

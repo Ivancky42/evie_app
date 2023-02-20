@@ -13,6 +13,7 @@ import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../api/colours.dart';
+import '../../api/fonts.dart';
 import '../../api/length.dart';
 import '../../api/navigator.dart';
 
@@ -54,19 +55,18 @@ class _LetsGoState extends State<LetsGo> {
             children: [
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w,76.h,16.w,4.h),
-                child: Text(
-                  //  "Hi ${_currentUserProvider.currentUserModel!.name}, thanks for choosing EVIE!",
+                child:  Text(
                   "Stay closeby with your bike",
-                  style: TextStyle(fontSize: 24.sp),
+                  style: EvieTextStyles.h2,
                 ),
               ),
 
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w,4.h,16.w,4.h),
                 child: Container(
-                  child: Text(
+                  child:   Text(
                     "Assemble your bike fully and keep your bike closely with you for the following steps.",
-                    style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                    style: EvieTextStyles.body18,
                   ),
                 ),
               ),
@@ -76,7 +76,7 @@ class _LetsGoState extends State<LetsGo> {
 
                   child: TextButton(
                       onPressed: (){
-
+                        Uri.http("www.google.com");
                       },
                       child: Text("How to assemble my bike?",
                         style: TextStyle( fontSize: 16.sp, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),)),
@@ -103,13 +103,9 @@ class _LetsGoState extends State<LetsGo> {
               width: double.infinity,
               child: EvieButton(
                 width: double.infinity,
-                child: Text(
-                  "I'm Ready",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.sp,
-                      fontWeight: FontWeight.w700
-                  ),
+                child:Text(
+                  "I'm ready",
+                  style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                 ),
                 onPressed: () async {
                   //changeToTurnOnLocationScreen(context);
@@ -139,12 +135,12 @@ class _LetsGoState extends State<LetsGo> {
                   width: double.infinity,
                   child: TextButton(
                         child: Text(
-                          "Maybe Later",
+                          "I'm not ready",
                           softWrap: false,
                           style: TextStyle(fontSize: 12.sp,color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                         ),
                         onPressed: () {
-                          changeToNotificationsControlScreen(context);
+                          changeToCongratulationScreen(context);
                         },
                       ),
                 ),

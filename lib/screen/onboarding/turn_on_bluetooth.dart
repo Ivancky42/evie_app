@@ -66,7 +66,7 @@ class _TurnOnBluetoothState extends State<TurnOnBluetooth> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
                       child: Text(
-                        "Turn on Bluetooth",
+                        "Allow Bluetooth",
                         style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
                       ),
                     ),
@@ -74,7 +74,8 @@ class _TurnOnBluetoothState extends State<TurnOnBluetooth> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 113.h),
                       child: Text(
-                        "EVIE will use Bluetooth to stay connect with your EVIE bike.",
+                        "Bluetooth is required to connect your device with your bike. "
+                            "This allows EVIE app provide you with real-time information, such as speed, distance, and more.",
                         style: TextStyle(fontSize: 16.sp,height: 1.5.h),
                       ),
                     ),
@@ -83,7 +84,7 @@ class _TurnOnBluetoothState extends State<TurnOnBluetooth> {
                       padding: EdgeInsets.fromLTRB(45.w, 0.h, 45.2.w,221.h),
                       child: Center(
                         child: SvgPicture.asset(
-                          "assets/images/allow_bluetooth.svg",
+                          "assets/images/bike_gointo_phone.svg",
 
                         ),
                       ),

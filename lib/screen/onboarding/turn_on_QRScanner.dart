@@ -76,7 +76,7 @@ class _TurnOnQRScannerState extends State<TurnOnQRScanner> {
                       padding: EdgeInsets.fromLTRB(45.w, 0.h, 45.2.w,221.h),
                       child:  Center(
                         child: SvgPicture.asset(
-                            "assets/images/allow_camera.svg",
+                            "assets/images/scan_qr.svg",
                         ),
                       ),
                     ),
