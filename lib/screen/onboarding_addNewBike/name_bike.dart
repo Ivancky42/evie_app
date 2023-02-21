@@ -124,7 +124,7 @@ class _NameBikeState extends State<NameBike> {
 
                               if(_bikeProvider.isAddBike == true){
                                _bikeProvider.setIsAddBike(false);
-                               changeToCongratsBikeAdded(context, _bikeNameController.text.trim());
+                               //changeToCongratsBikeAdded(context, _bikeNameController.text.trim());
 
                               }else{
                                 changeToTurnOnNotificationsScreen(context);

@@ -1,5 +1,6 @@
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/dialog.dart';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
 import 'package:evie_test/widgets/custom_divider.dart';
@@ -29,9 +30,11 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
   late BikeProvider _bikeProvider;
   late FirmwareProvider _firmwareProvider;
   late BluetoothProvider _bluetoothProvider;
+
   DeviceConnectResult? deviceConnectResult;
   String? label;
   String? pageNavigate;
+
   final TextEditingController _bikeNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -92,11 +95,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                             children: [
                               Text(
                                 label!,
-                                style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff5F6060)
-                                ),
+                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                               ),
                               deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
                                 "assets/icons/bluetooth_disconnect_filled.svg",
@@ -111,7 +110,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                           ),
                           Text(
                             _bikeProvider.currentBikeModel?.deviceName ?? "",
-                            style: TextStyle(fontSize: 16.sp),
+                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                           )
                         ],
                       ),
@@ -175,11 +174,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                             children: [
                               Text(
                                 label!,
-                                style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff5F6060)
-                                ),
+                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                               ),
                               deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
                                 "assets/icons/bluetooth_disconnect_filled.svg",
@@ -194,7 +189,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                           ),
                           Text(
                             _bikeProvider.rfidList.length.toString() + " " + label!,
-                            style: TextStyle(fontSize: 16.sp),
+                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                           )
                         ],
                       ),
@@ -249,11 +244,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                             children: [
                               Text(
                                 label!,
-                                style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff5F6060)
-                                ),
+                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                               ),
                               deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
                                 "assets/icons/bluetooth_disconnect_filled.svg",
@@ -268,7 +259,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                           ),
                           Text(
                             _bikeProvider.currentBikeModel?.movementSetting?.sensitivity   ?? "None",
-                            style: TextStyle(fontSize: 16.sp),
+                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                           )
                         ],
                       ),
@@ -313,11 +304,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                             children: [
                               Text(
                                 label!,
-                                style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff5F6060)
-                                ),
+                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                               ),
                               deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
                                 "assets/icons/bluetooth_disconnect_filled.svg",
@@ -333,8 +320,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                           Row(
                             children: [
                               Text(
-                                "Pro Plan",
-                                style: TextStyle(fontSize: 16.sp),
+                                _bikeProvider.isPlanSubscript == false ? "Starter" : "Premium",
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                               ),
                               SizedBox(width: 8.17.w,),
                               SvgPicture.asset(
@@ -396,11 +383,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                               children: [
                                 Text(
                                   label!,
-                                  style: TextStyle(
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xff5F6060)
-                                  ),
+                                  style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                                 ),
                                 deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
                                   "assets/icons/bluetooth_disconnect_filled.svg",
@@ -417,7 +400,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                               children: [
                                 Text(
                                   "${_bikeProvider.bikeUserList.length} Riders",
-                                  style: TextStyle(fontSize: 16.sp),
+                                  style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                                 ),
                                 SizedBox(width: 8.17.w,),
                                 SvgPicture.asset(
@@ -474,7 +457,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                             children: [
                               Text(
                                 label!,
-                                style: TextStyle(fontSize: 16.sp),
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                               ),
                               SizedBox(width: 8.17.w,),
                               SvgPicture.asset(
@@ -525,7 +508,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                             children: [
                               Text(
                                 label!,
-                                style: TextStyle(fontSize: 16.sp),
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                               ),
                               SizedBox(width: 8.17.w,),
                               SvgPicture.asset(
@@ -576,7 +559,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                             children: [
                               Text(
                                 label!,
-                                style: TextStyle(fontSize: 16.sp),
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                               ),
                               SizedBox(width: 8.17.w,),
                               SvgPicture.asset(
@@ -618,7 +601,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                           children: [
                             Text(
                               label!,
-                              style: TextStyle(fontSize: 16.sp),
+                              style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                             ),
                           ],
                         ),
@@ -671,11 +654,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                               children: [
                                 Text(
                                   label!,
-                                  style: TextStyle(
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xff5F6060)
-                                  ),
+                                  style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                                 ),
                                 deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
                                   "assets/icons/bluetooth_disconnect_filled.svg",
@@ -692,7 +671,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                               children: [
                                 Text(
                                   _firmwareProvider.currentFirmVer ?? "Not available",
-                                  style: TextStyle(fontSize: 16.sp),
+                                  style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                                 ),
                                 SizedBox(width: 4.w,),
                                 Visibility(
@@ -704,7 +683,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                                       ),
                                       child: Padding(
                                         padding:EdgeInsets.fromLTRB(6.w,4.h,6.w,4.h),
-                                        child: Text("Update Available", style: TextStyle(fontSize: 12.sp, color: EvieColors.grayishWhite),),
+                                        child: Text("Update Available",  style: EvieTextStyles.body12.copyWith(color: EvieColors.grayishWhite),),
                                       ),
                                     )),
                               ],
@@ -742,7 +721,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                           children: [
                             Text(
                               label!,
-                              style: TextStyle(fontSize: 16.sp),
+                              style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                             ),
                           ],
                         ),
@@ -776,7 +755,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                           children: [
                             Text(
                               label!,
-                              style: TextStyle(fontSize: 16.sp),
+                              style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                             ),
                           ],
                         ),

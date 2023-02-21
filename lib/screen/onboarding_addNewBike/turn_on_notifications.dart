@@ -190,7 +190,7 @@ class _TurnOnNotificationsState extends State<TurnOnNotifications> {
 
                           SmartDialog.dismiss();
 
-                          changeToCongratulationScreen(context);
+                          changeToCongratsBikeAdded(context, _bikeProvider.currentBikeModel!.deviceIMEI!);
                         }catch(e){
                           SmartDialog.show(
                               widget: EvieSingleButtonDialog(

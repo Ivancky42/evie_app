@@ -1,8 +1,7 @@
 
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/onboarding/bike_connect_failed.dart';
-import 'package:evie_test/screen/onboarding/bike_connect_success.dart';
+
 import 'package:evie_test/widgets/evie_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';

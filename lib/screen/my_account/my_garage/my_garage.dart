@@ -51,7 +51,7 @@ class _MyGarageState extends State<MyGarage> {
 
     return WillPopScope(
       onWillPop: () async {
-
+        changeToMyAccount(context);
         return false;
       },
       child: Scaffold(

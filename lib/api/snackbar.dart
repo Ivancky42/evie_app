@@ -69,25 +69,20 @@ showConnectedToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: Wrap(
-        children: [
-          Container(
-            width: 358.w,
-            alignment: Alignment.bottomLeft,
-            child: Row(
-              children: [
-                SvgPicture.asset("assets/icons/check.svg"),
-                SizedBox(width: 4.w,),
-                Text(
-                  "Bike Connected.",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ],
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            SvgPicture.asset("assets/icons/check.svg"),
+            SizedBox(width: 4.w,),
+            Text(
+              "Bike Connected.",
+              style: TextStyle(
+                color: Colors.white,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       duration: const Duration(seconds: 2),
     ),
@@ -99,38 +94,32 @@ showConnectingToast(context) {
     SnackBar(
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
-          borderRadius:
-          BorderRadius.all(Radius.circular(10)
-          )
+          borderRadius: BorderRadius.all(Radius.circular(10))
       ),
-      content: Wrap(
-        children: [
-          Container(
-            width: 358.w,
-            alignment: Alignment.bottomLeft,
-            child: Row(
-              children: [
-                SvgPicture.asset("assets/icons/loading.svg"),
-                SizedBox(width: 4.w,),
-                Container(
-                  width: 300.w,
-                  child: Text(
-                    "Connecting bike.",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                    ),
-                  ),
-                )
-              ],
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            SvgPicture.asset("assets/icons/loading.svg"),
+            SizedBox(width: 4.w,),
+            Text(
+              "Connecting bike.",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.sp,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       duration: const Duration(seconds: 30),
     ),
   );
 }
+
+
+
+
 
 showScanTimeoutToast(context) {
   ScaffoldMessenger.of(context).showSnackBar(
@@ -141,29 +130,24 @@ showScanTimeoutToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: Wrap(
-        children: [
-          Container(
-            width: 358.w,
-            alignment: Alignment.bottomLeft,
-            child: Row(
-              children: [
-                Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
-                SizedBox(width: 4.w,),
-                Container(
-                  width: 300.w,
-                  child: Text(
-                    "Fail to connect your bike. Please stay close to your bike and connect again.",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
+            SizedBox(width: 4.w,),
+            Container(
+              width: 300.w,
+              child: Text(
+                "Fail to connect your bike. Please stay close to your bike and connect again.",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
       duration: const Duration(seconds: 2),
     ),
@@ -179,29 +163,24 @@ showScanErrorToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: Wrap(
-        children: [
-          Container(
-            width: 358.w,
-            alignment: Alignment.bottomLeft,
-            child: Row(
-              children: [
-                Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
-                SizedBox(width: 4.w,),
-                Container(
-                  width: 300.w,
-                  child: Text(
-                    "Scan Error. Please re-enabled your bluetooth.",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
+            SizedBox(width: 4.w,),
+            Container(
+              width: 300.w,
+              child: Text(
+                "Scan Error. Please re-enabled your bluetooth.",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
       duration: const Duration(seconds: 2),
     ),
@@ -217,29 +196,24 @@ showConnectErrorToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: Wrap(
-        children: [
-          Container(
-            width: 358.w,
-            alignment: Alignment.bottomLeft,
-            child: Row(
-              children: [
-                Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
-                SizedBox(width: 4.w,),
-                Container(
-                  width: 300.w,
-                  child: Text(
-                    "Connect Error. Please try again.",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
+            SizedBox(width: 4.w,),
+            Container(
+              width: 300.w,
+              child: Text(
+                "Connect Error. Please try again.",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
       duration: const Duration(seconds: 2),
     ),
@@ -255,29 +229,24 @@ showDisconnectedToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: Wrap(
-        children: [
-          Container(
-            width: 358.w,
-            alignment: Alignment.bottomLeft,
-            child: Row(
-              children: [
-                Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
-                SizedBox(width: 4.w,),
-                Container(
-                  width: 300.w,
-                  child: Text(
-                    "Bike Disconnected.",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
+            SizedBox(width: 4.w,),
+            Container(
+              width: 300.w,
+              child: Text(
+                "Bike Disconnected.",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
       duration: const Duration(seconds: 2),
     ),
@@ -293,28 +262,23 @@ showControlAdmissionToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: Wrap(
-        children: [
-          Container(
-            width: 358.w,
-            alignment: Alignment.bottomLeft,
-            child: Row(
-              children: [
-                SizedBox(width: 4.w,),
-                Container(
-                  width: 300.w,
-                  child: Text(
-                    "Your account doesn't have control admission for this setting.",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            SizedBox(width: 4.w,),
+            Container(
+              width: 300.w,
+              child: Text(
+                "Your account doesn't have control admission for this setting.",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
       duration: const Duration(seconds: 2),
     ),
@@ -330,28 +294,23 @@ showUpgradePlanToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: Wrap(
-        children: [
-          Container(
-            width: 358.w,
-            alignment: Alignment.bottomLeft,
-            child: Row(
-              children: [
-                SizedBox(width: 4.w,),
-                Container(
-                  width: 300.w,
-                  child: Text(
-                    "This feature only available for pro plan user. You can upgrade your plan in setting page. ",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            SizedBox(width: 4.w,),
+            Container(
+              width: 300.w,
+              child: Text(
+                "This feature only available for pro plan user. You can upgrade your plan in setting page. ",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
       duration: const Duration(seconds: 2),
     ),

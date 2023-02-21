@@ -22,14 +22,16 @@ import '../../api/provider/bluetooth_provider.dart';
 import '../../widgets/evie_progress_indicator.dart';
 
 
-class Congratulation extends StatefulWidget {
-  const Congratulation({Key? key}) : super(key: key);
+class CongratsBikeAdded extends StatefulWidget {
+
+  final String bikeName;
+  const CongratsBikeAdded(this.bikeName,{Key? key}) : super(key: key);
 
   @override
-  _CongratulationState createState() => _CongratulationState();
+  _CongratsBikeAddedState createState() => _CongratsBikeAddedState();
 }
 
-class _CongratulationState extends State<Congratulation> {
+class _CongratsBikeAddedState extends State<CongratsBikeAdded> {
 
   late AuthProvider _authProvider;
 
@@ -63,7 +65,7 @@ class _CongratulationState extends State<Congratulation> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 87.h),
                       child: Text(
-                        "You have successfully added \"Bike Name\". Get ready to track your rides, access all the fun features, and have an amazing time. \n \n"
+                        "You have successfully added ${widget.bikeName.toString().trim()}. Get ready to track your rides, access all the fun features, and have an amazing time. \n \n"
                             "If there's anything we can help with, just let us know. Happy riding!",
                         style: TextStyle(fontSize: 16.sp,height: 1.5.h),
                       ),
@@ -85,8 +87,7 @@ class _CongratulationState extends State<Congratulation> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding:
-                    EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.button_Bottom),
+                    padding: EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.button_Bottom),
                     child:  EvieButton(
                       width: double.infinity,
                       height: 48.h,

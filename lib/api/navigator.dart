@@ -1,19 +1,12 @@
 import 'package:evie_test/screen/my_account/my_garage/my_garage.dart';
-import 'package:evie_test/screen/my_bike_setting/detection_sensitivity.dart';
+import 'package:evie_test/screen/my_bike_setting/detection_sensitivity/detection_sensitivity.dart';
 import 'package:evie_test/screen/my_bike_setting/firmware/firmware_information.dart';
 import 'package:evie_test/screen/my_bike_setting/firmware/firmware_update_failed.dart';
-import 'package:evie_test/screen/my_bike_setting/motion_sensitivity.dart';
+import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/motion_sensitivity.dart';
 
 import 'package:evie_test/screen/my_account/edit_profile.dart';
 import 'package:evie_test/screen/my_account/my_account.dart';
-import 'package:evie_test/screen/onboarding/email_preference_control.dart';
-import 'package:evie_test/screen/onboarding/lets_go.dart';
-import 'package:evie_test/screen/onboarding/name_bike.dart';
-import 'package:evie_test/screen/onboarding/qr_add_manually.dart';
-import 'package:evie_test/screen/onboarding/turn_on_QRScanner.dart';
-import 'package:evie_test/screen/onboarding/turn_on_bluetooth.dart';
-import 'package:evie_test/screen/onboarding/turn_on_location.dart';
-import 'package:evie_test/screen/onboarding/turn_on_notifications.dart';
+
 
 import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/screen/test_ble.dart';
@@ -22,8 +15,6 @@ import 'package:evie_test/screen/verify_email.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-
-import '../screen/add_bike/congrats_bike_added.dart';
 
 import '../screen/feeds/feeds.dart';
 import '../screen/my_account/push_notification/push_notification.dart';
@@ -44,11 +35,19 @@ import '../screen/my_bike_setting/share_bike/user_not_found.dart';
 import '../screen/my_bike_setting/sos_center/sos_center.dart';
 import '../screen/my_bike_setting/subscription/current_plan.dart';
 import '../screen/my_bike_setting/subscription/manage_plan.dart';
-import '../screen/onboarding/bike_connect_failed.dart';
-import '../screen/onboarding/bike_connect_success.dart';
-import '../screen/onboarding/congratulation.dart';
-import '../screen/onboarding/qr_scanning.dart';
 
+import '../screen/onboarding_addNewBike/bike_connect_failed.dart';
+import '../screen/onboarding_addNewBike/bike_connect_success.dart';
+import '../screen/onboarding_addNewBike/congrats_bike_added.dart';
+import '../screen/onboarding_addNewBike/email_preference_control.dart';
+import '../screen/onboarding_addNewBike/stay_close_to_bike.dart';
+import '../screen/onboarding_addNewBike/name_bike.dart';
+import '../screen/onboarding_addNewBike/qr_add_manually.dart';
+import '../screen/onboarding_addNewBike/qr_scanning.dart';
+import '../screen/onboarding_addNewBike/turn_on_QRScanner.dart';
+import '../screen/onboarding_addNewBike/turn_on_bluetooth.dart';
+import '../screen/onboarding_addNewBike/turn_on_location.dart';
+import '../screen/onboarding_addNewBike/turn_on_notifications.dart';
 import '../screen/signup_method.dart';
 import '../screen/signup_page.dart';
 
@@ -155,21 +154,13 @@ void changeToTripHistory(BuildContext context){
     ),
   );
 }
-void changeToLetsGoScreen(BuildContext context) {
+void changeToStayCloseToBike(BuildContext context) {
   Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const LetsGo())
+      builder: (context) => const StayCloseToBike())
   );
 }
 
-void changeToCongratulationScreen(BuildContext context) {
-  Navigator.pushReplacement(context,
-  PageTransition(
-    type: PageTransitionType.rightToLeft,
-    child: const Congratulation(),
-    duration: const Duration(milliseconds: 300),
-  ),
-  );
-}
+
 
 void changeToNameBikeScreen(BuildContext context) {
   Navigator.pushReplacement(context,

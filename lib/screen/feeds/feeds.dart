@@ -27,6 +27,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../api/colours.dart';
 import '../../api/dialog.dart';
+import '../../api/fonts.dart';
 import '../../api/function.dart';
 import '../../api/model/bike_model.dart';
 import '../../api/navigator.dart';
@@ -70,7 +71,7 @@ class _FeedsState extends State<Feeds> {
                 child: Container(
                   child: Text(
                     "Feeds",
-                    style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w700),
+                    style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
                   ),
                 ),
               ),

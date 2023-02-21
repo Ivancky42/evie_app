@@ -35,70 +35,88 @@ class EvieTextFormField extends StatefulWidget {
 
 class _EvieTextFormFieldState extends State<EvieTextFormField> {
   late FocusNode focusNode;
+  Color borderColor = Colors.grey;
 
   @override
   void initState() {
     focusNode = FocusNode();
     focusNode.addListener(() {
-      setState(() {});
+      setState(() {
+        borderColor = focusNode.hasFocus ? EvieColors.primaryColor : Colors.grey;
+      });
     });
     super.initState();
   }
 
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        child:TextFormField(
+
+        child:Container(
+
+          // decoration: BoxDecoration(
+          //   border: Border.all(color: borderColor, width: 1.5,),
+          //   borderRadius: BorderRadius.circular(10.0),
+          // ),
+
+          child: TextFormField(
       focusNode: focusNode,
       controller: widget.controller,
       keyboardType: widget.keyboardType,
       obscureText: widget.obscureText!,
       decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
-          hintText: widget.hintText,
-          labelText: widget.labelText,
-          hintStyle: TextStyle(fontSize: 10.sp, color:EvieColors.darkGrayish),
-          labelStyle: TextStyle(fontSize: 13.sp, color: EvieColors.darkGrayish),
-          filled: true,
-          errorStyle: TextStyle(
-            color: Theme.of(context).errorColor, // or any other color
-          ),
-          //fillColor: widget.focusNode!.hasFocus ? Colors.red : ThemeChangeNotifier().isDarkMode(context) ?  Color(0xff3F3F3F) : Color(0xffDFE0E0),
-          fillColor: focusNode.hasFocus ? EvieColors.thumbColorTrue : ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.thumbColorTrue,
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                width: 0.1,
-                color: ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.thumbColorTrue,), //<-- SEE HERE
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+            hintText: widget.hintText,
+            labelText: widget.labelText,
 
-          focusColor: ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray: EvieColors.thumbColorTrue,
+            hintStyle: TextStyle(fontSize: 10.sp, color:EvieColors.darkGrayish),
+            labelStyle: TextStyle(fontSize: 13.sp, color: EvieColors.darkGrayish),
+            filled: true,
+            errorStyle: TextStyle(
+              color: Theme.of(context).errorColor, // or any other color
+            ),
+            //fillColor: widget.focusNode!.hasFocus ? Colors.red : ThemeChangeNotifier().isDarkMode(context) ?  Color(0xff3F3F3F) : Color(0xffDFE0E0),
+            fillColor: focusNode.hasFocus ? EvieColors.thumbColorTrue : ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.lightGrayishCyan,
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  width: 0.1,
+                  color: ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.thumbColorTrue,), //<-- SEE HERE
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+
+            focusColor: ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray: EvieColors.thumbColorTrue,
 
 
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              width: 1.5,
-              color: Color(0xff6A51CA),), //<-- SEE HERE
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                width: 1.5,
+                color: Color(0xff6A51CA),), //<-- SEE HERE
+              borderRadius: BorderRadius.circular(10.0),
+            ),
 
-          errorBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              width: 1.5,
-              color: Color(0xffF42525),), //<-- SEE HERE
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+            errorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                width: 1.5,
+                color: Color(0xffF42525),), //<-- SEE HERE
+              borderRadius: BorderRadius.circular(10.0),
+            ),
 
-          focusedErrorBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              width: 1.5,
-              color: Color(0xffF42525),), //<-- SEE HERE
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          suffixIcon: widget.suffixIcon),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                width: 1.5,
+                color: Color(0xffF42525),), //<-- SEE HERE
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            suffixIcon: widget.suffixIcon),
       validator: widget.validator,
-    )
+    ),
+        )
     );
 
   }

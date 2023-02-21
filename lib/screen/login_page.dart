@@ -197,7 +197,7 @@ class _LoginScreenState extends State<Login> {
 
                       ///Quit loading and go to user home page
                       if(_authProvider.isFirstLogin == true){
-                        changeToLetsGoScreen(context);
+                        changeToStayCloseToBike(context);
                       }else{
                         changeToUserHomePageScreen(context);
                       }

@@ -1,7 +1,9 @@
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../api/colours.dart';
 import '../../theme/ThemeChangeNotifier.dart';
 
 class AccountPageContainer extends StatelessWidget {
@@ -22,7 +24,7 @@ class AccountPageContainer extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       onTap: onPress,
       child: Container(
-        height: 44.h,
+        height: 54.h,
         child: Padding(
           padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
           child: Row(
@@ -31,7 +33,7 @@ class AccountPageContainer extends StatelessWidget {
             children: [
               Text(
                 content,
-                style: TextStyle(fontSize: 16.sp),
+                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
               ),
               SvgPicture.asset(
                 trailingImage,
@@ -85,8 +87,7 @@ class AccountPageAppbar extends StatelessWidget implements PreferredSizeWidget {
       ),
       centerTitle: true,
       title: Text(
-        title,
-        style: TextStyle(fontSize: 24.sp, color: Color(0xff171617), fontWeight: FontWeight.w500, letterSpacing: 0.1.w),
+        title, style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
@@ -14,22 +15,22 @@ import '../../api/navigator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import '../../api/provider/location_provider.dart';
 
-class LetsGo extends StatefulWidget {
-  const LetsGo({Key? key}) : super(key: key);
+class StayCloseToBike extends StatefulWidget {
+  const StayCloseToBike({Key? key}) : super(key: key);
 
   @override
-  _LetsGoState createState() => _LetsGoState();
+  _StayCloseToBikeState createState() => _StayCloseToBikeState();
 }
 
-class _LetsGoState extends State<LetsGo> {
+class _StayCloseToBikeState extends State<StayCloseToBike> {
   late CurrentUserProvider _currentUserProvider;
-  late LocationProvider _locationProvider;
+  late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
 
   @override
   Widget build(BuildContext context) {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
-    _locationProvider = Provider.of<LocationProvider>(context);
+    _bikeProvider = Provider.of< BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     var currentName = _currentUserProvider.currentUserModel?.name;
@@ -49,7 +50,7 @@ class _LetsGoState extends State<LetsGo> {
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w,76.h,16.w,4.h),
                 child:  Text(
-                  "Stay close with your bike",
+                  "Stay close to your bike",
                   style: EvieTextStyles.h2,
                 ),
               ),
@@ -80,7 +81,7 @@ class _LetsGoState extends State<LetsGo> {
             Align(
           alignment: Alignment.center,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(75.w,98.h,75.w,127.84.h),
+            padding: EdgeInsets.fromLTRB(78.w,152.h,78.w,127.84.h),
             child: SvgPicture.asset(
               "assets/images/ride_bike_see_phone.svg",
             ),
@@ -120,10 +121,23 @@ class _LetsGoState extends State<LetsGo> {
           ),
         ),
 
-            Align(
+
+           ///Button for on boarding and add bike respectively
+           _bikeProvider.isAddBike ? Align(
+             alignment: Alignment.bottomCenter,
+             child: Padding(
+               padding: EdgeInsets.fromLTRB(120.w,25.h,120.w,EvieLength.buttonWord_WordBottom),
+               child: EvieButton_ReversedColor(
+                 width: double.infinity,
+                   onPressed: (){
+                   changeToUserHomePageScreen(context);
+                   },
+                   child: Text("Cancel", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)))
+             ),
+           ) : Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(150.w,25.h,150.w,EvieLength.buttonWord_WordBottom),
+                padding: EdgeInsets.fromLTRB(120.w,25.h,120.w,EvieLength.buttonWord_WordBottom),
                 child: SizedBox(
                   width: double.infinity,
                   child: TextButton(

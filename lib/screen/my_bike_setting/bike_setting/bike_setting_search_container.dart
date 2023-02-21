@@ -28,6 +28,7 @@ class _BikeSettingSearchContainerState extends State<BikeSettingSearchContainer>
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   DeviceConnectResult? deviceConnectResult;
+
   String? label;
   String? pageNavigate;
 

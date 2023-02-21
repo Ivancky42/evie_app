@@ -12,18 +12,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../api/colours.dart';
-import '../../api/length.dart';
-import '../../api/navigator.dart';
-import '../../api/provider/bike_provider.dart';
-import '../../api/provider/bluetooth_provider.dart';
-import '../../bluetooth/modelResult.dart';
-import '../../widgets/evie_single_button_dialog.dart';
-import '../../widgets/evie_slider.dart';
-import '../../widgets/evie_switch.dart';
-import '../../widgets/evie_textform.dart';
-import '../user_home_page/user_home_page.dart';
-import 'my_bike_widget.dart';
+import '../../../api/colours.dart';
+import '../../../api/length.dart';
+import '../../../api/navigator.dart';
+import '../../../api/provider/bike_provider.dart';
+import '../../../api/provider/bluetooth_provider.dart';
+import '../../../bluetooth/modelResult.dart';
+import '../../../widgets/evie_single_button_dialog.dart';
+import '../../../widgets/evie_slider.dart';
+
 
 enum PlayBuzzerSound { low, medium, high }
 

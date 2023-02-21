@@ -99,7 +99,7 @@ class _AccountVerifiedState extends State<AccountVerified> {
                 ),
                 onPressed: () async {
                   _authProvider.setIsFirstLogin(true);
-                  changeToLetsGoScreen(context);
+                  changeToStayCloseToBike(context);
                 },
               ),
             ),

@@ -16,6 +16,8 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
+import '../../api/fonts.dart';
+
 class TripHistory extends StatefulWidget {
   const TripHistory({Key? key}) : super(key: key);
 
@@ -42,7 +44,7 @@ class _TripHistoryState extends State<TripHistory> {
                 child: Container(
                   child: Text(
                     "Trip History",
-                    style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w700),
+                    style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
                   ),
                 ),
               ),

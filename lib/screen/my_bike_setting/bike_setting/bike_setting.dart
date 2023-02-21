@@ -24,9 +24,6 @@ import 'bike_setting_model.dart';
 import 'bike_setting_search_container.dart';
 
 
-
-///User profile page with user account information
-
 class BikeSetting extends StatefulWidget {
   const BikeSetting({Key? key}) : super(key: key);
 
@@ -39,19 +36,21 @@ class _BikeSettingState extends State<BikeSetting> {
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
 
-
   DeviceConnectResult? deviceConnectResult;
   CableLockResult? cableLockState;
   StreamController? connectStream;
-  final searchController = TextEditingController();
-  final _debouncer = Debouncer(milliseconds: 500);
-  List<BikeSettingModel> _searchFirstResult = [];
-  LinkedHashMap<String, BikeSettingModel> _searchSecondResult = LinkedHashMap<String, BikeSettingModel>();
-  bool _isSearching = false;
-  bool isFirstTimeConnected = false;
-  late Future loadDataFuture;
 
   List<BikeSettingModel> bikeSettingList = [];
+  List<BikeSettingModel> _searchFirstResult = [];
+  LinkedHashMap<String, BikeSettingModel> _searchSecondResult = LinkedHashMap<String, BikeSettingModel>();
+
+  bool _isSearching = false;
+  bool isFirstTimeConnected = false;
+
+  final searchController = TextEditingController();
+  final _debouncer = Debouncer(milliseconds: 500);
+
+  late Future loadDataFuture;
   late ScaffoldMessengerState _navigator;
 
   Future<List<BikeSettingModel>> loadData() async {
@@ -311,7 +310,7 @@ class _BikeSettingState extends State<BikeSetting> {
               ),
               Divider(
                 thickness: 0.5.h,
-                color: const Color(0xff8E8E8E),
+                color: EvieColors.darkWhite,
                 height: 0,
               ),
               FutureBuilder(
@@ -321,9 +320,10 @@ class _BikeSettingState extends State<BikeSetting> {
                       return const Center(child: CircularProgressIndicator());
                     }
                     else if (snapshot.connectionState == ConnectionState.done) {
-                      if (!_isSearching)
+                      if (!_isSearching) {
                         return Expanded(
                           child: SingleChildScrollView(
+                            physics: BouncingScrollPhysics(),
                             child: Column(
                               children: [
                                 ...bikeSettingList.map((e) => BikeSettingContainer(bikeSettingModel: e)).toList(),
@@ -331,7 +331,7 @@ class _BikeSettingState extends State<BikeSetting> {
                             ),
                           )
                       );
-                      else {
+                      } else {
                         return Expanded(
                             child: SingleChildScrollView(
                               child: Column(

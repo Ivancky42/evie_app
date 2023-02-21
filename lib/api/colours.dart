@@ -13,6 +13,7 @@ class EvieColors {
   static const grayishWhite = Color(0xFFECEDEB);
   static const lightGray = Color(0xffD4D4D4);
   static const progressBarGrey = Color(0xffCECFCF);
+  static const dividerWhite = Color(0xffF4F4F4);
   static const darkWhite = Color(0xff8E8E8E);
   static const darkGrayishCyan = Color(0xff5F6060);
   static const greyFill = Color(0xff717171);

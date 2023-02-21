@@ -74,7 +74,7 @@ class _ManagePlanState extends State<ManagePlan> {
                               color: Color(0xfff4f4f4)),
                           tabs: [
                             Text(
-                              "Essential",
+                              "Starter",
                               style: TextStyle(
                                   fontSize: 16.sp, color: Color(0xff383838)),
                             ),
@@ -82,7 +82,7 @@ class _ManagePlanState extends State<ManagePlan> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Pro ",
+                                  "Premium ",
                                   style: TextStyle(
                                       fontSize: 16.sp,
                                       color: Color(0xff383838)),
@@ -113,8 +113,9 @@ class _ManagePlanState extends State<ManagePlan> {
                     ),
                   ),
 
-                 Expanded(
-                    child: TabBarView(children: [
+                 const Expanded(
+                    child: TabBarView(
+                        children: [
                        EssentialPlan(),
                        ProPlan(),
                     ]),
