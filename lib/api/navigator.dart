@@ -47,8 +47,6 @@ import '../screen/my_bike_setting/subscription/manage_plan.dart';
 import '../screen/onboarding/bike_connect_failed.dart';
 import '../screen/onboarding/bike_connect_success.dart';
 import '../screen/onboarding/congratulation.dart';
-import '../screen/onboarding/display_control.dart';
-import '../screen/onboarding/notification_control.dart';
 import '../screen/onboarding/qr_scanning.dart';
 
 import '../screen/signup_method.dart';
@@ -262,15 +260,6 @@ void changeToBikeConnectFailedScreen(BuildContext context) {
   );
 }
 
-void changeToNotificationsControlScreen(BuildContext context) {
-  Navigator.pushReplacement(context,
-  PageTransition(
-    type: PageTransitionType.rightToLeft,
-    child: const NotificationsControl(),
-    duration: const Duration(milliseconds: 300),
-  ),
-  );
-}
 
 void changeToEmailPreferenceControlScreen(BuildContext context) {
   Navigator.pushReplacement(context,
@@ -310,16 +299,6 @@ void changeToNavigatePlanScreen(BuildContext context) {
       child: const NavigatePlanPage(),
       duration: const Duration(milliseconds: 300),
     ),
-  );
-}
-
-void changeToDisplayControlScreen(BuildContext context) {
-  Navigator.pushReplacement(context,
-  PageTransition(
-    type: PageTransitionType.rightToLeft,
-    child: const DisplayControl(),
-    duration: const Duration(milliseconds: 300),
-  ),
   );
 }
 

@@ -16,6 +16,7 @@ import '../../api/navigator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../api/provider/bike_provider.dart';
+import '../../widgets/evie_progress_indicator.dart';
 import '../../widgets/evie_textform.dart';
 
 class NameBike extends StatefulWidget {
@@ -57,19 +58,7 @@ class _NameBikeState extends State<NameBike> {
                     SizedBox(
                       height: 5.h,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.all(24.0),
-                      child:StepProgressIndicator(
-                        totalSteps: 10,
-                        currentStep: 5,
-                        selectedColor: Color(0xffCECFCF),
-                        selectedSize: 4,
-                        unselectedColor: Color(0xffDFE0E0),
-                        unselectedSize: 3,
-                        padding: 0.0,
-                        roundedEdges: Radius.circular(16),
-                      ),
-                    ),
+                    const EvieProgressIndicator(currentPageNumber: 5),
                     SizedBox(
                       height: 3.h,
                     ),

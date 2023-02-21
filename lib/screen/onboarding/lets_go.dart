@@ -1,24 +1,17 @@
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/onboarding/turn_on_bluetooth.dart';
-import 'package:evie_test/screen/onboarding/turn_on_location.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:open_mail_app/open_mail_app.dart';
-import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../api/colours.dart';
 import '../../api/fonts.dart';
 import '../../api/length.dart';
 import '../../api/navigator.dart';
-
 import 'package:evie_test/widgets/evie_button.dart';
-
 import '../../api/provider/location_provider.dart';
 
 class LetsGo extends StatefulWidget {
@@ -56,7 +49,7 @@ class _LetsGoState extends State<LetsGo> {
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w,76.h,16.w,4.h),
                 child:  Text(
-                  "Stay closeby with your bike",
+                  "Stay close with your bike",
                   style: EvieTextStyles.h2,
                 ),
               ),
@@ -65,7 +58,7 @@ class _LetsGoState extends State<LetsGo> {
                 padding: EdgeInsets.fromLTRB(16.w,4.h,16.w,4.h),
                 child: Container(
                   child:   Text(
-                    "Assemble your bike fully and keep your bike closely with you for the following steps.",
+                    "Assemble your bike fully. Keep your device close to your bike for the following steps. Please note that registering your bike may take up to 5 minutes.",
                     style: EvieTextStyles.body18,
                   ),
                 ),
@@ -79,7 +72,7 @@ class _LetsGoState extends State<LetsGo> {
                         Uri.http("www.google.com");
                       },
                       child: Text("How to assemble my bike?",
-                        style: TextStyle( fontSize: 16.sp, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),)),
+                        style: TextStyle( fontSize: 18.sp, fontWeight:FontWeight.w900, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),)),
               )
             ],
           ),
@@ -89,7 +82,7 @@ class _LetsGoState extends State<LetsGo> {
           child: Padding(
             padding: EdgeInsets.fromLTRB(75.w,98.h,75.w,127.84.h),
             child: SvgPicture.asset(
-              "assets/images/setup_account.svg",
+              "assets/images/ride_bike_see_phone.svg",
             ),
           ),
         ),
@@ -137,10 +130,10 @@ class _LetsGoState extends State<LetsGo> {
                         child: Text(
                           "I'm not ready",
                           softWrap: false,
-                          style: TextStyle(fontSize: 12.sp,color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                          style: TextStyle(fontSize: 14.sp, fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                         ),
                         onPressed: () {
-                          changeToCongratulationScreen(context);
+                        changeToUserHomePageScreen(context);
                         },
                       ),
                 ),

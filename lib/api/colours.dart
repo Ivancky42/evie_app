@@ -2,6 +2,7 @@ import 'dart:ui';
 
 class EvieColors {
   static const primaryColor = Color(0xFF6A51CA);
+  static const lightPurple = Color(0xFFCDC5ED);
   static const softPurple = Color(0xffC1B7E8);
   static const orange = Color(0xffE59200);
   static const red = Color(0xFFFE4A49);
@@ -11,6 +12,7 @@ class EvieColors {
   static const lightGrayishCyan = Color(0xffDFE0E0);
   static const grayishWhite = Color(0xFFECEDEB);
   static const lightGray = Color(0xffD4D4D4);
+  static const progressBarGrey = Color(0xffCECFCF);
   static const darkWhite = Color(0xff8E8E8E);
   static const darkGrayishCyan = Color(0xff5F6060);
   static const greyFill = Color(0xff717171);

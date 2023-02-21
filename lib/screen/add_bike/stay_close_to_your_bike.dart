@@ -13,6 +13,7 @@ import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../api/colours.dart';
+import '../../api/fonts.dart';
 import '../../api/length.dart';
 import '../../api/navigator.dart';
 import '../../api/provider/location_provider.dart';
@@ -54,7 +55,7 @@ class _StayCloseToYourBikeState extends State<StayCloseToYourBike> {
                       padding: EdgeInsets.fromLTRB(16.w,76.h,16.w,4.h),
                       child: Text(
                         "Stay close with your bike",
-                        style: TextStyle(fontSize: 24.sp),
+                        style: EvieTextStyles.h2,
                       ),
                     ),
 
@@ -62,9 +63,8 @@ class _StayCloseToYourBikeState extends State<StayCloseToYourBike> {
                       padding: EdgeInsets.fromLTRB(16.w,4.h,16.w,4.h),
                       child: Container(
                         child: Text(
-                          "Assemble your bike fully. Keep your device close to your bike for the following steps. "
-                              "Please note that registering your bike may take up to 5 minutes.",
-                          style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                          "Assemble your bike fully. Keep your device close to your bike for the following steps. Please note that registering your bike may take up to 5 minutes.",
+                          style: EvieTextStyles.body18,
                         ),
                       ),
                     ),
@@ -77,7 +77,7 @@ class _StayCloseToYourBikeState extends State<StayCloseToYourBike> {
                             Uri.http("www.google.com");
                           },
                           child: Text("How to assemble my bike?",
-                            style: TextStyle( fontSize: 16.sp, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),)),
+                            style: TextStyle( fontSize: 18.sp, fontWeight:FontWeight.w900, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),)),
                     )
                   ],
                 ),
@@ -103,11 +103,7 @@ class _StayCloseToYourBikeState extends State<StayCloseToYourBike> {
                         width: double.infinity,
                         child: Text(
                           "I'm Ready",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w700
-                          ),
+                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                         ),
                         onPressed: () async {
                           //changeToTurnOnLocationScreen(context);
@@ -141,7 +137,7 @@ class _StayCloseToYourBikeState extends State<StayCloseToYourBike> {
                       child: Text(
                         "Maybe Later",
                         softWrap: false,
-                        style: TextStyle(fontSize: 12.sp,color: EvieColors.primaryColor,),
+                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
                       ),),
 
                   ),

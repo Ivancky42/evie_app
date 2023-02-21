@@ -18,6 +18,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:open_settings/open_settings.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../screen/my_bike_setting/my_bike_function.dart';
 import '../widgets/evie_double_button_dialog.dart';
@@ -63,7 +64,8 @@ showBluetoothNotAuthorized() {
           rightContent: "OK",
           onPressedRight: () {
             SmartDialog.dismiss();
-            OpenSettings.openBluetoothSetting();
+            //OpenSettings.openBluetoothSetting();
+            openAppSettings();
            ///Redirect user to enable bluetooth permission.
           }));
 }
@@ -72,13 +74,13 @@ showLocationServiceDisable() {
   SmartDialog.show(
       keepSingle:
       true,
-      widget: EvieSingleButtonDialogCupertino(
-          title: "Error",
-          content: "Location service disabled",
+      widget: EvieSingleButtonDialog(
+          title: "Disable",
+          content: "Location service is disabled, please enable your location service in settings",
           rightContent: "OK",
           onPressedRight: () {
-            SmartDialog
-                .dismiss();
+            SmartDialog.dismiss();
+            openAppSettings();
           }));
 }
 

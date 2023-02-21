@@ -254,7 +254,6 @@ class _BikeWarningState extends State<BikeWarning> {
 
                                 ///If device is not connected
                               }   else...{
-
                                 SizedBox(
                                     height: 96.h,
                                     width: 96.w,

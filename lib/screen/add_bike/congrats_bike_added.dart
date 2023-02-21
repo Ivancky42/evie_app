@@ -19,6 +19,7 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../api/provider/bluetooth_provider.dart';
+import '../../widgets/evie_progress_indicator.dart';
 
 
 class CongratsBikeAdded extends StatefulWidget {
@@ -49,19 +50,8 @@ class _CongratsBikeAddedState extends State<CongratsBikeAdded> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(70.w, 66.h, 70.w,50.h),
-                      child:const StepProgressIndicator(
-                        totalSteps: 10,
-                        currentStep: 10,
-                        selectedColor: Color(0xffCECFCF),
-                        selectedSize: 4,
-                        unselectedColor: Color(0xffDFE0E0),
-                        unselectedSize: 3,
-                        padding: 0.0,
-                        roundedEdges: Radius.circular(16),
-                      ),
-                    ),
+
+                    const EvieProgressIndicator(currentPageNumber: 7),
 
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
@@ -72,18 +62,21 @@ class _CongratsBikeAddedState extends State<CongratsBikeAdded> {
                     ),
 
                     Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 113.h),
+                      padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 87.h),
                       child: Text(
-                        "You have successfully added ${widget.bikeName}. Enjoy the ride with us...",
+                        "You have successfully added ${widget.bikeName.toString().trim()}. Get ready to track your rides, access all the fun features, and have an amazing time. \n \n"
+                            "If there's anything we can help with, just let us know. Happy riding!",
                         style: TextStyle(fontSize: 16.sp,height: 1.5.h),
                       ),
                     ),
 
                     Padding(
-                      padding: EdgeInsets.fromLTRB(45.w, 0.h, 45.2.w,221.h),
+                      padding: EdgeInsets.fromLTRB(0.w, 0.h, 45.2.w,0.h),
                       child: Center(
                         child: SvgPicture.asset(
-                          "assets/images/account_verified.svg",
+                          "assets/images/bike_champion.svg",
+                          height: 242.34.h,
+                          width: 252.17.w,
                         ),
                       ),
                     ),
@@ -93,8 +86,7 @@ class _CongratsBikeAddedState extends State<CongratsBikeAdded> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding:
-                    EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.button_Bottom),
+                    padding: EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.button_Bottom),
                     child:  EvieButton(
                       width: double.infinity,
                       height: 48.h,

@@ -155,7 +155,7 @@ class _EmailPreferenceControlState extends State<EmailPreferenceControl> {
                       ),
                     ),
                     onPressed: () {
-                  changeToDisplayControlScreen(context);
+
                     },
                   ),
                 ),

@@ -11,10 +11,13 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
+import '../../api/dialog.dart';
 import '../../api/fonts.dart';
 import '../../api/navigator.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
+
+import '../../widgets/evie_progress_indicator.dart';
 
 class TurnOnLocation extends StatefulWidget {
   const TurnOnLocation({Key? key}) : super(key: key);
@@ -41,19 +44,8 @@ class _TurnOnLocationState extends State<TurnOnLocation> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-          padding: EdgeInsets.fromLTRB(70.w, 66.h, 70.w,50.h),
-            child:const StepProgressIndicator(
-              totalSteps: 10,
-              currentStep: 1,
-              selectedColor: Color(0xffCECFCF),
-              selectedSize: 4,
-              unselectedColor: Color(0xffDFE0E0),
-              unselectedSize: 3,
-              padding: 0.0,
-              roundedEdges: Radius.circular(16),
-            ),
-        ),
+
+           const EvieProgressIndicator(currentPageNumber: 0),
 
             Padding(
               padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
@@ -101,21 +93,18 @@ class _TurnOnLocationState extends State<TurnOnLocation> {
                       var bluetoothStatus = await Permission.bluetooth.status;
 
                       if(bluetoothStatus == PermissionStatus.granted){
-
                         changeToTurnOnQRScannerScreen(context);
                       }else{
-
                         changeToTurnOnBluetoothScreen(context);
                       }
                     }else if(await Permission.location.isPermanentlyDenied){
-                     OpenSettings.openLocationSourceSetting();
+                      showLocationServiceDisable();
+                     //OpenSettings.openLocationSourceSetting();
                     }
                   },
                 ),
               ),
             ),
-
-
       ]
         )
       ),

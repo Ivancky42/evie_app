@@ -11,6 +11,7 @@ import '../../api/colours.dart';
 import '../../api/length.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../widgets/evie_button.dart';
+import '../../widgets/evie_progress_indicator.dart';
 
 class BikeConnectFailed extends StatefulWidget {
   const BikeConnectFailed({Key? key}) : super(key: key);
@@ -38,19 +39,9 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(70.w, 66.h, 70.w, 50.h),
-              child: const StepProgressIndicator(
-                totalSteps: 10,
-                currentStep: 4,
-                selectedColor: Color(0xffCECFCF),
-                selectedSize: 4,
-                unselectedColor: Color(0xffDFE0E0),
-                unselectedSize: 3,
-                padding: 0.0,
-                roundedEdges: Radius.circular(16),
-              ),
-            ),
+
+            const EvieProgressIndicator(currentPageNumber: 4),
+
             Padding(
               padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 4.h),
               child: Text(

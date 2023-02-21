@@ -169,6 +169,8 @@ class BluetoothProvider extends ChangeNotifier {
         // TODO: Handle this case.
           break;
         case BleStatus.locationServicesDisabled:
+          debugPrint("checkBLEstatus location service disabled");
+          showLocationServiceDisable();
         // TODO: Handle this case.
           break;
         case BleStatus.ready:

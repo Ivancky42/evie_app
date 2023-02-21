@@ -19,6 +19,7 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../api/provider/bluetooth_provider.dart';
+import '../../widgets/evie_progress_indicator.dart';
 
 
 class TurnOnBluetooth extends StatefulWidget {
@@ -49,19 +50,8 @@ class _TurnOnBluetoothState extends State<TurnOnBluetooth> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(70.w, 66.h, 70.w,50.h),
-                      child:const StepProgressIndicator(
-                        totalSteps: 10,
-                        currentStep: 2,
-                        selectedColor: Color(0xffCECFCF),
-                        selectedSize: 4,
-                        unselectedColor: Color(0xffDFE0E0),
-                        unselectedSize: 3,
-                        padding: 0.0,
-                        roundedEdges: Radius.circular(16),
-                      ),
-                    ),
+
+                    const EvieProgressIndicator(currentPageNumber: 1),
 
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
