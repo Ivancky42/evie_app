@@ -3,7 +3,7 @@ import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
-import 'package:evie_test/widgets/custom_divider.dart';
+import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -128,7 +128,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               ),
             ),
-            const CustomDivider(),
+            const EvieDivider(),
           ],
         );
       case "EV-Key":
@@ -203,7 +203,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               ),
             ),
-            const CustomDivider(),
+            const EvieDivider(),
           ],
         );
       case "Motion Sensitivity":
@@ -273,7 +273,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               ),
             ),
-            const CustomDivider(),
+            const EvieDivider(),
           ],
         );
       case "Subscription":
@@ -343,7 +343,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               ),
             ),
-            const CustomDivider(),
+            const EvieDivider(),
           ],
         );
       case "Share Bike":
@@ -423,7 +423,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               )
             ),
-            const CustomDivider(),
+            const EvieDivider(),
           ],
         );
       case "Bike Status Alert":
@@ -474,7 +474,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               )
             ),
-            const CustomDivider(),
+            const EvieDivider(),
           ],
         );
       case "SOS Center":
@@ -525,7 +525,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               )
             ),
-            const CustomDivider(),
+            const EvieDivider(),
           ],
         );
       case "View Data":
@@ -576,7 +576,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
             ),
             ),
-            const CustomDivider(),
+            const EvieDivider(),
           ],
         );
       case "About Bike":
@@ -613,7 +613,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               ),
             ),
-            const CustomDivider(),
+            const EvieDivider(),
           ],
         );
       case "Firmware Version":
@@ -700,7 +700,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                   ),
                 ),
             ),
-            const CustomDivider(),
+            const EvieDivider(),
           ],
         );
       case "User Manual":
@@ -733,7 +733,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               ),
             ),
-            const CustomDivider(),
+            const EvieDivider(),
           ],
         );
       case "Reset Bike":
@@ -767,7 +767,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               ),
             ),
-            const CustomDivider(),
+            const EvieDivider(),
             Divider(
               thickness: 11.h,
               color: const Color(0xffF4F4F4),

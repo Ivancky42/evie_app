@@ -13,6 +13,7 @@ import 'package:evie_test/api/provider/current_user_provider.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../bluetooth/modelResult.dart';
+import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 
 

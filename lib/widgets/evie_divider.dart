@@ -2,10 +2,10 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CustomDivider extends StatelessWidget {
+class EvieDivider extends StatelessWidget {
   final double? thickness;
   final double? height;
-  const CustomDivider({Key? key, this.thickness, this.height}) : super(key: key);
+  const EvieDivider({Key? key, this.thickness, this.height}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,3 +16,4 @@ class CustomDivider extends StatelessWidget {
     );
   }
 }
+

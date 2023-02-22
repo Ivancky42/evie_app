@@ -173,8 +173,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   ///Upload the registered data to firestore
-  Future createFirestoreUser(
-      uid, email, name, phoneNo, profileIMG, credentialProvider) async {
+  Future createFirestoreUser(uid, email, name, phoneNo, profileIMG, credentialProvider) async {
     try {
       FirebaseFirestore.instance
           .collection(usersCollection)
@@ -408,25 +407,37 @@ class AuthProvider extends ChangeNotifier {
           await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
       if (userCredential.additionalUserInfo!.isNewUser) {
-        String? userPhoneNo;
+        String? userPhoneNo = "empty";
 
-        if (userCredential.user?.phoneNumber != null) {
-          userPhoneNo = userCredential.user?.phoneNumber.toString();
-        } else if (userCredential.user?.phoneNumber == null) {
-          userPhoneNo = "empty";
-        }
+        // if (userCredential.user?.phoneNumber != null) {
+        //   userPhoneNo = userCredential.user?.phoneNumber.toString();
+        // } else if (userCredential.user?.phoneNumber == null) {
+        //   userPhoneNo = "empty";
+        // }
 
         credentialProvider = "apple";
         notifyListeners();
+
+        String? userName = "";
+
+        if(nameInput == null || nameInput == ""){
+          if(appleCredential.givenName != null){
+            userName = appleCredential.givenName;
+          }else{
+            userName = "Evie User";
+          }
+        }else{
+          userName = nameInput;
+        }
 
         ///Firestore
         AuthProvider().createFirestoreUser(
             _uid,
             _email,
-            // '${appleCredential.givenName} ${appleCredential.familyName}', //Name
-            nameInput, //Name
+            userName,//Name
             userPhoneNo, //Phone no
-            userCredential.user?.photoURL.toString(),
+            //userCredential.user?.photoURL.toString(), ///Cannot get profile image from apple id when first time login, need approval from user
+            dotenv.env['DEFAULT_PROFILE_IMG'] ?? 'DPI not found',  //profileimg
             credentialProvider //Profile image
             );
         _uid = userCredential.user!.uid;

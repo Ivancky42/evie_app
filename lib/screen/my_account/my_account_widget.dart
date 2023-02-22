@@ -66,36 +66,8 @@ class AccountPageDivider extends StatelessWidget {
   }
 }
 
-class AccountPageAppbar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
-  final VoidCallback onPressed;
 
-  const AccountPageAppbar({
-    Key? key,
-    required this.title,
-    required this.onPressed,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      leading: IconButton(
-        icon: ThemeChangeNotifier().isDarkMode(context) == true
-            ? SvgPicture.asset("assets/buttons/back.svg")
-            : SvgPicture.asset("assets/buttons/back.svg"),
-        onPressed: onPressed,
-      ),
-      centerTitle: true,
-      title: Text(
-        title, style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),
-      ),
-    );
-  }
-
-  @override
-  // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(48.h);
-}
 
 class EditProfileContainer extends StatelessWidget {
   final String subtitle;

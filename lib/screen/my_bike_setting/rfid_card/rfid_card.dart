@@ -23,6 +23,7 @@ import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../bluetooth/modelResult.dart';
+import '../../../widgets/evie_appbar.dart';
 
 
 ///User profile page with user account information

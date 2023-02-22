@@ -84,42 +84,49 @@ class _SignUpMethodState extends State<SignUpMethod> {
 
 
                 Platform.isIOS ?
-                EvieButton(
-                    backgroundColor: Color(0xffDFE0E0),
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Image(
-                          image: AssetImage(
-                              "assets/icons/logo_apple.png"),
-                          height: 20.0,
-                        ),
-                        SizedBox(width: 1.5.w,),
-                        Text(
-                          "Continue with Apple",
-                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
-                        ),
-                      ],
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 8.h,
                     ),
-                    onPressed: () async {
-                      _authProvider
-                          .signInWithAppleID(widget.name)
-                          .then((result) {
-                        if (result == true) {
-                          changeToUserHomePageScreen(context);
-                        } else {
-                          SmartDialog.show(
-                              widget: EvieSingleButtonDialogCupertino(
-                                  title: "Error",
-                                  content: result,
-                                  rightContent: "Ok",
-                                  onPressedRight: () {
-                                    SmartDialog.dismiss();
-                                  }));
+                    EvieButton(
+                        backgroundColor: Color(0xffDFE0E0),
+                        width: double.infinity,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Image(
+                              image: AssetImage(
+                                  "assets/icons/logo_apple.png"),
+                              height: 20.0,
+                            ),
+                            SizedBox(width: 1.5.w,),
+                            Text(
+                              "Continue with Apple",
+                              style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
+                            ),
+                          ],
+                        ),
+                        onPressed: () async {
+                          _authProvider
+                              .signInWithAppleID(widget.name)
+                              .then((result) {
+                            if (result == true) {
+                              changeToUserHomePageScreen(context);
+                            } else {
+                              SmartDialog.show(
+                                  widget: EvieSingleButtonDialogCupertino(
+                                      title: "Error",
+                                      content: result,
+                                      rightContent: "Ok",
+                                      onPressedRight: () {
+                                        SmartDialog.dismiss();
+                                      }));
+                            }
+                          });
                         }
-                      });
-                    }
+                    ),
+                  ],
                 ) : Container(),
                 SizedBox(height: 8.h,),
                 EvieButton(

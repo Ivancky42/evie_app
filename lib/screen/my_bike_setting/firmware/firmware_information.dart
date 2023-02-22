@@ -22,6 +22,7 @@ import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/firmware_provider.dart';
+import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_button.dart';
 
 

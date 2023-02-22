@@ -17,6 +17,7 @@ import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
+import '../../../widgets/evie_appbar.dart';
 import '../../my_account/my_account_widget.dart';
 import '../my_bike_function.dart';
 import 'bike_setting_container.dart';

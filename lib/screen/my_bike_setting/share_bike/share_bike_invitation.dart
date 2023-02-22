@@ -16,6 +16,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
+import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_double_button_dialog.dart';
 import '../../../widgets/evie_textform.dart';
 import '../../my_account/my_account_widget.dart';

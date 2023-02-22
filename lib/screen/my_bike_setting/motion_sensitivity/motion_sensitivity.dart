@@ -24,11 +24,13 @@ import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
+import '../../../widgets/evie_appbar.dart';
+import '../../../widgets/evie_divider.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../../../widgets/evie_switch.dart';
 import '../../../widgets/evie_textform.dart';
 import '../../user_home_page/user_home_page.dart';
-import '../my_bike_widget.dart';
+
 
 ///User profile page with user account information
 
@@ -209,8 +211,8 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                       ),
                     ),
                   ),
-      ),
-                BikePageDivider(),
+                 ),
+                const EvieDivider(),
 
               ],
             ),

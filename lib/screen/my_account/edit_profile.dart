@@ -21,6 +21,7 @@ import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../api/navigator.dart';
+import '../../widgets/evie_appbar.dart';
 import '../../widgets/evie_textform.dart';
 
 ///User profile page with user account information

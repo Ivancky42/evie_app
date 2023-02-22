@@ -6,6 +6,7 @@ import 'package:evie_test/widgets/evie_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 
@@ -180,9 +181,21 @@ class _QRScanningState extends State<QRScanning> {
 
               Padding(
                 padding: EdgeInsets.fromLTRB(20.w, 153.h, 20.w, 123.h),
-                child: Text(
-                  "Align the QR code within the frame to scan",
-                  style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                child: Row(
+                  children: [
+                    Text(
+                      "Align the QR code within the frame to scan",
+                      style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                    ),
+                    GestureDetector(
+                      onTap: (){
+                        changeToUserHomePageScreen(context);
+                      },
+                      child: SvgPicture.asset(
+                        "assets/buttons/close.svg",
+                      ),
+                    ),
+                  ],
                 ),
               ),
 

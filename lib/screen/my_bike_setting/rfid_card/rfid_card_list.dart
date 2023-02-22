@@ -16,6 +16,7 @@ import '../../../api/colours.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../bluetooth/modelResult.dart';
+import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../../../widgets/evie_textform.dart';
 

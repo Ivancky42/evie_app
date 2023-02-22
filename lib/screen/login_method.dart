@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
-
 import '../api/colours.dart';
 import '../api/fonts.dart';
 import '../api/provider/auth_provider.dart';
@@ -91,41 +90,49 @@ class _SignInMethodState extends State<SignInMethod> {
 
 
                 Platform.isIOS ?
-                EvieButton(
-                    backgroundColor: Color(0xffDFE0E0),
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Image(
-                          image: AssetImage("assets/icons/logo_apple.png"),
-                          height: 20.0,
-                        ),
-                        SizedBox(
-                          width: 1.5.w,
-                        ),
-                        Text(
-                          "Login with Apple",
-                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
-                        ),
-                      ],
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 8.h,
                     ),
-                    onPressed: () async {
-                      _authProvider.signInWithAppleID("").then((result) {
-                        if (result == true) {
-                          changeToUserHomePageScreen(context);
-                        } else {
-                          SmartDialog.show(
-                              widget: EvieSingleButtonDialogCupertino(
-                                  title: "Error",
-                                  content: result,
-                                  rightContent: "Ok",
-                                  onPressedRight: () {
-                                    SmartDialog.dismiss();
-                                  }));
-                        }
-                      });
-                    }) : Container(),
+                    EvieButton(
+                        backgroundColor: Color(0xffDFE0E0),
+                        width: double.infinity,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Image(
+                              image: AssetImage("assets/icons/logo_apple.png"),
+                              height: 20.0,
+                            ),
+                            SizedBox(
+                              width: 1.5.w,
+                            ),
+                            Text(
+                              "Login with Apple",
+                              style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
+                            ),
+                          ],
+                        ),
+                        onPressed: () async {
+                          _authProvider.signInWithAppleID("").then((result) {
+                            if (result == true) {
+                              changeToUserHomePageScreen(context);
+                            } else {
+                              SmartDialog.show(
+                                  widget: EvieSingleButtonDialogCupertino(
+                                      title: "Error",
+                                      content: result,
+                                      rightContent: "Ok",
+                                      onPressedRight: () {
+                                        SmartDialog.dismiss();
+                                      }));
+                            }
+                          });
+                        }),
+                  ],
+                ) : Container(),
+
                 SizedBox(
                   height: 8.h,
                 ),

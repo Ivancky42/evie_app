@@ -4,22 +4,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
 import '../../../api/colours.dart';
 import '../../../api/length.dart';
-import '../../../api/model/bike_user_model.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
-import '../../../api/provider/notification_provider.dart';
+import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_button.dart';
-import '../../../widgets/evie_switch.dart';
-import '../../my_account/my_account_widget.dart';
-import '../my_bike_widget.dart';
+
 
 
 class ResetBike extends StatefulWidget{

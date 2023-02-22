@@ -5,8 +5,6 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,7 +18,9 @@ import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
-import '../my_bike_widget.dart';
+import '../../../widgets/evie_appbar.dart';
+import '../../../widgets/evie_divider.dart';
+
 
 
 
@@ -68,7 +68,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
                     padding: EdgeInsets.only(top:28.h),
                     child: Text("Current Plan", style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),),
                   ),
-                  Text(_bikeProvider.isPlanSubscript == false ? "Starter" : "Premium",style: EvieTextStyles.headline.copyWith(color: EvieColors.lightBlack)),
+                  Text(_bikeProvider.isPlanSubscript == false ? "Starter" : "Premium", style: EvieTextStyles.headline.copyWith(color: EvieColors.lightBlack)),
                   Text(_bikeProvider.isPlanSubscript == false ?"Forever" : "${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodStart?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().year} - "
                                                                             "${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}",
                     style: EvieTextStyles.body18.copyWith(color:EvieColors.darkGrayishCyan)),
@@ -77,8 +77,10 @@ class _CurrentPlanState extends State<CurrentPlan> {
                     child: Text("Status",style: EvieTextStyles.body14.copyWith(color:EvieColors.darkGrayishCyan),),
                   ),
                   ///Active Color (0xff05A454)    Expired Color (0xffF42525)
-                  Text("Active",style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500, color: Color(0xff05A454)),),
-                  BikePageDivider(),
+                  Text("Active",style: EvieTextStyles.body16.copyWith(color: EvieColors.green)),
+                  SizedBox(height: 10.h,),
+                  
+                  const EvieDivider(),
 
                   _bikeProvider.currentBikePlanModel != null ?
                   Visibility(
@@ -89,18 +91,24 @@ class _CurrentPlanState extends State<CurrentPlan> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(top:28.h),
-                          child: Text("Expired Plan", style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500, color: Color(0xff171617)),),
+                          child: Text("Previously on", style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),),
                         ),
-                        Text("Pro Plan",style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500, color: Color(0xff252526)),),
-                        Text("${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().toString()} - ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().toString()}",style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
+                        Text("Premium", style: EvieTextStyles.headline.copyWith(color: EvieColors.lightBlack)),
+                        Text("${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodStart?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().year} - "
+                            "${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}",
+                            style: EvieTextStyles.body18.copyWith(color:EvieColors.darkGrayishCyan)),
                         Padding(
                           padding: EdgeInsets.only(top:19.h),
-                          child: Text("Status",style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
+                          child: Text("Status",style: EvieTextStyles.body14.copyWith(color:EvieColors.darkGrayishCyan),),
                         ),
 
                         ///Active Color (0xff05A454)    Expired Color (0xffF42525)
-                        Text("Expired",style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500, color: Color(0xffF42525)),),
-                        BikePageDivider(),
+
+                        Text("Expired",        style: EvieTextStyles.body16.copyWith(color: EvieColors.lightRed)),
+                        SizedBox(height: 10.h,),
+                        
+                       const EvieDivider(),
+                        
                       ],
                     ),
                   ) : Container(),

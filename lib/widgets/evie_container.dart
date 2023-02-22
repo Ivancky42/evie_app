@@ -39,7 +39,7 @@ class BikePageContainer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                   subtitle!,
+                    subtitle!,
                     content != null ? Text(
                       content!,
                       style: TextStyle(fontSize: 16.sp),
@@ -83,25 +83,6 @@ class BikePageContainer extends StatelessWidget {
         ),
       );
     }
-
-  }
-}
-
-class BikePageDivider extends StatelessWidget {
-  final double? height;
-
-  const BikePageDivider({
-    Key? key,
-    this.height,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Divider(
-      thickness: 0.1.h,
-      color: const Color(0xff8E8E8E),
-      height: height ?? 0,
-    );
   }
 }
 

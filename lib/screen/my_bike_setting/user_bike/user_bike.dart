@@ -23,10 +23,11 @@ import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../bluetooth/modelResult.dart';
+import '../../../widgets/evie_container.dart';
+import '../../../widgets/evie_divider.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../../../widgets/evie_textform.dart';
 import '../my_bike_function.dart';
-import '../my_bike_widget.dart';
 
 
 
@@ -287,7 +288,7 @@ DeviceConnectResult? deviceConnectResult;
                             }
                           },
                           trailingImage: "assets/buttons/next.svg"),
-                      BikePageDivider(),
+                      EvieDivider(),
                       Opacity(
                         opacity: 0.3,
                         child: BikePageContainer (
@@ -338,7 +339,7 @@ DeviceConnectResult? deviceConnectResult;
                             },
                             trailingImage: "assets/buttons/next.svg"),
                       ),
-                      BikePageDivider(),
+                      EvieDivider(),
                       BikePageContainer (
                           subtitle:  Text("Share Bike",style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
                           contents: Row(
@@ -359,7 +360,7 @@ DeviceConnectResult? deviceConnectResult;
                           changeToShareBikeUserListScreen(context);
                           },
                           trailingImage: "assets/buttons/next.svg"),
-                      BikePageDivider(),
+                      EvieDivider(),
                       BikePageContainer (
                           contents: Row(
                             children: [
@@ -377,7 +378,7 @@ DeviceConnectResult? deviceConnectResult;
                             changeToBikeStatusAlertScreen(context);
                           },
                           trailingImage: "assets/buttons/next.svg"),
-                      BikePageDivider(),
+                      EvieDivider(),
                       BikePageContainer (
                           contents: Row(
                             children: [
@@ -395,7 +396,7 @@ DeviceConnectResult? deviceConnectResult;
                             changeToSOSCenterScreen(context);
                           },
                           trailingImage: "assets/buttons/next.svg"),
-                      BikePageDivider(),
+                      EvieDivider(),
                       Opacity(
                         opacity: 0.3,
                         child: BikePageContainer (
@@ -422,13 +423,13 @@ DeviceConnectResult? deviceConnectResult;
                           content: "About Bike",
                           onPress: () {},
                           trailingImage: "assets/buttons/next.svg"),
-                      BikePageDivider(),
+                      EvieDivider(),
                       BikePageContainer (
                           subtitle:  Text("Firmware Version",style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff5F6060)),),
                           content: "0.3.3",
                           onPress: () {},
                           trailingImage: "assets/buttons/next.svg"),
-                      BikePageDivider(),
+                      EvieDivider(),
                       BikePageContainer (
                           content: "User Manual",
                           onPress: () {},
@@ -440,12 +441,12 @@ DeviceConnectResult? deviceConnectResult;
                             onPress: () {},
                             trailingImage:"assets/buttons/next.svg"),
                       ),
-                      BikePageDivider(),
+                      EvieDivider(),
                       BikePageContainer (
                           content: "Delete Bike",
                           onPress: () {},
                           trailingImage:"assets/buttons/next.svg"),
-                      BikePageDivider(),
+                      EvieDivider(),
                     ],
                   ),
                 ),

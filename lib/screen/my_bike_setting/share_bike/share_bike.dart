@@ -18,6 +18,7 @@ import '../../../api/length.dart';
 import '../../../api/model/bike_user_model.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
+import '../../../widgets/evie_appbar.dart';
 import '../../my_account/my_account_widget.dart';
 
 
@@ -84,7 +85,6 @@ class _ShareBikeState extends State<ShareBike> {
                   child: Center(
                     child: SvgPicture.asset(
                       "assets/images/mention_amigo.svg",
-
                     ),
                   ),
                 ),

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:io';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/model/bike_model.dart';
 import 'package:evie_test/api/model/bike_plan_model.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
@@ -23,11 +24,13 @@ import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/function.dart';
 import '../../../api/length.dart';
 import '../../../api/model/user_bike_model.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
+import '../../../widgets/evie_appbar.dart';
 
 
 class MyGarage extends StatefulWidget {
@@ -104,6 +107,7 @@ class _MyGarageState extends State<MyGarage> {
             Padding(
               padding: EdgeInsets.only(bottom:100.h),
               child: ListView.separated(
+                physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: _bikeProvider.userBikeList.length,
                 itemBuilder: (context, index) {
@@ -161,13 +165,13 @@ class _MyGarageState extends State<MyGarage> {
           child: Stack(
             children: [
               SizedBox(
-                  height: 340.h,
+                  height: 370.h,
                   child: Stack(
                       children: [
                     Align(
                       alignment: Alignment.center,
                       child: Container(
-                        height: 270.h,
+                        height: 280.h,
                         decoration: const BoxDecoration(
                           color: EvieColors.lightGrayishCyan,
                           borderRadius: BorderRadius.all(
@@ -180,32 +184,34 @@ class _MyGarageState extends State<MyGarage> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                            Center(
-                              child: Text(
-                              userBikeDetails.deviceName!,
-                              style: TextStyle(
-                                  fontSize: 14.8.sp,
-                                  fontWeight: FontWeight.w500),
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                userBikeDetails.deviceName!,
+                                style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.bold, color: EvieColors.mediumLightBlack),
+                                ),
+                                Visibility(
+                                  visible: isPlanSubscript,
+                                  child: SvgPicture.asset(
+                                  "assets/icons/batch_tick.svg",
+                                ),)
+                              ],
                             ),
 
                               SizedBox(height: 14.h),
+
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     "Plan",
-                                    style: TextStyle(
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w400),
+                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
                                   ),
 
                                   Text(
                                     isPlanSubscript ? "Pro Plan" : "Free Plan",
-                                    style: TextStyle(
-                                        fontSize: 14.8.sp,
-                                        color: EvieColors.darkGrayishCyan,
-                                        fontWeight: FontWeight.w500),
+                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
                                   ),
                                 ],
                               ),
@@ -215,16 +221,12 @@ class _MyGarageState extends State<MyGarage> {
                                 children: [
                                   Text(
                                     "Plan Expiry",
-                                    style: TextStyle(
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w400),
+                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
                                   ),
                                   Text(
-                                      userBikePlan.periodEnd?.toDate().toString() ?? "Free Forever",
-                                    style: TextStyle(
-                                        fontSize: 14.8.sp,
-                                        color: EvieColors.darkGrayishCyan,
-                                        fontWeight: FontWeight.w500),
+                                      isPlanSubscript ? "${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day}, ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}"
+                                          : "Free Forever",
+                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
                                   ),
                                 ],
                               ),
@@ -235,16 +237,11 @@ class _MyGarageState extends State<MyGarage> {
                                 children: [
                                   Text(
                                     "Model",
-                                    style: TextStyle(
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w400),
+                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
                                   ),
                                   Text(
                                     "EVIE S series",
-                                    style: TextStyle(
-                                        fontSize: 14.8.sp,
-                                        color: EvieColors.darkGrayishCyan,
-                                        fontWeight: FontWeight.w500),
+                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
                                   ),
                                 ],
                               ),
@@ -254,16 +251,11 @@ class _MyGarageState extends State<MyGarage> {
                                 children: [
                                   Text(
                                     "Owner",
-                                    style: TextStyle(
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w400),
+                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
                                   ),
                                   Text(
                                     "owner",
-                                    style: TextStyle(
-                                        fontSize: 14.8.sp,
-                                        color: EvieColors.darkGrayishCyan,
-                                        fontWeight: FontWeight.w500),
+                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
                                   ),
                                 ],
                               ),
@@ -283,11 +275,7 @@ class _MyGarageState extends State<MyGarage> {
                                   ),
                                   Text(
                                     "Bike Setting",
-                                    style: TextStyle(
-                                      color: EvieColors.primaryColor,
-                                      fontSize: 17.sp,
-                                      fontWeight: FontWeight.w900,
-                                    ),
+                                    style: EvieTextStyles.ctaBig.copyWith(color:EvieColors.primaryColor),
                                   ),
                                 ],
                               ),
@@ -300,7 +288,7 @@ class _MyGarageState extends State<MyGarage> {
                                     borderRadius: BorderRadius.circular(10.w)
                                 ),
                                 elevation: 0.0,
-                                backgroundColor: const Color(0xffDFE0E0),
+                                backgroundColor: EvieColors.lightGrayishCyan,
                               ),
                               onPressed: () async {
                                 await _bikeProvider.changeBikeUsingIMEI(userBikeList.deviceIMEI);
@@ -308,7 +296,7 @@ class _MyGarageState extends State<MyGarage> {
                               }
                             )
                         ),
-                              SizedBox(height: 10.h),
+                           //   SizedBox(height: 5.h),
                             ],
                           ),
                         ),
@@ -317,7 +305,7 @@ class _MyGarageState extends State<MyGarage> {
                     Align(
                       alignment: Alignment.topCenter,
                       child: Image(
-                        height: 86.71.h,
+                        height: 111.65.h,
                         image: const AssetImage(
                             "assets/images/bike_HPStatus/bike_normal.png"),
                       ),

@@ -1,4 +1,3 @@
-
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';

@@ -13,11 +13,13 @@ import '../../../api/colours.dart';
 import '../../../api/model/bike_user_model.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
+import '../../../widgets/evie_appbar.dart';
+import '../../../widgets/evie_divider.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../../../widgets/evie_switch.dart';
 
 import '../../my_account/my_account_widget.dart';
-import '../my_bike_widget.dart';
+
 
 
 
@@ -94,7 +96,7 @@ class _SOSCentertState extends State<SOSCenter> {
                       },
                     )
                 ),
-                const BikePageDivider(),
+                const EvieDivider(),
                 Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
                     child: EvieSwitch(
@@ -126,7 +128,7 @@ class _SOSCentertState extends State<SOSCenter> {
                       },
                     )
                 ),
-                const BikePageDivider(),
+                const EvieDivider(),
 
               ],
             ),

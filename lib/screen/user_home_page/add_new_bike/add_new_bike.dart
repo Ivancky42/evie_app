@@ -73,6 +73,7 @@ class _AddNewBikeState extends State<AddNewBike> {
   bool myLocationEnabled = false;
 
   LocationData? userLocation;
+  late LatLng currentLatLngFree;
   late final MapController mapController;
   final Location _locationService = Location();
 
@@ -95,13 +96,11 @@ class _AddNewBikeState extends State<AddNewBike> {
 
   void initLocationService() async {
     LocationData? location;
-    locationListener();
 
     ///For user live location
     location = await _locationService.getLocation();
     userLocation = location;
-    userLocationSubscription =
-        _locationService.onLocationChanged.listen((LocationData result) async {
+    userLocationSubscription = _locationService.onLocationChanged.listen((LocationData result) async {
           if (mounted) {
             setState(() {
               userLocation = result;
@@ -109,6 +108,8 @@ class _AddNewBikeState extends State<AddNewBike> {
             });
           }
         });
+
+    locationListener();
   }
 
   @override
@@ -132,8 +133,6 @@ class _AddNewBikeState extends State<AddNewBike> {
 
     setConnectImage();
     setLockImage();
-
-    LatLng currentLatLngFree;
 
     if (userLocation != null) {
       currentLatLngFree = LatLng(userLocation!.latitude!, userLocation!.longitude!);
@@ -250,10 +249,12 @@ class _AddNewBikeState extends State<AddNewBike> {
                                 child: Text("Good Morning"),
                               );
                             }
+
                           }),
                       FutureBuilder(
                           future: getLocationModel(),
                           builder: (context, snapshot) {
+
                             if (snapshot.hasData) {
                               return SizedBox(
                                 width: double.infinity,
@@ -261,8 +262,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                                 child: Stack(
                                   children: [
                                     Mapbox_Widget(
-                                      accessToken:
-                                      _locationProvider.defPublicAccessToken,
+                                      accessToken: _locationProvider.defPublicAccessToken,
                                       //onMapCreated: _onMapCreated,
 
                                       mapController: mapController,
@@ -278,10 +278,8 @@ class _AddNewBikeState extends State<AddNewBike> {
                                       //     runSymbol();
                                       //   }
                                       // },
-                                      latitude: _locationProvider
-                                          .locationModel!.geopoint.latitude,
-                                      longitude: _locationProvider
-                                          .locationModel!.geopoint.longitude,
+                                      latitude: _locationProvider.locationModel?.geopoint.latitude ?? currentLatLngFree.latitude,
+                                      longitude: _locationProvider.locationModel?.geopoint.longitude ?? currentLatLngFree.longitude,
                                     ),
                                   ],
                                 ),
@@ -676,8 +674,13 @@ class _AddNewBikeState extends State<AddNewBike> {
     }
   }
 
-  Future<LocationModel?> getLocationModel() async {
-    return _locationProvider.locationModel;
+  Future getLocationModel() async {
+    if(_locationProvider.locationModel !=null){
+      return _locationProvider.locationModel;
+    }else{
+      return currentLatLngFree;
+    }
+
   }
 
 
