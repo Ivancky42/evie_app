@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/model/threat_routes_model.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
@@ -187,18 +188,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
     return WillPopScope(
       onWillPop: () async {
-        bool? exitApp = await SmartDialog.show(
-            widget: EvieDoubleButtonDialogCupertino(
-                title: "Close this app?",
-                content: "Are you sure you want to close this App?",
-                leftContent: "No",
-                rightContent: "Yes",
-                onPressedLeft: () {
-                  SmartDialog.dismiss();
-                },
-                onPressedRight: () {
-                  SystemNavigator.pop();
-                })) as bool?;
+        bool? exitApp = await showQuitApp() as bool?;
         return exitApp ?? false;
       },
       child: Scaffold(

@@ -1,9 +1,7 @@
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -13,7 +11,8 @@ import '../../api/fonts.dart';
 import '../../api/length.dart';
 import '../../api/navigator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
-import '../../api/provider/location_provider.dart';
+
+import '../../api/provider/auth_provider.dart';
 
 class StayCloseToBike extends StatefulWidget {
   const StayCloseToBike({Key? key}) : super(key: key);
@@ -23,17 +22,15 @@ class StayCloseToBike extends StatefulWidget {
 }
 
 class _StayCloseToBikeState extends State<StayCloseToBike> {
-  late CurrentUserProvider _currentUserProvider;
+  late AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
 
   @override
   Widget build(BuildContext context) {
-    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
-    _bikeProvider = Provider.of< BikeProvider>(context);
+    _authProvider = Provider.of<AuthProvider>(context);
+    _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
-
-    var currentName = _currentUserProvider.currentUserModel?.name;
 
     return WillPopScope(
       onWillPop: () async {
@@ -67,25 +64,25 @@ class _StayCloseToBikeState extends State<StayCloseToBike> {
 
               Padding(
                 padding: EdgeInsets.fromLTRB(11.w,4.h,16.w,98.h),
-
                   child: TextButton(
                       onPressed: (){
                         Uri.http("www.google.com");
                       },
                       child: Text("How to assemble my bike?",
-                        style: TextStyle( fontSize: 18.sp, fontWeight:FontWeight.w900, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),)),
-              )
-            ],
+                        style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),
+                    ),
+                  ),
+              )],
           ),
 
             Align(
-          alignment: Alignment.center,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(78.w,152.h,78.w,127.84.h),
-            child: SvgPicture.asset(
-              "assets/images/ride_bike_see_phone.svg",
-            ),
-          ),
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(78.w,152.h,78.w,127.84.h),
+                child: SvgPicture.asset(
+                  "assets/images/ride_bike_see_phone.svg",
+                ),
+              ),
         ),
 
             Align(
@@ -122,14 +119,16 @@ class _StayCloseToBikeState extends State<StayCloseToBike> {
         ),
 
 
+
            ///Button for on boarding and add bike respectively
            _bikeProvider.isAddBike ? Align(
              alignment: Alignment.bottomCenter,
              child: Padding(
-               padding: EdgeInsets.fromLTRB(120.w,25.h,120.w,EvieLength.buttonWord_WordBottom),
+               padding: EdgeInsets.fromLTRB(16.w,25.h,16.w,EvieLength.buttonbutton_buttonBottom),
                child: EvieButton_ReversedColor(
                  width: double.infinity,
                    onPressed: (){
+                   _bikeProvider.setIsAddBike(false);
                    changeToUserHomePageScreen(context);
                    },
                    child: Text("Cancel", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)))
@@ -147,6 +146,7 @@ class _StayCloseToBikeState extends State<StayCloseToBike> {
                           style: TextStyle(fontSize: 14.sp, fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                         ),
                         onPressed: () {
+                          _authProvider.setIsFirstLogin(false);
                         changeToUserHomePageScreen(context);
                         },
                       ),

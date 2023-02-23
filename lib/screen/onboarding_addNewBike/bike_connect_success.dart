@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import '../../animation/ripple_pulse_animation.dart';
+import '../../api/colours.dart';
+import '../../api/fonts.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../widgets/evie_progress_indicator.dart';
 
@@ -50,16 +52,16 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                       Padding(
                         padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
                         child: Text(
-                          "Bike registration successfully",
-                          style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
+                          "Yay! Bike is Connected! ",
+                          style: EvieTextStyles.h2,
                         ),
                       ),
 
                       Padding(
                         padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 63.h),
                         child: Text(
-                          "Hooray! You have successfully register your Bike Serial Number.",
-                          style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                          "Woo hoo! Your bike is now successfully paired with EVIE app.",
+                          style: EvieTextStyles.body18,
                         ),
                       ),
 
@@ -67,8 +69,8 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(32.w, 0.h, 32.w, 4.h),
                         child: Text(
-                          _bikeProvider.currentBikeModel?.deviceIMEI ?? "",
-                          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
+                          "Evie Bike",
+                          style:  EvieTextStyles.body20,
                         ),
                       ),
                      ),
@@ -77,7 +79,8 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                      child: Padding(
                        padding: EdgeInsets.fromLTRB(32.w, 4.h, 32.w, 32.h),
                        child:
-                       Text("Registered", style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),),
+                       Text(_bikeProvider.currentBikeModel?.deviceIMEI ?? "",
+                         style : EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan),),
                      ),
                   ),
 
@@ -85,8 +88,8 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                   ),
 
 
-          Padding(
-                    padding: EdgeInsets.fromLTRB(19.w, 336.h, 19.w, 288.h),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(19.w, 386.h, 19.w, 288.h),
                     child: Container(
                       height: 220.h,
                       width: 352.18.w,
@@ -95,19 +98,17 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                         children: <Widget>[
                           SvgPicture.asset(
                             ///Animation
-                            "assets/images/bike_fall.svg",
+                            "assets/images/bike_connected.svg",
                           ),
-                          // const Image(
-                          //   fit: BoxFit.fitWidth,
-                          //   image: AssetImage("assets/images/bike_HPStatus/bike_normal.png"),
-                          // ),
-                          IconButton(
-                            iconSize: 100.h,
-                            icon: Image.asset("assets/icons/connect_success.png"),
-                            onPressed: () {
 
-                            },
-                          ),
+
+                          // IconButton(
+                          //   iconSize: 100.h,
+                          //   icon: Image.asset("assets/icons/connect_success.png"),
+                          //   onPressed: () {
+                          //
+                          //   },
+                          // ),
 
                         ],
                       ),

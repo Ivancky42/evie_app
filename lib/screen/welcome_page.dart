@@ -10,6 +10,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../api/colours.dart';
+import '../api/dialog.dart';
 import '../widgets/evie_button.dart';
 
 class Welcome extends StatefulWidget {
@@ -22,19 +23,12 @@ class Welcome extends StatefulWidget {
 class _WelcomeState extends State<Welcome> {
   @override
   Widget build(BuildContext context) {
+
     return WillPopScope(
-        onWillPop: () async {
-     bool? exitApp = await SmartDialog.show(
-         widget:
-     EvieDoubleButtonDialogCupertino(
-         title: "Close this app?",
-         content: "Are you sure you want to close this App?",
-         leftContent: "No",
-         rightContent: "Yes",
-         onPressedLeft: (){SmartDialog.dismiss();},
-         onPressedRight: (){SystemNavigator.pop();})) as bool?;
-    return exitApp ?? false;
-    },
+      onWillPop: () async {
+        bool? exitApp = await showQuitApp() as bool?;
+        return exitApp ?? false;
+      },
 
     child:  Scaffold(
         body: Column(

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 
 import '../api/colours.dart';
@@ -15,6 +16,7 @@ class EvieTextFormField extends StatefulWidget {
   final String? labelText;
   final Widget? suffixIcon;
   final FormFieldValidator<String>? validator;
+  final List<TextInputFormatter>? inputFormatter;
 
   const EvieTextFormField({
     Key? key,
@@ -26,6 +28,7 @@ class EvieTextFormField extends StatefulWidget {
     this.labelText,
     this.suffixIcon,
     this.validator,
+    this.inputFormatter,
 
   }) : super(key: key);
 
@@ -66,56 +69,57 @@ class _EvieTextFormFieldState extends State<EvieTextFormField> {
           // ),
 
           child: TextFormField(
-      focusNode: focusNode,
-      controller: widget.controller,
-      keyboardType: widget.keyboardType,
-      obscureText: widget.obscureText!,
-      decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
-            hintText: widget.hintText,
-            labelText: widget.labelText,
+              inputFormatters: widget.inputFormatter,
+              focusNode: focusNode,
+              controller: widget.controller,
+              keyboardType: widget.keyboardType,
+              obscureText: widget.obscureText!,
+              decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+                    hintText: widget.hintText,
+                    labelText: widget.labelText,
 
-            hintStyle: TextStyle(fontSize: 10.sp, color:EvieColors.darkGrayish),
-            labelStyle: TextStyle(fontSize: 13.sp, color: EvieColors.darkGrayish),
-            filled: true,
-            errorStyle: TextStyle(
-              color: Theme.of(context).errorColor, // or any other color
+                    hintStyle: TextStyle(fontSize: 10.sp, color:EvieColors.darkGrayish),
+                    labelStyle: TextStyle(fontSize: 13.sp, color: EvieColors.darkGrayish),
+                    filled: true,
+                    errorStyle: TextStyle(
+                      color: Theme.of(context).errorColor, // or any other color
+                    ),
+                    //fillColor: widget.focusNode!.hasFocus ? Colors.red : ThemeChangeNotifier().isDarkMode(context) ?  Color(0xff3F3F3F) : Color(0xffDFE0E0),
+                    fillColor: focusNode.hasFocus ? EvieColors.thumbColorTrue : ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.lightGrayishCyan,
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          width: 0.1,
+                          color: ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.thumbColorTrue,), //<-- SEE HERE
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+
+                    focusColor: ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray: EvieColors.thumbColorTrue,
+
+
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        width: 1.5,
+                        color: Color(0xff6A51CA),), //<-- SEE HERE
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+
+                    errorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        width: 1.5,
+                        color: Color(0xffF42525),), //<-- SEE HERE
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        width: 1.5,
+                        color: Color(0xffF42525),), //<-- SEE HERE
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    suffixIcon: widget.suffixIcon),
+              validator: widget.validator,
             ),
-            //fillColor: widget.focusNode!.hasFocus ? Colors.red : ThemeChangeNotifier().isDarkMode(context) ?  Color(0xff3F3F3F) : Color(0xffDFE0E0),
-            fillColor: focusNode.hasFocus ? EvieColors.thumbColorTrue : ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.lightGrayishCyan,
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 0.1,
-                  color: ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.thumbColorTrue,), //<-- SEE HERE
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-
-            focusColor: ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray: EvieColors.thumbColorTrue,
-
-
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                width: 1.5,
-                color: Color(0xff6A51CA),), //<-- SEE HERE
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-
-            errorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                width: 1.5,
-                color: Color(0xffF42525),), //<-- SEE HERE
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-
-            focusedErrorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                width: 1.5,
-                color: Color(0xffF42525),), //<-- SEE HERE
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            suffixIcon: widget.suffixIcon),
-      validator: widget.validator,
-    ),
         )
     );
 

@@ -1,15 +1,19 @@
+import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:get/utils.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
+
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import '../../api/colours.dart';
+import '../../api/fonts.dart';
 import '../../api/length.dart';
 import '../../api/navigator.dart';
 
@@ -59,13 +63,10 @@ class _NameBikeState extends State<NameBike> {
                       height: 5.h,
                     ),
                     const EvieProgressIndicator(currentPageNumber: 5),
-                    SizedBox(
-                      height: 3.h,
-                    ),
+
                     Text(
                       "Name your bike",
-                      style:
-                      TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
+                      style: EvieTextStyles.h2,
                     ),
                     SizedBox(
                       height: 1.h,
@@ -73,7 +74,8 @@ class _NameBikeState extends State<NameBike> {
                     Text("Give your bike a unique name. "
                         "Can't think of a name for your bike now? "
                         "No worries, you can always do that later at bike setting page whenever you are ready.",
-                      style: TextStyle(fontSize: 11.5.sp, fontWeight: FontWeight.w400,height: 0.17.h),),
+                      style: EvieTextStyles.body18,),
+
                     SizedBox(
                       height: 2.h,
                     ),
@@ -95,6 +97,7 @@ class _NameBikeState extends State<NameBike> {
                 ),
               ),
             ),
+
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
@@ -104,41 +107,15 @@ class _NameBikeState extends State<NameBike> {
                   width: double.infinity,
                   child: Text(
                     "Save",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10.sp,
-                    ),
+                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                   ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       _bikeProvider.updateBikeName(_bikeNameController.text.trim()).then((result){
                         if(result == true){
-                          SmartDialog.show(
-                            keepSingle: true,
-                              widget: EvieSingleButtonDialogCupertino
-                            (title: "Success",
-                              content: "Update successful",
-                              rightContent: "Ok",
-                              onPressedRight: (){
-                              SmartDialog.dismiss();
-
-                              if(_bikeProvider.isAddBike == true){
-                               _bikeProvider.setIsAddBike(false);
-                               //changeToCongratsBikeAdded(context, _bikeNameController.text.trim());
-
-                              }else{
-                                changeToTurnOnNotificationsScreen(context);
-                              }
-
-                            } ));
+                        showAddBikeNameSuccess(context, _bikeProvider, _bikeNameController.text.trim());
                         } else{
-                          SmartDialog.show(
-                              keepSingle: true,
-                              widget: EvieSingleButtonDialogCupertino
-                                (title: "Not Success",
-                                  content: "An error occur, try again",
-                                  rightContent: "Ok",
-                                  onPressedRight: (){SmartDialog.dismiss();} ));
+                        showAddBikeNameFailed();
                         }
                       });
                     }
@@ -146,23 +123,27 @@ class _NameBikeState extends State<NameBike> {
                 ),
               ),
             ),
+
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.only(left: 16, right: 16, bottom: EvieLength.buttonWord_WordBottom),
-                child:
-
-                SizedBox(
-                  height: 6.h,
-                  width: 30.w,
-                  child:
-                  TextButton(
+                padding: EdgeInsets.fromLTRB(0.w,25.h,0.w,EvieLength.buttonWord_WordBottom),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
                     child: Text(
-                      "Maybe Later",
-                      style: TextStyle(fontSize: 9.sp,color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                      "Can't think of any name now",
+                      softWrap: false,
+                      style: TextStyle(fontSize: 14.sp, fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
-                     changeToTurnOnNotificationsScreen(context);
+                      _bikeProvider.updateBikeName("Evie Bike").then((result){
+                        if(result == true){
+                          showAddBikeNameSuccess(context, _bikeProvider, "Evie Bike");
+                        } else{
+                          showAddBikeNameFailed();
+                        }
+                      });
                     },
                   ),
                 ),

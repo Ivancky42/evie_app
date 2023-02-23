@@ -62,6 +62,7 @@ class AppTheme{
         backgroundColor: const Color(0xffF2F2F2).withOpacity(0.9),
       ),
 
+  //  brightness: Brightness.dark,
   );
 
 
@@ -120,6 +121,9 @@ class AppTheme{
 
     dialogTheme: DialogTheme(
       backgroundColor: const Color(0xff1E1E1E).withOpacity(0.85),
-    )
+    ),
+
+  //  brightness: Brightness.light,
   );
+
 }

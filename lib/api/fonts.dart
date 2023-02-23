@@ -21,6 +21,7 @@ class EvieTextStyles {
  static TextStyle body14 = TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400,);
  static TextStyle body16 = TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400,);
  static TextStyle body18 = TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400,);
+ static TextStyle body20 = TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500,);
 
 }
 

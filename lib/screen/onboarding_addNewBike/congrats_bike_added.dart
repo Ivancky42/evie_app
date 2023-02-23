@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
+import '../../api/fonts.dart';
 import '../../api/navigator.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
@@ -24,7 +26,7 @@ import '../../widgets/evie_progress_indicator.dart';
 
 class CongratsBikeAdded extends StatefulWidget {
 
-  final String bikeName;
+  final String? bikeName;
   const CongratsBikeAdded(this.bikeName,{Key? key}) : super(key: key);
 
   @override
@@ -34,10 +36,12 @@ class CongratsBikeAdded extends StatefulWidget {
 class _CongratsBikeAddedState extends State<CongratsBikeAdded> {
 
   late AuthProvider _authProvider;
+  late BikeProvider _bikeProvider;
 
   @override
   Widget build(BuildContext context) {
     _authProvider = Provider.of<AuthProvider>(context);
+    _bikeProvider = Provider.of<BikeProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -58,16 +62,16 @@ class _CongratsBikeAddedState extends State<CongratsBikeAdded> {
                       padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
                       child: Text(
                         "Congrats!",
-                        style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
+                        style: EvieTextStyles.h2,
                       ),
                     ),
 
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 87.h),
                       child: Text(
-                        "You have successfully added ${widget.bikeName.toString().trim()}. Get ready to track your rides, access all the fun features, and have an amazing time. \n \n"
+                        "You have successfully added ${widget.bikeName.toString().trim() ?? ""}. Get ready to track your rides, access all the fun features, and have an amazing time. \n \n"
                             "If there's anything we can help with, just let us know. Happy riding!",
-                        style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                        style: EvieTextStyles.body18,
                       ),
                     ),
 
@@ -93,15 +97,14 @@ class _CongratsBikeAddedState extends State<CongratsBikeAdded> {
                       height: 48.h,
                       child: Text(
                         "Let's Get Started",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w700
-                        ),
+                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                       ),
 
                       onPressed: (){
+
                         _authProvider.setIsFirstLogin(false);
+                        _bikeProvider.setIsAddBike(false);
+
                         changeToUserHomePageScreen(context);
                       },
                     ),

@@ -6,14 +6,10 @@ import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:open_mail_app/open_mail_app.dart';
-import 'package:open_settings/open_settings.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
+import '../../api/fonts.dart';
 import '../../api/navigator.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
@@ -21,10 +17,8 @@ import 'package:evie_test/widgets/evie_button.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../api/provider/bluetooth_provider.dart';
 import '../../widgets/evie_progress_indicator.dart';
+import '../../widgets/evie_text_input_formatter.dart';
 import '../../widgets/evie_textform.dart';
-import 'bike_connect_failed.dart';
-import 'bike_connect_success.dart';
-
 
 class QRAddManually extends StatefulWidget {
   const QRAddManually({Key? key}) : super(key: key);
@@ -34,7 +28,6 @@ class QRAddManually extends StatefulWidget {
 }
 
 class _QRAddManuallyState extends State<QRAddManually> {
-
 
   final TextEditingController _serialNumberController = TextEditingController();
   final TextEditingController _validationKeyController = TextEditingController();
@@ -72,17 +65,29 @@ class _QRAddManuallyState extends State<QRAddManually> {
                       child: Text(
                         "Please enter the following codes. "
                             "You'll find them next to the QR code on the back of your manual.",
-                        style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                        style: EvieTextStyles.body18.copyWith(height: 1.5.h),
                       ),
                     ),
 
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(11.w,4.h,16.w,12.h),
+                      child: TextButton(
+                        onPressed: (){
+                          Uri.http("www.google.com");
+                        },
+                        child: Text("Where to find these?",
+                          style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),
+                        ),
+                      ),
+                    ),
 
                     Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 8.h),
+                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 8.h),
                       child: EvieTextFormField(
+                        inputFormatter: [AddQRInputFormatter()],
                         controller: _serialNumberController,
                         obscureText: false,
-                        hintText: "T0AS01010100001",
+                        hintText: "T0AS01 0101 00001",
                         labelText: "Serial Number",
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -131,10 +136,10 @@ class _QRAddManuallyState extends State<QRAddManually> {
                         ),
                       ),
                       onPressed: () async {
-
                 if (_formKey.currentState!.validate()) {
+
                   String code =
-                      "serialNumber:${_serialNumberController.text.trim()},"
+                      "serialNumber:${_serialNumberController.text.trim().replaceAll(" ", "")},"
                       "validationKey:${_validationKeyController.text.trim()}";
 
                   await _bikeProvider.handleBarcodeData(code);
@@ -144,8 +149,6 @@ class _QRAddManuallyState extends State<QRAddManually> {
                   }else{
                     changeToBikeConnectFailedScreen(context);
                   }
-
-
                 }
                       },
                     ),

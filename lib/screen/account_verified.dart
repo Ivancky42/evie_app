@@ -9,6 +9,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import '../api/dialog.dart';
 import '../api/length.dart';
 import '../api/navigator.dart';
 import '../theme/ThemeChangeNotifier.dart';
@@ -32,15 +33,7 @@ class _AccountVerifiedState extends State<AccountVerified> {
     _authProvider = Provider.of<AuthProvider>(context);
     return WillPopScope(
       onWillPop: () async {
-        bool? exitApp = await SmartDialog.show(
-            widget:
-            EvieDoubleButtonDialogCupertino(
-                title: "Close this app?",
-                content: "Are you sure you want to close this App?",
-                leftContent: "No",
-                rightContent: "Yes",
-                onPressedLeft: (){SmartDialog.dismiss();},
-                onPressedRight: (){SystemNavigator.pop();})) as bool?;
+        bool? exitApp = await showQuitApp() as bool?;
         return exitApp ?? false;
       },
 

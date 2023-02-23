@@ -14,6 +14,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
+import '../api/dialog.dart';
 import '../api/provider/auth_provider.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/provider/current_user_provider.dart';
@@ -273,15 +274,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
     return WillPopScope(
         onWillPop: () async {
-          bool? exitApp = await SmartDialog.show(
-              widget:
-              EvieDoubleButtonDialogCupertino(
-                  title: "Close this app?",
-                  content: "Are you sure you want to close this App?",
-                  leftContent: "No",
-                  rightContent: "Yes",
-                  onPressedLeft: (){SmartDialog.dismiss();},
-                  onPressedRight: (){SystemNavigator.pop();})) as bool?;
+          bool? exitApp = await showQuitApp() as bool?;
           return exitApp ?? false;
         },
 

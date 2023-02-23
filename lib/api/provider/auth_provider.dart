@@ -35,7 +35,7 @@ class AuthProvider extends ChangeNotifier {
   String? get getEmail => _email;
 
   bool isLogin = false;
-  bool? isFirstLogin;
+  bool? isFirstLogin = false;
   bool? isEmailVerified;
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;

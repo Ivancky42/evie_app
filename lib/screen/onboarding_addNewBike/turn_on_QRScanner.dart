@@ -1,3 +1,5 @@
+import 'package:evie_test/api/dialog.dart';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -49,7 +51,7 @@ class _TurnOnQRScannerState extends State<TurnOnQRScanner> {
                       padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
                       child: Text(
                         "Scan the QR Code",
-                        style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
+                        style: EvieTextStyles.h2,
                       ),
                     ),
                     SizedBox(
@@ -59,7 +61,7 @@ class _TurnOnQRScannerState extends State<TurnOnQRScanner> {
                       padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 113.h),
                       child: Text(
                         "You can find the QR on the back of the manual.",
-                        style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                        style: EvieTextStyles.body18,
                       ),
                     ),
 
@@ -77,45 +79,24 @@ class _TurnOnQRScannerState extends State<TurnOnQRScanner> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom),
+                    padding:    EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.button_Bottom),
                     child:  EvieButton(
                       width: double.infinity,
                       height: 48.h,
                       child: Text(
                         "Scan QR Code",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w700
-                        ),
+                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                       ),
-                      onPressed: () {
+                      onPressed: () async{
+                      if (await Permission.camera.request().isGranted){
                         changeToQRScanningScreen(context);
+                        }else{
+                          showCameraDisable();
+                        }
                       },
                     ),
                   ),
                 ),
-
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(150.w,25.h,150.w,EvieLength.buttonWord_WordBottom),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: TextButton(
-                        child: Text(
-                          "Maybe Later",
-                          softWrap: false,
-                          style: TextStyle(fontSize: 12.sp,color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
-                        ),
-                        onPressed: () {
-                          changeToTurnOnNotificationsScreen(context);
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-
 
               ]
           )

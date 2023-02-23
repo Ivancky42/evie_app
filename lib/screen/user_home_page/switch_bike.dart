@@ -62,7 +62,8 @@ class _SwitchBikeState extends State<SwitchBike> {
                 height: 59.h,
                 child: GestureDetector(
                   onTap: () {
-                    changeToTurnOnQRScannerScreen(context);
+                    _bikeProvider.setIsAddBike(true);
+                    changeToStayCloseToBike(context);
                   },
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 0.h, 6.w, 17.h),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -22,6 +23,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../api/provider/bluetooth_provider.dart';
 import '../../api/provider/notification_provider.dart';
+import '../../api/snackbar.dart';
 import '../../widgets/evie_progress_indicator.dart';
 import '../../widgets/evie_single_button_dialog.dart';
 import '../../widgets/evie_switch.dart';
@@ -77,7 +79,7 @@ class _TurnOnNotificationsState extends State<TurnOnNotifications> {
 
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 0.h),
-                      child: Text(    "Get latest updates of EVIE bike with EVIE app. You can always manage your push notification in Setting anytime.",
+                      child: Text(  "Get latest updates of EVIE bike with EVIE app. You can always manage your push notification in Setting anytime.",
                         style: EvieTextStyles.body18,),
                     ),
 
@@ -108,35 +110,75 @@ class _TurnOnNotificationsState extends State<TurnOnNotifications> {
                                 },
                               ),
 
-                              ///Free and pro plan
-                              ///
-                              EvieSwitch(
-                                text: "Bike Security Alert",
-                                value: _switchValue3,
-                                thumbColor: _thumbColor,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _switchValue3 = value!;
-                                  });
-                                },
+                              Divider(
+                                thickness: 11.h,
+                                color: EvieColors.dividerWhite,
                               ),
 
-                              EvieSwitch(
-                                text: "SOS Alerts",
-                                value: _switchValue4,
-                                thumbColor: _thumbColor,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _switchValue4 = value!;
-                                  });
-                                },
+                              if(_bikeProvider.isPlanSubscript == true)...{
+                                EvieSwitch(
+                                  text: "Bike Security Alert",
+                                  value: _switchValue3,
+                                  thumbColor: _thumbColor,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _switchValue3 = value!;
+                                    });
+                                  },
+                                ),
+                              }else...{
+                              Opacity(
+                              opacity: 0.3,
+                                child:GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  onTap: (){
+                                    showOnlyForProToast(context);
+                                  },
+                                  child: EvieSwitch(
+                                    text: "Bike Security Alert",
+                                    value: false,
+                                    thumbColor: _thumbColor,
+                                    onChanged: (value) {
+                                    },
+                                  ),
+                                ),
                               ),
+                              },
+
+                              if(_bikeProvider.isPlanSubscript == true)...{
+                                EvieSwitch(
+                                  text: "SOS Alerts",
+                                  value: _switchValue4,
+                                  thumbColor: _thumbColor,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _switchValue4 = value!;
+                                    });
+                                  },
+                                ),
+                              }else...{
+                              Opacity(
+                              opacity: 0.3,
+                               child: GestureDetector(
+                                 behavior: HitTestBehavior.translucent,
+                                 onTap: (){
+                                   showOnlyForProToast(context);
+                                 },
+                                 child: EvieSwitch(
+                                    text: "SOS Alerts",
+                                    value: false,
+                                    thumbColor: _thumbColor,
+                                    onChanged: (value) {
+
+                                    },
+                                  ),
+                               ),
+                              ),
+                              },
                             ],
                           )
                       ),
                     ),
-
-
                   ],
                 ),
 
@@ -157,52 +199,77 @@ class _TurnOnNotificationsState extends State<TurnOnNotifications> {
                         ),
                       ),
                       onPressed: () async {
-                        SmartDialog.showLoading();
-                        try{
-                          await _bikeProvider.updateFirestoreNotification("general", _switchValue1);
-                          if(_switchValue1){
-                            await _notificationProvider.subscribeToTopic("~general");
-                          }
-                          await _bikeProvider.updateFirestoreNotification("firmwareUpdate", _switchValue2);
-                          if(_switchValue2){
-                            await _notificationProvider.subscribeToTopic("~firmware-update");
-                          }
 
-                          await _bikeProvider.updateFirestoreNotification("connectionLost", _switchValue3);
-                          await _bikeProvider.updateFirestoreNotification("movementDetect", _switchValue3);
-                          await _bikeProvider.updateFirestoreNotification("theftAttempt", _switchValue3);
-                          await _bikeProvider.updateFirestoreNotification("lock", _switchValue3);
-                          await _bikeProvider.updateFirestoreNotification("planReminder", _switchValue3);
-                          if(_switchValue3){
-                            await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~connection-lost");
-                            await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~movement-detect");
-                            await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~theft-attempt");
-                            await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~lock-reminder");
-                            await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~plan-reminder");
-                          }
 
-                          await _bikeProvider.updateFirestoreNotification("crash", _switchValue4);
-                          await _bikeProvider.updateFirestoreNotification("fallDetect", _switchValue4);
-                          if(_switchValue4){
-                            await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~fall-detect");
-                            await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~crash");
-                          }
-
-                          SmartDialog.dismiss();
-
-                          changeToCongratsBikeAdded(context, _bikeProvider.currentBikeModel!.deviceIMEI!);
-                        }catch(e){
-                          SmartDialog.show(
-                              widget: EvieSingleButtonDialog(
-                                  title: "Error",
-                                  content: "Try again",
-                                  rightContent: "OK",
-                                  onPressedRight: (){
-                                    SmartDialog.dismiss();
-                                  }));
+                        if(_bikeProvider.isPlanSubscript == true){}else{
+                          setState(() {
+                            _switchValue3 = false;
+                            _switchValue4 = false;
+                          });
                         }
 
-                        ///Also need to subscript
+                       if (await Permission.notification.request().isGranted){
+                         SmartDialog.showLoading();
+                         try{
+                           await _bikeProvider.updateFirestoreNotification("general", _switchValue1);
+                           if(_switchValue1){
+                             await _notificationProvider.subscribeToTopic("~general");
+                           }
+                           await _bikeProvider.updateFirestoreNotification("firmwareUpdate", _switchValue2);
+                           if(_switchValue2){
+                             await _notificationProvider.subscribeToTopic("~firmware-update");
+                           }
+
+
+                           await _bikeProvider.updateFirestoreNotification("connectionLost", _switchValue3);
+                           await _bikeProvider.updateFirestoreNotification("movementDetect", _switchValue3);
+                           await _bikeProvider.updateFirestoreNotification("theftAttempt", _switchValue3);
+                           await _bikeProvider.updateFirestoreNotification("lock", _switchValue3);
+                           await _bikeProvider.updateFirestoreNotification("planReminder", _switchValue3);
+
+                          if(_bikeProvider.currentBikeModel != null){
+                           if(_switchValue3){
+                               await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel?.deviceIMEI}~connection-lost");
+                               await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel?.deviceIMEI}~movement-detect");
+                               await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel?.deviceIMEI}~theft-attempt");
+                               await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel?.deviceIMEI}~lock-reminder");
+                               await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel?.deviceIMEI}~plan-reminder");
+                             }
+                           }
+
+                           await _bikeProvider.updateFirestoreNotification("crash", _switchValue4);
+                           await _bikeProvider.updateFirestoreNotification("fallDetect", _switchValue4);
+
+                           if(_bikeProvider.currentBikeModel != null){
+                             if(_switchValue4){
+                             await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel?.deviceIMEI}~fall-detect");
+                             await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel?.deviceIMEI}~crash");
+                             }
+                           }
+
+                           SmartDialog.dismiss();
+                           if(_bikeProvider.currentBikeModel != null){
+                             changeToCongratsBikeAdded(context, _bikeProvider.currentBikeModel?.deviceIMEI ?? "Evie Bike" );
+                           }else{
+                             changeToUserHomePageScreen(context);
+                           }
+                    
+                         }catch(e){
+                           // SmartDialog.show(
+                           //     widget: EvieSingleButtonDialog(
+                           //         title: "Error",
+                           //         content: "Try again",
+                           //         rightContent: "OK",
+                           //         onPressedRight: (){
+                           //           SmartDialog.dismiss();
+                           //         }));
+                         }
+
+                       }else{
+                         showNotificationNotAuthorized();
+
+                       }
+
                       },
                     ),
                   ),

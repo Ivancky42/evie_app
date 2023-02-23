@@ -14,6 +14,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
+import '../../api/fonts.dart';
 import '../../api/navigator.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
@@ -57,7 +58,7 @@ class _TurnOnBluetoothState extends State<TurnOnBluetooth> {
                       padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
                       child: Text(
                         "Allow Bluetooth",
-                        style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
+                        style: EvieTextStyles.h2,
                       ),
                     ),
 
@@ -66,7 +67,7 @@ class _TurnOnBluetoothState extends State<TurnOnBluetooth> {
                       child: Text(
                         "Bluetooth is required to connect your device with your bike. "
                             "This allows EVIE app provide you with real-time information, such as speed, distance, and more.",
-                        style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                        style: EvieTextStyles.body18,
                       ),
                     ),
 
@@ -92,11 +93,7 @@ class _TurnOnBluetoothState extends State<TurnOnBluetooth> {
                       height: 48.h,
                       child: Text(
                         "Allow Bluetooth",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w700
-                        ),
+                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                       ),
                       onPressed: () async {
 

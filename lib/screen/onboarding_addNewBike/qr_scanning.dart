@@ -1,5 +1,6 @@
 
 import 'package:evie_test/api/navigator.dart';
+import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 
 import 'package:evie_test/widgets/evie_appbar.dart';
@@ -13,6 +14,8 @@ import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../../api/colours.dart';
+import '../../api/fonts.dart';
 import '../../api/length.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../widgets/evie_button.dart';
@@ -30,8 +33,8 @@ class QRScanning extends StatefulWidget {
 class _QRScanningState extends State<QRScanning> {
 
   late MobileScannerController cameraController;
-
   late BikeProvider _bikeProvider;
+  bool onTorch = false;
 
   @override
   void initState() {
@@ -54,6 +57,7 @@ class _QRScanningState extends State<QRScanning> {
       height: 184.h,
     );
 
+    AuthProvider _authProvider =  Provider.of<AuthProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
 
     return WillPopScope(
@@ -96,50 +100,8 @@ class _QRScanningState extends State<QRScanning> {
                      ///upload to userbike and bikeuser list
 
                    }
-
-
                 }
                 ),
-
-
-
-     // MobileScanner(
-     //
-     //              fit: BoxFit.cover,
-     //              allowDuplicates: false,
-     //              scan
-     //              controller: cameraController,
-     //              onDetect: (barcode, args) async {
-     //
-     //                if (barcode.rawValue == null) {
-     //                  debugPrint('Failed to scan Barcode');
-     //                } else {
-     //                  final String code = barcode.rawValue!;
-     //                  debugPrint('Barcode found, $code');
-     //
-     //                  SmartDialog.showLoading();
-     //                  _bikeProvider.handleBarcodeData(code);
-     //
-     //                  await _bikeProvider.handleBarcodeData(code);
-     //                  if(_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success){
-     //
-     //                    SmartDialog.dismiss(status:SmartStatus.loading);
-     //                    changeToBikeConnectSuccessScreen(context);
-     //                  }else{
-     //                    SmartDialog.dismiss(status:SmartStatus.loading);
-     //                    changeToBikeConnectFailedScreen(context);
-     //                  }
-     //
-     //                  ///get serial number
-     //                  ///handle code pass to bike provider
-     //                  ///Detect bike exist from reference, the validation code correct
-     //                  ///Detect is first user
-     //                  ///upload to userbike and bikeuser list
-     //
-     //                }
-     //              }),
-
-
 
               Positioned.fill(
                 child: Container(
@@ -159,56 +121,110 @@ class _QRScanningState extends State<QRScanning> {
               ),
 
 
+              // child: IconButton(
+              //     iconSize: 64.h,
+              //     icon:  onTorch ? SvgPicture.asset(
+              //       "assets/buttons/torch_off.svg",
+              //       height: 64.h,
+              //       width: 64.w,
+              //     ) : SvgPicture.asset(
+              //       "assets/buttons/torch_on.svg",
+              //       height: 64.h,
+              //       width: 64.w,
+              //     ),
+              //     onPressed: () {
+              //       onTorch != onTorch;
+              //       cameraController.toggleTorch();
+              //     }
+              // ),
 
 
+                Align(
+                alignment: Alignment.bottomCenter,
+                child:Padding(
+                      padding:       EdgeInsets.only(left: 16.w, right: 16.w, bottom: 180.h),
+                      child: IconButton(
+                        iconSize: 64.h,
+                          icon:  onTorch ? Image(
+                            image: const AssetImage("assets/buttons/torch_on.png"),
+                            height: 64.h,
+                            width: 64.w,
+                          ) : Image(
+                            image: const AssetImage("assets/buttons/torch.png"),
+                            height: 64.h,
+                            width: 64.w,
+                          ),
+                        onPressed: () {
 
-    Align(
-    alignment: Alignment.bottomCenter,
-    child:Padding(
-          padding:       EdgeInsets.only(left: 16.w, right: 16.w, bottom: 180.h),
-          child: IconButton(
-            iconSize: 64.h,
-              icon:  Image(
-                image: const AssetImage("assets/buttons/torch.png"),
-                height: 64.h,
-                width: 64.w,
-              ),
-            onPressed: () => cameraController.toggleTorch(),
-          ),
-        ),
-    ),
+                          setState(() {
+                            onTorch = !onTorch;
+                          });
+                         cameraController.toggleTorch();
+                            }
 
-
-              Padding(
-                padding: EdgeInsets.fromLTRB(20.w, 153.h, 20.w, 123.h),
-                child: Row(
-                  children: [
-                    Text(
-                      "Align the QR code within the frame to scan",
-                      style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                          ),
+                        ),
                     ),
-                    GestureDetector(
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(20.w, 71.h, 20.w, 123.h),
+                    child:   GestureDetector(
                       onTap: (){
+                        _authProvider.setIsFirstLogin(false);
+                        _bikeProvider.setIsAddBike(false);
                         changeToUserHomePageScreen(context);
                       },
                       child: SvgPicture.asset(
                         "assets/buttons/close.svg",
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
 
-        Align(
-            alignment: Alignment.bottomCenter,
-        child:Padding(
-          padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,132.h),
-          child: Text(
-            "Or",
-            style: TextStyle(fontSize: 16.sp, color: Colors.white),
-          ),
-        ),
-        ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(20.w, 153.h, 20.w, 123.h),
+                    child: Text(
+                      "Align the QR code within the frame to scan",
+                      style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(20.w, 190.h, 20.w, 123.h),
+                    child: TextButton(
+                      onPressed: (){
+                        Uri.http("www.google.com");
+                      },
+                      child: Text("Where to find QR code?",
+                        style: EvieTextStyles.body16.copyWith(fontWeight:FontWeight.w900, color: EvieColors.thumbColorTrue, decoration: TextDecoration.underline,),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+            Align(
+                alignment: Alignment.bottomCenter,
+            child:Padding(
+              padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,132.h),
+              child: Text(
+                "Or",
+                style: TextStyle(fontSize: 16.sp, color: Colors.white),
+              ),
+            ),
+            ),
 
 
               Align(

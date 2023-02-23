@@ -13,6 +13,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 import 'package:evie_test/widgets/evie_radio_button.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -28,7 +29,54 @@ import '../widgets/evie_textform.dart';
 import 'colours.dart';
 import 'navigator.dart';
 
+showQuitApp(){
+  SmartDialog.show(
+      widget: EvieDoubleButtonDialog(
+          title: "Close this app?",
+          childContent: const Text("Are you sure you want to close this App?"),
+          leftContent: "No",
+          rightContent: "Yes",
+          onPressedLeft: () {
+            SmartDialog.dismiss();
+          },
+          onPressedRight: () {
+            SystemNavigator.pop();
+          }));
+}
+
+showAddBikeNameSuccess(context, BikeProvider bikeProvider, bikeNameController){
+  SmartDialog.dismiss();
+  SmartDialog.show(
+      keepSingle: true,
+      widget: EvieSingleButtonDialog
+        (title: "Success",
+          content: "Update successful",
+          rightContent: "Ok",
+          onPressedRight: (){
+            SmartDialog.dismiss();
+            if(bikeProvider.isAddBike == true){
+              bikeProvider.setIsAddBike(false);
+              changeToCongratsBikeAdded(context, bikeNameController);
+            }else{
+              changeToTurnOnNotificationsScreen(context);
+            }
+          }
+          ));
+}
+
+showAddBikeNameFailed(){
+  SmartDialog.dismiss();
+  SmartDialog.show(
+      keepSingle: true,
+      widget: EvieSingleButtonDialog
+        (title: "Not Success",
+          content: "An error occur, try again",
+          rightContent: "Ok",
+          onPressedRight: (){SmartDialog.dismiss();} ));
+}
+
 showBluetoothNotTurnOn() {
+  SmartDialog.dismiss();
   SmartDialog.show(
       keepSingle: true,
       widget: EvieSingleButtonDialogCupertino(
@@ -41,6 +89,7 @@ showBluetoothNotTurnOn() {
 }
 
 showBluetoothNotSupport() {
+  SmartDialog.dismiss();
   SmartDialog.show(
       keepSingle:
       true,
@@ -55,6 +104,7 @@ showBluetoothNotSupport() {
 }
 
 showBluetoothNotAuthorized() {
+  SmartDialog.dismiss();
   SmartDialog.show(
       keepSingle:
       true,
@@ -71,6 +121,7 @@ showBluetoothNotAuthorized() {
 }
 
 showLocationServiceDisable() {
+  SmartDialog.dismiss();
   SmartDialog.show(
       keepSingle:
       true,
@@ -81,6 +132,39 @@ showLocationServiceDisable() {
           onPressedRight: () {
             SmartDialog.dismiss();
             openAppSettings();
+          }));
+}
+
+
+showCameraDisable() {
+  SmartDialog.dismiss();
+  SmartDialog.dismiss();
+  SmartDialog.show(
+      keepSingle:
+      true,
+      widget: EvieSingleButtonDialog(
+          title: "Disable",
+          content: "Camera is disabled, please enable your camera service in settings",
+          rightContent: "OK",
+          onPressedRight: () {
+            SmartDialog.dismiss();
+            openAppSettings();
+          }));
+}
+
+showNotificationNotAuthorized() {
+  SmartDialog.dismiss();
+  SmartDialog.show(
+      keepSingle:
+      true,
+      widget: EvieSingleButtonDialog(
+          title: "Error",
+          content: "Notification permission is off, turn on notification permission in setting",
+          rightContent: "OK",
+          onPressedRight: () {
+            SmartDialog.dismiss();
+            openAppSettings();
+            ///Redirect user to enable bluetooth permission.
           }));
 }
 

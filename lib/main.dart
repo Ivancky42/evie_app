@@ -196,8 +196,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthProvider _authProvider = Provider.of<AuthProvider>(context);
-    PlanProvider _planProvider = Provider.of<PlanProvider>(context);
-    BluetoothProvider _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     ThemeProvider _themeProvider = Provider.of<ThemeProvider>(context);
     _themeProvider.init();
 
@@ -222,6 +220,7 @@ class MyApp extends StatelessWidget {
       return AnnotatedRegion<SystemUiOverlayStyle>(
 
         value: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark,
           statusBarColor: Colors.transparent,
         ),
 

@@ -317,8 +317,42 @@ showUpgradePlanToast(context) {
   );
 }
 
+showOnlyForProToast(context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
+            SizedBox(width: 4.w,),
+            Container(
+              width: 300.w,
+              child: Text(
+                "This feature only available for pro plan user. You can upgrade your plan in setting page.",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      duration: const Duration(seconds: 5),
+    ),
+  );
+}
+
 hideCurrentSnackBar(ScaffoldMessengerState _navigator) {
   Future.delayed(Duration.zero).then((value) {
     _navigator.removeCurrentSnackBar();
   });
 }
+

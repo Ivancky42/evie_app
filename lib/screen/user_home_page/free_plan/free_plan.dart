@@ -19,6 +19,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import '../../../api/dialog.dart';
 import '../../../api/function.dart';
 import '../../../api/model/location_model.dart';
 import '../../../api/provider/bike_provider.dart';
@@ -159,18 +160,7 @@ class _FreePlanState extends State<FreePlan> {
 
     return WillPopScope(
       onWillPop: () async {
-        bool? exitApp = await SmartDialog.show(
-            widget: EvieDoubleButtonDialogCupertino(
-                title: "Close this app?",
-                content: "Are you sure you want to close this App?",
-                leftContent: "No",
-                rightContent: "Yes",
-                onPressedLeft: () {
-                  SmartDialog.dismiss();
-                },
-                onPressedRight: () {
-                  SystemNavigator.pop();
-                })) as bool?;
+        bool? exitApp = await showQuitApp() as bool?;
         return exitApp ?? false;
       },
       child: Scaffold(

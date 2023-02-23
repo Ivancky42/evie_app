@@ -1,4 +1,5 @@
 import 'package:evie_test/api/navigator.dart';
+import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import '../../animation/ripple_pulse_animation.dart';
 import '../../api/colours.dart';
+import '../../api/fonts.dart';
 import '../../api/length.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../widgets/evie_button.dart';
@@ -23,11 +25,13 @@ class BikeConnectFailed extends StatefulWidget {
 class _BikeConnectFailedState extends State<BikeConnectFailed> {
 
   late BikeProvider _bikeProvider;
+  late AuthProvider _authProvider;
 
   @override
   Widget build(BuildContext context) {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _authProvider = Provider.of<AuthProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -46,23 +50,23 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
               padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 4.h),
               child: Text(
                 "Bike registration failed",
-                style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
+                style: EvieTextStyles.h2,
               ),
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 63.h),
               child: Text(
                 "Oops! Look like ${_bikeProvider.scanQRCodeResult.toString()} happen.",
-                style: TextStyle(fontSize: 16.sp, height: 1.5.h),
+                style: EvieTextStyles.body18,
               ),
             ),
             Center(
               child: Padding(
                 padding: EdgeInsets.fromLTRB(32.w, 0.h, 32.w, 4.h),
                 child: Text(
-                  "Bike Serial Number",
+                  "Evie Bike",
                   style:
-                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
+                  EvieTextStyles.body20,
                 ),
               ),
             ),
@@ -70,16 +74,16 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
               child: Padding(
                 padding: EdgeInsets.fromLTRB(32.w, 4.h, 32.w, 32.h),
                 child: Text(
-                  "Not Registered",
+                  "Bike Serial Number",
                   style:
-                      TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
+                      EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
               ),
             ),
           ],
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(19.w, 336.h, 19.w, 288.h),
+          padding: EdgeInsets.fromLTRB(19.w, 356.h, 19.w, 288.h),
           child: Container(
             height: 220.h,
             width: 352.18.w,
@@ -89,16 +93,12 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
                 SvgPicture.asset(
                   "assets/images/bike_fall.svg",
                 ),
-                // const Image(
-                //   fit: BoxFit.fitWidth,
-                //   image:
-                //       AssetImage("assets/images/bike_HPStatus/bike_normal.png"),
+
+                // IconButton(
+                //   iconSize: 100.h,
+                //   icon: Image.asset("assets/icons/connect_failed.png"),
+                //   onPressed: () {},
                 // ),
-                IconButton(
-                  iconSize: 100.h,
-                  icon: Image.asset("assets/icons/connect_failed.png"),
-                  onPressed: () {},
-                ),
               ],
             ),
           ),
@@ -106,12 +106,12 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom),
+                padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom+60.h),
                 child:  EvieButton(
                   width: double.infinity,
                   height: 48.h,
                   child: Text(
-                    "Scan QR Code",
+                    "Try Again",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16.sp,
@@ -125,19 +125,34 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
               ),
             ),
 
+          Align(
+              alignment: Alignment.bottomCenter,
+            child:Padding(
+                padding: EdgeInsets.fromLTRB(16.w,25.h,16.w,EvieLength.buttonbutton_buttonBottom+60.h),
+                child: EvieButton_ReversedColor(
+                    width: double.infinity,
+                    onPressed: (){
+
+                    changeToTurnOnNotificationsScreen(context);
+                    },
+                    child: Text("Get Help", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)))
+            ),
+          ),
+
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(150.w,25.h,150.w,EvieLength.buttonWord_WordBottom),
+                padding: EdgeInsets.fromLTRB(0.w,25.h,0.w,EvieLength.buttonWord_WordBottom),
                 child: SizedBox(
                   width: double.infinity,
                   child: TextButton(
                     child: Text(
-                      "Maybe Later",
+                      "Skip register bike process",
                       softWrap: false,
-                      style: TextStyle(fontSize: 12.sp,color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                      style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
+                      _authProvider.setIsFirstLogin(false);
                       changeToTurnOnNotificationsScreen(context);
                     },
                   ),
