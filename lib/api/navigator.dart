@@ -16,7 +16,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../screen/check_your_email.dart';
 import '../screen/feeds/feeds.dart';
+import '../screen/forget_your_password.dart';
 import '../screen/my_account/push_notification/push_notification.dart';
 import '../screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
 import '../screen/my_bike_setting/firmware/firmware_update_completed.dart';
@@ -74,10 +76,6 @@ void changeToSignUpScreen(BuildContext context, name) {
   Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (context) => SignUp(name))
   );
-}
-
-void changeToCheckYourEmailScreen(BuildContext context) {
-  Navigator.of(context).pushNamedAndRemoveUntil("/checkMail", (route) => false);
 }
 
 void changeToAccountVerifiedScreen(BuildContext context) {
@@ -144,6 +142,15 @@ void changeToUserHomePageScreen(BuildContext context ) {
   );
 }
 
+void changeToCheckYourEmail(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const CheckYourEmail(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
 
 void changeToTripHistory(BuildContext context){
   Navigator.pushReplacement(context,

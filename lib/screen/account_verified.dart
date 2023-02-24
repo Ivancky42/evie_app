@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
@@ -8,8 +9,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
+import '../api/colours.dart';
 import '../api/dialog.dart';
+import '../api/fonts.dart';
 import '../api/length.dart';
 import '../api/navigator.dart';
 import '../theme/ThemeChangeNotifier.dart';
@@ -47,19 +49,17 @@ class _AccountVerifiedState extends State<AccountVerified> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 1.h,
-              ),
+
               Text(
                 "Account Verified!",
-                style: TextStyle(fontSize: 18.sp),
+                style: EvieTextStyles.h2,
               ),
               SizedBox(
                 height: 1.h,
               ),
               Text(
-                "You are all set.",
-                style: TextStyle(fontSize: 12.sp),
+                "Awesome! You're ready to go. Let's start by registering your bike so you can have a smooth and seamless riding experience.",
+                style: EvieTextStyles.body18,
               ),
 
             ],
@@ -78,17 +78,14 @@ class _AccountVerifiedState extends State<AccountVerified> {
           alignment: Alignment.bottomCenter,
           child: Padding(
             padding: EdgeInsets.only(
-                left: 16, right: 16, bottom: EvieLength.button_Bottom),
+                left: 16, right: 16, bottom: EvieLength.buttonWord_ButtonBottom),
             child: SizedBox(
               width: double.infinity,
               child:   EvieButton(
                 width: double.infinity,
                 child: Text(
-                  "Let's Get Started",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.sp,
-                  ),
+                  "Register My Bike",
+                  style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                 ),
                 onPressed: () async {
                   _authProvider.setIsFirstLogin(true);
@@ -99,6 +96,27 @@ class _AccountVerifiedState extends State<AccountVerified> {
           ),
         ),
 
+
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0.w,25.h,0.w,EvieLength.buttonWord_WordBottom),
+            child: SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                child: Text(
+                  "Maybe Later",
+                  softWrap: false,
+                  style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                ),
+                onPressed: () {
+                  _authProvider.setIsFirstLogin(false);
+                  changeToUserHomePageScreen(context);
+                },
+              ),
+            ),
+          ),
+        ),
 
 
 

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/function.dart';
+import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/firmware_provider.dart';
@@ -44,6 +45,46 @@ showQuitApp(){
           }));
 }
 
+showBackToHome(context, BikeProvider _bikeProvider, AuthProvider _authProvider){
+  SmartDialog.show(
+      widget:
+      EvieDoubleButtonDialog(
+          title: "Back to Home Page?",
+          childContent: Text("Are you sure you want to sign out and back to home page?"),
+          leftContent: "No",
+          rightContent: "Yes",
+          onPressedLeft: (){SmartDialog.dismiss();},
+          onPressedRight: () async {
+            await _bikeProvider.clear();
+            await _authProvider.signOut(context).then((result){
+              if(result == true){
+                SmartDialog.dismiss();
+                // _authProvider.clear();
+
+                changeToWelcomeScreen(context);
+                SmartDialog.dismiss();
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(
+                  const SnackBar(
+                    content: Text('Signed out'),
+                    duration: Duration(
+                        seconds: 2),),
+                );
+              }else{
+                SmartDialog.dismiss();
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(
+                  const SnackBar(
+                    content: Text('Error, Try Again'),
+                    duration: Duration(
+                        seconds: 4),),
+                );
+              }
+            });
+          }));
+}
+
+
 showAddBikeNameSuccess(context, BikeProvider bikeProvider, bikeNameController){
   SmartDialog.dismiss();
   SmartDialog.show(
@@ -79,7 +120,7 @@ showBluetoothNotTurnOn() {
   SmartDialog.dismiss();
   SmartDialog.show(
       keepSingle: true,
-      widget: EvieSingleButtonDialogCupertino(
+      widget: EvieSingleButtonDialog(
           title: "Error",
           content: "Bluetooth is off, please turn on your bluetooth",
           rightContent: "OK",
@@ -88,12 +129,13 @@ showBluetoothNotTurnOn() {
           }));
 }
 
+
 showBluetoothNotSupport() {
   SmartDialog.dismiss();
   SmartDialog.show(
       keepSingle:
       true,
-      widget: EvieSingleButtonDialogCupertino(
+      widget: EvieSingleButtonDialog(
           title: "Error",
           content: "Bluetooth unsupported",
           rightContent: "OK",
@@ -243,7 +285,7 @@ showEditBikeNameDialog(_formKey, _bikeNameController, _bikeProvider) {
 showUpdateSuccessDialog() {
   SmartDialog.show(
       keepSingle: true,
-      widget: EvieSingleButtonDialogCupertino
+      widget: EvieSingleButtonDialog
         (title: "Success",
           content: "Update successful",
           rightContent: "Ok",
@@ -255,7 +297,7 @@ showUpdateSuccessDialog() {
 showUpdateFailedDialog() {
   SmartDialog.show(
       keepSingle: true,
-      widget: EvieSingleButtonDialogCupertino
+      widget: EvieSingleButtonDialog
         (title: "Not Success",
           content: "An error occur, try again",
           rightContent: "Ok",
@@ -286,7 +328,7 @@ showDeleteShareBikeUser(BikeProvider _bikeProvider, int index){
                 SmartDialog.dismiss(status: SmartStatus.loading);
                 SmartDialog.show(
                     keepSingle: true,
-                    widget: EvieSingleButtonDialogCupertino(
+                    widget: EvieSingleButtonDialog(
                         title: "Success",
                         content: "You canceled the invitation",
                         rightContent: "Close",
@@ -296,7 +338,7 @@ showDeleteShareBikeUser(BikeProvider _bikeProvider, int index){
               } else if(uploadStatus == UploadFirestoreResult.failed) {
                 SmartDialog.dismiss();
                 SmartDialog.show(
-                    widget: EvieSingleButtonDialogCupertino(
+                    widget: EvieSingleButtonDialog(
                         title: "Not success",
                         content: "Try again",
                         rightContent: "Close",
@@ -318,7 +360,7 @@ showDeleteShareBikeUser(BikeProvider _bikeProvider, int index){
                 SmartDialog.dismiss(status: SmartStatus.loading);
                 SmartDialog.show(
                     keepSingle: true,
-                    widget: EvieSingleButtonDialogCupertino(
+                    widget: EvieSingleButtonDialog(
                         title: "Success",
                         content: "You removed the user",
                         rightContent: "Close",
@@ -328,7 +370,7 @@ showDeleteShareBikeUser(BikeProvider _bikeProvider, int index){
               } else if(uploadStatus == UploadFirestoreResult.failed) {
                 SmartDialog.dismiss();
                 SmartDialog.show(
-                    widget: EvieSingleButtonDialogCupertino(
+                    widget: EvieSingleButtonDialog(
                         title: "Not success",
                         content: "Try again",
                         rightContent: "Close",
@@ -342,7 +384,7 @@ showDeleteShareBikeUser(BikeProvider _bikeProvider, int index){
 
 showDeleteNotificationSuccess(){
   SmartDialog.show(
-      widget: EvieSingleButtonDialogCupertino(
+      widget: EvieSingleButtonDialog(
           title: "Deleted",
           content: "Notification deleted",
           rightContent: "OK",
@@ -352,7 +394,7 @@ showDeleteNotificationSuccess(){
 
 showDeleteNotificationFailed(){
   SmartDialog.show(
-      widget: EvieSingleButtonDialogCupertino(
+      widget: EvieSingleButtonDialog(
           title: "Failed",
           content: "Try again",
           rightContent: "OK",
@@ -432,7 +474,7 @@ showFirmwareUpdateQuit(context, StreamSubscription? stream){
 
 showCannotUnlockBike(){
   SmartDialog.show(
-      widget: EvieSingleButtonDialogCupertino(
+      widget: EvieSingleButtonDialog(
           title: "Error",
           content: "Cannot unlock bike, please place the phone near the bike and try again.",
           rightContent: "OK",

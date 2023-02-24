@@ -153,7 +153,13 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
                     ),
                     onPressed: () {
                       _authProvider.setIsFirstLogin(false);
-                      changeToTurnOnNotificationsScreen(context);
+                      if(_bikeProvider.isAddBike == true){
+                        _authProvider.setIsFirstLogin(false);
+                        _bikeProvider.setIsAddBike(false);
+                       changeToUserHomePageScreen(context);
+                      }else{
+                        changeToTurnOnNotificationsScreen(context);
+                      }
                     },
                   ),
                 ),

@@ -414,14 +414,7 @@ class _FreePlanState extends State<FreePlan> {
                                                                         SmartDialog.dismiss(
                                                                             status: SmartStatus.loading);
                                                                         subscription?.cancel();
-                                                                        SmartDialog.show(
-                                                                            widget: EvieSingleButtonDialogCupertino(
-                                                                                title: "Error",
-                                                                                content: "Cannot unlock bike, please place the phone near the bike and try again.",
-                                                                                rightContent: "OK",
-                                                                                onPressedRight: () {
-                                                                                  SmartDialog.dismiss();
-                                                                                }));
+                                                                        showCannotUnlockBike();
                                                                       });
                                                                 }
                                                                     : null,

@@ -86,17 +86,12 @@ class _LoginScreenState extends State<Login> {
                     height: 2.h,
                   ),
                   Text("Welcome Back!",
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w500,
-                      )),
+                    style: EvieTextStyles.h2,),
                   SizedBox(
                     height: 1.h,
                   ),
                   Text("Enter your email address",
-                      style: TextStyle(
-                        fontSize: 11.5.sp,
-                      )),
+                    style: EvieTextStyles.body18,),
                   SizedBox(
                     height: 1.h,
                   ),
@@ -116,7 +111,7 @@ class _LoginScreenState extends State<Login> {
                   ),
 
                   SizedBox(
-                    height: 1.h,
+                    height: 8.h,
                   ),
 
                   EvieTextFormField(
@@ -154,10 +149,7 @@ class _LoginScreenState extends State<Login> {
                     child: TextButton(
                         child: Text(
                           "Forgot Password?",
-                          style: TextStyle(
-                              color: EvieColors.primaryColor,
-                              fontSize: 10.sp,
-                              fontWeight: FontWeight.w400),
+                          style: EvieTextStyles.body14.copyWith(color: EvieColors.primaryColor, fontWeight: FontWeight.w900, decoration: TextDecoration.underline,)
                         ),
                         onPressed: () {
                           changeToForgetPasswordScreen(context);

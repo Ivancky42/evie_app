@@ -1,5 +1,6 @@
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/dialog.dart';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
@@ -65,11 +66,7 @@ class _BikeSettingSearchContainerState extends State<BikeSettingSearchContainer>
                           ),
                           Text(
                             label!,
-                            style: TextStyle(
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w400,
-                              color: EvieColors.darkGrayishCyan,
-                            ),
+                            style:EvieTextStyles.body18.copyWith( color: EvieColors.darkGrayishCyan,),
                           )
                         ],
                       ),
@@ -111,11 +108,8 @@ class _BikeSettingSearchContainerState extends State<BikeSettingSearchContainer>
                           ),
                           Text(
                             label!,
-                            style: TextStyle(
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w400,
-                                color: EvieColors.darkGrayishCyan,
-                            ),
+                            style:EvieTextStyles.body18.copyWith( color: EvieColors.darkGrayishCyan,),
+
                           )
                         ],
                       ),

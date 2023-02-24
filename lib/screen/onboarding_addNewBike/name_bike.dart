@@ -5,13 +5,8 @@ import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/utils.dart';
-import 'package:open_mail_app/open_mail_app.dart';
-import 'package:open_settings/open_settings.dart';
 import 'package:provider/provider.dart';
 
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 import '../../api/colours.dart';
 import '../../api/fonts.dart';
 import '../../api/length.dart';
@@ -113,6 +108,7 @@ class _NameBikeState extends State<NameBike> {
                     if (_formKey.currentState!.validate()) {
                       _bikeProvider.updateBikeName(_bikeNameController.text.trim()).then((result){
                         if(result == true){
+                          /// if(bikeProvider.isAddBike == true) logic inside dialog
                         showAddBikeNameSuccess(context, _bikeProvider, _bikeNameController.text.trim());
                         } else{
                         showAddBikeNameFailed();
@@ -139,6 +135,7 @@ class _NameBikeState extends State<NameBike> {
                     onPressed: () {
                       _bikeProvider.updateBikeName("Evie Bike").then((result){
                         if(result == true){
+                          /// if(bikeProvider.isAddBike == true) logic inside dialog
                           showAddBikeNameSuccess(context, _bikeProvider, "Evie Bike");
                         } else{
                           showAddBikeNameFailed();

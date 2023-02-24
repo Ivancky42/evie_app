@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +13,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
+
 import '../api/colours.dart';
+import '../api/dialog.dart';
+import '../api/fonts.dart';
 import '../api/navigator.dart';
 import '../api/provider/bike_provider.dart';
 import '../theme/ThemeChangeNotifier.dart';
@@ -103,86 +107,14 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
     return WillPopScope(
       onWillPop: () async {
-        bool? exitApp = await SmartDialog.show(
-            widget:
-            EvieDoubleButtonDialogCupertino(
-                title: "Back to Home Page?",
-                content: "Are you sure you want to sign out and back to home page?",
-                leftContent: "No",
-                rightContent: "Yes",
-                onPressedLeft: (){SmartDialog.dismiss();},
-                onPressedRight: () async {
-                  SmartDialog.showLoading();
-                  await _bikeProvider.clear();
-                  await _authProvider.signOut(context).then((result){
-                    if(result == true){
-                      SmartDialog.dismiss();
-                      // _authProvider.clear();
-
-                      changeToWelcomeScreen(context);
-                      SmartDialog.dismiss();
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(
-                        const SnackBar(
-                          content: Text('Signed out'),
-                          duration: Duration(
-                              seconds: 2),),
-                      );
-                    }else{
-                      SmartDialog.dismiss();
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(
-                        const SnackBar(
-                          content: Text('Error, Try Again'),
-                          duration: Duration(
-                              seconds: 4),),
-                      );
-                    }
-                  });
-                })) as bool?;
+        bool? exitApp = await showBackToHome(context, _bikeProvider, _authProvider)  as bool?;
         return exitApp ?? false;
       },
 
       child:  Scaffold(
 
         appBar: EvieAppbar_Back(onPressed: () {
-          SmartDialog.show(
-              widget:
-              EvieDoubleButtonDialogCupertino(
-                  title: "Back to Home Page?",
-                  content: "Are you sure you want to sign out and back to home page?",
-                  leftContent: "No",
-                  rightContent: "Yes",
-                  onPressedLeft: (){SmartDialog.dismiss();},
-                  onPressedRight: () async{
-                    await _bikeProvider.clear();
-                    await _authProvider.signOut(context).then((result){
-                      SmartDialog.showLoading();
-                      if(result == true){
-                        SmartDialog.dismiss();
-                        // _authProvider.clear();
-
-                        changeToWelcomeScreen(context);
-                        SmartDialog.dismiss();
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(
-                          const SnackBar(
-                            content: Text('Signed out'),
-                            duration: Duration(
-                                seconds: 2),),
-                        );
-                      }else{
-                        SmartDialog.dismiss();
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(
-                          const SnackBar(
-                            content: Text('Error, Try Again'),
-                            duration: Duration(
-                                seconds: 4),),
-                        );
-                      }
-                    });
-                  })) as bool?;
+          showBackToHome(context, _bikeProvider, _authProvider) as bool?;
         }),
 
 
@@ -198,14 +130,14 @@ class _VerifyEmailState extends State<VerifyEmail> {
                   ),
                   Text(
                     "Verify your email address",
-                    style: TextStyle(fontSize: 18.sp),
+                    style: EvieTextStyles.h2,
                   ),
                   SizedBox(
                     height: 1.h,
                   ),
                   Text(
                     "To keep your account secure, we've sent an email to ${_authProvider.getEmail}. Please follow the instruction to verify your account.",
-                    style: TextStyle(fontSize: 12.sp, height: 0.17.h),
+                    style: EvieTextStyles.body18,
                   ),
                 ]),
           ),
@@ -223,10 +155,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                 width: double.infinity,
                 child: Text(
                   "Open Email Inbox",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.sp,
-                  ),
+                  style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                 ),
                 onPressed: () async {
                   await OpenMailApp.openMailApp();
@@ -237,30 +166,29 @@ class _VerifyEmailState extends State<VerifyEmail> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 64.0),
+              padding:EdgeInsets.only(left: 16, right: 16, bottom: EvieLength.buttonWord_WordBottom),
               child: Text(
                 "Did not receive the email? Check your spam filter, or try",
-                style: TextStyle(fontSize: 9.sp),
+                style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w400, color: EvieColors.lightBlack,),
               ),
             ),
           ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 42.0),
+              padding: EdgeInsets.only(left: 16, right: 16, bottom:  EvieLength.buttonWord_WordBottom-20.h),
               child: SizedBox(
-                height: 30,
+                height: 35,
                 width: 100,
                 child: TextButton(
                   child: Text(
                     "resend email.",
-                    style:
-                        TextStyle(fontSize: 9.sp, color: EvieColors.primaryColor),
+                    style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w400, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                   ),
                   onPressed: () async {
                     if(isCountDownOver == false){
                       SmartDialog.show(
-                        widget: EvieSingleButtonDialogCupertino(
+                        widget: EvieSingleButtonDialog(
                             title: "Error",
                             content: "You need to wait 30 seconds before sending another email",
                             rightContent: "Ok",
@@ -269,7 +197,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                     }else if(isCountDownOver == true){
                       _authProvider.sendFirestoreVerifyEmail();
                         SmartDialog.show(
-                            widget: EvieSingleButtonDialogCupertino(
+                            widget: EvieSingleButtonDialog(
                                 title: "Success",
                                 content: "We have send another verify email to your account",
                                 rightContent: "Ok",

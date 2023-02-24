@@ -242,7 +242,6 @@ class MyApp extends StatelessWidget {
             "/welcome": (context) => const Welcome(),
             "/inputName": (context) => const InputName(),
             "/signInMethod": (context) => const SignInMethod(),
-            "/checkMail": (context) => const CheckYourEmail(),
             "/verifyEmail": (context) => const VerifyEmail(),
             "/accountVerified": (context) => const AccountVerified(),
             "/letsGo": (context) => const StayCloseToBike(),

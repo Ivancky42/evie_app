@@ -10,8 +10,6 @@ import 'package:provider/provider.dart';
 import '../../api/colours.dart';
 import '../../api/navigator.dart';
 import '../../api/provider/bike_provider.dart';
-import '../../api/provider/bluetooth_provider.dart';
-import '../../bluetooth/modelResult.dart';
 
 class SwitchBike extends StatefulWidget {
   const SwitchBike({Key? key}) : super(key: key);
@@ -59,7 +57,7 @@ class _SwitchBikeState extends State<SwitchBike> {
 
               /// add new bike
               Container(
-                height: 59.h,
+                height: 100.h,
                 child: GestureDetector(
                   onTap: () {
                     _bikeProvider.setIsAddBike(true);

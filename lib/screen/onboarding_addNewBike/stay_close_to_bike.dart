@@ -136,14 +136,14 @@ class _StayCloseToBikeState extends State<StayCloseToBike> {
            ) : Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(120.w,25.h,120.w,EvieLength.buttonWord_WordBottom),
+                padding: EdgeInsets.fromLTRB(0.w,25.h,0.w,EvieLength.buttonWord_WordBottom),
                 child: SizedBox(
                   width: double.infinity,
                   child: TextButton(
                         child: Text(
                           "I'm not ready",
                           softWrap: false,
-                          style: TextStyle(fontSize: 14.sp, fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                          style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                         ),
                         onPressed: () {
                           _authProvider.setIsFirstLogin(false);

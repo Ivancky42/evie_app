@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/model/user_bike_model.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -104,11 +105,7 @@ class _BikeContainerState extends State<BikeContainer> {
               child: ElevatedButton(
                 child: Text(
                   "Bike Setting",
-                  style: TextStyle(
-                      fontSize: 12.sp,
-                      color: EvieColors.primaryColor,
-                      fontWeight: FontWeight.w400),
-                ),
+                  style: EvieTextStyles.body14.copyWith(color: EvieColors.primaryColor,fontWeight: FontWeight.w900),),
                 onPressed: () async {
                   ///Switch bike animation
                   await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
@@ -130,9 +127,9 @@ class _BikeContainerState extends State<BikeContainer> {
 
         trailing: CupertinoSwitch(
           value: isSpecificDeviceConnected,
-          activeColor: const Color(0xff6A51CA),
+          activeColor: EvieColors.primaryColor,
           thumbColor: EvieColors.thumbColorTrue,
-          trackColor: const Color(0xff6A51CA).withOpacity(0.5),
+          trackColor: EvieColors.primaryColor.withOpacity(0.5),
           onChanged: (value) async {
             if (value) {
               await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
@@ -176,28 +173,32 @@ class _BikeContainerState extends State<BikeContainer> {
           final result = bikeProvider.calculateDateDifference(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate());
           if(result < 0){
             return "assets/images/bike_HPStatus/bike_normal.png";
-          }else{
-            switch (bikeModel.location!.status) {
-              case 'safe':
-                {
-                  if (cableLockState?.lockState == LockState.unlock) {
-                    return "assets/images/bike_HPStatus/bike_safe.png";
-                  } else {
-                    return "assets/images/bike_HPStatus/bike_safe.png";
+          }else {
+            if (bikeModel.location?.isConnected == false) {
+              return "assets/images/bike_HPStatus/bike_warning.png";
+            } else {
+              switch (bikeModel.location!.status) {
+                case 'safe':
+                  {
+                    if (cableLockState?.lockState == LockState.unlock) {
+                      return "assets/images/bike_HPStatus/bike_safe.png";
+                    } else {
+                      return "assets/images/bike_HPStatus/bike_safe.png";
+                    }
                   }
-                }
-              case 'warning':
-                return "assets/images/bike_HPStatus/bike_warning.png";
+                case 'warning':
+                  return "assets/images/bike_HPStatus/bike_warning.png";
 
-              case 'danger':
-                return "assets/images/bike_HPStatus/bike_danger.png";
-              case 'fall':
-                return "assets/images/bike_HPStatus/bike_warning.png";
-              case 'crash':
-                return "assets/images/bike_HPStatus/bike_danger.png";
+                case 'danger':
+                  return "assets/images/bike_HPStatus/bike_danger.png";
+                case 'fall':
+                  return "assets/images/bike_HPStatus/bike_warning.png";
+                case 'crash':
+                  return "assets/images/bike_HPStatus/bike_danger.png";
 
-              default:
-                return "assets/images/bike_HPStatus/bike_safe.png";
+                default:
+                  return "assets/images/bike_HPStatus/bike_safe.png";
+              }
             }
           }
         }
@@ -214,26 +215,30 @@ class _BikeContainerState extends State<BikeContainer> {
           if(result < 0){
             return "assets/buttons/bike_security_not_available.svg";
           }else{
-            switch (bikeModel.location!.status) {
-              case 'safe':
-                {
-                  if (cableLockState?.lockState == LockState.unlock) {
-                    return "assets/buttons/bike_security_unlock.svg";
-                  } else {
-                    return "assets/buttons/bike_security_lock_and_secure.svg";
+            if(bikeModel.location?.isConnected == false){
+              return "assets/buttons/bike_security_warning.svg";
+            }else {
+              switch (bikeModel.location!.status) {
+                case 'safe':
+                  {
+                    if (cableLockState?.lockState == LockState.unlock) {
+                      return "assets/buttons/bike_security_unlock.svg";
+                    } else {
+                      return "assets/buttons/bike_security_lock_and_secure.svg";
+                    }
                   }
-                }
-              case 'warning':
-                return "assets/buttons/bike_security_warning.svg";
-              case 'danger':
-                return "assets/buttons/bike_security_danger.svg";
-              case 'fall':
-                return "assets/buttons/bike_security_warning.svg";
-              case 'crash':
-                return "assets/buttons/bike_security_danger.svg";
+                case 'warning':
+                  return "assets/buttons/bike_security_warning.svg";
+                case 'danger':
+                  return "assets/buttons/bike_security_danger.svg";
+                case 'fall':
+                  return "assets/buttons/bike_security_warning.svg";
+                case 'crash':
+                  return "assets/buttons/bike_security_danger.svg";
 
-              default:
-                return "assets/buttons/bike_security_lock_and_secure.svg";
+                default:
+                  return "assets/buttons/bike_security_lock_and_secure.svg";
+              }
             }
           }
         }
@@ -251,34 +256,39 @@ class _BikeContainerState extends State<BikeContainer> {
           if(result < 0){
             return "-";
           }else{
-            switch (isLocked) {
-              case true:
-                if (bikeModel.location!.status == "safe") {
-                  return "Locked & Secure";
-                } else if (bikeModel.location!.status == "warning") {
-                  return "Movement Detected";
-                } else if (bikeModel.location!.status == "danger") {
-                  return "Under Threat";
-                }else if (bikeModel.location!.status == "fall") {
-                  return "Fall Detected";
-                }else if (bikeModel.location!.status == "crash") {
-                  return "Crash Alert";
-                }
-                break;
-              case false:
-                if (bikeModel.location!.status == "safe") {
-                  return "Unlocked";
-                } else if (bikeModel.location!.status == "warning") {
-                  return "Movement Detected";
-                } else if (bikeModel.location!.status == "danger") {
-                  return "Under Threat";
-                }else if (bikeModel.location!.status == "fall") {
-                  return "Fall Detected";
-                }else if (bikeModel.location!.status == "crash") {
-                  return "Crash Alert";
-                }
-                break;
+            if(bikeModel.location?.isConnected == false){
+              return "Connection Lost";
+            }else{
+              switch (isLocked) {
+                case true:
+                  if (bikeModel.location!.status == "safe") {
+                    return "Locked & Secure";
+                  } else if (bikeModel.location!.status == "warning") {
+                    return "Movement Detected";
+                  } else if (bikeModel.location!.status == "danger") {
+                    return "Under Threat";
+                  }else if (bikeModel.location!.status == "fall") {
+                    return "Fall Detected";
+                  }else if (bikeModel.location!.status == "crash") {
+                    return "Crash Alert";
+                  }
+                  break;
+                case false:
+                  if (bikeModel.location!.status == "safe") {
+                    return "Unlocked";
+                  } else if (bikeModel.location!.status == "warning") {
+                    return "Movement Detected";
+                  } else if (bikeModel.location!.status == "danger") {
+                    return "Under Threat";
+                  }else if (bikeModel.location!.status == "fall") {
+                    return "Fall Detected";
+                  }else if (bikeModel.location!.status == "crash") {
+                    return "Crash Alert";
+                  }
+                  break;
+              }
             }
+
           }
         }
       }
