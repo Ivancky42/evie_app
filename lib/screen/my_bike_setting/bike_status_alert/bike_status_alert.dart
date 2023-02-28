@@ -51,7 +51,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
+        appBar: PageAppbar(
           title: 'Bike Status Alert',
           onPressed: () {
             changeToNavigatePlanScreen(context);

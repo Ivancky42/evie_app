@@ -374,5 +374,3 @@ showUpgradePlanToast(double bottomPadding) {
       )
   );
 }
-
-

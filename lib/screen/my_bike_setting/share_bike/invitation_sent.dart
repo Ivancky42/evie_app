@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
+import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 
@@ -39,7 +40,7 @@ class _InvitationSentState extends State<InvitationSent> {
                         padding: EdgeInsets.fromLTRB(16.w,76.h,16.w,4.h),
                         child: Text(
                           "Invitation Sent",
-                          style: TextStyle(fontSize: 24.sp),
+                          style: EvieTextStyles.h2,
                         ),
                       ),
 
@@ -48,7 +49,7 @@ class _InvitationSentState extends State<InvitationSent> {
                         child: Container(
                           child: Text(
                             "Hooray! EVIE have sent invitation to ${widget.email}. Let's enjoy the ride together",
-                            style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                            style: EvieTextStyles.body18,
                           ),
                         ),
                       ),
@@ -57,9 +58,9 @@ class _InvitationSentState extends State<InvitationSent> {
                       Align(
                         alignment: Alignment.center,
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(75.w,98.h,75.w,127.84.h),
+                          padding: EdgeInsets.fromLTRB(28.w,98.h,28.w,127.84.h),
                           child: SvgPicture.asset(
-                            "assets/images/beer_celebration.svg",
+                            "assets/images/send_email.svg",
                           ),
                         ),
                       ),

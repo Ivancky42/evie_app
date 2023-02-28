@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/dialog.dart';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +12,7 @@ import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/function.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/location_provider.dart';
@@ -65,10 +67,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                 EdgeInsets.only(left: 17.w, top: 10.h, bottom: 11.h),
                 child: Text(
                   "Threat History",
-                  style: TextStyle(
-                      fontSize: 24.sp,
-                      fontWeight:
-                      FontWeight.w500),
+                  style: EvieTextStyles.h1,
                 ),
               ),
               Padding(
@@ -107,9 +106,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                           child:  Center(
                             child: Text(
                               "scroll to load more",
-                              style: TextStyle(
-                                  color: const Color(0xff7A7A79),
-                                  fontSize: 12.sp),
+                              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),
                             ),
                           ),),
                         // item builder type is compulsory.
@@ -154,13 +151,12 @@ class _Threat_HistoryState extends State<Threat_History> {
                                         ),
                                         subtitle: data == null
                                             ? const Text('Error in data')
-                                            : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
+                                            : Text("${getSecurityTextWidget(data["type"])} • ${calculateTimeAgoWithTime(data["created"]!.toDate())}", style: EvieTextStyles.body12,)
 
                                     ),
                                     const Divider(height: 1),
                                   ],
                                 );
-                                break;
                               case ThreatFilterDate.today:
                                 if(widget.bikeProvider.calculateDateDifference(data['created'].toDate()) == 0){
                                   return Column(

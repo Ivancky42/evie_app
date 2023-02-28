@@ -58,6 +58,20 @@ calculateTimeAgo(DateTime dateTime){
     return timeAgo;
 }
 
+calculateTimeAgoWithTime(DateTime dateTime){
+  Duration diff = DateTime.now().difference(dateTime);
+
+  String timeAgo;
+  if (diff.inMinutes > 0 && diff.inMinutes < 60){
+    timeAgo = "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
+  }else if(diff.inHours > 0 && diff.inHours < 24){
+    timeAgo = "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
+  }else{
+    timeAgo = "${monthsInYear[dateTime.month]} ${dateTime.day.toString()}, at ${dateTime.hour}:${dateTime.minute}";
+  }
+  return timeAgo;
+}
+
 const Map<int,String> monthsInYear = {
   1: "Jan",
   2: "Feb",

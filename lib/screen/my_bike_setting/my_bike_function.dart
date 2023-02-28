@@ -34,7 +34,7 @@ checkBLEPermissionAndAction(BluetoothProvider _bluetoothProvider, DeviceConnectR
     case BleStatus.poweredOff:
       SmartDialog.show(
           keepSingle: true,
-          widget: EvieSingleButtonDialogCupertino(
+          widget: EvieSingleButtonDialog(
               title: "Error",
               content: "Bluetooth is off, please turn on your bluetooth",
               rightContent: "OK",
@@ -48,7 +48,7 @@ checkBLEPermissionAndAction(BluetoothProvider _bluetoothProvider, DeviceConnectR
     case BleStatus.unsupported:
       SmartDialog.show(
           keepSingle: true,
-          widget: EvieSingleButtonDialogCupertino(
+          widget: EvieSingleButtonDialog(
               title: "Error",
               content: "Bluetooth unsupported",
               rightContent: "OK",
@@ -62,7 +62,7 @@ checkBLEPermissionAndAction(BluetoothProvider _bluetoothProvider, DeviceConnectR
     case BleStatus.locationServicesDisabled:
       SmartDialog.show(
           keepSingle: true,
-          widget: EvieSingleButtonDialogCupertino(
+          widget: EvieSingleButtonDialog(
               title: "Error",
               content: "Location service disabled",
               rightContent: "OK",
@@ -102,7 +102,7 @@ handleConnection(connectStream, _bluetoothProvider) async {
         connectStream?.cancel();
         SmartDialog.show(
             keepSingle: true,
-            widget: EvieSingleButtonDialogCupertino(
+            widget: EvieSingleButtonDialog(
                 title: "Cannot connect bike",
                 content: "Scan timeout",
                 rightContent: "OK",
@@ -114,7 +114,7 @@ handleConnection(connectStream, _bluetoothProvider) async {
         connectStream?.cancel();
         SmartDialog.show(
             keepSingle: true,
-            widget: EvieSingleButtonDialogCupertino(
+            widget: EvieSingleButtonDialog(
                 title: "Cannot connect bike",
                 content: "Scan error",
                 rightContent: "OK",
@@ -143,7 +143,7 @@ handleConnection(connectStream, _bluetoothProvider) async {
         connectStream?.cancel();
         SmartDialog.show(
             keepSingle: true,
-            widget: EvieSingleButtonDialogCupertino(
+            widget: EvieSingleButtonDialog(
                 title: "Cannot connect bike",
                 content: "Connect error",
                 rightContent: "OK",

@@ -356,7 +356,7 @@ class _FeedsState extends State<Feeds> {
                                                                 SmartDialog.dismiss();
                                                                 SmartDialog.show(
                                                                     backDismiss: false,
-                                                                    widget: EvieSingleButtonDialogCupertino(
+                                                                    widget: EvieSingleButtonDialog(
                                                                         title: "Error",
                                                                         content: "Try again",
                                                                         rightContent: "OK",
@@ -470,7 +470,7 @@ class _FeedsState extends State<Feeds> {
                 SmartDialog.dismiss(status: SmartStatus.loading);
                 SmartDialog.show(
                     keepSingle: true,
-                    widget: EvieSingleButtonDialogCupertino(
+                    widget: EvieSingleButtonDialog(
                         title: "Success",
                         content: "You declined the invitation",
                         rightContent: "Close",
@@ -480,7 +480,7 @@ class _FeedsState extends State<Feeds> {
               } else if(cancelStatus == UploadFirestoreResult.failed) {
                 SmartDialog.dismiss();
                 SmartDialog.show(
-                    widget: EvieSingleButtonDialogCupertino(
+                    widget: EvieSingleButtonDialog(
                         title: "Not success",
                         content: "Try again",
                         rightContent: "Close",

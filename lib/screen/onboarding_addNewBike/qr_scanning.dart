@@ -15,6 +15,7 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../api/colours.dart';
+import '../../api/dialog.dart';
 import '../../api/fonts.dart';
 import '../../api/length.dart';
 import '../../api/provider/bike_provider.dart';
@@ -205,7 +206,7 @@ class _QRScanningState extends State<QRScanning> {
                     padding: EdgeInsets.fromLTRB(20.w, 190.h, 20.w, 123.h),
                     child: TextButton(
                       onPressed: (){
-                        Uri.http("www.google.com");
+                        showWhereToFindQRCode();
                       },
                       child: Text("Where to find QR code?",
                         style: EvieTextStyles.body16.copyWith(fontWeight:FontWeight.w900, color: EvieColors.thumbColorTrue, decoration: TextDecoration.underline,),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -128,8 +129,9 @@ class _HomePageWidget_StatusBarState extends State<HomePageWidget_StatusBar> {
 Widget stackActionableBar(context, BikeProvider bikeProvider, NotificationProvider notificationProvider){
 
   var items = [
-    'Try 6 hours Later',
-    'Remind Me 5 seconds',
+    'Remind Me 3hr Later',
+    'Remind Me Tomorrow',
+    'Remind Me Next Week'
   ];
   ///Remind me 24 hours later, remind me tomorrow, remind me next week, etc
 
@@ -141,18 +143,19 @@ Widget stackActionableBar(context, BikeProvider bikeProvider, NotificationProvid
         buttonLeft: EvieButton_DropDown(
             onChanged: (value) async {
               if(value.toString() == items.elementAt(0)){
-                await notificationProvider.setSharedPreferenceDate("targetDateTime", DateTime.now().add(const Duration(hours: 6)));
+                await notificationProvider.setSharedPreferenceDate("targetDateTime", DateTime.now().add(const Duration(hours: 3)));
               }else if(value.toString() == items.elementAt(1)){
-                await notificationProvider.setSharedPreferenceDate("targetDateTime", DateTime.now().add(const Duration(seconds: 5)));
+                await notificationProvider.setSharedPreferenceDate("targetDateTime", DateTime.now().add(const Duration(hours: 24)));
+              }else if(value.toString() == items.elementAt(2)){
+                await notificationProvider.setSharedPreferenceDate("targetDateTime", DateTime.now().add(const Duration(days: 7)));
               }
             },
             items: items.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value,
-                  style: TextStyle(
-                  fontSize: 16.sp,
-                ),),
+                child: Text(
+                  value,
+                  style: EvieTextStyles.body16),
 
               );
             }).toList(),
@@ -162,7 +165,7 @@ Widget stackActionableBar(context, BikeProvider bikeProvider, NotificationProvid
         buttonRight: EvieButton(
           child: Text("Add Now",style: TextStyle(color: EvieColors.grayishWhite, fontSize: 17.sp, fontWeight: FontWeight.w900),),
           onPressed: (){
-            changeToRFIDCardScreen(context);
+            changeToEVKey(context);
           },)),
   );
 }
@@ -172,19 +175,19 @@ Widget getSecurityTextWidget(bool isLocked) {
   switch (isLocked) {
     case true:
         return Text(
-          "LOCKED AND SECURE",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+          "Locked And Secured",
+          style: EvieTextStyles.headlineB,
         );
 
     case false:
         return Text(
-          "UNLOCKED",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+          "Unlocked",
+          style: EvieTextStyles.headlineB,
         );
     default:
         return Text(
-          "UNKNOWN",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+          "Unknown",
+          style: EvieTextStyles.headlineB,
         );
   }
 }

@@ -126,7 +126,7 @@ class _BikeSettingState extends State<BikeSetting> {
     },
 
       child: Scaffold(
-          appBar: AccountPageAppbar(
+          appBar: PageAppbar(
             title: 'My Bike Setting',
             onPressed: () {
               changeToMyGarageScreen(context);

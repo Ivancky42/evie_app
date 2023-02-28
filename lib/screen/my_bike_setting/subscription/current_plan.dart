@@ -49,7 +49,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
+        appBar: PageAppbar(
           title: 'Subscription',
           onPressed: () {
             changeToNavigatePlanScreen(context);

@@ -35,11 +35,11 @@ class EvieAppbar_Back extends StatelessWidget implements PreferredSizeWidget {
 
 
 
-class AccountPageAppbar extends StatelessWidget implements PreferredSizeWidget {
+class PageAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback onPressed;
 
-  const AccountPageAppbar({
+  const PageAppbar({
     Key? key,
     required this.title,
     required this.onPressed,

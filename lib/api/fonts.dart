@@ -11,7 +11,7 @@ class EvieTextStyles {
  static TextStyle h4 = TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w500,);
 
  static TextStyle headline = TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500,);
- static TextStyle headlineB = TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w900,);
+ static TextStyle headlineB = TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w900, color: EvieColors.darkGray);
  static TextStyle subHeadline = TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500,);
 
  static TextStyle ctaSmall = TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w900,);

@@ -45,7 +45,7 @@ class _ManagePlanState extends State<ManagePlan> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
+        appBar: PageAppbar(
           title: 'Manage Plan',
           onPressed: () {
             changeToCurrentPlanScreen(context);

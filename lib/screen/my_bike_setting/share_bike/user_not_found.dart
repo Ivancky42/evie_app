@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
+import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 
@@ -49,7 +50,7 @@ class _UserNotFoundState extends State<UserNotFound> {
                       padding: EdgeInsets.fromLTRB(16.w,76.h,16.w,4.h),
                       child: Text(
                         "User Not Found",
-                        style: TextStyle(fontSize: 24.sp),
+                        style: EvieTextStyles.h2,
                       ),
                     ),
 
@@ -57,22 +58,22 @@ class _UserNotFoundState extends State<UserNotFound> {
                       padding: EdgeInsets.fromLTRB(16.w,4.h,16.w,4.h),
                       child: Container(
                         child: Text(
-                          "User not found in EVIE database. No worries, EVIE have sent an email invitation to ${widget.email} ...register with EVIE.",
-                          style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                          "User not found in EVIE database.",
+                          style: EvieTextStyles.body18,
                         ),
                       ),
                     ),
 
 
-                Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(75.w,98.h,75.w,127.84.h),
-                    child: SvgPicture.asset(
-                      "assets/images/beer_celebration.svg",
+                    Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(28.w,98.h,28.w,127.84.h),
+                        child: SvgPicture.asset(
+                          "assets/images/send_email.svg",
+                        ),
+                      ),
                     ),
-                  ),
-                ),
 
 
               ]),

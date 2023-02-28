@@ -7,6 +7,7 @@ import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
@@ -43,6 +44,53 @@ showQuitApp(){
           onPressedRight: () {
             SystemNavigator.pop();
           }));
+}
+
+showResentEmailSuccess(CurrentUserProvider currentUserProvider){
+  SmartDialog.show(
+      widget: EvieSingleButtonDialog(
+          title: "Email Resent",
+          content: "We've resend email to ${currentUserProvider.currentUserModel?.email ?? "your account."} Do check on spam mailbox too!",
+          rightContent: "Ok",
+          onPressedRight:(){SmartDialog.dismiss();})
+  );
+}
+
+showResentEmailFailed(){
+  SmartDialog.show(
+      widget: EvieSingleButtonDialog(
+          title: "Error",
+          content: "You need to wait 30 seconds before sending another email",
+          rightContent: "Ok",
+          onPressedRight:(){SmartDialog.dismiss();})
+  );
+}
+
+showWhereToFindQRCode(){
+  SmartDialog.show(
+      widget: EvieSingleButtonDialog(
+          title: "Where to find QR Code?",
+          image:  SvgPicture.asset(
+              "assets/images/allow_camera.svg",
+            ),
+          content: "QR code can be found on the back side of greeting card.",
+          rightContent: "Ok",
+          onPressedRight:(){SmartDialog.dismiss();})
+  );
+}
+
+
+showWhereToFindCodes(){
+  SmartDialog.show(
+      widget: EvieSingleButtonDialog(
+          title: "Where to find these?",
+          image:  SvgPicture.asset(
+            "assets/images/allow_camera.svg",
+          ),
+          content: "Serial Number and Validation Key can be found on the back side of greeting card.",
+          rightContent: "Ok",
+          onPressedRight:(){SmartDialog.dismiss();})
+  );
 }
 
 showBackToHome(context, BikeProvider _bikeProvider, AuthProvider _authProvider){
@@ -106,6 +154,17 @@ showAddBikeNameSuccess(context, BikeProvider bikeProvider, bikeNameController){
 }
 
 showAddBikeNameFailed(){
+  SmartDialog.dismiss();
+  SmartDialog.show(
+      keepSingle: true,
+      widget: EvieSingleButtonDialog
+        (title: "Not Success",
+          content: "An error occur, try again",
+          rightContent: "Ok",
+          onPressedRight: (){SmartDialog.dismiss();} ));
+}
+
+showFailed(){
   SmartDialog.dismiss();
   SmartDialog.show(
       keepSingle: true,
@@ -608,73 +667,93 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
                         });
                       }),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: EvieButton_PickDate(
-                          onPressed: () async {
-                            if(_selectedRadio == 3){
-                              pickedDate1 = await showDatePicker(
-                                  context: context,
-                                  initialDate: bikeProvider.threatFilterDate1 ?? pickedDate2 ?? DateTime.now(),
-                                  firstDate: DateTime(DateTime.now().year-2),
-                                  lastDate: pickedDate2 ?? DateTime.now());
+                  Visibility(
+                    visible: _selectedRadio == 3,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: EvieButton_PickDate(
+                            onPressed: () async {
+                              if(_selectedRadio == 3){
+                                pickedDate1 = await showDatePicker(
+                                    context: context,
+                                    initialDate: bikeProvider.threatFilterDate1 ?? pickedDate2 ?? DateTime.now(),
+                                    firstDate: DateTime(DateTime.now().year-2),
+                                    lastDate: pickedDate2 ?? DateTime.now(),
+                                    builder: (context, child) {
+                                      return Theme(data: Theme.of(context).copyWith(
+                                          colorScheme: ColorScheme.light(
+                                            primary: EvieColors.primaryColor,
 
-                              if (pickedDate1 != null) {
-                                setState(() {
-                                  pickedDate1 = pickedDate1;
-                                });
+                                          ), ), child: child!);
+                                    },
+                                );
+
+                                if (pickedDate1 != null) {
+                                  setState(() {
+                                    pickedDate1 = pickedDate1;
+                                  });
+                                }
                               }
+                            },
+                            child: Row(
+                              children: [
+                                Text(pickedDate1!=null ? "${monthsInYear[pickedDate1!.month]} ${pickedDate1!.day} ${pickedDate1!.year}": "",
+                                  style: TextStyle(color: EvieColors.darkGrayishCyan),),
+                                SvgPicture.asset(
+                                  "assets/buttons/calendar.svg",
+                                  height: 24.h,
+                                  width: 24.w,
+                                ),
+                              ],
+                            ),),
+                        ),
+
+                     // Expanded(child: const Text("-"),),
+
+                      Expanded(
+                        child:  EvieButton_PickDate(
+                        width: 155.w,
+                        onPressed: () async {
+                          if(_selectedRadio == 3){
+                            pickedDate2 = await showDatePicker(
+                                context: context,
+                                initialDate: bikeProvider.threatFilterDate2 ?? pickedDate1 ?? DateTime.now(),
+                                firstDate: pickedDate1 ?? DateTime(DateTime.now().year-2),
+                                lastDate: DateTime.now(),
+                              builder: (context, child) {
+                                return Theme(data: Theme.of(context).copyWith(
+                                  colorScheme: ColorScheme.light(
+                                    primary: EvieColors.primaryColor,
+
+                                  ), ), child: child!);
+                              },
+
+                            );
+
+                            if (pickedDate2 != null) {
+                              setState(() {
+                                pickedDate2 = pickedDate2;
+                              });
                             }
-                          },
-                          child: Row(
-                            children: [
-                              Text(pickedDate1!=null ? "${monthsInYear[pickedDate1!.month]} ${pickedDate1!.day} ${pickedDate1!.year}": "",
-                                style: TextStyle(color: EvieColors.darkGrayishCyan),),
-                              SvgPicture.asset(
-                                "assets/buttons/calendar.svg",
-                                height: 24.h,
-                                width: 24.w,
-                              ),
-                            ],
-                          ),),
-                      ),
-
-                   // Expanded(child: const Text("-"),),
-
-                    Expanded(
-                      child:  EvieButton_PickDate(
-                      width: 155.w,
-                      onPressed: () async {
-                        if(_selectedRadio == 3){
-                          pickedDate2 = await showDatePicker(
-                              context: context,
-                              initialDate: bikeProvider.threatFilterDate2 ?? pickedDate1 ?? DateTime.now(),
-                              firstDate: pickedDate1 ?? DateTime(DateTime.now().year-2),
-                              lastDate: DateTime.now());
-
-                          if (pickedDate2 != null) {
-                            setState(() {
-                              pickedDate2 = pickedDate2;
-                            });
                           }
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          Text(pickedDate2 != null ? "${monthsInYear[pickedDate2!.month]} ${pickedDate2!.day} ${pickedDate2!.year}": "",
-                            style: const TextStyle(color: EvieColors.darkGrayishCyan),),
-                          SvgPicture.asset(
-                            "assets/buttons/calendar.svg",
-                            height: 24.h,
-                            width: 24.w,
-                          ),
-                        ],
+                        },
+                        child: Row(
+                          children: [
+                            Text(pickedDate2 != null ? "${monthsInYear[pickedDate2!.month]} ${pickedDate2!.day} ${pickedDate2!.year}": "",
+                              style: const TextStyle(color: EvieColors.darkGrayishCyan),),
+                            SvgPicture.asset(
+                              "assets/buttons/calendar.svg",
+                              height: 24.h,
+                              width: 24.w,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    ),
-                  ],),
+                      ),
+                    ],),
+                  ),
                 ],
               ),
             ),

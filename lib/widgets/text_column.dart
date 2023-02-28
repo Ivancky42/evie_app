@@ -1,3 +1,4 @@
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_oval.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,8 +22,8 @@ class TextColumn extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title,style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, color:EvieColors.darkGrayishCyan),),
-        Text(body,style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400, color: EvieColors.lightBlack),),
+        Text(title,style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray)),
+        Text(body,style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),),
       ],
     );
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -59,7 +60,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
+        appBar: PageAppbar(
           title: 'Share Bike',
           onPressed: () {
             changeToNavigatePlanScreen(context);
@@ -115,16 +116,15 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                               ),
 
                               title: Text(
-                                  _bikeProvider.bikeUserDetails.values.elementAt(index).name, style: TextStyle(fontSize: 16.sp),),
+                                  _bikeProvider.bikeUserDetails.values.elementAt(index).name,
+                                style: EvieTextStyles.body18),
                               subtitle: Text(
                                 "${_bikeProvider.bikeUserDetails.values.elementAt(index).email}",
-                                style: TextStyle(fontSize:12.sp, color: ThemeChangeNotifier().isDarkMode(context)
-                                    == true ? Colors.white70: Colors.black54,),
-                            ),
+                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish)),
 
                             trailing: isOwner == true && isManageList && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
                             Text(_bikeProvider.bikeUserList.values.elementAt(index).role,
-                                style: TextStyle(fontSize: 12.sp, color: EvieColors.darkGrayish))
+                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),)
                                 : isManageList ?
                                 Container()
                           //            ShareBikeDelete(bikeProvider: _bikeProvider, index: index,)
@@ -135,7 +135,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                               "assets/icons/pending_tag.svg",
                             )
                                 : Text(_bikeProvider.bikeUserList.values.elementAt(index).role,
-                                style: TextStyle(fontSize: 12.sp, color: EvieColors.darkGrayish))
+                              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),)
                           ),
                         );
                     },
@@ -159,10 +159,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                     height: 48.h,
                     child: Text(
                       "Save",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w700),
+                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                     ),
                     onPressed: () {
                       setState(() {
@@ -184,11 +181,8 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                     width: double.infinity,
                     height: 48.h,
                     child: Text(
-                      "Add Rider?",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w700),
+                      "Add Rider",
+                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                     ),
                     onPressed: () {
                       ///Check if bike already have 5 user
@@ -222,10 +216,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                       height: 52.h,
                       child: Text(
                         "Cancel",
-                        style: TextStyle(
-                            color: EvieColors.primaryColor,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w700),
+                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)
                       ),
                       onPressed: () {
                         setState(() {
@@ -251,10 +242,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                       height: 52.h,
                       child: Text(
                         "Remove All Rider",
-                        style: TextStyle(
-                            color: EvieColors.primaryColor,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w700),
+                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)
                       ),
                       onPressed: () {
 

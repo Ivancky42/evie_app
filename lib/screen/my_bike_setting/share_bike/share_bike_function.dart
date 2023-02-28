@@ -55,9 +55,9 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
         ),
         onPressed: (){
           SmartDialog.show(
-              widget: EvieDoubleButtonDialogCupertino(
+              widget: EvieDoubleButtonDialog(
                 title: "Are you sure you want to leave",
-                content: 'Are you sure you want to leave',
+                childContent: Text('Are you sure you want to leave'),
                 leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
                 rightContent: "Yes",
                 onPressedRight: () async {
@@ -73,7 +73,7 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
                       SmartDialog.dismiss(status: SmartStatus.loading);
                       SmartDialog.show(
                           keepSingle: true,
-                          widget: EvieSingleButtonDialogCupertino(
+                          widget: EvieSingleButtonDialog(
                               title: "Success",
                               content: "You leave",
                               rightContent: "Close",
@@ -83,7 +83,7 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
                     } else if(uploadStatus == UploadFirestoreResult.failed) {
                       SmartDialog.dismiss();
                       SmartDialog.show(
-                          widget: EvieSingleButtonDialogCupertino(
+                          widget: EvieSingleButtonDialog(
                               title: "Not success",
                               content: "Try again",
                               rightContent: "Close",

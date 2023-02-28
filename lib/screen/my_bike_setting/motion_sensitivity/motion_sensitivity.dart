@@ -5,8 +5,6 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
@@ -55,7 +53,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
+        appBar: PageAppbar(
           title: 'Motion Sensitivity',
           onPressed: () {
             changeToNavigatePlanScreen(context);
@@ -114,10 +112,10 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
 
                 Stack(
                   children: [
-                    Divider(
-                      thickness: 23.h,
-                      color: const Color(0xffF4F4F4),
-                    ),
+                    // Divider(
+                    //   thickness: 23.h,
+                    //   color: const Color(0xffF4F4F4),
+                    // ),
 
                     Padding(
                       padding: EdgeInsets.only(left: 16.w),
@@ -126,6 +124,8 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
 
                   ],
                 ),
+
+                const EvieDivider(),
 
                 _bikeProvider.currentBikeModel?.movementSetting?.enabled == true ? Padding(
         padding:EdgeInsets.only(top: 5.h,bottom: 5.h,),

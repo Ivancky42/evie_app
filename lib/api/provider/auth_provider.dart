@@ -252,6 +252,7 @@ class AuthProvider extends ChangeNotifier {
           _uid = userCredential.user!.uid;
           _email = userCredential.user!.email!;
 
+          setIsFirstLogin(true);
           notifyListeners();
           return true;
         } else {
@@ -305,6 +306,7 @@ class AuthProvider extends ChangeNotifier {
         _uid = userCredential.user!.uid;
         _email = userCredential.user!.email!;
 
+        setIsFirstLogin(true);
         notifyListeners();
         return true;
       } else {
@@ -364,6 +366,8 @@ class AuthProvider extends ChangeNotifier {
               );
           _uid = userCredential.user!.uid;
           _email = userCredential.user!.email!;
+
+          setIsFirstLogin(true);
 
           notifyListeners();
           return true;
@@ -442,6 +446,8 @@ class AuthProvider extends ChangeNotifier {
             );
         _uid = userCredential.user!.uid;
         _email = userCredential.user!.email!;
+
+        setIsFirstLogin(true);
 
         notifyListeners();
         return true;

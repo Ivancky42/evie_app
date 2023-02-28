@@ -11,6 +11,7 @@ import 'package:slider_button/slider_button.dart';
 
 
 import '../../../../../api/colours.dart';
+import '../../../../../api/fonts.dart';
 import '../../../../../api/provider/bike_provider.dart';
 import '../../../../../api/provider/bluetooth_provider.dart';
 import '../../../../../api/provider/current_user_provider.dart';
@@ -120,8 +121,8 @@ class _CrashAlertState extends State<CrashAlert> {
                               ?.batteryPercent ??
                               0,
                           child: Text(
-                            "CRASH ALERT",
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+                            "Crash Alert",
+                            style: EvieTextStyles.headlineB,
                           ),
                         ),
                       ),

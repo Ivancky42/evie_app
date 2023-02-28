@@ -1,22 +1,16 @@
 import 'dart:io';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/my_account/my_account_widget.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evie_test/widgets/widgets.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
+import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
+import '../../../api/colours.dart';
 import '../../../api/dialog.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
@@ -26,16 +20,15 @@ import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
 
 
-///User profile page with user account information
 
-class RFIDCard extends StatefulWidget {
-  const RFIDCard({Key? key}) : super(key: key);
+class EVKey extends StatefulWidget {
+  const EVKey({Key? key}) : super(key: key);
 
   @override
-  _RFIDCardState createState() => _RFIDCardState();
+  _EVKeyState createState() => _EVKeyState();
 }
 
-class _RFIDCardState extends State<RFIDCard> {
+class _EVKeyState extends State<EVKey> {
 
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
@@ -53,8 +46,8 @@ class _RFIDCardState extends State<RFIDCard> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
-          title: 'RFID Card',
+        appBar: PageAppbar(
+          title: 'EV-Key',
           onPressed: () {
             changeToNavigatePlanScreen(context);
           },
@@ -69,24 +62,25 @@ class _RFIDCardState extends State<RFIDCard> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
                   child: Text(
-                    "Lock and unlock bike with RFID Card",
-                    style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
+                    "Unlock bike with EV-Key",
+                    style: EvieTextStyles.h2,
                   ),
                 ),
 
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 106.h),
                   child: Text(
-                    "Some description of RFID Card. A maximum number of 5 cards can be registered.",
-                    style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                    "Unlocking your bike has never been easier with the EV-Key! This convenient and secure method lets you access your bike with just a simple tap.\n\n "
+                        "A maximum number of 5 EV-Key can be register.",
+                    style: EvieTextStyles.body18,
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(45.w, 0.h, 45.2.w,221.h),
-                  child: Center(
-                    child: SvgPicture.asset(
-                      "assets/images/mention_amigo.svg",
 
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,221.h),
+                    child: Center(
+                      child:  Lottie.asset('assets/animations/RFIDCardRegister.json'),
                     ),
                   ),
                 ),
@@ -103,12 +97,8 @@ class _RFIDCardState extends State<RFIDCard> {
                   child: EvieButton(
                     width: double.infinity,
                     child: Text(
-                      "Add RFID Card",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w700
-                      ),
+                      "Add EV-Key",
+                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                     ),
 
                     onPressed: () async {
@@ -123,33 +113,13 @@ class _RFIDCardState extends State<RFIDCard> {
                             showConnectDialog(_bluetoothProvider, _bikeProvider);
                               }
                               else if (deviceConnectResult == DeviceConnectResult.connected) {
-                              changeToAddNewRFIDScreen(context);
+                              changeToAddNewEVKey(context);
                               }
                             },
                   ),
                 ),
               ),
             ),
-
-            // Align(
-            //   alignment: Alignment.bottomCenter,
-            //   child: Padding(
-            //     padding: EdgeInsets.fromLTRB(0.w,25.h,0.w,EvieLength.buttonWord_WordBottom),
-            //     child: SizedBox(
-            //       width: double.infinity,
-            //       child: TextButton(
-            //         child: Text(
-            //           "Forgot Password",
-            //           softWrap: false,
-            //           style: TextStyle(fontSize: 12.sp,color: EvieColors.PrimaryColor,decoration: TextDecoration.underline,),
-            //         ),
-            //         onPressed: () {
-            //
-            //         },
-            //       ),
-            //     ),
-            //   ),
-            // ),
           ],
         ),),
     );

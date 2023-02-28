@@ -14,6 +14,7 @@ import '../../../../../api/provider/bike_provider.dart';
 import '../../../../../api/provider/bluetooth_provider.dart';
 import '../../../../../api/provider/current_user_provider.dart';
 import '../../../../../api/provider/location_provider.dart';
+import '../../../../../api/snackbar.dart';
 import '../../../../../bluetooth/modelResult.dart';
 import '../../../../user_home_page/home_page_function.dart';
 import '../../../../../widgets/evie_single_button_dialog.dart';
@@ -133,8 +134,8 @@ class _BikeSafeState extends State<BikeSafe> {
                                       ? () {
                                     ///Check is connected
 
-                                    SmartDialog.showLoading(
-                                        msg: "Unlocking");
+                                    showUnlockingToast(context);
+
                                     StreamSubscription?
                                     subscription;
                                     subscription = _bluetoothProvider
@@ -148,37 +149,14 @@ class _BikeSafeState extends State<BikeSafe> {
                                               ?.cancel();
                                           if (unlockResult.result ==
                                               CommandResult.success) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  'Bike is unlocked. To lock bike, pull the lock handle on the bike.',
-                                                  style: TextStyle(fontSize: 16.sp),
-                                                ),
-                                                duration: Duration(seconds: 2),
-                                              ),
-                                            );
+
+                                          //  showToLockBikeInstructionToast(context);
+
                                           } else {
                                             SmartDialog.dismiss(
                                                 status: SmartStatus.loading);
-                                            subscription
-                                                ?.cancel();
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                width: 358.w,
-                                                behavior: SnackBarBehavior.floating,
-                                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                                                content: Container(
-                                                  height: 80.h,
-                                                  child: Text(
-                                                    'Bike is unlocked. To lock bike, pull the lock handle on the bike.',
-                                                    style: TextStyle(fontSize: 16.sp),
-                                                  ),
-                                                ),
-                                                duration: const Duration(seconds: 4),
-                                              ),
-                                            );
+                                            subscription?.cancel();
+                                          //  showToLockBikeInstructionToast(context);
                                           }
                                         }, onError: (error) {
                                       SmartDialog.dismiss(
@@ -187,7 +165,7 @@ class _BikeSafeState extends State<BikeSafe> {
                                       subscription
                                           ?.cancel();
                                       SmartDialog.show(
-                                          widget: EvieSingleButtonDialogCupertino(
+                                          widget: EvieSingleButtonDialog(
                                               title: "Error",
                                               content: "Cannot unlock bike, please place the phone near the bike and try again.",
                                               rightContent: "OK",
@@ -196,7 +174,9 @@ class _BikeSafeState extends State<BikeSafe> {
                                               }));
                                     });
                                   }
-                                      : null,
+                                      : (){
+                                    showToLockBikeInstructionToast(context);
+                                  },
                                   //icon inside button
                                   child: widget.connectImage,
                                 ),

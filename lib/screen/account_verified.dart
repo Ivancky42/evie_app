@@ -8,6 +8,7 @@ import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../api/colours.dart';
 import '../api/dialog.dart';
@@ -68,12 +69,13 @@ class _AccountVerifiedState extends State<AccountVerified> {
       ),
 
 
-        Align(
-          alignment: Alignment.center,
-          child: SvgPicture.asset(
-            "assets/images/rider.svg",
+        Expanded(
+          child: Align(
+            alignment: Alignment.center,
+            child: Lottie.asset('assets/animations/account-verify.json'),
           ),
         ),
+
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(

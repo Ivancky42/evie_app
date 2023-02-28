@@ -20,15 +20,16 @@ import '../screen/check_your_email.dart';
 import '../screen/feeds/feeds.dart';
 import '../screen/forget_your_password.dart';
 import '../screen/my_account/push_notification/push_notification.dart';
+import '../screen/my_bike_setting/about_bike/about_bike.dart';
 import '../screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
 import '../screen/my_bike_setting/firmware/firmware_update_completed.dart';
 import '../screen/my_bike_setting/navigate_plan_page.dart';
 import '../screen/my_bike_setting/reset_bike/reset_bike.dart';
-import '../screen/my_bike_setting/rfid_card/add_new_rfid.dart';
-import '../screen/my_bike_setting/rfid_card/name_rfid.dart';
-import '../screen/my_bike_setting/rfid_card/rfid_add_failed.dart';
-import '../screen/my_bike_setting/rfid_card/rfid_card.dart';
-import '../screen/my_bike_setting/rfid_card/rfid_card_list.dart';
+import '../screen/my_bike_setting/rfid_card/register_ev_key.dart';
+import '../screen/my_bike_setting/rfid_card/name_ev.dart';
+import '../screen/my_bike_setting/rfid_card/ev_add_failed.dart';
+import '../screen/my_bike_setting/rfid_card/ev_key.dart';
+import '../screen/my_bike_setting/rfid_card/ev_key_list.dart';
 import '../screen/my_bike_setting/share_bike/invitation_sent.dart';
 import '../screen/my_bike_setting/share_bike/share_bike.dart';
 import '../screen/my_bike_setting/share_bike/share_bike_invitation.dart';
@@ -54,6 +55,7 @@ import '../screen/signup_method.dart';
 import '../screen/signup_page.dart';
 
 import '../abandon/user_notification_details.dart';
+import '../test/test.dart';
 import 'model/bike_model.dart';
 import 'model/plan_model.dart';
 import 'model/price_model.dart';
@@ -127,10 +129,6 @@ void changeToTestBLEScreen(BuildContext context) {
   );
 }
 
-void changeToRFIDScreen(BuildContext context) {
-  Navigator.of(context)
-      .pushNamedAndRemoveUntil("/rfid", (route) => false);
-}
 
 void changeToUserHomePageScreen(BuildContext context ) {
   Navigator.pushReplacement(context,
@@ -302,50 +300,50 @@ void changeToNavigatePlanScreen(BuildContext context) {
 
 
 
-void changeToRFIDCardScreen(BuildContext context) {
+void changeToEVKey(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: const RFIDCard(),
+      child: const EVKey(),
       duration: const Duration(milliseconds: 300),
     ),
   );
 }
 
-void changeToAddNewRFIDScreen(BuildContext context) {
+void changeToAddNewEVKey(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: const AddNewRFID(),
+      child: const RegisterEVKey(),
       duration: const Duration(milliseconds: 300),
     ),
   );
 }
 
-void changeToNameRFIDScreen(BuildContext context, String rfidNumber) {
+void changeToNameEVKey(BuildContext context, String rfidNumber) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: NameRFID(rfidNumber),
+      child: NameEV(rfidNumber),
       duration: const Duration(milliseconds: 300),
     ),
   );
 }
-void changeToRFIDListScreen(BuildContext context) {
+void changeToEVKeyList(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: const RFIDCardList(),
+      child: const EVKeyList(),
       duration: const Duration(milliseconds: 300),
     ),
   );
 }
 
-void changeToRFIDAddFailedScreen(BuildContext context) {
+void changeToEVAddFailed(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: const RFIDAddFailed(),
+      child: const EVAddFailed(),
       duration: const Duration(milliseconds: 300),
     ),
   );
@@ -453,6 +451,17 @@ void changeToPushNotification(BuildContext context) {
 //     ),
 //   );
 // }
+
+void changeToAboutBike(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const AboutBike(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
 
 void changeToFirmwareInformation(BuildContext context) {
   Navigator.pushReplacement(context,
@@ -590,6 +599,6 @@ void changeToStripeCheckoutScreen(
 
 void changeToTestScreen(BuildContext context) {
   Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const NameBike())
+      builder: (context) => const Test())
   );
 }

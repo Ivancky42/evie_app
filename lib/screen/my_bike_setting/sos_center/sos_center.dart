@@ -52,7 +52,7 @@ class _SOSCentertState extends State<SOSCenter> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
+        appBar: PageAppbar(
           title: 'SOS Center',
           onPressed: () {
             changeToNavigatePlanScreen(context);

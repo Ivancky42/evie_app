@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/switch_bike.dart';
 import 'package:flutter/cupertino.dart';
@@ -61,7 +63,7 @@ class Bike_Name_Row extends StatelessWidget {
         ),
 
         GestureDetector(
-          onTap: () {
+          onTap: (){
             SmartDialog.dismiss(status: SmartStatus.allToast);
             showMaterialModalBottomSheet(
                 expand: false,
@@ -70,13 +72,28 @@ class Bike_Name_Row extends StatelessWidget {
                   return SwitchBike();
                 });
           },
-          child: Image(
-            image: AssetImage(currentBikeStatusImage),
-            height: 60.h,
-            width: 87.w,
+
+          child: Padding(
+            padding:  EdgeInsets.only(right: 16.w),
+            child: Stack(
+              children: [
+                Image(
+                  image: AssetImage(currentBikeStatusImage),
+                  height: 59.h,
+                  width: 86.w,
+                ),
+                Positioned(
+                  top: -3,
+                  right: 2,
+                  child: SvgPicture.asset(
+                    "assets/buttons/switch_button.svg",
+                    width: 20.w,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-
       ],
     );
   }
@@ -103,31 +120,17 @@ class Bike_Status_Row extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      if (isLocked == LockState.lock) ...{
-        SvgPicture.asset(
-          "assets/buttons/bike_security_lock_and_secure.svg",
-          height: 36.h,
-          width: 36.w,
-        ),
-      } else if (isLocked == LockState.unlock) ...{
-        SvgPicture.asset(
-          "assets/buttons/bike_security_unlock.svg",
-          height: 36.h,
-          width: 36.w,
-        ),
-      } else ...{
-        SvgPicture.asset(
-          "assets/icons/battery_not_available.svg",
-          height: 36.h,
-          width: 36.w,
-        ),
-      },
+      SvgPicture.asset(
+        currentSecurityIcon,
+        height:36.h,
+        width: 36.w,
+      ),
       SizedBox(width: 4.w),
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 135.w,
+            width: Platform.isAndroid ? 135.w : 150.w,
             child: child,
           )
         ],

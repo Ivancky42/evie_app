@@ -53,10 +53,10 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             case "EV-Key":
               pageNavigate = null;
               if (_bikeProvider.rfidList.isNotEmpty) {
-                changeToRFIDListScreen(context);
+                changeToEVKeyList(context);
               }
               else {
-                changeToRFIDCardScreen(context);
+                changeToEVKey(context);
               }
               break;
             case "Motion Sensitivity":
@@ -151,10 +151,10 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 }
                 else if (deviceConnectResult == DeviceConnectResult.connected) {
                   if (_bikeProvider.rfidList.isNotEmpty) {
-                    changeToRFIDListScreen(context);
+                    changeToEVKeyList(context);
                   }
                   else {
-                    changeToRFIDCardScreen(context);
+                    changeToEVKey(context);
                   }
                 }
               },
@@ -589,6 +589,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
+
+                changeToAboutBike(context);
               },
               child: Container(
                 height: 44.h,

@@ -52,7 +52,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
+        appBar: PageAppbar(
           title: 'Share Bike',
           onPressed: () {
             changeToNavigatePlanScreen(context);
@@ -123,7 +123,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                   if (result == null) {
                                     SmartDialog.show(
                                         backDismiss: false,
-                                        widget: EvieSingleButtonDialogCupertino(
+                                        widget: EvieSingleButtonDialog(
                                             title: "User not found",
                                             content: "Email not register in database",
                                             rightContent: "Close",
@@ -143,12 +143,13 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
 
                                     if (existResult == false) {
                                       SmartDialog.show(
-                                          widget: EvieDoubleButtonDialogCupertino(
+                                          widget: EvieDoubleButtonDialog(
                                             title: "Share Bike",
-                                            content: "Share ${_bikeProvider
+                                            childContent: Text("Share ${_bikeProvider
                                                 .currentBikeModel!.deviceName}"
                                                 " with ${_emailController.text
-                                                .trim()} ?",
+                                                .trim()} ?"),
+                                            
                                             leftContent: "Cancel",
                                             onPressedLeft: () =>
                                                 SmartDialog.dismiss(),
@@ -160,7 +161,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                               then((update) {
                                                 if (update == true) {
                                                   SmartDialog.show(
-                                                      widget: EvieSingleButtonDialogCupertino(
+                                                      widget: EvieSingleButtonDialog(
                                                           title: "Success",
                                                           content: "Shared bike with ${_emailController
                                                               .text.trim()}",
@@ -177,7 +178,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                                 }
                                                 else {
                                                   SmartDialog.show(
-                                                      widget: EvieSingleButtonDialogCupertino(
+                                                      widget: EvieSingleButtonDialog(
                                                           title: "Not success",
                                                           content: "Try again",
                                                           rightContent: "Close",
@@ -192,7 +193,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                     } else {
                                       SmartDialog.show(
                                           backDismiss: false,
-                                          widget: EvieSingleButtonDialogCupertino(
+                                          widget: EvieSingleButtonDialog(
                                               title: "User already exist",
                                               content: "The target user owned the bike",
                                               rightContent: "Close",

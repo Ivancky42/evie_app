@@ -112,11 +112,7 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
                   height: 48.h,
                   child: Text(
                     "Try Again",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w700
-                    ),
+                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                   ),
                   onPressed: () {
                     changeToQRScanningScreen(context);
@@ -133,7 +129,6 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
                     width: double.infinity,
                     onPressed: (){
 
-                    changeToTurnOnNotificationsScreen(context);
                     },
                     child: Text("Get Help", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)))
             ),
@@ -153,6 +148,7 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
                     ),
                     onPressed: () {
                       _authProvider.setIsFirstLogin(false);
+
                       if(_bikeProvider.isAddBike == true){
                         _authProvider.setIsFirstLogin(false);
                         _bikeProvider.setIsAddBike(false);

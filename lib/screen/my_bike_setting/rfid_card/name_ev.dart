@@ -4,16 +4,10 @@ import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evie_test/widgets/widgets.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
@@ -27,16 +21,16 @@ import '../../../widgets/evie_textform.dart';
 
 
 
-class NameRFID extends StatefulWidget {
+class NameEV extends StatefulWidget {
   final String rfidNumber;
 
-  const NameRFID(this.rfidNumber, {Key? key}) : super(key: key);
+  const NameEV(this.rfidNumber, {Key? key}) : super(key: key);
 
   @override
-  _NameRFIDState createState() => _NameRFIDState();
+  _NameEVState createState() => _NameEVState();
 }
 
-class _NameRFIDState extends State<NameRFID> {
+class _NameEVState extends State<NameEV> {
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
 
@@ -68,7 +62,7 @@ class _NameRFIDState extends State<NameRFID> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
+        appBar: PageAppbar(
           title: 'New RFID Card',
           onPressed: () {
             SmartDialog.show(
@@ -99,7 +93,7 @@ class _NameRFIDState extends State<NameRFID> {
                   Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w, 4.h),
                     child: Text(
-                      "Give your RFID Card a name",
+                      "Give your EV-Key a name",
                       style: TextStyle(
                           fontSize: 24.sp, fontWeight: FontWeight.w500),
                     ),
@@ -107,7 +101,7 @@ class _NameRFIDState extends State<NameRFID> {
                   Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 15.h),
                     child: Text(
-                      "some texts here",
+                      "Personalize with label",
                       style: TextStyle(fontSize: 16.sp, height: 1.5.h),
                     ),
                   ),
@@ -174,7 +168,7 @@ class _NameRFIDState extends State<NameRFID> {
                 SmartDialog.dismiss();
 
                 ///Change to rfid list
-                changeToRFIDListScreen(context);
+                changeToEVKeyList(context);
               }));
     } else {
       SmartDialog.show(
@@ -184,7 +178,7 @@ class _NameRFIDState extends State<NameRFID> {
               rightContent: "OK",
               onPressedRight: () {
                 SmartDialog.dismiss();
-                changeToRFIDCardScreen(context);
+                changeToEVKey(context);
               }));
     }
   }

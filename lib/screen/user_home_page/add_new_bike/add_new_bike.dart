@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/utils.dart';
 import 'package:location/location.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
@@ -191,7 +193,7 @@ class _AddNewBikeState extends State<AddNewBike> {
           _bluetoothProvider.clearDeviceConnectStatus();
           SmartDialog.show(
               keepSingle: true,
-              widget: EvieSingleButtonDialogCupertino(
+              widget: EvieSingleButtonDialog(
                   title: "Cannot connect bike",
                   content: "Connection Error",
                   rightContent: "OK",
@@ -224,12 +226,17 @@ class _AddNewBikeState extends State<AddNewBike> {
                               return GestureDetector(
                                 onTap: (){},
                                 child:Padding(
-                                  padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w, 28.h),
+                                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 28.h),
                                   child: Container(
-                                      height: 24.h,
-                                      child: Text(
-                                        "Good Morning ${_currentUserProvider.currentUserModel!.name}",
-                                        style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                                      height: 60.h,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Good Morning ${_currentUserProvider.currentUserModel!.name}",
+                                            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                                          ),
+                                        ],
                                       )
                                   ),
                                 ),
@@ -344,7 +351,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                                                         EdgeInsets.fromLTRB(16.w, 9.h, 0, 0),
                                                         child: Bike_Name_Row(
                                                             bikeName: _bikeProvider.currentBikeModel?.deviceName ?? "",
-                                                            distanceBetween: "Bike is not connected",
+                                                            distanceBetween: "",
                                                             currentBikeStatusImage: "assets/images/bike_HPStatus/bike_normal.png",
                                                             isDeviceConnected: deviceConnectResult == DeviceConnectResult.connected),
                                                       ),
@@ -356,11 +363,11 @@ class _AddNewBikeState extends State<AddNewBike> {
                                                           child: Bike_Status_Row(
                                                             connectText: "-",
                                                             estKm: "",
-                                                            currentSecurityIcon: currentSecurityIcon,
+                                                            currentSecurityIcon:"assets/buttons/bike_security_not_available.svg",
                                                             currentBatteryIcon: "assets/icons/battery_not_available.svg",
                                                             isLocked: cableLockState?.lockState ?? LockState.unknown,
                                                             child:Text(
-                                                              "NOT AVAILABLE",
+                                                              "Not Available",
                                                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
                                                             ),),
                                                         ),
@@ -375,7 +382,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                                                               width: 96.w,
                                                               child:FloatingActionButton(
                                                                 elevation: 0,
-                                                                backgroundColor: Color(0xff6A51CA),
+                                                                backgroundColor: EvieColors.primaryColor,
                                                                 onPressed:(){
                                                                   _bikeProvider.setIsAddBike(true);
                                                                  changeToTurnOnQRScannerScreen(context);

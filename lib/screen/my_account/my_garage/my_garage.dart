@@ -16,11 +16,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evie_test/widgets/widgets.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
@@ -58,7 +53,7 @@ class _MyGarageState extends State<MyGarage> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
+        appBar: PageAppbar(
           title: 'My Garage',
           onPressed: () {
             changeToMyAccount(context);
@@ -133,13 +128,10 @@ class _MyGarageState extends State<MyGarage> {
                   width: double.infinity,
                   height: 48.h,
                   child: Text(_bikeProvider.userBikeList.isEmpty ? "Add New Bike" : "Add More Bike",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w700
-                    ),
+                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                   ),
                   onPressed: () {
+                    _bikeProvider.setIsAddBike(true);
                    changeToTurnOnQRScannerScreen(context);
                   },
                 ),

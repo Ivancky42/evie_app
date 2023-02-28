@@ -12,7 +12,6 @@ import 'package:evie_test/screen/my_account/my_account.dart';
 import 'package:evie_test/screen/my_account/verify_password.dart';
 import 'package:evie_test/screen/my_bike_setting/detection_sensitivity/detection_sensitivity.dart';
 import 'package:evie_test/screen/onboarding_addNewBike/stay_close_to_bike.dart';
-import 'package:evie_test/screen/rfid_card_manage.dart';
 import 'package:evie_test/screen/shares_bike.dart';
 import 'package:evie_test/screen/signup_method.dart';
 import 'package:evie_test/screen/test_ble.dart';
@@ -252,7 +251,6 @@ class MyApp extends StatelessWidget {
             "/userChangePassword": (context) => const UserChangePassword(),
             "/testBle": (context) => const TestBle(),
         //    "/notification": (context) => const UserNotification(),
-            "/rfid": (context) => const RFIDCardManage(),
             "/myAccount": (context) => const MyAccount(),
             "/editProfile": (context) => const EditProfile(),
             "/verifyPassword": (context) => const VerifyPassword(),

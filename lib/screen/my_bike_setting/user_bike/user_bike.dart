@@ -71,9 +71,9 @@ DeviceConnectResult? deviceConnectResult;
             case 0:
               pageNavigate = null;
               if(_bikeProvider.rfidList.isNotEmpty){
-                changeToRFIDListScreen(context);
+                changeToEVKeyList(context);
               }else{
-                changeToRFIDCardScreen(context);
+                changeToEVKey(context);
               }
 
               break;
@@ -170,7 +170,7 @@ DeviceConnectResult? deviceConnectResult;
                                                 if(result == true){
                                                   SmartDialog.show(
                                                       keepSingle: true,
-                                                      widget: EvieSingleButtonDialogCupertino
+                                                      widget: EvieSingleButtonDialog
                                                         (title: "Success",
                                                           content: "Update successful",
                                                           rightContent: "Ok",
@@ -180,7 +180,7 @@ DeviceConnectResult? deviceConnectResult;
                                                 } else{
                                                   SmartDialog.show(
                                                       keepSingle: true,
-                                                      widget: EvieSingleButtonDialogCupertino
+                                                      widget: EvieSingleButtonDialog
                                                         (title: "Not Success",
                                                           content: "An error occur, try again",
                                                           rightContent: "Ok",
@@ -259,9 +259,9 @@ DeviceConnectResult? deviceConnectResult;
                           onPress: () {
                             if(deviceConnectResult == DeviceConnectResult.connected){
                               if(_bikeProvider.rfidList.isNotEmpty){
-                                changeToRFIDListScreen(context);
+                                changeToEVKeyList(context);
                               }else{
-                                changeToRFIDCardScreen(context);
+                                changeToEVKey(context);
                               }
 
                             }else {

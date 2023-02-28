@@ -20,10 +20,12 @@ import 'package:location/location.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import '../../../api/dialog.dart';
+import '../../../api/fonts.dart';
 import '../../../api/function.dart';
 import '../../../api/model/location_model.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/location_provider.dart';
+import '../../../api/snackbar.dart';
 import '../../../api/toast.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_double_button_dialog.dart';
@@ -185,9 +187,14 @@ class _FreePlanState extends State<FreePlan> {
                                       height: 60.h,
                                       child: Container(
                                         alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          "Good Morning ${_currentUserProvider.currentUserModel!.name}",
-                                          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Good Morning ${_currentUserProvider.currentUserModel!.name}",
+                                              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                                            ),
+                                          ],
                                         ),
                                       )
                                   ),
@@ -325,8 +332,8 @@ class _FreePlanState extends State<FreePlan> {
                                                             currentSecurityIcon: currentSecurityIcon,
                                                             isLocked: cableLockState?.lockState ?? LockState.unknown,
                                                             child: Text( cableLockState!.lockState == LockState.lock ?
-                                                            "LOCK & SECURED" : "UNLOCKED",
-                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+                                                            "Locked & Secured" : "Unlocked",
+                                                              style: EvieTextStyles.headlineB,
                                                             ),),
                                                         ),
                                                       ),
@@ -354,10 +361,10 @@ class _FreePlanState extends State<FreePlan> {
                                                                     ? () {
                                                                   ///Check is connected
 
-                                                                  SmartDialog
-                                                                      .showLoading(
-                                                                      msg:
-                                                                      "Unlocking");
+                                                               ///   SmartDialog.showLoading(msg: "Unlocking");
+                                                                  showUnlockingToast(context);
+
+
                                                                   StreamSubscription?
                                                                   subscription;
                                                                   subscription =
@@ -365,50 +372,19 @@ class _FreePlanState extends State<FreePlan> {
                                                                           .cableUnlock()
                                                                           .listen(
                                                                               (unlockResult) {
-                                                                            SmartDialog.dismiss(
-                                                                                status: SmartStatus
-                                                                                    .loading);
+                                                                            SmartDialog.dismiss(status: SmartStatus.loading);
                                                                             subscription
                                                                                 ?.cancel();
                                                                             if (unlockResult
                                                                                 .result ==
                                                                                 CommandResult
                                                                                     .success) {
-                                                                              ScaffoldMessenger.of(
-                                                                                  context)
-                                                                                  .showSnackBar(
-                                                                                SnackBar(
-                                                                                  content:
-                                                                                  Text('Bike is unlocked. To lock bike, pull the lock handle on the bike.',style: TextStyle(fontSize: 16.sp),),
-                                                                                  duration:
-                                                                                  Duration(seconds: 2),
-                                                                                ),
-                                                                              );
+                                                                //              showToLockBikeInstructionToast(context);
                                                                             } else {
                                                                               SmartDialog.dismiss(status: SmartStatus.loading);
                                                                               subscription
                                                                                   ?.cancel();
-                                                                              ScaffoldMessenger.of(
-                                                                                  context)
-                                                                                  .showSnackBar(
-                                                                                SnackBar(
-                                                                                  width:
-                                                                                  358.w,
-                                                                                  behavior:
-                                                                                  SnackBarBehavior.floating,
-                                                                                  shape: RoundedRectangleBorder(
-                                                                                      borderRadius:
-                                                                                      BorderRadius.all(Radius.circular(10))),
-                                                                                  content:
-                                                                                  Container(
-                                                                                    height:
-                                                                                    80.h,
-                                                                                    child:
-                                                                                    Text('Bike is unlocked. To lock bike, pull the lock handle on the bike.',style: TextStyle(fontSize: 16.sp),),
-                                                                                  ),
-                                                                                  duration: const Duration(seconds: 4),
-                                                                                ),
-                                                                              );
+                                                                 //             showToLockBikeInstructionToast(context);
                                                                             }
                                                                           }, onError: (error) {
                                                                         SmartDialog.dismiss(
@@ -417,7 +393,9 @@ class _FreePlanState extends State<FreePlan> {
                                                                         showCannotUnlockBike();
                                                                       });
                                                                 }
-                                                                    : null,
+                                                                    : (){
+                                                                  showToLockBikeInstructionToast(context);
+                                                                },
                                                                 //icon inside button
                                                                 child: lockImage,
                                                               ),
@@ -503,12 +481,12 @@ class _FreePlanState extends State<FreePlan> {
                                                           child: Bike_Status_Row(
                                                             connectText: "-",
                                                             estKm: "",
-                                                            currentSecurityIcon: currentSecurityIcon,
+                                                            currentSecurityIcon:"assets/buttons/bike_security_not_available.svg",
                                                             currentBatteryIcon: "assets/icons/battery_not_available.svg",
                                                             isLocked: cableLockState?.lockState ?? LockState.unknown,
                                                             child:Text(
-                                                              "NOT AVAILABLE",
-                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+                                                              "Not Available",
+                                                              style: EvieTextStyles.headlineB,
                                                             ),),
                                                         ),
                                                       ),

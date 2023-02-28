@@ -257,7 +257,7 @@ class _SignUpState extends State<SignUp> {
                               changeToVerifyEmailScreen(context);
                             } else {
                               SmartDialog.show(
-                                widget: EvieSingleButtonDialogCupertino(
+                                widget: EvieSingleButtonDialog(
                                     title: "Error",
                                     content: result.toString(),
                                     rightContent: "Ok",
@@ -276,7 +276,7 @@ class _SignUpState extends State<SignUp> {
                         } else {
                           debugPrint("Sign Up Error");
                           SmartDialog.show(
-                            widget: EvieSingleButtonDialogCupertino(
+                            widget: EvieSingleButtonDialog(
                                 title: "Error",
                                 content: "Try again",
                                 rightContent: "Ok",

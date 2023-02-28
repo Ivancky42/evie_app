@@ -19,6 +19,7 @@ import '../api/dialog.dart';
 import '../api/fonts.dart';
 import '../api/navigator.dart';
 import '../api/provider/bike_provider.dart';
+import '../api/snackbar.dart';
 import '../theme/ThemeChangeNotifier.dart';
 import '../widgets/evie_appbar.dart';
 import '../widgets/evie_double_button_dialog.dart';
@@ -187,22 +188,12 @@ class _VerifyEmailState extends State<VerifyEmail> {
                   ),
                   onPressed: () async {
                     if(isCountDownOver == false){
-                      SmartDialog.show(
-                        widget: EvieSingleButtonDialog(
-                            title: "Error",
-                            content: "You need to wait 30 seconds before sending another email",
-                            rightContent: "Ok",
-                            onPressedRight:(){SmartDialog.dismiss();})
-                      );
+
+                      showResentEmailFailedToast(context);
+
                     }else if(isCountDownOver == true){
                       _authProvider.sendFirestoreVerifyEmail();
-                        SmartDialog.show(
-                            widget: EvieSingleButtonDialog(
-                                title: "Success",
-                                content: "We have send another verify email to your account",
-                                rightContent: "Ok",
-                                onPressedRight:(){SmartDialog.dismiss();})
-                        );
+                     showResentEmailSuccess(_currentUserProvider);
                         setState(() {
                           isCountDownOver = false;
                           resetTimer();

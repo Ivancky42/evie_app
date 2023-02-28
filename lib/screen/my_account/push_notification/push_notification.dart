@@ -51,7 +51,7 @@ class _PushNotificationState extends State<PushNotification> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
+        appBar: PageAppbar(
           title: 'Push Notification',
           onPressed: () {
             changeToMyAccount(context);

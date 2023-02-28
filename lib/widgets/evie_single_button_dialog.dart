@@ -121,15 +121,15 @@ class EvieSingleButtonDialog extends StatelessWidget{
                 ),
               ),
 
-              image != null ? image! : SizedBox(),
-
               Text(
                 content,
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 18.sp,
                 ),
               ),
+
+              image != null ? image! : SizedBox(),
 
               Padding(
                 padding: EdgeInsets.only(top: 9.h),

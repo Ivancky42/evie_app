@@ -115,7 +115,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                               changeToUserHomePageScreen(context);
                             } else {
                               SmartDialog.show(
-                                  widget: EvieSingleButtonDialogCupertino(
+                                  widget: EvieSingleButtonDialog(
                                       title: "Error",
                                       content: result,
                                       rightContent: "Ok",
@@ -193,7 +193,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                           changeToUserHomePageScreen(context);
                         } else {
                           SmartDialog.show(
-                              widget: EvieSingleButtonDialogCupertino(
+                              widget: EvieSingleButtonDialog(
                                   title: "Error",
                                   content: result,
                                   rightContent: "Ok",

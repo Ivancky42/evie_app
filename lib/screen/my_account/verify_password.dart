@@ -51,7 +51,7 @@ class _VerifyPasswordState extends State<VerifyPassword> {
         return false;
       },
       child: Scaffold(
-          appBar: AccountPageAppbar(
+          appBar: PageAppbar(
             title: 'Update Password',
             onPressed: () {
              changeToEditProfile(context);

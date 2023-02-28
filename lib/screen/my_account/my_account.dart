@@ -196,6 +196,8 @@ class _MyAccountState extends State<MyAccount> {
                             });
                           } catch (e) {
                             debugPrint(e.toString());
+                            SmartDialog.dismiss();
+                            showFailed();
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -220,7 +222,7 @@ class _MyAccountState extends State<MyAccount> {
                           style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                         ),
                         onPressed: () {
-                          _authProvider.sendFirestoreVerifyEmail();
+
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(

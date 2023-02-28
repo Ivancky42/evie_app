@@ -7,9 +7,11 @@ import 'package:evie_test/screen/my_account/my_account_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 
+import '../../../api/fonts.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../bluetooth/modelResult.dart';
@@ -17,16 +19,14 @@ import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 
 
-///User profile page with user account information
-
-class AddNewRFID extends StatefulWidget {
-  const AddNewRFID({Key? key}) : super(key: key);
+class RegisterEVKey extends StatefulWidget {
+  const RegisterEVKey({Key? key}) : super(key: key);
 
   @override
-  _AddNewRFIDState createState() => _AddNewRFIDState();
+  _RegisterEVKeyState createState() => _RegisterEVKeyState();
 }
 
-class _AddNewRFIDState extends State<AddNewRFID> {
+class _RegisterEVKeyState extends State<RegisterEVKey> {
 
   late BluetoothProvider _bluetoothProvider;
   late BikeProvider _bikeProvider;
@@ -47,7 +47,7 @@ class _AddNewRFIDState extends State<AddNewRFID> {
       onWillPop: () async {
         addRFIDStream.cancel();
         if(_bikeProvider.rfidList.length >0){
-          changeToRFIDListScreen(context);
+          changeToEVKeyList(context);
         }else{
           changeToNavigatePlanScreen(context);
         }
@@ -55,12 +55,12 @@ class _AddNewRFIDState extends State<AddNewRFID> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
-          title: 'Add New RFID Card',
+        appBar: PageAppbar(
+          title: 'Register your EV-Key',
           onPressed: () {
             addRFIDStream.cancel();
             if(_bikeProvider.rfidList.length >0){
-              changeToRFIDListScreen(context);
+              changeToEVKeyList(context);
             }else{
               changeToNavigatePlanScreen(context);
             }
@@ -75,23 +75,23 @@ class _AddNewRFIDState extends State<AddNewRFID> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
                   child: Text(
-                    "Add New RFID Card",
-                    style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
+                    "Flash your EV-Key at the lock",
+                    style: EvieTextStyles.h2,
                   ),
                 ),
 
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 155.h),
                   child: Text(
-                    "Scan your RFID card",
-                    style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                    "Hold and place your EV-Key near the bike's lock.",
+                    style: EvieTextStyles.body18,
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(45.w, 0.h, 45.2.w,221.h),
-                  child: Center(
-                    child: SvgPicture.asset(
-                      "assets/images/mention_amigo.svg",
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,221.h),
+                    child: Center(
+                      child:  Lottie.asset('assets/animations/RFIDCardRegister.json'),
                     ),
                   ),
                 ),
@@ -122,7 +122,7 @@ class _AddNewRFIDState extends State<AddNewRFID> {
                     onPressedRight: () {
                       SmartDialog.dismiss();
 
-                      changeToNameRFIDScreen(context, addRFIDStatus.rfidNumber!);
+                      changeToNameEVKey(context, addRFIDStatus.rfidNumber!);
                     }));
           } else {
             SmartDialog.show(
@@ -132,7 +132,7 @@ class _AddNewRFIDState extends State<AddNewRFID> {
                     rightContent: "OK",
                     onPressedRight: () {
                       SmartDialog.dismiss();
-                      changeToRFIDAddFailedScreen(context);
+                      changeToEVAddFailed(context);
                     }));
           }
 
@@ -149,7 +149,7 @@ class _AddNewRFIDState extends State<AddNewRFID> {
                   onPressedRight: () {
                     SmartDialog.dismiss();
 
-                    changeToNameRFIDScreen(context, addRFIDStatus.rfidNumber!);
+                    changeToNameEVKey(context, addRFIDStatus.rfidNumber!);
                   }));
         } else {
           SmartDialog.show(
@@ -159,7 +159,7 @@ class _AddNewRFIDState extends State<AddNewRFID> {
                   rightContent: "OK",
                   onPressedRight: () {
                     SmartDialog.dismiss();
-                    changeToRFIDAddFailedScreen(context);
+                    changeToEVAddFailed(context);
                   }));
         }
       }
@@ -174,7 +174,7 @@ class _AddNewRFIDState extends State<AddNewRFID> {
           rightContent: "OK",
           onPressedRight: (){
             SmartDialog.dismiss();
-            changeToRFIDAddFailedScreen(context);
+            changeToEVAddFailed(context);
           }));
     });
   }

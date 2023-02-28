@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
+import '../../api/dialog.dart';
 import '../../api/fonts.dart';
 import '../../api/navigator.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -73,7 +74,7 @@ class _QRAddManuallyState extends State<QRAddManually> {
                       padding: EdgeInsets.fromLTRB(11.w,4.h,16.w,12.h),
                       child: TextButton(
                         onPressed: (){
-                          Uri.http("www.google.com");
+                          showWhereToFindCodes();
                         },
                         child: Text("Where to find these?",
                           style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),
@@ -129,11 +130,7 @@ class _QRAddManuallyState extends State<QRAddManually> {
                       height: 48.h,
                       child: Text(
                         "Validate Code",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w700
-                        ),
+                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                       ),
                       onPressed: () async {
                 if (_formKey.currentState!.validate()) {

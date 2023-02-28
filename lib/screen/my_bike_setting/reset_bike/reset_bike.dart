@@ -37,7 +37,7 @@ class _ResetBikeState extends State<ResetBike> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
+        appBar: PageAppbar(
           title: 'Reset Bike',
           onPressed: () {
             changeToNavigatePlanScreen(context);

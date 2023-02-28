@@ -383,26 +383,28 @@ class BikeProvider extends ChangeNotifier {
     bool result;
 
     try {
-      final ubsnapshot = await FirebaseFirestore.instance
-          .collection(bikesCollection)
-          .doc(currentBikeModel!.deviceIMEI)
-          .collection(usersCollection)
-          .get();
 
-      List<int> aList = [];
-      int? userId;
-
-      for (var element in ubsnapshot.docs) {
-        aList.add(element.data()["userId"]);
-      }
-
-      aList = aList..sort();
-
-      for (var i = 4; i > 0; i--) {
-        if (!aList.contains(i)) {
-          userId = i;
-        }
-      }
+      ///Function to add userID
+      // final ubsnapshot = await FirebaseFirestore.instance
+      //     .collection(bikesCollection)
+      //     .doc(currentBikeModel!.deviceIMEI)
+      //     .collection(usersCollection)
+      //     .get();
+      //
+      // List<int> aList = [];
+      // int? userId;
+      //
+      // for (var element in ubsnapshot.docs) {
+      //   aList.add(element.data()["userId"]);
+      // }
+      //
+      // aList = aList..sort();
+      //
+      // for (var i = 4; i > 0; i--) {
+      //   if (!aList.contains(i)) {
+      //     userId = i;
+      //   }
+      // }
 
       //Update
       await FirebaseFirestore.instance
@@ -417,11 +419,11 @@ class BikeProvider extends ChangeNotifier {
         'role': 'user',
         'status': 'pending',
         'justInvited': false,
-        'userId': userId,
+      //  'userId': userId,
         'ownerUid': currentUserModel!.uid,
       }, SetOptions(merge: true));
 
-      Future.delayed(const Duration(milliseconds: 500), () {
+      Future.delayed(const Duration(seconds: 2), () {
         FirebaseFirestore.instance
             .collection(bikesCollection)
             .doc(currentBikeModel!.deviceIMEI)

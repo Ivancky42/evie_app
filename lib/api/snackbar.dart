@@ -119,8 +119,6 @@ showConnectingToast(context) {
 
 
 
-
-
 showScanTimeoutToast(context) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
@@ -253,6 +251,69 @@ showDisconnectedToast(context) {
   );
 }
 
+
+showUnlockingToast(context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Container(
+              width: 300.w,
+              child: Text(
+                "Unlocking...",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
+showToLockBikeInstructionToast(context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Container(
+              width: 300.w,
+              child: Text(
+                "Bike is unlocked. To lock bike, pull the lock handle on the bike.",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      duration: const Duration(seconds: 5),
+    ),
+  );
+}
+
 showControlAdmissionToast(context) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
@@ -346,6 +407,38 @@ showOnlyForProToast(context) {
         ),
       ),
       duration: const Duration(seconds: 5),
+    ),
+  );
+}
+
+
+showResentEmailFailedToast(context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Container(
+              width: 300.w,
+              child: Text(
+                "You may request to resend email in another 30 seconds.",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      duration: const Duration(seconds: 2),
     ),
   );
 }

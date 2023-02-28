@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/switch_bike.dart';
@@ -10,6 +12,8 @@ import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 
 
+import '../../../api/colours.dart';
+import '../../../api/fonts.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/location_provider.dart';
@@ -63,6 +67,8 @@ class Bike_Name_Row extends StatelessWidget {
             ),
           ],
         ),
+
+
         GestureDetector(
           onTap: (){
             SmartDialog.dismiss(status: SmartStatus.allToast);
@@ -73,10 +79,26 @@ class Bike_Name_Row extends StatelessWidget {
                   return SwitchBike();
                 });
           },
-          child: Image(
-            image: AssetImage(currentBikeStatusImage),
-            height: 59.h,
-            width: 86.w,
+
+          child: Padding(
+            padding:  EdgeInsets.only(right: 16.w),
+            child: Stack(
+              children: [
+                Image(
+                  image: AssetImage(currentBikeStatusImage),
+                  height: 59.h,
+                  width: 86.w,
+                ),
+                Positioned(
+                  top: -3,
+                  right: 2,
+                  child: SvgPicture.asset(
+                    "assets/buttons/switch_button.svg",
+                    width: 20.w,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -100,43 +122,54 @@ class Bike_Status_Row extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
+    return Row(
 
-         SvgPicture.asset(
-          currentSecurityIcon,
-          height:36.h,
-           width: 36.w,
-        ),
-      SizedBox(width: 4.w),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 135.w,
-            child: child,
-          )
-        ],
-      ),
+
+          Row(children: [
+            SvgPicture.asset(
+              currentSecurityIcon,
+              height:36.h,
+              width: 36.w,
+            ),
+            SizedBox(width: 4.w),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: Platform.isAndroid ? 135.w : 150.w,
+                  child: child,
+                )
+              ],
+            ),
+          ],),
+
+
       const VerticalDivider(
         thickness: 1,
       ),
-      SvgPicture.asset(
-        batteryImage,
-        width: 36.w,
-        height: 36.h,
+
+      Row(
+        children: [
+          SvgPicture.asset(
+            batteryImage,
+            width: 36.w,
+            height: 36.h,
+          ),
+          SizedBox(
+            width: 10.w,
+          ),
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              "${batteryPercentage} %",
+              style: EvieTextStyles.headlineB,
+            ),
+            Text(
+              "Est 0km",
+              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
+            ),
+        ],
       ),
-      SizedBox(
-        width: 10.w,
-      ),
-      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
-          "${batteryPercentage} %",
-          style: TextStyle(fontSize: 20.sp),
-        ),
-        Text(
-          "Est 0km",
-          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
-        )
       ])
     ]);
   }

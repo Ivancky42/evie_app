@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
@@ -9,6 +10,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -59,7 +61,7 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
+        appBar: PageAppbar(
           title: 'Detection Sensitivity',
           onPressed: () {
             changeToMotionSensitivityScreen(context);
@@ -73,10 +75,10 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 27.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 30.h, 16.w, 10.h),
                   child: Text(
                     "Alarm in bike will be trigger when motion is detected.",
-                    style: TextStyle(fontSize: 16.sp, height: 1.5.h),
+                    style: EvieTextStyles.body18,
                   ),
                 ),
 
@@ -153,24 +155,30 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
 
                 Stack(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 15.w),
-                      child: Divider(
-                        thickness: 38.h,
-                        color: const Color(0xffF4F4F4),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: EdgeInsets.only(top: 15.w),
+                    //   child: Divider(
+                    //     thickness: 38.h,
+                    //     color: const Color(0xffF4F4F4),
+                    //   ),
+                    // ),
 
                     Padding(
                       padding: EdgeInsets.only(left: 16.w),
                       child: Text("Give your bike a push to test on the motion sensor sensitivity level.",
-                        style: TextStyle(fontSize: 12.sp, color: Color(0xff5F6060)),),
+                        style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),),
                     ),
                   ],
                 ),
               ],
             ),
+
+            Align(
+              alignment: Alignment.center,
+              child: Lottie.asset('assets/animations/motion-sensitivity.json'),
+            ),
           ],
+
         ),),
     );
   }

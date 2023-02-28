@@ -74,7 +74,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
+        appBar: PageAppbar(
           title: 'Firmware Information',
           onPressed: () {
             if(_firmwareProvider.isUpdating == true){}else{

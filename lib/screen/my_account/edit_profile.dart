@@ -58,7 +58,7 @@ class _EditProfileState extends State<EditProfile> {
         return false;
       },
       child: Scaffold(
-          appBar: AccountPageAppbar(
+          appBar: PageAppbar(
             title: 'Edit My Profile',
             onPressed: () {
      changeToMyAccount(context);

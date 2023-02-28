@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -19,20 +20,19 @@ import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 
 
-///User profile page with user account information
-
-class RFIDAddFailed extends StatefulWidget {
-  const RFIDAddFailed({Key? key}) : super(key: key);
+class EVAddFailed extends StatefulWidget {
+  const EVAddFailed({Key? key}) : super(key: key);
 
   @override
-  _RFIDAddFailedState createState() => _RFIDAddFailedState();
+  _EVAddFailedState createState() => _EVAddFailedState();
 }
 
-class _RFIDAddFailedState extends State<RFIDAddFailed> {
+class _EVAddFailedState extends State<EVAddFailed> {
 
   late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
@@ -59,24 +59,24 @@ class _RFIDAddFailedState extends State<RFIDAddFailed> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 76.h, 16.w,4.h),
                   child: Text(
-                    "Oops! Something went wrong",
-                    style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
+                    "Whoops! There's an issue.",
+                    style: EvieTextStyles.h2,
                   ),
                 ),
 
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 106.h),
                   child: Text(
-                    "Some description",
-                    style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                    "We're sorry, but there was an error registering your EV-Key. \n\n"
+                        "Make sure your RFID tag is working properly and is within range. (some instruction on what can be done more correctly)",
+                    style: EvieTextStyles.body18,
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(45.w, 0.h, 45.2.w,221.h),
-                  child: Center(
-                    child: SvgPicture.asset(
-                      "assets/images/mention_amigo.svg",
-
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(0.w, 0.h, 0.w,221.h),
+                    child: Center(
+                      child:  Lottie.asset('assets/animations/error-animate.json',),
                     ),
                   ),
                 ),
@@ -86,20 +86,16 @@ class _RFIDAddFailedState extends State<RFIDAddFailed> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom),
+                padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom+60.h),
                 child:  EvieButton(
                   width: double.infinity,
                   height: 48.h,
                   child: Text(
-                    "Try Again",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w700
-                    ),
+                      "Try Again",
+                      style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                   ),
                   onPressed: () {
-      changeToAddNewRFIDScreen(context);
+                    changeToEVKey(context);
                   },
                 ),
               ),
@@ -107,17 +103,32 @@ class _RFIDAddFailedState extends State<RFIDAddFailed> {
 
             Align(
               alignment: Alignment.bottomCenter,
+              child:Padding(
+                  padding: EdgeInsets.fromLTRB(16.w,25.h,16.w,EvieLength.buttonbutton_buttonBottom+60.h),
+                  child: EvieButton_ReversedColor(
+                      width: double.infinity,
+                      onPressed: (){
+
+                      },
+                      child: Text("Get Help", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)))
+              ),
+            ),
+
+            Align(
+              alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(150.w,25.h,150.w,EvieLength.buttonWord_WordBottom),
+                padding: EdgeInsets.fromLTRB(0.w,25.h,0.w,EvieLength.buttonWord_WordBottom),
                 child: SizedBox(
                   width: double.infinity,
                   child: TextButton(
                     child: Text(
-                      "Cancel add new RFID Card",style: TextStyle(fontSize: 12.sp,color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                      "Cancel register EV-Key",
+                      softWrap: false,
+                      style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
                       if(_bikeProvider.rfidList.length >0){
-                        changeToRFIDListScreen(context);
+                        changeToEVKeyList(context);
                       }else{
                         changeToNavigatePlanScreen(context);
                       }
@@ -126,7 +137,6 @@ class _RFIDAddFailedState extends State<RFIDAddFailed> {
                 ),
               ),
             ),
-
           ],
         ),),
     );

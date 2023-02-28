@@ -148,6 +148,7 @@ flutter:
     - assets/logo/
     - assets/buttons/
     - assets/images/
+    - assets/animations/
     - assets/images/bike_HPStatus/
     - assets/images/splashscreen/
     - assets/files/bike_settings.json

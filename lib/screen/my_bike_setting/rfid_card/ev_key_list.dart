@@ -20,18 +20,14 @@ import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../../../widgets/evie_textform.dart';
 
-
-
-///User profile page with user account information
-
-class RFIDCardList extends StatefulWidget {
-  const RFIDCardList({Key? key}) : super(key: key);
+class EVKeyList extends StatefulWidget {
+  const EVKeyList({Key? key}) : super(key: key);
 
   @override
-  _RFIDCardListState createState() => _RFIDCardListState();
+  _EVKeyListState createState() => _EVKeyListState();
 }
 
-class _RFIDCardListState extends State<RFIDCardList> {
+class _EVKeyListState extends State<EVKeyList> {
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   bool isManageList = false;
@@ -52,8 +48,8 @@ class _RFIDCardListState extends State<RFIDCardList> {
         return false;
       },
       child: Scaffold(
-        appBar: AccountPageAppbar(
-          title: 'RFID Card',
+        appBar: PageAppbar(
+          title: 'EV-Key',
           onPressed: () {
             changeToNavigatePlanScreen(context);
           },
@@ -323,14 +319,14 @@ class _RFIDCardListState extends State<RFIDCardList> {
                         width: double.infinity,
                         height: 48.h,
                         child: Text(
-                          "Add RFID Card",
+                          "Add EV-Key",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w700),
                         ),
                         onPressed: () {
-                          changeToAddNewRFIDScreen(context);
+                          changeToAddNewEVKey(context);
                         },
                       ),
                     ),
