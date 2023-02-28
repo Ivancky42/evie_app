@@ -80,7 +80,7 @@ class _FirmwareUpdateCompletedState extends State<FirmwareUpdateCompleted> {
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
-                       changeToNavigatePlanScreen(context);
+                       changeToBikeSetting(context);
                       },
                     ),
                   ),

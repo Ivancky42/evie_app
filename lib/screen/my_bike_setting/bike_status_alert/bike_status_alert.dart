@@ -47,14 +47,14 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToNavigatePlanScreen(context);
+        changeToBikeSetting(context);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'Bike Status Alert',
           onPressed: () {
-            changeToNavigatePlanScreen(context);
+            changeToBikeSetting(context);
           },
         ),
         body: Stack(

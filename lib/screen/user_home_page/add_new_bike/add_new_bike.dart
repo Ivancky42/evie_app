@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:evie_test/api/colours.dart';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
@@ -234,7 +235,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                                         children: [
                                           Text(
                                             "Good Morning ${_currentUserProvider.currentUserModel!.name}",
-                                            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                                            style: EvieTextStyles.h3,
                                           ),
                                         ],
                                       )
@@ -368,7 +369,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                                                             isLocked: cableLockState?.lockState ?? LockState.unknown,
                                                             child:Text(
                                                               "Not Available",
-                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+                                                              style: EvieTextStyles.headlineB.copyWith(fontWeight: FontWeight.bold)
                                                             ),),
                                                         ),
                                                       ),
@@ -400,12 +401,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                                                             ),
                                                             Text(
                                                               "Tap to add new bike",
-                                                              style: TextStyle(
-                                                                  fontSize: 12.sp,
-                                                                  fontWeight:
-                                                                  FontWeight.w400,
-                                                                  color: Color(
-                                                                      0xff3F3F3F)),
+                                                              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                                             ),
 
                                                           ],
@@ -435,7 +431,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                                         children: [
                                           Padding(
                                             padding: EdgeInsets.only(left:17.w),
-                                            child: Text("Threat History",style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),),
+                                            child: Text("Threat History", style: EvieTextStyles.h1,),
                                           ),
                                           IconButton(
                                             onPressed: (){

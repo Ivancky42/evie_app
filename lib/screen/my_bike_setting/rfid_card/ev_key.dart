@@ -42,14 +42,14 @@ class _EVKeyState extends State<EVKey> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToNavigatePlanScreen(context);
+        changeToBikeSetting(context);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'EV-Key',
           onPressed: () {
-            changeToNavigatePlanScreen(context);
+            changeToBikeSetting(context);
           },
         ),
         body: Stack(
@@ -109,7 +109,7 @@ class _EVKeyState extends State<EVKey> {
                             || deviceConnectResult == DeviceConnectResult.scanError
                             || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
                             ) {
-                             changeToNavigatePlanScreen(context);
+                             changeToBikeSetting(context);
                             showConnectDialog(_bluetoothProvider, _bikeProvider);
                               }
                               else if (deviceConnectResult == DeviceConnectResult.connected) {

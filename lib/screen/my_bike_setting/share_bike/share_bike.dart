@@ -38,14 +38,14 @@ class _ShareBikeState extends State<ShareBike> {
 
      return WillPopScope(
       onWillPop: () async {
-        changeToNavigatePlanScreen(context);
+        changeToBikeSetting(context);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'Share Bike',
           onPressed: () {
-            changeToNavigatePlanScreen(context);
+            changeToBikeSetting(context);
           },
         ),
         body: Stack(

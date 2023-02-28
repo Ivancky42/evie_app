@@ -87,7 +87,7 @@ class _FirmwareUpdateFailedState extends State<FirmwareUpdateFailed> {
                         ),
                       ),
                       onPressed: () {
-                        changeToNavigatePlanScreen(context);
+                        changeToBikeSetting(context);
                       },
                     ),
                   ),
@@ -106,7 +106,7 @@ class _FirmwareUpdateFailedState extends State<FirmwareUpdateFailed> {
                           style: TextStyle(fontSize: 12.sp,color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                         ),
                         onPressed: () {
-                          changeToNavigatePlanScreen(context);
+                          changeToBikeSetting(context);
                         },
                       ),
                     ),

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:evie_test/api/dialog.dart';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -11,6 +12,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -69,7 +71,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
     return WillPopScope(
       onWillPop: () async {
         if(_firmwareProvider.isUpdating == true){}else{
-          changeToNavigatePlanScreen(context);
+          changeToBikeSetting(context);
         }
         return false;
       },
@@ -78,131 +80,140 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
           title: 'Firmware Information',
           onPressed: () {
             if(_firmwareProvider.isUpdating == true){}else{
-              changeToNavigatePlanScreen(context);
+              changeToBikeSetting(context);
             }
           },
         ),
         body: Stack(
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+            SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
 
-                if(_firmwareProvider.isLatestFirmVer == true)...{
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
-                    child: Text(
-                      "Your firmware is up to date",
-                      style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  if(_firmwareProvider.isLatestFirmVer == true)...{
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
+                      child: Text(
+                        "Your firmware is up to date",
+                        style: EvieTextStyles.h2,
+                      ),
                     ),
-                  ),
-                Padding(
-                padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
-                  child:TextColumn(
-                      title: "Current Version",
-                      body: _firmwareProvider.currentFirmVer ?? "Not available"),
-                ),
-                  const AccountPageDivider(),
-                Padding(
-                padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
-                  child:TextColumn(
-                      title: "What's New",
-                      body: _firmwareProvider.latestFirmwareModel?.desc ?? "Not available"),
-                ),
-                  const AccountPageDivider(),
-                }
-
-                else...{
-
                   Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
-                    child: Text(
-                      "Firmware update available",
-                      style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
-                    ),
+                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
+                    child:TextColumn(
+                        title: "Current Version",
+                        body: _firmwareProvider.currentFirmVer ?? "Not available"),
                   ),
+                    const AccountPageDivider(),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
-                    child: Text(
-                      "Stay close to your bike and keep app open to complete firmware update.",
-                      style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
-                    ),
+                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
+                    child:TextColumn(
+                        title: "What's New",
+                        body: _firmwareProvider.latestFirmwareModel?.desc ?? "Not available"),
                   ),
+                    const AccountPageDivider(),
+                  }
 
-                  Visibility(
-                    visible: _firmwareProvider.isUpdating,
-                    child: Padding(
-                        padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 20.h),
-                        child: Column(
-                          children: [
-                            LinearPercentIndicator(
-                              padding: EdgeInsets.zero,
-                              width: 355.w,
-                              animation: false,
-                              lineHeight: 4.h,
-                              animationDuration: 0,
-                              percent: _bluetoothProvider.fwUpgradeProgress,
-                              progressColor: EvieColors.primaryColor,
-                              backgroundColor: EvieColors.lightGray,
+                  else...{
+
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
+                      child: Text(
+                        "Better Firmware available",
+                        style:EvieTextStyles.h2,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SvgPicture.asset(
+                            "assets/buttons/bike_security_warning.svg",
+                            height: 24.h,
+                            width: 24.w,
+                          ),
+                          Expanded(
+                            child: Text(
+                              "Stay close to your bike and keep app open to complete firmware update.",
+                              style: EvieTextStyles.body18
                             ),
+                          ),
+                        ],
+                      ),
+                    ),
 
-                            Visibility(
-                              visible: _firmwareProvider.isUpdating,
-                              child: Padding(
-                                padding: EdgeInsets.only(left:4.w, right: 4.w, top :4.h),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Time remaining: ${intToTimeLeft(((_bluetoothProvider.fwUpgradeProgress * 100)*
-                                        (totalSeconds/100)-totalSeconds).abs().toInt())}",
-                                      style: TextStyle(
-                                        fontSize: 12.sp,
-                                        color: EvieColors.mediumBlack,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
+                    Visibility(
+                      visible: _firmwareProvider.isUpdating,
+                      child: Padding(
+                          padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 20.h),
+                          child: Column(
+                            children: [
+                              LinearPercentIndicator(
+                                padding: EdgeInsets.zero,
+                                width: 355.w,
+                                animation: false,
+                                lineHeight: 4.h,
+                                animationDuration: 0,
+                                percent: _bluetoothProvider.fwUpgradeProgress,
+                                progressColor: EvieColors.primaryColor,
+                                backgroundColor: EvieColors.lightGray,
+                              ),
 
-                                    Text(
-                                      (_bluetoothProvider.fwUpgradeProgress * 100).toStringAsFixed(0) + "%",
-                                      style: TextStyle(
-                                        fontSize: 12.sp,
-                                        color: EvieColors.mediumBlack,
-                                        fontWeight: FontWeight.w400,
+                              Visibility(
+                                visible: _firmwareProvider.isUpdating,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left:4.w, right: 4.w, top :4.h),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("Time remaining: ${intToTimeLeft(((_bluetoothProvider.fwUpgradeProgress * 100)*
+                                          (totalSeconds/100)-totalSeconds).abs().toInt())}",
+                                        style: EvieTextStyles.body12.copyWith(color: EvieColors.mediumBlack)
+
                                       ),
-                                    ),
-                                  ],
+
+                                      Text(
+                                        (_bluetoothProvider.fwUpgradeProgress * 100).toStringAsFixed(0) + "%",
+                                          style: EvieTextStyles.body12.copyWith(color: EvieColors.mediumBlack)
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        )
+                            ],
+                          )
+                      ),
                     ),
-                  ),
 
-                Padding(
-                padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
+                  Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
+                    child:TextColumn(
+                        title: "Update Version",
+                        body: _firmwareProvider.latestFirmVer ?? "None"),
+                  ),
+                    const AccountPageDivider(),
+                  Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
+                    child:TextColumn(
+                        title: "Current Version",
+                        body: _firmwareProvider.currentFirmVer ?? "None"),
+                  ),
+                     const AccountPageDivider(),
+                  Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
                   child:TextColumn(
-                      title: "Update Version",
-                      body: _firmwareProvider.latestFirmVer ?? "None"),
-                ),
-                  const AccountPageDivider(),
-                Padding(
-                padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
-                  child:TextColumn(
-                      title: "Current Version",
-                      body: _firmwareProvider.currentFirmVer ?? "None"),
-                ),
-                   const AccountPageDivider(),
-                Padding(
-                padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
-                child:TextColumn(
-                      title: "What's New",
-                      body: _firmwareProvider.latestFirmwareModel?.desc ?? "None"),
-                ),
-                  const AccountPageDivider(),
-                },
-              ],
+                        title: "What's New",
+                        body: _firmwareProvider.latestFirmwareModel?.desc ?? "None"),
+                  ),
+                    const AccountPageDivider(),
+                  },
+                ],
+              ),
             ),
 
             Visibility(
@@ -216,10 +227,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                     height: 48.h,
                     child: Text(
                       "Download and Update",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w700),
+                      style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                     ),
                     onPressed: () {
                       showFirmwareUpdate(context, _firmwareProvider, stream, _bluetoothProvider);

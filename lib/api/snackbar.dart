@@ -1,3 +1,4 @@
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
@@ -77,9 +78,7 @@ showConnectedToast(context) {
             SizedBox(width: 4.w,),
             Text(
               "Bike Connected.",
-              style: TextStyle(
-                color: Colors.white,
-              ),
+              style: EvieTextStyles.toast,
             ),
           ],
         ),
@@ -104,10 +103,7 @@ showConnectingToast(context) {
             SizedBox(width: 4.w,),
             Text(
               "Connecting bike.",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16.sp,
-              ),
+              style: EvieTextStyles.toast,
             ),
           ],
         ),
@@ -138,10 +134,7 @@ showScanTimeoutToast(context) {
               width: 300.w,
               child: Text(
                 "Fail to connect your bike. Please stay close to your bike and connect again.",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.sp,
-                ),
+                style: EvieTextStyles.toast,
               ),
             )
           ],
@@ -171,10 +164,7 @@ showScanErrorToast(context) {
               width: 300.w,
               child: Text(
                 "Scan Error. Please re-enabled your bluetooth.",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.sp,
-                ),
+                style: EvieTextStyles.toast,
               ),
             )
           ],
@@ -204,10 +194,7 @@ showConnectErrorToast(context) {
               width: 300.w,
               child: Text(
                 "Connect Error. Please try again.",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.sp,
-                ),
+                style: EvieTextStyles.toast,
               ),
             )
           ],
@@ -237,10 +224,7 @@ showDisconnectedToast(context) {
               width: 300.w,
               child: Text(
                 "Bike Disconnected.",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.sp,
-                ),
+                style: EvieTextStyles.toast,
               ),
             )
           ],
@@ -269,10 +253,7 @@ showUnlockingToast(context) {
               width: 300.w,
               child: Text(
                 "Unlocking...",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.sp,
-                ),
+                style: EvieTextStyles.toast,
               ),
             )
           ],
@@ -300,10 +281,7 @@ showToLockBikeInstructionToast(context) {
               width: 300.w,
               child: Text(
                 "Bike is unlocked. To lock bike, pull the lock handle on the bike.",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.sp,
-                ),
+                style: EvieTextStyles.toast,
               ),
             )
           ],
@@ -332,10 +310,7 @@ showControlAdmissionToast(context) {
               width: 300.w,
               child: Text(
                 "Your account doesn't have control admission for this setting.",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.sp,
-                ),
+                style: EvieTextStyles.toast,
               ),
             )
           ],
@@ -364,10 +339,7 @@ showUpgradePlanToast(context) {
               width: 300.w,
               child: Text(
                 "This feature only available for pro plan user. You can upgrade your plan in setting page. ",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.sp,
-                ),
+                style: EvieTextStyles.toast,
               ),
             )
           ],
@@ -397,10 +369,7 @@ showOnlyForProToast(context) {
               width: 300.w,
               child: Text(
                 "This feature only available for pro plan user. You can upgrade your plan in setting page.",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.sp,
-                ),
+                style: EvieTextStyles.toast,
               ),
             )
           ],
@@ -429,10 +398,7 @@ showResentEmailFailedToast(context) {
               width: 300.w,
               child: Text(
                 "You may request to resend email in another 30 seconds.",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.sp,
-                ),
+                style: EvieTextStyles.toast,
               ),
             )
           ],

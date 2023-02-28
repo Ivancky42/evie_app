@@ -77,8 +77,7 @@ class _BikeContainerState extends State<BikeContainer> {
         ),
         title: Text(
             widget.bikeModel.deviceName!,
-            style: TextStyle(
-                fontSize: 16.sp, fontWeight: FontWeight.w900),
+            style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.bold, color: EvieColors.mediumLightBlack),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,9 +92,7 @@ class _BikeContainerState extends State<BikeContainer> {
                 Text(getCurrentBikeStatusString(
                     deviceConnectResult == DeviceConnectResult.connected,
                     widget.bikeModel,
-                    _bikeProvider), style: TextStyle(
-                    fontSize: 16.sp, fontWeight: FontWeight.w400
-                ),),
+                    _bikeProvider), style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan)),
               ],
             ),
 
@@ -109,7 +106,7 @@ class _BikeContainerState extends State<BikeContainer> {
                 onPressed: () async {
                   ///Switch bike animation
                   await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
-                  changeToNavigatePlanScreen(context);
+                  changeToBikeSetting(context, 'SwitchBike');
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

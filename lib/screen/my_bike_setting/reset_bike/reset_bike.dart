@@ -33,14 +33,14 @@ class _ResetBikeState extends State<ResetBike> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToNavigatePlanScreen(context);
+        changeToBikeSetting(context);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'Reset Bike',
           onPressed: () {
-            changeToNavigatePlanScreen(context);
+            changeToBikeSetting(context);
           },
         ),
         body: Stack(

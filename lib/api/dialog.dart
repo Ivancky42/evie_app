@@ -523,7 +523,7 @@ showFirmwareUpdateQuit(context, StreamSubscription? stream){
           rightContent: "Stay",
           onPressedLeft: (){
             SmartDialog.dismiss();
-            changeToNavigatePlanScreen(context);
+            changeToBikeSetting(context);
             stream?.cancel();
           },
           onPressedRight: (){

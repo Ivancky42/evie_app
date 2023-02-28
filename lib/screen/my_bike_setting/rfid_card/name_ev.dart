@@ -57,7 +57,7 @@ class _NameEVState extends State<NameEV> {
                   SmartDialog.dismiss();
                   _bikeProvider.deleteRFIDFirestore(widget.rfidNumber);
                   _bluetoothProvider.deleteRFID(widget.rfidNumber);
-                  changeToNavigatePlanScreen(context);
+                  changeToBikeSetting(context);
                 }));
         return false;
       },
@@ -78,7 +78,7 @@ class _NameEVState extends State<NameEV> {
                       SmartDialog.dismiss();
                       _bikeProvider.deleteRFIDFirestore(widget.rfidNumber);
                       _bluetoothProvider.deleteRFID(widget.rfidNumber);
-                      changeToNavigatePlanScreen(context);
+                      changeToBikeSetting(context);
                     }));
           },
         ),

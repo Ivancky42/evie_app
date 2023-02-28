@@ -23,6 +23,8 @@ class EvieTextStyles {
  static TextStyle body18 = TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400,);
  static TextStyle body20 = TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500,);
 
+ static TextStyle toast = TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400, color: EvieColors.grayishWhite);
+
 }
 
 

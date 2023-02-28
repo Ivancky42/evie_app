@@ -46,8 +46,7 @@ class Bike_Name_Row extends StatelessWidget {
               children: [
                 Text(
                   bikeName,
-                  style:
-                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                    style:EvieTextStyles.h3
                 ),
                 SvgPicture.asset(
                   "assets/icons/batch_tick.svg",
@@ -63,7 +62,7 @@ class Bike_Name_Row extends StatelessWidget {
             ),
             Text(
               "Est. ${distanceBetween}m",
-              style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400),
+              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
             ),
           ],
         ),

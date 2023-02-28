@@ -49,14 +49,14 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToNavigatePlanScreen(context);
+        changeToBikeSetting(context);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'Motion Sensitivity',
           onPressed: () {
-            changeToNavigatePlanScreen(context);
+            changeToBikeSetting(context);
           },
         ),
         body: Stack(

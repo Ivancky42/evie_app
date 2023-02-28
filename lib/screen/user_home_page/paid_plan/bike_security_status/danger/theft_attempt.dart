@@ -113,7 +113,7 @@ class _BikeDangerState extends State<BikeDanger> {
                       child: Column(
                         children: [
                           Padding(
-                            padding:  EdgeInsets.only(top:0.h,left: 16.sp, right: 16.sp, bottom: 20.h),
+                            padding:  EdgeInsets.only(top:0.h,left: 16.w, right: 16.w, bottom: 20.h),
                             child:   SvgPicture.asset(
                               "assets/buttons/signal_strength.svg",
                               width: 358.w,

@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../api/colours.dart';
+import '../../../../../api/fonts.dart';
 import '../../../../../api/provider/bike_provider.dart';
 import '../../../../../api/provider/bluetooth_provider.dart';
 import '../../../../../api/provider/current_user_provider.dart';
@@ -187,35 +188,17 @@ class _BikeSafeState extends State<BikeSafe> {
                               if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning) ...{
                                 Text(
                                   "Connecting bike",
-                                  style: TextStyle(
-                                      fontSize:
-                                      12.sp,
-                                      fontWeight:
-                                      FontWeight
-                                          .w400,
-                                      color: EvieColors.darkGray),
+                                  style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                 ),
                               } else if (deviceConnectResult == DeviceConnectResult.connected) ...{
                                 Text(
                                   "Tap to unlock bike",
-                                  style: TextStyle(
-                                      fontSize:
-                                      12.sp,
-                                      fontWeight:
-                                      FontWeight
-                                          .w400,
-                                      color: EvieColors.darkGray),
+                                  style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                 ),
                               } else ...{
                                 Text(
                                   "",
-                                  style: TextStyle(
-                                      fontSize:
-                                      12.sp,
-                                      fontWeight:
-                                      FontWeight
-                                          .w400,
-                                      color: EvieColors.darkGray),
+                                  style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                 ),
                               },
 
@@ -243,24 +226,12 @@ class _BikeSafeState extends State<BikeSafe> {
                                 if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning) ...{
                                   Text(
                                     "Connecting bike",
-                                    style: TextStyle(
-                                        fontSize:
-                                        12.sp,
-                                        fontWeight:
-                                        FontWeight
-                                            .w400,
-                                        color: EvieColors.darkGray),
+                                    style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                   ),
                                 } else ...{
                                   Text(
                                     "Tap to connect bike",
-                                    style: TextStyle(
-                                        fontSize:
-                                        12.sp,
-                                        fontWeight:
-                                        FontWeight
-                                            .w400,
-                                        color: EvieColors.darkGray),
+                                    style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                   ),
                                 },
 

@@ -53,7 +53,7 @@ class _AboutBikeState extends State<AboutBike> {
     return WillPopScope(
       onWillPop: () async {
 
-          changeToNavigatePlanScreen(context);
+          changeToBikeSetting(context);
 
         return false;
       },
@@ -62,7 +62,7 @@ class _AboutBikeState extends State<AboutBike> {
           title: 'About Bike',
           onPressed: () {
 
-              changeToNavigatePlanScreen(context);
+              changeToBikeSetting(context);
 
           },
         ),

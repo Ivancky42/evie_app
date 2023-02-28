@@ -1,7 +1,9 @@
 
+import 'package:evie_test/api/fonts.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sizer/sizer.dart';
+
 
 import '../api/colours.dart';
 import '../theme/ThemeChangeNotifier.dart';
@@ -79,8 +81,8 @@ class _EvieTextFormFieldState extends State<EvieTextFormField> {
                     hintText: widget.hintText,
                     labelText: widget.labelText,
 
-                    hintStyle: TextStyle(fontSize: 10.sp, color:EvieColors.darkGrayish),
-                    labelStyle: TextStyle(fontSize: 13.sp, color: EvieColors.darkGrayish),
+                    hintStyle: EvieTextStyles.body14.copyWith(color:EvieColors.darkGrayish),
+                    labelStyle:  EvieTextStyles.body18.copyWith(color:EvieColors.darkGrayish),
                     filled: true,
                     errorStyle: TextStyle(
                       color: Theme.of(context).errorColor, // or any other color

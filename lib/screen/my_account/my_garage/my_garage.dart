@@ -284,7 +284,7 @@ class _MyGarageState extends State<MyGarage> {
                               ),
                               onPressed: () async {
                                 await _bikeProvider.changeBikeUsingIMEI(userBikeList.deviceIMEI);
-                                changeToNavigatePlanScreen(context);
+                                changeToBikeSetting(context, 'MyGarage');
                               }
                             )
                         ),

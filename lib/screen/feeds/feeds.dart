@@ -152,7 +152,6 @@ class _FeedsState extends State<Feeds> {
                             await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.elementAt(index));
                             changeToUserHomePageScreen(context);
 
-                            print(_bikeProvider.currentBikeModel!.deviceIMEI);
                             });
                       }else{
                         return Container();
@@ -164,6 +163,7 @@ class _FeedsState extends State<Feeds> {
                       }else{
                         return Container();
                       }
+
                     }, separatorBuilder: (BuildContext context, int index) {
                       return Divider(height: 1.5.h,);
                     },

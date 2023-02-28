@@ -9,7 +9,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../feeds/feeds.dart';
 import '../my_account/my_account.dart';
-import '../my_bike_setting/navigate_plan_page.dart';
 import '../my_bike_setting/user_bike/user_bike.dart';
 import '../../abandon/user_notification.dart';
 
@@ -67,80 +66,115 @@ class _UserHomePageState extends State<UserHomePage> {
             },
             items: [
               BottomNavigationBarItem(
-                icon: Container(
-                  child: SvgPicture.asset(
-                    "assets/buttons/home.svg",
-                  ),
+                icon: Transform.translate(
+                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                  child: Container(
+                    child: SvgPicture.asset(
+                      "assets/buttons/home.svg",
+                    ),
           //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                  height: EvieLength.bottom_bar_icon_height,
-                ),
-                activeIcon: Container(
-                  child: SvgPicture.asset(
-                    "assets/buttons/home_selected.svg",
+                    height: EvieLength.bottom_bar_icon_height,
                   ),
+                ),
+
+                activeIcon: Transform.translate(
+                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                  child: Container(
+                    child: SvgPicture.asset(
+                      "assets/buttons/home_selected.svg",
+                    ),
         //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                  height: EvieLength.bottom_bar_icon_height,
-                ),
-                tooltip: 'User Profile',
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Container(
-       //          alignment: Alignment(0,-1.0),
-                  child: SvgPicture.asset(
-                    "assets/buttons/statistic.svg",
+                    height: EvieLength.bottom_bar_icon_height,
                   ),
-                  //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                  height: EvieLength.bottom_bar_icon_height,
-                ),
-                activeIcon: Container(
-      //            alignment: Alignment(0,-1.0),
-                  child: SvgPicture.asset(
-                    "assets/buttons/statistic_selected.svg",
-                  ),
-                  //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                  height: EvieLength.bottom_bar_icon_height,
                 ),
                 tooltip: 'User Profile',
                 label: '',
               ),
 
+
               BottomNavigationBarItem(
-                icon: Container(
-                  child: SvgPicture.asset(
-                    "assets/buttons/notification.svg",
+                icon: Transform.translate(
+                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                  child: Container(
+       //          alignment: Alignment(0,-1.0),
+                    child: SvgPicture.asset(
+                      "assets/buttons/statistic.svg",
+                    ),
+                    //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                    height: EvieLength.bottom_bar_icon_height,
                   ),
+                ),
+
+                activeIcon: Transform.translate(
+                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                  child: Container(
+      //            alignment: Alignment(0,-1.0),
+                    child: SvgPicture.asset(
+                      "assets/buttons/statistic_selected.svg",
+                    ),
+                    //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                    height: EvieLength.bottom_bar_icon_height,
+                  ),
+                ),
+                tooltip: 'User Profile',
+                label: '',
+              ),
+
+
+              BottomNavigationBarItem(
+                icon: Transform.translate(
+                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                  child: Container(
+                    child: SvgPicture.asset(
+                      "assets/buttons/notification.svg",
+                    ),
           //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                  height: EvieLength.bottom_bar_icon_height,
-                ),
-                activeIcon: Container(
-                  child: SvgPicture.asset(
-                    "assets/buttons/notification_selected.svg",
+                    height: EvieLength.bottom_bar_icon_height,
                   ),
+                ),
+
+                activeIcon:Transform.translate(
+                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                  child: Container(
+                    child: SvgPicture.asset(
+                      "assets/buttons/notification_selected.svg",
+                    ),
            //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                  height: EvieLength.bottom_bar_icon_height,
+                    height: EvieLength.bottom_bar_icon_height,
+                  ),
                 ),
                 tooltip: 'User',
                 label: '',
               ),
+
+
               BottomNavigationBarItem(
-                icon: Container(
-                  child: SvgPicture.asset(
-                    "assets/buttons/user.svg",
+                icon: Transform.translate(
+                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                  child: Container(
+                    child: SvgPicture.asset(
+                      "assets/buttons/user.svg",
+                    ),
+                    //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                    height: EvieLength.bottom_bar_icon_height,
                   ),
-                  //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                  height: EvieLength.bottom_bar_icon_height,
                 ),
-                activeIcon: Container(
-                  child: SvgPicture.asset(
-                    "assets/buttons/user_selected.svg",
+
+                activeIcon: Transform.translate(
+                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                  child: Container(
+                    child: SvgPicture.asset(
+                      "assets/buttons/user_selected.svg",
+                    ),
+                    //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                    height: EvieLength.bottom_bar_icon_height,
                   ),
-                  //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                  height: EvieLength.bottom_bar_icon_height,
                 ),
                 tooltip: 'User',
                 label: '',
               ),
+
+
             ],
           ),
         ));

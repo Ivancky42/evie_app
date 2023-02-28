@@ -21,9 +21,9 @@ import '../screen/feeds/feeds.dart';
 import '../screen/forget_your_password.dart';
 import '../screen/my_account/push_notification/push_notification.dart';
 import '../screen/my_bike_setting/about_bike/about_bike.dart';
+import '../screen/my_bike_setting/bike_setting/bike_setting.dart';
 import '../screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
 import '../screen/my_bike_setting/firmware/firmware_update_completed.dart';
-import '../screen/my_bike_setting/navigate_plan_page.dart';
 import '../screen/my_bike_setting/reset_bike/reset_bike.dart';
 import '../screen/my_bike_setting/rfid_card/register_ev_key.dart';
 import '../screen/my_bike_setting/rfid_card/name_ev.dart';
@@ -288,11 +288,11 @@ void changeToMyGarageScreen(BuildContext context) {
 }
 
 
-void changeToNavigatePlanScreen(BuildContext context) {
+void changeToBikeSetting(BuildContext context, [String? source]) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: const NavigatePlanPage(),
+      child:  BikeSetting(source),
       duration: const Duration(milliseconds: 300),
     ),
   );

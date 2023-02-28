@@ -8,6 +8,8 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import '../../../api/colours.dart';
+import '../../../api/fonts.dart';
 import '../../../bluetooth/modelResult.dart';
 
 class Bike_Name_Row extends StatelessWidget {
@@ -37,8 +39,7 @@ class Bike_Name_Row extends StatelessWidget {
               children: [
                 Text(
                   bikeName,
-                  style:
-                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                    style:EvieTextStyles.h3,
                 ),
                 Visibility(
                   visible: isDeviceConnected!,
@@ -57,7 +58,7 @@ class Bike_Name_Row extends StatelessWidget {
 
             Text(
               isDeviceConnected! ? "With You" : "Bike is not connected",
-              style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400),
+              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
             ),
           ],
         ),
@@ -149,17 +150,17 @@ class Bike_Status_Row extends StatelessWidget {
       if (estKm == "") ...{
         Text(
           "${connectText} %",
-          style: TextStyle(fontSize: 20.sp),
+          style: EvieTextStyles.headlineB,
         ),
       } else ...{
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             "${connectText} %",
-            style: TextStyle(fontSize: 20.sp),
+            style: EvieTextStyles.headlineB,
           ),
           Text(
             estKm,
-            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
+            style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
           )
         ])
       }

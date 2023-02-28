@@ -19,6 +19,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import '../../../api/colours.dart';
 import '../../../api/dialog.dart';
 import '../../../api/fonts.dart';
 import '../../../api/function.dart';
@@ -63,8 +64,7 @@ class _FreePlanState extends State<FreePlan> {
   final List<String> dangerStatus = ['safe', 'warning', 'danger'];
   String currentDangerStatus = 'safe';
   String currentBikeStatusImage = "assets/images/bike_HPStatus/bike_safe.png";
-  String currentSecurityIcon =
-      "assets/buttons/bike_security_not_available.svg";
+  String currentSecurityIcon = "assets/buttons/bike_security_not_available.svg";
 
   late LocationProvider _locationProvider;
 
@@ -157,9 +157,6 @@ class _FreePlanState extends State<FreePlan> {
       ),
     ];
 
-    // final TextEditingController _bikeNameController = TextEditingController();
-    // final FocusNode _textFocus = FocusNode();
-
     return WillPopScope(
       onWillPop: () async {
         bool? exitApp = await showQuitApp() as bool?;
@@ -192,7 +189,7 @@ class _FreePlanState extends State<FreePlan> {
                                           children: [
                                             Text(
                                               "Good Morning ${_currentUserProvider.currentUserModel!.name}",
-                                              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                                              style: EvieTextStyles.h3,
                                             ),
                                           ],
                                         ),
@@ -216,8 +213,7 @@ class _FreePlanState extends State<FreePlan> {
                                 child: Stack(
                                   children: [
                                     Mapbox_Widget(
-                                      accessToken:
-                                      _locationProvider.defPublicAccessToken,
+                                      accessToken: _locationProvider.defPublicAccessToken,
                                       //onMapCreated: _onMapCreated,
 
                                       mapController: mapController,
@@ -233,10 +229,8 @@ class _FreePlanState extends State<FreePlan> {
                                       //     runSymbol();
                                       //   }
                                       // },
-                                      latitude: _locationProvider
-                                          .locationModel!.geopoint.latitude,
-                                      longitude: _locationProvider
-                                          .locationModel!.geopoint.longitude,
+                                      latitude: _locationProvider.locationModel!.geopoint.latitude,
+                                      longitude: _locationProvider.locationModel!.geopoint.longitude,
                                     ),
                                   ],
                                 ),
@@ -283,7 +277,6 @@ class _FreePlanState extends State<FreePlan> {
                           expand: true,
                           builder: (BuildContext context, ScrollController _scrollController) {
 
-
                             return ListView(
                               controller: _scrollController,
                               children: [
@@ -308,8 +301,10 @@ class _FreePlanState extends State<FreePlan> {
                                                     children: <Widget>[
                                                       Padding(
                                                         padding: EdgeInsets.only(top: 11.h),
-                                                        child: Image.asset("assets/buttons/home_indicator.png",
-                                                          width: 40.w, height: 4.h,),
+                                                        child: Image.asset(
+                                                          "assets/buttons/home_indicator.png",
+                                                          width: 40.w,
+                                                          height: 4.h,),
                                                       ),
                                                       Padding(
                                                         padding:
@@ -348,47 +343,27 @@ class _FreePlanState extends State<FreePlan> {
                                                               child:FloatingActionButton(
                                                                 elevation: 0,
                                                                 backgroundColor:
-                                                                cableLockState
-                                                                    ?.lockState ==
-                                                                    LockState
-                                                                        .lock
-                                                                    ? lockColour
-                                                                    : const Color(
-                                                                    0xffC1B7E8),
-                                                                onPressed: cableLockState
-                                                                    ?.lockState ==
-                                                                    LockState.lock
-                                                                    ? () {
+                                                                cableLockState?.lockState == LockState.lock ? lockColour : const Color(0xffC1B7E8),
+                                                                onPressed: cableLockState?.lockState == LockState.lock ? () {
                                                                   ///Check is connected
 
                                                                ///   SmartDialog.showLoading(msg: "Unlocking");
                                                                   showUnlockingToast(context);
 
-
                                                                   StreamSubscription?
                                                                   subscription;
-                                                                  subscription =
-                                                                      _bluetoothProvider
-                                                                          .cableUnlock()
-                                                                          .listen(
-                                                                              (unlockResult) {
+                                                                  subscription = _bluetoothProvider.cableUnlock().listen((unlockResult) {
                                                                             SmartDialog.dismiss(status: SmartStatus.loading);
-                                                                            subscription
-                                                                                ?.cancel();
-                                                                            if (unlockResult
-                                                                                .result ==
-                                                                                CommandResult
-                                                                                    .success) {
+                                                                            subscription?.cancel();
+                                                                            if (unlockResult.result == CommandResult.success) {
                                                                 //              showToLockBikeInstructionToast(context);
                                                                             } else {
                                                                               SmartDialog.dismiss(status: SmartStatus.loading);
-                                                                              subscription
-                                                                                  ?.cancel();
+                                                                              subscription?.cancel();
                                                                  //             showToLockBikeInstructionToast(context);
                                                                             }
                                                                           }, onError: (error) {
-                                                                        SmartDialog.dismiss(
-                                                                            status: SmartStatus.loading);
+                                                                        SmartDialog.dismiss(status: SmartStatus.loading);
                                                                         subscription?.cancel();
                                                                         showCannotUnlockBike();
                                                                       });
@@ -406,32 +381,17 @@ class _FreePlanState extends State<FreePlan> {
                                                             if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning) ...{
                                                               Text(
                                                                 "Connecting bike",
-                                                                style: TextStyle(
-                                                                    fontSize: 12.sp,
-                                                                    fontWeight:
-                                                                    FontWeight.w400,
-                                                                    color: Color(
-                                                                        0xff3F3F3F)),
+                                                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                                               ),
                                                             } else if(deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr)...{
                                                               Text(
                                                                 "Tap to unlock bike",
-                                                                style: TextStyle(
-                                                                    fontSize: 12.sp,
-                                                                    fontWeight:
-                                                                    FontWeight.w400,
-                                                                    color: Color(
-                                                                        0xff3F3F3F)),
+                                                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                                               ),
                                                             }else ...{
                                                               Text(
                                                                 "Tap to connect bike",
-                                                                style: TextStyle(
-                                                                    fontSize: 12.sp,
-                                                                    fontWeight:
-                                                                    FontWeight.w400,
-                                                                    color: Color(
-                                                                        0xff3F3F3F)),
+                                                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                                               ),
                                                             },
 
@@ -515,22 +475,12 @@ class _FreePlanState extends State<FreePlan> {
                                                             if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning) ...{
                                                               Text(
                                                                 "Connecting bike",
-                                                                style: TextStyle(
-                                                                    fontSize: 12.sp,
-                                                                    fontWeight:
-                                                                    FontWeight.w400,
-                                                                    color: Color(
-                                                                        0xff3F3F3F)),
+                                                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                                               ),
                                                             } else ...{
                                                               Text(
                                                                 "Tap to connect bike",
-                                                                style: TextStyle(
-                                                                    fontSize: 12.sp,
-                                                                    fontWeight:
-                                                                    FontWeight.w400,
-                                                                    color: Color(
-                                                                        0xff3F3F3F)),
+                                                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                                               ),
                                                             },
 
@@ -561,14 +511,12 @@ class _FreePlanState extends State<FreePlan> {
                                         children: [
                                           Padding(
                                             padding: EdgeInsets.only(left:17.w),
-                                            child: Text("Threat History",style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),),
+                                            child: Text("Threat History",style: EvieTextStyles.h1,),
                                           ),
                                           IconButton(
                                             onPressed: (){
-                                              _bikeProvider
-                                                  .controlBikeList("next");
-                                              _bluetoothProvider
-                                                  .disconnectDevice();
+                                              _bikeProvider.controlBikeList("next");
+                                              _bluetoothProvider.disconnectDevice();
                                             },
                                             icon: SvgPicture.asset(
                                               "assets/buttons/filter.svg",

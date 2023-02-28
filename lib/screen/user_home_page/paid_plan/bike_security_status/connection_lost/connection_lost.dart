@@ -75,8 +75,7 @@ class _ConnectionLostState extends State<ConnectionLost> {
                       MainAxisAlignment.start,
                       children: <Widget>[
                         Padding(
-                          padding: EdgeInsets.only(
-                              top: 11.h),
+                          padding: EdgeInsets.only(top: 11.h),
                           child: Image.asset(
                             "assets/buttons/home_indicator.png",
                             width: 40.w,
@@ -85,39 +84,21 @@ class _ConnectionLostState extends State<ConnectionLost> {
                         ),
                         Padding(
                           padding:
-                          EdgeInsets.fromLTRB(
-                              16.w, 9.h, 0, 0),
+                          EdgeInsets.fromLTRB(16.w, 9.h, 0, 0),
                           child: Bike_Name_Row(
-                            bikeName: _bikeProvider
-                                .currentBikeModel
-                                ?.deviceName ??
-                                "",
-                            distanceBetween: widget.distanceBetween ??
-                                "-",
-                            currentBikeStatusImage:
-                            "assets/images/bike_HPStatus/bike_warning.png",
+                            bikeName: _bikeProvider.currentBikeModel?.deviceName ?? "",
+                            distanceBetween: widget.distanceBetween ?? "-",
+                            currentBikeStatusImage: "assets/images/bike_HPStatus/bike_warning.png",
                             isDeviceConnected: widget.isDeviceConnected! && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr,
                           ),
                         ),
                         Padding(
                           padding:
-                          EdgeInsets.fromLTRB(
-                              16.w,
-                              17.15.h,
-                              0,
-                              0),
+                          EdgeInsets.fromLTRB(16.w, 17.15.h, 0, 0),
                           child: IntrinsicHeight(
                             child: Bike_Status_Row(
-                              batteryImage: getBatteryImage(
-                                  _bikeProvider
-                                      .currentBikeModel
-                                      ?.batteryPercent ??
-                                      0),
-                              batteryPercentage:
-                              _bikeProvider
-                                  .currentBikeModel
-                                  ?.batteryPercent ??
-                                  0,
+                              batteryImage: getBatteryImage(_bikeProvider.currentBikeModel?.batteryPercent ?? 0),
+                              batteryPercentage: _bikeProvider.currentBikeModel?.batteryPercent ?? 0,
                               currentSecurityIcon:"assets/buttons/bike_security_warning.svg",
                               child:  Text(
                                 "Connection Lost",
@@ -127,8 +108,7 @@ class _ConnectionLostState extends State<ConnectionLost> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(
-                              top: 31.h),
+                          padding: EdgeInsets.only(top: 31.h),
                           child: Column(
                             children: [
 
@@ -150,22 +130,16 @@ class _ConnectionLostState extends State<ConnectionLost> {
                                     subscription = _bluetoothProvider.cableUnlock().listen((unlockResult) {
                                           SmartDialog.dismiss(status: SmartStatus.loading);
                                           subscription?.cancel();
-                                          if (unlockResult.result ==
-                                              CommandResult.success) {
+                                          if (unlockResult.result == CommandResult.success) {
                                    //         showToLockBikeInstructionToast(context);
                                           } else {
-                                            SmartDialog.dismiss(
-                                                status: SmartStatus.loading);
-                                            subscription
-                                                ?.cancel();
+                                            SmartDialog.dismiss(status: SmartStatus.loading);
+                                            subscription?.cancel();
                                    //         showToLockBikeInstructionToast(context);
                                           }
                                         }, onError: (error) {
-                                      SmartDialog.dismiss(
-                                          status:
-                                          SmartStatus.loading);
-                                      subscription
-                                          ?.cancel();
+                                      SmartDialog.dismiss(status: SmartStatus.loading);
+                                      subscription?.cancel();
                                       SmartDialog.show(
                                           widget: EvieSingleButtonDialog(
                                               title: "Error",
@@ -182,41 +156,25 @@ class _ConnectionLostState extends State<ConnectionLost> {
                                   child: widget.connectImage,
                                 ),
                               ),
+
                               SizedBox(
                                 height: 12.h,
                               ),
+
                               if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning) ...{
                                 Text(
                                   "Connecting bike",
-                                  style: TextStyle(
-                                      fontSize:
-                                      12.sp,
-                                      fontWeight:
-                                      FontWeight
-                                          .w400,
-                                      color: EvieColors.darkGray),
+                                  style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                 ),
                               } else if (deviceConnectResult == DeviceConnectResult.connected) ...{
                                 Text(
                                   "Tap to unlock bike",
-                                  style: TextStyle(
-                                      fontSize:
-                                      12.sp,
-                                      fontWeight:
-                                      FontWeight
-                                          .w400,
-                                      color: EvieColors.darkGray),
+                                  style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                 ),
                               } else ...{
                                 Text(
                                   "",
-                                  style: TextStyle(
-                                      fontSize:
-                                      12.sp,
-                                      fontWeight:
-                                      FontWeight
-                                          .w400,
-                                      color: EvieColors.darkGray),
+                                  style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                 ),
                               },
 
@@ -234,38 +192,25 @@ class _ConnectionLostState extends State<ConnectionLost> {
                                         checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
                                       },
                                       //icon inside button
-                                      child:
-                                      widget.connectImage,
+                                      child: widget.connectImage,
                                     )),
+
                                 SizedBox(
                                   height: 12.h,
                                 ),
+
                                 if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning) ...{
                                   Text(
                                     "Connecting bike",
-                                    style: TextStyle(
-                                        fontSize:
-                                        12.sp,
-                                        fontWeight:
-                                        FontWeight
-                                            .w400,
-                                        color: EvieColors.darkGray),
+                                    style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                   ),
                                 } else ...{
                                   Text(
                                     "Tap to connect bike",
-                                    style: TextStyle(
-                                        fontSize:
-                                        12.sp,
-                                        fontWeight:
-                                        FontWeight
-                                            .w400,
-                                        color: EvieColors.darkGray),
+                                    style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                   ),
                                 },
-
                               }
-
                             ],
                           ),
                         )

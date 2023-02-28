@@ -26,7 +26,8 @@ import 'bike_setting_search_container.dart';
 
 
 class BikeSetting extends StatefulWidget {
-  const BikeSetting({Key? key}) : super(key: key);
+  final String? source;
+  const BikeSetting(this.source, {Key? key}) : super(key: key);
 
   @override
   _BikeSettingState createState() => _BikeSettingState();
@@ -121,7 +122,15 @@ class _BikeSettingState extends State<BikeSetting> {
 
     return WillPopScope(
         onWillPop: () async {
-          changeToMyGarageScreen(context);
+
+          if(widget.source == 'MyGarage'){
+            changeToMyGarageScreen(context);
+          }else if(widget.source == 'SwitchBike'){
+            changeToUserHomePageScreen(context);
+          }else{
+            changeToMyGarageScreen(context);
+          }
+
       return false;
     },
 
@@ -129,7 +138,13 @@ class _BikeSettingState extends State<BikeSetting> {
           appBar: PageAppbar(
             title: 'My Bike Setting',
             onPressed: () {
-              changeToMyGarageScreen(context);
+              if(widget.source == 'MyGarage'){
+                changeToMyGarageScreen(context);
+              }else if(widget.source == 'SwitchBike'){
+                changeToUserHomePageScreen(context);
+              }else{
+                changeToMyGarageScreen(context);
+              }
             },
           ),
           body: Column(

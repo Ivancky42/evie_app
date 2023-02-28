@@ -189,37 +189,19 @@ class _FallDetectedState extends State<FallDetected> {
                                 DeviceConnectResult.scanning) ...{
                           Text(
                             "Connecting bike",
-                            style: TextStyle(
-                                fontSize:
-                                12.sp,
-                                fontWeight:
-                                FontWeight
-                                    .w400,
-                                color: EvieColors.darkGray),
+                            style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                           ),
                         } else
                           if (deviceConnectResult ==
                               DeviceConnectResult.connected) ...{
                             Text(
                               "Tap to unlock bike",
-                              style: TextStyle(
-                                  fontSize:
-                                  12.sp,
-                                  fontWeight:
-                                  FontWeight
-                                      .w400,
-                                  color: EvieColors.darkGray),
+                              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                             ),
                           } else ...{
                               Text(
                                 "",
-                                style: TextStyle(
-                                    fontSize:
-                                    12.sp,
-                                    fontWeight:
-                                    FontWeight
-                                        .w400,
-                                    color: EvieColors.darkGray),
+                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                               ),
                             },
 
@@ -246,24 +228,12 @@ class _FallDetectedState extends State<FallDetected> {
                         if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning) ...{
                           Text(
                             "Connecting bike",
-                            style: TextStyle(
-                                fontSize:
-                                12.sp,
-                                fontWeight:
-                                FontWeight
-                                    .w400,
-                                color: EvieColors.darkGray),
+                            style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                           ),
                         } else ...{
                           Text(
                             "Tap to connect bike",
-                            style: TextStyle(
-                                fontSize:
-                                12.sp,
-                                fontWeight:
-                                FontWeight
-                                    .w400,
-                                color: EvieColors.darkGray),
+                            style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                           ),
                         },
 

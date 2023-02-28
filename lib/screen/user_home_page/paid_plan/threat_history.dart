@@ -132,7 +132,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                         ),
                                         title: data == null ? const Text('Error')
                                             : data["address"] != null
-                                            ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
+                                            ? Text(data["address"], style: EvieTextStyles.body18,)
                                             : FutureBuilder<dynamic>(
                                             future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
                                             builder: (context, snapshot) {
@@ -140,7 +140,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                                 widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
                                                 return Text(
                                                   snapshot.data.name.toString(),
-                                                  style: TextStyle(fontSize: 18.sp),
+                                                  style:  EvieTextStyles.body18,
                                                 );
                                               }else{
                                                 return const Text(
@@ -170,7 +170,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                           ),
                                           title: data == null ? const Text('Error')
                                               : data["address"] != null
-                                              ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
+                                              ? Text(data["address"], style: EvieTextStyles.body18,)
                                               : FutureBuilder<dynamic>(
                                               future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
                                               builder: (context, snapshot) {
@@ -178,7 +178,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                                   widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
                                                   return Text(
                                                     snapshot.data.name.toString(),
-                                                    style: TextStyle(fontSize: 18.sp),
+                                                    style:  EvieTextStyles.body18,
                                                   );
                                                 }else{
                                                   return const Text(
@@ -189,7 +189,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                           ),
                                           subtitle: data == null
                                               ? const Text('Error in data')
-                                              : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
+                                              : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style:  EvieTextStyles.body14,)
 
                                       ),
                                       const Divider(height: 1),
@@ -210,7 +210,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                           ),
                                           title: data == null ? const Text('Error')
                                               : data["address"] != null
-                                              ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
+                                              ? Text(data["address"], style:  EvieTextStyles.body18,)
                                               : FutureBuilder<dynamic>(
                                               future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
                                               builder: (context, snapshot) {
@@ -218,7 +218,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                                   widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
                                                   return Text(
                                                     snapshot.data.name.toString(),
-                                                    style: TextStyle(fontSize: 18.sp),
+                                                    style:  EvieTextStyles.body18,
                                                   );
                                                 }else{
                                                   return const Text(
@@ -229,7 +229,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                           ),
                                           subtitle: data == null
                                               ? const Text('Error in data')
-                                              : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
+                                              : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style:  EvieTextStyles.body14,)
 
                                       ),
                                       const Divider(height: 1),
@@ -250,7 +250,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                           ),
                                           title: data == null ? const Text('Error')
                                               : data["address"] != null
-                                              ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
+                                              ? Text(data["address"], style:  EvieTextStyles.body18,)
                                               : FutureBuilder<dynamic>(
                                               future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
                                               builder: (context, snapshot) {
@@ -258,7 +258,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                                   widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
                                                   return Text(
                                                     snapshot.data.name.toString(),
-                                                    style: TextStyle(fontSize: 18.sp),
+                                                    style:  EvieTextStyles.body18,
                                                   );
                                                 }else{
                                                   return const Text(
@@ -269,7 +269,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                           ),
                                           subtitle: data == null
                                               ? const Text('Error in data')
-                                              : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
+                                              : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style:  EvieTextStyles.body14,)
 
                                       ),
                                       const Divider(height: 1),
@@ -291,7 +291,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                           ),
                                           title: data == null ? const Text('Error')
                                               : data["address"] != null
-                                              ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
+                                              ? Text(data["address"], style:  EvieTextStyles.body18,)
                                               : FutureBuilder<dynamic>(
                                               future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
                                               builder: (context, snapshot) {
@@ -299,7 +299,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                                   widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
                                                   return Text(
                                                     snapshot.data.name.toString(),
-                                                    style: TextStyle(fontSize: 18.sp),
+                                                    style:  EvieTextStyles.body18,
                                                   );
                                                 }else{
                                                   return const Text(
@@ -310,7 +310,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                           ),
                                           subtitle: data == null
                                               ? const Text('Error in data')
-                                              : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
+                                              : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: EvieTextStyles.body14,)
 
                                       ),
                                       const Divider(height: 1),
@@ -330,7 +330,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                         ),
                                         title: data == null ? const Text('Error')
                                             : data["address"] != null
-                                            ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
+                                            ? Text(data["address"], style:  EvieTextStyles.body18,)
                                             : FutureBuilder<dynamic>(
                                             future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
                                             builder: (context, snapshot) {
@@ -338,7 +338,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                                 widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
                                                 return Text(
                                                   snapshot.data.name.toString(),
-                                                  style: TextStyle(fontSize: 18.sp),
+                                                  style: EvieTextStyles.body18,
                                                 );
                                               }else{
                                                 return const Text(
@@ -349,7 +349,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                         ),
                                         subtitle: data == null
                                             ? const Text('Error in data')
-                                            : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
+                                            : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style:  EvieTextStyles.body14,)
 
                                     ),
                                     const Divider(height: 1),
@@ -396,10 +396,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                       child: ElevatedButton(
                         child: Text(
                           "Show All Data",
-                          style: TextStyle(
-                              fontSize: 17.sp,
-                              color: Color(0xff7A7A79),
-                              fontWeight: FontWeight.w700),
+                          style:  EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                         ),
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
@@ -455,45 +452,6 @@ class _Threat_HistoryState extends State<Threat_History> {
       default:
         return "empty";
     }
-  }
-
-  Widget _proceed(BuildContext context, index, data, documentSnapshots) {
-    return Column(
-      children: [
-        ListTile(
-            leading: data == null ? const Text('Error')
-                : SvgPicture.asset(
-              getSecurityIconWidget(data['type']),
-              height: 36.h,
-              width: 36.w,
-            ),
-            title: data == null ? const Text('Error')
-                : data["address"] != null
-                ? Text(data["address"], style: TextStyle(fontSize: 18.sp),)
-                : FutureBuilder<dynamic>(
-                future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
-                    return Text(
-                      snapshot.data.name.toString(),
-                      style: TextStyle(fontSize: 18.sp),
-                    );
-                  }else{
-                    return const Text(
-                      "loading",
-                    );
-                  }
-                }
-            ),
-            subtitle: data == null
-                ? const Text('Error in data')
-                : Text("${getSecurityTextWidget(data["type"])} • ${data["created"]!.toDate().toString()}", style: TextStyle(fontSize: 12.sp),)
-
-        ),
-        const Divider(height: 1),
-      ],
-    );
   }
 
 }

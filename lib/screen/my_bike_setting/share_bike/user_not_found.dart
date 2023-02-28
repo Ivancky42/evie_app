@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
+import '../../../api/colours.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
@@ -88,10 +89,7 @@ class _UserNotFoundState extends State<UserNotFound> {
                       height: 48.h,
                       child: Text(
                         "Done",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w700),
+                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                       ),
                       onPressed: () {
                         changeToShareBikeInvitationScreen(context);

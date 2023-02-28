@@ -44,7 +44,7 @@ class _EVAddFailedState extends State<EVAddFailed> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToNavigatePlanScreen(context);
+        changeToBikeSetting(context);
         return false;
       },
       child: Scaffold(
@@ -76,7 +76,7 @@ class _EVAddFailedState extends State<EVAddFailed> {
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(0.w, 0.h, 0.w,221.h),
                     child: Center(
-                      child:  Lottie.asset('assets/animations/error-animate.json',),
+                      child:  Lottie.asset('assets/animations/error-animate.json'),
                     ),
                   ),
                 ),
@@ -130,7 +130,7 @@ class _EVAddFailedState extends State<EVAddFailed> {
                       if(_bikeProvider.rfidList.length >0){
                         changeToEVKeyList(context);
                       }else{
-                        changeToNavigatePlanScreen(context);
+                        changeToBikeSetting(context);
                       }
                     },
                   ),

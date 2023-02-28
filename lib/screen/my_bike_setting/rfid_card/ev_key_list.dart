@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -44,14 +45,14 @@ class _EVKeyListState extends State<EVKeyList> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToNavigatePlanScreen(context);
+        changeToBikeSetting(context);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'EV-Key',
           onPressed: () {
-            changeToNavigatePlanScreen(context);
+            changeToBikeSetting(context);
           },
         ),
         body: Stack(
@@ -83,11 +84,11 @@ class _EVKeyListState extends State<EVKeyList> {
                      ),
                      title: Text(
                        _bikeProvider.rfidList.values.elementAt(index).rfidName,
-                       style: TextStyle(fontSize: 16.sp),
+                       style: EvieTextStyles.body18,
                      ),
                      subtitle: Text(
                        _bikeProvider.rfidList.keys.elementAt(index),
-                       style: TextStyle(fontSize: 12.sp, color: Color(0xff5F6060)),
+                       style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                      ),
                      trailing: isManageList ? Container(
                        width: 107.w,
@@ -104,9 +105,7 @@ class _EVKeyListState extends State<EVKeyList> {
                              ),
                              Text(
                                "Delete",
-                               style: TextStyle(
-                                   fontSize: 12.sp,
-                                   color: Color(0xffECEDEB)),
+                               style: EvieTextStyles.body12.copyWith(color: EvieColors.grayishWhite),
                              ),
                            ],
                          ),
@@ -242,27 +241,19 @@ class _EVKeyListState extends State<EVKeyList> {
                                            widget:
                                            EvieSingleButtonDialog(
                                                title: "Success",
-                                               content:
-                                               "Name uploaded",
-                                               rightContent:
-                                               "OK",
-                                               onPressedRight:
-                                                   () {
-                                                 SmartDialog
-                                                     .dismiss();
+                                               content: "Name uploaded",
+                                               rightContent: "OK",
+                                               onPressedRight: () {
+                                                 SmartDialog.dismiss();
                                                }))
-                                           : SmartDialog.show(
-                                           widget:
-                                           EvieSingleButtonDialog(
+                                           : SmartDialog.show(widget: EvieSingleButtonDialog(
                                                title: "Error",
                                                content:
                                                "Please try again",
                                                rightContent:
                                                "OK",
-                                               onPressedRight:
-                                                   () {
-                                                 SmartDialog
-                                                     .dismiss();
+                                               onPressedRight: () {
+                                                 SmartDialog.dismiss();
                                                }));
                                      }
                                    }),
