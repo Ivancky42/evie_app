@@ -1,8 +1,20 @@
+import 'dart:async';
+
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/provider/notification_provider.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:provider/provider.dart';
+
+import '../widgets/evie_double_button_dialog.dart';
+import '../widgets/evie_single_button_dialog.dart';
+import 'colours.dart';
 
 checkBleStatusAndConnectDevice(BluetoothProvider _bluetoothProvider, BikeProvider _bikeProvider) {
   BleStatus? bleStatus = _bluetoothProvider.bleStatus;
@@ -86,5 +98,108 @@ const Map<int,String> monthsInYear = {
   11: "Nov",
   12: "Dec",
 };
+
+
+capitalizeFirstCharacter(String sentence){
+  List<String> words = sentence.split(' ');
+  for (int i = 0; i < words.length; i++) {
+    String word = words[i];
+    if (word.isNotEmpty) {
+      words[i] = word[0].toUpperCase() + word.substring(1);
+    }
+  }
+  return words.join(' ');
+}
+
+
+class ShareBikeLeave extends StatefulWidget {
+
+  final BikeProvider bikeProvider;
+  final int index;
+
+  const ShareBikeLeave({
+    Key? key,
+    required this.bikeProvider,
+    required this.index,
+
+  }) : super(key: key);
+
+  @override
+  State<ShareBikeLeave> createState() => _ShareBikeLeaveState();
+}
+
+class _ShareBikeLeaveState extends State<ShareBikeLeave> {
+
+  late NotificationProvider _notificationProvider;
+
+  @override
+  Widget build(BuildContext context) {
+
+    _notificationProvider = Provider.of<NotificationProvider>(context);
+
+    return Container(
+      width: 82.w,
+      height: 35.h,
+      child: ElevatedButton(
+        child:    Text(
+          "Leave",
+          style: TextStyle(
+              fontSize: 12.sp,
+              color: EvieColors.primaryColor),
+        ),
+        onPressed: (){
+          SmartDialog.show(
+              widget: EvieDoubleButtonDialog(
+                title: "Are you sure you want to leave",
+                childContent: Text('Are you sure you want to leave'),
+                leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
+                rightContent: "Yes",
+                onPressedRight: () async {
+                  SmartDialog.dismiss();
+                  SmartDialog.showLoading();
+                  StreamSubscription? currentSubscription;
+
+                  currentSubscription = widget.bikeProvider.leaveSharedBike(
+                      widget.bikeProvider.bikeUserList.values.elementAt(widget.index).uid,
+                      widget.bikeProvider.bikeUserList.values.elementAt(widget.index).notificationId!).listen((uploadStatus) {
+
+                    if(uploadStatus == UploadFirestoreResult.success){
+                      SmartDialog.dismiss(status: SmartStatus.loading);
+                      SmartDialog.show(
+                          keepSingle: true,
+                          widget: EvieSingleButtonDialog(
+                              title: "Success",
+                              content: "You leave",
+                              rightContent: "Close",
+                              onPressedRight: () => SmartDialog.dismiss()
+                          ));
+                      currentSubscription?.cancel();
+                    } else if(uploadStatus == UploadFirestoreResult.failed) {
+                      SmartDialog.dismiss();
+                      SmartDialog.show(
+                          widget: EvieSingleButtonDialog(
+                              title: "Not success",
+                              content: "Try again",
+                              rightContent: "Close",
+                              onPressedRight: ()=>SmartDialog.dismiss()
+                          ));
+                    }else{};
+                  },
+                  );
+                },
+              ));
+        },
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.circular(20.w)),
+          elevation: 0.0,
+          backgroundColor: EvieColors.lightGrayishCyan,
+        ),
+      ),
+    );
+  }
+}
+
 
 

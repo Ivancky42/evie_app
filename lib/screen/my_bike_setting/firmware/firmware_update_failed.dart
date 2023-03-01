@@ -50,7 +50,9 @@ class _FirmwareUpdateFailedState extends State<FirmwareUpdateFailed> {
                         padding: EdgeInsets.fromLTRB(16.w,4.h,16.w,4.h),
                         child: Container(
                           child: Text(
-                            "Looks like something went wrong. Please try again.",
+                            "We're sorry, but your EVIE firmware upgrade was not successful. "
+                                "Please check if your Evie bike is still functioning properly and if not, reach out to our support team for assistance. "
+                                    "We'll help you troubleshoot the issue and find a solution. THank you for trying to upgrade your device!",
                             style: TextStyle(fontSize: 16.sp,height: 1.5.h),
                           ),
                         ),
@@ -60,9 +62,9 @@ class _FirmwareUpdateFailedState extends State<FirmwareUpdateFailed> {
                       Align(
                         alignment: Alignment.center,
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(75.w,98.h,75.w,127.84.h),
+                          padding: EdgeInsets.fromLTRB(16.w,98.h,16.w,127.84.h),
                           child: SvgPicture.asset(
-                            "assets/images/allow_location.svg",
+                            "assets/images/bike_broken.svg",
                           ),
                         ),
                       ),
@@ -74,12 +76,12 @@ class _FirmwareUpdateFailedState extends State<FirmwareUpdateFailed> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom),
+                    padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
                     child:  EvieButton(
                       width: double.infinity,
                       height: 48.h,
                       child: Text(
-                        "Try again",
+                        "Done",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 16.sp,
@@ -93,25 +95,6 @@ class _FirmwareUpdateFailedState extends State<FirmwareUpdateFailed> {
                   ),
                 ),
 
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(100.w,25.h,100.w,EvieLength.buttonWord_WordBottom),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: TextButton(
-                        child: Text(
-                          "Remind me later",
-                          softWrap: false,
-                          style: TextStyle(fontSize: 12.sp,color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
-                        ),
-                        onPressed: () {
-                          changeToBikeSetting(context);
-                        },
-                      ),
-                    ),
-                  ),
-                ),
 
               ]),
         ));

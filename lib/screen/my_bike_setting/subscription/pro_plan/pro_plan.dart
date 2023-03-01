@@ -7,11 +7,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 
+import '../../../../api/fonts.dart';
 import '../../../../api/model/plan_model.dart';
 import '../../../../api/navigator.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../widgets/evie_button.dart';
-import '../plan_page_widget.dart';
+import '../../../../widgets/evie_container.dart';
+
 
 class ProPlan extends StatefulWidget{
   const ProPlan({Key? key,}) : super(key: key);
@@ -32,7 +34,7 @@ class _ProPlanState extends State<ProPlan> {
     _planProvider = Provider.of<PlanProvider>(context);
 
     return Padding(
-      padding: EdgeInsets.only(left: 32.w, right: 32.w),
+      padding: EdgeInsets.only(left: 16.w, right: 16.w),
       child: ListView(
         shrinkWrap: true,
         children: [
@@ -40,9 +42,9 @@ class _ProPlanState extends State<ProPlan> {
             height: 664.h,
             width: 326.w,
             decoration: BoxDecoration(
-                color: Color(0xffDFE0E0),
+                color: EvieColors.lightGrayishCyan,
                 border: Border.all(
-                  color: Color(0xffDFE0E0),
+                  color: EvieColors.lightGrayishCyan,
                 ),
                 borderRadius:
                 BorderRadius.all(Radius.circular(10))),
@@ -57,36 +59,37 @@ class _ProPlanState extends State<ProPlan> {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(top: 40.h, bottom: 20.h),
-                        child: Text("Pro Plan", style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500,color: Color(0xff7A7A79)),),
+                        child: Text("Premium", style: EvieTextStyles.body20.copyWith(color: EvieColors.darkGrayish),),
                       ),
-                      Text("USD29.90",style: TextStyle(fontSize: 40.sp, fontWeight: FontWeight.w900,),),
+                      Text("USD29.90",style: EvieTextStyles.display),
 
                       Align(
                           alignment: Alignment(0.3, -12),
-                          child: Text("/per month",style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400,color: Color(0xff7A7A79)),)),
+                          child: Text("/per month",style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayish),)),
 
                       SizedBox(height: 40.h,),
-                      Text("Best for peace of mind: Remote monitor bike status and receive theft detection alert notification",
-                        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400,  height: 1.2.h),),
+                      Text("Best for worry free: Remote monitor bike status and receive theft alert notification.",
+                          style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack,height: 1.2.h)),
 
                       Padding(
                         padding: EdgeInsets.only(top: 14.h, bottom: 12.h),
-                        child: Divider(height: 1.h,color: Color(0xff8E8E8E),),
+                        child: Divider(height: 1.h,color: EvieColors.darkWhite,),
                       ),
 
                       Row(children: [
-                        Text("Includes",style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500,color: Color(0xff383838)),),
+                        Text("Includes",style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack, fontWeight: FontWeight.bold),),
                       ]),
 
-                      PlanPageElementRow(content: "All Essential includes"),
-                      PlanPageElementRow(content: "GPS tracking"),
-                      PlanPageElementRow(content: "Alert notification"),
-                      PlanPageElementRow(content: "Theft detection"),
-                      PlanPageElementRow(content: "Remote monitoring"),
-                      PlanPageElementRow(content: "Fall detection with alerts"),
-                      PlanPageElementRow(content: "Ride history"),
-                      PlanPageElementRow(content: "Exclusive promotions"),
-                      PlanPageElementRow(content: "Unlimited data package"),
+                      const PlanPageElementRow(content: "All Lite includes"),
+                      const PlanPageElementRow(content: "GPS tracking"),
+                      const PlanPageElementRow(content: "Alert notification"),
+                      const PlanPageElementRow(content: "Theft detection"),
+                      const PlanPageElementRow(content: "Remote monitoring"),
+                      const PlanPageElementRow(content: "Fall detection with alerts"),
+                      const PlanPageElementRow(content: "Ride history"),
+                      const PlanPageElementRow(content: "Exclusive promotions"),
+                      const PlanPageElementRow(content: "Bike Sharing"),
+                      const PlanPageElementRow(content: "Unlimited data package"),
 
                     ],
                   ),
@@ -130,11 +133,7 @@ class _ProPlanState extends State<ProPlan> {
                         height: 48.h,
                         child: Text(
                           "Unlock Plan",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w700
-                          ),
+                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                         ),
                         onPressed: () {
                           String key = _planProvider.availablePlanList.keys.elementAt(0);
@@ -145,7 +144,6 @@ class _ProPlanState extends State<ProPlan> {
                               changeToStripeCheckoutScreen(context, value, _bikeProvider.currentBikeModel!, planModel, priceModel);
                             });
                           });
-
                         },
                       ),
                     ),

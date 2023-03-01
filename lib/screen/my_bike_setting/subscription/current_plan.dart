@@ -63,7 +63,6 @@ class _CurrentPlanState extends State<CurrentPlan> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Padding(
                     padding: EdgeInsets.only(top:28.h),
                     child: Text("Current Plan", style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),),

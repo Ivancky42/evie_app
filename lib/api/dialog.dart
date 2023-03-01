@@ -833,3 +833,10 @@ showResetBike(BuildContext context, BikeProvider bikeProvider){
       }));
 }
 
+showErrorChangeDetectionSensitivity(){
+  SmartDialog.show(widget: EvieSingleButtonDialog(
+      title: "Error",
+      content: "Error update motion sensitivity",
+      rightContent: "Ok",
+      onPressedRight: (){SmartDialog.dismiss();}));
+}

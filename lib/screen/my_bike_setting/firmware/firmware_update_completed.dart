@@ -37,7 +37,7 @@ class _FirmwareUpdateCompletedState extends State<FirmwareUpdateCompleted> {
                       Padding(
                         padding: EdgeInsets.fromLTRB(16.w,76.h,16.w,4.h),
                         child: Text(
-                          "Update Completed",
+                          "Upgrade Completed!",
                           style: TextStyle(fontSize: 24.sp),
                         ),
                       ),
@@ -46,7 +46,8 @@ class _FirmwareUpdateCompletedState extends State<FirmwareUpdateCompleted> {
                         padding: EdgeInsets.fromLTRB(16.w,4.h,16.w,4.h),
                         child: Container(
                           child: Text(
-                            "Hooray! EVIE firmware have been updated successfully.",
+                            "WooHoo! You should now be able to enjoy improved performance, bug fixes, and new features. "
+                                "If you encounter any issues, please reach out to our support team for assistance. Thank you for upgrading your device!",
                             style: TextStyle(fontSize: 16.sp,height: 1.5.h),
                           ),
                         ),
@@ -56,9 +57,9 @@ class _FirmwareUpdateCompletedState extends State<FirmwareUpdateCompleted> {
                       Align(
                         alignment: Alignment.center,
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(75.w,98.h,75.w,127.84.h),
+                          padding: EdgeInsets.fromLTRB(16.w,98.h,16.w,127.84.h),
                           child: SvgPicture.asset(
-                            "assets/images/beer_celebration.svg",
+                            "assets/images/bike_champion.svg",
                           ),
                         ),
                       ),

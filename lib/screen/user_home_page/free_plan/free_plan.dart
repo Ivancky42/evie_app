@@ -279,6 +279,7 @@ class _FreePlanState extends State<FreePlan> {
 
                             return ListView(
                               controller: _scrollController,
+                              physics: const BouncingScrollPhysics(),
                               children: [
                                 navigateButton(),
                                 currentScroll <= 0.8 ?

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
@@ -10,6 +11,7 @@ import 'package:evie_test/screen/my_bike_setting/subscription/pro_plan/pro_plan.
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:provider/provider.dart';
 
@@ -61,51 +63,59 @@ class _ManagePlanState extends State<ManagePlan> {
                         EdgeInsets.only(left: 16.w, right: 16.w, bottom: 30.h),
                     child: Container(
                       decoration: BoxDecoration(
-                          color: Color(0xffDFE0E0),
+                          color: EvieColors.lightGrayishCyan,
                           border: Border.all(
-                            color: Color(0xffDFE0E0),
+                            color: EvieColors.lightGrayishCyan,
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                          borderRadius: const BorderRadius.all(Radius.circular(30))),
                       child: Container(
                         height: 40.h,
                         child: TabBar(
+
+                          /// Defined Tab Text Colour
+                          labelColor: EvieColors.primaryColor,
+                          unselectedLabelColor: EvieColors.lightBlack,
+
                           indicator: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                               // Creates border
-                              color: Color(0xfff4f4f4)),
+                              color: EvieColors.dividerWhite),
                           tabs: [
                             Text(
                               "Starter",
-                              style: TextStyle(
-                                  fontSize: 16.sp, color: Color(0xff383838)),
+                              style: EvieTextStyles.ctaSmall,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   "Premium ",
-                                  style: TextStyle(
-                                      fontSize: 16.sp,
-                                      color: Color(0xff383838)),
+                                  style: EvieTextStyles.ctaSmall,
                                 ),
-                                Container(
-                                  height: 23.h,
-                                  width: 70.w,
-                                  decoration: BoxDecoration(
-                                      color: EvieColors.primaryColor,
-                                      border: Border.all(
-                                        color: EvieColors.primaryColor,
-                                      ),
-                                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                                  child: Center(
-                                    child: Text(
-                                      "Best Value",
-                                      style: TextStyle(
-                                          fontSize: 12.sp,
-                                          color: Color(0xffECEDEB)),
-                                    ),
-                                  ),
-                                )
+                                SvgPicture.asset(
+                                  "assets/icons/batch_tick.svg",
+                                  height: 16.h,
+                                ),
+
+                                // Container(
+                                //   height: 23.h,
+                                //   width: 70.w,
+                                //   decoration: BoxDecoration(
+                                //       color: EvieColors.primaryColor,
+                                //       border: Border.all(
+                                //         color: EvieColors.primaryColor,
+                                //       ),
+                                //       borderRadius: const BorderRadius.all(Radius.circular(5))),
+                                //   child: Center(
+                                //     child: Text(
+                                //       "Best Value",
+                                //       style: TextStyle(
+                                //           fontSize: 12.sp,
+                                //           color: Color(0xffECEDEB)),
+                                //     ),
+                                //   ),
+                                // )
+
                               ],
                             ),
                           ],

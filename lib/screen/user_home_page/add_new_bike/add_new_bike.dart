@@ -324,6 +324,7 @@ class _AddNewBikeState extends State<AddNewBike> {
 
                             return ListView(
                               controller: _scrollController,
+                              physics: const BouncingScrollPhysics(),
                               children: [
                                 navigateButton(),
                                 currentScroll <= 0.8 ?

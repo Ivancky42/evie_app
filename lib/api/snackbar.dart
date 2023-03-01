@@ -409,6 +409,34 @@ showResentEmailFailedToast(context) {
   );
 }
 
+showBikeAddSuccessfulToast(context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            SvgPicture.asset("assets/icons/check.svg"),
+            SizedBox(width: 4.w,),
+            Text(
+              "'Bike added successfully!'",
+              style: EvieTextStyles.toast,
+            ),
+          ],
+        ),
+      ),
+      duration: const Duration(seconds: 3),
+    ),
+  );
+}
+
+
 hideCurrentSnackBar(ScaffoldMessengerState _navigator) {
   Future.delayed(Duration.zero).then((value) {
     _navigator.removeCurrentSnackBar();

@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/dialog.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
@@ -123,19 +124,13 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
                                   } else {
                                     SmartDialog.dismiss(status: SmartStatus.loading);
                                     subscription?.cancel();
-                                    SmartDialog.show(widget: EvieSingleButtonDialog(
-                                        title: "Error",
-                                        content: "Error change motion sensitivity",
-                                        rightContent: "Ok",
-                                        onPressedRight: (){SmartDialog.dismiss();}));
+
+                                    showErrorChangeDetectionSensitivity();
+
                                   }
                                 });
                               }else{
-                                SmartDialog.show(widget: EvieSingleButtonDialog(
-                                    title: "Error",
-                                    content: "Error update motion sensitivity",
-                                    rightContent: "Ok",
-                                    onPressedRight: (){SmartDialog.dismiss();}));
+                                showErrorChangeDetectionSensitivity();
                               }
                             }
                           },
@@ -144,7 +139,7 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
 
                       Text(
                         _bikeProvider.currentBikeModel!.movementSetting?.sensitivity ?? "medium",
-                        style: TextStyle(fontSize:16.sp, color: Color(0xff7A7A79)),
+                        style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayish),
                       ),
 
                     ],

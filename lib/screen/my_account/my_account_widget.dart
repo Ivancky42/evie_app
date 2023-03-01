@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../api/colours.dart';
-import '../../theme/ThemeChangeNotifier.dart';
 
 class AccountPageContainer extends StatelessWidget {
   final String content;

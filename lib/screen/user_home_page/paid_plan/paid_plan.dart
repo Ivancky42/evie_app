@@ -294,10 +294,10 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                       snap: true,
                       snapSizes: const [minRatio, initialRatio, maxRatio],
                       expand: true,
-                      builder: (BuildContext context,
-                          ScrollController _scrollController) {
+                      builder: (BuildContext context, ScrollController _scrollController) {
                         return ListView(
                           controller: _scrollController,
+                          physics: const BouncingScrollPhysics(),
                           children: [
                             mapLauncher(),
                             navigateButton(),

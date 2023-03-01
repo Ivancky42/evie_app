@@ -9,7 +9,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../feeds/feeds.dart';
 import '../my_account/my_account.dart';
-import '../my_bike_setting/user_bike/user_bike.dart';
 import '../../abandon/user_notification.dart';
 
 ///User default home page when login condition is true
@@ -23,7 +22,8 @@ class UserHomePage extends StatefulWidget {
 }
 
 class _UserHomePageState extends State<UserHomePage> {
-  //Current index is 0, init state body[screen] is user home page general screen
+
+  ///Current index is 0, init state body[screen] is user home page general screen
   late int currentIndex;
 
   ///Appbar title

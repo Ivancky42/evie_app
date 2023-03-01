@@ -141,10 +141,8 @@ class _BikeSettingSearchContainerState extends State<BikeSettingSearchContainer>
     if (refinedMatch.contains(refinedSearch)) {
       if (refinedMatch.substring(0, refinedSearch.length) == refinedSearch) {
         return TextSpan(
-          style: TextStyle(
-            color: EvieColors.primaryColor,
-            fontSize: 16.sp
-          ),
+          style: EvieTextStyles.body16.copyWith(color: EvieColors.primaryColor),
+
           text: match.substring(0, refinedSearch.length),
           children: [
             searchMatch(
@@ -155,16 +153,11 @@ class _BikeSettingSearchContainerState extends State<BikeSettingSearchContainer>
           ],
         );
       } else if (refinedMatch.length == refinedSearch.length) {
-        return TextSpan(text: match, style: TextStyle(
-          color: EvieColors.primaryColor,
-            fontSize: 16.sp
-        ));
+        return TextSpan(text: match, style: EvieTextStyles.body16.copyWith(color: EvieColors.primaryColor),
+        );
       } else {
         return TextSpan(
-          style: TextStyle(
-            color: Colors.black,
-              fontSize: 16.sp
-          ),
+          style: EvieTextStyles.body16.copyWith(color: Colors.black),
           text: match.substring(
             0,
             refinedMatch.indexOf(refinedSearch),
@@ -179,17 +172,13 @@ class _BikeSettingSearchContainerState extends State<BikeSettingSearchContainer>
         );
       }
     } else if (!refinedMatch.contains(refinedSearch)) {
-      return TextSpan(text: match, style: TextStyle(
-        color: Colors.black,
-          fontSize: 16.sp
-      ));
+      return TextSpan(text: match,style: EvieTextStyles.body16.copyWith(color: Colors.black),
+      );
     }
     return TextSpan(
       text: match.substring(0, refinedMatch.indexOf(refinedSearch)),
-      style: TextStyle(
-        color: Colors.black,
-          fontSize: 16.sp
-      ),
+      style: EvieTextStyles.body16.copyWith(color: Colors.black),
+
       children: [
         searchMatch(match.substring(refinedMatch.indexOf(refinedSearch)))
       ],

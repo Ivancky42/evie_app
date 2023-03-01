@@ -3,16 +3,11 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:evie_test/api/backend/sim_api_caller.dart';
 import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/navigator.dart';
-import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:evie_test/screen/trip_history/week.dart';
 import 'package:evie_test/screen/trip_history/year.dart';
-import 'package:evie_test/widgets/widgets.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../../api/dialog.dart';
 import '../../api/fonts.dart';
@@ -37,7 +32,6 @@ class _TripHistoryState extends State<TripHistory> {
         return exitApp ?? false;
       },
       child: Scaffold(
-
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -61,38 +55,38 @@ class _TripHistoryState extends State<TripHistory> {
                           EdgeInsets.only(left: 16.w, right: 16.w, bottom: 30.h),
                           child: Container(
                             decoration: BoxDecoration(
-                                color: Color(0xffDFE0E0),
+                                color: EvieColors.lightGrayishCyan,
                                 border: Border.all(
-                                  color: Color(0xffDFE0E0),
+                                  color: EvieColors.lightGrayishCyan,
                                 ),
-                                borderRadius: BorderRadius.all(Radius.circular(30))),
+                                borderRadius: const BorderRadius.all(Radius.circular(30))),
                             child: Container(
                               height: 40.h,
                               child: TabBar(
+
+                                labelColor: EvieColors.primaryColor,
+                                unselectedLabelColor: EvieColors.lightBlack,
+
                                 indicator: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30),
-                                    // Creates border
-                                    color: Color(0xfff4f4f4)),
+                                    color: EvieColors.dividerWhite),
+
                                 tabs: [
                                   Text(
                                     "Day",
-                                    style: TextStyle(
-                                        fontSize: 16.sp, color: Color(0xff383838)),
+                                    style: EvieTextStyles.ctaSmall,
                                   ),
                                   Text(
                                     "Week",
-                                    style: TextStyle(
-                                        fontSize: 16.sp, color: Color(0xff383838)),
+                                    style: EvieTextStyles.ctaSmall,
                                   ),
                                   Text(
                                     "Month",
-                                    style: TextStyle(
-                                        fontSize: 16.sp, color: Color(0xff383838)),
+                                    style: EvieTextStyles.ctaSmall,
                                   ),
                                   Text(
                                     "Year",
-                                    style: TextStyle(
-                                        fontSize: 16.sp, color: Color(0xff383838)),
+                                    style: EvieTextStyles.ctaSmall,
                                   ),
 
                                 ],

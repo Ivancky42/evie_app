@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/state_manager.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -31,6 +32,7 @@ import '../../api/fonts.dart';
 import '../../api/function.dart';
 import '../../api/model/bike_model.dart';
 import '../../api/navigator.dart';
+import '../../api/snackbar.dart';
 import '../../theme/ThemeChangeNotifier.dart';
 import '../../widgets/evie_single_button_dialog.dart';
 
@@ -60,7 +62,8 @@ class _FeedsState extends State<Feeds> {
 
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        bool? exitApp = await showQuitApp() as bool?;
+        return exitApp ?? false;
       },
       child: Scaffold(
           body: Column(
@@ -165,10 +168,24 @@ class _FeedsState extends State<Feeds> {
                       }
 
                     }, separatorBuilder: (BuildContext context, int index) {
-                      return Divider(height: 1.5.h,);
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Divider(height: 1.5.h,),
+                        ],
+                      );
                     },
                     ),
                   ),
+
+                    SizedBox(
+                      height: 10.h,
+                    ),
+
+                    Divider(height: 1.5.h,),
+
                     Container(
                       child: _notificationProvider.notificationList.isNotEmpty ?
                       ListView.separated(
@@ -257,11 +274,11 @@ class _FeedsState extends State<Feeds> {
                                               child: Text(_notificationProvider
                                                   .notificationList.values
                                                   .elementAt(index)
-                                                  .title!, style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w900),),
+                                                  .title!, style: EvieTextStyles.headlineB.copyWith(color: EvieColors.mediumLightBlack),),
                                             ),
 
                                             Text(calculateTimeAgo(_notificationProvider.notificationList.values.elementAt(index).created!.toDate()),
-                                              style: TextStyle(fontSize: 12.sp,color: EvieColors.darkGrayishCyan, fontWeight: FontWeight.w400),),
+                                              style: EvieTextStyles.body12.copyWith(color: EvieColors.darkGrayishCyan),),
                                           ],
                                         ),
                                         subtitle: Column(
@@ -319,12 +336,11 @@ class _FeedsState extends State<Feeds> {
                                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                                       crossAxisAlignment: CrossAxisAlignment.center,
                                                                       children: [
-                                                                        SvgPicture.asset(
-                                                                          "assets/icons/loading.svg",
-                                                                          height: 48.h,
-                                                                          width: 48.w,
-                                                                        ),
-                                                                        Text("Accepting invitation and adding bike...", style: TextStyle(fontSize: 16.sp, color: Color(0xff3F3F3F)),)
+                                                                        Lottie.asset(
+                                                                            'assets/animations/add-bike.json',
+                                                                        height: 83.h,
+                                                                        width: 198.h),
+                                                                        Text("Accepting invitation and adding bike...", style:EvieTextStyles.body16.copyWith(color: EvieColors.darkGray),)
                                                                       ],
                                                                     )
                                                                 ));
@@ -334,17 +350,11 @@ class _FeedsState extends State<Feeds> {
                                                                 _notificationProvider.notificationList.values.elementAt(index).deviceIMEI!,
                                                                 _currentUserProvider.currentUserModel!.uid)
                                                                 .listen((uploadStatus) async {
-
                                                               if(uploadStatus == UploadFirestoreResult.success){
                                                                 SmartDialog.dismiss();
                                                                 _notificationProvider.updateUserNotificationSharedBikeStatus(_notificationProvider.notificationList.keys.elementAt(index));
-                                                                ScaffoldMessenger.of(context)
-                                                                    .showSnackBar(
-                                                                  const SnackBar(
-                                                                    content: Text('Bike added successfully!'),
-                                                                    duration: Duration(
-                                                                        seconds: 3),),
-                                                                );
+
+                                                                showBikeAddSuccessfulToast(context);
 
                                                                 changeToUserHomePageScreen(context);
                                                                 for (var element in _bikeProvider.userBikeNotificationList) {
@@ -427,7 +437,7 @@ class _FeedsState extends State<Feeds> {
                           child: Column(
                             children: [
                               SvgPicture.asset(
-                                "assets/images/mention_amigo.svg",
+                                "assets/images/bike_email.svg",
                               ),
                               SizedBox(
                                 height: 60.h,
@@ -452,9 +462,9 @@ class _FeedsState extends State<Feeds> {
 
   decline(int index){
     SmartDialog.show(
-        widget: EvieDoubleButtonDialogCupertino(
+        widget: EvieDoubleButtonDialog(
           title: "Are you sure you want to decline?",
-          content: 'Are you sure you want to decline?',
+          childContent: Text('Are you sure you want to decline?'),
           leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
           rightContent: "Yes",
           onPressedRight: () async {

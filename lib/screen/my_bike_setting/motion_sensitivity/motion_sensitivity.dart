@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 
 import '../../../api/colours.dart';
+import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
@@ -119,7 +120,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
 
                     Padding(
                       padding: EdgeInsets.only(left: 16.w),
-                      child: Text("Alarm on bike will be triggered when it senses movement.", style: TextStyle(fontSize: 12.sp, color: Color(0xff5F6060)),),
+                      child: Text("Alarm on bike will be triggered when it senses movement.", style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),),
                     ),
 
                   ],
@@ -144,14 +145,14 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                 children: [
                    Text(
                     "Level Detection Sensitivity",
-                    style: TextStyle(fontSize: 16.sp),
+                    style: EvieTextStyles.body18,
                   ),
 
                   Row(
                     children: [
                       Text(
                         _bikeProvider.currentBikeModel?.movementSetting?.sensitivity ?? "None",
-                        style: TextStyle(fontSize: 16.sp, color: Color(0xff7A7A79)),
+                        style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayish),
                       ),
                       SvgPicture.asset(
                         "assets/buttons/next.svg",
@@ -166,6 +167,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
           ),
         ),
       ): Opacity(
+
                   opacity: 0.3,
         child: Padding(
                     padding:EdgeInsets.only(top: 5.h,bottom: 5.h,),
@@ -183,14 +185,14 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                             children: [
                               Text(
                                 "Level Detection Sensitivity",
-                                style: TextStyle(fontSize: 16.sp),
+                                style: EvieTextStyles.body18,
                               ),
 
                               Row(
                                 children: [
                                   Text(
                                     _bikeProvider.currentBikeModel?.movementSetting?.sensitivity ?? "None",
-                                    style: TextStyle(fontSize: 16.sp, color: Color(0xff7A7A79)),
+                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayish),
                                   ),
                                   SvgPicture.asset(
                                     "assets/buttons/next.svg",

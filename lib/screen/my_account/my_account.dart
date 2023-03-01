@@ -41,7 +41,8 @@ class _MyAccountState extends State<MyAccount> {
 
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        bool? exitApp = await showQuitApp() as bool?;
+        return exitApp ?? false;
       },
 
       child: Scaffold(
@@ -68,9 +69,8 @@ class _MyAccountState extends State<MyAccount> {
                     child: CachedNetworkImage(
                       //imageUrl: document['profileIMG'],
                       imageUrl: _currentUserProvider.currentUserModel != null ? _currentUserProvider.currentUserModel!.profileIMG : "",
-                      placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      placeholder: (context, url) => const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                       width: 66.67.h,
                       height: 66.67.h,
                       fit: BoxFit.cover,
@@ -81,6 +81,7 @@ class _MyAccountState extends State<MyAccount> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
                     Text(
                       _currentUserProvider.currentUserModel?.name ?? "",
                       style:EvieTextStyles.headline.copyWith(color:EvieColors.lightBlack),
@@ -245,7 +246,7 @@ class _MyAccountState extends State<MyAccount> {
                             style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                           ),
                           Text(
-                            "Copyright 2022 by Beno Inc",
+                            "Copyright 2023 by Beno Inc",
                             style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                           ),
                         ],
@@ -256,111 +257,6 @@ class _MyAccountState extends State<MyAccount> {
               ),
             ),
           ),
-          // Padding(
-          //   padding: EdgeInsets.only(
-          //       left: 16.w, right: 16.w, top: 24.h, bottom: 10.h),
-          //   child: Container(
-          //     height: 45.h,
-          //     width: double.infinity,
-          //     child: ElevatedButton(
-          //       child: Text(
-          //         "Logout",
-          //         style: TextStyle(
-          //           fontSize: 17.sp,
-          //           color: Color(0xff7A7A79), fontWeight: FontWeight.w700
-          //         ),
-          //       ),
-          //       onPressed: () async {
-          //         SmartDialog.showLoading();
-          //         try {
-          //           await _bikeProvider.clear();
-          //           await _authProvider.signOut(context).then((result) {
-          //             if (result == true) {
-          //               SmartDialog.dismiss();
-          //               // _authProvider.clear();
-          //
-          //               changeToWelcomeScreen(context);
-          //               ScaffoldMessenger.of(context).showSnackBar(
-          //                 const SnackBar(
-          //                   content: Text('Signed out'),
-          //                   duration: Duration(seconds: 2),
-          //                 ),
-          //               );
-          //             } else {
-          //               SmartDialog.dismiss();
-          //               ScaffoldMessenger.of(context).showSnackBar(
-          //                 const SnackBar(
-          //                   content: Text('Error, Try Again'),
-          //                   duration: Duration(seconds: 4),
-          //                 ),
-          //               );
-          //             }
-          //           });
-          //         } catch (e) {
-          //           debugPrint(e.toString());
-          //         }
-          //       },
-          //       style: ElevatedButton.styleFrom(
-          //         shape: RoundedRectangleBorder(
-          //             borderRadius: BorderRadius.circular(10.0),
-          //             side:  BorderSide(color: Color(0xff7A7A79), width: 1.5.w)),
-          //         elevation: 0.0,
-          //         backgroundColor: Colors.transparent,
-          //
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Padding(
-          //   padding: EdgeInsets.only(
-          //       left: 16.w, right: 16.w, top: 0.h, bottom: 6.h),
-          //   child: Container(
-          //     height: 45.h,
-          //     width: double.infinity,
-          //     child: ElevatedButton(
-          //       child: Text(
-          //         "Revoke Account",
-          //         style: TextStyle(
-          //             fontSize: 17.sp,
-          //             color: Color(0xff7A7A79),
-          //             fontWeight: FontWeight.w700),
-          //       ),
-          //       onPressed: () {
-          //       },
-          //       style: ElevatedButton.styleFrom(
-          //         shape: RoundedRectangleBorder(
-          //             borderRadius: BorderRadius.circular(10.0),
-          //             side:  BorderSide(color: Color(0xff7A7A79), width: 1.5.w)),
-          //         elevation: 0.0,
-          //         backgroundColor: Colors.transparent,
-          //
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Padding(
-          //   padding: EdgeInsets.only(bottom: 14.h),
-          //   child: Center(
-          //     child: Column(
-          //       children: [
-          //         Text(
-          //           "Evie v0.0.1",
-          //           style: TextStyle(
-          //               fontSize: 12.sp,
-          //             color: Color(0xff8E8E8E),
-          //           ),
-          //         ),
-          //         Text(
-          //           "Copyright 2022 by Beno Inc",
-          //           style: TextStyle(
-          //             fontSize: 12.sp,
-          //             color: Color(0xff8E8E8E),
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
         ],
       )),
     );

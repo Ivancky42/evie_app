@@ -6,8 +6,6 @@ import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
-import 'package:evie_test/screen/my_bike_setting/share_bike/share_bike_function.dart';
-
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -19,6 +17,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
 import '../../../api/dialog.dart';
+import '../../../api/function.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/current_user_provider.dart';

@@ -1,5 +1,5 @@
 import 'package:evie_test/screen/my_account/my_garage/my_garage.dart';
-import 'package:evie_test/screen/my_bike_setting/detection_sensitivity/detection_sensitivity.dart';
+import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_sensitivity.dart';
 import 'package:evie_test/screen/my_bike_setting/firmware/firmware_information.dart';
 import 'package:evie_test/screen/my_bike_setting/firmware/firmware_update_failed.dart';
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/motion_sensitivity.dart';

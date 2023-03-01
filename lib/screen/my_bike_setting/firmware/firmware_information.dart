@@ -79,7 +79,9 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
         appBar: PageAppbar(
           title: 'Firmware Information',
           onPressed: () {
-            if(_firmwareProvider.isUpdating == true){}else{
+            if(_firmwareProvider.isUpdating == true){
+
+            }else{
               changeToBikeSetting(context);
             }
           },
