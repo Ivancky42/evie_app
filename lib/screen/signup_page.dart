@@ -246,7 +246,7 @@ class _SignUpState extends State<SignUp> {
                                 ),
                               );
                               ///Quit loading and go to user home page
-                              changeToUserHomePageScreen(context);
+                              changeToStayCloseToBike(context);
                             } else if (result.toString() == "Not yet verify") {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

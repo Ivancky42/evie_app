@@ -65,7 +65,7 @@ class _EVAddFailedState extends State<EVAddFailed> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 106.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 50.h),
                   child: Text(
                     "We're sorry, but there was an error registering your EV-Key. \n\n"
                         "Make sure your RFID tag is working properly and is within range. (some instruction on what can be done more correctly)",

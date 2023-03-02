@@ -242,11 +242,11 @@ class _MyAccountState extends State<MyAccount> {
                       child: Column(
                         children: [
                           Text(
-                            "Evie v0.0.1",
+                            "Evie v1.0.0(16)",
                             style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                           ),
                           Text(
-                            "Copyright 2023 by Beno Inc",
+                            "Copyright 2023 by Hyperion Innovations",
                             style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                           ),
                         ],

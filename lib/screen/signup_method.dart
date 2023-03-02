@@ -112,7 +112,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                               .signInWithAppleID(widget.name)
                               .then((result) {
                             if (result == true) {
-                              changeToUserHomePageScreen(context);
+                              changeToStayCloseToBike(context);
                             } else {
                               SmartDialog.show(
                                   widget: EvieSingleButtonDialog(
@@ -152,7 +152,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                           .signInWithGoogle(widget.name)
                           .then((result) {
                         if (result == true) {
-                          changeToUserHomePageScreen(context);
+                        changeToStayCloseToBike(context);
                         } else {
                           SmartDialog.show(
                               widget: EvieSingleButtonDialogCupertino(
@@ -190,7 +190,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                           .signInWithFacebook(widget.name)
                           .then((result) {
                         if (result == true) {
-                          changeToUserHomePageScreen(context);
+                          changeToStayCloseToBike(context);
                         } else {
                           SmartDialog.show(
                               widget: EvieSingleButtonDialog(

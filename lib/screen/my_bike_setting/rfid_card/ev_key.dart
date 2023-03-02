@@ -68,7 +68,7 @@ class _EVKeyState extends State<EVKey> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 106.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 50.h),
                   child: Text(
                     "Unlocking your bike has never been easier with the EV-Key! This convenient and secure method lets you access your bike with just a simple tap.\n\n "
                         "A maximum number of 5 EV-Key can be register.",

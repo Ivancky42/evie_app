@@ -98,7 +98,7 @@ class _BikeContainerState extends State<BikeContainer> {
 
             Container(
               height: 33.h,
-              width: 112.w,
+              width: 125.w,
               child: ElevatedButton(
                 child: Text(
                   "Bike Setting",
