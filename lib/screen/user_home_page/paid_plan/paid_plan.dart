@@ -71,11 +71,15 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   StreamSubscription? locationSubscription;
   StreamSubscription? userLocationSubscription;
 
+  
+  /// +100 , +100
   static const double initialRatio = 424 / 700;
   static const double minRatio = 186 / 700;
+
   static const double maxRatio = 1.0;
   bool isBottomSheetExpanded = false;
   bool isMapListShowing = false;
+  bool isFirstLoadUserLocation = true;
   List<map_launcher.AvailableMap>? availableMaps;
 
   LocationData? userLocation;
@@ -102,10 +106,12 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   }
 
   void initLocationService() async {
+
+    ///If 5 seconds are passed AND if the phone is moved at least 1 meters, listen the location
+    await _locationService.changeSettings(interval: 5000, distanceFilter: 1);
+
     ///For user live location
-    await _locationService.getLocation();
-    userLocationSubscription =
-        _locationService.onLocationChanged.listen((LocationData result) async {
+    userLocationSubscription = _locationService.onLocationChanged.listen((LocationData result) async {
           if (mounted) {
             setState(() {
               userLocation = result;
@@ -113,15 +119,23 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
               if(userLocation != null && _locationProvider.locationModel?.status != null) {
                 getDistanceBetween();
 
+                if(isFirstLoadUserLocation == true){
+                  animateBounce();
+                  isFirstLoadUserLocation = false;
+                }
+
                 ///User location update will bounce every once, causing almost infinity bounce if open comment
-         //       animateBounce();
+                //       animateBounce();
+
               }
             });
           }
         });
-    if(userLocation != null && _locationProvider.locationModel?.status != null){
-      locationListener();
-    }
+
+    locationListener();
+    // if(userLocation != null && _locationProvider.locationModel?.status != null){
+    //   locationListener();
+    // }
   }
 
   @override
@@ -139,7 +153,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
      // _bluetoothProvider.startScanAndConnect();
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -296,15 +309,39 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                       expand: true,
                       builder: (BuildContext context, ScrollController _scrollController) {
                         return ListView(
+
                           controller: _scrollController,
                           physics: const BouncingScrollPhysics(),
                           children: [
                             mapLauncher(),
                             navigateButton(),
                             currentScroll <= 0.8
+
                                 ? Stack(children: [
                                       switchBikeStatusBottom(_locationProvider.locationModel?.status ?? ""),
                                   ])
+                        //           ListView(
+                        //
+                        //           controller: _scrollController,
+                        //           physics: const BouncingScrollPhysics(),
+                        //           children: [
+                        //           // mapLauncher(),
+                        //           // navigateButton(),
+                        //           currentScroll <= 0.8
+                        //           ? ClipRect(
+                        //           child: Stack(children: [
+                        //           switchBikeStatusBottom(_locationProvider.locationModel?.status ?? ""),
+                        //
+                        //           Transform.translate(
+                        //           offset: Offset(MediaQuery.of(context).size.width - 50.w, -10),
+                        //           child: Icon(Icons.ice_skating)
+                        //           ),
+                        //
+                        //           ]),
+                        //           )
+                        //               : Threat_History(bikeProvider: _bikeProvider, bluetoothProvider: _bluetoothProvider, locationProvider: _locationProvider,),
+                        // ],
+                        // );
                                 : Threat_History(bikeProvider: _bikeProvider, bluetoothProvider: _bluetoothProvider, locationProvider: _locationProvider,),
                           ],
                         );

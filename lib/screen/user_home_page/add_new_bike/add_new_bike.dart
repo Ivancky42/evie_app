@@ -75,6 +75,7 @@ class _AddNewBikeState extends State<AddNewBike> {
 
   StreamSubscription? locationSubscription;
   bool myLocationEnabled = false;
+  bool isFirstLoadUserLocation = true;
 
   LocationData? userLocation;
   late LatLng currentLatLngFree;
@@ -99,21 +100,28 @@ class _AddNewBikeState extends State<AddNewBike> {
   }
 
   void initLocationService() async {
-    LocationData? location;
+
+    ///If 5 seconds are passed AND if the phone is moved at least 1 meters, listen the location
+    await _locationService.changeSettings(interval: 5000, distanceFilter: 1);
 
     ///For user live location
-    location = await _locationService.getLocation();
-    userLocation = location;
     userLocationSubscription = _locationService.onLocationChanged.listen((LocationData result) async {
           if (mounted) {
             setState(() {
               userLocation = result;
-              animateBounce();
+              if(isFirstLoadUserLocation == true){
+                animateBounce();
+                isFirstLoadUserLocation = false;
+              }
+            //  animateBounce();
             });
           }
         });
 
     locationListener();
+    // if(userLocation != null){
+    //   locationListener();
+    // }
   }
 
   @override
@@ -537,7 +545,7 @@ class _AddNewBikeState extends State<AddNewBike> {
         alignment: Alignment.bottomRight,
         child: GestureDetector(
           onTap: () async {
-
+            animateBounce();
           },
           child: Container(
               height: 50.h,

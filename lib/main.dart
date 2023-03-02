@@ -231,7 +231,7 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
 
           //Change the app to dark theme when user's phone is set to dark mode
-          darkTheme: AppTheme.darkTheme,
+          darkTheme: AppTheme.lightTheme,
           initialRoute:
           decideMainPage(),
          // _authProvider.isLogin == true ? '/userHomePage' : '/welcome',

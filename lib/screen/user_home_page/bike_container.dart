@@ -96,6 +96,7 @@ class _BikeContainerState extends State<BikeContainer> {
               ],
             ),
 
+
             Container(
               height: 33.h,
               width: 125.w,
