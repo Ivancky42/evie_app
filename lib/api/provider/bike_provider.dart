@@ -67,6 +67,9 @@ class BikeProvider extends ChangeNotifier {
 
   LinkedHashMap bikeUserList = LinkedHashMap<String, BikeUserModel>();
   LinkedHashMap bikeUserDetails = LinkedHashMap<String, UserModel>();
+
+  ///String uid, string name
+  LinkedHashMap bikeUserOwnerUid = LinkedHashMap<String, String>();
   LinkedHashMap userBikeList = LinkedHashMap<String, UserBikeModel>();
   LinkedHashMap userBikeDetails = LinkedHashMap<String, BikeModel>();
   LinkedHashMap userBikePlans = LinkedHashMap<String, BikePlanModel>();
@@ -266,6 +269,16 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
+  getOwnerUid(String deviceIMEI, String ownerUid) async {
+
+    final snapshot = await FirebaseFirestore.instance
+        .collection(usersCollection)
+        .doc(ownerUid)
+        .get();
+
+    userBikeDetails[deviceIMEI].ownerName = snapshot['name'];
+    notifyListeners();
+  }
 
   getThreatRoutes() async {
     if(currentBikeModel?.location?.status == "danger"){
@@ -744,14 +757,21 @@ class BikeProvider extends ChangeNotifier {
           .collection(bikesCollection)
           .doc(deviceIMEI)
           .snapshots()
-          .listen((snapshot) {
+          .listen((snapshot) async {
         if (snapshot.data() != null) {
           Map<String, dynamic>? obj = snapshot.data();
           if (obj != null) {
             userBikeDetails.update(
                 snapshot.id, (value) => BikeModel.fromJson(obj),
                 ifAbsent: () => BikeModel.fromJson(obj));
+
             notifyListeners();
+
+
+              getOwnerUid(deviceIMEI, obj['ownerUid'] );
+
+
+
           } else if (obj == null) {
             userBikeDetails.removeWhere((key, value) => key == obj?.keys);
             notifyListeners();
@@ -795,6 +815,7 @@ class BikeProvider extends ChangeNotifier {
           userBikePlans.clear();
           notifyListeners();
         }
+
       });
     } catch (e) {
       debugPrint(e.toString());
@@ -940,6 +961,13 @@ class BikeProvider extends ChangeNotifier {
         userId: 0,
         created: Timestamp.now(),
       ).toJson());
+
+      await FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(selectedDeviceId)
+          .set({
+        'ownerUid': currentUserModel!.uid,
+      }, SetOptions(merge: true));
 
       scanQRCodeResult = ScanQRCodeResult.success;
       notifyListeners();

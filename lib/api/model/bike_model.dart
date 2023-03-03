@@ -29,6 +29,8 @@ class BikeModel {
   String? protVersion;
   String? firmVer;
   Timestamp? registered;
+  String? ownerUid;
+  String? ownerName;
 
   BikeModel({
     required this.batteryPercent,
@@ -51,6 +53,8 @@ class BikeModel {
     required this.protVersion,
     this.firmVer,
     required this.registered,
+    this.ownerUid,
+    this.ownerName,
 
   });
 

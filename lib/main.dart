@@ -8,11 +8,9 @@ import 'package:evie_test/screen/input_name.dart';
 import 'package:evie_test/screen/login_method.dart';
 import 'package:evie_test/screen/my_account/edit_profile.dart';
 import 'package:evie_test/screen/my_account/enter_new_password.dart';
-import 'package:evie_test/screen/my_account/my_account.dart';
 import 'package:evie_test/screen/my_account/verify_password.dart';
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_sensitivity.dart';
 import 'package:evie_test/screen/onboarding_addNewBike/stay_close_to_bike.dart';
-import 'package:evie_test/screen/shares_bike.dart';
 import 'package:evie_test/screen/signup_method.dart';
 import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/abandon/user_notification.dart';
@@ -251,7 +249,6 @@ class MyApp extends StatelessWidget {
             "/userChangePassword": (context) => const UserChangePassword(),
             "/testBle": (context) => const TestBle(),
         //    "/notification": (context) => const UserNotification(),
-            "/myAccount": (context) => const MyAccount(),
             "/editProfile": (context) => const EditProfile(),
             "/verifyPassword": (context) => const VerifyPassword(),
             "/enterNewPassword": (context) => const EnterNewPassword(),

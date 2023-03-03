@@ -8,7 +8,7 @@ import 'package:evie_test/screen/user_home_general.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../feeds/feeds.dart';
-import '../my_account/my_account.dart';
+import '../my_account/account/my_account.dart';
 import '../../abandon/user_notification.dart';
 
 ///User default home page when login condition is true
@@ -41,7 +41,6 @@ class _UserHomePageState extends State<UserHomePage> {
     const Feeds(),
     const MyAccount(),
   ];
-
 
   @override
   Widget build(BuildContext context) {

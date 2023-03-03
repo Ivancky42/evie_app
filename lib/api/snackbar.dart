@@ -58,6 +58,15 @@ showConnectionStatusToast(
           return showConnectErrorToast(context);
         });
         break;
+      case DeviceConnectResult.connecting:
+        // TODO: Handle this case.
+        break;
+      case DeviceConnectResult.partialConnected:
+        // TODO: Handle this case.
+        break;
+      case DeviceConnectResult.disconnecting:
+        // TODO: Handle this case.
+        break;
     }
 }
 

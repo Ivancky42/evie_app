@@ -1,0 +1,29 @@
+[
+  {
+    "id": 0,
+    "label": "Personal Information"
+  },
+  {
+    "id":1,
+    "label":"My Garage"
+  },
+  {
+    "id": 2,
+    "label": "Push Notification"
+  },  {
+  "id": 3,
+  "label": "Email Newsletter"
+  },  {
+    "id": 4,
+    "label": "Display Setting"
+  },  {
+    "id": 5,
+    "label": "Help Center"
+  },  {
+    "id": 6,
+    "label": "Privacy Policies"
+  },  {
+    "id": 7,
+    "label": "Terms & Conditions"
+  }
+]

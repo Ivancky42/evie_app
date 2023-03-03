@@ -5,7 +5,6 @@ import 'package:evie_test/screen/my_bike_setting/firmware/firmware_update_failed
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/motion_sensitivity.dart';
 
 import 'package:evie_test/screen/my_account/edit_profile.dart';
-import 'package:evie_test/screen/my_account/my_account.dart';
 
 
 import 'package:evie_test/screen/stripe_checkout.dart';
@@ -19,6 +18,7 @@ import 'package:page_transition/page_transition.dart';
 import '../screen/check_your_email.dart';
 import '../screen/feeds/feeds.dart';
 import '../screen/forget_your_password.dart';
+import '../screen/my_account/account/my_account.dart';
 import '../screen/my_account/push_notification/push_notification.dart';
 import '../screen/my_bike_setting/about_bike/about_bike.dart';
 import '../screen/my_bike_setting/bike_setting/bike_setting.dart';

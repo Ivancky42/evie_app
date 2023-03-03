@@ -47,6 +47,15 @@ showConnectionStatusToast(BluetoothProvider _bluetoothProvider, bool isFirstTime
         return SmartDialog.dismiss(status: SmartStatus.allToast).then((value) => showConnectErrorToast(bottomPadding));
       });
       break;
+    case DeviceConnectResult.connecting:
+      // TODO: Handle this case.
+      break;
+    case DeviceConnectResult.partialConnected:
+      // TODO: Handle this case.
+      break;
+    case DeviceConnectResult.disconnecting:
+      // TODO: Handle this case.
+      break;
   }
 }
 

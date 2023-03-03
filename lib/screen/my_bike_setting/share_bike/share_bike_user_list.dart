@@ -114,9 +114,20 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                                 ),
                               ),
 
-                              title: Text(
-                                  _bikeProvider.bikeUserDetails.values.elementAt(index).name,
-                                style: EvieTextStyles.body18),
+                              title: Row(
+                                children: [
+                                  Text(
+                                      _bikeProvider.bikeUserDetails.values.elementAt(index).name,
+                                    style: EvieTextStyles.body18),
+
+                                  Visibility(
+                                    visible: _currentUserProvider.currentUserModel!.name == _bikeProvider.bikeUserDetails.values.elementAt(index).name,
+                                    child: Text(
+                                        " (You)",
+                                        style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan)),
+                                  ),
+                                ],
+                              ),
                               subtitle: Text(
                                 "${_bikeProvider.bikeUserDetails.values.elementAt(index).email}",
                                 style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish)),

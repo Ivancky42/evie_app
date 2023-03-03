@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/model/bike_model.dart';
 import 'package:evie_test/api/model/bike_plan_model.dart';
+import 'package:evie_test/api/model/user_model.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
@@ -38,12 +40,14 @@ class MyGarage extends StatefulWidget {
 class _MyGarageState extends State<MyGarage> {
 
   late BikeProvider _bikeProvider;
+  late CurrentUserProvider _currentUserProvider;
   late BluetoothProvider _bluetoothProvider;
 
   @override
   Widget build(BuildContext context) {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
 
@@ -107,9 +111,11 @@ class _MyGarageState extends State<MyGarage> {
                 itemCount: _bikeProvider.userBikeList.length,
                 itemBuilder: (context, index) {
                   return listItem(
+                    _bikeProvider.userBikeList.keys.elementAt(index),
                       _bikeProvider.userBikeList.values.elementAt(index),
                       _bikeProvider.userBikeDetails.values.elementAt(index),
                     _bikeProvider.userBikePlans.values.elementAt(index),
+
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {
@@ -142,7 +148,7 @@ class _MyGarageState extends State<MyGarage> {
     );
   }
 
-  Widget listItem(UserBikeModel userBikeList, BikeModel userBikeDetails, BikePlanModel? userBikePlan) {
+  Widget listItem(String deviceIMEI, UserBikeModel userBikeList, BikeModel userBikeDetails, BikePlanModel? userBikePlan) {
 
     bool isPlanSubscript;
     final result = _bikeProvider.calculateDateDifference(userBikePlan!.periodEnd!.toDate());
@@ -216,7 +222,7 @@ class _MyGarageState extends State<MyGarage> {
                                     style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
                                   ),
                                   Text(
-                                      isPlanSubscript ? "${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day}, ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}"
+                                      isPlanSubscript ? "${monthsInYear[userBikePlan.periodEnd!.toDate().month]} ${userBikePlan.periodEnd!.toDate().day}, ${userBikePlan.periodEnd!.toDate().year}"
                                           : "Free Forever",
                                     style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
                                   ),
@@ -245,9 +251,19 @@ class _MyGarageState extends State<MyGarage> {
                                     "Owner",
                                     style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
                                   ),
-                                  Text(
-                                    "owner",
-                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
+                                  Row(
+                                    children: [
+                                      Text(
+                                       userBikeDetails.ownerName ?? "owner",
+                                        style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
+                                      ),
+                                      Visibility(
+                                        visible: _currentUserProvider.currentUserModel!.name == userBikeDetails.ownerName,
+                                        child: Text(
+                                            " (You)",
+                                            style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan)),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
