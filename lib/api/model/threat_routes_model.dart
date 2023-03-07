@@ -11,7 +11,7 @@ class ThreatRoutesModel {
 
   factory ThreatRoutesModel.fromJson(Map json) {
     return ThreatRoutesModel(
-      geopoint: fromJsonGeoPoint(json['geopoint'] as GeoPoint),
+      geopoint: fromJsonGeoPoint(json['geopoint'] as GeoPoint) ?? const GeoPoint(0, 0),
       created: timestampFromJson(json['updated']),
     );
   }

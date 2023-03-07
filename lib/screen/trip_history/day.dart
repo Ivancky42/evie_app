@@ -23,11 +23,10 @@ class _TripDayState extends State<TripDay> {
   @override
   void initState() {
     data = [
-      _ChartData('CHN', 12),
-      _ChartData('GER', 15),
-      _ChartData('RUS', 30),
-      _ChartData('BRZ', 6.4),
-      _ChartData('IND', 14)
+      _ChartData('12.00', 1623),
+      _ChartData('13.00', 2100),
+      _ChartData('12.00', 899),
+      _ChartData('14.00', 767),
     ];
     _tooltip = TooltipBehavior(enable: true);
     super.initState();
@@ -37,7 +36,10 @@ class _TripDayState extends State<TripDay> {
   Widget build(BuildContext context) {
     return   Padding(
       padding: EdgeInsets.only(left: 32.w, right: 32.w),
-      child: Column(children: [
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+
+        children: [
 
         Text("TOTAL"),
         Row(
@@ -53,7 +55,10 @@ class _TripDayState extends State<TripDay> {
             primaryXAxis: CategoryAxis(),
 
             ///maximum, data.duration highest
-            primaryYAxis: NumericAxis(minimum: 0, maximum: 40, interval: 10),
+            primaryYAxis: NumericAxis(minimum: 0, maximum: 2500, interval: 300,
+              opposedPosition: true,
+            ),
+
             tooltipBehavior: _tooltip,
             series: <ChartSeries<_ChartData, String>>[
               ColumnSeries<_ChartData, String>(

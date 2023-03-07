@@ -77,6 +77,7 @@ class BikeProvider extends ChangeNotifier {
   LinkedHashMap userBikePlans = LinkedHashMap<String, BikePlanModel>();
   LinkedHashMap rfidList = LinkedHashMap<String, RFIDModel>();
   LinkedHashMap threatRoutesLists = LinkedHashMap<String, ThreatRoutesModel>();
+  LinkedHashMap currentTripHistoryLists = LinkedHashMap<String, TripHistoryModel>();
 
   ThreatHistoryModel? currentThreatHistoryModel;
   TripHistoryModel? currentTripHistoryModel;
@@ -844,86 +845,46 @@ class BikeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
   getTripHistory() {
+    currentTripHistoryLists.clear();
     try{
       tripHistorySubscription = FirebaseFirestore.instance
             .collection(bikesCollection)
             .doc(currentBikeModel!.deviceIMEI)
             .collection(tripHistoryCollection)
-            .snapshots().listen((snapshot) {
+            .snapshots()
+            .listen((snapshot) {
             if (snapshot.docs.isNotEmpty) {
               for (var docChange in snapshot.docChanges) {
                 switch (docChange.type) {
                   case DocumentChangeType.added:
                     Map<String, dynamic>? obj = docChange.doc.data();
-
-                    rfidList.putIfAbsent(docChange.doc.id,
-                            () => RFIDModel.fromJson(obj!));
-
+                    currentTripHistoryLists.putIfAbsent(docChange.doc.id, () => TripHistoryModel.fromJson(obj!));
                     notifyListeners();
                     break;
                   case DocumentChangeType.removed:
-
-                    rfidList.removeWhere((key, value) => key == docChange.doc.id);
-
+                    currentTripHistoryLists.removeWhere((key, value) => key == docChange.doc.id);
                     notifyListeners();
                     break;
                   case DocumentChangeType.modified:
                     Map<String, dynamic>? obj = docChange.doc.data();
-
-                    rfidList.update(docChange.doc.id,
-                            (value) => RFIDModel.fromJson(obj!));
-
+                    currentTripHistoryLists.update(docChange.doc.id, (value) => TripHistoryModel.fromJson(obj!));
                     notifyListeners();
                     break;
                 }
               }
+            }else{
+              currentTripHistoryLists.clear();
             }
       });
 
     }catch (e) {
         debugPrint(e.toString());
+        tripHistorySubscription?.cancel();
       }
 
-    // rfidList.clear();
-    // try {
-    //   rfidListSubscription = FirebaseFirestore.instance
-    //       .collection(bikesCollection)
-    //       .doc(currentBikeModel!.deviceIMEI)
-    //       .collection(rfidCollection)
-    //       .orderBy("created", descending: true)
-    //       .snapshots()
-    //       .listen((snapshot) {
-    //     if (snapshot.docs.isNotEmpty) {
-    //       for (var docChange in snapshot.docChanges) {
-    //         switch (docChange.type) {
-    //           case DocumentChangeType.added:
-    //             Map<String, dynamic>? obj = docChange.doc.data();
-    //             rfidList.putIfAbsent(docChange.doc.id,
-    //                     () => RFIDModel.fromJson(obj!));
-    //             notifyListeners();
-    //             break;
-    //           case DocumentChangeType.removed:
-    //             rfidList.removeWhere((key, value) => key == docChange.doc.id);
-    //             notifyListeners();
-    //             break;
-    //           case DocumentChangeType.modified:
-    //             Map<String, dynamic>? obj = docChange.doc.data();
-    //             rfidList.update(docChange.doc.id,
-    //                     (value) => RFIDModel.fromJson(obj!));
-    //             notifyListeners();
-    //             break;
-    //         }
-    //       }
-    //     }else{
-    //       rfidList.clear();
-    //     }
-    //   });
-    // } catch (e) {
-    //   debugPrint(e.toString());
-    // }
   }
+
 
   Future<bool> checkIsUserExist(String targetEmail) async {
     bool result = false;
@@ -1455,12 +1416,14 @@ class BikeProvider extends ChangeNotifier {
     currentUserBikeSubscription?.cancel();
     currentBikePlanSubscription?.cancel();
     rfidListSubscription?.cancel();
+    tripHistorySubscription?.cancel();
 
     userBikeList.clear();
     userBikeDetails.clear();
     bikeUserList.clear();
     bikeUserDetails.clear();
     threatRoutesLists.clear();
+    currentTripHistoryLists.clear();
 
     isPlanSubscript = null;
     currentBikeIMEI = null;

@@ -102,4 +102,8 @@ class BikeModel {
   static Timestamp? timestampFromJson(Timestamp? timestamp) {
     return timestamp;
   }
+
+  setTripHistory(dynamic data){
+    tripHistoryModel = data;
+  }
 }

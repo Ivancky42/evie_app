@@ -388,7 +388,7 @@ class _AccountContainerState extends State<AccountContainer> {
                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                   ),
                   onPressed: () {
-
+                    
 
                   },
                   style: ElevatedButton.styleFrom(
@@ -408,7 +408,7 @@ class _AccountContainerState extends State<AccountContainer> {
                 child: Column(
                   children: [
                     Text(
-                      "Evie v1.0.0 (17)",
+                      "Evie v1.0.0 (18)",
                       style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                     ),
                     Text(
