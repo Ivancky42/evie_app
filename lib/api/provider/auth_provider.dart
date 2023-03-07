@@ -239,8 +239,11 @@ class AuthProvider extends ChangeNotifier {
           credentialProvider = "google";
           notifyListeners();
 
+          _uid = userCredential.user!.uid;
+          _email = userCredential.user!.email!;
+
           ///Firestore
-          AuthProvider().createFirestoreUser(
+         createFirestoreUser(
               _uid,
               _email,
               //userCredential.user?.displayName.toString(), //Name
@@ -249,8 +252,6 @@ class AuthProvider extends ChangeNotifier {
               userCredential.user?.photoURL.toString(),
               credentialProvider //Profile image
               );
-          _uid = userCredential.user!.uid;
-          _email = userCredential.user!.email!;
 
           setIsFirstLogin(true);
           notifyListeners();
@@ -293,8 +294,11 @@ class AuthProvider extends ChangeNotifier {
         credentialProvider = "facebook";
         notifyListeners();
 
+        _uid = userCredential.user!.uid;
+        _email = userCredential.user!.email!;
+
         ///Firestore
-        AuthProvider().createFirestoreUser(
+       createFirestoreUser(
             _uid,
             _email,
             //userCredential.user?.displayName.toString(), //Name
@@ -303,8 +307,6 @@ class AuthProvider extends ChangeNotifier {
             userCredential.user?.photoURL.toString(),
             credentialProvider //Profile image
             );
-        _uid = userCredential.user!.uid;
-        _email = userCredential.user!.email!;
 
         setIsFirstLogin(true);
         notifyListeners();
@@ -354,8 +356,11 @@ class AuthProvider extends ChangeNotifier {
           credentialProvider = "twitter";
           notifyListeners();
 
+          _uid = userCredential.user!.uid;
+          _email = userCredential.user!.email!;
+
           ///Firestore
-          AuthProvider().createFirestoreUser(
+          createFirestoreUser(
               _uid,
               _email,
               //userCredential.user?.displayName.toString(), //Name
@@ -364,8 +369,7 @@ class AuthProvider extends ChangeNotifier {
               userCredential.user?.photoURL.toString(),
               credentialProvider //Profile image
               );
-          _uid = userCredential.user!.uid;
-          _email = userCredential.user!.email!;
+
 
           setIsFirstLogin(true);
 
@@ -434,8 +438,11 @@ class AuthProvider extends ChangeNotifier {
           userName = nameInput;
         }
 
+        _uid = userCredential.user!.uid;
+        _email = userCredential.user!.email!;
+
         ///Firestore
-        AuthProvider().createFirestoreUser(
+        createFirestoreUser(
             _uid,
             _email,
             userName,//Name
@@ -444,8 +451,6 @@ class AuthProvider extends ChangeNotifier {
             dotenv.env['DEFAULT_PROFILE_IMG'] ?? 'DPI not found',  //profileimg
             credentialProvider //Profile image
             );
-        _uid = userCredential.user!.uid;
-        _email = userCredential.user!.email!;
 
         setIsFirstLogin(true);
 

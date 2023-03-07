@@ -11,6 +11,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 
+import '../../../api/dialog.dart';
 import '../../../api/fonts.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bluetooth_provider.dart';
@@ -114,26 +115,11 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
 
           final result = await _bikeProvider.uploadRFIDtoFireStore(addRFIDStatus.rfidNumber!, "RFID Card");
           if (result == true) {
-            SmartDialog.show(
-                widget: EvieSingleButtonDialog(
-                    title: "Success",
-                    content: "Card added",
-                    rightContent: "OK",
-                    onPressedRight: () {
-                      SmartDialog.dismiss();
 
-                      changeToNameEVKey(context, addRFIDStatus.rfidNumber!);
-                    }));
+            showAddEVKeySuccess(context, addRFIDStatus.rfidNumber!);
+
           } else {
-            SmartDialog.show(
-                widget: EvieSingleButtonDialog(
-                    title: "Error",
-                    content: "Error upload rfid to firestore",
-                    rightContent: "OK",
-                    onPressedRight: () {
-                      SmartDialog.dismiss();
-                      changeToEVAddFailed(context);
-                    }));
+            showUploadEVKeyToFirestoreFailed(context);
           }
 
       }else if(addRFIDStatus.addRFIDState == AddRFIDState.cardIsExist){
@@ -141,41 +127,17 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
         addRFIDStream.cancel();
         final result = await _bikeProvider.uploadRFIDtoFireStore(addRFIDStatus.rfidNumber!, "RFID Card");
         if (result == true) {
-          SmartDialog.show(
-              widget: EvieSingleButtonDialog(
-                  title: "Success",
-                  content: "Card already exists, data uploaded",
-                  rightContent: "OK",
-                  onPressedRight: () {
-                    SmartDialog.dismiss();
 
-                    changeToNameEVKey(context, addRFIDStatus.rfidNumber!);
-                  }));
+          showEVKeyExistAndUploadToFirestore(context, addRFIDStatus.rfidNumber!);
+
         } else {
-          SmartDialog.show(
-              widget: EvieSingleButtonDialog(
-                  title: "Error",
-                  content: "Error upload rfid to firestore",
-                  rightContent: "OK",
-                  onPressedRight: () {
-                    SmartDialog.dismiss();
-                    changeToEVAddFailed(context);
-                  }));
+          showAddEVKeyFailed(context);
         }
       }
     }, onError: (error) {
       addRFIDStream.cancel();
       SmartDialog.dismiss(status: SmartStatus.loading);
-      SmartDialog.show(
-          keepSingle: true,
-          widget: EvieSingleButtonDialog(
-          title: "Error",
-          content: error.toString(),
-          rightContent: "OK",
-          onPressedRight: (){
-            SmartDialog.dismiss();
-            changeToEVAddFailed(context);
-          }));
+      showAddEVKeyFailed(context);
     });
   }
 

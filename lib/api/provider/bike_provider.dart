@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/movement_setting_model.dart';
 import 'package:evie_test/api/model/notification_setting_model.dart';
+import 'package:evie_test/api/model/trip_history_model.dart';
 import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -64,6 +65,7 @@ class BikeProvider extends ChangeNotifier {
   String inventoryCollection = dotenv.env['DB_COLLECTION_INVENTORY'] ?? 'DB not found';
   String theftHistoryCollection = dotenv.env['DB_COLLECTION_THEFTHISTORY'] ?? 'DB not found';
   String routesCollection = dotenv.env['DB_COLLECTION_ROUTES'] ?? 'DB not found';
+  String tripHistoryCollection = dotenv.env['DB_COLLECTION_TRIPHISTORY'] ?? 'DB not found';
 
   LinkedHashMap bikeUserList = LinkedHashMap<String, BikeUserModel>();
   LinkedHashMap bikeUserDetails = LinkedHashMap<String, UserModel>();
@@ -77,6 +79,7 @@ class BikeProvider extends ChangeNotifier {
   LinkedHashMap threatRoutesLists = LinkedHashMap<String, ThreatRoutesModel>();
 
   ThreatHistoryModel? currentThreatHistoryModel;
+  TripHistoryModel? currentTripHistoryModel;
   BikePlanModel? currentBikePlanModel;
   UserModel? currentUserModel;
   BikeModel? currentBikeModel;
@@ -103,6 +106,7 @@ class BikeProvider extends ChangeNotifier {
   StreamSubscription? currentBikePlanSubscription;
   StreamSubscription? bikePlanSubscription;
   StreamSubscription? rfidListSubscription;
+  StreamSubscription? tripHistorySubscription;
 
   StreamSubscription? currentSubscription;
 
@@ -263,6 +267,7 @@ class BikeProvider extends ChangeNotifier {
             switchBikeResultListener.add(switchBikeResult);
           }
           getRFIDList();
+          getTripHistory();
           getBikeUserList();
         });
       }
@@ -839,6 +844,87 @@ class BikeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+  getTripHistory() {
+    try{
+      tripHistorySubscription = FirebaseFirestore.instance
+            .collection(bikesCollection)
+            .doc(currentBikeModel!.deviceIMEI)
+            .collection(tripHistoryCollection)
+            .snapshots().listen((snapshot) {
+            if (snapshot.docs.isNotEmpty) {
+              for (var docChange in snapshot.docChanges) {
+                switch (docChange.type) {
+                  case DocumentChangeType.added:
+                    Map<String, dynamic>? obj = docChange.doc.data();
+
+                    rfidList.putIfAbsent(docChange.doc.id,
+                            () => RFIDModel.fromJson(obj!));
+
+                    notifyListeners();
+                    break;
+                  case DocumentChangeType.removed:
+
+                    rfidList.removeWhere((key, value) => key == docChange.doc.id);
+
+                    notifyListeners();
+                    break;
+                  case DocumentChangeType.modified:
+                    Map<String, dynamic>? obj = docChange.doc.data();
+
+                    rfidList.update(docChange.doc.id,
+                            (value) => RFIDModel.fromJson(obj!));
+
+                    notifyListeners();
+                    break;
+                }
+              }
+            }
+      });
+
+    }catch (e) {
+        debugPrint(e.toString());
+      }
+
+    // rfidList.clear();
+    // try {
+    //   rfidListSubscription = FirebaseFirestore.instance
+    //       .collection(bikesCollection)
+    //       .doc(currentBikeModel!.deviceIMEI)
+    //       .collection(rfidCollection)
+    //       .orderBy("created", descending: true)
+    //       .snapshots()
+    //       .listen((snapshot) {
+    //     if (snapshot.docs.isNotEmpty) {
+    //       for (var docChange in snapshot.docChanges) {
+    //         switch (docChange.type) {
+    //           case DocumentChangeType.added:
+    //             Map<String, dynamic>? obj = docChange.doc.data();
+    //             rfidList.putIfAbsent(docChange.doc.id,
+    //                     () => RFIDModel.fromJson(obj!));
+    //             notifyListeners();
+    //             break;
+    //           case DocumentChangeType.removed:
+    //             rfidList.removeWhere((key, value) => key == docChange.doc.id);
+    //             notifyListeners();
+    //             break;
+    //           case DocumentChangeType.modified:
+    //             Map<String, dynamic>? obj = docChange.doc.data();
+    //             rfidList.update(docChange.doc.id,
+    //                     (value) => RFIDModel.fromJson(obj!));
+    //             notifyListeners();
+    //             break;
+    //         }
+    //       }
+    //     }else{
+    //       rfidList.clear();
+    //     }
+    //   });
+    // } catch (e) {
+    //   debugPrint(e.toString());
+    // }
+  }
+
   Future<bool> checkIsUserExist(String targetEmail) async {
     bool result = false;
     if (bikeUserList.isNotEmpty) {
@@ -1219,6 +1305,8 @@ class BikeProvider extends ChangeNotifier {
           .doc(rfidID.toString())
           .set({
         'rfidID' : rfidID,
+
+        ///rfidColour
         'rfidName' : rfidName,
         'created': Timestamp.now(),
       }, SetOptions(merge: true));

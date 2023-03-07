@@ -840,3 +840,53 @@ showErrorChangeDetectionSensitivity(){
       rightContent: "Ok",
       onPressedRight: (){SmartDialog.dismiss();}));
 }
+
+showAddEVKeyFailed(BuildContext context){
+  SmartDialog.show(
+      widget: EvieSingleButtonDialog(
+          title: "Error",
+          content: "Error upload rfid to firestore",
+          rightContent: "OK",
+          onPressedRight: () {
+            SmartDialog.dismiss();
+            changeToEVAddFailed(context);
+          }));
+}
+
+showUploadEVKeyToFirestoreFailed(BuildContext context){
+  SmartDialog.show(
+      widget: EvieSingleButtonDialog(
+          title: "Error",
+          content: "Error upload rfid to firestore",
+          rightContent: "OK",
+          onPressedRight: () {
+            SmartDialog.dismiss();
+            changeToEVAddFailed(context);
+          }));
+}
+
+showEVKeyExistAndUploadToFirestore(BuildContext context, String rfidNumber){
+  SmartDialog.show(
+      widget: EvieSingleButtonDialog(
+          title: "Success",
+          content: "Card already exists, data uploaded",
+          rightContent: "OK",
+          onPressedRight: () {
+            SmartDialog.dismiss();
+
+            changeToNameEVKey(context, rfidNumber);
+          }));
+}
+
+showAddEVKeySuccess(BuildContext context, String rfidNumber){
+  SmartDialog.show(
+      widget: EvieSingleButtonDialog(
+          title: "Success",
+          content: "Card added",
+          rightContent: "OK",
+          onPressedRight: () {
+            SmartDialog.dismiss();
+
+            changeToNameEVKey(context, rfidNumber);
+          }));
+}

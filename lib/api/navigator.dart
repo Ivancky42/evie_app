@@ -5,6 +5,7 @@ import 'package:evie_test/screen/my_bike_setting/firmware/firmware_update_failed
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/motion_sensitivity.dart';
 
 import 'package:evie_test/screen/my_account/edit_profile.dart';
+import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_set_colour_code.dart';
 
 
 import 'package:evie_test/screen/stripe_checkout.dart';
@@ -329,6 +330,17 @@ void changeToNameEVKey(BuildContext context, String rfidNumber) {
     ),
   );
 }
+
+// void changeToEVColourCode(BuildContext context, String rfidNumber) {
+//   Navigator.pushReplacement(context,
+//     PageTransition(
+//       type: PageTransitionType.rightToLeft,
+//       child: EVColourCode(rfidNumber),
+//       duration: const Duration(milliseconds: 300),
+//     ),
+//   );
+// }
+
 void changeToEVKeyList(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(

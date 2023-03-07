@@ -98,7 +98,6 @@ class _EvieTextFormFieldState extends State<EvieTextFormField> {
 
                     focusColor: ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray: EvieColors.thumbColorTrue,
 
-
                     focusedBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
                         width: 1.5,

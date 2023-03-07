@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/movement_setting_model.dart';
 import 'package:evie_test/api/model/plan_model.dart';
 import 'package:evie_test/api/model/simcard_model.dart';
+import 'package:evie_test/api/model/trip_history_model.dart';
 
 import 'bike_plan_model.dart';
 import 'location_model.dart';
@@ -20,6 +21,7 @@ class BikeModel {
   bool? isLocked;
   Timestamp? lastUpdated;
   LocationModel? location;
+  TripHistoryModel? tripHistoryModel;
   MovementSettingModel? movementSetting;
   SimSettingModel? simSetting;
   BikePlanModel? bikePlanModel;
@@ -45,6 +47,7 @@ class BikeModel {
     required this.isLocked,
     required this.lastUpdated,
     required this.location,
+    this.tripHistoryModel,
     this.movementSetting,
     this.bikePlanModel,
     this.simSetting,
@@ -80,6 +83,7 @@ class BikeModel {
       isLocked:   json['isLocked']?? false,
       lastUpdated:    timestampFromJson(json['lastUpdated']),
       location:   LocationModel.fromJson(json['location'] as Map<String, dynamic>),
+      //tripHistoryModel:   TripHistoryModel.fromJson(json['tripHistory'] as Map<String, dynamic>),
       movementSetting: json['movementSetting'] != null ? MovementSettingModel.fromJson(json['movementSetting'] as Map<String, dynamic>) : null,
       simSetting:   json['simSetting'] != null ? SimSettingModel.fromJson(json['simSetting'] as Map<String, dynamic>) : null,
       bikePlanModel:   json['plans'] != null ? BikePlanModel.fromJson(json['plans'] as Map<String, dynamic>) : null,
