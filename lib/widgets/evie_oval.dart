@@ -1,31 +1,56 @@
+import 'package:evie_test/api/fonts.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+
+import '../api/colours.dart';
 
 
-///Double button dialog
-class EvieOvalGray extends StatelessWidget{
-  String text;
-  double? width;
-  double? height;
 
-  EvieOvalGray({
-    Key? key,
-    required this.text,
-    this.height,
-    this.width,
+class EvieOvalGray extends StatefulWidget {
+  final String buttonText;
+  final VoidCallback? onPressed;
 
+  const EvieOvalGray({Key? key,
+    required this.buttonText,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
+  _EvieOvalGrayState createState() => _EvieOvalGrayState();
+}
+
+class _EvieOvalGrayState extends State<EvieOvalGray> {
+  double buttonWidth = 0;
+
+  @override
   Widget build(BuildContext context) {
-      return Container(
-        height: height,
-        width:width,
-        decoration: BoxDecoration(
-          color: Color(0xffDFE0E0),
-          borderRadius: BorderRadius.circular(25.0),
-        ),
-        child: Center(child:Text(text,style: TextStyle(fontSize: 12),)),
-      );
-    }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        buttonWidth = getTextWidth(widget.buttonText);
+        return GestureDetector(
+          onTap: widget.onPressed,
+          child: Container(
+            width: buttonWidth > constraints.maxWidth ? constraints.maxWidth : buttonWidth,
+            height: 35.h,
+            decoration: BoxDecoration(
+              color: EvieColors.lightGrayishCyan,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Center(
+              child: Text(widget.buttonText),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  double getTextWidth(String text) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: EvieTextStyles.body14),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    )..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.width + 50.w; // add some padding to the width
+  }
 }

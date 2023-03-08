@@ -11,7 +11,6 @@ import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 
 
-
 class InvitationSent extends StatefulWidget{
   final String email;
   const InvitationSent(this.email,{ Key? key }) : super(key: key);

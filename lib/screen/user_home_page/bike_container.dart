@@ -168,7 +168,7 @@ class _BikeContainerState extends State<BikeContainer> {
     for(var index = 0; index < bikeProvider.userBikePlans.length; index++ ){
       if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
         if(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null){
-          final result = bikeProvider.calculateDateDifference(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate());
+          final result = bikeProvider.calculateDateDifferenceFromNow(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate());
           if(result < 0){
             return "assets/images/bike_HPStatus/bike_normal.png";
           }else {
@@ -209,7 +209,7 @@ class _BikeContainerState extends State<BikeContainer> {
     for(var index = 0; index < bikeProvider.userBikePlans.length; index++ ){
       if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
         if(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null){
-          final result = bikeProvider.calculateDateDifference(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate());
+          final result = bikeProvider.calculateDateDifferenceFromNow(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate());
           if(result < 0){
             return "assets/buttons/bike_security_not_available.svg";
           }else{
@@ -250,7 +250,7 @@ class _BikeContainerState extends State<BikeContainer> {
     for(var index = 0; index < bikeProvider.userBikePlans.length; index++ ){
       if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
         if(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null){
-          final result = bikeProvider.calculateDateDifference(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate());
+          final result = bikeProvider.calculateDateDifferenceFromNow(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate());
           if(result < 0){
             return "-";
           }else{

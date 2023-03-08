@@ -192,6 +192,7 @@ class EvieButton_PickDate extends StatelessWidget {
   final double? width;
   final double? height;
   final Color? backgroundColor;
+  final bool? showColour;
 
   const EvieButton_PickDate({
     Key? key,
@@ -200,6 +201,7 @@ class EvieButton_PickDate extends StatelessWidget {
     this.width,
     this.height,
     this.backgroundColor,
+    this.showColour = true,
   }) : super(key: key);
 
   @override
@@ -216,8 +218,7 @@ class EvieButton_PickDate extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.w)),
                 elevation: 0.0,
-                backgroundColor: EvieColors.lightGrayishCyan,
-
+                backgroundColor: showColour == true ? EvieColors.lightGrayishCyan : Colors.transparent,
               ),
             ),
 

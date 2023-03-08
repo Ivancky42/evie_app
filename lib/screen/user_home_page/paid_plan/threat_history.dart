@@ -160,7 +160,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                   ],
                                 );
                               case ThreatFilterDate.today:
-                                if(widget.bikeProvider.calculateDateDifference(data['created'].toDate()) == 0){
+                                if(widget.bikeProvider.calculateDateDifferenceFromNow(data['created'].toDate()) == 0){
                                   return Column(
                                     children: [
                                       ListTile(
@@ -200,7 +200,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                 }
                                 break;
                               case ThreatFilterDate.yesterday:
-                                if(widget.bikeProvider.calculateDateDifference(data['created'].toDate()) == -1){
+                                if(widget.bikeProvider.calculateDateDifferenceFromNow(data['created'].toDate()) == -1){
                                   return Column(
                                     children: [
                                       ListTile(
@@ -240,7 +240,7 @@ class _Threat_HistoryState extends State<Threat_History> {
                                 }
                                 break;
                               case ThreatFilterDate.last7days:
-                                if([-1,-2,-3,-4,-5,-6,-7].contains(widget.bikeProvider.calculateDateDifference(data['created'].toDate()))){
+                                if([-1,-2,-3,-4,-5,-6,-7].contains(widget.bikeProvider.calculateDateDifferenceFromNow(data['created'].toDate()))){
                                   return Column(
                                     children: [
                                       ListTile(

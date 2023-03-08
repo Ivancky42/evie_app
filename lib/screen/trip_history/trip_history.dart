@@ -5,6 +5,7 @@ import 'package:evie_test/api/backend/sim_api_caller.dart';
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
+import 'package:evie_test/screen/trip_history/trip_history_data.dart';
 import 'package:evie_test/screen/trip_history/week.dart';
 import 'package:evie_test/screen/trip_history/year.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,12 @@ import '../../api/fonts.dart';
 import '../../widgets/evie_appbar.dart';
 import 'day.dart';
 import 'month.dart';
+
+enum TotalData{
+  mileage,
+  noOfRide,
+  carbonFootprint,
+}
 
 class TripHistory extends StatefulWidget {
   const TripHistory({Key? key}) : super(key: key);
@@ -95,13 +102,18 @@ class _TripHistoryState extends State<TripHistory> {
                           ),
                         ),
 
-                         const Expanded(
+                        const Expanded(
                           child: TabBarView(
                               children: [
                                 TripDay(),
                                 TripWeek(),
                                 TripMonth(),
                                 TripYear(),
+
+                          //      TripHistoryData("day"),
+                          //      TripHistoryData("week"),
+                          //      TripHistoryData("month"),
+                          //      TripHistoryData("year"),
                               ]),
                         ),
                       ],

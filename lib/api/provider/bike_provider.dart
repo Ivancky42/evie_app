@@ -1150,7 +1150,7 @@ class BikeProvider extends ChangeNotifier {
                   for(int i=0;i<snapshot.docs.length;i++){
                     currentBikePlanModel = BikePlanModel.fromJson(obj!);
                   }
-                  final result = calculateDateDifference(currentBikePlanModel!.periodEnd!.toDate());
+                  final result = calculateDateDifferenceFromNow(currentBikePlanModel!.periodEnd!.toDate());
                   if(result < 0){
                     isPlanSubscript = false;
                   }else{
@@ -1168,7 +1168,7 @@ class BikeProvider extends ChangeNotifier {
                 for(int i=0;i<snapshot.docs.length;i++){
                   currentBikePlanModel = BikePlanModel.fromJson(obj!);
                 }
-                final result = calculateDateDifference(currentBikePlanModel!.periodEnd!.toDate());
+                final result = calculateDateDifferenceFromNow(currentBikePlanModel!.periodEnd!.toDate());
                 if(result < 0){
                   isPlanSubscript = false;
                 }else{
@@ -1324,9 +1324,13 @@ class BikeProvider extends ChangeNotifier {
   /// Yesterday : calculateDifference(date) == -1.
   /// Today : calculateDifference(date) == 0.
   /// Tomorrow : calculateDifference(date) == 1
-  int calculateDateDifference(DateTime date) {
+  int calculateDateDifferenceFromNow(DateTime date) {
     DateTime now = DateTime.now();
     return DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
+  }
+
+  int calculateDateDifference(DateTime date1, DateTime date2) {
+    return DateTime(date1.year, date1.month, date1.day).difference(DateTime(date2.year, date2.month, date2.day)).inDays;
   }
 
   setIsAddBike(bool isAddBike){
