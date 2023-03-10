@@ -151,7 +151,7 @@ class _MyGarageState extends State<MyGarage> {
   Widget listItem(String deviceIMEI, UserBikeModel userBikeList, BikeModel userBikeDetails, BikePlanModel? userBikePlan) {
 
     bool isPlanSubscript;
-    final result = _bikeProvider.calculateDateDifferenceFromNow(userBikePlan!.periodEnd!.toDate());
+    final result = calculateDateDifferenceFromNow(userBikePlan!.periodEnd!.toDate());
     if(result < 0){
       isPlanSubscript = false;
     }else{

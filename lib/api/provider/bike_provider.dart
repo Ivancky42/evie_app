@@ -6,11 +6,13 @@ import 'package:evie_test/api/model/notification_setting_model.dart';
 import 'package:evie_test/api/model/trip_history_model.dart';
 import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
+import 'package:evie_test/api/provider/trip_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../function.dart';
 import '../model/bike_model.dart';
 import '../model/bike_plan_model.dart';
 import '../model/bike_user_model.dart';
@@ -65,7 +67,6 @@ class BikeProvider extends ChangeNotifier {
   String inventoryCollection = dotenv.env['DB_COLLECTION_INVENTORY'] ?? 'DB not found';
   String theftHistoryCollection = dotenv.env['DB_COLLECTION_THEFTHISTORY'] ?? 'DB not found';
   String routesCollection = dotenv.env['DB_COLLECTION_ROUTES'] ?? 'DB not found';
-  String tripHistoryCollection = dotenv.env['DB_COLLECTION_TRIPHISTORY'] ?? 'DB not found';
 
   LinkedHashMap bikeUserList = LinkedHashMap<String, BikeUserModel>();
   LinkedHashMap bikeUserDetails = LinkedHashMap<String, UserModel>();
@@ -77,10 +78,8 @@ class BikeProvider extends ChangeNotifier {
   LinkedHashMap userBikePlans = LinkedHashMap<String, BikePlanModel>();
   LinkedHashMap rfidList = LinkedHashMap<String, RFIDModel>();
   LinkedHashMap threatRoutesLists = LinkedHashMap<String, ThreatRoutesModel>();
-  LinkedHashMap currentTripHistoryLists = LinkedHashMap<String, TripHistoryModel>();
 
   ThreatHistoryModel? currentThreatHistoryModel;
-  TripHistoryModel? currentTripHistoryModel;
   BikePlanModel? currentBikePlanModel;
   UserModel? currentUserModel;
   BikeModel? currentBikeModel;
@@ -107,7 +106,6 @@ class BikeProvider extends ChangeNotifier {
   StreamSubscription? currentBikePlanSubscription;
   StreamSubscription? bikePlanSubscription;
   StreamSubscription? rfidListSubscription;
-  StreamSubscription? tripHistorySubscription;
 
   StreamSubscription? currentSubscription;
 
@@ -268,7 +266,6 @@ class BikeProvider extends ChangeNotifier {
             switchBikeResultListener.add(switchBikeResult);
           }
           getRFIDList();
-          getTripHistory();
           getBikeUserList();
         });
       }
@@ -845,45 +842,6 @@ class BikeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  getTripHistory() {
-    currentTripHistoryLists.clear();
-    try{
-      tripHistorySubscription = FirebaseFirestore.instance
-            .collection(bikesCollection)
-            .doc(currentBikeModel!.deviceIMEI)
-            .collection(tripHistoryCollection)
-            .snapshots()
-            .listen((snapshot) {
-            if (snapshot.docs.isNotEmpty) {
-              for (var docChange in snapshot.docChanges) {
-                switch (docChange.type) {
-                  case DocumentChangeType.added:
-                    Map<String, dynamic>? obj = docChange.doc.data();
-                    currentTripHistoryLists.putIfAbsent(docChange.doc.id, () => TripHistoryModel.fromJson(obj!));
-                    notifyListeners();
-                    break;
-                  case DocumentChangeType.removed:
-                    currentTripHistoryLists.removeWhere((key, value) => key == docChange.doc.id);
-                    notifyListeners();
-                    break;
-                  case DocumentChangeType.modified:
-                    Map<String, dynamic>? obj = docChange.doc.data();
-                    currentTripHistoryLists.update(docChange.doc.id, (value) => TripHistoryModel.fromJson(obj!));
-                    notifyListeners();
-                    break;
-                }
-              }
-            }else{
-              currentTripHistoryLists.clear();
-            }
-      });
-
-    }catch (e) {
-        debugPrint(e.toString());
-        tripHistorySubscription?.cancel();
-      }
-
-  }
 
 
   Future<bool> checkIsUserExist(String targetEmail) async {
@@ -1210,7 +1168,6 @@ class BikeProvider extends ChangeNotifier {
   }
 
 
-
   /// ****************************************** ///
   /// RFID
   /// ****************************************** ///
@@ -1321,18 +1278,6 @@ class BikeProvider extends ChangeNotifier {
   /// Command for calculation
 
 
-  /// Yesterday : calculateDifference(date) == -1.
-  /// Today : calculateDifference(date) == 0.
-  /// Tomorrow : calculateDifference(date) == 1
-  int calculateDateDifferenceFromNow(DateTime date) {
-    DateTime now = DateTime.now();
-    return DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
-  }
-
-  int calculateDateDifference(DateTime date1, DateTime date2) {
-    return DateTime(date1.year, date1.month, date1.day).difference(DateTime(date2.year, date2.month, date2.day)).inDays;
-  }
-
   setIsAddBike(bool isAddBike){
     this.isAddBike = isAddBike;
     notifyListeners();
@@ -1405,7 +1350,7 @@ class BikeProvider extends ChangeNotifier {
       }
     });
 
-
+    TripProvider().clear();
 
     SharedPreferences prefs = await _prefs;
     prefs.remove('currentBikeName');
@@ -1420,14 +1365,12 @@ class BikeProvider extends ChangeNotifier {
     currentUserBikeSubscription?.cancel();
     currentBikePlanSubscription?.cancel();
     rfidListSubscription?.cancel();
-    tripHistorySubscription?.cancel();
 
     userBikeList.clear();
     userBikeDetails.clear();
     bikeUserList.clear();
     bikeUserDetails.clear();
     threatRoutesLists.clear();
-    currentTripHistoryLists.clear();
 
     isPlanSubscript = null;
     currentBikeIMEI = null;

@@ -46,9 +46,16 @@ class CurrentUserProvider extends ChangeNotifier {
 
   ///Get user information
   void getUser(String? uid) {
+
+    currentUserSubscription?.cancel();
+
     if (uid == null || uid == "") {
       currentUserModel = null;
     } else {
+
+      NotificationProvider().subscribeToTopic("fcm_test");
+      NotificationProvider().subscribeToTopic(uid);
+
       currentUserSubscription = FirebaseFirestore.instance.collection(usersCollection).doc(uid)
           .snapshots()
           .listen((event) {
@@ -56,8 +63,6 @@ class CurrentUserProvider extends ChangeNotifier {
           Map<String, dynamic>? obj = event.data();
           if (obj != null) {
             currentUserModel = UserModel.fromJson(obj);
-            NotificationProvider().subscribeToTopic("fcm_test");
-            NotificationProvider().subscribeToTopic(currentUserModel!.uid);
             notifyListeners();
           }
         } on Exception catch (exception) {

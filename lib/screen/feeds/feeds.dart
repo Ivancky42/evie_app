@@ -94,7 +94,7 @@ class _FeedsState extends State<Feeds> {
                     itemBuilder: (context, index) {
 
                       if(_bikeProvider.userBikePlans.values.elementAt(index)?.periodEnd.toDate() != null){
-                       if(_bikeProvider.calculateDateDifferenceFromNow(_bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate()) >= 0){
+                       if(calculateDateDifferenceFromNow(_bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate()) >= 0){
                       ///if connection lost
                       if(_bikeProvider.userBikeDetails.values.elementAt(index).location.isConnected == false){
                        return FeedsListTile(

@@ -51,6 +51,11 @@ class _TripHistoryState extends State<TripHistory> {
               ),
             ),
           ),
+
+
+            ///Detect is have bike
+            ///Detect if plan subscript
+
             Expanded(
               child: DefaultTabController(
                   length: 4,
@@ -95,8 +100,11 @@ class _TripHistoryState extends State<TripHistory> {
                                     "Year",
                                     style: EvieTextStyles.ctaSmall,
                                   ),
-
                                 ],
+
+                                ///Bold text when selected
+                                //labelStyle: TextStyle(fontWeight: FontWeight.bold),
+
                               ),
                             ),
                           ),
@@ -105,21 +113,39 @@ class _TripHistoryState extends State<TripHistory> {
                         const Expanded(
                           child: TabBarView(
                               children: [
-                                TripDay(),
-                                TripWeek(),
-                                TripMonth(),
-                                TripYear(),
+                                // TripDay(),
+                                // TripWeek(),
+                                // TripMonth(),
+                                // TripYear(),
 
-                          //      TripHistoryData("day"),
-                          //      TripHistoryData("week"),
-                          //      TripHistoryData("month"),
-                          //      TripHistoryData("year"),
+                               TripHistoryData("day"),
+                               TripHistoryData("week"),
+                               TripHistoryData("month"),
+                               TripHistoryData("year"),
                               ]),
                         ),
+
                       ],
                     ),
                   )),
             ),
+
+            // Stack(
+            //   children: [
+            //     Divider(
+            //       thickness: 34.h,
+            //       color: EvieColors.dividerWhite,
+            //     ),
+            //
+            //     ///Recent activity / 2022 Stats
+            //     Padding(
+            //       padding: EdgeInsets.only(left: 16.w),
+            //       child: Text("Recent Activity", style: EvieTextStyles.h4),
+            //     ),
+            //   ],
+            // ),
+
+            //Listview.separated / pagination
           ],
         ),
       ),

@@ -111,6 +111,27 @@ capitalizeFirstCharacter(String sentence){
   return words.join(' ');
 }
 
+/// Yesterday : calculateDifference(date) == -1.
+/// Today : calculateDifference(date) == 0.
+/// Tomorrow : calculateDifference(date) == 1
+int calculateDateDifferenceFromNow(DateTime date) {
+  DateTime now = DateTime.now();
+  return DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
+}
+
+int calculateDateDifference(DateTime date1, DateTime date2) {
+  return DateTime(date1.year, date1.month, date1.day).difference(DateTime(date2.year, date2.month, date2.day)).inDays;
+}
+
+/// final year = 2023;
+/// final month = 3;
+/// final numDaysInMonth = daysInMonth(year, month); // returns 31 for March 2023
+int daysInMonth(int year, int month) {
+  final lastDayOfMonth = DateTime(year, month + 1, 0);
+  return lastDayOfMonth.day;
+}
+
+
 
 class ShareBikeLeave extends StatefulWidget {
 
@@ -127,7 +148,6 @@ class ShareBikeLeave extends StatefulWidget {
   @override
   State<ShareBikeLeave> createState() => _ShareBikeLeaveState();
 }
-
 class _ShareBikeLeaveState extends State<ShareBikeLeave> {
 
   late NotificationProvider _notificationProvider;

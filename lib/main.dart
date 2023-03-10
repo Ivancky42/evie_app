@@ -47,6 +47,7 @@ import 'api/provider/bike_provider.dart';
 import 'api/provider/firmware_provider.dart';
 import 'api/provider/location_provider.dart';
 import 'api/provider/notification_provider.dart';
+import 'api/provider/trip_provider.dart';
 
 
 
@@ -170,6 +171,14 @@ class AppProviders extends StatelessWidget {
               create: (_) => FirmwareProvider(),
               update: (_, bikeProvider, firmwareProvider) {
                 return firmwareProvider!
+                  ..update(bikeProvider.currentBikeModel);
+              }
+          ),
+          ChangeNotifierProxyProvider<BikeProvider, TripProvider>(
+              lazy: false,
+              create: (_) => TripProvider(),
+              update: (_, bikeProvider, tripProvider) {
+                return tripProvider!
                   ..update(bikeProvider.currentBikeModel);
               }
           ),
