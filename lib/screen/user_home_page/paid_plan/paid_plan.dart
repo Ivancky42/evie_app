@@ -120,7 +120,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                 getDistanceBetween();
 
                 if(isFirstLoadUserLocation == true){
-                  animateBounce();
+                  //animateBounce();
                   isFirstLoadUserLocation = false;
                 }
 

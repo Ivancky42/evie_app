@@ -6,6 +6,7 @@ import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/trip_provider.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -20,7 +21,7 @@ import '../../widgets/evie_oval.dart';
 
 
 class TripHistoryData extends StatefulWidget{
-  final String format;
+  final TripFormat format;
   const TripHistoryData(this.format,{ Key? key }) : super(key: key);
   @override
   _TripHistoryDataState createState() => _TripHistoryDataState();
@@ -59,12 +60,12 @@ class _TripHistoryDataState extends State<TripHistoryData> {
         });
 
     switch(widget.format){
-      case "day":
+      case TripFormat.day:
         xNumericAxis = NumericAxis(
           isVisible: true,
         );
         break;
-      case "week":
+      case TripFormat.week:
         xNumericAxis = NumericAxis(
           minimum: 1,
           maximum: 7,
@@ -72,7 +73,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           isVisible: true,
         );
         break;
-      case "month":
+      case TripFormat.month:
         xNumericAxis = NumericAxis(
           minimum: 1,
           maximum: daysInMonth(pickedDate!.year,  pickedDate!.month).toDouble(),
@@ -80,7 +81,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           isVisible: true,
         );
         break;
-      case "year":
+      case TripFormat.year:
         xNumericAxis = NumericAxis(
           minimum: 1,
           maximum: 12,
@@ -102,162 +103,193 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
     return Padding(
         padding: EdgeInsets.only(left: 32.w, right: 32.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
 
-          children: [
+            children: [
 
-            Text("TOTAL", style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan),),
-            Row(
-              children: [
+              Text("TOTAL", style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan),),
+              Row(
+                children: [
 
-                if(currentData == totalData.elementAt(0))...{
-                  Text((currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2), style: EvieTextStyles.display,),
-                  Text("km", style: EvieTextStyles.body18,),
-                }else if(currentData == totalData.elementAt(1))...{
-                  // Text(_bikeProvider.currentTripHistoryLists.length.toStringAsFixed(0), style: EvieTextStyles.display,),
-                  Text(currentTripHistoryListDay.length.toStringAsFixed(0), style: EvieTextStyles.display,),
-                  Text("rides", style: EvieTextStyles.body18,),
-                }else if(currentData == totalData.elementAt(2))...{
-                  Text("12345", style: EvieTextStyles.display,),
-                  Text("g", style: EvieTextStyles.body18,),
-                },
+                  if(currentData == totalData.elementAt(0))...{
+                    Text((currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2), style: EvieTextStyles.display,),
+                    Text("km", style: EvieTextStyles.body18,),
+                  }else if(currentData == totalData.elementAt(1))...{
+                    // Text(_bikeProvider.currentTripHistoryLists.length.toStringAsFixed(0), style: EvieTextStyles.display,),
+                    Text(currentTripHistoryListDay.length.toStringAsFixed(0), style: EvieTextStyles.display,),
+                    Text("rides", style: EvieTextStyles.body18,),
+                  }else if(currentData == totalData.elementAt(2))...{
+                    Text("12345", style: EvieTextStyles.display,),
+                    Text("g", style: EvieTextStyles.body18,),
+                  },
 
-                SizedBox(width: 4.w,),
-                EvieOvalGray(
-                  buttonText: currentData,
-                  onPressed: (){
-                    if(currentData == totalData.first){
+                  SizedBox(width: 4.w,),
+                  EvieOvalGray(
+                    buttonText: currentData,
+                    onPressed: (){
+                      if(currentData == totalData.first){
+                        setState(() {
+                          currentData = totalData.elementAt(1);
+                        });
+                      }else if(currentData == totalData.elementAt(1)){
+                        setState(() {
+                          currentData = totalData.last;
+                        });
+                      }else if(currentData == totalData.last){
+                        setState(() {
+                          currentData = totalData.first;
+                        });
+                      }
+                    },)
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    widget.format == "week" ?
+                    "${monthsInYear[pickedDate!.month]} ${pickedDate!.day}-${pickedDate!.add(Duration(days: 6)).day} ${pickedDate!.year}" :
+                    "${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}",
+                    style: const TextStyle(color: EvieColors.darkGrayishCyan),),
+
+                  Expanded(
+                    child:  EvieButton_PickDate(
+                      showColour: false,
+                      width: 155.w,
+                      onPressed: () async {
+
+                      //  pickedDate
+                        DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: pickedDate ?? DateTime.now(),
+                          firstDate:  DateTime(DateTime.now().year-2),
+                          lastDate: DateTime.now(),
+                          builder: (context, child) {
+                            return Theme(data: Theme.of(context).copyWith(
+                              colorScheme: const ColorScheme.light(
+                                primary: EvieColors.primaryColor,
+                              ), ), child: child!);
+                          },
+                        );
+
+                          if(picked == null){
+                            setState(() {
+                              pickedDate == DateTime.now();
+                            });
+                          }else{
+                            setState(() {
+                              pickedDate = picked;
+                            });
+                          }
+                      },
+                      child: SvgPicture.asset(
+                        "assets/buttons/calendar.svg",
+                        height: 24.h,
+                        width: 24.w,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onHorizontalDragEnd: (DragEndDetails details){
+                  double velocity = details.velocity.pixelsPerSecond.dx;
+                  if(velocity > 0){
+                    ///Swipe right, go to previous date
+                    setState(() {
+                      pickedDate = pickedDate?.subtract(Duration(days: 1));
+                    });
+                  }else{
+                    ///Swipe left, go to next date
+
+                    //If picked date less than today
+                    if(calculateDateDifferenceFromNow(pickedDate!) < 0){
                       setState(() {
-                        currentData = totalData.elementAt(1);
-                      });
-                    }else if(currentData == totalData.elementAt(1)){
-                      setState(() {
-                        currentData = totalData.last;
-                      });
-                    }else if(currentData == totalData.last){
-                      setState(() {
-                        currentData = totalData.first;
+                        pickedDate = pickedDate?.add(Duration(days: 1));
                       });
                     }
-                  },)
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  widget.format == "week" ?
-                  "${monthsInYear[pickedDate!.month]} ${pickedDate!.day}-${pickedDate!.add(Duration(days: 6)).day} ${pickedDate!.year}" :
-                  "${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}",
-                  style: const TextStyle(color: EvieColors.darkGrayishCyan),),
-
-                Expanded(
-                  child:  EvieButton_PickDate(
-                    showColour: false,
-                    width: 155.w,
-                    onPressed: () async {
-
-                      pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: pickedDate ?? DateTime.now(),
-                        firstDate:  DateTime(DateTime.now().year-2),
-                        lastDate: DateTime.now(),
-                        builder: (context, child) {
-                          return Theme(data: Theme.of(context).copyWith(
-                            colorScheme: const ColorScheme.light(
-                              primary: EvieColors.primaryColor,
-                            ), ), child: child!);
-                        },
-                      );
-
-                      // if(pickedDate == null){
-                      //   setState(() {
-                      //     pickedDate == DateTime.now();
-                      //   });
-                      // }
-
-                      setState(() {});
-                    },
-                    child: SvgPicture.asset(
-                      "assets/buttons/calendar.svg",
-                      height: 24.h,
-                      width: 24.w,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onHorizontalDragEnd: (DragEndDetails details){
-                double velocity = details.velocity.pixelsPerSecond.dx;
-                if(velocity > 0){
-                  ///Swipe right, go to previous date
-                  setState(() {
-                    pickedDate = pickedDate?.subtract(Duration(days: 1));
-                  });
-                }else{
-                  ///Swipe left, go to next date
-
-                  //If picked date less than today
-                  if(calculateDateDifferenceFromNow(pickedDate!) < 0){
-                    setState(() {
-                      pickedDate = pickedDate?.add(Duration(days: 1));
-                    });
                   }
-                }
-              },
-              child:
-              SfCartesianChart(
-                primaryXAxis: widget.format == "day"
-                    ? CategoryAxis(
-                    isVisible: true,
-                  )
-                    : xNumericAxis,
+                },
+                child:
+                SfCartesianChart(
+                  primaryXAxis: widget.format == TripFormat.day
+                      ? CategoryAxis(
+                      isVisible: true,
+                    )
+                      : xNumericAxis,
 
-                ///maximum, data.duration highest
-                primaryYAxis: NumericAxis(
-                  //minimum: 0, maximum: 2500, interval: 300,
-                  opposedPosition: true,
-                ),
-
-                tooltipBehavior: _tooltip,
-                series: <ColumnSeries<ChartData, dynamic>>[
-                  ColumnSeries<ChartData, dynamic>(
-                    dataSource: chartData,
-                    xValueMapper: (ChartData data, _) => widget.format == "day" ? "${data.x.hour}:${data.x.minute}" : data.x,
-                    yValueMapper: (ChartData data, _) => data.y,
-                    ///width of the column
-                    width: 0.8,
-                    ///Spacing between the column
-                    spacing: 0.2,
-                    name: chartData.toString(),
-                    color: EvieColors.primaryColor,
-                    borderRadius: const BorderRadius.only(
-                      topRight:  Radius.circular(5),
-                      topLeft: Radius.circular(5),
-                    ),
+                  ///maximum, data.duration highest
+                  primaryYAxis: NumericAxis(
+                    //minimum: 0, maximum: 2500, interval: 300,
+                    opposedPosition: true,
                   ),
 
-                ],
-                enableAxisAnimation: true,
-                zoomPanBehavior: ZoomPanBehavior(
-                  enablePanning: false,
-                  enablePinching: false,
+                  tooltipBehavior: _tooltip,
+                  series: <ColumnSeries<ChartData, dynamic>>[
+                    ColumnSeries<ChartData, dynamic>(
+                      dataSource: chartData,
+                      xValueMapper: (ChartData data, _) => widget.format == TripFormat.day ? "${data.x.hour}:${data.x.minute}" : data.x,
+                      yValueMapper: (ChartData data, _) => data.y,
+                      ///width of the column
+                      width: 0.8,
+                      ///Spacing between the column
+                      spacing: 0.2,
+                      name: chartData.toString(),
+                      color: EvieColors.primaryColor,
+                      borderRadius: const BorderRadius.only(
+                        topRight:  Radius.circular(5),
+                        topLeft: Radius.circular(5),
+                      ),
+                    ),
+
+                  ],
+                  enableAxisAnimation: true,
+                  zoomPanBehavior: ZoomPanBehavior(
+                    enablePanning: false,
+                    enablePinching: false,
+                  ),
+
                 ),
-
               ),
-            )
 
-          ],)
+
+              Padding(
+                padding:  EdgeInsets.only(top: 10.h),
+                child: Text("Recent Activity", style: EvieTextStyles.h4),
+              ),
+
+              ListView.separated(
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
+                separatorBuilder: (context, index) {
+                  return Divider(height: 1.h);
+                },
+                itemCount: _tripProvider.currentTripHistoryLists.length,
+                itemBuilder: (context, index) {
+                  return  ListTile(
+                    title: Text(_tripProvider.currentTripHistoryLists.values.elementAt(index).startTime.toDate().toString()),
+                    subtitle: Text(_tripProvider.currentTripHistoryLists.values.elementAt(index).distance.toString()),
+
+                  );
+                },
+              ),
+
+              //Listview.separated / pagination
+
+            ],),
+        )
     );
   }
+
+
 
   getData(BikeProvider bikeProvider, TripProvider tripProvider){
 
     switch(widget.format){
-      case "day":
+      case TripFormat.day:
         chartData.clear();
         currentTripHistoryListDay.clear();
 
@@ -269,13 +301,14 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           }
         });
         return;
-      case "week":
+      case TripFormat.week:
         chartData.clear();
         currentTripHistoryListDay.clear();
         // value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)
         tripProvider.currentTripHistoryLists.forEach((key, value) {
           ///Filter date
           ///if pickeddate is before pickedData.add7days
+          ///Logic error
           if(value.startTime.toDate().isAfter(pickedDate) && value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)))){
             chartData.add(ChartData(value.startTime.toDate().day, value.distance.toDouble()));
             currentTripHistoryListDay.add(value);
@@ -286,7 +319,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           }
         });
         return;
-      case "month":
+      case TripFormat.month:
         chartData.clear();
         currentTripHistoryListDay.clear();
 
@@ -309,7 +342,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
         });
 
         return;
-      case "year":
+      case TripFormat.year:
         chartData.clear();
         currentTripHistoryListDay.clear();
 
@@ -330,16 +363,6 @@ class _TripHistoryDataState extends State<TripHistoryData> {
         });
         return;
     }
-    chartData.clear();
-    currentTripHistoryListDay.clear();
-
-    tripProvider.currentTripHistoryLists.forEach((key, value) {
-      ///Filter date
-      if(calculateDateDifference(pickedDate!, value.startTime.toDate()) == 0){
-        chartData.add(ChartData(value.startTime.toDate(), value.distance.toDouble()));
-        currentTripHistoryListDay.add(value);
-      }
-    });
   }
 }
 

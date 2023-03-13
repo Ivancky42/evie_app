@@ -30,7 +30,7 @@
 //   late String currentData;
 //   late List<TripHistoryModel> currentTripHistoryListDay = [];
 //
-//   late List<ChartData> chartData = [];
+//   late List<_ChartData> chartData = [];
 //   late TooltipBehavior _tooltip;
 //   DateTime? pickedDate = DateTime.now();
 //

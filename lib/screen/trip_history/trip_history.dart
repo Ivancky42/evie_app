@@ -3,24 +3,24 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:evie_test/api/backend/sim_api_caller.dart';
 import 'package:evie_test/api/colours.dart';
+import 'package:evie_test/api/provider/plan_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:evie_test/screen/trip_history/trip_history_data.dart';
 import 'package:evie_test/screen/trip_history/week.dart';
 import 'package:evie_test/screen/trip_history/year.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 import '../../api/dialog.dart';
 import '../../api/fonts.dart';
+import '../../api/provider/bike_provider.dart';
+import '../../api/provider/trip_provider.dart';
 import '../../widgets/evie_appbar.dart';
 import 'day.dart';
 import 'month.dart';
-
-enum TotalData{
-  mileage,
-  noOfRide,
-  carbonFootprint,
-}
 
 class TripHistory extends StatefulWidget {
   const TripHistory({Key? key}) : super(key: key);
@@ -31,37 +31,40 @@ class TripHistory extends StatefulWidget {
 
 class _TripHistoryState extends State<TripHistory> {
 
+  late BikeProvider _bikeProvider;
+
   @override
   Widget build(BuildContext context) {
+
+    _bikeProvider = Provider.of<BikeProvider>(context);
+
     return WillPopScope(
       onWillPop: () async {
         bool? exitApp = await showQuitApp() as bool?;
         return exitApp ?? false;
       },
       child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-            padding: EdgeInsets.fromLTRB(16.w, 51.h, 0.w, 22.h),
-            child: Container(
-              child: Text(
-                "Trip History",
-                style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
-              ),
-            ),
-          ),
-
-
-            ///Detect is have bike
-            ///Detect if plan subscript
-
-            Expanded(
-              child: DefaultTabController(
+        body:
+            Container(
+              ///Detect if user have bike
+              child: _bikeProvider.userBikeList.isNotEmpty ?
+              ///Detect if premium plan subscript
+                  _bikeProvider.isPlanSubscript == true ?
+              DefaultTabController(
                   length: 4,
                   child: Scaffold(
                     body: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(16.w, 51.h, 0.w, 22.h),
+                          child: Container(
+                            child: Text(
+                              "Trip History",
+                              style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
+                            ),
+                          ),
+                        ),
                         Padding(
                           padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, bottom: 30.h),
@@ -118,36 +121,68 @@ class _TripHistoryState extends State<TripHistory> {
                                 // TripMonth(),
                                 // TripYear(),
 
-                               TripHistoryData("day"),
-                               TripHistoryData("week"),
-                               TripHistoryData("month"),
-                               TripHistoryData("year"),
+                               TripHistoryData(TripFormat.day),
+                               TripHistoryData(TripFormat.week),
+                               TripHistoryData(TripFormat.month),
+                               TripHistoryData(TripFormat.year),
                               ]),
                         ),
 
                       ],
                     ),
-                  )),
+                  ))
+                      :
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(16.w, 51.h, 0.w, 22.h),
+                        child: Container(
+                          child: Text(
+                            "Trip History",
+                            style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
+                          ),
+                        ),
+                      ),
+                      Text("You do not have plan subscript")
+                    ],
+                  )
+                  :
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(16.w, 51.h, 0.w, 22.h),
+                        child: Container(
+                          child: Text(
+                            "Trip History",
+                            style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
+                          ),
+                        ),
+                      ),
+                      Stack(
+                        children: [
+                          Center(
+                            child: Padding(
+                              padding: EdgeInsets.only(left:15.w, right:15.w),
+                              child: SvgPicture.asset(
+                                        "assets/images/bike_register_required.svg",
+                                        height:608.h,
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 120.h),
+                              child: Lottie.asset('assets/animations/add-bike.json'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
             ),
 
-            // Stack(
-            //   children: [
-            //     Divider(
-            //       thickness: 34.h,
-            //       color: EvieColors.dividerWhite,
-            //     ),
-            //
-            //     ///Recent activity / 2022 Stats
-            //     Padding(
-            //       padding: EdgeInsets.only(left: 16.w),
-            //       child: Text("Recent Activity", style: EvieTextStyles.h4),
-            //     ),
-            //   ],
-            // ),
-
-            //Listview.separated / pagination
-          ],
-        ),
       ),
     );
   }

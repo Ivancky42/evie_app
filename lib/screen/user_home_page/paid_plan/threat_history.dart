@@ -114,8 +114,6 @@ class _Threat_HistoryState extends State<Threat_History> {
                         itemBuilder: (context, documentSnapshots, index) {
                           final data = documentSnapshots[index].data() as Map?;
 
-                          print("load");
-
                           ///Filter String
                            snapshotLength = data?.length;
 

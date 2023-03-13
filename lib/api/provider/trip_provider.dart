@@ -10,6 +10,19 @@ import '../function.dart';
 import '../model/trip_history_model.dart';
 import 'bike_provider.dart';
 
+enum TripFormat{
+  day,
+  week,
+  month,
+  year,
+}
+
+enum DataType{
+  mileage,
+  noOfRide,
+  carbonFootprint,
+}
+
 class TripProvider extends ChangeNotifier {
 
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
@@ -23,8 +36,6 @@ class TripProvider extends ChangeNotifier {
   TripHistoryModel? currentTripHistoryModel;
   BikeModel? currentBikeModel;
 
-  late List<ChartData> chartData = [];
-  late List<TripHistoryModel> currentTripHistoryListDay = [];
 
   TripProvider() {
     init();
@@ -48,6 +59,7 @@ class TripProvider extends ChangeNotifier {
             .collection(bikesCollection)
             .doc(currentBikeModel!.deviceIMEI)
             .collection(tripHistoryCollection)
+            .orderBy("startTime", descending: true)
             .snapshots()
             .listen((snapshot) {
           if (snapshot.docs.isNotEmpty) {
@@ -81,93 +93,84 @@ class TripProvider extends ChangeNotifier {
     }
   }
 
-  getData(BikeProvider bikeProvider, TripProvider tripProvider, String dataFormat, DateTime pickedDate){
 
-    switch(dataFormat){
-      case "day":
-        chartData.clear();
-        currentTripHistoryListDay.clear();
-
-        tripProvider.currentTripHistoryLists.forEach((key, value) {
-          ///Filter date
-          if(calculateDateDifference(pickedDate!, value.startTime.toDate()) == 0){
-            chartData.add(ChartData(value.startTime.toDate(), value.distance.toDouble()));
-            currentTripHistoryListDay.add(value);
-          }
-        });
-        return;
-      case "week":
-        chartData.clear();
-        currentTripHistoryListDay.clear();
-        // value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)
-        tripProvider.currentTripHistoryLists.forEach((key, value) {
-          ///Filter date
-          ///if pickeddate is before pickedData.add7days
-          if(value.startTime.toDate().isAfter(pickedDate) && value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)))){
-            chartData.add(ChartData(value.startTime.toDate().day, value.distance.toDouble()));
-            currentTripHistoryListDay.add(value);
-          }
-          if(calculateDateDifference(pickedDate!, value.startTime.toDate()) == 0){
-            chartData.add(ChartData(value.startTime.toDate().day, value.distance.toDouble()));
-            currentTripHistoryListDay.add(value);
-          }
-        });
-        return;
-      case "month":
-        chartData.clear();
-        currentTripHistoryListDay.clear();
-
-        final totalDaysInMonth = daysInMonth(pickedDate!.year,  pickedDate!.month);
-
-        tripProvider.currentTripHistoryLists.forEach((key, value) {
-          ///Filter date
-          if(value.startTime.toDate().month == pickedDate!.month && value.startTime.toDate().year == pickedDate!.year){
-
-            double totalDistance = 0;
-
-            for (int day = 1; day <= totalDaysInMonth; day++) {
-              if(value.startTime.toDate().day == day){
-                totalDistance += value.distance;
-                chartData.add(ChartData(value.startTime.toDate().day, totalDistance));
-              }
-            }
-            currentTripHistoryListDay.add(value);
-          }
-        });
-
-        return;
-      case "year":
-        chartData.clear();
-        currentTripHistoryListDay.clear();
-
-        tripProvider.currentTripHistoryLists.forEach((key, value) {
-          ///Filter date
-          if(value.startTime.toDate().year == pickedDate!.year){
-
-            double totalDistance = 0;
-
-            for (int month = 1; month <= 12; month++) {
-              if(value.startTime.toDate().month == month){
-                totalDistance += value.distance;
-                chartData.add(ChartData(value.startTime.toDate().month, totalDistance));
-              }
-            }
-            currentTripHistoryListDay.add(value);
-          }
-        });
-        return;
-    }
-    chartData.clear();
-    currentTripHistoryListDay.clear();
-
-    tripProvider.currentTripHistoryLists.forEach((key, value) {
-      ///Filter date
-      if(calculateDateDifference(pickedDate!, value.startTime.toDate()) == 0){
-        chartData.add(ChartData(value.startTime.toDate(), value.distance.toDouble()));
-        currentTripHistoryListDay.add(value);
-      }
-    });
-  }
+  // getData(BikeProvider bikeProvider, TripProvider tripProvider, TripFormat tripFormat, DateTime pickedDate, chartData, currentTripHistoryListDay){
+  //
+  //   switch(tripFormat){
+  //     case TripFormat.day:
+  //       chartData.clear();
+  //       currentTripHistoryListDay.clear();
+  //
+  //       tripProvider.currentTripHistoryLists.forEach((key, value) {
+  //         ///Filter date
+  //         if(calculateDateDifference(pickedDate!, value.startTime.toDate()) == 0){
+  //           chartData.add(ChartData(value.startTime.toDate(), value.distance.toDouble()));
+  //           currentTripHistoryListDay.add(value);
+  //         }
+  //       });
+  //       return;
+  //     case TripFormat.week:
+  //       chartData.clear();
+  //       currentTripHistoryListDay.clear();
+  //       // value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)
+  //       tripProvider.currentTripHistoryLists.forEach((key, value) {
+  //         ///Filter date
+  //         ///if pickeddate is before pickedData.add7days
+  //         if(value.startTime.toDate().isAfter(pickedDate) && value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)))){
+  //           chartData.add(ChartData(value.startTime.toDate().day, value.distance.toDouble()));
+  //           currentTripHistoryListDay.add(value);
+  //         }
+  //         if(calculateDateDifference(pickedDate!, value.startTime.toDate()) == 0){
+  //           chartData.add(ChartData(value.startTime.toDate().day, value.distance.toDouble()));
+  //           currentTripHistoryListDay.add(value);
+  //         }
+  //       });
+  //       return;
+  //     case TripFormat.month:
+  //       chartData.clear();
+  //       currentTripHistoryListDay.clear();
+  //
+  //       final totalDaysInMonth = daysInMonth(pickedDate!.year,  pickedDate!.month);
+  //
+  //       tripProvider.currentTripHistoryLists.forEach((key, value) {
+  //         ///Filter date
+  //         if(value.startTime.toDate().month == pickedDate!.month && value.startTime.toDate().year == pickedDate!.year){
+  //
+  //           double totalDistance = 0;
+  //
+  //           for (int day = 1; day <= totalDaysInMonth; day++) {
+  //             if(value.startTime.toDate().day == day){
+  //               totalDistance += value.distance;
+  //               chartData.add(ChartData(value.startTime.toDate().day, totalDistance));
+  //             }
+  //           }
+  //           currentTripHistoryListDay.add(value);
+  //         }
+  //       });
+  //
+  //       return;
+  //     case TripFormat.year:
+  //       chartData.clear();
+  //       currentTripHistoryListDay.clear();
+  //
+  //       tripProvider.currentTripHistoryLists.forEach((key, value) {
+  //         ///Filter date
+  //         if(value.startTime.toDate().year == pickedDate!.year){
+  //
+  //           double totalDistance = 0;
+  //
+  //           for (int month = 1; month <= 12; month++) {
+  //             if(value.startTime.toDate().month == month){
+  //               totalDistance += value.distance;
+  //               chartData.add(ChartData(value.startTime.toDate().month, totalDistance));
+  //             }
+  //           }
+  //           currentTripHistoryListDay.add(value);
+  //         }
+  //       });
+  //       return;
+  //   }
+  // }
 
   clear(){
     tripHistorySubscription?.cancel();

@@ -110,7 +110,7 @@ class _FreePlanState extends State<FreePlan> {
             setState(() {
               userLocation = result;
               if(isFirstLoadUserLocation == true){
-                animateBounce();
+                //animateBounce();
                 isFirstLoadUserLocation = false;
               }
            //   animateBounce();
