@@ -110,7 +110,9 @@ class _AddNewBikeState extends State<AddNewBike> {
             setState(() {
               userLocation = result;
               if(isFirstLoadUserLocation == true){
-                //animateBounce();
+                Future.delayed(const Duration(milliseconds: 50), () {
+                  animateBounce();
+                });
                 isFirstLoadUserLocation = false;
               }
             //  animateBounce();

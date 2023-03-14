@@ -7,6 +7,7 @@ import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/trip_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/trip_history/recent_activity.dart';
+import 'package:evie_test/screen/trip_history/year_status.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -54,7 +55,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'Distance: ${data.y.toStringAsFixed(0) ?? "0"}',
-                  style: TextStyle(color: Colors.white),
+                  style: EvieTextStyles.body16.copyWith(color: EvieColors.white),
                 ),
               )
           );
@@ -91,14 +92,14 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
                 if(currentData == totalData.elementAt(0))...{
                   Text((currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2), style: EvieTextStyles.display,),
-                  Text("km", style: EvieTextStyles.body18,),
+                  Text(" km", style: EvieTextStyles.body18,),
                 }else if(currentData == totalData.elementAt(1))...{
                   // Text(_bikeProvider.currentTripHistoryLists.length.toStringAsFixed(0), style: EvieTextStyles.display,),
                   Text(currentTripHistoryListDay.length.toStringAsFixed(0), style: EvieTextStyles.display,),
                   Text("rides", style: EvieTextStyles.body18,),
                 }else if(currentData == totalData.elementAt(2))...{
-                  Text("12345", style: EvieTextStyles.display,),
-                  Text("g", style: EvieTextStyles.body18,),
+                  Text(" 0", style: EvieTextStyles.display,),
+                  Text(" g", style: EvieTextStyles.body18,),
                 },
 
                 SizedBox(width: 4.w,),
@@ -137,7 +138,6 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                     showColour: false,
                     width: 155.w,
                     onPressed: () async {
-
                     //  pickedDate
                       DateTime? picked = await showDatePicker(
                         context: context,
@@ -197,14 +197,11 @@ class _TripHistoryDataState extends State<TripHistoryData> {
               },
               child:
               SfCartesianChart(
-                primaryXAxis: widget.format == TripFormat.day
+                primaryXAxis: widget.format == TripFormat.day || widget.format == TripFormat.week
                     ? CategoryAxis(
                     isVisible: true,
                   )
-                    : widget.format == TripFormat.week
-                    ? CategoryAxis(
-                  isVisible: true,
-                ):
+                    :
                 xNumericAxis,
 
                 ///maximum, data.duration highest
@@ -217,7 +214,11 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                 series: <ColumnSeries<ChartData, dynamic>>[
                   ColumnSeries<ChartData, dynamic>(
                     dataSource: chartData,
-                    xValueMapper: (ChartData data, _) => widget.format == TripFormat.day ? "${data.x.hour}:${data.x.minute}" : data.x,
+                    xValueMapper: (ChartData data, _) =>
+                    widget.format == TripFormat.day ? "${data.x.hour.toString().padLeft(2,'0')}:${data.x.minute.toString().padLeft(2,'0')}" :
+                    widget.format == TripFormat.week ? weekdayName[data.x.weekday] :
+                  //  widget.format == TripFormat.year ? monthName[data.x] :
+                    data.x,
                     yValueMapper: (ChartData data, _) => data.y,
                     ///width of the column
                     width: 0.8,
@@ -243,29 +244,11 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           ),
 
 
-          RecentActivity(widget.format),
-          // Padding(
-          //   padding:  EdgeInsets.only(top: 10.h),
-          //   child: Text("Recent Activity", style: EvieTextStyles.h4),
-          // ),
-          //
-          // ListView.separated(
-          //   shrinkWrap: true,
-          //   padding: EdgeInsets.zero,
-          //   separatorBuilder: (context, index) {
-          //     return Divider(height: 1.h);
-          //   },
-          //   itemCount: _tripProvider.currentTripHistoryLists.length,
-          //   itemBuilder: (context, index) {
-          //     return  ListTile(
-          //       title: Text(_tripProvider.currentTripHistoryLists.values.elementAt(index).startTime.toDate().toString()),
-          //       subtitle: Text(_tripProvider.currentTripHistoryLists.values.elementAt(index).distance.toString()),
-          //
-          //     );
-          //   },
-          // ),
-
-          //Listview.separated / pagination
+          if(widget.format == TripFormat.year)...{
+            YearStatus(pickedDate!),
+          }else...{
+            RecentActivity(widget.format),
+          }
 
         ],),
     );
@@ -326,37 +309,25 @@ class _TripHistoryDataState extends State<TripHistoryData> {
         currentTripHistoryListDay.clear();
         // value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)
 
-        chartData.add((ChartData(pickedDate!.add(const Duration(days: 0)).day, 0)));
-        chartData.add((ChartData(pickedDate!.add(const Duration(days: 1)).day, 0)));
-        chartData.add((ChartData(pickedDate!.add(const Duration(days: 2)).day, 0)));
-        chartData.add((ChartData(pickedDate!.add(const Duration(days: 3)).day, 0)));
-        chartData.add((ChartData(pickedDate!.add(const Duration(days: 4)).day, 0)));
-        chartData.add((ChartData(pickedDate!.add(const Duration(days: 5)).day, 0)));
-        chartData.add((ChartData(pickedDate!.add(const Duration(days: 6)).day, 0)));
+        // for(int i = pickedDate!.add(const Duration(days: 0)).day; i < pickedDate!.add(const Duration(days: 6)).day; i ++){
+        //   chartData.add((ChartData(i, 0)));
+        // }
+
+        chartData.add((ChartData(pickedDate!.add(const Duration(days: 0)), 0)));
+        chartData.add((ChartData(pickedDate!.add(const Duration(days: 1)), 0)));
+        chartData.add((ChartData(pickedDate!.add(const Duration(days: 2)), 0)));
+        chartData.add((ChartData(pickedDate!.add(const Duration(days: 3)), 0)));
+        chartData.add((ChartData(pickedDate!.add(const Duration(days: 4)), 0)));
+        chartData.add((ChartData(pickedDate!.add(const Duration(days: 5)), 0)));
+        chartData.add((ChartData(pickedDate!.add(const Duration(days: 6)), 0)));
 
         tripProvider.currentTripHistoryLists.forEach((key, value) {
           if(value.startTime.toDate().isAfter(pickedDate) && value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 7)))){
-            ChartData newData = chartData.firstWhere((data) => data.x == value.startTime.toDate().day);
+            ChartData newData = chartData.firstWhere((data) => data.x.day == value.startTime.toDate().day);
             newData.y = newData.y + value.distance.toDouble();
             currentTripHistoryListDay.add(value);
           }
         });
-
-
-
-        // tripProvider.currentTripHistoryLists.forEach((key, value) {
-        //   ///Filter date
-        //   ///if pickeddate is before pickedData.add7days
-        //   ///Logic error
-        //   if(value.startTime.toDate().isAfter(pickedDate) && value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)))){
-        //     chartData.add(ChartData(value.startTime.toDate().day, value.distance.toDouble()));
-        //     currentTripHistoryListDay.add(value);
-        //   }
-        //   if(calculateDateDifference(pickedDate!, value.startTime.toDate()) == 0){
-        //     chartData.add(ChartData(value.startTime.toDate().day, value.distance.toDouble()));
-        //     currentTripHistoryListDay.add(value);
-        //   }
-        // });
         return;
       case TripFormat.month:
         chartData.clear();

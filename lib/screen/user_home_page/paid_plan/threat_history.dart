@@ -328,22 +328,22 @@ class _Threat_HistoryState extends State<Threat_History> {
                                           height: 36.h,
                                           width: 36.w,
                                         ),
-                                        title: data == null ? const Text('Error')
-                                            : data["address"] != null
-                                            ? Text(data["address"], style:  EvieTextStyles.body18,)
-                                            : FutureBuilder<dynamic>(
-                                            future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
-                                            builder: (context, snapshot) {
-                                              if (snapshot.hasData) {
-                                                widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
-                                                return Text(
-                                                  snapshot.data.name.toString(),
-                                                  style: EvieTextStyles.body18,
-                                                );
-                                              }else{
-                                                return const Text(
-                                                  "loading",
-                                                );
+                                        title: data == null ? const Text('Error') :
+                                               data["address"] != null ?
+                                               Text(data["address"], style:  EvieTextStyles.body18,) :
+                                               FutureBuilder<dynamic>(
+                                                 future: widget.locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
+                                                 builder: (context, snapshot) {
+                                                    if (snapshot.hasData) {
+                                                      widget.bikeProvider.uploadPlaceMarkAddressToFirestore(widget.bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
+                                                      return Text(
+                                                       snapshot.data.name.toString(),
+                                                       style: EvieTextStyles.body18,
+                                                     );
+                                                   }else{
+                                                      return const Text(
+                                                       "loading",
+                                                    );
                                               }
                                             }
                                         ),
@@ -394,9 +394,17 @@ class _Threat_HistoryState extends State<Threat_History> {
                       height: 45.h,
                       width: double.infinity,
                       child: ElevatedButton(
-                        child: Text(
-                          "Show All Data",
-                          style:  EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Show All Data",
+                              style:  EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
+                            ),
+                            SvgPicture.asset(
+                              "assets/buttons/external_link.svg",
+                            ),
+                          ],
                         ),
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(

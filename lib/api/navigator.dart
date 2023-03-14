@@ -1,3 +1,6 @@
+import 'dart:collection';
+
+import 'package:evie_test/api/model/trip_history_model.dart';
 import 'package:evie_test/screen/my_account/my_garage/my_garage.dart';
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_sensitivity.dart';
 import 'package:evie_test/screen/my_bike_setting/firmware/firmware_information.dart';
@@ -10,6 +13,7 @@ import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_set_colour_code.da
 
 import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/screen/test_ble.dart';
+import 'package:evie_test/screen/trip_history/ride_history.dart';
 import 'package:evie_test/screen/user_home_page/user_home_page.dart';
 import 'package:evie_test/screen/verify_email.dart';
 import 'package:flutter/cupertino.dart';
@@ -160,13 +164,22 @@ void changeToTripHistory(BuildContext context){
     ),
   );
 }
+
+void changeToRideHistory(BuildContext context, String tripId, TripHistoryModel currentTripHistoryList){
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.bottomToTop,
+      child:  RideHistory(tripId, currentTripHistoryList),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
 void changeToStayCloseToBike(BuildContext context) {
   Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (context) => const StayCloseToBike())
   );
 }
-
-
 
 void changeToNameBikeScreen(BuildContext context) {
   Navigator.pushReplacement(context,

@@ -131,7 +131,11 @@ int daysInMonth(int year, int month) {
   return lastDayOfMonth.day;
 }
 
+///weekdayName[DateTime.now().weekday]) = Mon
+const Map<int, String> weekdayName = {1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat", 7: "Sun"};
 
+///weekdayName[DateTime.now().month]) = J
+const Map<int, String> monthName = {1: "J", 2: "F", 3: "M", 4: "A", 5: "M", 6: "J", 7: "J", 8:"A",9:"S",10:"O",11:"N",12:"D"};
 
 class ShareBikeLeave extends StatefulWidget {
 

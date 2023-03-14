@@ -94,6 +94,63 @@ class TripProvider extends ChangeNotifier {
   }
 
 
+   getYearStatusData(DateTime pickedData){
+
+    List<double> returnData = [];
+    double totalMileage = 0;
+    double noOfRide = 0;
+
+    // Average Speed per Ride = Total Distance / Total Time per Ride
+    // Total Time = End Time - Start Time
+
+ //   dynamic totalTime;
+  //  double averageSpeed = 0;
+
+    // Average Duration = Total Time / Number of Rides
+    // Total Time = End Time - Start Time
+
+ //   dynamic averageDuration;
+    currentTripHistoryLists.forEach((key, value) {
+      ///Filter date
+      if(value.startTime.toDate().year == pickedData.year){
+
+        noOfRide += 1;
+        totalMileage += value.distance;
+
+      //  totalTime += (value.endTime!.toDate().difference(value.startTime!.toDate())).inMinutes;
+
+
+      }
+    });
+
+  //  averageSpeed = (totalMileage/totalTime);
+
+
+    returnData.add(totalMileage);
+    returnData.add(noOfRide);
+    //returnData.add(averageSpeed);
+
+    return returnData;
+  }
+
+  Future uploadPlaceMarkAddressToFirestore(String deviceIMEI, String eventID, String targetAddress, String address) async {
+    try {
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(deviceIMEI)
+          .collection(tripHistoryCollection)
+          .doc(eventID)
+          .set({
+        targetAddress: address,
+      }, SetOptions(merge: true));
+
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+
+
   // getData(BikeProvider bikeProvider, TripProvider tripProvider, TripFormat tripFormat, DateTime pickedDate, chartData, currentTripHistoryListDay){
   //
   //   switch(tripFormat){
@@ -171,6 +228,7 @@ class TripProvider extends ChangeNotifier {
   //       return;
   //   }
   // }
+
 
   clear(){
     tripHistorySubscription?.cancel();

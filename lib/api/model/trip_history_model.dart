@@ -13,6 +13,9 @@ class TripHistoryModel {
   Timestamp? startTime;
   Timestamp? endTime;
 
+  String? startAddress;
+  String? endAddress;
+
   TripHistoryModel({
     this.distance,
 
@@ -24,6 +27,9 @@ class TripHistoryModel {
 
     this.startTime,
     this.endTime,
+
+    this.startAddress,
+    this.endAddress,
   });
 
   factory TripHistoryModel.fromJson(Map json) {
@@ -38,6 +44,9 @@ class TripHistoryModel {
 
       startTime: timestampFromJson(json['startTime']),
       endTime: timestampFromJson(json['endTime']),
+
+      startAddress: json['startAddress'] ?? "",
+      endAddress: json['endAddress'] ?? "",
     );
   }
 

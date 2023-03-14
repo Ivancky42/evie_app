@@ -72,15 +72,98 @@ class _RecentActivityState extends State<RecentActivity> {
           },
           itemCount: _tripProvider.currentTripHistoryLists.length,
           itemBuilder: (context, index) {
-            return  ListTile(
-              title: Text(_tripProvider.currentTripHistoryLists.values.elementAt(index).startTime.toDate().toString()),
-              subtitle: Text(_tripProvider.currentTripHistoryLists.values.elementAt(index).distance.toString()),
+            return  Column(
+              children: [
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
 
+                    changeToRideHistory(context, _tripProvider.currentTripHistoryLists.keys.elementAt(index), _tripProvider.currentTripHistoryLists.values.elementAt(index));
+
+                  },
+                  child: Container(
+                    height: 77.h,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                 _tripProvider.currentTripHistoryLists.values.elementAt(index).startTime.toDate().toString(),
+                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                              ),
+                              SvgPicture.asset(
+                                "assets/buttons/next.svg",
+                                height: 24.h,
+                                width: 24.w,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "${(_tripProvider.currentTripHistoryLists.values.elementAt(index).distance.toDouble()/1000).toStringAsFixed(2)}km",
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                              ),
+                              Text(
+                                "0g carbon footprint",
+                                style: EvieTextStyles.body14,
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const EvieDivider(),
+
+              ],
             );
+
           },
         ),
 
-        //Listview.separated / pagination
+        Padding(
+          padding:
+          const EdgeInsets.all(6),
+          child:  Padding(
+            padding: EdgeInsets.only(
+                left: 16.w, right: 16.w, top: 0.h, bottom: 6.h),
+            child: Container(
+              height: 45.h,
+              width: double.infinity,
+              child: ElevatedButton(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Show All Data",
+                      style:  EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
+                    ),
+                    SvgPicture.asset(
+                     "assets/buttons/external_link.svg",
+                    ),
+                  ],
+                ),
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      side:  BorderSide(color: Color(0xff7A7A79), width: 1.5.w)),
+                  elevation: 0.0,
+                  backgroundColor: Colors.transparent,
+
+                ),
+              ),
+            ),
+          ),
+        ),
 
       ],);
   }

@@ -7,8 +7,6 @@ import 'package:evie_test/api/provider/plan_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:evie_test/screen/trip_history/trip_history_data.dart';
-import 'package:evie_test/screen/trip_history/week.dart';
-import 'package:evie_test/screen/trip_history/year.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
@@ -19,8 +17,6 @@ import '../../api/fonts.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../api/provider/trip_provider.dart';
 import '../../widgets/evie_appbar.dart';
-import 'day.dart';
-import 'month.dart';
 
 class TripHistory extends StatefulWidget {
   const TripHistory({Key? key}) : super(key: key);

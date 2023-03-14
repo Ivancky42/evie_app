@@ -793,8 +793,18 @@
 //                                             child: Container(
 //
 //                                               child: ElevatedButton(
-//                                                 child: Text(
-//                                                   "Show All Data",
+//                                               child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.center,
+//                   children: [
+//                     Text(
+//                       "Show All Data",
+//                       style:  EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
+//                     ),
+//                     SvgPicture.asset(
+//                      "assets/buttons/external_link.svg",
+//                     ),
+//                   ],
+//                 ),
 //                                                   style: TextStyle(
 //                                                     fontSize: 11.sp,
 //                                                     color:
