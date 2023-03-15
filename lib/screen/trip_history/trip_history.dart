@@ -112,11 +112,6 @@ class _TripHistoryState extends State<TripHistory> {
                         const Expanded(
                           child: TabBarView(
                               children: [
-                                // TripDay(),
-                                // TripWeek(),
-                                // TripMonth(),
-                                // TripYear(),
-
                                TripHistoryData(TripFormat.day),
                                TripHistoryData(TripFormat.week),
                                TripHistoryData(TripFormat.month),

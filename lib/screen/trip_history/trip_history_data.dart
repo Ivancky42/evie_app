@@ -37,15 +37,18 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
   late List<ChartData> chartData = [];
   late TooltipBehavior _tooltip;
-  late NumericAxis xNumericAxis;
 
-  DateTime? pickedDate = DateTime.now();
+
+  DateTime now = DateTime.now();
+  DateTime? pickedDate;
 
   late BikeProvider _bikeProvider;
   late TripProvider _tripProvider;
 
   @override
   void initState() {
+    pickedDate = DateTime(now.year, now.month, now.day);
+
     _tooltip = TooltipBehavior(
         enable: true,
         builder: (dynamic data, dynamic point, dynamic series,
@@ -61,8 +64,6 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           );
         });
 
-    getChartAxis();
-
     currentData = totalData.first;
     super.initState();
   }
@@ -73,9 +74,9 @@ class _TripHistoryDataState extends State<TripHistoryData> {
     _tripProvider = Provider.of<TripProvider>(context);
 
     getData(_bikeProvider, _tripProvider);
-    getChartAxis();
 
     return SingleChildScrollView(
+      physics:const BouncingScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
 
@@ -179,30 +180,62 @@ class _TripHistoryDataState extends State<TripHistoryData> {
               behavior: HitTestBehavior.translucent,
               onHorizontalDragEnd: (DragEndDetails details){
                 double velocity = details.velocity.pixelsPerSecond.dx;
-                if(velocity > 0){
-                  ///Swipe right, go to previous date
-                  setState(() {
-                    pickedDate = pickedDate?.subtract(Duration(days: 1));
-                  });
-                }else{
-                  ///Swipe left, go to next date
-
-                  //If picked date less than today
-                  if(calculateDateDifferenceFromNow(pickedDate!) < 0){
+                if(widget.format == TripFormat.month){
+                  if(velocity > 0){
+                    ///Swipe right, go to previous date
                     setState(() {
-                      pickedDate = pickedDate?.add(Duration(days: 1));
+                      pickedDate = pickedDate?.subtract(Duration(days: 30));
                     });
+                  }else{
+                    ///Swipe left, go to next date
+
+                    //If picked date less than today
+                    if(calculateDateDifferenceFromNow(pickedDate!) < 0){
+                      setState(() {
+                        pickedDate = pickedDate?.add(Duration(days: 30));
+                      });
+                    }
+                  }
+                }else if(widget.format == TripFormat.year){
+                  if(velocity > 0){
+                    ///Swipe right, go to previous date
+                    setState(() {
+                      pickedDate = pickedDate?.subtract(Duration(days: 365));
+                    });
+                  }else{
+                    ///Swipe left, go to next date
+
+                    //If picked date less than today
+                    if(calculateDateDifferenceFromNow(pickedDate!) < 0){
+                      setState(() {
+                        pickedDate = pickedDate?.add(Duration(days: 365));
+                      });
+                    }
+                  }
+                }else{
+                  if(velocity > 0){
+                    ///Swipe right, go to previous date
+                    setState(() {
+                      pickedDate = pickedDate?.subtract(Duration(days: 1));
+                    });
+                  }else{
+                    ///Swipe left, go to next date
+
+                    //If picked date less than today
+                    if(calculateDateDifferenceFromNow(pickedDate!) < 0){
+                      setState(() {
+                        pickedDate = pickedDate?.add(Duration(days: 1));
+                      });
+                    }
                   }
                 }
+
               },
               child:
               SfCartesianChart(
-                primaryXAxis: widget.format == TripFormat.day || widget.format == TripFormat.week
-                    ? CategoryAxis(
+                primaryXAxis: CategoryAxis(
                     isVisible: true,
-                  )
-                    :
-                xNumericAxis,
+                  ),
 
                 ///maximum, data.duration highest
                 primaryYAxis: NumericAxis(
@@ -217,7 +250,8 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                     xValueMapper: (ChartData data, _) =>
                     widget.format == TripFormat.day ? "${data.x.hour.toString().padLeft(2,'0')}:${data.x.minute.toString().padLeft(2,'0')}" :
                     widget.format == TripFormat.week ? weekdayName[data.x.weekday] :
-                  //  widget.format == TripFormat.year ? monthName[data.x] :
+                    widget.format == TripFormat.month ? data.x.day :
+                    widget.format == TripFormat.year ? monthNameHalf[data.x.month] :
                     data.x,
                     yValueMapper: (ChartData data, _) => data.y,
                     ///width of the column
@@ -243,7 +277,6 @@ class _TripHistoryDataState extends State<TripHistoryData> {
             ),
           ),
 
-
           if(widget.format == TripFormat.year)...{
             YearStatus(pickedDate!),
           }else...{
@@ -252,41 +285,6 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
         ],),
     );
-  }
-
-
-  getChartAxis(){
-    switch(widget.format){
-      case TripFormat.day:
-        xNumericAxis = NumericAxis(
-          isVisible: true,
-        );
-        break;
-      case TripFormat.week:
-        xNumericAxis = NumericAxis(
-          minimum: pickedDate!.day.toDouble(),
-          maximum: pickedDate!.add(const Duration(days: 6)).day.toDouble(),
-          interval: 1,
-          isVisible: true,
-        );
-        break;
-      case TripFormat.month:
-        xNumericAxis = NumericAxis(
-          minimum: 1,
-          maximum: daysInMonth(pickedDate!.year,  pickedDate!.month).toDouble(),
-          interval: 4,
-          isVisible: true,
-        );
-        break;
-      case TripFormat.year:
-        xNumericAxis = NumericAxis(
-          minimum: 1,
-          maximum: 12,
-          interval: 1,
-          isVisible: true,
-        );
-        break;
-    }
   }
 
   getData(BikeProvider bikeProvider, TripProvider tripProvider){
@@ -305,24 +303,17 @@ class _TripHistoryDataState extends State<TripHistoryData> {
         });
         return;
       case TripFormat.week:
+
         chartData.clear();
         currentTripHistoryListDay.clear();
         // value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)
 
-        // for(int i = pickedDate!.add(const Duration(days: 0)).day; i < pickedDate!.add(const Duration(days: 6)).day; i ++){
-        //   chartData.add((ChartData(i, 0)));
-        // }
-
-        chartData.add((ChartData(pickedDate!.add(const Duration(days: 0)), 0)));
-        chartData.add((ChartData(pickedDate!.add(const Duration(days: 1)), 0)));
-        chartData.add((ChartData(pickedDate!.add(const Duration(days: 2)), 0)));
-        chartData.add((ChartData(pickedDate!.add(const Duration(days: 3)), 0)));
-        chartData.add((ChartData(pickedDate!.add(const Duration(days: 4)), 0)));
-        chartData.add((ChartData(pickedDate!.add(const Duration(days: 5)), 0)));
-        chartData.add((ChartData(pickedDate!.add(const Duration(days: 6)), 0)));
+        for(int i = 0; i < 7; i ++){
+        chartData.add((ChartData(pickedDate!.add(Duration(days: i)), 0)));
+        }
 
         tripProvider.currentTripHistoryLists.forEach((key, value) {
-          if(value.startTime.toDate().isAfter(pickedDate) && value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 7)))){
+          if(value.startTime.toDate().isAfter(pickedDate) && value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 6)))){
             ChartData newData = chartData.firstWhere((data) => data.x.day == value.startTime.toDate().day);
             newData.y = newData.y + value.distance.toDouble();
             currentTripHistoryListDay.add(value);
@@ -335,19 +326,16 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
         final totalDaysInMonth = daysInMonth(pickedDate!.year,  pickedDate!.month);
 
+        for(int i = 1; i <= totalDaysInMonth; i ++){
+          chartData.add((ChartData(DateTime(pickedDate!.year, pickedDate!.month, i), 0)));
+        }
         tripProvider.currentTripHistoryLists.forEach((key, value) {
           ///Filter date
           if(value.startTime.toDate().month == pickedDate!.month && value.startTime.toDate().year == pickedDate!.year){
 
-            double totalDistance = 0;
-
-            for (int day = 1; day <= totalDaysInMonth; day++) {
-              if(value.startTime.toDate().day == day){
-                totalDistance += value.distance;
-                chartData.add(ChartData(value.startTime.toDate().day, totalDistance));
-              }
-            }
-              currentTripHistoryListDay.add(value);
+            ChartData newData = chartData.firstWhere((data) => data.x.day == value.startTime.toDate().day);
+            newData.y = newData.y + value.distance.toDouble();
+            currentTripHistoryListDay.add(value);
           }
         });
 
@@ -356,19 +344,18 @@ class _TripHistoryDataState extends State<TripHistoryData> {
         chartData.clear();
         currentTripHistoryListDay.clear();
 
+        for(int i = 1; i <= 12; i ++){
+          chartData.add((ChartData(DateTime(pickedDate!.year, i, 1), 0)));
+        }
+
         tripProvider.currentTripHistoryLists.forEach((key, value) {
           ///Filter date
           if(value.startTime.toDate().year == pickedDate!.year){
 
-            double totalDistance = 0;
-
-            for (int month = 1; month <= 12; month++) {
-              if(value.startTime.toDate().month == month){
-                totalDistance += value.distance;
-                chartData.add(ChartData(value.startTime.toDate().month, totalDistance));
-              }
-            }
+            ChartData newData = chartData.firstWhere((data) => data.x.month == value.startTime.toDate().month);
+            newData.y = newData.y + value.distance.toDouble();
             currentTripHistoryListDay.add(value);
+
           }
         });
         return;

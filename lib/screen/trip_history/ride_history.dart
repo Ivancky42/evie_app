@@ -71,13 +71,13 @@ class _RideHistoryState extends State<RideHistory> {
     _locationProvider = Provider.of<LocationProvider>(context);
     _tripProvider = Provider.of<TripProvider>(context);
 
-    loadMarker(widget.tripId, widget.currentTripHistoryList.startTrip, widget.currentTripHistoryList.endTrip, startAddress, endAddress);
 
     if(startAddress == null || endAddress == null){
       getAddress(widget.currentTripHistoryList.startTrip, widget.tripId, "startAddress");
       getAddress(widget.currentTripHistoryList.endTrip, widget.tripId, "endAddress");
     }
 
+    loadMarker(widget.tripId, widget.currentTripHistoryList.startTrip, widget.currentTripHistoryList.endTrip, startAddress, endAddress);
 
     return WillPopScope(
       onWillPop: () async {
@@ -152,8 +152,8 @@ class _RideHistoryState extends State<RideHistory> {
                           Text("Avg. Speed", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),),
                           Row(
                             children: [
-                              Text((widget.currentTripHistoryList.distance!/
-                                  (widget.currentTripHistoryList.endTime!.toDate().difference(widget.currentTripHistoryList.startTime!.toDate())).inMinutes).toStringAsFixed(2),
+                              Text((calculateAverageSpeed(widget.currentTripHistoryList.distance!.toDouble(),
+                                    calculateTimeDifferentInHour(widget.currentTripHistoryList.endTime!.toDate(),widget.currentTripHistoryList.startTime!.toDate()))).toStringAsFixed(2),
                                     style: EvieTextStyles.headlineB,),
                               Text("km/h", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
                             ],
@@ -256,7 +256,7 @@ class _RideHistoryState extends State<RideHistory> {
   }
 
 
-  Future getAddress(GeoPoint? trip, String tripId, String addressType) async {
+  getAddress(GeoPoint? trip, String tripId, String addressType) async {
 
     if(addressType == "startAddress"){
       if(widget.currentTripHistoryList.startAddress != null && widget.currentTripHistoryList.startAddress != ""){
@@ -278,6 +278,7 @@ class _RideHistoryState extends State<RideHistory> {
         setState(() {
           endAddress = widget.currentTripHistoryList.endAddress;
         });
+
       }else{
         final snapshot = await _locationProvider.returnPlaceMarks(trip!.latitude, trip!.longitude);
 
@@ -303,22 +304,25 @@ class _RideHistoryState extends State<RideHistory> {
         min(widget.currentTripHistoryList.startTrip!.latitude,
             widget.currentTripHistoryList.endTrip!.latitude),
         min(widget.currentTripHistoryList.startTrip!.longitude,
-            widget.currentTripHistoryList.endTrip!.latitude),
+            widget.currentTripHistoryList.endTrip!.longitude),
       );
 
       final LatLng northeast = LatLng(
         max(widget.currentTripHistoryList.startTrip!.latitude,
             widget.currentTripHistoryList.endTrip!.latitude),
         max(widget.currentTripHistoryList.startTrip!.longitude,
-            widget.currentTripHistoryList.endTrip!.latitude),
+            widget.currentTripHistoryList.endTrip!.longitude),
       );
 
       final latLngBounds = LatLngBounds(southwest, northeast);
 
-        mapController?.fitBounds(latLngBounds,
+
+        mapController?.fitBounds(
+         latLngBounds,
             options: FitBoundsOptions(
               padding: EdgeInsets.fromLTRB(170.w, 100.h, 170.w, 360.h),
-            ));
+            )
+          );
 
     }
   }

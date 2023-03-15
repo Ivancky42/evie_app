@@ -585,6 +585,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
   void animateBounce() {
     if (_locationProvider.locationModel != null && userLocation != null) {
+
       final LatLng southwest = LatLng(
         min(_locationProvider.locationModel!.geopoint.latitude,
             userLocation!.latitude!),

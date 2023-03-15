@@ -76,9 +76,9 @@ calculateTimeAgoWithTime(DateTime dateTime){
   Duration diff = DateTime.now().difference(dateTime);
 
   String timeAgo;
-  if (diff.inMinutes > 0 && diff.inMinutes < 60){
+  if (diff.inMinutes >= 0 && diff.inMinutes <= 60){
     timeAgo = "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
-  }else if(diff.inHours > 0 && diff.inHours < 24){
+  }else if(diff.inHours >= 0 && diff.inHours <= 24){
     timeAgo = "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
   }else{
     timeAgo = "${monthsInYear[dateTime.month]} ${dateTime.day.toString()}, at ${dateTime.hour}:${dateTime.minute}";
@@ -91,14 +91,39 @@ calculateDateAgo(DateTime startDateTime, DateTime endDateTime){
   Duration diff = DateTime.now().difference(startDateTime);
 
   String timeAgo;
-  if (diff.inHours > 0 && diff.inHours < 24){
+  if (diff.inHours >= 0 && diff.inHours <= 24){
     timeAgo = "Today ${startDateTime.hour.toString().padLeft(2,'0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2,'0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
-  }else if(diff.inHours >= 24  && diff.inHours < 48){
+  }else if(diff.inHours > 24  && diff.inHours <= 48){
     timeAgo = "Yesterday ${startDateTime.hour.toString().padLeft(2,'0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2,'0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
   }else{
     timeAgo = "${weekdayNameFull[startDateTime.weekday]}, ${monthNameHalf[startDateTime.month]} ${startDateTime.day} ${startDateTime.hour.toString().padLeft(2,'0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2,'0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
   }
   return timeAgo;
+}
+
+calculateTimeDifferentInHour(DateTime startDateTime, DateTime endDateTime){
+  if(startDateTime.difference(endDateTime).inHours.toDouble() > 0){
+    return startDateTime.difference(endDateTime).inHours.toDouble();
+  }else{
+    return 1.0;
+  }
+}
+
+calculateAverageSpeed(double mileage, double time){
+  return ((mileage/1000)/time);
+}
+
+formatTotalDuration(double durationInDecimalHours){
+
+  if(!durationInDecimalHours.isNaN && !durationInDecimalHours.isInfinite){
+
+    int hours = durationInDecimalHours.toInt();
+    int minutes = ((durationInDecimalHours - hours) * 60).round();
+    String formattedDuration = '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
+    return formattedDuration;
+  }else{
+    return 0;
+  }
 }
 
 const Map<int,String> monthsInYear = {

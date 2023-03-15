@@ -36,7 +36,7 @@ class _YearStatusState extends State<YearStatus> {
   double totalMileage = 0;
   double noOfRide = 0;
   double averageSpeed = 0;
-  late DateTime averageDuration;
+  double averageDuration = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +143,7 @@ class _YearStatusState extends State<YearStatus> {
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
                 Text(
-                  "${averageSpeed}kmh/ride",
+                  "${averageSpeed.toStringAsFixed(2)}kmh/ride",
                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                 )
               ],
@@ -168,7 +168,7 @@ class _YearStatusState extends State<YearStatus> {
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
                 Text(
-                  "00:00/ride",
+                  "${formatTotalDuration(averageDuration)}/ride",
                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                 )
               ],
@@ -218,18 +218,14 @@ class _YearStatusState extends State<YearStatus> {
 
       ],);
   }
+
   getYearStatusData(){
       List<double> returnData = _tripProvider.getYearStatusData(widget.pickedData);
       totalMileage = returnData.elementAt(0);
       noOfRide = returnData.elementAt(1);
-    //  averageSpeed = returnData.elementAt(2);
+      averageSpeed = returnData.elementAt(2);
+      averageDuration = returnData.elementAt(3);
 
-
-      // Average Speed per Ride = Total Distance / Total Time per Ride
-      // Total Time = End Time - Start Time
-
-    // Average Duration = Total Time / Number of Rides
-    // Total Time = End Time - Start Time
   }
 }
 

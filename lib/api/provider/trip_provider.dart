@@ -36,7 +36,6 @@ class TripProvider extends ChangeNotifier {
   TripHistoryModel? currentTripHistoryModel;
   BikeModel? currentBikeModel;
 
-
   TripProvider() {
     init();
   }
@@ -52,6 +51,7 @@ class TripProvider extends ChangeNotifier {
   }
 
   getTripHistory() async {
+    tripHistorySubscription?.cancel();
     if(currentBikeModel != null){
       currentTripHistoryLists.clear();
       try{
@@ -100,35 +100,32 @@ class TripProvider extends ChangeNotifier {
     double totalMileage = 0;
     double noOfRide = 0;
 
-    // Average Speed per Ride = Total Distance / Total Time per Ride
-    // Total Time = End Time - Start Time
+    /// Average Speed per Ride = Total Distance / Total Time per Ride
+    /// Total Time = End Time - Start Time
+    double totalTime = 0;
+    double totalAverageSpeed = 0;
 
- //   dynamic totalTime;
-  //  double averageSpeed = 0;
+    ///Average Duration per Ride = Total Time per Ride / Number of Rides
+    ///  (endTime-startTime) + (endTime-startTime) + (endTime-startTime)/ 3
+    double totalDuration = 0;
 
-    // Average Duration = Total Time / Number of Rides
-    // Total Time = End Time - Start Time
-
- //   dynamic averageDuration;
     currentTripHistoryLists.forEach((key, value) {
       ///Filter date
       if(value.startTime.toDate().year == pickedData.year){
 
         noOfRide += 1;
         totalMileage += value.distance;
-
-      //  totalTime += (value.endTime!.toDate().difference(value.startTime!.toDate())).inMinutes;
-
-
+        totalTime += calculateTimeDifferentInHour(value.endTime!.toDate(), value.startTime!.toDate());
       }
     });
 
-  //  averageSpeed = (totalMileage/totalTime);
-
+    totalAverageSpeed = calculateAverageSpeed(totalMileage, totalTime);
+    totalDuration = (totalTime/noOfRide);
 
     returnData.add(totalMileage);
     returnData.add(noOfRide);
-    //returnData.add(averageSpeed);
+    returnData.add(totalAverageSpeed);
+    returnData.add(totalDuration);
 
     return returnData;
   }
@@ -150,91 +147,10 @@ class TripProvider extends ChangeNotifier {
   }
 
 
-  // getData(BikeProvider bikeProvider, TripProvider tripProvider, TripFormat tripFormat, DateTime pickedDate, chartData, currentTripHistoryListDay){
-  //
-  //   switch(tripFormat){
-  //     case TripFormat.day:
-  //       chartData.clear();
-  //       currentTripHistoryListDay.clear();
-  //
-  //       tripProvider.currentTripHistoryLists.forEach((key, value) {
-  //         ///Filter date
-  //         if(calculateDateDifference(pickedDate!, value.startTime.toDate()) == 0){
-  //           chartData.add(ChartData(value.startTime.toDate(), value.distance.toDouble()));
-  //           currentTripHistoryListDay.add(value);
-  //         }
-  //       });
-  //       return;
-  //     case TripFormat.week:
-  //       chartData.clear();
-  //       currentTripHistoryListDay.clear();
-  //       // value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)
-  //       tripProvider.currentTripHistoryLists.forEach((key, value) {
-  //         ///Filter date
-  //         ///if pickeddate is before pickedData.add7days
-  //         if(value.startTime.toDate().isAfter(pickedDate) && value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)))){
-  //           chartData.add(ChartData(value.startTime.toDate().day, value.distance.toDouble()));
-  //           currentTripHistoryListDay.add(value);
-  //         }
-  //         if(calculateDateDifference(pickedDate!, value.startTime.toDate()) == 0){
-  //           chartData.add(ChartData(value.startTime.toDate().day, value.distance.toDouble()));
-  //           currentTripHistoryListDay.add(value);
-  //         }
-  //       });
-  //       return;
-  //     case TripFormat.month:
-  //       chartData.clear();
-  //       currentTripHistoryListDay.clear();
-  //
-  //       final totalDaysInMonth = daysInMonth(pickedDate!.year,  pickedDate!.month);
-  //
-  //       tripProvider.currentTripHistoryLists.forEach((key, value) {
-  //         ///Filter date
-  //         if(value.startTime.toDate().month == pickedDate!.month && value.startTime.toDate().year == pickedDate!.year){
-  //
-  //           double totalDistance = 0;
-  //
-  //           for (int day = 1; day <= totalDaysInMonth; day++) {
-  //             if(value.startTime.toDate().day == day){
-  //               totalDistance += value.distance;
-  //               chartData.add(ChartData(value.startTime.toDate().day, totalDistance));
-  //             }
-  //           }
-  //           currentTripHistoryListDay.add(value);
-  //         }
-  //       });
-  //
-  //       return;
-  //     case TripFormat.year:
-  //       chartData.clear();
-  //       currentTripHistoryListDay.clear();
-  //
-  //       tripProvider.currentTripHistoryLists.forEach((key, value) {
-  //         ///Filter date
-  //         if(value.startTime.toDate().year == pickedDate!.year){
-  //
-  //           double totalDistance = 0;
-  //
-  //           for (int month = 1; month <= 12; month++) {
-  //             if(value.startTime.toDate().month == month){
-  //               totalDistance += value.distance;
-  //               chartData.add(ChartData(value.startTime.toDate().month, totalDistance));
-  //             }
-  //           }
-  //           currentTripHistoryListDay.add(value);
-  //         }
-  //       });
-  //       return;
-  //   }
-  // }
-
-
   clear(){
     tripHistorySubscription?.cancel();
     currentTripHistoryLists.clear();
   }
-
-
 }
 
 class ChartData {
