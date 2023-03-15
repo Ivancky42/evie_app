@@ -21,6 +21,7 @@ import '../../../api/model/bike_user_model.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../widgets/evie_appbar.dart';
+import '../../api/function.dart';
 import '../user_home_page/add_new_bike/mapbox_widget.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -73,8 +74,8 @@ class _RideHistoryState extends State<RideHistory> {
     loadMarker(widget.tripId, widget.currentTripHistoryList.startTrip, widget.currentTripHistoryList.endTrip, startAddress, endAddress);
 
     if(startAddress == null || endAddress == null){
-      getStartAddress(widget.currentTripHistoryList.startTrip, widget.tripId);
-      getEndAddress(widget.currentTripHistoryList.endTrip, widget.tripId);
+      getAddress(widget.currentTripHistoryList.startTrip, widget.tripId, "startAddress");
+      getAddress(widget.currentTripHistoryList.endTrip, widget.tripId, "endAddress");
     }
 
 
@@ -100,7 +101,7 @@ class _RideHistoryState extends State<RideHistory> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
                   child: Text(
-                    widget.currentTripHistoryList.startTime!.toDate().toString(),
+                      calculateDateAgo(widget.currentTripHistoryList.startTime!.toDate(),widget.currentTripHistoryList.endTime!.toDate()),
                     style: EvieTextStyles.body18,
                   ),
                 ),
@@ -254,41 +255,45 @@ class _RideHistoryState extends State<RideHistory> {
    });
   }
 
-  Future getStartAddress(GeoPoint? trip, String tripId) async {
 
-    if(widget.currentTripHistoryList.startAddress != null && widget.currentTripHistoryList.startAddress != ""){
-      setState(() {
-        startAddress = widget.currentTripHistoryList.startAddress;
-      });
-    }else{
-      final snapshot = await _locationProvider.returnPlaceMarks(trip!.latitude, trip!.longitude);
+  Future getAddress(GeoPoint? trip, String tripId, String addressType) async {
 
-      if(snapshot != null){
-        _tripProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, tripId, "startAddress",  snapshot.name.toString());
-       setState(() {
-         startAddress = snapshot.name.toString();
-       });
-      }
-    }
-  }
-
- Future getEndAddress(GeoPoint? trip, String tripId) async {
-
-    if(widget.currentTripHistoryList.endAddress != null && widget.currentTripHistoryList.endAddress != ""){
-      setState(() {
-        endAddress = widget.currentTripHistoryList.endAddress;
-      });
-    }else{
-      final snapshot = await _locationProvider.returnPlaceMarks(trip!.latitude, trip!.longitude);
-
-      if(snapshot != null){
-        _tripProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, tripId, "endAddress",  snapshot.name.toString());
+    if(addressType == "startAddress"){
+      if(widget.currentTripHistoryList.startAddress != null && widget.currentTripHistoryList.startAddress != ""){
         setState(() {
-          endAddress = snapshot.name.toString();
+          startAddress = widget.currentTripHistoryList.startAddress;
         });
+      }else{
+        final snapshot = await _locationProvider.returnPlaceMarks(trip!.latitude, trip!.longitude);
+
+        if(snapshot != null){
+          _tripProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, tripId, "startAddress",  snapshot.name.toString());
+          setState(() {
+            startAddress = snapshot.name.toString();
+          });
+        }
+      }
+    }else{
+      if(widget.currentTripHistoryList.endAddress != null && widget.currentTripHistoryList.endAddress != ""){
+        setState(() {
+          endAddress = widget.currentTripHistoryList.endAddress;
+        });
+      }else{
+        final snapshot = await _locationProvider.returnPlaceMarks(trip!.latitude, trip!.longitude);
+
+        if(snapshot != null){
+          _tripProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, tripId, "endAddress",  snapshot.name.toString());
+          setState(() {
+            endAddress = snapshot.name.toString();
+          });
+        }
       }
     }
+
+
   }
+
+
 
   void animateBounce() {
 

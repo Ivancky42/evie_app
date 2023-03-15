@@ -150,7 +150,6 @@ class TripProvider extends ChangeNotifier {
   }
 
 
-
   // getData(BikeProvider bikeProvider, TripProvider tripProvider, TripFormat tripFormat, DateTime pickedDate, chartData, currentTripHistoryListDay){
   //
   //   switch(tripFormat){

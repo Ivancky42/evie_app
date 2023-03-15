@@ -56,6 +56,7 @@ connectDevice(BluetoothProvider _bluetoothProvider, BikeProvider _bikeProvider) 
   }
 }
 
+///Return 5 minutes ago/20 Nov
 calculateTimeAgo(DateTime dateTime){
     Duration diff = DateTime.now().difference(dateTime);
 
@@ -70,6 +71,7 @@ calculateTimeAgo(DateTime dateTime){
     return timeAgo;
 }
 
+
 calculateTimeAgoWithTime(DateTime dateTime){
   Duration diff = DateTime.now().difference(dateTime);
 
@@ -80,6 +82,21 @@ calculateTimeAgoWithTime(DateTime dateTime){
     timeAgo = "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
   }else{
     timeAgo = "${monthsInYear[dateTime.month]} ${dateTime.day.toString()}, at ${dateTime.hour}:${dateTime.minute}";
+  }
+  return timeAgo;
+}
+
+///Return today/yesterday/Thursday, Aug 20  16.00 - 16.14
+calculateDateAgo(DateTime startDateTime, DateTime endDateTime){
+  Duration diff = DateTime.now().difference(startDateTime);
+
+  String timeAgo;
+  if (diff.inHours > 0 && diff.inHours < 24){
+    timeAgo = "Today ${startDateTime.hour.toString().padLeft(2,'0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2,'0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
+  }else if(diff.inHours >= 24  && diff.inHours < 48){
+    timeAgo = "Yesterday ${startDateTime.hour.toString().padLeft(2,'0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2,'0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
+  }else{
+    timeAgo = "${weekdayNameFull[startDateTime.weekday]}, ${monthNameHalf[startDateTime.month]} ${startDateTime.day} ${startDateTime.hour.toString().padLeft(2,'0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2,'0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
   }
   return timeAgo;
 }
@@ -134,8 +151,14 @@ int daysInMonth(int year, int month) {
 ///weekdayName[DateTime.now().weekday]) = Mon
 const Map<int, String> weekdayName = {1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat", 7: "Sun"};
 
-///weekdayName[DateTime.now().month]) = J
+///weekdayName[DateTime.now().weekday]) = Monday
+const Map<int, String> weekdayNameFull = {1: "Monday", 2: "Tuesday", 3: "Wednesday", 4: "Thursday", 5: "Friday", 6: "Saturday", 7: "Sunday"};
+
+///monthName[DateTime.now().month]) = J
 const Map<int, String> monthName = {1: "J", 2: "F", 3: "M", 4: "A", 5: "M", 6: "J", 7: "J", 8:"A",9:"S",10:"O",11:"N",12:"D"};
+
+///monthName[DateTime.now().month]) = Jan
+const Map<int, String> monthNameHalf = {1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun", 7: "Jul", 8:"Aug",9:"Sep",10:"Oct",11:"Nov",12:"Dec"};
 
 class ShareBikeLeave extends StatefulWidget {
 

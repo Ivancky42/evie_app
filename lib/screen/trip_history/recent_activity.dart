@@ -93,7 +93,8 @@ class _RecentActivityState extends State<RecentActivity> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                 _tripProvider.currentTripHistoryLists.values.elementAt(index).startTime.toDate().toString(),
+                                calculateDateAgo(_tripProvider.currentTripHistoryLists.values.elementAt(index).startTime.toDate(), _tripProvider.currentTripHistoryLists.values.elementAt(index).endTime.toDate()),
+
                                 style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                               ),
                               SvgPicture.asset(
