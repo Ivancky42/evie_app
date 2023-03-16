@@ -17,12 +17,14 @@ import '../../../api/fonts.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/location_provider.dart';
+import '../../../api/provider/setting_provider.dart';
 
 class Bike_Name_Row extends StatelessWidget {
   String bikeName;
   String distanceBetween;
   String currentBikeStatusImage;
   bool isDeviceConnected;
+  SettingProvider settingProvider;
 
   Bike_Name_Row({
     Key? key,
@@ -30,6 +32,7 @@ class Bike_Name_Row extends StatelessWidget {
     required this.distanceBetween,
     required this.currentBikeStatusImage,
     required this.isDeviceConnected,
+    required this.settingProvider,
   }) : super(key: key);
 
 
@@ -61,7 +64,9 @@ class Bike_Name_Row extends StatelessWidget {
               ],
             ),
             Text(
-              "Est. ${distanceBetween}m",
+              settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
+              "Est. ${distanceBetween}m" :
+              "Est. ${settingProvider.convertMeterToMilesInString(double.tryParse(distanceBetween))}miles",
               style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
             ),
           ],
@@ -110,6 +115,7 @@ class Bike_Status_Row extends StatelessWidget {
   Widget child;
   String batteryImage;
   int batteryPercentage;
+  SettingProvider settingProvider;
 
   Bike_Status_Row({
     Key? key,
@@ -117,6 +123,7 @@ class Bike_Status_Row extends StatelessWidget {
     required this.child,
     required this.batteryImage,
     required this.batteryPercentage,
+    required this.settingProvider,
   }) : super(key: key);
 
   @override
@@ -143,7 +150,6 @@ class Bike_Status_Row extends StatelessWidget {
             ),
           ],),
 
-
       const VerticalDivider(
         thickness: 1,
       ),
@@ -164,7 +170,8 @@ class Bike_Status_Row extends StatelessWidget {
               style: EvieTextStyles.headlineB,
             ),
             Text(
-              "Est 0km",
+              ///Calculate based on battery percentage
+              settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ? "Est 0km" : "Est 0miles",
               style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
             ),
         ],

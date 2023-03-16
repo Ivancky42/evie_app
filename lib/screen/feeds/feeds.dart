@@ -32,8 +32,8 @@ import '../../api/fonts.dart';
 import '../../api/function.dart';
 import '../../api/model/bike_model.dart';
 import '../../api/navigator.dart';
+import '../../api/provider/setting_provider.dart';
 import '../../api/snackbar.dart';
-import '../../theme/ThemeChangeNotifier.dart';
 import '../../widgets/evie_single_button_dialog.dart';
 
 ///User profile page with user account information
@@ -289,7 +289,7 @@ class _FeedsState extends State<Feeds> {
                                                 "${_notificationProvider.notificationList.values.elementAt(index).body!}",
                                                 //                  "\n\n${_notificationProvider.notificationList.values.elementAt(index).created!.toDate()}",
                                                 style: TextStyle(
-                                                  color: ThemeChangeNotifier()
+                                                  color: SettingProvider()
                                                       .isDarkMode(context) ==
                                                       true
                                                       ? Colors.white70

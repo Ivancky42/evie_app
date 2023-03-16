@@ -22,7 +22,7 @@ import '../api/navigator.dart';
 import '../api/provider/auth_provider.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/provider/plan_provider.dart';
-import '../api/provider/theme_provider.dart';
+import '../api/provider/setting_provider.dart';
 import '../test/test qr scanner.dart';
 import '../widgets/evie_button.dart';
 import '../widgets/evie_double_button_dialog.dart';
@@ -41,7 +41,7 @@ class _TestBleState extends State<TestBle> {
   late BikeProvider _bikeProvider;
   late AuthProvider _authProvider;
   late PlanProvider _planProvider;
-  late ThemeProvider _themeProvider;
+  late SettingProvider _settingProvider;
   DeviceConnectionState? connectionState;
   ConnectionStateUpdate? connectionStateUpdate;
   StreamSubscription? connectSubscription;
@@ -72,7 +72,7 @@ class _TestBleState extends State<TestBle> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
     _planProvider = Provider.of<PlanProvider>(context);
-    _themeProvider = Provider.of<ThemeProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
     connectionStateUpdate = bluetoothProvider.connectionStateUpdate;
     connectionState = bluetoothProvider.connectionStateUpdate?.connectionState;
 
@@ -960,7 +960,7 @@ class _TestBleState extends State<TestBle> {
                     ),
                   ),
                   onPressed: () {
-                    _themeProvider.enableSystemTheme();
+                    _settingProvider.enableSystemTheme();
                   },
                 ),
 
@@ -975,7 +975,7 @@ class _TestBleState extends State<TestBle> {
                     ),
                   ),
                   onPressed: () {
-                    _themeProvider.enableLightTheme();
+                    _settingProvider.enableLightTheme();
                   },
                 ),
 
@@ -989,7 +989,7 @@ class _TestBleState extends State<TestBle> {
                     ),
                   ),
                   onPressed: () {
-                    _themeProvider.enableDarkTheme();
+                    _settingProvider.enableDarkTheme();
                   },
                 ),
 

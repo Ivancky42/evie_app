@@ -15,6 +15,7 @@ import '../../../../../api/provider/bike_provider.dart';
 import '../../../../../api/provider/bluetooth_provider.dart';
 import '../../../../../api/provider/current_user_provider.dart';
 import '../../../../../api/provider/location_provider.dart';
+import '../../../../../api/provider/setting_provider.dart';
 import '../../../../../api/snackbar.dart';
 import '../../../../../bluetooth/modelResult.dart';
 import '../../../../user_home_page/home_page_function.dart';
@@ -51,6 +52,7 @@ class _BikeSafeState extends State<BikeSafe> {
 
     BikeProvider _bikeProvider = Provider.of<BikeProvider>(context);
     BluetoothProvider _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    SettingProvider _settingProvider = Provider.of<SettingProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
@@ -91,6 +93,7 @@ class _BikeSafeState extends State<BikeSafe> {
                                 "-",
                             currentBikeStatusImage:
                             "assets/images/bike_HPStatus/bike_safe.png",
+                            settingProvider: _settingProvider,
                             isDeviceConnected: widget.isDeviceConnected! && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr,
                           ),
                         ),
@@ -110,6 +113,7 @@ class _BikeSafeState extends State<BikeSafe> {
                                   ?.batteryPercent ??
                                   0,
                               currentSecurityIcon: getSecurityImageWidget(_bikeProvider.currentBikeModel!.isLocked!),
+                              settingProvider: _settingProvider,
                               child: getSecurityTextWidget(_bikeProvider.currentBikeModel!.isLocked!),
                             ),
                           ),

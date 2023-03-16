@@ -1,3 +1,4 @@
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class EvieRadioButton extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(text ?? "", style: TextStyle(fontSize: 16.sp),),
+        Text(text ?? "", style: EvieTextStyles.body18,),
 
         Radio(
         fillColor: MaterialStateColor.resolveWith(

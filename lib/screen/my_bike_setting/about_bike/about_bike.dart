@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
@@ -22,6 +23,7 @@ import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/firmware_provider.dart';
+import '../../../api/provider/trip_provider.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_button.dart';
 
@@ -34,10 +36,10 @@ class AboutBike extends StatefulWidget {
 
 class _AboutBikeState extends State<AboutBike> {
 
-  late CurrentUserProvider _currentUserProvider;
+  late TripProvider _tripProvider;
   late BikeProvider _bikeProvider;
-  late BluetoothProvider _bluetoothProvider;
-  late FirmwareProvider _firmwareProvider;
+  late SettingProvider _settingProvider;
+
 
   int totalSeconds = 105;
 
@@ -45,10 +47,10 @@ class _AboutBikeState extends State<AboutBike> {
 
   @override
   Widget build(BuildContext context) {
-    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    _tripProvider = Provider.of<TripProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
-    _bluetoothProvider = Provider.of<BluetoothProvider>(context);
-    _firmwareProvider = Provider.of<FirmwareProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
+
 
     return WillPopScope(
       onWillPop: () async {
@@ -118,7 +120,10 @@ class _AboutBikeState extends State<AboutBike> {
                   padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
                   child:TextColumn(
                       title: "Total Mileage",
-                      body: "0 km"),
+                      body: _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
+                      "${(_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2)} km":
+                      "${_settingProvider.convertMeterToMilesInString(_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()))} miles",
+                ),
                 ),
                 const AccountPageDivider(),
               ],

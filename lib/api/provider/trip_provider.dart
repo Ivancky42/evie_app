@@ -17,11 +17,6 @@ enum TripFormat{
   year,
 }
 
-enum DataType{
-  mileage,
-  noOfRide,
-  carbonFootprint,
-}
 
 class TripProvider extends ChangeNotifier {
 
@@ -57,7 +52,8 @@ class TripProvider extends ChangeNotifier {
       try{
         tripHistorySubscription = FirebaseFirestore.instance
             .collection(bikesCollection)
-            .doc(currentBikeModel!.deviceIMEI)
+///            .doc(currentBikeModel!.deviceIMEI)
+            .doc("862205055084620")
             .collection(tripHistoryCollection)
             .orderBy("startTime", descending: true)
             .snapshots()
@@ -145,7 +141,6 @@ class TripProvider extends ChangeNotifier {
       debugPrint(e.toString());
     }
   }
-
 
   clear(){
     tripHistorySubscription?.cancel();

@@ -16,7 +16,6 @@ import '../api/fonts.dart';
 import '../api/length.dart';
 import '../api/navigator.dart';
 import '../api/snackbar.dart';
-import '../theme/ThemeChangeNotifier.dart';
 import '../widgets/evie_appbar.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/widgets.dart';

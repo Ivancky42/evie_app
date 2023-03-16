@@ -16,6 +16,7 @@ import '../../../../../api/provider/bike_provider.dart';
 import '../../../../../api/provider/bluetooth_provider.dart';
 import '../../../../../api/provider/current_user_provider.dart';
 import '../../../../../api/provider/location_provider.dart';
+import '../../../../../api/provider/setting_provider.dart';
 import '../../../../../api/snackbar.dart';
 import '../../../../../bluetooth/modelResult.dart';
 import '../../../../../widgets/evie_single_button_dialog.dart';
@@ -54,6 +55,7 @@ class _BikeDangerState extends State<BikeDanger> {
     BikeProvider _bikeProvider = Provider.of<BikeProvider>(context);
     BluetoothProvider _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     LocationProvider _locationProvider = Provider.of<LocationProvider>(context);
+    SettingProvider _settingProvider = Provider.of<SettingProvider>(context);
 
     connectionState = _bluetoothProvider.connectionStateUpdate?.connectionState;
     connectionStateUpdate = _bluetoothProvider.connectionStateUpdate;
@@ -88,6 +90,7 @@ class _BikeDangerState extends State<BikeDanger> {
                           bikeName: _bikeProvider.currentBikeModel?.deviceName ?? "",
                           distanceBetween: widget.distanceBetween ?? "-",
                           currentBikeStatusImage: "assets/images/bike_HPStatus/bike_danger.png",
+                          settingProvider: _settingProvider,
                           isDeviceConnected: widget.isDeviceConnected! && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr
                       ),
                     ),
@@ -100,6 +103,7 @@ class _BikeDangerState extends State<BikeDanger> {
                           "assets/buttons/bike_security_danger.svg",
                           batteryImage: getBatteryImage(_bikeProvider.currentBikeModel?.batteryPercent ?? 0),
                           batteryPercentage: _bikeProvider.currentBikeModel?.batteryPercent ?? 0,
+                          settingProvider: _settingProvider,
                           child: Text(
                             "Theft Attempt",
                             style: EvieTextStyles.headlineB,

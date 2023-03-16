@@ -4,6 +4,7 @@ import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/model/trip_history_model.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/provider/trip_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
@@ -41,11 +42,13 @@ class _RecentActivityState extends State<RecentActivity> {
 
   late BikeProvider _bikeProvider;
   late TripProvider _tripProvider;
+  late SettingProvider _settingProvider;
 
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _tripProvider = Provider.of<TripProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
 
     return  Column(
@@ -107,8 +110,13 @@ class _RecentActivityState extends State<RecentActivity> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
                               Text(
                                 "${(_tripProvider.currentTripHistoryLists.values.elementAt(index).distance.toDouble()/1000).toStringAsFixed(2)}km",
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                              ):
+                              Text(
+                                "${_settingProvider.convertMeterToMilesInString((_tripProvider.currentTripHistoryLists.values.elementAt(index).distance.toDouble()))}miles",
                                 style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                               ),
                               Text(
@@ -166,6 +174,12 @@ class _RecentActivityState extends State<RecentActivity> {
           ),
         ),
 
+        Center(
+          child: Text(
+            "Currently all trip history data are from bike 862205055084620, 4487",
+            style:  EvieTextStyles.body12,
+          ),
+        ),
       ],);
   }
 

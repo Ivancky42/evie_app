@@ -15,6 +15,7 @@ import '../../../../../api/provider/bike_provider.dart';
 import '../../../../../api/provider/bluetooth_provider.dart';
 import '../../../../../api/provider/current_user_provider.dart';
 import '../../../../../api/provider/location_provider.dart';
+import '../../../../../api/provider/setting_provider.dart';
 import '../../../../../api/snackbar.dart';
 import '../../../../../bluetooth/modelResult.dart';
 import '../../../../../widgets/evie_single_button_dialog.dart';
@@ -51,6 +52,7 @@ class _BikeWarningState extends State<BikeWarning> {
 
     BikeProvider _bikeProvider = Provider.of<BikeProvider>(context);
     BluetoothProvider _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    SettingProvider _settingProvider = Provider.of<SettingProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
@@ -93,6 +95,7 @@ class _BikeWarningState extends State<BikeWarning> {
                                 "-",
                             currentBikeStatusImage:
                             "assets/images/bike_HPStatus/bike_warning.png",
+                            settingProvider: _settingProvider,
                             isDeviceConnected: widget.isDeviceConnected! && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr,
                           ),
                         ),
@@ -117,6 +120,7 @@ class _BikeWarningState extends State<BikeWarning> {
                                   0,
                               currentSecurityIcon:
                               "assets/buttons/bike_security_warning.svg",
+                              settingProvider: _settingProvider,
                               child: Text(
                                 "Movement Detected",
                                 style: EvieTextStyles.headlineB,

@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 
 import '../api/colours.dart';
 import '../api/function.dart';
-import '../theme/ThemeChangeNotifier.dart';
 import 'evie_button.dart';
 
 class FeedsListTile extends StatelessWidget {

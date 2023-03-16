@@ -1,8 +1,6 @@
 import 'dart:math';
 
 import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/model/trip_history_model.dart';
-import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/trip_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -11,14 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../api/fonts.dart';
 import '../../api/function.dart';
-import '../../widgets/evie_button.dart';
-import '../../widgets/evie_oval.dart';
-
+import '../../api/provider/setting_provider.dart';
 
 class YearStatus extends StatefulWidget{
   final DateTime pickedData;
@@ -29,7 +24,7 @@ class YearStatus extends StatefulWidget{
 
 class _YearStatusState extends State<YearStatus> {
 
-  late BikeProvider _bikeProvider;
+  late SettingProvider _settingProvider;
   late TripProvider _tripProvider;
 
   double carbonFootPrint = 0;
@@ -40,7 +35,7 @@ class _YearStatusState extends State<YearStatus> {
 
   @override
   Widget build(BuildContext context) {
-    _bikeProvider = Provider.of<BikeProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
     _tripProvider = Provider.of<TripProvider>(context);
 
     getYearStatusData();
@@ -95,7 +90,9 @@ class _YearStatusState extends State<YearStatus> {
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
                 Text(
-                  "${(totalMileage/1000).toStringAsFixed(0)}km/ride",
+                  _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
+                  "${(totalMileage/1000).toStringAsFixed(2)}km/ride" :
+                  "${_settingProvider.convertMeterToMilesInString(totalMileage)}miles/ride",
                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                 )
               ],
@@ -143,7 +140,9 @@ class _YearStatusState extends State<YearStatus> {
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
                 Text(
-                  "${averageSpeed.toStringAsFixed(2)}kmh/ride",
+                  _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
+                  "${averageSpeed.toStringAsFixed(2)}kmh/ride":
+                  "${(averageSpeed*0.621371).toStringAsFixed(2)}mph/ride",
                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                 )
               ],

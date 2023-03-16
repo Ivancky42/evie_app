@@ -61,6 +61,7 @@ class _TripHistoryState extends State<TripHistory> {
                             ),
                           ),
                         ),
+
                         Padding(
                           padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, bottom: 30.h),
@@ -118,7 +119,6 @@ class _TripHistoryState extends State<TripHistory> {
                                TripHistoryData(TripFormat.year),
                               ]),
                         ),
-
                       ],
                     ),
                   ))
@@ -173,7 +173,6 @@ class _TripHistoryState extends State<TripHistory> {
                     ],
                   ),
             ),
-
       ),
     );
   }

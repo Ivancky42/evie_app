@@ -9,6 +9,7 @@ import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/provider/firmware_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:evie_test/widgets/evie_button.dart';
@@ -19,11 +20,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../screen/my_bike_setting/my_bike_function.dart';
+import '../widgets/evie_divider.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
 import '../widgets/evie_switch.dart';
@@ -70,7 +74,7 @@ showWhereToFindQRCode(){
   SmartDialog.show(
       widget: EvieSingleButtonDialog(
           title: "Where to find QR Code?",
-          image:  SvgPicture.asset(
+          widget:  SvgPicture.asset(
               "assets/images/allow_camera.svg",
             ),
           content: "QR code can be found on the back side of greeting card.",
@@ -79,12 +83,11 @@ showWhereToFindQRCode(){
   );
 }
 
-
 showWhereToFindCodes(){
   SmartDialog.show(
       widget: EvieSingleButtonDialog(
           title: "Where to find these?",
-          image:  SvgPicture.asset(
+          widget:  SvgPicture.asset(
             "assets/images/allow_camera.svg",
           ),
           content: "Serial Number and Validation Key can be found on the back side of greeting card.",
@@ -131,7 +134,6 @@ showBackToHome(context, BikeProvider _bikeProvider, AuthProvider _authProvider){
             });
           }));
 }
-
 
 showAddBikeNameSuccess(context, BikeProvider bikeProvider, bikeNameController){
   SmartDialog.dismiss();
@@ -188,7 +190,6 @@ showBluetoothNotTurnOn() {
           }));
 }
 
-
 showBluetoothNotSupport() {
   SmartDialog.dismiss();
   SmartDialog.show(
@@ -235,7 +236,6 @@ showLocationServiceDisable() {
             openAppSettings();
           }));
 }
-
 
 showCameraDisable() {
   SmartDialog.dismiss();
@@ -787,7 +787,6 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
   );
 }
 
-
 showNoSelectDate(){
   SmartDialog.show(
       widget: EvieSingleButtonDialog(
@@ -798,7 +797,6 @@ showNoSelectDate(){
             SmartDialog.dismiss();
           }));
 }
-
 
 showResetBike(BuildContext context, BikeProvider bikeProvider){
   SmartDialog.show(widget: EvieDoubleButtonDialog(
@@ -889,4 +887,48 @@ showAddEVKeySuccess(BuildContext context, String rfidNumber){
 
             changeToNameEVKey(context, rfidNumber);
           }));
+}
+
+showMeasurementUnit(SettingProvider settingProvider){
+
+  int _selectedRadio = 0;
+
+  if(settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem){
+    _selectedRadio = 0;
+  }else if(settingProvider.currentMeasurementSetting == MeasurementSetting.imperialSystem){
+    _selectedRadio = 1;
+  }else{
+    _selectedRadio = 0;
+  }
+  SmartDialog.show(
+      keepSingle: true,
+      widget: EvieSingleButtonDialog
+        (title: "Measurement Unit",
+         widget: Column(
+           children: [
+             EvieRadioButton(
+                 text: "Metric System (meters)",
+                 value: 0,
+                 groupValue: _selectedRadio,
+                 onChanged: (value){
+                   settingProvider.changeMeasurement(MeasurementSetting.metricSystem);
+                   SmartDialog.dismiss();
+                 }),
+
+             EvieDivider(),
+
+             EvieRadioButton(
+                 text: "Imperial System (miles)",
+                 value: 1,
+                 groupValue: _selectedRadio,
+                 onChanged: (value){
+                   settingProvider.changeMeasurement(MeasurementSetting.imperialSystem);
+                   SmartDialog.dismiss();
+                 }),
+
+             EvieDivider(),
+
+         ],),
+         rightContent: "Ok",
+          onPressedRight: (){SmartDialog.dismiss();} ));
 }

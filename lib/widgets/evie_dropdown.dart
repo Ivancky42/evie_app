@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../api/colours.dart';
-import '../theme/ThemeChangeNotifier.dart';
+import '../api/provider/setting_provider.dart';
 
 class EvieDropdown extends StatefulWidget {
 
@@ -80,7 +80,7 @@ class _EvieDropdownState extends State<EvieDropdown> {
             ): OutlineInputBorder(
               borderSide: BorderSide(
                 width: 0.1,
-                color: ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.thumbColorTrue,),
+                color: SettingProvider().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.thumbColorTrue,),
               borderRadius: BorderRadius.circular(10.0),
             ),
           ),

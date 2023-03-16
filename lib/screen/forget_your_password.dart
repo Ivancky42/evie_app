@@ -7,7 +7,6 @@ import '../api/colours.dart';
 import '../api/fonts.dart';
 import '../api/length.dart';
 import '../api/navigator.dart';
-import '../theme/ThemeChangeNotifier.dart';
 import '../widgets/evie_appbar.dart';
 import '../widgets/evie_textform.dart';
 import '../widgets/widgets.dart';

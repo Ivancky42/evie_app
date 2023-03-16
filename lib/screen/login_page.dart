@@ -16,7 +16,6 @@ import '../api/colours.dart';
 import '../api/fonts.dart';
 import '../api/navigator.dart';
 import '../api/provider/notification_provider.dart';
-import '../theme/ThemeChangeNotifier.dart';
 import '../widgets/evie_single_button_dialog.dart';
 
 class SignIn extends StatefulWidget {

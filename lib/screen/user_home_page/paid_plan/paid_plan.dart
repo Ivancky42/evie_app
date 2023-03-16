@@ -26,6 +26,7 @@ import '../../../api/model/location_model.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/location_provider.dart';
 import '../../../api/provider/notification_provider.dart';
+import '../../../api/provider/setting_provider.dart';
 import '../../../api/toast.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_double_button_dialog.dart';
@@ -54,6 +55,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late NotificationProvider _notificationProvider;
+  late SettingProvider _settingProvider;
 
   DeviceConnectResult? deviceConnectResult;
   CableLockResult? cableLockState;
@@ -163,6 +165,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
     _notificationProvider = Provider.of<NotificationProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;

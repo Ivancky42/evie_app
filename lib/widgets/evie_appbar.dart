@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../api/colours.dart';
 import '../api/fonts.dart';
-import '../theme/ThemeChangeNotifier.dart';
+import '../api/provider/setting_provider.dart';
 
 class EvieAppbar_Back extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onPressed;
@@ -19,7 +19,7 @@ class EvieAppbar_Back extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: IconButton(
-        icon: ThemeChangeNotifier().isDarkMode(context) == true
+        icon: SettingProvider().isDarkMode(context) == true
             ? Image.asset('assets/buttons/back_darkMode.png')
             : SvgPicture.asset('assets/buttons/back_big.svg',),
 
@@ -49,7 +49,7 @@ class PageAppbar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: IconButton(
-        icon: ThemeChangeNotifier().isDarkMode(context) == true
+        icon: SettingProvider().isDarkMode(context) == true
             ? SvgPicture.asset("assets/buttons/back_big.svg")
             : SvgPicture.asset("assets/buttons/back_big.svg"),
         onPressed: onPressed,

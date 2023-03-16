@@ -13,7 +13,6 @@ import '../api/fonts.dart';
 import '../api/length.dart';
 import '../api/navigator.dart';
 import '../api/provider/auth_provider.dart';
-import '../theme/ThemeChangeNotifier.dart';
 import '../widgets/evie_appbar.dart';
 import '../widgets/evie_single_button_dialog.dart';
 
@@ -261,7 +260,7 @@ class _SignUpState extends State<SignUp> {
                                     title: "Error",
                                     content: result.toString(),
                                     rightContent: "Ok",
-                                    image: Image.asset(
+                                    widget: Image.asset(
                                       "assets/images/error.png",
                                       width: 36,
                                       height: 36,
@@ -280,7 +279,7 @@ class _SignUpState extends State<SignUp> {
                                 title: "Error",
                                 content: "Try again",
                                 rightContent: "Ok",
-                                image: Image.asset(
+                                widget: Image.asset(
                                   "assets/images/error.png",
                                   width: 36,
                                   height: 36,

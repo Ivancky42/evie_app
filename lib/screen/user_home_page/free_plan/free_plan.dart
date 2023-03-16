@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/free_plan/mapbox_widget.dart';
 
@@ -47,6 +48,7 @@ class _FreePlanState extends State<FreePlan> {
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late NotificationProvider _notificationProvider;
+  late SettingProvider _settingProvider;
 
   Color lockColour = const Color(0xff6A51CA);
 
@@ -141,6 +143,7 @@ class _FreePlanState extends State<FreePlan> {
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
      _notificationProvider = Provider.of<NotificationProvider>(context);
+     _settingProvider = Provider.of<SettingProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
@@ -166,6 +169,7 @@ class _FreePlanState extends State<FreePlan> {
         },
       ),
     ];
+
 
     return WillPopScope(
       onWillPop: () async {
@@ -332,11 +336,11 @@ class _FreePlanState extends State<FreePlan> {
                                                         EdgeInsets.fromLTRB(16.w, 17.15.h, 0, 0),
                                                         child: IntrinsicHeight(
                                                           child: Bike_Status_Row(
-                                                            estKm:"",
+                                                            batteryPercentage: _bluetoothProvider.bikeInfoResult!.batteryLevel!,
                                                             currentBatteryIcon: getBatteryImageFromBLE(_bluetoothProvider.bikeInfoResult!.batteryLevel!),
-                                                            connectText: _bluetoothProvider.bikeInfoResult!.batteryLevel!,
                                                             currentSecurityIcon: currentSecurityIcon,
                                                             isLocked: cableLockState?.lockState ?? LockState.unknown,
+                                                            settingProvider: _settingProvider,
                                                             child: Text( cableLockState!.lockState == LockState.lock ?
                                                             "Locked & Secured" : "Unlocked",
                                                               style: EvieTextStyles.headlineB,
@@ -450,11 +454,11 @@ class _FreePlanState extends State<FreePlan> {
                                                         EdgeInsets.fromLTRB(16.w, 17.15.h, 0, 0),
                                                         child: IntrinsicHeight(
                                                           child: Bike_Status_Row(
-                                                            connectText: "-",
-                                                            estKm: "",
+                                                            batteryPercentage: "-",
                                                             currentSecurityIcon:"assets/buttons/bike_security_not_available.svg",
                                                             currentBatteryIcon: "assets/icons/battery_not_available.svg",
                                                             isLocked: cableLockState?.lockState ?? LockState.unknown,
+                                                            settingProvider: _settingProvider,
                                                             child:Text(
                                                               "Not Available",
                                                               style: EvieTextStyles.headlineB,

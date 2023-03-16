@@ -21,7 +21,6 @@ import '../../../api/function.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/current_user_provider.dart';
-import '../../../theme/ThemeChangeNotifier.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 

@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:evie_test/api/provider/setting_provider.dart';
+import 'package:evie_test/api/provider/trip_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/switch_bike.dart';
 import 'package:flutter/cupertino.dart';
@@ -104,18 +106,18 @@ class Bike_Status_Row extends StatelessWidget {
   String currentSecurityIcon;
   LockState isLocked;
   String currentBatteryIcon;
-  String connectText;
   Widget child;
-  String estKm;
+  String batteryPercentage;
+  SettingProvider settingProvider;
 
   Bike_Status_Row({
     Key? key,
     required this.currentSecurityIcon,
     required this.isLocked,
     required this.currentBatteryIcon,
-    required this.connectText,
     required this.child,
-    required this.estKm,
+    required this.batteryPercentage,
+    required this.settingProvider,
   }) : super(key: key);
 
   @override
@@ -147,19 +149,20 @@ class Bike_Status_Row extends StatelessWidget {
       SizedBox(
         width: 10.w,
       ),
-      if (estKm == "") ...{
+      if (batteryPercentage == "-") ...{
         Text(
-          "${connectText} %",
+          "${batteryPercentage} %",
           style: EvieTextStyles.headlineB,
         ),
       } else ...{
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            "${connectText} %",
+            "${batteryPercentage} %",
             style: EvieTextStyles.headlineB,
           ),
           Text(
-            estKm,
+            ///Calculate based on battery percentage
+            settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ? "Est 0km" : "Est 0miles",
             style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
           )
         ])

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/trip_history_model.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/location_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/provider/trip_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_oval.dart';
@@ -39,7 +40,7 @@ class _RideHistoryState extends State<RideHistory> {
 
   LinkedHashMap bikeUserList = LinkedHashMap<String, BikeUserModel>();
 
-  late AuthProvider _authProvider;
+  late SettingProvider _settingProvider;
   late BikeProvider _bikeProvider;
   late LocationProvider _locationProvider;
   late TripProvider _tripProvider;
@@ -67,7 +68,7 @@ class _RideHistoryState extends State<RideHistory> {
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
-    _authProvider = Provider.of<AuthProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
     _tripProvider = Provider.of<TripProvider>(context);
 
@@ -136,10 +137,18 @@ class _RideHistoryState extends State<RideHistory> {
                        crossAxisAlignment: CrossAxisAlignment.start,
                        children: [
                          Text("Mileage", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),),
+                         
+                         _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ? 
                          Row(
                            children: [
                              Text((widget.currentTripHistoryList.distance!/1000).toStringAsFixed(2), style: EvieTextStyles.headlineB,),
                              Text("km", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
+                           ],
+                         ) :
+                         Row(
+                           children: [
+                             Text(_settingProvider.convertMeterToMilesInString(widget.currentTripHistoryList.distance!.toDouble()), style: EvieTextStyles.headlineB,),
+                             Text("miles", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
                            ],
                          ),
                        ],
@@ -150,12 +159,22 @@ class _RideHistoryState extends State<RideHistory> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text("Avg. Speed", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),),
+
+                          _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
                           Row(
                             children: [
                               Text((calculateAverageSpeed(widget.currentTripHistoryList.distance!.toDouble(),
                                     calculateTimeDifferentInHour(widget.currentTripHistoryList.endTime!.toDate(),widget.currentTripHistoryList.startTime!.toDate()))).toStringAsFixed(2),
                                     style: EvieTextStyles.headlineB,),
                               Text("km/h", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
+                            ],
+                          ) :
+                          Row(
+                            children: [
+                              Text(((calculateAverageSpeed(widget.currentTripHistoryList.distance!.toDouble(),
+                                  calculateTimeDifferentInHour(widget.currentTripHistoryList.endTime!.toDate(),widget.currentTripHistoryList.startTime!.toDate())))*0.621371).toStringAsFixed(2),
+                                style: EvieTextStyles.headlineB,),
+                              Text("mp/h", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
                             ],
                           ),
                         ],

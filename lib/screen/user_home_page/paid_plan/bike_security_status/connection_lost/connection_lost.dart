@@ -15,6 +15,7 @@ import '../../../../../api/provider/bike_provider.dart';
 import '../../../../../api/provider/bluetooth_provider.dart';
 import '../../../../../api/provider/current_user_provider.dart';
 import '../../../../../api/provider/location_provider.dart';
+import '../../../../../api/provider/setting_provider.dart';
 import '../../../../../api/snackbar.dart';
 import '../../../../../bluetooth/modelResult.dart';
 import '../../../../user_home_page/home_page_function.dart';
@@ -53,6 +54,7 @@ class _ConnectionLostState extends State<ConnectionLost> {
 
     BikeProvider _bikeProvider = Provider.of<BikeProvider>(context);
     BluetoothProvider _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    SettingProvider _settingProvider = Provider.of<SettingProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
@@ -89,6 +91,7 @@ class _ConnectionLostState extends State<ConnectionLost> {
                             bikeName: _bikeProvider.currentBikeModel?.deviceName ?? "",
                             distanceBetween: widget.distanceBetween ?? "-",
                             currentBikeStatusImage: "assets/images/bike_HPStatus/bike_warning.png",
+                            settingProvider: _settingProvider,
                             isDeviceConnected: widget.isDeviceConnected! && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr,
                           ),
                         ),
@@ -100,6 +103,7 @@ class _ConnectionLostState extends State<ConnectionLost> {
                               batteryImage: getBatteryImage(_bikeProvider.currentBikeModel?.batteryPercent ?? 0),
                               batteryPercentage: _bikeProvider.currentBikeModel?.batteryPercent ?? 0,
                               currentSecurityIcon:"assets/buttons/bike_security_warning.svg",
+                              settingProvider: _settingProvider,
                               child:  Text(
                                 "Connection Lost",
                                 style: EvieTextStyles.headlineB,

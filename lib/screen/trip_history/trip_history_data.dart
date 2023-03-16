@@ -4,6 +4,7 @@ import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/model/trip_history_model.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/provider/trip_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/trip_history/recent_activity.dart';
@@ -44,6 +45,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
   late BikeProvider _bikeProvider;
   late TripProvider _tripProvider;
+  late SettingProvider _settingProvider;
 
   @override
   void initState() {
@@ -56,8 +58,13 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           return Container(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Distance: ${data.y.toStringAsFixed(0) ?? "0"}',
+                child: _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
+                Text(
+                  "Distance: ${(data.y/1000).toStringAsFixed(0) ?? "0"}km",
+                  style: EvieTextStyles.body16.copyWith(color: EvieColors.white),
+                ):
+                Text(
+                  "Distance: ${_settingProvider.convertMeterToMilesInString(data.y) ?? "0"}miles",
                   style: EvieTextStyles.body16.copyWith(color: EvieColors.white),
                 ),
               )
@@ -72,6 +79,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _tripProvider = Provider.of<TripProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     getData(_bikeProvider, _tripProvider);
 
@@ -92,8 +100,21 @@ class _TripHistoryDataState extends State<TripHistoryData> {
               children: [
 
                 if(currentData == totalData.elementAt(0))...{
-                  Text((currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2), style: EvieTextStyles.display,),
-                  Text(" km", style: EvieTextStyles.body18,),
+
+                  _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
+                  Row(
+                    children: [
+                      Text((currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2), style: EvieTextStyles.display,),
+                      Text(" km", style: EvieTextStyles.body18,),
+                    ],
+                  ):
+                  Row(
+                    children: [
+                      Text(_settingProvider.convertMeterToMilesInString(currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())), style: EvieTextStyles.display,),
+                      Text(" miles", style: EvieTextStyles.body18,),
+                    ],
+                  ),
+
                 }else if(currentData == totalData.elementAt(1))...{
                   // Text(_bikeProvider.currentTripHistoryLists.length.toStringAsFixed(0), style: EvieTextStyles.display,),
                   Text(currentTripHistoryListDay.length.toStringAsFixed(0), style: EvieTextStyles.display,),
@@ -131,6 +152,8 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                 Text(
                   widget.format == TripFormat.week ?
                   "${monthsInYear[pickedDate!.month]} ${pickedDate!.day}-${pickedDate!.add(Duration(days: 6)).day} ${pickedDate!.year}" :
+                   widget.format == TripFormat.month ?
+                  "${monthsInYear[pickedDate!.month]} ${pickedDate!.year}" :
                   "${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}",
                   style: const TextStyle(color: EvieColors.darkGrayishCyan),),
 
@@ -247,13 +270,19 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                 series: <ColumnSeries<ChartData, dynamic>>[
                   ColumnSeries<ChartData, dynamic>(
                     dataSource: chartData,
+
                     xValueMapper: (ChartData data, _) =>
-                    widget.format == TripFormat.day ? "${data.x.hour.toString().padLeft(2,'0')}:${data.x.minute.toString().padLeft(2,'0')}" :
-                    widget.format == TripFormat.week ? weekdayName[data.x.weekday] :
-                    widget.format == TripFormat.month ? data.x.day :
-                    widget.format == TripFormat.year ? monthNameHalf[data.x.month] :
-                    data.x,
-                    yValueMapper: (ChartData data, _) => data.y,
+                      widget.format == TripFormat.day ? "${data.x.hour.toString().padLeft(2,'0')}:${data.x.minute.toString().padLeft(2,'0')}" :
+                      widget.format == TripFormat.week ? weekdayName[data.x.weekday] :
+                      widget.format == TripFormat.month ? data.x.day :
+                      widget.format == TripFormat.year ? monthNameHalf[data.x.month] :
+                      data.x,
+                    
+                    yValueMapper: (ChartData data, _) => 
+                      _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
+                      (data.y/1000):
+                      _settingProvider.convertMeterToMiles(data.y.toDouble()),
+
                     ///width of the column
                     width: 0.8,
                     ///Spacing between the column

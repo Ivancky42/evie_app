@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 
 
 import '../api/colours.dart';
-import '../theme/ThemeChangeNotifier.dart';
+import '../api/provider/setting_provider.dart';
 
 ///Button Widget
 class EvieTextFormField extends StatefulWidget {
@@ -88,15 +88,15 @@ class _EvieTextFormFieldState extends State<EvieTextFormField> {
                       color: Theme.of(context).errorColor, // or any other color
                     ),
                     //fillColor: widget.focusNode!.hasFocus ? Colors.red : ThemeChangeNotifier().isDarkMode(context) ?  Color(0xff3F3F3F) : Color(0xffDFE0E0),
-                    fillColor: focusNode.hasFocus ? EvieColors.thumbColorTrue : ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.lightGrayishCyan,
+                    fillColor: focusNode.hasFocus ? EvieColors.thumbColorTrue : SettingProvider().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.lightGrayishCyan,
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           width: 0.1,
-                          color: ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.thumbColorTrue,), //<-- SEE HERE
+                          color: SettingProvider().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.thumbColorTrue,), //<-- SEE HERE
                       borderRadius: BorderRadius.circular(10.0),
                     ),
 
-                    focusColor: ThemeChangeNotifier().isDarkMode(context) ?  EvieColors.darkGray: EvieColors.thumbColorTrue,
+                    focusColor: SettingProvider().isDarkMode(context) ?  EvieColors.darkGray: EvieColors.thumbColorTrue,
 
                     focusedBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
@@ -156,7 +156,7 @@ class EvieButton_TextForm_Constant extends StatelessWidget {
                 hintText: hintText,
                 hintStyle: TextStyle(
                     fontSize: 13,
-                  color: ThemeChangeNotifier().isDarkMode(context) == true ? Colors.white70 : Colors.black,
+                  color: SettingProvider().isDarkMode(context) == true ? Colors.white70 : Colors.black,
                 ),
                 filled: true,
                 //<-- SEE HERE

@@ -24,6 +24,7 @@ import '../screen/check_your_email.dart';
 import '../screen/feeds/feeds.dart';
 import '../screen/forget_your_password.dart';
 import '../screen/my_account/account/my_account.dart';
+import '../screen/my_account/display_setting/display_setting.dart';
 import '../screen/my_account/push_notification/push_notification.dart';
 import '../screen/my_bike_setting/about_bike/about_bike.dart';
 import '../screen/my_bike_setting/bike_setting/bike_setting.dart';
@@ -467,6 +468,15 @@ void changeToPushNotification(BuildContext context) {
   );
 }
 
+void changeToDisplaySetting(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const DisplaySetting(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
 // void changeToEmailNewsletter(BuildContext context) {
 //   Navigator.pushReplacement(context,
 //     PageTransition(

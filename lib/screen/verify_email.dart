@@ -20,7 +20,6 @@ import '../api/fonts.dart';
 import '../api/navigator.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/snackbar.dart';
-import '../theme/ThemeChangeNotifier.dart';
 import '../widgets/evie_appbar.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/widgets.dart';

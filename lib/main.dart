@@ -1,7 +1,7 @@
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
-import 'package:evie_test/api/provider/theme_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/profile/user_profile.dart';
 import 'package:evie_test/screen/account_verified.dart';
 import 'package:evie_test/screen/input_name.dart';
@@ -13,11 +13,8 @@ import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_se
 import 'package:evie_test/screen/onboarding_addNewBike/stay_close_to_bike.dart';
 import 'package:evie_test/screen/signup_method.dart';
 import 'package:evie_test/screen/test_ble.dart';
-import 'package:evie_test/abandon/user_notification.dart';
-import 'package:evie_test/abandon/user_notification_details.dart';
 import 'package:evie_test/screen/verify_email.dart';
 import 'package:evie_test/screen/welcome_page.dart';
-import 'package:evie_test/theme/ThemeChangeNotifier.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -25,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:evie_test/screen/signup_page.dart';
 import 'package:evie_test/screen/login_page.dart';
-import 'package:evie_test/profile/user_profile.dart';
 import 'package:evie_test/screen/forget_your_password.dart';
 import 'package:evie_test/theme/AppTheme.dart';
 import 'package:evie_test/screen/user_home_page/user_home_page.dart';
@@ -36,8 +32,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:evie_test/abandon/user_change_password.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:evie_test/theme/ThemeChangeNotifier.dart';
-import 'package:evie_test/screen/connect_bluetooth_device_page.dart';
 import 'package:sizer/sizer.dart';
 import 'package:upgrader/upgrader.dart';
 
@@ -104,6 +98,7 @@ Future main() async {
   );
 }
 
+
 ///Multi provider setup
 class AppProviders extends StatelessWidget {
   final Widget child;
@@ -117,15 +112,9 @@ class AppProviders extends StatelessWidget {
           ChangeNotifierProvider<AuthProvider>(
             create: (context) => AuthProvider(),
           ),
-          ChangeNotifierProvider<ThemeChangeNotifier>(
-            create: (context) => ThemeChangeNotifier(),
+          ChangeNotifierProvider<SettingProvider>(
+            create: (context) => SettingProvider(),
           ),
-          ChangeNotifierProvider<ThemeProvider>(
-            create: (context) => ThemeProvider(),
-          ),
-      ///    ChangeNotifierProvider<LocationProvider>(
-      ///      create: (context) => LocationProvider(),
-      ///    ),
           ChangeNotifierProxyProvider<AuthProvider, CurrentUserProvider>(
               lazy: false,
               create: (_) => CurrentUserProvider(),
@@ -202,8 +191,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthProvider _authProvider = Provider.of<AuthProvider>(context);
-    ThemeProvider _themeProvider = Provider.of<ThemeProvider>(context);
-    _themeProvider.init();
+    SettingProvider _settingProvider = Provider.of<SettingProvider>(context);
+    //_settingProvider.init();
 
     decideMainPage() {
       if (_authProvider.isLogin == true) {
@@ -232,7 +221,7 @@ class MyApp extends StatelessWidget {
 
         child: MaterialApp(
           title: 'Evie',
-          themeMode: _themeProvider.themeMode,
+          themeMode: _settingProvider.currentThemeMode,
 
           //Light theme data
           theme: AppTheme.lightTheme,
@@ -280,8 +269,6 @@ class MyApp extends StatelessWidget {
       );
     });
   }
-
-
 }
 
 /// CREATE A [AndroidNotificationChannel] FOR HEADS UP NOTIFICATIONS

@@ -12,8 +12,8 @@ import 'evie_button.dart';
 class EvieSingleButtonDialog extends StatelessWidget{
   // final String buttonNumber;
   final String title;
-  final String content;
-  final Widget? image;
+  final String? content;
+  final Widget? widget;
   final String rightContent;
   final VoidCallback onPressedRight;
 
@@ -21,8 +21,8 @@ class EvieSingleButtonDialog extends StatelessWidget{
     Key? key,
     //required this.buttonNumber,
     required this.title,
-    required this.content,
-    this.image,
+    this.content,
+    this.widget,
     required this.rightContent,
     required this.onPressedRight
   }) : super(key: key);
@@ -62,13 +62,13 @@ class EvieSingleButtonDialog extends StatelessWidget{
                 ),
               ),
 
-              Text(
-                content,
+              content != null? Text(
+                content ?? "" ,
                 textAlign: TextAlign.start,
                 style: EvieTextStyles.body18,
-              ),
+              ) : Container(),
 
-              image != null ? image! : SizedBox(),
+              widget != null ? widget! : SizedBox(),
 
               Padding(
                 padding: EdgeInsets.only(top: 9.h),

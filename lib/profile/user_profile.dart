@@ -16,7 +16,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 
 import '../api/navigator.dart';
 import '../api/provider/bike_provider.dart';
-import '../theme/ThemeChangeNotifier.dart';
+import '../api/provider/setting_provider.dart';
 
 ///User profile page with user account information
 
@@ -234,7 +234,7 @@ class _UserProfileState extends State<UserProfile> {
                                       decoration: InputDecoration(
                                         labelText: 'Email Address',
                                         labelStyle: TextStyle(
-                                            color: ThemeChangeNotifier().isDarkMode(context)
+                                            color: SettingProvider().isDarkMode(context)
                                                 == true ? Colors.white70 : Colors.black,
                                         ),
                                         filled: true,
@@ -264,7 +264,7 @@ class _UserProfileState extends State<UserProfile> {
                                       decoration: InputDecoration(
                                         labelText: 'Username',
                                         labelStyle: TextStyle(
-                                          color: ThemeChangeNotifier().isDarkMode(context)
+                                          color: SettingProvider().isDarkMode(context)
                                               == true ? Colors.white70 : Colors.black,
                                         ),
                                         hintText: 'Type your name here',
@@ -296,7 +296,7 @@ class _UserProfileState extends State<UserProfile> {
                                       decoration: InputDecoration(
                                         labelText: 'Phone Number',
                                         labelStyle: TextStyle(
-                                          color: ThemeChangeNotifier().isDarkMode(context)
+                                          color: SettingProvider().isDarkMode(context)
                                               == true ? Colors.white70 : Colors.black,
                                         ),
                                         hintText: 'Type your phone number here',

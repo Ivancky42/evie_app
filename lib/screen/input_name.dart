@@ -4,10 +4,8 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_textform.dart';
 import 'package:flutter/material.dart';
 
-
 import '../api/colours.dart';
 import '../api/length.dart';
-import '../theme/ThemeChangeNotifier.dart';
 import '../widgets/evie_appbar.dart';
 import '../widgets/evie_button.dart';
 

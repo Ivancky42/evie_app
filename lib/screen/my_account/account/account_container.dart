@@ -190,7 +190,7 @@ class _AccountContainerState extends State<AccountContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-
+                changeToDisplaySetting(context);
               },
               child: Container(
                 height: 44.h,
@@ -388,7 +388,6 @@ class _AccountContainerState extends State<AccountContainer> {
                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                   ),
                   onPressed: () {
-                    
 
                   },
                   style: ElevatedButton.styleFrom(
@@ -408,7 +407,7 @@ class _AccountContainerState extends State<AccountContainer> {
                 child: Column(
                   children: [
                     Text(
-                      "Evie v1.0.0 (18)",
+                      "Evie v1.0.0 (20)",
                       style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                     ),
                     Text(

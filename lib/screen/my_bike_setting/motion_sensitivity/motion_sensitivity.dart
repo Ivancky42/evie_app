@@ -129,47 +129,47 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                 const EvieDivider(),
 
                 _bikeProvider.currentBikeModel?.movementSetting?.enabled == true ? Padding(
-        padding:EdgeInsets.only(top: 5.h,bottom: 5.h,),
-        child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: (){
-            changeToDetectionSensitivityScreen(context);
-          },
-          child: Container(
-            height: 44.h,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                   Text(
-                    "Level Detection Sensitivity",
-                    style: EvieTextStyles.body18,
-                  ),
+                  padding:EdgeInsets.only(top: 5.h,bottom: 5.h,),
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: (){
+                      changeToDetectionSensitivityScreen(context);
+                    },
+                    child: Container(
+                      height: 54.h,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                             Text(
+                              "Level Detection Sensitivity",
+                              style: EvieTextStyles.body18,
+                            ),
 
-                  Row(
-                    children: [
-                      Text(
-                        _bikeProvider.currentBikeModel?.movementSetting?.sensitivity ?? "None",
-                        style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayish),
+                            Row(
+                              children: [
+                                Text(
+                                  _bikeProvider.currentBikeModel?.movementSetting?.sensitivity ?? "None",
+                                  style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayish),
+                                ),
+                                SvgPicture.asset(
+                                  "assets/buttons/next.svg",
+                                  height: 24.h,
+                                  width: 24.w,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      SvgPicture.asset(
-                        "assets/buttons/next.svg",
-                        height: 24.h,
-                        width: 24.w,
-                      ),
-                    ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ): Opacity(
+                ): Opacity(
 
-                  opacity: 0.3,
-        child: Padding(
+                            opacity: 0.3,
+                  child: Padding(
                     padding:EdgeInsets.only(top: 5.h,bottom: 5.h,),
                     child: GestureDetector(
                       behavior: HitTestBehavior.translucent,

@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import '../api/colours.dart';
 import '../api/fonts.dart';
 import '../api/provider/auth_provider.dart';
-import '../theme/ThemeChangeNotifier.dart';
 import '../widgets/evie_appbar.dart';
 import '../widgets/evie_button.dart';
 import '../widgets/evie_single_button_dialog.dart';
