@@ -24,7 +24,7 @@ import '../../../paid_plan/bottom_sheet_widget.dart';
 import '../../../home_page_widget.dart';
 
 class FallDetected extends StatefulWidget {
-  final SvgPicture? connectImage;
+  final Widget? connectImage;
   final String? distanceBetween;
   final bool? isDeviceConnected;
 
@@ -141,6 +141,7 @@ class _FallDetectedState extends State<FallDetected> {
                                 LockState.lock ? () {
                               ///Check is connected
 
+                              _bluetoothProvider.setIsUnlocking(true);
                               showUnlockingToast(context);
 
                               StreamSubscription?subscription;

@@ -19,6 +19,7 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:lottie/lottie.dart' as lottie;
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
 import 'package:provider/provider.dart';
 import '../../../api/colours.dart';
@@ -50,6 +51,7 @@ class PaidPlan extends StatefulWidget  {
   _PaidPlanState createState() => _PaidPlanState();
 }
 
+
 class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
@@ -60,7 +62,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   DeviceConnectResult? deviceConnectResult;
   CableLockResult? cableLockState;
 
-  SvgPicture? buttonImage;
+  Widget? buttonImage;
 
   late LocationProvider _locationProvider;
   late LatLngBounds latLngBounds;
@@ -510,36 +512,37 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     }
   }
 
+
   void setButtonImage() {
     if (deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr) {
       if (cableLockState?.lockState == LockState.unlock) {
+        if(_bluetoothProvider.isUnlocking == true){
+          Future.delayed(Duration.zero, () {
+            _bluetoothProvider.setIsUnlocking(false);
+          });
+        }
         buttonImage = SvgPicture.asset(
           "assets/buttons/lock_unlock.svg",
           width: 52.w,
           height: 50.h,
         );
-      }
-      else if (cableLockState?.lockState == LockState.lock) {
-        buttonImage = SvgPicture.asset(
-          "assets/buttons/lock_lock.svg",
-          width: 52.w,
-          height: 50.h,
-        );
+      }else if(_bluetoothProvider.isUnlocking){
+        buttonImage =  lottie.Lottie.asset('assets/animations/unlock_button.json', repeat: false);
+      } else if (cableLockState?.lockState == LockState.lock) {
+
+          buttonImage = SvgPicture.asset(
+            "assets/buttons/lock_lock.svg",
+            width: 52.w,
+            height: 50.h,);
+        }
       }
       else if (cableLockState?.lockState == LockState.unknown) {
-        buttonImage = SvgPicture.asset(
-          "assets/buttons/loading.svg",
-          width: 52.w,
-          height: 50.h,
-        );
-      }
+
+        buttonImage =  lottie.Lottie.asset('assets/animations/loading_button.json');
     }
     else if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning || deviceConnectResult == DeviceConnectResult.partialConnected) {
-        buttonImage = SvgPicture.asset(
-          "assets/buttons/loading.svg",
-          width: 52.w,
-          height: 50.h,
-        );
+
+      buttonImage =  lottie.Lottie.asset('assets/animations/loading_button.json');
     }
     else if (deviceConnectResult == DeviceConnectResult.disconnected) {
         buttonImage = SvgPicture.asset(

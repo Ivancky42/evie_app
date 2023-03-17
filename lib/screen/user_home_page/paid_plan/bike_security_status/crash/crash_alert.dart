@@ -24,7 +24,7 @@ import '../../../paid_plan/bottom_sheet_widget.dart';
 import '../../../home_page_widget.dart';
 
 class CrashAlert extends StatefulWidget {
-  final SvgPicture? connectImage;
+  final Widget? connectImage;
   final String? distanceBetween;
   final bool? isDeviceConnected;
 

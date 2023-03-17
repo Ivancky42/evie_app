@@ -4,6 +4,7 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -96,11 +97,7 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                       child:Stack(
                         alignment: Alignment.center,
                         children: <Widget>[
-                          SvgPicture.asset(
-                            ///Animation
-                            "assets/images/bike_connected.svg",
-                          ),
-
+                      Lottie.asset("assets/images/register-bike-success.json",),
 
                           // IconButton(
                           //   iconSize: 100.h,

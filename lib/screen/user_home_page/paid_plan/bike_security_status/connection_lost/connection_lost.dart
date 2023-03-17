@@ -25,7 +25,7 @@ import '../../../home_page_widget.dart';
 
 class ConnectionLost extends StatefulWidget {
 
-  final SvgPicture? connectImage;
+  final Widget? connectImage;
   final String? distanceBetween;
   final bool? isDeviceConnected;
 
@@ -127,6 +127,7 @@ class _ConnectionLostState extends State<ConnectionLost> {
                                   onPressed: cableLockState?.lockState == LockState.lock ? () {
                                     ///Check is connected
 
+                                    _bluetoothProvider.setIsUnlocking(true);
                                     showUnlockingToast(context);
 
                                     StreamSubscription?subscription;

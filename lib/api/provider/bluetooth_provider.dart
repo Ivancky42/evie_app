@@ -76,6 +76,8 @@ class BluetoothProvider extends ChangeNotifier {
   String? _deviceID;
   String? get deviceID => _deviceID;
 
+  bool isUnlocking = false;
+
   NotifyDataState notifyDataState = NotifyDataState.notifying;
 
   /// * Device Connect Status ****/
@@ -350,6 +352,10 @@ class BluetoothProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  setIsUnlocking(bool result){
+    isUnlocking = result;
+    notifyListeners();
+  }
 
   ///Discover device service and characteristic
   void discoverServices(String bleKey) async {

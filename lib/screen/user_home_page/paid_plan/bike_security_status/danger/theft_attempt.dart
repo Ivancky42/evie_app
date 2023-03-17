@@ -26,7 +26,7 @@ import '../../../home_page_widget.dart';
 
 class BikeDanger extends StatefulWidget {
 
-  final SvgPicture? connectImage;
+  final Widget? connectImage;
   final String? distanceBetween;
   final bool? isDeviceConnected;
 
@@ -156,6 +156,7 @@ class _BikeDangerState extends State<BikeDanger> {
                                   onPressed: deviceConnectResult == DeviceConnectResult.connected ? () {
                                     ///Check is connected
 
+                                    _bluetoothProvider.setIsUnlocking(true);
                                     showUnlockingToast(context);
 
                                     StreamSubscription? subscription;

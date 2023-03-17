@@ -24,10 +24,9 @@ import '../../../paid_plan/bottom_sheet_widget.dart';
 import '../../../home_page_widget.dart';
 
 class BikeWarning extends StatefulWidget {
-  final SvgPicture? connectImage;
+  final Widget? connectImage;
   final String? distanceBetween;
   final bool? isDeviceConnected;
-
 
   const BikeWarning({
     Key? key,
@@ -151,6 +150,7 @@ class _BikeWarningState extends State<BikeWarning> {
                                       ? () {
                                     ///Check is connected
 
+                                    _bluetoothProvider.setIsUnlocking(true);
                                     showUnlockingToast(context);
 
                                     StreamSubscription?

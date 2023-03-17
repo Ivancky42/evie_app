@@ -388,7 +388,7 @@ class _AccountContainerState extends State<AccountContainer> {
                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                   ),
                   onPressed: () {
-
+                 changeToBikeConnectSuccessScreen(context);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -407,7 +407,7 @@ class _AccountContainerState extends State<AccountContainer> {
                 child: Column(
                   children: [
                     Text(
-                      "Evie v1.0.0 (20)",
+                      "Evie v1.0.0 (21)",
                       style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                     ),
                     Text(
