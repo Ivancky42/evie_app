@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../api/colours.dart';
@@ -48,6 +49,10 @@ class _BikeDangerState extends State<BikeDanger> {
   CableLockResult? cableLockState;
   DeviceConnectResult? deviceConnectResult;
 
+  bool dismissed = false;
+  bool isWithinDistance = false;
+  double percent = 0.0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +66,8 @@ class _BikeDangerState extends State<BikeDanger> {
     connectionStateUpdate = _bluetoothProvider.connectionStateUpdate;
     cableLockState = _bluetoothProvider.cableLockState;
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
+
+    percent = _bluetoothProvider.deviceRssiProgress;
 
       return Container(
           height: 636.h,
@@ -118,11 +125,31 @@ class _BikeDangerState extends State<BikeDanger> {
                         children: [
                           Padding(
                             padding:  EdgeInsets.only(top:0.h,left: 16.w, right: 16.w, bottom: 20.h),
-                            child:   SvgPicture.asset(
-                              "assets/buttons/signal_strength.svg",
-                              width: 358.w,
-                              height: 24.h,
-                            ),
+                            child:   Row(
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/icons/bluetooth_small.svg",
+                                ),
+                                Text("Signal Strength", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
+
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                    child: LinearPercentIndicator(
+                                      padding: EdgeInsets.only(left: 29.w,right: 8.w),
+                                      animation: true,
+                                      lineHeight: 4.h,
+                                      animationDuration: 500,
+                                      percent: percent,
+                                      progressColor: _getProgressColor(percent),
+                                      backgroundColor: EvieColors.lightGray,
+                                      animateFromLastPercent: true,
+
+                                    ),
+                                  ),
+                                ),
+
+                            ],)
                           ),
 
                           Visibility(
@@ -131,12 +158,16 @@ class _BikeDangerState extends State<BikeDanger> {
                                 || deviceConnectResult == DeviceConnectResult.scanTimeout
                                 || deviceConnectResult == DeviceConnectResult.connectError
                                 || deviceConnectResult == DeviceConnectResult.scanError,
-                             child:Padding(
+                             child:  Padding(
                                 padding:  EdgeInsets.only(top:0.h,bottom:29.h),
                                 child: EvieSliderButton(
-                                  dismissible: false,
-                                  action: (){
+                                  dismissible: true,
+                                  action: () {
                                     checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
+
+                                    if(_bluetoothProvider.bleStatus == BleStatus.poweredOff){
+
+                                    }
                               }, text: "I'm with my bike",),
                           ),
                          ),
@@ -189,6 +220,18 @@ class _BikeDangerState extends State<BikeDanger> {
             ],
           ));
     }
+  Color _getProgressColor(double percent) {
+    if (percent < 0.3) {
+      return EvieColors.lightRed;
+    } else if (percent < 0.7) {
+      return EvieColors.lightOrange;
+    } else {
+      return EvieColors.successGreen;
+    }
+  }
+
+
+
   }
 
 

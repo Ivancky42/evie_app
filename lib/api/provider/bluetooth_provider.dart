@@ -69,6 +69,8 @@ class BluetoothProvider extends ChangeNotifier {
   QueryRFIDCardResult? queryRFIDCardResult;
   BikeModel? currentBikeModel;
 
+  double deviceRssi = 0;
+  double deviceRssiProgress = 0.7;
 
   bool _isPaired = false;
   bool get isPaired => _isPaired;
@@ -126,7 +128,6 @@ class BluetoothProvider extends ChangeNotifier {
   StreamController<IotInfoModel> iotInfoModelListener =
   StreamController.broadcast();
   late Stream<IotInfoModel> iotInfoModelStream;
-
 
 
   BluetoothProvider() {

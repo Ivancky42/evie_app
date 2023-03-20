@@ -43,7 +43,8 @@ class _AccountVerifiedState extends State<AccountVerified> {
         appBar: EvieAppbar_Back(onPressed: (){ changeToWelcomeScreen(context);}),
         body:
         Stack(
-      children:[Padding(
+      children:[
+        Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -68,11 +69,9 @@ class _AccountVerifiedState extends State<AccountVerified> {
       ),
 
 
-        Expanded(
-          child: Align(
-            alignment: Alignment.center,
-            child: Lottie.asset('assets/animations/account-verify.json'),
-          ),
+        Align(
+          alignment: Alignment.center,
+          child: Lottie.asset('assets/animations/account-verify.json'),
         ),
 
         Align(

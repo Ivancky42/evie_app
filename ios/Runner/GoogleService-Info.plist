@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>214110477774-ihdqjjbqbqc42kgcqpr4m2so3057sb8b.apps.googleusercontent.com</string>
+	<string>484859945311-vffv9uipl1ohirg96h70u78t7pbg8mq1.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.214110477774-ihdqjjbqbqc42kgcqpr4m2so3057sb8b</string>
+	<string>com.googleusercontent.apps.484859945311-vffv9uipl1ohirg96h70u78t7pbg8mq1</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>214110477774-v6iamegdb2ovkp9nug0mscae4cjcfghr.apps.googleusercontent.com</string>
+	<string>484859945311-i3mpvbakeq01o0vvveb919qgvgvua5r1.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyD-c6LY9UrBxdo68xHgjNWTS1KEeSsQlZc</string>
+	<string>AIzaSyBLK6DrCZ58jpZpPO24N-nyx6djtHMxV2I</string>
 	<key>GCM_SENDER_ID</key>
-	<string>214110477774</string>
+	<string>484859945311</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.evie.app</string>
 	<key>PROJECT_ID</key>
-	<string>evie-6952d</string>
+	<string>evie-126a6</string>
 	<key>STORAGE_BUCKET</key>
-	<string>evie-6952d.appspot.com</string>
+	<string>evie-126a6.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:214110477774:ios:35e6651e58dfcab08b5f9f</string>
-	<key>DATABASE_URL</key>
-	<string>https://evie-6952d-default-rtdb.firebaseio.com</string>
+	<string>1:484859945311:ios:754d27de897c6908fa56ea</string>
 </dict>
 </plist>

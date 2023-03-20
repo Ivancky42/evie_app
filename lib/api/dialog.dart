@@ -366,9 +366,10 @@ showUpdateFailedDialog() {
 showDeleteShareBikeUser(BikeProvider _bikeProvider, int index){
 
   SmartDialog.show(
-      widget: EvieDoubleButtonDialogCupertino(
+      widget: EvieDoubleButtonDialog(
         title: "Are you sure you want to delete this user",
-        content: 'Are you sure you want to delete ${_bikeProvider.bikeUserDetails.values.elementAt(index).name!}',
+        childContent: Text('Are you sure you want to delete ${_bikeProvider.bikeUserDetails.values.elementAt(index).name!}',
+          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),),
         leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
         rightContent: "Yes",
         onPressedRight: () async {
@@ -867,7 +868,7 @@ showEVKeyExistAndUploadToFirestore(BuildContext context, String rfidNumber){
   SmartDialog.show(
       widget: EvieSingleButtonDialog(
           title: "Success",
-          content: "Card already exists, data uploaded",
+          content: "Card data uploaded",
           rightContent: "OK",
           onPressedRight: () {
             SmartDialog.dismiss();

@@ -6,11 +6,13 @@ class EvieColors {
   static const lightPurple = Color(0xFFCDC5ED);
   static const blue = Color(0xFF0075FF);
   static const yellow = Color(0xffFFD600);
+  static const lightOrange = Color(0xffF4B13B);
   static const orange = Color(0xffE59200);
   static const red = Color(0xFFFE4A49);
   static const lightRed = Color(0xffF42525);
   static const darkRed = Color(0xffCA0D0D);
   static const lightGreen = Color(0xff00D015);
+  static const successGreen = Color(0xff1BCC73);
   static const green = Color(0xff05A454);
   static const white = Color(0xffFFFFFF);
   static const thumbColorTrue = Color(0xffFAFAFA);

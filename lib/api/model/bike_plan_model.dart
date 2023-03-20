@@ -26,8 +26,8 @@ class BikePlanModel {
       planId: json['eventId'] ?? '',
       name: json['name'] ?? '',
       product: json['product'] ?? null,
-      periodStart: timestampFromJson(json['periodStart']),
-      periodEnd: timestampFromJson(json['periodEnd']),
+      periodStart: timestampFromJson(json['periodStart']) ?? Timestamp.fromDate(DateTime.now().subtract(Duration(days: 365))),
+      periodEnd: timestampFromJson(json['periodEnd']) ??  Timestamp.fromDate(DateTime.now().subtract(Duration(days: 365))),
       created: timestampFromJson(json['created']),
     );
   }

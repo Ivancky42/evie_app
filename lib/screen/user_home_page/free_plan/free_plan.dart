@@ -170,7 +170,6 @@ class _FreePlanState extends State<FreePlan> {
       ),
     ];
 
-
     return WillPopScope(
       onWillPop: () async {
         bool? exitApp = await showQuitApp() as bool?;

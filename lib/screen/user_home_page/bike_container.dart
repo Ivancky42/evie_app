@@ -166,37 +166,47 @@ class _BikeContainerState extends State<BikeContainer> {
   }
 
   getCurrentBikeStatusImage(BikeModel bikeModel, BikeProvider bikeProvider) {
-    for(var index = 0; index < bikeProvider.userBikePlans.length; index++ ){
-      if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
-        if(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null){
-          final result = calculateDateDifferenceFromNow(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate());
-          if(result < 0){
-            return "assets/images/bike_HPStatus/bike_normal.png";
-          }else {
-            if (bikeModel.location?.isConnected == false) {
-              return "assets/images/bike_HPStatus/bike_warning.png";
+    if (bikeProvider.userBikePlans.isNotEmpty) {
+      for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
+        if (bikeModel.deviceIMEI ==
+            bikeProvider.userBikePlans.keys.elementAt(index)) {
+          if (bikeProvider.userBikePlans.values
+              .elementAt(index)
+              .periodEnd
+              .toDate() != null) {
+            final result = calculateDateDifferenceFromNow(
+                bikeProvider.userBikePlans.values
+                    .elementAt(index)
+                    .periodEnd
+                    .toDate());
+            if (result < 0) {
+              return "assets/images/bike_HPStatus/bike_normal.png";
             } else {
-              switch (bikeModel.location!.status) {
-                case 'safe':
-                  {
-                    if (cableLockState?.lockState == LockState.unlock) {
-                      return "assets/images/bike_HPStatus/bike_safe.png";
-                    } else {
-                      return "assets/images/bike_HPStatus/bike_safe.png";
+              if (bikeModel.location?.isConnected == false) {
+                return "assets/images/bike_HPStatus/bike_warning.png";
+              } else {
+                switch (bikeModel.location!.status) {
+                  case 'safe':
+                    {
+                      if (cableLockState?.lockState == LockState.unlock) {
+                        return "assets/images/bike_HPStatus/bike_safe.png";
+                      } else {
+                        return "assets/images/bike_HPStatus/bike_safe.png";
+                      }
                     }
-                  }
-                case 'warning':
-                  return "assets/images/bike_HPStatus/bike_warning.png";
+                  case 'warning':
+                    return "assets/images/bike_HPStatus/bike_warning.png";
 
-                case 'danger':
-                  return "assets/images/bike_HPStatus/bike_danger.png";
-                case 'fall':
-                  return "assets/images/bike_HPStatus/bike_warning.png";
-                case 'crash':
-                  return "assets/images/bike_HPStatus/bike_danger.png";
+                  case 'danger':
+                    return "assets/images/bike_HPStatus/bike_danger.png";
+                  case 'fall':
+                    return "assets/images/bike_HPStatus/bike_warning.png";
+                  case 'crash':
+                    return "assets/images/bike_HPStatus/bike_danger.png";
 
-                default:
-                  return "assets/images/bike_HPStatus/bike_safe.png";
+                  default:
+                    return "assets/images/bike_HPStatus/bike_safe.png";
+                }
               }
             }
           }

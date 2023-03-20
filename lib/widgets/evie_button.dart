@@ -104,55 +104,55 @@ class EvieButton_DropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //   height: height ?? 48.h,
-      //   width: width ?? double.infinity,
-      //   child: Padding(
-      //     padding:  EdgeInsets.only(left: 16.w, right:16.w),
-      //     child: DropdownButtonHideUnderline(
-      //       child: DropdownButton2(
-      //         // buttonHeight: 40,
-      //         // buttonWidth: 140,
-      //         isExpanded: true,
-      //         icon: SvgPicture.asset(
-      //             "assets/buttons/down_mini.svg",
-      //           ),
-      //         hint: Text(text, style: TextStyle( fontFamily: 'Avenir', color: EvieColors.primaryColor, fontSize: 17.sp, fontWeight: FontWeight.w900),),
-      //         items: items,
-      //         onChanged: onChanged,
-      //         dropdownDecoration: BoxDecoration(
-      //           borderRadius: BorderRadius.circular(10.w),
-      //           boxShadow: [
-      //             BoxShadow(
-      //               color: Colors.grey.withOpacity(0.3),
-      //               spreadRadius: 1,
-      //               blurRadius: 1,
-      //            //   offset: Offset(0, 3), // changes position of shadow
-      //             ),
-      //           ],
-      //         ),
-      //           dropdownMaxHeight: 120.h,
-      //           dropdownWidth: 210.w,
-      //           itemHeight: 40.h,
-      //
-      //       ),
-      //     ),
-      //
-      //     // child: DropdownButton(
-      //     //   isExpanded: true,
-      //     //   underline: const SizedBox(),
-      //     //   onChanged: onChanged,
-      //     //   items: items,
-      //     //   icon: SvgPicture.asset(
-      //     //     "assets/buttons/down_mini.svg",
-      //     //   ),
-      //     //   style: const TextStyle(color: EvieColors.primaryColor),
-      //     //   hint: Text(text, style: TextStyle(color: EvieColors.primaryColor, fontSize: 17.sp, fontWeight: FontWeight.w500),),
-      //     // ),
-      //   ),
-      // decoration: BoxDecoration(
-      //   color: backgroundColor ?? EvieColors.lightGrayishCyan,
-      //     borderRadius:  BorderRadius.all(Radius.circular(10.w)),
-      // ),
+        height: height ?? 48.h,
+        width: width ?? double.infinity,
+        child: Padding(
+          padding:  EdgeInsets.only(left: 16.w, right:16.w),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton2(
+              // buttonHeight: 40,
+              // buttonWidth: 140,
+              isExpanded: true,
+              // icon: SvgPicture.asset(
+              //     "assets/buttons/down_mini.svg",
+              //   ),
+              hint: Text(text, style: TextStyle( fontFamily: 'Avenir', color: EvieColors.primaryColor, fontSize: 17.sp, fontWeight: FontWeight.w900),),
+              items: items,
+              onChanged: onChanged,
+              // dropdownDecoration: BoxDecoration(
+              //   borderRadius: BorderRadius.circular(10.w),
+              //   boxShadow: [
+              //     BoxShadow(
+              //       color: Colors.grey.withOpacity(0.3),
+              //       spreadRadius: 1,
+              //       blurRadius: 1,
+              //    //   offset: Offset(0, 3), // changes position of shadow
+              //     ),
+              //   ],
+              // ),
+              //   dropdownMaxHeight: 120.h,
+              //   dropdownWidth: 210.w,
+              //   itemHeight: 40.h,
+
+            ),
+          ),
+
+          // child: DropdownButton(
+          //   isExpanded: true,
+          //   underline: const SizedBox(),
+          //   onChanged: onChanged,
+          //   items: items,
+          //   icon: SvgPicture.asset(
+          //     "assets/buttons/down_mini.svg",
+          //   ),
+          //   style: const TextStyle(color: EvieColors.primaryColor),
+          //   hint: Text(text, style: TextStyle(color: EvieColors.primaryColor, fontSize: 17.sp, fontWeight: FontWeight.w500),),
+          // ),
+        ),
+      decoration: BoxDecoration(
+        color: backgroundColor ?? EvieColors.lightGrayishCyan,
+          borderRadius:  BorderRadius.all(Radius.circular(10.w)),
+      ),
     );
   }
 

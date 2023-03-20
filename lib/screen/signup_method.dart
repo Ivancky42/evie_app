@@ -154,7 +154,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                         changeToStayCloseToBike(context);
                         } else {
                           SmartDialog.show(
-                              widget: EvieSingleButtonDialogCupertino(
+                              widget: EvieSingleButtonDialog(
                                   title: "Error",
                                   content: result,
                                   rightContent: "Ok",

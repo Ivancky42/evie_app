@@ -205,6 +205,8 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
       }
     }
 
+    print(_bikeProvider.currentBikeModel!.location!.geopoint.longitude);
+
 
     return WillPopScope(
       onWillPop: () async {
@@ -587,6 +589,9 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     } else {
       distanceBetween = "-";
     }
+    Future.delayed(Duration.zero, () {
+      _bikeProvider.saveDistanceBetween(distanceBetween);
+    });
   }
 
   void animateBounce() {

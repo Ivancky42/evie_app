@@ -180,7 +180,7 @@ class _AddNewBikeState extends State<AddNewBike> {
           _bluetoothProvider.clearDeviceConnectStatus();
           SmartDialog.show(
               keepSingle: true,
-              widget: EvieSingleButtonDialogCupertino(
+              widget: EvieSingleButtonDialog(
                   title: "Cannot connect bike",
                   content: "Move your device near the bike and try again",
                   rightContent: "OK",
@@ -192,7 +192,7 @@ class _AddNewBikeState extends State<AddNewBike> {
           _bluetoothProvider.clearDeviceConnectStatus();
           SmartDialog.show(
             keepSingle: true,
-            widget: EvieSingleButtonDialogCupertino(
+            widget: EvieSingleButtonDialog(
                 title: "Cannot connect bike",
                 content: "Scan timeout",
                 rightContent: "OK",

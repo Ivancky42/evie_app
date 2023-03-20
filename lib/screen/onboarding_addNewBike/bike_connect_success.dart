@@ -31,7 +31,7 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
 
-     Future.delayed(const Duration(seconds: 8), (){
+     Future.delayed(const Duration(seconds: 5), (){
        changeToNameBikeScreen(context);
      });
 
@@ -97,7 +97,7 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                       child:Stack(
                         alignment: Alignment.center,
                         children: <Widget>[
-                      Lottie.asset("assets/images/register-bike-success.json",),
+                      Lottie.asset("assets/animations/register_bike_success.json",),
 
                           // IconButton(
                           //   iconSize: 100.h,

@@ -103,8 +103,9 @@ class _HomePageWidget_StatusBarState extends State<HomePageWidget_StatusBar> {
                           style: TextStyle(fontSize: 20.sp, color: fontColor, fontWeight: FontWeight.w900),
                         );
                       }else{
-                        return const Text(
+                        return Text(
                           "loading",
+                          style: TextStyle(fontSize: 20.sp, color: fontColor, fontWeight: FontWeight.w900),
                         );
                       }
                     }
@@ -159,7 +160,7 @@ Widget stackActionableBar(context, BikeProvider bikeProvider, NotificationProvid
 
               );
             }).toList(),
-            text: "Remind Me Later"
+            text: "Later"
         ),
 
         buttonRight: EvieButton(

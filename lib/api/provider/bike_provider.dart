@@ -60,6 +60,7 @@ class BikeProvider extends ChangeNotifier {
 
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
   String bikesCollection = dotenv.env['DB_COLLECTION_BIKES'] ?? 'DB not found';
+  String serialNumCollection = dotenv.env['DB_COLLECTION_SERIALNUM'] ?? 'DB not found';
   String rfidCollection = dotenv.env['DB_COLLECTION_RFID'] ?? 'DB not found';
   String eventsCollection = dotenv.env['DB_COLLECTION_EVENTS'] ?? 'DB not found';
   String plansCollection = dotenv.env['DB_COLLECTION_PLANS'] ?? 'DB not found';
@@ -91,6 +92,7 @@ class BikeProvider extends ChangeNotifier {
   bool? isOwner;
   bool isAddBike = false;
   bool isReadBike = false;
+  String? distanceBetween;
   List userBikeNotificationList = ["~connection-lost","~movement-detect","~theft-attempt","~lock-reminder","~plan-reminder","~fall-detect", "crash"];
 
   List<String> threatFilterArray = ["warning", "danger","fall","crash","lock"];
@@ -842,8 +844,6 @@ class BikeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
   Future<bool> checkIsUserExist(String targetEmail) async {
     bool result = false;
     if (bikeUserList.isNotEmpty) {
@@ -858,18 +858,28 @@ class BikeProvider extends ChangeNotifier {
     return result;
   }
 
+  saveDistanceBetween(String? distanceBetween){
+    this.distanceBetween = distanceBetween ?? "-";
+    notifyListeners();
+  }
+
   /// ****************************************** ///
   /// Connect bike
   /// ****************************************** ///
   /// Command for connect bike
 
   handleBarcodeData(String code) async {
+
+
+
     List<String> splitCode = code.split(',');
     String serialNumber = splitCode[0].split(':').last;
     String validationKey = splitCode[1].split(':').last;
 
     final snapshot = await FirebaseFirestore.instance
         .collection(inventoryCollection)
+        .doc(bikesCollection)
+        .collection(serialNumCollection)
         .doc(serialNumber)
         .get();
 
@@ -1326,7 +1336,10 @@ class BikeProvider extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
 
+  calculateIsWithinDistance(String? distanceBetweenNum){
+    double? distanceBetween = double.tryParse(distanceBetweenNum ?? "0") ?? 0;
   }
 
   clear() async {

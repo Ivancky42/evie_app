@@ -135,7 +135,17 @@ class _TripHistoryState extends State<TripHistory> {
                           ),
                         ),
                       ),
-                      Text("You do not have plan subscript")
+                      Column(
+                        children: [
+                          Center(child: Text("You do not have plan subscript")),
+                          Center(
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 120.h),
+                              child: Lottie.asset('assets/animations/add-bike.json'),
+                            ),
+                          ),
+                        ],
+                      )
                     ],
                   )
                   :
@@ -162,6 +172,7 @@ class _TripHistoryState extends State<TripHistory> {
                               ),
                             ),
                           ),
+
                           Center(
                             child: Padding(
                               padding: EdgeInsets.only(top: 120.h),

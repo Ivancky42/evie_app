@@ -203,11 +203,11 @@ class _LoginScreenState extends State<Login> {
                       changeToVerifyEmailScreen(context);
                     } else {
                       SmartDialog.show(
-                        widget: EvieSingleButtonDialogCupertino(
+                        widget: EvieSingleButtonDialog(
                             title: "Error",
                             content: result.toString(),
                             rightContent: "Ok",
-                            image: Image.asset(
+                            widget: Image.asset(
                               "assets/images/error.png",
                               width: 36,
                               height: 36,
