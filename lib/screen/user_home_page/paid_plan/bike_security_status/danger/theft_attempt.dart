@@ -71,8 +71,11 @@ class _BikeDangerState extends State<BikeDanger> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
+    _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     if(isLoaded == false){
+      // if(double.tryParse(_bikeProvider.distanceBetween ?? "0")! < 100){
+      // }
       if (_bluetoothProvider.currentBikeModel != null) {
         isLoaded = true;
         bleScanSub = _bluetoothProvider.startScanRSSI();
