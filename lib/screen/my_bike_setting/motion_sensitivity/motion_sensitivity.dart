@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
@@ -151,7 +152,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                             Row(
                               children: [
                                 Text(
-                                  _bikeProvider.currentBikeModel?.movementSetting?.sensitivity ?? "None",
+                                  capitalizeFirstCharacter(_bikeProvider.currentBikeModel?.movementSetting?.sensitivity ?? "None"),
                                   style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayish),
                                 ),
                                 SvgPicture.asset(

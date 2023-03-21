@@ -69,9 +69,6 @@ class BluetoothProvider extends ChangeNotifier {
   QueryRFIDCardResult? queryRFIDCardResult;
   BikeModel? currentBikeModel;
 
-  double deviceRssi = 0;
-  double deviceRssiProgress = 0.7;
-
   bool _isPaired = false;
   bool get isPaired => _isPaired;
 
@@ -1115,4 +1112,34 @@ class BluetoothProvider extends ChangeNotifier {
     fwUpgradeProgress = 0;
     notifyListeners();
   }
+
+  final bool _isScanning = false;
+  final _ble = FlutterReactiveBle();
+  StreamSubscription? bleScanSub;
+
+  double deviceRssi = 0;
+  double deviceRssiProgress = 0.0;
+
+    startScanRSSI() {
+    bleScanSub?.cancel();
+    bleScanSub = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((discoveredDevice) async {
+
+      if (discoveredDevice.name == currentBikeModel?.bleName) {
+
+        deviceRssi = discoveredDevice.rssi.toDouble();
+
+        if(deviceRssi.abs() > 0 && deviceRssi.abs() < 100){
+          deviceRssiProgress = 1.0 - (deviceRssi.abs() / 100.0);
+        }else{
+          deviceRssiProgress = 0.0;
+        }
+
+        notifyListeners();
+      }
+
+    }, onError: (error) {
+      bleScanSub?.cancel();
+    });
+  }
+
 }

@@ -119,6 +119,7 @@ class _BikeSettingState extends State<BikeSetting> {
       showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, context, _navigator);
     }
 
+
     return WillPopScope(
         onWillPop: () async {
 

@@ -10,6 +10,7 @@ import 'package:evie_test/api/provider/trip_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../function.dart';
@@ -1341,6 +1342,8 @@ class BikeProvider extends ChangeNotifier {
   calculateIsWithinDistance(String? distanceBetweenNum){
     double? distanceBetween = double.tryParse(distanceBetweenNum ?? "0") ?? 0;
   }
+
+
 
   clear() async {
     userBikeList.forEach((key, value) async {

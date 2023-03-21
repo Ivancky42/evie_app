@@ -1,6 +1,7 @@
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
+import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
@@ -258,7 +259,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                             ],
                           ),
                           Text(
-                            _bikeProvider.currentBikeModel?.movementSetting?.sensitivity   ?? "None",
+                            capitalizeFirstCharacter(_bikeProvider.currentBikeModel?.movementSetting?.sensitivity ?? "None"),
                             style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                           )
                         ],

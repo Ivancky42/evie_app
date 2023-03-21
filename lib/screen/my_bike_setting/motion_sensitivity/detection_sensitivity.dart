@@ -16,6 +16,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../api/colours.dart';
 import '../../../api/dialog.dart';
+import '../../../api/function.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
@@ -138,7 +139,7 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
                       ),
 
                       Text(
-                        _bikeProvider.currentBikeModel!.movementSetting?.sensitivity ?? "medium",
+                        capitalizeFirstCharacter(_bikeProvider.currentBikeModel!.movementSetting?.sensitivity ?? "Medium"),
                         style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayish),
                       ),
 

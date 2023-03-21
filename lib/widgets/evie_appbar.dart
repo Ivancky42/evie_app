@@ -49,9 +49,7 @@ class PageAppbar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: IconButton(
-        icon: SettingProvider().isDarkMode(context) == true
-            ? SvgPicture.asset("assets/buttons/back_big.svg")
-            : SvgPicture.asset("assets/buttons/back_big.svg"),
+        icon: SvgPicture.asset("assets/buttons/back_big.svg"),
         onPressed: onPressed,
       ),
       centerTitle: true,

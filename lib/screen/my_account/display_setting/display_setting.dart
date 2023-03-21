@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/dialog.dart';
+import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
@@ -83,7 +84,7 @@ class _DisplaySettingState extends State<DisplaySetting> {
                       Row(
                         children: [
                           Text(
-                            _settingProvider.currentMeasurementSetting.toString().split('.').last,
+                            capitalizeFirstCharacter(_settingProvider.currentMeasurementSetting.toString().split('.').last),
                             style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayish),
                           ),
                           SvgPicture.asset(

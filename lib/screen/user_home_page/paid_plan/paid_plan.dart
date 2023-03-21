@@ -205,7 +205,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
       }
     }
 
-    print(_bikeProvider.currentBikeModel!.location!.geopoint.longitude);
 
 
     return WillPopScope(
