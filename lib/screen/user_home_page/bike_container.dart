@@ -212,97 +212,119 @@ class _BikeContainerState extends State<BikeContainer> {
           }
         }
       }
+    }else{
+      return "assets/images/bike_HPStatus/bike_safe.png";
     }
   }
 
   getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider) {
 
-    for(var index = 0; index < bikeProvider.userBikePlans.length; index++ ){
-      if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
-        if(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null){
-          final result = calculateDateDifferenceFromNow(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate());
-          if(result < 0){
-            return "assets/buttons/bike_security_not_available.svg";
-          }else{
-            if(bikeModel.location?.isConnected == false){
-              return "assets/buttons/bike_security_warning.svg";
-            }else {
-              switch (bikeModel.location!.status) {
-                case 'safe':
-                  {
-                    if (cableLockState?.lockState == LockState.unlock) {
-                      return "assets/buttons/bike_security_unlock.svg";
-                    } else {
-                      return "assets/buttons/bike_security_lock_and_secure.svg";
+    if (bikeProvider.userBikePlans.isNotEmpty) {
+      for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
+        if (bikeModel.deviceIMEI ==
+            bikeProvider.userBikePlans.keys.elementAt(index)) {
+          if (bikeProvider.userBikePlans.values
+              .elementAt(index)
+              .periodEnd
+              .toDate() != null) {
+            final result = calculateDateDifferenceFromNow(
+                bikeProvider.userBikePlans.values
+                    .elementAt(index)
+                    .periodEnd
+                    .toDate());
+            if (result < 0) {
+              return "assets/buttons/bike_security_not_available.svg";
+            } else {
+              if (bikeModel.location?.isConnected == false) {
+                return "assets/buttons/bike_security_warning.svg";
+              } else {
+                switch (bikeModel.location!.status) {
+                  case 'safe':
+                    {
+                      if (cableLockState?.lockState == LockState.unlock) {
+                        return "assets/buttons/bike_security_unlock.svg";
+                      } else {
+                        return "assets/buttons/bike_security_lock_and_secure.svg";
+                      }
                     }
-                  }
-                case 'warning':
-                  return "assets/buttons/bike_security_warning.svg";
-                case 'danger':
-                  return "assets/buttons/bike_security_danger.svg";
-                case 'fall':
-                  return "assets/buttons/bike_security_warning.svg";
-                case 'crash':
-                  return "assets/buttons/bike_security_danger.svg";
+                  case 'warning':
+                    return "assets/buttons/bike_security_warning.svg";
+                  case 'danger':
+                    return "assets/buttons/bike_security_danger.svg";
+                  case 'fall':
+                    return "assets/buttons/bike_security_warning.svg";
+                  case 'crash':
+                    return "assets/buttons/bike_security_danger.svg";
 
-                default:
-                  return "assets/buttons/bike_security_lock_and_secure.svg";
+                  default:
+                    return "assets/buttons/bike_security_lock_and_secure.svg";
+                }
               }
             }
           }
         }
       }
+    }else{
+       return "assets/buttons/bike_security_not_available.svg";
     }
-
   }
 
   getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bikeProvider) {
 
-    for(var index = 0; index < bikeProvider.userBikePlans.length; index++ ){
-      if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
-        if(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null){
-          final result = calculateDateDifferenceFromNow(bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate());
-          if(result < 0){
-            return "-";
-          }else{
-            if(bikeModel.location?.isConnected == false){
-              return "Connection Lost";
-            }else{
-              switch (isLocked) {
-                case true:
-                  if (bikeModel.location!.status == "safe") {
-                    return "Locked & Secure";
-                  } else if (bikeModel.location!.status == "warning") {
-                    return "Movement Detected";
-                  } else if (bikeModel.location!.status == "danger") {
-                    return "Under Threat";
-                  }else if (bikeModel.location!.status == "fall") {
-                    return "Fall Detected";
-                  }else if (bikeModel.location!.status == "crash") {
-                    return "Crash Alert";
-                  }
-                  break;
-                case false:
-                  if (bikeModel.location!.status == "safe") {
-                    return "Unlocked";
-                  } else if (bikeModel.location!.status == "warning") {
-                    return "Movement Detected";
-                  } else if (bikeModel.location!.status == "danger") {
-                    return "Under Threat";
-                  }else if (bikeModel.location!.status == "fall") {
-                    return "Fall Detected";
-                  }else if (bikeModel.location!.status == "crash") {
-                    return "Crash Alert";
-                  }
-                  break;
+    if (bikeProvider.userBikePlans.isNotEmpty) {
+      for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
+        if (bikeModel.deviceIMEI ==
+            bikeProvider.userBikePlans.keys.elementAt(index)) {
+          if (bikeProvider.userBikePlans.values
+              .elementAt(index)
+              .periodEnd
+              .toDate() != null) {
+            final result = calculateDateDifferenceFromNow(
+                bikeProvider.userBikePlans.values
+                    .elementAt(index)
+                    .periodEnd
+                    .toDate());
+            if (result < 0) {
+              return "-";
+            } else {
+              if (bikeModel.location?.isConnected == false) {
+                return "Connection Lost";
+              } else {
+                switch (isLocked) {
+                  case true:
+                    if (bikeModel.location!.status == "safe") {
+                      return "Locked & Secure";
+                    } else if (bikeModel.location!.status == "warning") {
+                      return "Movement Detected";
+                    } else if (bikeModel.location!.status == "danger") {
+                      return "Under Threat";
+                    } else if (bikeModel.location!.status == "fall") {
+                      return "Fall Detected";
+                    } else if (bikeModel.location!.status == "crash") {
+                      return "Crash Alert";
+                    }
+                    break;
+                  case false:
+                    if (bikeModel.location!.status == "safe") {
+                      return "Unlocked";
+                    } else if (bikeModel.location!.status == "warning") {
+                      return "Movement Detected";
+                    } else if (bikeModel.location!.status == "danger") {
+                      return "Under Threat";
+                    } else if (bikeModel.location!.status == "fall") {
+                      return "Fall Detected";
+                    } else if (bikeModel.location!.status == "crash") {
+                      return "Crash Alert";
+                    }
+                    break;
+                }
               }
             }
-
           }
         }
       }
+    }else{
+      return "-";
     }
-
-
   }
 }

@@ -33,8 +33,8 @@
 				<string>REVERSED_CLIENT_ID</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>com.googleusercontent.apps.214110477774-ihdqjjbqbqc42kgcqpr4m2so3057sb8b</string>
-					<string>fb1067110560864964</string>
+					<string>com.googleusercontent.apps.484859945311-vffv9uipl1ohirg96h70u78t7pbg8mq1</string>
+					<string>fb235155132316488</string>
 				</array>
 			</dict>
 		</array>
@@ -43,11 +43,11 @@
 		<key>FacebookAdvertiserIDCollectionEnabled</key>
 		<string>TRUE</string>
 		<key>FacebookAppID</key>
-		<string>1067110560864964</string>
+		<string>235155132316488</string>
 		<key>FacebookAutoLogAppEventsEnabled</key>
 		<string>TRUE</string>
 		<key>FacebookClientToken</key>
-		<string>1afbe0916db6922439b0bcaaba383ccf</string>
+		<string>a04972941e9c0df0002236cc4dd5d5c1</string>
 		<key>FacebookDisplayName</key>
 		<string>Evie_Bikes</string>
 		<key>LSApplicationQueriesSchemes</key>

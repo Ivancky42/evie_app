@@ -83,7 +83,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
 
                   _bikeProvider.currentBikePlanModel != null ?
                   Visibility(
-                    visible: _bikeProvider.currentBikePlanModel != null && _bikeProvider.isPlanSubscript == false,
+                    visible: _bikeProvider.currentBikePlanModel != null && _bikeProvider.currentBikePlanModel?.periodEnd != null && _bikeProvider.isPlanSubscript == false,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,

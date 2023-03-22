@@ -114,8 +114,7 @@ class _MyGarageState extends State<MyGarage> {
                     _bikeProvider.userBikeList.keys.elementAt(index),
                       _bikeProvider.userBikeList.values.elementAt(index),
                       _bikeProvider.userBikeDetails.values.elementAt(index),
-                    _bikeProvider.userBikePlans.values.elementAt(index),
-
+                    _bikeProvider.userBikePlans.isNotEmpty ? _bikeProvider.userBikePlans.values.elementAt(index) : null,
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {
@@ -123,8 +122,6 @@ class _MyGarageState extends State<MyGarage> {
                 },
               ),
             ),
-
-
 
             Align(
               alignment: Alignment.bottomCenter,
@@ -150,13 +147,17 @@ class _MyGarageState extends State<MyGarage> {
 
   Widget listItem(String deviceIMEI, UserBikeModel userBikeList, BikeModel userBikeDetails, BikePlanModel? userBikePlan) {
 
-    bool isPlanSubscript;
-    final result = calculateDateDifferenceFromNow(userBikePlan!.periodEnd!.toDate());
-    if(result < 0){
-      isPlanSubscript = false;
-    }else{
-      isPlanSubscript = true;
+    bool isPlanSubscript = false;
+
+    if(userBikePlan != null){
+      final result = calculateDateDifferenceFromNow(userBikePlan!.periodEnd!.toDate());
+      if(result < 0){
+        isPlanSubscript = false;
+      }else{
+        isPlanSubscript = true;
+      }
     }
+
 
       return Padding(
           padding:EdgeInsets.only(left:16.w, right: 16.w, top:28.h),
@@ -222,7 +223,7 @@ class _MyGarageState extends State<MyGarage> {
                                     style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
                                   ),
                                   Text(
-                                      isPlanSubscript ? "${monthsInYear[userBikePlan.periodEnd!.toDate().month]} ${userBikePlan.periodEnd!.toDate().day}, ${userBikePlan.periodEnd!.toDate().year}"
+                                      isPlanSubscript ? "${monthsInYear[userBikePlan?.periodEnd!.toDate().month]} ${userBikePlan?.periodEnd!.toDate().day}, ${userBikePlan?.periodEnd!.toDate().year}"
                                           : "Free Forever",
                                     style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
                                   ),
