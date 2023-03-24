@@ -244,7 +244,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            "Good Morning ${_currentUserProvider.currentUserModel!.name}",
+                                            "${_currentUserProvider.getGreeting() ?? "Hello"} ${_currentUserProvider.currentUserModel!.name}",
                                             style: EvieTextStyles.h3,
                                           ),
                                         ],
@@ -253,8 +253,11 @@ class _AddNewBikeState extends State<AddNewBike> {
                                 ),
                               );
                             } else {
-                              return const Center(
-                                child: Text("Good Morning"),
+                              return Center(
+                                child: Text(
+                                  "${_currentUserProvider.getGreeting() ?? "Hello"}",
+                                  style: EvieTextStyles.h3,
+                                ),
                               );
                             }
 

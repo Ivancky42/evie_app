@@ -27,6 +27,7 @@ import '../model/user_model.dart';
 
 enum ScanQRCodeResult {
   unknown,
+  notBikeDataFailure,
   validateFailure,
   noBikeDataFailure,
   userExistFailure,
@@ -870,31 +871,33 @@ class BikeProvider extends ChangeNotifier {
   /// Command for connect bike
 
   handleBarcodeData(String code) async {
+    if(code.contains(',')){
+      List<String> splitCode = code.split(',');
+      String serialNumber = splitCode[0].split(':').last;
+      String validationKey = splitCode[1].split(':').last;
 
+      final snapshot = await FirebaseFirestore.instance
+          .collection(inventoryCollection)
+          .doc(bikesCollection)
+          .collection(serialNumCollection)
+          .doc(serialNumber)
+          .get();
 
-
-    List<String> splitCode = code.split(',');
-    String serialNumber = splitCode[0].split(':').last;
-    String validationKey = splitCode[1].split(':').last;
-
-    final snapshot = await FirebaseFirestore.instance
-        .collection(inventoryCollection)
-        .doc(bikesCollection)
-        .collection(serialNumCollection)
-        .doc(serialNumber)
-        .get();
-
-    if (!snapshot.exists) {
-      scanQRCodeResult = ScanQRCodeResult.validateFailure;
-      notifyListeners();
-      return false;
-    } else if (validationKey == snapshot["validationKey"]) {
-      await checkIsBikeExist(snapshot["bikeRef"]);
-    } else {
-      scanQRCodeResult = ScanQRCodeResult.validateFailure;
-      notifyListeners();
-      return false;
+      if (!snapshot.exists) {
+        scanQRCodeResult = ScanQRCodeResult.validateFailure;
+        notifyListeners();
+        return false;
+      } else if (validationKey == snapshot["validationKey"]) {
+        await checkIsBikeExist(snapshot["bikeRef"]);
+      } else {
+        scanQRCodeResult = ScanQRCodeResult.validateFailure;
+        notifyListeners();
+        return false;
+      }
+    }else{
+      scanQRCodeResult = ScanQRCodeResult.notBikeDataFailure;
     }
+
   }
 
   Future checkIsBikeExist(DocumentReference docRef) async {

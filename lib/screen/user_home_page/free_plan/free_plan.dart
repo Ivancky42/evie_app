@@ -201,7 +201,7 @@ class _FreePlanState extends State<FreePlan> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              "Good Morning ${_currentUserProvider.currentUserModel!.name}",
+                                              "${_currentUserProvider.getGreeting() ?? "Hello"} ${_currentUserProvider.currentUserModel!.name}",
                                               style: EvieTextStyles.h3,
                                             ),
                                           ],
@@ -211,8 +211,11 @@ class _FreePlanState extends State<FreePlan> {
                                 ),
                               );
                             } else {
-                              return const Center(
-                                child: Text("Good Morning"),
+                              return Center(
+                               child: Text(
+                                 "${_currentUserProvider.getGreeting() ?? "Hello"}",
+                                  style: EvieTextStyles.h3,
+                                ),
                               );
                             }
                           }),
