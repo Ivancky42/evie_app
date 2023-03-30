@@ -328,10 +328,9 @@ class _UserProfileState extends State<UserProfile> {
                                             onPressed: () async {
                                           SmartDialog.showLoading();
                                               try {
-                                                await _bikeProvider.clear();
-                                                await _authProvider.signOut(context).then((result){
+                                                await _authProvider.signOut(context).then((result) async {
                                                   if(result == true){
-
+                                                    await _bikeProvider.clear();
                                                     SmartDialog.dismiss();
                                                    // _authProvider.clear();
 

@@ -93,80 +93,145 @@ class _FeedsState extends State<Feeds> {
                     itemCount: _bikeProvider.userBikeList.length,
                     itemBuilder: (context, index) {
 
-                      if(_bikeProvider.userBikePlans.values.elementAt(index)?.periodEnd.toDate() != null){
-                       if(calculateDateDifferenceFromNow(_bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate()) >= 0){
-                      ///if connection lost
-                      if(_bikeProvider.userBikeDetails.values.elementAt(index).location.isConnected == false){
-                       return FeedsListTile(
-                            image: "assets/buttons/bike_security_warning.svg",
-                            title: "Connection Lost",
-                            subtitle: "${_bikeProvider.userBikeDetails.values.elementAt(index).deviceName} has lost connection. Last update was time. "
-                            "${_bikeProvider.userBikeDetails.values.elementAt(index).deviceName} will be back online after...",
-                            isDanger: false,
-                            date: _bikeProvider.userBikeDetails.values.elementAt(index).lastUpdated.toDate(),
-                            onPressRight: ()async{
-                            await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.elementAt(index));
-                            changeToUserHomePageScreen(context);
-                            });
-                      }else{
-                      ///if condition == danger or warning
-                      if(_bikeProvider.userBikeDetails.values.elementAt(index).location.status == "danger"){
-                        return FeedsListTile(
-                            image: "assets/buttons/bike_security_danger.svg",
-                            title: "Theft Attempt Alert",
-                            subtitle: "${_bikeProvider.userBikeDetails.values.elementAt(index).deviceName}, Your bike is under threat! Someone is trying to steal your bike!",
-                            isDanger: true,
-                            date: _bikeProvider.userBikeDetails.values.elementAt(index).lastUpdated.toDate(),
-                            onPressRight: ()async{
-                            await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.elementAt(index));
-                            changeToUserHomePageScreen(context);
-                      });
-                      }else if(_bikeProvider.userBikeDetails.values.elementAt(index).location.status == "warning"){
-                        return FeedsListTile(
-                            image: "assets/buttons/bike_security_warning.svg",
-                            title: "Movement Detected",
-                            subtitle: "${_bikeProvider.userBikeDetails.values.elementAt(index).deviceName}, Movement were detected at Malaysia",
-                            isDanger: false,
-                            date: _bikeProvider.userBikeDetails.values.elementAt(index).lastUpdated.toDate(),
-                            onPressRight: ()async{
-                            await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.elementAt(index));
-                            changeToUserHomePageScreen(context);
-                            });
-                            }else if(_bikeProvider.userBikeDetails.values.elementAt(index).location.status == "fall"){
-                        return FeedsListTile(
-                            image: "assets/buttons/bike_security_warning.svg",
-                            title: "Fall Detected",
-                            subtitle: "${_bikeProvider.userBikeDetails.values.elementAt(index).deviceName}, Fall detect detected when detection detecting detect",
-                            isDanger: false,
-                            date: _bikeProvider.userBikeDetails.values.elementAt(index).lastUpdated.toDate(),
-                            onPressRight: ()async{
-                            await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.elementAt(index));
-                            changeToUserHomePageScreen(context);
-                            });
-                      }else if(_bikeProvider.userBikeDetails.values.elementAt(index).location.status == "crash"){
-                        return FeedsListTile(
-                            image: "assets/buttons/bike_security_danger.svg",
-                            title: "Crash Alert",
-                            subtitle:  "EVIE detected that ${_currentUserProvider.currentUserModel!.name} has fallen from bike... "
-                            "To checkout where is ${_currentUserProvider.currentUserModel!.name}, click on \"Track My Bike\"",
-                            isDanger: true,
-                            date: _bikeProvider.userBikeDetails.values.elementAt(index).lastUpdated.toDate(),
-                            onPressRight: ()async{
-                            await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.elementAt(index));
-                            changeToUserHomePageScreen(context);
-
-                            });
-                      }else{
-                        return Container();
+                      if(_bikeProvider.userBikePlans.isNotEmpty) {
+                        if (_bikeProvider.userBikePlans.values
+                            .elementAt(index)
+                            ?.periodEnd
+                            .toDate() != null) {
+                          if (calculateDateDifferenceFromNow(
+                              _bikeProvider.userBikePlans.values
+                                  .elementAt(index)
+                                  .periodEnd
+                                  .toDate()) >= 0) {
+                            ///if connection lost
+                            if (_bikeProvider.userBikeDetails.values
+                                .elementAt(index)
+                                .location
+                                .isConnected == false) {
+                              return FeedsListTile(
+                                  image: "assets/buttons/bike_security_warning.svg",
+                                  title: "Connection Lost",
+                                  subtitle: "${_bikeProvider.userBikeDetails
+                                      .values
+                                      .elementAt(index)
+                                      .deviceName} has lost connection. Last update was time. "
+                                      "${_bikeProvider.userBikeDetails.values
+                                      .elementAt(index)
+                                      .deviceName} will be back online after...",
+                                  isDanger: false,
+                                  date: _bikeProvider.userBikeDetails.values
+                                      .elementAt(index)
+                                      .lastUpdated
+                                      .toDate(),
+                                  onPressRight: () async {
+                                    await _bikeProvider.changeBikeUsingIMEI(
+                                        _bikeProvider.userBikeDetails.keys
+                                            .elementAt(index));
+                                    changeToUserHomePageScreen(context);
+                                  });
+                            } else {
+                              ///if condition == danger or warning
+                              if (_bikeProvider.userBikeDetails.values
+                                  .elementAt(index)
+                                  .location
+                                  .status == "danger") {
+                                return FeedsListTile(
+                                    image: "assets/buttons/bike_security_danger.svg",
+                                    title: "Theft Attempt Alert",
+                                    subtitle: "${_bikeProvider.userBikeDetails
+                                        .values
+                                        .elementAt(index)
+                                        .deviceName}, Your bike is under threat! Someone is trying to steal your bike!",
+                                    isDanger: true,
+                                    date: _bikeProvider.userBikeDetails.values
+                                        .elementAt(index)
+                                        .lastUpdated
+                                        .toDate(),
+                                    onPressRight: () async {
+                                      await _bikeProvider.changeBikeUsingIMEI(
+                                          _bikeProvider.userBikeDetails.keys
+                                              .elementAt(index));
+                                      changeToUserHomePageScreen(context);
+                                    });
+                              } else if (_bikeProvider.userBikeDetails.values
+                                  .elementAt(index)
+                                  .location
+                                  .status == "warning") {
+                                return FeedsListTile(
+                                    image: "assets/buttons/bike_security_warning.svg",
+                                    title: "Movement Detected",
+                                    subtitle: "${_bikeProvider.userBikeDetails
+                                        .values
+                                        .elementAt(index)
+                                        .deviceName}, Movement were detected at Malaysia",
+                                    isDanger: false,
+                                    date: _bikeProvider.userBikeDetails.values
+                                        .elementAt(index)
+                                        .lastUpdated
+                                        .toDate(),
+                                    onPressRight: () async {
+                                      await _bikeProvider.changeBikeUsingIMEI(
+                                          _bikeProvider.userBikeDetails.keys
+                                              .elementAt(index));
+                                      changeToUserHomePageScreen(context);
+                                    });
+                              } else if (_bikeProvider.userBikeDetails.values
+                                  .elementAt(index)
+                                  .location
+                                  .status == "fall") {
+                                return FeedsListTile(
+                                    image: "assets/buttons/bike_security_warning.svg",
+                                    title: "Fall Detected",
+                                    subtitle: "${_bikeProvider.userBikeDetails
+                                        .values
+                                        .elementAt(index)
+                                        .deviceName}, Fall detect detected when detection detecting detect",
+                                    isDanger: false,
+                                    date: _bikeProvider.userBikeDetails.values
+                                        .elementAt(index)
+                                        .lastUpdated
+                                        .toDate(),
+                                    onPressRight: () async {
+                                      await _bikeProvider.changeBikeUsingIMEI(
+                                          _bikeProvider.userBikeDetails.keys
+                                              .elementAt(index));
+                                      changeToUserHomePageScreen(context);
+                                    });
+                              } else if (_bikeProvider.userBikeDetails.values
+                                  .elementAt(index)
+                                  .location
+                                  .status == "crash") {
+                                return FeedsListTile(
+                                    image: "assets/buttons/bike_security_danger.svg",
+                                    title: "Crash Alert",
+                                    subtitle: "EVIE detected that ${_currentUserProvider
+                                        .currentUserModel!
+                                        .name} has fallen from bike... "
+                                        "To checkout where is ${_currentUserProvider
+                                        .currentUserModel!
+                                        .name}, click on \"Track My Bike\"",
+                                    isDanger: true,
+                                    date: _bikeProvider.userBikeDetails.values
+                                        .elementAt(index)
+                                        .lastUpdated
+                                        .toDate(),
+                                    onPressRight: () async {
+                                      await _bikeProvider.changeBikeUsingIMEI(
+                                          _bikeProvider.userBikeDetails.keys
+                                              .elementAt(index));
+                                      changeToUserHomePageScreen(context);
+                                    });
+                              } else {
+                                return Container();
+                              }
+                            }
+                          } else {
+                            return Container();
+                          }
+                        } else {
+                          return Container();
+                        }
                       }
-                      }
-                      }else{
-                        return Container();
-                      }
-                      }else{
-                        return Container();
-                      }
-
                     }, separatorBuilder: (BuildContext context, int index) {
                       return Column(
                         children: [

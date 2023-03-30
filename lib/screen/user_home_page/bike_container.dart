@@ -168,12 +168,8 @@ class _BikeContainerState extends State<BikeContainer> {
   getCurrentBikeStatusImage(BikeModel bikeModel, BikeProvider bikeProvider) {
     if (bikeProvider.userBikePlans.isNotEmpty) {
       for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
-        if (bikeModel.deviceIMEI ==
-            bikeProvider.userBikePlans.keys.elementAt(index)) {
-          if (bikeProvider.userBikePlans.values
-              .elementAt(index)
-              .periodEnd
-              .toDate() != null) {
+        if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
+          if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
             final result = calculateDateDifferenceFromNow(
                 bikeProvider.userBikePlans.values
                     .elementAt(index)
@@ -209,11 +205,13 @@ class _BikeContainerState extends State<BikeContainer> {
                 }
               }
             }
+          }else{
+            return "assets/images/bike_HPStatus/bike_normal.png";
           }
         }
       }
     }else{
-      return "assets/images/bike_HPStatus/bike_safe.png";
+      return "assets/images/bike_HPStatus/bike_normal.png";
     }
   }
 
@@ -223,10 +221,7 @@ class _BikeContainerState extends State<BikeContainer> {
       for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
         if (bikeModel.deviceIMEI ==
             bikeProvider.userBikePlans.keys.elementAt(index)) {
-          if (bikeProvider.userBikePlans.values
-              .elementAt(index)
-              .periodEnd
-              .toDate() != null) {
+          if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
             final result = calculateDateDifferenceFromNow(
                 bikeProvider.userBikePlans.values
                     .elementAt(index)
@@ -261,6 +256,8 @@ class _BikeContainerState extends State<BikeContainer> {
                 }
               }
             }
+          }else{
+            return "assets/buttons/bike_security_not_available.svg";
           }
         }
       }
@@ -275,10 +272,7 @@ class _BikeContainerState extends State<BikeContainer> {
       for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
         if (bikeModel.deviceIMEI ==
             bikeProvider.userBikePlans.keys.elementAt(index)) {
-          if (bikeProvider.userBikePlans.values
-              .elementAt(index)
-              .periodEnd
-              .toDate() != null) {
+          if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
             final result = calculateDateDifferenceFromNow(
                 bikeProvider.userBikePlans.values
                     .elementAt(index)
@@ -320,6 +314,8 @@ class _BikeContainerState extends State<BikeContainer> {
                 }
               }
             }
+          }else{
+            return "-";
           }
         }
       }

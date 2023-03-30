@@ -106,9 +106,9 @@ showBackToHome(context, BikeProvider _bikeProvider, AuthProvider _authProvider){
           rightContent: "Yes",
           onPressedLeft: (){SmartDialog.dismiss();},
           onPressedRight: () async {
-            await _bikeProvider.clear();
-            await _authProvider.signOut(context).then((result){
+            await _authProvider.signOut(context).then((result) async {
               if(result == true){
+                await _bikeProvider.clear();
                 SmartDialog.dismiss();
                 // _authProvider.clear();
 

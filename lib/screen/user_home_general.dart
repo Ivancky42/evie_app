@@ -284,18 +284,21 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     );
   }
 
+
+
   Widget _buildChild(LinkedHashMap userBikeList) {
     if (_bikeProvider.isReadBike && _bikeProvider.currentBikeModel == null && !userBikeList.isNotEmpty) {
       return const AddNewBike();
     } else {
-        if (_bikeProvider.isPlanSubscript == true) {
+        if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == true) {
           return const PaidPlan();
-        } else if (_bikeProvider.isPlanSubscript == false) {
+        } else if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == false) {
           return const FreePlan();
         }else{
+
           ///For not become unlimited Circular
-          // if(_bikeProvider.userBikeList.isNotEmpty) _bikeProvider.controlBikeList("first");
-          return const CircularProgressIndicator();
+           //if(_bikeProvider.userBikeList.isNotEmpty) _bikeProvider.controlBikeList("first");
+          return const Center(child: CircularProgressIndicator());
         }
     }
   }

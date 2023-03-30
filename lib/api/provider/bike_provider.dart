@@ -78,7 +78,7 @@ class BikeProvider extends ChangeNotifier {
   LinkedHashMap bikeUserOwnerUid = LinkedHashMap<String, String>();
   LinkedHashMap userBikeList = LinkedHashMap<String, UserBikeModel>();
   LinkedHashMap userBikeDetails = LinkedHashMap<String, BikeModel>();
-  LinkedHashMap userBikePlans = LinkedHashMap<String, BikePlanModel>();
+  LinkedHashMap userBikePlans = LinkedHashMap<String, BikePlanModel?>();
   LinkedHashMap rfidList = LinkedHashMap<String, RFIDModel>();
   LinkedHashMap threatRoutesLists = LinkedHashMap<String, ThreatRoutesModel>();
 
@@ -90,7 +90,7 @@ class BikeProvider extends ChangeNotifier {
 
   int currentBikeList = 0;
   String? currentBikeIMEI;
-  bool? isPlanSubscript;
+  bool? isPlanSubscript = false;
   bool? isOwner;
   bool isAddBike = false;
   bool isReadBike = false;
@@ -125,12 +125,10 @@ class BikeProvider extends ChangeNotifier {
     if (user != null) {
       if (currentUserModel != null) {
         if (currentUserModel!.uid != user.uid) {
-          userBikeList.clear();
           getBikeList(user.uid);
         }
       }
       else {
-        userBikeList.clear();
         getBikeList(user.uid);
       }
       currentUserModel = user;
@@ -145,7 +143,6 @@ class BikeProvider extends ChangeNotifier {
   Future<void> getBikeList(String? uid) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     currentBikeModel = null;
-
     try {
       ///read doc change
       bikeListSubscription = FirebaseFirestore.instance
@@ -204,10 +201,12 @@ class BikeProvider extends ChangeNotifier {
           ///Subscript to topic based on looping (for first time open app only)
           if (prefs.containsKey('currentBikeImei')) {
             currentBikeIMEI = prefs.getString('currentBikeImei') ?? "";
+
             notifyListeners();
           } else {
             currentBikeIMEI = userBikeList.keys.first.toString();
           }
+
 
           if (currentBikeIMEI != "") {
             getBike(currentBikeIMEI);
@@ -231,6 +230,8 @@ class BikeProvider extends ChangeNotifier {
 
   ///Get bike information based on selected current bike
   Future getBike(String? imei) async {
+
+
     currentBikeModel = null;
     SharedPreferences prefs = await _prefs;
     isPlanSubscript = null;
@@ -774,9 +775,7 @@ class BikeProvider extends ChangeNotifier {
 
             notifyListeners();
 
-
               getOwnerUid(deviceIMEI, obj['ownerUid'] );
-
 
 
           } else if (obj == null) {
@@ -801,7 +800,6 @@ class BikeProvider extends ChangeNotifier {
 
                 ///Put in userBikeDetails as Model
                   //userBikeDetails[deviceIMEI].bikePlanModel = BikePlanModel.fromJson(obj!);
-
                 userBikePlans.putIfAbsent(deviceIMEI, () => BikePlanModel.fromJson(obj!));
                 notifyListeners();
                 break;
@@ -819,7 +817,7 @@ class BikeProvider extends ChangeNotifier {
             }
           }
         }else{
-          userBikePlans.clear();
+          userBikePlans.putIfAbsent(deviceIMEI, () => null);
           notifyListeners();
         }
 
@@ -1370,11 +1368,10 @@ class BikeProvider extends ChangeNotifier {
 
     TripProvider().clear();
 
-    SharedPreferences prefs = await _prefs;
-    prefs.remove('currentBikeName');
-    prefs.remove('currentBikeList');
-    prefs.remove('currentBikeIMEI');
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('currentBikeName');
+    await prefs.remove('currentBikeList');
+    await prefs.remove('currentBikeImei');
 
     bikeListSubscription?.cancel();
     currentBikeSubscription?.cancel();

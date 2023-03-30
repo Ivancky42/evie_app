@@ -207,7 +207,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     }
 
 
-
     return WillPopScope(
       onWillPop: () async {
         bool? exitApp = await showQuitApp() as bool?;
@@ -668,8 +667,8 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   void loadMarker(LatLng currentLatLng) {
 
       markers = <Marker>[
-        if(_bikeProvider.currentBikeModel?.location?.status == "danger")...{
 
+        if(_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger")...{
       ///load a few more marker
       for(int i = 0; i < _bikeProvider.threatRoutesLists.length; i++)...{
         Marker(
