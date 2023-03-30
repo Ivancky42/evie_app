@@ -22,8 +22,6 @@ import '../../api/provider/bike_provider.dart';
 import '../../widgets/evie_button.dart';
 import '../../widgets/page_widget/qr_scanner_overlay.dart';
 
-
-
 class QRScanning extends StatefulWidget {
   const QRScanning({Key? key}) : super(key: key);
 
@@ -82,23 +80,16 @@ class _QRScanningState extends State<QRScanning> {
                      debugPrint('Barcode found, $code');
 
                      SmartDialog.showLoading();
-                     _bikeProvider.handleBarcodeData(code);
 
                      await _bikeProvider.handleBarcodeData(code);
-                     if (_bikeProvider.scanQRCodeResult ==
-                         ScanQRCodeResult.success) {
+
+                     if (_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success) {
                        SmartDialog.dismiss(status: SmartStatus.loading);
                        changeToBikeConnectSuccessScreen(context);
                      } else {
                        SmartDialog.dismiss(status: SmartStatus.loading);
                        changeToBikeConnectFailedScreen(context);
                      }
-
-                     ///get serial number
-                     ///handle code pass to bike provider
-                     ///Detect bike exist from reference, the validation code correct
-                     ///Detect is first user
-                     ///upload to userbike and bikeuser list
 
                    }
                 }
@@ -122,28 +113,10 @@ class _QRScanningState extends State<QRScanning> {
               ),
 
 
-              // child: IconButton(
-              //     iconSize: 64.h,
-              //     icon:  onTorch ? SvgPicture.asset(
-              //       "assets/buttons/torch_off.svg",
-              //       height: 64.h,
-              //       width: 64.w,
-              //     ) : SvgPicture.asset(
-              //       "assets/buttons/torch_on.svg",
-              //       height: 64.h,
-              //       width: 64.w,
-              //     ),
-              //     onPressed: () {
-              //       onTorch != onTorch;
-              //       cameraController.toggleTorch();
-              //     }
-              // ),
-
-
                 Align(
                 alignment: Alignment.bottomCenter,
                 child:Padding(
-                      padding:       EdgeInsets.only(left: 16.w, right: 16.w, bottom: 180.h),
+                      padding:  EdgeInsets.only(left: 16.w, right: 16.w, bottom: 180.h),
                       child: IconButton(
                         iconSize: 64.h,
                           icon:  onTorch ? Image(

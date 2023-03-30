@@ -67,7 +67,6 @@ class AccountPageDivider extends StatelessWidget {
 
 
 
-
 class EditProfileContainer extends StatelessWidget {
   final String subtitle;
   final String content;

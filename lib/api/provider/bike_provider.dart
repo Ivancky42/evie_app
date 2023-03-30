@@ -897,7 +897,6 @@ class BikeProvider extends ChangeNotifier {
     }else{
       scanQRCodeResult = ScanQRCodeResult.notBikeDataFailure;
     }
-
   }
 
   Future checkIsBikeExist(DocumentReference docRef) async {

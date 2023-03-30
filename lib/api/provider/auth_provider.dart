@@ -226,6 +226,9 @@ class AuthProvider extends ChangeNotifier {
         final UserCredential userCredential =
             await FirebaseAuth.instance.signInWithCredential(credential);
 
+        credentialProvider = "google";
+        notifyListeners();
+
         if (userCredential.additionalUserInfo!.isNewUser) {
           String? userPhoneNo;
 
@@ -235,9 +238,6 @@ class AuthProvider extends ChangeNotifier {
           } else if (userCredential.user?.phoneNumber == null) {
             userPhoneNo = "empty";
           }
-
-          credentialProvider = "google";
-          notifyListeners();
 
           _uid = userCredential.user!.uid;
           _email = userCredential.user!.email!;
@@ -281,13 +281,14 @@ class AuthProvider extends ChangeNotifier {
       final userCredential =
           await _auth.signInWithCredential(facebookAuthCredential);
 
+      credentialProvider = "facebook";
+      notifyListeners();
+
       if (userCredential.additionalUserInfo!.isNewUser) {
         String? userPhoneNo;
 
           userPhoneNo = "empty";
 
-        credentialProvider = "facebook";
-        notifyListeners();
 
         _uid = userCredential.user!.uid;
         _email = userCredential.user!.email!;
@@ -342,14 +343,15 @@ class AuthProvider extends ChangeNotifier {
         if (userCredential.additionalUserInfo!.isNewUser) {
           String? userPhoneNo;
 
+          credentialProvider = "twitter";
+          notifyListeners();
+
           if (userCredential.user?.phoneNumber != null) {
             userPhoneNo = userCredential.user?.phoneNumber.toString();
           } else if (userCredential.user?.phoneNumber == null) {
             userPhoneNo = "empty";
           }
 
-          credentialProvider = "twitter";
-          notifyListeners();
 
           _uid = userCredential.user!.uid;
           _email = userCredential.user!.email!;
@@ -409,6 +411,9 @@ class AuthProvider extends ChangeNotifier {
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
+      credentialProvider = "apple";
+      notifyListeners();
+
       if (userCredential.additionalUserInfo!.isNewUser) {
         String? userPhoneNo = "empty";
 
@@ -417,9 +422,6 @@ class AuthProvider extends ChangeNotifier {
         // } else if (userCredential.user?.phoneNumber == null) {
         //   userPhoneNo = "empty";
         // }
-
-        credentialProvider = "apple";
-        notifyListeners();
 
         String? userName = "";
 
@@ -525,6 +527,11 @@ class AuthProvider extends ChangeNotifier {
       await CurrentUserProvider().cancelSubscription();
       await NotificationProvider().unsubscribeFromTopic(_uid);
       await NotificationProvider().unsubscribeFromTopic("fcm_test");
+
+      if(credentialProvider == "google"){
+        await googleSignIn.disconnect();
+        await googleSignIn.signOut();
+      }
 
       await _auth.signOut();
 

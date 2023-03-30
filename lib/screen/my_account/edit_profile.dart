@@ -61,7 +61,7 @@ class _EditProfileState extends State<EditProfile> {
           appBar: PageAppbar(
             title: 'Edit My Profile',
             onPressed: () {
-     changeToMyAccount(context);
+                changeToMyAccount(context);
             },
           ),
           body: Column(

@@ -86,7 +86,7 @@ class _UserHomePageState extends State<UserHomePage> {
                     height: EvieLength.bottom_bar_icon_height,
                   ),
                 ),
-                tooltip: 'User Profile',
+                tooltip: 'Home',
                 label: '',
               ),
 
@@ -115,7 +115,7 @@ class _UserHomePageState extends State<UserHomePage> {
                     height: EvieLength.bottom_bar_icon_height,
                   ),
                 ),
-                tooltip: 'User Profile',
+                tooltip: 'Statistic',
                 label: '',
               ),
 
@@ -142,7 +142,7 @@ class _UserHomePageState extends State<UserHomePage> {
                     height: EvieLength.bottom_bar_icon_height,
                   ),
                 ),
-                tooltip: 'User',
+                tooltip: 'Feeds',
                 label: '',
               ),
 
