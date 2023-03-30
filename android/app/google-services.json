@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "484859945311-c5635kb2m118numsn0v441fqv9203pjh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.evie.app",
+            "certificate_hash": "2af6bd93f3bba27ef86d0e7481675f0ae54eaa8e"
+          }
+        },
+        {
           "client_id": "484859945311-i3mpvbakeq01o0vvveb919qgvgvua5r1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -22,7 +30,7 @@
           }
         },
         {
-          "client_id": "484859945311-1dtapbht0dqgjdv9tjf5jdhmh3h44cu6.apps.googleusercontent.com",
+          "client_id": "484859945311-06sc3rro1sfhgr4tm4nn9shcdug5e09s.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,14 +43,50 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "484859945311-1dtapbht0dqgjdv9tjf5jdhmh3h44cu6.apps.googleusercontent.com",
+              "client_id": "484859945311-06sc3rro1sfhgr4tm4nn9shcdug5e09s.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "484859945311-vffv9uipl1ohirg96h70u78t7pbg8mq1.apps.googleusercontent.com",
+              "client_id": "484859945311-0pv2mt1rh5cpc4mrt350t7snbmt2ksva.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.evie.app"
+                "bundle_id": "com.evie.config"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:484859945311:android:18bbda4da6d818d3fa56ea",
+        "android_client_info": {
+          "package_name": "com.evie.config"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "484859945311-06sc3rro1sfhgr4tm4nn9shcdug5e09s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4u3Urr0u8SUOJnxKZXvULG2jEyjNYPSw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "484859945311-06sc3rro1sfhgr4tm4nn9shcdug5e09s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "484859945311-0pv2mt1rh5cpc4mrt350t7snbmt2ksva.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.evie.config"
               }
             }
           ]

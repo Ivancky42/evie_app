@@ -23,6 +23,7 @@ import 'package:lottie/lottie.dart' as lottie;
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
 import 'package:provider/provider.dart';
 import '../../../api/colours.dart';
+import '../../../api/fonts.dart';
 import '../../../api/model/location_model.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/location_provider.dart';
@@ -229,8 +230,9 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                         if (snapshot.hasData) {
                           return switchBikeStatusBar(_locationProvider.locationModel?.status ?? "");
                         } else {
-                          return const Center(
-                            child: Text("Good Morning"),
+                          return Center(
+                            child: Text("${_currentUserProvider.getGreeting() ?? "Hello"} ${_currentUserProvider.currentUserModel?.name ?? ""}",
+                              style: EvieTextStyles.h3,),
                           );
                         }
                       }),

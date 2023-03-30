@@ -44,7 +44,6 @@ import 'api/provider/notification_provider.dart';
 import 'api/provider/trip_provider.dart';
 
 
-
 ///Main function execution
 Future main() async {
   ///Firebase
@@ -220,7 +219,7 @@ class MyApp extends StatelessWidget {
         ),
 
         child: MaterialApp(
-          title: 'Evie',
+          title: 'Evie Bike',
           themeMode: _settingProvider.currentThemeMode,
 
           //Light theme data

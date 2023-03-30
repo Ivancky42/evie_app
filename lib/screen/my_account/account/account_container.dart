@@ -406,7 +406,7 @@ class _AccountContainerState extends State<AccountContainer> {
                 child: Column(
                   children: [
                     Text(
-                      "Evie v1.0.0 (21)",
+                      "Evie v1.0.0 (22)",
                       style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                     ),
                     Text(

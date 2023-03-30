@@ -26,6 +26,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+
 android {
     compileSdkVersion 33
 
@@ -52,11 +53,30 @@ android {
         versionName flutterVersionName
     }
 
+
+    def keystoreProperties = new Properties()
+    def keystorePropertiesFile = rootProject.file('key.properties')
+    if (keystorePropertiesFile.exists()) {
+        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    }
+
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file("key.jks")
+            //storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -81,6 +101,8 @@ dependencies {
     implementation ('com.mapbox.maps:android:10.8.1'){
         exclude group: 'com.mapbox.mapboxsdk', module:'mapbox-android-telemetry'
     }
+    implementation 'com.facebook.android:facebook-login:[version]'
+    implementation 'com.facebook.android:facebook-core:[version]'
     //configurations {
     //    all*.exclude module: 'com.mapbox.android' // This removes all other versions of `support-v4` if gets duplicated from all the artifacts.
     //}

@@ -46,6 +46,7 @@ class AuthProvider extends ChangeNotifier {
     init();
   }
 
+
   ///Initial value
   Future<void> init() async {
     userChangeSubscription = FirebaseAuth.instance.userChanges().listen((user) {
@@ -214,7 +215,6 @@ class AuthProvider extends ChangeNotifier {
     try {
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
-
       if (googleSignInAccount != null) {
         final GoogleSignInAuthentication googleSignInAuthentication =
             await googleSignInAccount.authentication;
@@ -273,8 +273,7 @@ class AuthProvider extends ChangeNotifier {
   ///Sign in with facebook
   Future signInWithFacebook(String nameInput) async {
     try {
-      final LoginResult loginResult = await FacebookAuth.instance
-          .login(permissions: ['email', 'public_profile']);
+      final LoginResult loginResult = await FacebookAuth.instance.login(permissions: ['email', 'public_profile']);
 
       final OAuthCredential facebookAuthCredential =
           FacebookAuthProvider.credential(loginResult.accessToken!.token);
@@ -285,11 +284,7 @@ class AuthProvider extends ChangeNotifier {
       if (userCredential.additionalUserInfo!.isNewUser) {
         String? userPhoneNo;
 
-        if (userCredential.user?.phoneNumber != null) {
-          userPhoneNo = userCredential.user?.phoneNumber.toString();
-        } else if (userCredential.user?.phoneNumber == null) {
           userPhoneNo = "empty";
-        }
 
         credentialProvider = "facebook";
         notifyListeners();

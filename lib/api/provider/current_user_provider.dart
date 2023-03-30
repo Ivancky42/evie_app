@@ -15,7 +15,6 @@ import 'notification_provider.dart';
 
 class CurrentUserProvider extends ChangeNotifier {
 
-
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
   String? randomQuote;
 
@@ -161,6 +160,23 @@ class CurrentUserProvider extends ChangeNotifier {
     var randomQuote = TodaysQuote.quotes[randomNumber];
     this.randomQuote = randomQuote;
     notifyListeners();
+  }
+
+  getGreeting(){
+    final now = DateTime.now();
+    final currentTime = TimeOfDay.fromDateTime(now);
+
+    String greeting;
+
+    if (currentTime.hour >= 5 && currentTime.hour < 12) {
+      greeting = "Good Morning";
+    } else if (currentTime.hour >= 12 && currentTime.hour < 18) {
+      greeting = "Good Afternoon";
+    } else {
+      greeting = "Good Evening";
+    }
+
+    return greeting;
   }
 }
 

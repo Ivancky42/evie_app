@@ -200,7 +200,7 @@ class _SignInMethodState extends State<SignInMethod> {
                           SmartDialog.show(
                               widget: EvieSingleButtonDialog(
                                   title: "Error",
-                                  content: result,
+                                  content: result.toString(),
                                   rightContent: "Ok",
                                   onPressedRight: () {
                                     SmartDialog.dismiss();

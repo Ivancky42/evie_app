@@ -1,10 +1,10 @@
 # evie
 
-A new Flutter bike project.
+Evie Bike App
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This is Evie Bikes App
 
 A few resources to get you started if this is your first Flutter project:
 
