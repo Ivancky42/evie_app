@@ -30,7 +30,8 @@ class _UserProfileState extends State<UserProfile> {
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneNoController = TextEditingController();
-  late CurrentUserProvider _currentUser;late AuthProvider _authProvider;
+  late CurrentUserProvider _currentUser;
+  late AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
 
   //Create string for image
