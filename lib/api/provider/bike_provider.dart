@@ -870,9 +870,6 @@ class BikeProvider extends ChangeNotifier {
   /// Command for connect bike
 
   handleBarcodeData(String code) async {
-
-
-
     List<String> splitCode = code.split(',');
     String serialNumber = splitCode[0].split(':').last;
     String validationKey = splitCode[1].split(':').last;

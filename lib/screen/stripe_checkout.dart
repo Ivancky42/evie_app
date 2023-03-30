@@ -55,9 +55,9 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
           }
         },
         navigationDelegate: (NavigationRequest request) {
-          if (request.url.startsWith('https://evie-6952d.web.app/success.html')) {
+          if (request.url.startsWith('https://evie-126a6.web.app/success.html')) {
             SmartDialog.show(widget: EvieSingleButtonDialogCupertino(title: 'Successfully subscribed', content: 'Plan Already subscribed.', rightContent: 'View Plan', onPressedRight: () {Navigator.of(context).pop();},));
-          } else if (request.url.startsWith('https://evie-6952d.web.app/cancel.html')) {
+          } else if (request.url.startsWith('https://evie-126a6.web.app/cancel.html')) {
             SmartDialog.show(widget: EvieSingleButtonDialogCupertino(title: 'Operation failed', content: 'User cancelled the action', rightContent: 'BACK', onPressedRight: () {Navigator.of(context).pop();},));
           }
           return NavigationDecision.navigate;
@@ -66,7 +66,7 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
     ));
   }
 
-  String get initialUrl => 'https://evie-6952d.web.app/stripe';
+  String get initialUrl => 'https://evie-126a6.web.app/stripe';
 
   Future<void> _redirectToStripe(String sessionId) async {
     final redirectToCheckoutJs = '''

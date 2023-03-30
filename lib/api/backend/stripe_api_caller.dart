@@ -23,8 +23,8 @@ class StripeApiCaller {
         }
       ],
       'mode': 'payment',
-      'success_url': 'https://evie-6952d.web.app/success.html',
-      'cancel_url': 'https://evie-6952d.web.app/cancel.html',
+      'success_url': 'https://evie-126a6.web.app/success.html',
+      'cancel_url': 'https://evie-126a6.web.app/cancel.html',
       "customer" : customerId,
       "client_reference_id": deviceIMEI + "," + planId,
     };

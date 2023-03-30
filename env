@@ -11,6 +11,7 @@ FACEBOOK_TOKEN='PSLxQXpnSLCHUWBoV0KqLCut840='
 #Database Data
 DB_COLLECTION_USERS=users
 DB_COLLECTION_BIKES=bikes
+DB_COLLECTION_SERIALNUM=serialNumber
 DB_COLLECTION_EVENTS=events
 DB_COLLECTION_RFID=rfid
 DB_COLLECTION_NOTIFICATIONS=notifications
@@ -19,7 +20,10 @@ DB_COLLECTION_NOTIFICATIONS=notifications
 DB_COLLECTION_PLANS=plans
 DB_COLLECTION_RELEASES=releases
 DB_COLLECTION_FIRMWARE=firmware
-DEFAULT_PROFILE_IMG='https://firebasestorage.googleapis.com/v0/b/evie-6952d.appspot.com/o/UserProfilePic%2FDefaultProfilePicCats.jpeg?alt=media&token=e606c97d-5f37-4d7f-bcc8-5a0b89afa0b4'
+DB_COLLECTION_THEFTHISTORY=theftHistory
+DB_COLLECTION_ROUTES=routes
+DB_COLLECTION_TRIPHISTORY=tripHistory
+DEFAULT_PROFILE_IMG='https://firebasestorage.googleapis.com/v0/b/evie-126a6.appspot.com/o/UserProfilePic%2Fblank_profile.jpeg?alt=media&token=fe95e4d3-3693-4293-a9a3-aa2fe563ecab'
 
 #Bluetooth Data
 BLE_SERVICE_UUID='6e400001-b5a3-f393-e0a9-e50e24dcca9e'
@@ -35,5 +39,5 @@ DEF_PUBLIC_TOKEN='pk.eyJ1IjoiaGVsbG9ldmllIiwiYSI6ImNsN3pvMm9oZTBsM3ozcG4zd2NmenV
 MAPBOX_STYLE_TOKEN='mapbox://styles/helloevie/cl8oacc6600cc15llcctjy0rl'
 
 #Stripe Data
-STRIPE_API_KEY='pk_test_51LjzhfBjvoM881zM0adsmftcWyPvdhW0wZ8yVB572DACYrc5k9hxPiBtpOQU84kLSgq7e08Ju0YFIcD4FpR2VFFn00dtiD6bU9'
-STRIPE_SECRET_KEY='sk_test_51LjzhfBjvoM881zMsw8IwpBDjhaeSP95cNjmi759OFcISxhNyGNaHo3uWwBOdZaSNKTetxwrgCmJSqZvnDlz7KgR00pEbKQ166'
+STRIPE_API_KEY='pk_test_51MndxJIXKqdv4F5CyHUAeW5uRnK46Vu9XlkxLbgy4cdePW3asv4RLDZNSzunmFqnX0c46SnTtpEt0DptZLuY8hok003OoSiAkl'
+STRIPE_SECRET_KEY='sk_test_51MndxJIXKqdv4F5CCakJngLo98ByCiIhf2d8853NXnyINt4XQYmlazhv5kNRHfMkUUbXhSVkjfYjmuXIqsNMWmPb00vL6FZy8T'
