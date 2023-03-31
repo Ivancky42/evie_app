@@ -111,10 +111,15 @@ class _MyGarageState extends State<MyGarage> {
                 itemCount: _bikeProvider.userBikeList.length,
                 itemBuilder: (context, index) {
                   return listItem(
+                    
                     _bikeProvider.userBikeList.keys.elementAt(index),
-                      _bikeProvider.userBikeList.values.elementAt(index),
-                      _bikeProvider.userBikeDetails.values.elementAt(index),
-                    _bikeProvider.userBikePlans.isNotEmpty ? _bikeProvider.userBikePlans.values.elementAt(index) : null,
+                    _bikeProvider.userBikeList[_bikeProvider.userBikeList.keys.elementAt(index)],
+                    _bikeProvider.userBikeDetails[_bikeProvider.userBikeList.keys.elementAt(index)],
+                    _bikeProvider.userBikePlans.isNotEmpty ? _bikeProvider.userBikePlans[_bikeProvider.userBikeList.keys.elementAt(index)] : null,
+
+                    //   _bikeProvider.userBikeList.values.elementAt(index),
+                    //   _bikeProvider.userBikeDetails.values.elementAt(index),
+                    // _bikeProvider.userBikePlans.isNotEmpty ? _bikeProvider.userBikePlans.values.elementAt(index) : null,
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {
