@@ -238,7 +238,7 @@ class _FeedsState extends State<Feeds> {
                           SizedBox(
                             height: 10.h,
                           ),
-                          Divider(height: 1.5.h,),
+                      //    Divider(height: 1.5.h,),
                         ],
                       );
                     },

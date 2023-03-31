@@ -768,6 +768,7 @@ class BikeProvider extends ChangeNotifier {
           .listen((snapshot) async {
         if (snapshot.data() != null) {
           Map<String, dynamic>? obj = snapshot.data();
+
           if (obj != null) {
             userBikeDetails.update(
                 snapshot.id, (value) => BikeModel.fromJson(obj),
@@ -790,36 +791,62 @@ class BikeProvider extends ChangeNotifier {
           .collection(bikesCollection)
           .doc(deviceIMEI)
           .collection(plansCollection)
+          .limit(1)
           .snapshots()
           .listen((snapshot) {
         if (snapshot.docs.isNotEmpty) {
-          for (var docChange in snapshot.docChanges) {
-            switch (docChange.type) {
-              case DocumentChangeType.added:
-                Map<String, dynamic>? obj = docChange.doc.data();
+          for (var change in snapshot.docChanges) {
+            var docRef = change.doc.reference;
+            docRef.snapshots().listen((docSnapshot) {
+                  if (docSnapshot.data() != null) {
+                    Map<String, dynamic>? obj = docSnapshot.data();
 
-                ///Put in userBikeDetails as Model
-                  //userBikeDetails[deviceIMEI].bikePlanModel = BikePlanModel.fromJson(obj!);
-                userBikePlans.putIfAbsent(deviceIMEI, () => BikePlanModel.fromJson(obj!));
-                notifyListeners();
-                break;
-              case DocumentChangeType.removed:
-                Map<String, dynamic>? obj = docChange.doc.data();
+                    if (obj != null) {
+                      userBikePlans.update(deviceIMEI, (value) => BikePlanModel.fromJson(obj), ifAbsent: () => BikePlanModel.fromJson(obj));
+                      notifyListeners();
 
-                userBikePlans.removeWhere((key, value) => key == deviceIMEI);
-                notifyListeners();
-                break;
-              case DocumentChangeType.modified:
-                 Map<String, dynamic>? obj = docChange.doc.data();
-
-                userBikePlans.update(deviceIMEI, (value) => BikePlanModel.fromJson(obj!));
-                break;
-            }
+                    } else if (obj == null) {
+                      userBikePlans.update(deviceIMEI, (value) => null, ifAbsent: () => null);
+                      notifyListeners();
+                    }
+                  }else{
+                    userBikePlans.update(deviceIMEI, (value) => null, ifAbsent: () => null);
+                  }
+            });
           }
         }else{
-          userBikePlans.putIfAbsent(deviceIMEI, () => null);
+          userBikePlans.update(deviceIMEI, (value) => null, ifAbsent: () => null);
           notifyListeners();
         }
+
+
+        // ///
+        // if (snapshot.docs.isNotEmpty) {
+        //   for (var docChange in snapshot.docChanges) {
+        //     switch (docChange.type) {
+        //       case DocumentChangeType.added:
+        //         Map<String, dynamic>? obj = docChange.doc.data();
+        //
+        //         ///Put in userBikeDetails as Model
+        //           //userBikeDetails[deviceIMEI].bikePlanModel = BikePlanModel.fromJson(obj!);
+        //         userBikePlans.putIfAbsent(deviceIMEI, () => BikePlanModel.fromJson(obj!));
+        //         notifyListeners();
+        //         break;
+        //       case DocumentChangeType.removed:
+        //         userBikePlans.putIfAbsent(deviceIMEI, () => null);
+        //         notifyListeners();
+        //         break;
+        //       case DocumentChangeType.modified:
+        //          Map<String, dynamic>? obj = docChange.doc.data();
+        //         userBikePlans.update(deviceIMEI, (value) => BikePlanModel.fromJson(obj!));
+        //         break;
+        //     }
+        //   }
+        // }else{
+        //   userBikePlans.putIfAbsent(deviceIMEI, () => null);
+        //   notifyListeners();
+        // }
+        // ///
 
       });
     } catch (e) {
