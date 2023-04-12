@@ -127,6 +127,8 @@ class _BikeSettingState extends State<BikeSetting> {
             changeToMyGarageScreen(context);
           }else if(widget.source == 'SwitchBike'){
             changeToUserHomePageScreen(context);
+          }else if(widget.source == 'Home'){
+            changeToUserHomePageScreen(context);
           }else{
             changeToMyGarageScreen(context);
           }
@@ -141,6 +143,8 @@ class _BikeSettingState extends State<BikeSetting> {
               if(widget.source == 'MyGarage'){
                 changeToMyGarageScreen(context);
               }else if(widget.source == 'SwitchBike'){
+                changeToUserHomePageScreen(context);
+              }else if(widget.source == 'Home'){
                 changeToUserHomePageScreen(context);
               }else{
                 changeToMyGarageScreen(context);

@@ -36,8 +36,9 @@ class _TripHistoryState extends State<TripHistory> {
 
     return WillPopScope(
       onWillPop: () async {
-        bool? exitApp = await showQuitApp() as bool?;
-        return exitApp ?? false;
+        // bool? exitApp = await showQuitApp() as bool?;
+        // return exitApp ?? false;
+        return false;
       },
       child: Scaffold(
         body:
@@ -56,7 +57,7 @@ class _TripHistoryState extends State<TripHistory> {
                           padding: EdgeInsets.fromLTRB(16.w, 51.h, 0.w, 22.h),
                           child: Container(
                             child: Text(
-                              "Trip History",
+                              "Rides",
                               style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
                             ),
                           ),

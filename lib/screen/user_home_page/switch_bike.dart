@@ -1,5 +1,6 @@
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/bike_container.dart';
+import 'package:evie_test/widgets/evie_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -23,7 +24,6 @@ class _SwitchBikeState extends State<SwitchBike> {
   @override
   Widget build(BuildContext context) {
     BikeProvider _bikeProvider = Provider.of<BikeProvider>(context);
-
 
     return Wrap(
       children: [
@@ -53,32 +53,23 @@ class _SwitchBikeState extends State<SwitchBike> {
                 itemCount: _bikeProvider.userBikeDetails.length,
                 itemBuilder: (context, index) {
 
-
                   return BikeContainer(bikeModel: _bikeProvider.userBikeDetails.values.elementAt(index));
                 },
               ),
 
-              /// add new bike
-              Container(
-                height: 100.h,
-                child: GestureDetector(
-                  onTap: () {
-                    _bikeProvider.setIsAddBike(true);
-                    changeToStayCloseToBike(context);
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 6.w, 17.h),
-                    child: ListTile(
-                      leading: SvgPicture.asset(
-                        "assets/buttons/add_new_bike.svg",
-                      ),
-                      title: Text(
-                        "Add New Bike",
-                        style: TextStyle(
-                            fontSize: 16.sp, fontWeight: FontWeight.w700),
-                      ),
+              ///Add new bike
+              Padding(
+                padding:  EdgeInsets.fromLTRB(16.w, 0, 16.w, 39.h),
+                child: EvieButton(
+                    onPressed: (){
+                      _bikeProvider.setIsAddBike(true);
+                      changeToStayCloseToBike(context);
+                    },
+                    child: Text(
+                      "Add More Bike",
+                      style: TextStyle(
+                          fontSize: 16.sp, fontWeight: FontWeight.w700),
                     ),
-                  ),
                 ),
               )
             ],

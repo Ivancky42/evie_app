@@ -37,7 +37,7 @@ class _EvieOvalGrayState extends State<EvieOvalGray> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Center(
-              child: Text(widget.buttonText),
+              child: Text(widget.buttonText, style: EvieTextStyles.body14,),
             ),
           ),
         );

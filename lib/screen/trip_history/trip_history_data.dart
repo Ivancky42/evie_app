@@ -100,7 +100,6 @@ class _TripHistoryDataState extends State<TripHistoryData> {
               children: [
 
                 if(currentData == totalData.elementAt(0))...{
-
                   _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
                   Row(
                     children: [
@@ -277,8 +276,8 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                       widget.format == TripFormat.month ? data.x.day :
                       widget.format == TripFormat.year ? monthNameHalf[data.x.month] :
                       data.x,
-                    
-                    yValueMapper: (ChartData data, _) => 
+
+                    yValueMapper: (ChartData data, _) =>
                       _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
                       (data.y/1000):
                       _settingProvider.convertMeterToMiles(data.y.toDouble()),

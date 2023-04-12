@@ -14,6 +14,7 @@ import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_set_colour_code.da
 import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/screen/trip_history/ride_history.dart';
+import 'package:evie_test/screen/trip_history/trip_history.dart';
 import 'package:evie_test/screen/user_home_page/user_home_page.dart';
 import 'package:evie_test/screen/verify_email.dart';
 import 'package:flutter/cupertino.dart';
@@ -135,7 +136,6 @@ void changeToTestBLEScreen(BuildContext context) {
   );
 }
 
-
 void changeToUserHomePageScreen(BuildContext context ) {
   Navigator.pushReplacement(context,
     PageTransition(
@@ -160,11 +160,22 @@ void changeToTripHistory(BuildContext context){
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.bottomToTop,
+      child: const TripHistory(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+void changeToFeedsScreen(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
       child: const UserHomePage(1),
       duration: const Duration(milliseconds: 300),
     ),
   );
 }
+
 
 void changeToRideHistory(BuildContext context, String tripId, TripHistoryModel currentTripHistoryList){
   Navigator.pushReplacement(context,
@@ -451,7 +462,7 @@ void changeToMyAccount(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: const UserHomePage(3),
+      child: const UserHomePage(2),
       duration: const Duration(milliseconds: 300),
     ),
   );
@@ -576,16 +587,6 @@ void changeToShareBikeUserListScreen(BuildContext context) {
     PageTransition(
       type: PageTransitionType.rightToLeft,
       child: const ShareBikeUserList(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
-
-void changeToFeedsScreen(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const UserHomePage(2),
       duration: const Duration(milliseconds: 300),
     ),
   );

@@ -139,8 +139,7 @@ class _UserProfileState extends State<UserProfile> {
                 icon: const Icon(Icons.save),
                 tooltip: 'Save',
                 onPressed: () {
-                      _currentUser.updateUserProfile(uploadimageUrl,
-                          _nameController.text.trim(), _phoneNoController.text.trim());
+                      _currentUser.updateUserProfile(uploadimageUrl, _nameController.text.trim(), _phoneNoController.text.trim());
 
                       setState(() {
                         _isInputEnable = false;

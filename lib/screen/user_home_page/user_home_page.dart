@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/test_ble.dart';
@@ -26,9 +28,6 @@ class _UserHomePageState extends State<UserHomePage> {
   ///Current index is 0, init state body[screen] is user home page general screen
   late int currentIndex;
 
-  ///Appbar title
-  String _title = '';
-
   @override
   void initState() {
     currentIndex = widget.currentIndex ?? 0;
@@ -37,7 +36,6 @@ class _UserHomePageState extends State<UserHomePage> {
   ///Body Screen navigation by bottom navigation bar
   final screen = [
     const UserHomeGeneral(),
-    const TripHistory(),
     const Feeds(),
     const MyAccount(),
   ];
@@ -51,128 +49,103 @@ class _UserHomePageState extends State<UserHomePage> {
         body: screen[currentIndex],
 
         bottomNavigationBar: BottomAppBar(
-         // height: 80.h,
-          child: BottomNavigationBar(
-            //For disable animation
-            //type: BottomNavigationBarType.fixed,
+         height:  Platform.isIOS ? 90.h : 55.h,
+          child: SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
+            child: BottomNavigationBar(
+              //For disable animation
+              //type: BottomNavigationBarType.fixed,
          //   iconSize: 15,
-            //selectedItemColor: Color(0xff69489D),
-            currentIndex: currentIndex,
-            onTap: (index) {
-              setState(() {
-                currentIndex = index;
-              });
-            },
-            items: [
-              BottomNavigationBarItem(
-                icon: Transform.translate(
-                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
-                  child: Container(
-                    child: SvgPicture.asset(
-                      "assets/buttons/home.svg",
-                    ),
-          //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                    height: EvieLength.bottom_bar_icon_height,
-                  ),
-                ),
+              //selectedItemColor: Color(0xff69489D),
+              currentIndex: currentIndex,
+              onTap: (index) {
+                setState(() {
+                  currentIndex = index;
+                });
+              },
 
-                activeIcon: Transform.translate(
-                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
-                  child: Container(
-                    child: SvgPicture.asset(
-                      "assets/buttons/home_selected.svg",
+              items: [
+                BottomNavigationBarItem(
+                  icon: Transform.translate(
+                    offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                    child: Container(
+                      child: SvgPicture.asset(
+                        "assets/buttons/home.svg",
+                      ),
+            //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                      height: EvieLength.bottom_bar_icon_height,
                     ),
+                  ),
+                  activeIcon: Transform.translate(
+                    offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                    child: Container(
+                      child: SvgPicture.asset(
+                        "assets/buttons/home_selected.svg",
+                      ),
         //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                    height: EvieLength.bottom_bar_icon_height,
-                  ),
-                ),
-                tooltip: 'Home',
-                label: '',
-              ),
+                      height: EvieLength.bottom_bar_icon_height,
 
-
-              BottomNavigationBarItem(
-                icon: Transform.translate(
-                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
-                  child: Container(
-       //          alignment: Alignment(0,-1.0),
-                    child: SvgPicture.asset(
-                      "assets/buttons/statistic.svg",
                     ),
-                    //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                    height: EvieLength.bottom_bar_icon_height,
                   ),
+                  tooltip: 'Home',
+                  label: '',
                 ),
 
-                activeIcon: Transform.translate(
-                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
-                  child: Container(
-      //            alignment: Alignment(0,-1.0),
-                    child: SvgPicture.asset(
-                      "assets/buttons/statistic_selected.svg",
+
+                BottomNavigationBarItem(
+                  icon: Transform.translate(
+                    offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                    child: Container(
+                      child: SvgPicture.asset(
+                        "assets/buttons/notification.svg",
+                      ),
+            //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                      height: EvieLength.bottom_bar_icon_height,
                     ),
-                    //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                    height: EvieLength.bottom_bar_icon_height,
                   ),
-                ),
-                tooltip: 'Statistic',
-                label: '',
-              ),
 
-
-              BottomNavigationBarItem(
-                icon: Transform.translate(
-                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
-                  child: Container(
-                    child: SvgPicture.asset(
-                      "assets/buttons/notification.svg",
+                  activeIcon:Transform.translate(
+                    offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                    child: Container(
+                      child: SvgPicture.asset(
+                        "assets/buttons/notification_selected.svg",
+                      ),
+             //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                      height: EvieLength.bottom_bar_icon_height,
                     ),
-          //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                    height: EvieLength.bottom_bar_icon_height,
                   ),
+                  tooltip: 'Feeds',
+                  label: '',
                 ),
 
-                activeIcon:Transform.translate(
-                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
-                  child: Container(
-                    child: SvgPicture.asset(
-                      "assets/buttons/notification_selected.svg",
+
+                BottomNavigationBarItem(
+                  icon: Transform.translate(
+                    offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                    child: Container(
+                      child: SvgPicture.asset(
+                        "assets/buttons/user.svg",
+                      ),
+                      //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                      height: EvieLength.bottom_bar_icon_height,
                     ),
-           //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                    height: EvieLength.bottom_bar_icon_height,
                   ),
-                ),
-                tooltip: 'Feeds',
-                label: '',
-              ),
 
-
-              BottomNavigationBarItem(
-                icon: Transform.translate(
-                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
-                  child: Container(
-                    child: SvgPicture.asset(
-                      "assets/buttons/user.svg",
+                  activeIcon: Transform.translate(
+                    offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                    child: Container(
+                      child: SvgPicture.asset(
+                        "assets/buttons/user_selected.svg",
+                      ),
+                      //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                      height: EvieLength.bottom_bar_icon_height,
                     ),
-                    //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                    height: EvieLength.bottom_bar_icon_height,
                   ),
+                  tooltip: 'User',
+                  label: '',
                 ),
-
-                activeIcon: Transform.translate(
-                  offset: Offset(0, EvieLength.bottom_bar_icon_offset),
-                  child: Container(
-                    child: SvgPicture.asset(
-                      "assets/buttons/user_selected.svg",
-                    ),
-                    //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                    height: EvieLength.bottom_bar_icon_height,
-                  ),
-                ),
-                tooltip: 'User',
-                label: '',
-              ),
-            ],
+              ],
+            ),
           ),
         ));
   }

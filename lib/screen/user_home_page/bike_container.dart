@@ -46,7 +46,6 @@ class _BikeContainerState extends State<BikeContainer> {
     /// get bluetooth connection state and lock unlock to detect isConnected
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
-
     ///Handle all data if bool isDeviceConnected is true
     if (deviceConnectResult == DeviceConnectResult.connected) {
       if (_bluetoothProvider.currentBikeModel?.deviceIMEI == widget.bikeModel.deviceIMEI) {
@@ -65,16 +64,19 @@ class _BikeContainerState extends State<BikeContainer> {
       });
     }
 
+    ///
     return Container(
       height: 98.h,
       child: ListTile(
         leading: Padding(
           padding: EdgeInsets.fromLTRB(16.w, 17.h, 0.w, 0.h),
-          child: Image(
-            image: AssetImage(getCurrentBikeStatusImage(widget.bikeModel, _bikeProvider)),
-            height: 25.h,
-            width: 39.59.w,
-          ),
+          child: Image.asset('assets/images/bike_round.png', ),
+          //
+          // Image(
+          //   image: AssetImage(getCurrentBikeStatusImage(widget.bikeModel, _bikeProvider, _bluetoothProvider)),
+          //   height: 25.h,
+          //   width: 39.59.w,
+          // ),
         ),
         title: Text(
             widget.bikeModel.deviceName!,
@@ -86,14 +88,11 @@ class _BikeContainerState extends State<BikeContainer> {
             Row(
               children: [
                 SvgPicture.asset(
-                  getCurrentBikeStatusIcon(widget.bikeModel, _bikeProvider),
+                  getCurrentBikeStatusIcon(widget.bikeModel, _bikeProvider, _bluetoothProvider),
                   height: 20.h,
                   width: 20.w,
                 ),
-                Text(getCurrentBikeStatusString(
-                    deviceConnectResult == DeviceConnectResult.connected,
-                    widget.bikeModel,
-                    _bikeProvider), style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan)),
+                Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, widget.bikeModel, _bikeProvider,_bluetoothProvider), style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan)),
               ],
             ),
 
@@ -101,24 +100,24 @@ class _BikeContainerState extends State<BikeContainer> {
             Container(
               height: 33.h,
               width: 125.w,
-              child: ElevatedButton(
-                child: Text(
-                  "Bike Setting",
-                  style: EvieTextStyles.body14.copyWith(color: EvieColors.primaryColor,fontWeight: FontWeight.w900),),
-                onPressed: () async {
-                  ///Switch bike animation
-                  await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
-                  changeToBikeSetting(context, 'SwitchBike');
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      side:  BorderSide(color: EvieColors.primaryColor, width: 1.0.w)),
-                  elevation: 0.0,
-                  backgroundColor: Colors.transparent,
-
-                ),
-              ),
+              // child: ElevatedButton(
+              //   child: Text(
+              //     "Bike Setting",
+              //     style: EvieTextStyles.body14.copyWith(color: EvieColors.primaryColor,fontWeight: FontWeight.w900),),
+              //   onPressed: () async {
+              //     ///Switch bike animation
+              //     await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
+              //     changeToBikeSetting(context, 'SwitchBike');
+              //   },
+              //   style: ElevatedButton.styleFrom(
+              //     shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(20.0),
+              //         side:  BorderSide(color: EvieColors.primaryColor, width: 1.0.w)),
+              //     elevation: 0.0,
+              //     backgroundColor: Colors.transparent,
+              //
+              //   ),
+              // ),
             ),
             Divider(),
           ],
@@ -165,162 +164,4 @@ class _BikeContainerState extends State<BikeContainer> {
     );
   }
 
-  getCurrentBikeStatusImage(BikeModel bikeModel, BikeProvider bikeProvider) {
-    if (bikeProvider.userBikePlans.isNotEmpty) {
-      for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
-        if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
-          if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
-            final result = calculateDateDifferenceFromNow(
-                bikeProvider.userBikePlans.values
-                    .elementAt(index)
-                    .periodEnd
-                    .toDate());
-            if (result < 0) {
-              return "assets/images/bike_HPStatus/bike_normal.png";
-            } else {
-              if (bikeModel.location?.isConnected == false) {
-                return "assets/images/bike_HPStatus/bike_warning.png";
-              } else {
-                switch (bikeModel.location!.status) {
-                  case 'safe':
-                    {
-                      if (cableLockState?.lockState == LockState.unlock) {
-                        return "assets/images/bike_HPStatus/bike_safe.png";
-                      } else {
-                        return "assets/images/bike_HPStatus/bike_safe.png";
-                      }
-                    }
-                  case 'warning':
-                    return "assets/images/bike_HPStatus/bike_warning.png";
-
-                  case 'danger':
-                    return "assets/images/bike_HPStatus/bike_danger.png";
-                  case 'fall':
-                    return "assets/images/bike_HPStatus/bike_warning.png";
-                  case 'crash':
-                    return "assets/images/bike_HPStatus/bike_danger.png";
-
-                  default:
-                    return "assets/images/bike_HPStatus/bike_safe.png";
-                }
-              }
-            }
-          }else{
-            return "assets/images/bike_HPStatus/bike_normal.png";
-          }
-        }
-      }
-    }else{
-      return "assets/images/bike_HPStatus/bike_normal.png";
-    }
-  }
-
-  getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider) {
-
-    if (bikeProvider.userBikePlans.isNotEmpty) {
-      for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
-        if (bikeModel.deviceIMEI ==
-            bikeProvider.userBikePlans.keys.elementAt(index)) {
-          if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
-            final result = calculateDateDifferenceFromNow(
-                bikeProvider.userBikePlans.values
-                    .elementAt(index)
-                    .periodEnd
-                    .toDate());
-            if (result < 0) {
-              return "assets/buttons/bike_security_not_available.svg";
-            } else {
-              if (bikeModel.location?.isConnected == false) {
-                return "assets/buttons/bike_security_warning.svg";
-              } else {
-                switch (bikeModel.location!.status) {
-                  case 'safe':
-                    {
-                      if (cableLockState?.lockState == LockState.unlock) {
-                        return "assets/buttons/bike_security_unlock.svg";
-                      } else {
-                        return "assets/buttons/bike_security_lock_and_secure.svg";
-                      }
-                    }
-                  case 'warning':
-                    return "assets/buttons/bike_security_warning.svg";
-                  case 'danger':
-                    return "assets/buttons/bike_security_danger.svg";
-                  case 'fall':
-                    return "assets/buttons/bike_security_warning.svg";
-                  case 'crash':
-                    return "assets/buttons/bike_security_danger.svg";
-
-                  default:
-                    return "assets/buttons/bike_security_lock_and_secure.svg";
-                }
-              }
-            }
-          }else{
-            return "assets/buttons/bike_security_not_available.svg";
-          }
-        }
-      }
-    }else{
-       return "assets/buttons/bike_security_not_available.svg";
-    }
-  }
-
-  getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bikeProvider) {
-
-    if (bikeProvider.userBikePlans.isNotEmpty) {
-      for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
-        if (bikeModel.deviceIMEI ==
-            bikeProvider.userBikePlans.keys.elementAt(index)) {
-          if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
-            final result = calculateDateDifferenceFromNow(
-                bikeProvider.userBikePlans.values
-                    .elementAt(index)
-                    .periodEnd
-                    .toDate());
-            if (result < 0) {
-              return "-";
-            } else {
-              if (bikeModel.location?.isConnected == false) {
-                return "Connection Lost";
-              } else {
-                switch (isLocked) {
-                  case true:
-                    if (bikeModel.location!.status == "safe") {
-                      return "Locked & Secure";
-                    } else if (bikeModel.location!.status == "warning") {
-                      return "Movement Detected";
-                    } else if (bikeModel.location!.status == "danger") {
-                      return "Under Threat";
-                    } else if (bikeModel.location!.status == "fall") {
-                      return "Fall Detected";
-                    } else if (bikeModel.location!.status == "crash") {
-                      return "Crash Alert";
-                    }
-                    break;
-                  case false:
-                    if (bikeModel.location!.status == "safe") {
-                      return "Unlocked";
-                    } else if (bikeModel.location!.status == "warning") {
-                      return "Movement Detected";
-                    } else if (bikeModel.location!.status == "danger") {
-                      return "Under Threat";
-                    } else if (bikeModel.location!.status == "fall") {
-                      return "Fall Detected";
-                    } else if (bikeModel.location!.status == "crash") {
-                      return "Crash Alert";
-                    }
-                    break;
-                }
-              }
-            }
-          }else{
-            return "-";
-          }
-        }
-      }
-    }else{
-      return "-";
-    }
-  }
 }

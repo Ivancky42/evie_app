@@ -32,8 +32,7 @@ class _SignUpState extends State<SignUp> {
   //To read data from user input
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmController =
-      TextEditingController();
+  final TextEditingController _passwordConfirmController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   late AuthProvider _authProvider;
   late CurrentUserProvider _currentUserProvider;
@@ -196,8 +195,6 @@ class _SignUpState extends State<SignUp> {
                         side: MaterialStateBorderSide.resolveWith(
                               (states) => BorderSide(width: 1.w, color:EvieColors.lightGrayishCyan),
                         ),
-
-
                       ),
 
                       Expanded(

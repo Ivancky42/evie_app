@@ -59,7 +59,7 @@ class NotificationProvider extends ChangeNotifier {
   ///Subscribe function block
   subscribeToTopic(String? topic) async {
     await messaging.subscribeToTopic(topic!);
-    debugPrint("Subscribe to : $topic");
+    // debugPrint("Subscribe to : $topic");
   }
 
   ///Unsubscribe function block

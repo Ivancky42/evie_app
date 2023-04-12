@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
 import 'colours.dart';
+import 'model/bike_model.dart';
 
 checkBleStatusAndConnectDevice(BluetoothProvider _bluetoothProvider, BikeProvider _bikeProvider) {
   BleStatus? bleStatus = _bluetoothProvider.bleStatus;
@@ -81,7 +82,7 @@ calculateTimeAgoWithTime(DateTime dateTime){
   }else if(diff.inHours >= 0 && diff.inHours <= 24){
     timeAgo = "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
   }else{
-    timeAgo = "${monthsInYear[dateTime.month]} ${dateTime.day.toString()}, at ${dateTime.hour}:${dateTime.minute}";
+    timeAgo = "${monthsInYear[dateTime.month]} ${dateTime.day.toString()} ${dateTime.year.toString()}, at ${dateTime.hour}:${dateTime.minute}";
   }
   return timeAgo;
 }
@@ -270,6 +271,157 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
         ),
       ),
     );
+  }
+}
+
+
+getCurrentBikeStatusImage(BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
+  if (bikeProvider.userBikePlans.isNotEmpty) {
+    for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
+      if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
+        if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
+          final result = calculateDateDifferenceFromNow(
+              bikeProvider.userBikePlans.values
+                  .elementAt(index)
+                  .periodEnd
+                  .toDate());
+          if (result < 0) {
+            return "assets/images/bike_HPStatus/bike_normal.png";
+          } else {
+            if (bikeModel.location?.isConnected == false) {
+              return "assets/images/bike_HPStatus/bike_warning.png";
+            } else {
+              switch (bikeModel.location!.status) {
+                case 'safe':
+                  {
+                    if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+                      return "assets/images/bike_HPStatus/bike_safe.png";
+                    } else {
+                      return "assets/images/bike_HPStatus/bike_safe.png";
+                    }
+                  }
+                case 'warning':
+                  return "assets/images/bike_HPStatus/bike_warning.png";
+
+                case 'danger':
+                  return "assets/images/bike_HPStatus/bike_danger.png";
+                case 'fall':
+                  return "assets/images/bike_HPStatus/bike_warning.png";
+                case 'crash':
+                  return "assets/images/bike_HPStatus/bike_danger.png";
+
+                default:
+                  return "assets/images/bike_HPStatus/bike_safe.png";
+              }
+            }
+          }
+        }else{
+          return "assets/images/bike_HPStatus/bike_normal.png";
+        }
+      }
+    }
+  }else{
+    return "assets/images/bike_HPStatus/bike_normal.png";
+  }
+}
+
+getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
+
+  if (bikeProvider.userBikePlans.isNotEmpty) {
+    for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
+      if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
+        if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
+          final result = calculateDateDifferenceFromNow(
+              bikeProvider.userBikePlans.values
+                  .elementAt(index)
+                  .periodEnd
+                  .toDate());
+          if (result < 0) {
+            return "assets/buttons/bike_security_not_available.svg";
+          } else {
+            if (bikeModel.location?.isConnected == false) {
+              return "assets/buttons/bike_security_warning.svg";
+            } else {
+              switch (bikeModel.location!.status) {
+                case 'safe':
+                  {
+                    if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+                      return "assets/buttons/bike_security_unlock.svg";
+                    } else {
+                      return "assets/buttons/bike_security_lock_and_secure.svg";
+                    }
+                  }
+                case 'warning':
+                  return "assets/buttons/bike_security_warning.svg";
+                case 'danger':
+                  return "assets/buttons/bike_security_danger.svg";
+                case 'fall':
+                  return "assets/buttons/bike_security_warning.svg";
+                case 'crash':
+                  return "assets/buttons/bike_security_danger.svg";
+
+                default:
+                  return "assets/buttons/bike_security_lock_and_secure.svg";
+              }
+            }
+          }
+        }else{
+          return "assets/buttons/bike_security_not_available.svg";
+        }
+      }
+    }
+  }else{
+    return "assets/buttons/bike_security_not_available.svg";
+  }
+}
+
+getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
+
+  if (bikeProvider.userBikePlans.isNotEmpty) {
+    for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
+      if (bikeModel.deviceIMEI ==
+          bikeProvider.userBikePlans.keys.elementAt(index)) {
+        if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
+          final result = calculateDateDifferenceFromNow(
+              bikeProvider.userBikePlans.values
+                  .elementAt(index)
+                  .periodEnd
+                  .toDate());
+          if (result < 0) {
+            return "-";
+          } else {
+            if (bikeModel.location?.isConnected == false) {
+              return "Connection Lost";
+            } else {
+              switch (bikeModel.location!.status) {
+                case 'safe':
+                  {
+                    if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+                      return "Unlocked";
+                    } else {
+                      return "Locked & Secure";
+                    }
+                  }
+                case 'warning':
+                  return "Movement Detected";
+                case 'danger':
+                  return "Under Threat";
+                case 'fall':
+                  return "Fall Detected";
+                case 'crash':
+                  return "Crash Alert";
+                default:
+                  return "-";
+              }
+            }
+          }
+        }else{
+          return "-";
+        }
+      }
+    }
+  }else{
+    return "-";
   }
 }
 
