@@ -9,7 +9,7 @@ void showTripHistorySheet(BuildContext context) {
     isScrollControlled: true,
     constraints: BoxConstraints.tight(Size(
         MediaQuery.of(context).size.width,
-        MediaQuery.of(context).size.height * .95)),
+        MediaQuery.of(context).size.height * .90)),
     context: context,
     builder: (BuildContext context) {
       return EvieBottomSheet(childContext: const TripHistory(),);
@@ -18,12 +18,13 @@ void showTripHistorySheet(BuildContext context) {
 }
 
 
+
 void showBikeSettingSheet(BuildContext context) {
   showModalBottomSheet(
     isScrollControlled: true,
     constraints: BoxConstraints.tight(Size(
         MediaQuery.of(context).size.width,
-        MediaQuery.of(context).size.height * .95)),
+        MediaQuery.of(context).size.height * .90)),
     context: context,
     builder: (BuildContext context) {
       return EvieBottomSheet(childContext: const BikeSetting("Home"),);

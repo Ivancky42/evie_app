@@ -32,8 +32,6 @@ class _EvieBottomSheetState extends State<EvieBottomSheet> {
   @override
   Widget build(BuildContext context) {
 
-    BikeProvider _bikeProvider = Provider.of<BikeProvider>(context);
-
     return Container(
       decoration: const BoxDecoration(
         color: EvieColors.grayishWhite,

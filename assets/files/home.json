@@ -1,0 +1,22 @@
+[
+  {
+    "id": 0,
+    "label": "Orbital Anti-theft"
+  },
+  {
+    "id":1,
+    "label":"Battery"
+  },
+  {
+    "id": 2,
+    "label": "Rides"
+  },
+  {
+  "id": 3,
+  "label": "Setting"
+  },
+  {
+    "id": 4,
+    "label": "Unlocking System"
+  }
+]

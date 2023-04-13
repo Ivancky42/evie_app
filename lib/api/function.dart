@@ -425,5 +425,23 @@ getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bike
   }
 }
 
+///Load image according danger status
+loadMarkerImageString(String dangerStatus){
+  switch (dangerStatus) {
+    case 'safe':
+      return "assets/icons/marker_safe.png";
+    case 'warning':
+      return "assets/icons/marker_warning.png";
+    case 'fall':
+      return "assets/icons/marker_warning.png";
+    case 'danger':
+      return "assets/icons/marker_danger.png";
+    case 'crash':
+      return "assets/icons/marker_danger.png";
+    default:
+      return "assets/icons/marker_safe.png";
+  }
+}
+
 
 

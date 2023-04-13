@@ -107,15 +107,19 @@ class AppProviders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
+      ///In summary, setting lazy to true delays the creation of the provider's instance until it is first accessed,
+      ///while setting it to false creates the instance immediately when the Provider widget is built.
         providers: [
           ChangeNotifierProvider<AuthProvider>(
+            lazy: true,
             create: (context) => AuthProvider(),
           ),
           ChangeNotifierProvider<SettingProvider>(
+            lazy: true,
             create: (context) => SettingProvider(),
           ),
           ChangeNotifierProxyProvider<AuthProvider, CurrentUserProvider>(
-              lazy: false,
+              lazy: true,
               create: (_) => CurrentUserProvider(),
               update: (_, authProvider, currentUserProvider) {
                 return currentUserProvider!
@@ -147,7 +151,7 @@ class AppProviders extends StatelessWidget {
               }
           ),
           ChangeNotifierProxyProvider<BikeProvider, LocationProvider>(
-              lazy: false,
+              lazy: true,
               create: (_) => LocationProvider(),
               update: (_, bikeProvider, locationProvider) {
                 return locationProvider!
@@ -155,7 +159,7 @@ class AppProviders extends StatelessWidget {
               }
           ),
           ChangeNotifierProxyProvider<BikeProvider, FirmwareProvider>(
-              lazy: false,
+              lazy: true,
               create: (_) => FirmwareProvider(),
               update: (_, bikeProvider, firmwareProvider) {
                 return firmwareProvider!
@@ -163,7 +167,7 @@ class AppProviders extends StatelessWidget {
               }
           ),
           ChangeNotifierProxyProvider<BikeProvider, TripProvider>(
-              lazy: false,
+              lazy: true,
               create: (_) => TripProvider(),
               update: (_, bikeProvider, tripProvider) {
                 return tripProvider!

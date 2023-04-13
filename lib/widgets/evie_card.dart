@@ -10,6 +10,9 @@ class EvieCard extends StatelessWidget {
   final double? width;
   final String? title;
   final VoidCallback? onPress;
+  final Color? color;
+  final Decoration? decoration;
+  final EdgeInsetsGeometry? padding;
 
   const EvieCard({
     Key? key,
@@ -18,6 +21,9 @@ class EvieCard extends StatelessWidget {
     this.width,
     this.title,
     this.onPress,
+    this.color,
+    this.decoration,
+    this.padding,
 
   }) : super(key: key);
 
@@ -27,13 +33,12 @@ class EvieCard extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       onTap: onPress,
       child: Container(
-
         width: width ?? 168.w,
         height: height ?? 168.h,
 
         child: title != null ?
         Padding(
-          padding: EdgeInsets.only(left: 16.w, top: 16.h),
+          padding: padding ?? EdgeInsets.only(left: 16.w, top: 16.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -45,8 +50,8 @@ class EvieCard extends StatelessWidget {
         ) :
         child,
 
-        decoration: BoxDecoration(
-          color: EvieColors.dividerWhite,
+        decoration: decoration ?? BoxDecoration(
+          color: color ?? EvieColors.dividerWhite,
           borderRadius: BorderRadius.circular(10.w),
           boxShadow: [
             BoxShadow(

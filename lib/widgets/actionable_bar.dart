@@ -5,6 +5,10 @@ import 'package:get/utils.dart';
 
 
 import '../api/colours.dart';
+import '../api/fonts.dart';
+import '../api/navigator.dart';
+import '../api/provider/bike_provider.dart';
+import '../api/provider/notification_provider.dart';
 
 ///Button Widget
 class EvieActionableBar extends StatelessWidget {
@@ -86,4 +90,49 @@ class EvieActionableBar extends StatelessWidget {
     //   ),
     // );
   }
+}
+
+
+Widget stackActionableBar(context, BikeProvider bikeProvider, NotificationProvider notificationProvider){
+
+  var items = [
+    'Remind Me 3hr Later',
+    'Remind Me Tomorrow',
+    'Remind Me Next Week'
+  ];
+  ///Remind me 24 hours later, remind me tomorrow, remind me next week, etc
+
+  return Visibility(
+    visible: bikeProvider.rfidList.length == 0 && notificationProvider.isTimeArrive,
+    child: EvieActionableBar(
+        title: "Register EV-Key",
+        text: "Add EV-Key to unlock your bike without app assistance.",
+        buttonLeft: EvieButton_DropDown(
+            onChanged: (value) async {
+              if(value.toString() == items.elementAt(0)){
+                await notificationProvider.setSharedPreferenceDate("targetDateTime", DateTime.now().add(const Duration(hours: 3)));
+              }else if(value.toString() == items.elementAt(1)){
+                await notificationProvider.setSharedPreferenceDate("targetDateTime", DateTime.now().add(const Duration(hours: 24)));
+              }else if(value.toString() == items.elementAt(2)){
+                await notificationProvider.setSharedPreferenceDate("targetDateTime", DateTime.now().add(const Duration(days: 7)));
+              }
+            },
+            items: items.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                    value,
+                    style: EvieTextStyles.body16),
+
+              );
+            }).toList(),
+            text: "Later"
+        ),
+
+        buttonRight: EvieButton(
+          child: Text("Add Now",style: TextStyle(color: EvieColors.grayishWhite, fontSize: 17.sp, fontWeight: FontWeight.w900),),
+          onPressed: (){
+            changeToEVKey(context);
+          },)),
+  );
 }

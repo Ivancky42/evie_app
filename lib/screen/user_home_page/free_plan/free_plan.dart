@@ -298,6 +298,23 @@ class _FreePlanState extends State<FreePlan> {
                          padding: EdgeInsets.all(10.w),
                          child: Column(
                            children: [
+
+                             // Visibility(
+                             //   visible: _bikeProvider.rfidList.length == 0,
+                             //   child: Padding(
+                             //     padding: EdgeInsets.all(10.w),
+                             //     child: EvieCard(
+                             //       height: 96.h,
+                             //       width: double.infinity,
+                             //       color: EvieColors.primaryColor,
+                             //       child: Row(
+                             //         children: [
+                             //
+                             //       ],),
+                             //     ),
+                             //   ),
+                             // ),
+
                              Row(
                                mainAxisAlignment: MainAxisAlignment.center,
                                children: [

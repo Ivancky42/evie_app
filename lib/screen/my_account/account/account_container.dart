@@ -297,7 +297,6 @@ class _AccountContainerState extends State<AccountContainer> {
               behavior: HitTestBehavior.translucent,
               onTap: () {
 
-                changeToMyGarageScreen(context);
               },
               child: Container(
                 height: 44.h,

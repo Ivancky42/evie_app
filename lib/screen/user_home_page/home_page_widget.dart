@@ -127,49 +127,6 @@ class _HomePageWidget_StatusBarState extends State<HomePageWidget_StatusBar> {
 }
 
 
-Widget stackActionableBar(context, BikeProvider bikeProvider, NotificationProvider notificationProvider){
-
-  var items = [
-    'Remind Me 3hr Later',
-    'Remind Me Tomorrow',
-    'Remind Me Next Week'
-  ];
-  ///Remind me 24 hours later, remind me tomorrow, remind me next week, etc
-
-  return Visibility(
-    visible: bikeProvider.rfidList.length == 0 && notificationProvider.isTimeArrive,
-    child: EvieActionableBar(
-        title: "Register EV-Key",
-        text: "Add EV-Key to unlock your bike without app assistance.",
-        buttonLeft: EvieButton_DropDown(
-            onChanged: (value) async {
-              if(value.toString() == items.elementAt(0)){
-                await notificationProvider.setSharedPreferenceDate("targetDateTime", DateTime.now().add(const Duration(hours: 3)));
-              }else if(value.toString() == items.elementAt(1)){
-                await notificationProvider.setSharedPreferenceDate("targetDateTime", DateTime.now().add(const Duration(hours: 24)));
-              }else if(value.toString() == items.elementAt(2)){
-                await notificationProvider.setSharedPreferenceDate("targetDateTime", DateTime.now().add(const Duration(days: 7)));
-              }
-            },
-            items: items.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(
-                  value,
-                  style: EvieTextStyles.body16),
-
-              );
-            }).toList(),
-            text: "Later"
-        ),
-
-        buttonRight: EvieButton(
-          child: Text("Add Now",style: TextStyle(color: EvieColors.grayishWhite, fontSize: 17.sp, fontWeight: FontWeight.w900),),
-          onPressed: (){
-            changeToEVKey(context);
-          },)),
-  );
-}
 
 
 Widget getSecurityTextWidget(bool isLocked) {
@@ -247,11 +204,11 @@ Widget getFirestoreSecurityTextWidget(bool? isLocked, String status) {
 
 String getBatteryImage(int batteryPercent) {
 
-  if (batteryPercent > 50 && batteryPercent <= 100) {
+  if (batteryPercent > 75 && batteryPercent <= 100) {
     return "assets/icons/battery_full.svg";
-  } else if (batteryPercent > 10 && batteryPercent <= 50) {
+  } else if (batteryPercent > 20 && batteryPercent <= 75) {
     return "assets/icons/battery_half.svg";
-  } else if (batteryPercent >= 0 && batteryPercent <= 10) {
+  } else if (batteryPercent >= 0 && batteryPercent <= 20) {
     return "assets/icons/battery_low.svg";
   } else {
     return "assets/icons/battery_not_available.svg";
@@ -259,15 +216,14 @@ String getBatteryImage(int batteryPercent) {
 }
 
 String getBatteryImageFromBLE(String? batteryPercentage) {
-int batteryPercent;
 
-batteryPercent = int.parse(batteryPercentage!);
+int batteryPercent = int.parse(batteryPercentage!);
 
-  if (batteryPercent > 50 && batteryPercent <= 100) {
+  if (batteryPercent > 75 && batteryPercent <= 100) {
     return "assets/icons/battery_full.svg";
-  } else if (batteryPercent > 10 && batteryPercent <= 50) {
+  } else if (batteryPercent > 20 && batteryPercent <= 75) {
     return "assets/icons/battery_half.svg";
-  } else if (batteryPercent >= 0 && batteryPercent <= 10) {
+  } else if (batteryPercent >= 0 && batteryPercent <= 20) {
     return "assets/icons/battery_low.svg";
   } else {
     return "assets/icons/battery_not_available.svg";

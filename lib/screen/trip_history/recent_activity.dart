@@ -160,7 +160,9 @@ class _RecentActivityState extends State<RecentActivity> {
                     ),
                   ],
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  ///Go to external link
+                },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -174,12 +176,13 @@ class _RecentActivityState extends State<RecentActivity> {
           ),
         ),
 
-        Center(
-          child: Text(
-            "Currently all trip history data are from bike 862205055084620, 4487",
-            style:  EvieTextStyles.body12,
-          ),
-        ),
+        ///Hide
+        // Center(
+        //   child: Text(
+        //     "Currently all trip history data are from bike 862205055084620, 4487",
+        //     style:  EvieTextStyles.body12,
+        //   ),
+        // ),
       ],);
   }
 

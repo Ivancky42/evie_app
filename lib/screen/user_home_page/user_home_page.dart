@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:evie_test/screen/user_home_general.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import '../../test/test.dart';
 import '../feeds/feeds.dart';
 import '../my_account/account/my_account.dart';
 import '../../abandon/user_notification.dart';
@@ -36,7 +37,8 @@ class _UserHomePageState extends State<UserHomePage> {
   ///Body Screen navigation by bottom navigation bar
   final screen = [
     const UserHomeGeneral(),
-    const Feeds(),
+    //const Feeds(),
+    AnimatedGradientBorder(),
     const MyAccount(),
   ];
 
@@ -152,16 +154,10 @@ class _UserHomePageState extends State<UserHomePage> {
 }
 
 // class CustomBottomNavigationBarItem extends BottomNavigationBarItem {
-//   CustomBottomNavigationBarItem({required Widget icon, required Widget title})
-//       : super(
+//   CustomBottomNavigationBarItem({required Widget icon, required Widget title}) : super(
 //     icon: Column(
 //       mainAxisAlignment: MainAxisAlignment.start,
 //       children: [icon],
 //     ),
 //   );
 // }
-//
-// CustomBottomNavigationBarItem(
-// icon: Icon(Icons.home),
-// title: Text('Home'),
-// ),
