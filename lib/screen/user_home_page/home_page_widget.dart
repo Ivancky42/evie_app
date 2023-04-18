@@ -129,7 +129,7 @@ class _HomePageWidget_StatusBarState extends State<HomePageWidget_StatusBar> {
 
 
 
-Widget getSecurityTextWidget(bool isLocked) {
+Widget getSecurityTextWidgetSafe(bool isLocked) {
   switch (isLocked) {
     case true:
         return Text(
@@ -205,29 +205,32 @@ Widget getFirestoreSecurityTextWidget(bool? isLocked, String status) {
 String getBatteryImage(int batteryPercent) {
 
   if (batteryPercent > 75 && batteryPercent <= 100) {
-    return "assets/icons/battery_full.svg";
-  } else if (batteryPercent > 20 && batteryPercent <= 75) {
-    return "assets/icons/battery_half.svg";
+    return "assets/icons/battery_full_black.svg";
+  } else if (batteryPercent > 50 && batteryPercent <= 75) {
+    return "assets/icons/battery_half_more_black.svg";
+  } else if (batteryPercent > 20 && batteryPercent <= 50) {
+    return "assets/icons/battery_half_less_black.svg";
   } else if (batteryPercent >= 0 && batteryPercent <= 20) {
-    return "assets/icons/battery_low.svg";
+    return "assets/icons/battery_low_black.svg";
   } else {
     return "assets/icons/battery_not_available.svg";
   }
 }
 
 String getBatteryImageFromBLE(String? batteryPercentage) {
-
 int batteryPercent = int.parse(batteryPercentage!);
 
-  if (batteryPercent > 75 && batteryPercent <= 100) {
-    return "assets/icons/battery_full.svg";
-  } else if (batteryPercent > 20 && batteryPercent <= 75) {
-    return "assets/icons/battery_half.svg";
-  } else if (batteryPercent >= 0 && batteryPercent <= 20) {
-    return "assets/icons/battery_low.svg";
-  } else {
-    return "assets/icons/battery_not_available.svg";
-  }
+if (batteryPercent > 75 && batteryPercent <= 100) {
+  return "assets/icons/battery_full_black.svg";
+} else if (batteryPercent > 50 && batteryPercent <= 75) {
+  return "assets/icons/battery_half_more_black.svg";
+} else if (batteryPercent > 20 && batteryPercent <= 50) {
+  return "assets/icons/battery_half_less_black.svg";
+} else if (batteryPercent >= 0 && batteryPercent <= 20) {
+  return "assets/icons/battery_low_black.svg";
+} else {
+  return "assets/icons/battery_not_available.svg";
+}
 }
 
 

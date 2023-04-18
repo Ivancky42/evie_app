@@ -37,7 +37,7 @@ class _SwitchBikeState extends State<SwitchBike> {
             children: [
               /// home indicator
               Padding(
-                padding: EdgeInsets.only(top: 11.h),
+                padding: EdgeInsets.only(top: 11.h, bottom: 11.h),
                 child: Image.asset(
                   "assets/buttons/home_indicator.png",
                   width: 40.w,
@@ -48,6 +48,7 @@ class _SwitchBikeState extends State<SwitchBike> {
               /// bike list
               ListView.builder(
                 scrollDirection: Axis.vertical,
+                padding: const EdgeInsets.all(0),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: _bikeProvider.userBikeDetails.length,
@@ -59,7 +60,7 @@ class _SwitchBikeState extends State<SwitchBike> {
 
               ///Add new bike
               Padding(
-                padding:  EdgeInsets.fromLTRB(16.w, 0, 16.w, 39.h),
+                padding:  EdgeInsets.fromLTRB(16.w, 22.h, 16.w, 39.h),
                 child: EvieButton(
                     onPressed: (){
                       _bikeProvider.setIsAddBike(true);

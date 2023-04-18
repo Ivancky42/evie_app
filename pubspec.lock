@@ -1160,7 +1160,7 @@ packages:
     source: hosted
     version: "2.4.0"
   mapbox_gl:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
       path: "."
       ref: f505fcf5c79b75c165703028af77f3af62d382ae

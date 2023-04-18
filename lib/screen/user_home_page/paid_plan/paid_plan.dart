@@ -38,6 +38,7 @@ import '../../../api/provider/trip_provider.dart';
 import '../../../api/snackbar.dart';
 import '../../../api/toast.dart';
 import '../../../bluetooth/modelResult.dart';
+import '../../../widgets/actionable_bar.dart';
 import '../../../widgets/evie_card.dart';
 import '../../../widgets/evie_oval.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
@@ -69,17 +70,13 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late NotificationProvider _notificationProvider;
-  late TripProvider _tripProvider;
-  late SettingProvider _settingProvider;
+
+  bool isActionBarAppear = false;
 
   DeviceConnectResult? deviceConnectResult;
   CableLockResult? cableLockState;
 
-  SvgPicture? bikeSecurityIcon;
-  String? bikeSecurityText;
-  Widget? buttonImage;
 
-  late LocationProvider _locationProvider;
   late LatLngBounds latLngBounds;
 
   double currentScroll = 0.40;
@@ -181,10 +178,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
-    _locationProvider = Provider.of<LocationProvider>(context);
     _notificationProvider = Provider.of<NotificationProvider>(context);
-    _tripProvider = Provider.of<TripProvider>(context);
-    _settingProvider = Provider.of<SettingProvider>(context);
 
     // deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     // cableLockState = _bluetoothProvider.cableLockState;
@@ -236,236 +230,242 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                   children: [
                     Align(
                       alignment: Alignment.topCenter,
-                      child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              color:  EvieColors.lightBlack,
-                              child: FutureBuilder(
-                                  future: _currentUserProvider.fetchCurrentUserModel,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return GestureDetector(
-                                        onTap: (){},
-                                        child:Padding(
-                                          padding: EdgeInsets.fromLTRB(0.w, 0, 0.w, 0),
-                                          child: Container(
-                                              height: 73.33.h,
-                                              color:  EvieColors.lightBlack,
-                                              child: Container(
-                                                alignment: Alignment.centerLeft,
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        Padding(
-                                                          padding: const EdgeInsets.all(8.0),
-                                                          child: Image.asset('assets/images/bike_round.png'),
-                                                        ),
-                                                        Padding(
-                                                          padding:  EdgeInsets.only(left: 12.w),
-                                                          child: Column(
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                            children: [
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            color:  EvieColors.lightBlack,
+                            child: FutureBuilder(
+                                future: _currentUserProvider.fetchCurrentUserModel,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return GestureDetector(
+                                      onTap: (){},
+                                      child:Padding(
+                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                        child: Container(
+                                            height: 73.33.h,
+                                            color:  EvieColors.lightBlack,
+                                            child: Container(
+                                              alignment: Alignment.centerLeft,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: Image.asset('assets/images/bike_round.png'),
+                                                      ),
+                                                      Padding(
+                                                        padding:  EdgeInsets.only(left: 12.w),
+                                                        child: Column(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
 
-                                                              Row(
-                                                                children: [
-                                                                  Text(
+                                                            Row(
+                                                              children: [
+                                                                Text(
 
-                                                                    //context.watch<BikeProvider>().currentBikeModel?.deviceName ?? "loading"
-                                                                    // Selector<MyState, int>(
-                                                                    //  selector: (context, myState) => myState.myValue,
-                                                                    //  builder: (context, myValue, child) {
-                                                                    //    return Text('My Value: $myValue');
-                                                                    //    },
-                                                                    //  );
-                                                                    // }
+                                                                  //context.watch<BikeProvider>().currentBikeModel?.deviceName ?? "loading"
+                                                                  // Selector<MyState, int>(
+                                                                  //  selector: (context, myState) => myState.myValue,
+                                                                  //  builder: (context, myValue, child) {
+                                                                  //    return Text('My Value: $myValue');
+                                                                  //    },
+                                                                  //  );
+                                                                  // }
 
-                                                                    _bikeProvider.currentBikeModel?.deviceName ?? "loading",
-                                                                    style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite),
-                                                                  ),
-                                                                  SvgPicture.asset(
-                                                                    "assets/icons/batch_tick.svg",
-                                                                    height: 25.h,
-                                                                  )
-                                                                ],
-                                                              ),
+                                                                  _bikeProvider.currentBikeModel?.deviceName ?? "loading",
+                                                                  style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite),
+                                                                ),
+                                                                SvgPicture.asset(
+                                                                  "assets/icons/batch_tick.svg",
+                                                                  height: 25.h,
+                                                                )
+                                                              ],
+                                                            ),
 
-                                                              Row(
-                                                                children: [
-                                                                  Row(
-                                                                    children: [
-                                                                      _bikeProvider.currentBikeModel?.location?.isConnected == true ?
-                                                                      Row(
-                                                                        children: [
-                                                                          SvgPicture.asset(
-                                                                            "assets/icons/wifi_connected.svg",
-                                                                          ),
-                                                                          Text(
-                                                                            "Online",
-                                                                            style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                                                          ),
-                                                                        ],
-                                                                      ) :
-                                                                      Row(
-                                                                        children: [
-                                                                          SvgPicture.asset(
-                                                                            "assets/icons/wifi_offline.svg",
-                                                                          ),
-                                                                          Text(
-                                                                            "Offline",
-                                                                            style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  Padding(
-                                                                    padding: EdgeInsets.only(left: 9.w, right: 5.w, bottom: 2.h),
-                                                                    child: SvgPicture.asset(
-                                                                      "assets/icons/break_line.svg",
+                                                            Row(
+                                                              children: [
+                                                                Row(
+                                                                  children: [
+                                                                    _bikeProvider.currentBikeModel?.location?.isConnected == true ?
+                                                                    Row(
+                                                                      children: [
+                                                                        SvgPicture.asset(
+                                                                          "assets/icons/wifi_connected.svg",
+                                                                        ),
+                                                                        Text(
+                                                                          "Online",
+                                                                          style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                                                        ),
+                                                                      ],
+                                                                    ) :
+                                                                    Row(
+                                                                      children: [
+                                                                        SvgPicture.asset(
+                                                                          "assets/icons/wifi_offline.svg",
+                                                                        ),
+                                                                        Text(
+                                                                          "Offline",
+                                                                          style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                                                        ),
+                                                                      ],
                                                                     ),
+                                                                  ],
+                                                                ),
+                                                                Padding(
+                                                                  padding: EdgeInsets.only(left: 9.w, right: 5.w, bottom: 2.h),
+                                                                  child: SvgPicture.asset(
+                                                                    "assets/icons/break_line.svg",
                                                                   ),
-                                                                  Row(
-                                                                    children: [
-                                                                      deviceConnectResult == DeviceConnectResult.connected ?
-                                                                      Row(
-                                                                        children: [
-                                                                          SvgPicture.asset(
-                                                                            "assets/icons/bluetooth_connected.svg",
-                                                                          ),
-                                                                          Text(
-                                                                            "Connected",
-                                                                            style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                                                          ),
-                                                                        ],
-                                                                      ) :
-                                                                      Row(
-                                                                        children: [
-                                                                          SvgPicture.asset(
-                                                                            "assets/icons/bluetooth_disconnected.svg",
-                                                                          ),
-                                                                          Text(
-                                                                            "Disconnected",
-                                                                            style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ],
-                                                                  )
-                                                              ],)
-                                                            ],
-                                                          ),
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    deviceConnectResult == DeviceConnectResult.connected ?
+                                                                    Row(
+                                                                      children: [
+                                                                        SvgPicture.asset(
+                                                                          "assets/icons/bluetooth_connected.svg",
+                                                                        ),
+                                                                        Text(
+                                                                          "Connected",
+                                                                          style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                                                        ),
+                                                                      ],
+                                                                    ) :
+                                                                    Row(
+                                                                      children: [
+                                                                        SvgPicture.asset(
+                                                                          "assets/icons/bluetooth_disconnected.svg",
+                                                                        ),
+                                                                        Text(
+                                                                          "Disconnected",
+                                                                          style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ],
+                                                                )
+                                                            ],)
+                                                          ],
                                                         ),
-                                                      ],),
+                                                      ),
+                                                    ],),
 
-                                                    Padding(
-                                                      padding: EdgeInsets.only(right: 22.5.w),
-                                                      child: IconButton(
-                                                          onPressed: (){
-                                                            showMaterialModalBottomSheet(
-                                                                expand: false,
-                                                                context: context,
-                                                                builder: (context) {
-                                                                  return SwitchBike();
-                                                                });
-                                                          },
-                                                          icon: SvgPicture.asset("assets/buttons/down_white.svg",)),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                          ),
-                                        ),
-                                      );
-                                    } else {
-                                      return Center(
-                                        child: Text(
-                                          "Loading",
-                                          style: EvieTextStyles.h3,
-                                        ),
-                                      );
-                                    }
-                                  }),
-                            ),
-
-                            Padding(
-                              padding: EdgeInsets.all(10.w),
-                              child: Column(
-                                children: [
-
-                                  // Visibility(
-                                  //   visible: _bikeProvider.rfidList.length == 0,
-                                  //   child: Padding(
-                                  //     padding: EdgeInsets.all(10.w),
-                                  //     child: EvieCard(
-                                  //       height: 96.h,
-                                  //       width: double.infinity,
-                                  //       color: EvieColors.primaryColor,
-                                  //       child: Row(
-                                  //         children: [
-                                  //
-                                  //       ],),
-                                  //     ),
-                                  //   ),
-                                  // ),
-
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                            padding: EdgeInsets.all(10.w),
-                                            child: OrbitalAntiTheft(),
+                                                  Padding(
+                                                    padding: EdgeInsets.only(right: 22.5.w),
+                                                    child: IconButton(
+                                                        onPressed: (){
+                                                          showMaterialModalBottomSheet(
+                                                              expand: false,
+                                                              context: context,
+                                                              builder: (context) {
+                                                                return SwitchBike();
+                                                              });
+                                                        },
+                                                        icon: SvgPicture.asset("assets/buttons/down_white.svg",)),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
                                         ),
                                       ),
-                                    ],
+                                    );
+                                  } else {
+
+                                    return Center(
+                                      child: Text(
+                                        "Loading",
+                                        style: EvieTextStyles.h3,
+                                      ),
+                                    );
+                                  }
+                                }),
+                          ),
+
+
+                           Expanded(
+                              child: SingleChildScrollView(
+                                physics: isActionBarAppear == true ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
+                                child: Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: SizedBox(
+                                    height: isActionBarAppear == true ? double.infinity : 1000.h,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+
+                                        // Visibility(
+                                        //   visible: _bikeProvider.rfidList.length == 0,
+                                        //   child: Padding(
+                                        //     padding: EdgeInsets.all(10.w),
+                                        //     child: EvieCard(
+                                        //       height: 96.h,
+                                        //       width: double.infinity,
+                                        //       color: EvieColors.primaryColor,
+                                        //       child: Row(
+                                        //         children: [
+                                        //
+                                        //       ],),
+                                        //     ),
+                                        //   ),
+                                        // ),
+
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Padding(
+                                                  padding: EdgeInsets.all(8),
+                                                  child: OrbitalAntiTheft(),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: Padding(
+                                                  padding: EdgeInsets.all(8),
+                                                  child: Battery(),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                  padding: EdgeInsets.all(8),
+                                                  child: Rides(),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: Padding(
+                                                  padding: EdgeInsets.all(8),
+                                                  child: Setting(),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                  padding: EdgeInsets.all(8),
+                                                  child: UnlockingSystem(),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                            padding: EdgeInsets.all(10.w),
-                                            child: Battery(),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Padding(
-                                            padding: EdgeInsets.all(10.w),
-                                            child: Rides(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                            padding: EdgeInsets.all(10.w),
-                                            child: Setting(),
-                                        ),
-                                      ),
-
-                                      Expanded(
-                                        child: Padding(
-                                            padding: EdgeInsets.all(10.w),
-                                            child: UnlockingSystem(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
-                          ],
-                        ),
+                        ],
                       ),
                     ),
                   ],),

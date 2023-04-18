@@ -55,9 +55,9 @@ class EvieCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.w),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 0.2.w,
-              blurRadius: 3.w,
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 8.0.w,
+              blurRadius: 8.0.w,
             ),
           ],
         ),

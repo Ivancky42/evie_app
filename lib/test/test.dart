@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -5,6 +6,7 @@ import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:get/utils.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -19,14 +21,79 @@ import '../../api/provider/bike_provider.dart';
 import '../../widgets/evie_progress_indicator.dart';
 import '../../widgets/evie_textform.dart';
 
+
 class Test extends StatefulWidget {
   const Test({Key? key}) : super(key: key);
+  @override
+  State<Test> createState() => _TestState();
+}
+class _TestState extends State<Test>  {
+
+
+  int _currentIndex = 0;
+  List<Widget> _widgets = [
+    Container(
+    child: Text("1"),
+  ), Container(
+      child: Text("2"),
+    )
+  ];
 
   @override
-  _TestState createState() => _TestState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Carousel Slider'),
+      ),
+      body: Column(
+        children: [
+          CarouselSlider(
+            items: _widgets,
+            options: CarouselOptions(
+              height: 400.0,
+              autoPlay: false,
+              enlargeCenterPage: true,
+              aspectRatio: 16/9,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+              viewportFraction: 0.8,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: _widgets.map((item) {
+              int index = _widgets.indexOf(item);
+              return Container(
+                width: 8.0,
+                height: 8.0,
+                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _currentIndex == index ? EvieColors.primaryColor : EvieColors.progressBarGrey,
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-class _TestState extends State<Test> with SingleTickerProviderStateMixin{
+
+
+
+class BorderPaint extends StatefulWidget {
+  const BorderPaint({Key? key}) : super(key: key);
+
+  @override
+  _BorderPaintState createState() => _BorderPaintState();
+}
+
+class _BorderPaintState extends State<BorderPaint> with SingleTickerProviderStateMixin{
   AnimationController? controller;
   Animation<double>? animation;
 
@@ -142,9 +209,9 @@ class BorderPainter extends CustomPainter {
 class AnimatedGradientBorder extends StatefulWidget {
   const AnimatedGradientBorder({Key? key}) : super(key: key);
   @override
-  State<AnimatedGradientBorder> createState() => _AnimatedGradientBorderState();
+  State<Test> createState() => _TestState();
 }
-class _AnimatedGradientBorderState extends State<AnimatedGradientBorder> with SingleTickerProviderStateMixin {
+class _AnimatedGradientBorderState extends State<Test> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   @override
   void initState() {

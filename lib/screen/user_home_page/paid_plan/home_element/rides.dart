@@ -70,7 +70,7 @@ class _RidesState extends State<Rides> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             EvieOvalGray(
-              buttonText: currentData,
+              buttonText: currentData == "Carbon Footprint" ? "CO2" : currentData,
               onPressed: (){
                 if(currentData == totalData.first){
                   setState(() {
@@ -87,36 +87,39 @@ class _RidesState extends State<Rides> {
                 }
               },),
 
-            SvgPicture.asset(
-              "assets/icons/bar_chart.svg",
-              height: 36.h,
-              width: 36.w,
-            ),
 
             if(currentData == totalData.elementAt(0))...{
               _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
               Row(
                 children: [
-                  Text((currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2), style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
-                  Text(" km", style: EvieTextStyles.body18,),
+                  Text("${(currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2)}", style: EvieTextStyles.display,),
+                  Text(" km", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray,)),
                 ],
-              ):
+              ) :
               Row(
                 children: [
-                  Text(_settingProvider.convertMeterToMilesInString(currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())), style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
-                  Text(" miles", style: EvieTextStyles.body18,),
+                  Text("${_settingProvider.convertMeterToMilesInString(currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()))}", style: EvieTextStyles.display,),
+                  Text(" miles", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
                 ],
               ),
-
             }else if(currentData == totalData.elementAt(1))...{
-              // Text(_bikeProvider.currentTripHistoryLists.length.toStringAsFixed(0), style: EvieTextStyles.display,),
-              Text("${currentTripHistoryListDay.length.toStringAsFixed(0)} rides ", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
+              Row(
+                children: [
+                  Text("${currentTripHistoryListDay.length.toStringAsFixed(0)}", style: EvieTextStyles.display,),
+                  Text(" rides ", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
+                ],
+              ),
             }else if(currentData == totalData.elementAt(2))...{
-              Text(" 0 g", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
+              Row(
+                children: [
+                  Text("0", style: EvieTextStyles.display,),
+                  Text(" g", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
+                ],
+              ),
             },
 
-            Text("ridden this week", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
-            ),
+            Text("ridden this week", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray,height: 1.2),),
+            SizedBox(height: 16.h,),
           ],
         ),
       ),

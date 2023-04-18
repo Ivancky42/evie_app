@@ -11,5 +11,6 @@ class EvieLength {
   static var bottom_bar_icon_height = 51.67.h;
   static var bottom_bar_icon_offset = -8.h;
 
+  static var sheet_expand = .92;
 
 }

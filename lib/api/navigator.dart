@@ -635,6 +635,6 @@ void changeToStripeCheckoutScreen(
 
 void changeToTestScreen(BuildContext context) {
   Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const Test())
+      builder: (context) => const BorderPaint())
   );
 }

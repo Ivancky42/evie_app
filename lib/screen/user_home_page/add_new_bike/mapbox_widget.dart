@@ -11,6 +11,8 @@ class Mapbox_Widget extends StatefulWidget {
   double longitude;
   MapController? mapController;
   List<Marker> markers;
+  bool? isInteract;
+  double? zoom;
 
   Mapbox_Widget({
     Key? key,
@@ -22,6 +24,8 @@ class Mapbox_Widget extends StatefulWidget {
     required this.longitude,
     this.mapController,
     required this.markers,
+    this.isInteract,
+    this.zoom,
 
   }) : super(key: key);
 
@@ -37,9 +41,9 @@ class _Mapbox_WidgetState extends State<Mapbox_Widget> {
     return FlutterMap(
       mapController: widget.mapController,
       options: MapOptions(
-        interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+        interactiveFlags: widget.isInteract == false ? InteractiveFlag.none : InteractiveFlag.pinchZoom | InteractiveFlag.drag ,
 
-        zoom: 16,
+        zoom: widget.zoom ?? 16,
         center: LatLng(
             widget.latitude,
             widget.longitude),

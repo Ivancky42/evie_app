@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../../../api/colours.dart';
 import '../../../../api/fonts.dart';
 import '../../../../api/provider/bike_provider.dart';
+import '../../../../api/sheet.dart';
 import '../../../../widgets/evie_card.dart';
 import '../../home_page_widget.dart';
 
@@ -31,6 +32,9 @@ class _BatteryState extends State<Battery> {
     _bikeProvider = Provider.of<BikeProvider>(context);
 
     return EvieCard(
+      onPress: (){
+        showBatteryDetailsSheet(context);
+      },
       title: "Battery",
       child: Expanded(
         child: Column(

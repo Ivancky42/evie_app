@@ -348,7 +348,7 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, Bluetoo
                     if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
                       return "assets/buttons/bike_security_unlock.svg";
                     } else {
-                      return "assets/buttons/bike_security_lock_and_secure.svg";
+                      return "assets/buttons/bike_security_lock_and_secure_black.svg";
                     }
                   }
                 case 'warning':
@@ -361,7 +361,7 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, Bluetoo
                   return "assets/buttons/bike_security_danger.svg";
 
                 default:
-                  return "assets/buttons/bike_security_lock_and_secure.svg";
+                  return "assets/buttons/bike_security_lock_and_secure_black.svg";
               }
             }
           }
@@ -440,6 +440,40 @@ loadMarkerImageString(String dangerStatus){
       return "assets/icons/marker_danger.png";
     default:
       return "assets/icons/marker_safe.png";
+  }
+}
+
+getSecurityIconWidget(String eventType) {
+  switch (eventType) {
+    case "warning":
+      return "assets/buttons/bike_security_warning.svg";
+    case "danger":
+      return "assets/buttons/bike_security_danger.svg";
+    case "lock":
+      return "assets/buttons/bike_security_lock_and_secure.svg";
+    case "unlock":
+      return "assets/buttons/bike_security_unlock.svg";
+    case "fall":
+      return "assets/buttons/bike_security_warning.svg";
+    default:
+      return "assets/buttons/bike_security_not_available.svg";
+  }
+}
+
+getSecurityTextWidget(String eventType) {
+  switch (eventType) {
+    case "warning":
+      return "Movement Detected";
+    case "danger":
+      return "Under threat";
+    case "lock":
+      return "Lock bike";
+    case "unlock":
+      return "Unlock bike";
+    case "fall":
+      return "Fall detection";
+    default:
+      return "empty";
   }
 }
 

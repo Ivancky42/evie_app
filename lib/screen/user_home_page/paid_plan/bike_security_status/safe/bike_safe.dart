@@ -114,7 +114,7 @@ class _BikeSafeState extends State<BikeSafe> {
                                   0,
                               currentSecurityIcon: getSecurityImageWidget(_bikeProvider.currentBikeModel!.isLocked!),
                               settingProvider: _settingProvider,
-                              child: getSecurityTextWidget(_bikeProvider.currentBikeModel!.isLocked!),
+                              child: getSecurityTextWidgetSafe(_bikeProvider.currentBikeModel!.isLocked!),
                             ),
                           ),
                         ),

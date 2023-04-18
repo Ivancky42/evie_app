@@ -31,7 +31,7 @@ class _EvieOvalGrayState extends State<EvieOvalGray> {
           onTap: widget.onPressed,
           child: Container(
             width: buttonWidth > constraints.maxWidth ? constraints.maxWidth : buttonWidth,
-            height: 35.h,
+            height: 30.h,
             decoration: BoxDecoration(
               color: EvieColors.lightGrayishCyan,
               borderRadius: BorderRadius.circular(20),

@@ -34,7 +34,7 @@ class _SettingState extends State<Setting> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             SvgPicture.asset(
-              "assets/icons/setting.svg",
+              "assets/icons/setting_black.svg",
               height: 36.h,
             ),
             Text("Bike Setting", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),

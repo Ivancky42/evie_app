@@ -559,7 +559,8 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
 
   SmartDialog.show(
       useSystem: true,
-      widget: StatefulBuilder(builder: (context, setState){
+      widget: StatefulBuilder(
+          builder: (context, setState){
         return    EvieDoubleButtonDialog(
             title: "Filter Bike Status",
             childContent: Container(

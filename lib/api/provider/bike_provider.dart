@@ -110,7 +110,6 @@ class BikeProvider extends ChangeNotifier {
   StreamSubscription? currentBikePlanSubscription;
   StreamSubscription? bikePlanSubscription;
   StreamSubscription? rfidListSubscription;
-
   StreamSubscription? currentSubscription;
 
   ScanQRCodeResult scanQRCodeResult = ScanQRCodeResult.unknown;
@@ -1321,6 +1320,16 @@ class BikeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+   getThreatHistoryQuery() {
+    return FirebaseFirestore.instance.collection("bikes")
+        .doc(currentBikeModel!.deviceIMEI!)
+        .collection("events")
+        //.where('type', whereIn: ['lock'])
+        //.where('type', whereIn: _bikeProvider.threatFilterArray)
+        .orderBy("created", descending: true)
+        .snapshots();
+  }
+
   ///Compare bluetooth firmware version and firestore bike firmware version
   checkIsCurrentVersion(String firmVer){
     print("check ble firmware ver");
@@ -1400,19 +1409,25 @@ class BikeProvider extends ChangeNotifier {
     await prefs.remove('currentBikeList');
     await prefs.remove('currentBikeImei');
 
+
     bikeListSubscription?.cancel();
     currentBikeSubscription?.cancel();
+    currentThreatRoutesSubscription?.cancel();
     bikeUserSubscription?.cancel();
     currentBikeUserSubscription?.cancel();
     currentUserBikeSubscription?.cancel();
     currentBikePlanSubscription?.cancel();
+    bikePlanSubscription?.cancel();
     rfidListSubscription?.cancel();
 
     userBikeList.clear();
     userBikeDetails.clear();
     bikeUserList.clear();
     bikeUserDetails.clear();
+    userBikePlans.clear();
+    rfidList.clear();
     threatRoutesLists.clear();
+
 
     isPlanSubscript = null;
     currentBikeIMEI = null;

@@ -24,3 +24,18 @@ extension Sizer on num {
   //double get sp => this * SizerUtil.height / 900.6;
   double get sp => this * SizerUtil.height / 900;
 }
+
+///MediaQuery.of(context).size.height,
+///// Full screen width and height
+// double width = MediaQuery.of(context).size.width;
+// double height = MediaQuery.of(context).size.height;
+//
+// // Height (without SafeArea)
+// var padding = MediaQuery.of(context).viewPadding;
+// double height1 = height - padding.top - padding.bottom;
+//
+// // Height (without status bar)
+// double height2 = height - padding.top;
+//
+// // Height (without status and toolbar)
+// double height3 = height - padding.top - kToolbarHeight;
