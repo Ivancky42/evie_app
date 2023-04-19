@@ -35,7 +35,7 @@ class EvieCard extends StatelessWidget {
       child: Container(
         width: width ?? 168.w,
         height: height ?? 168.h,
-
+        
         child: title != null ?
         Padding(
           padding: padding ?? EdgeInsets.only(left: 16.w, top: 16.h),

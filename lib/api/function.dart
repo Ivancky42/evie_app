@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/evie_double_button_dialog.dart';
@@ -274,6 +275,34 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
   }
 }
 
+getCurrentBikeStatusTag(BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
+  if (bikeProvider.userBikePlans.isNotEmpty) {
+    for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
+      if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
+        if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
+          final result = calculateDateDifferenceFromNow(
+              bikeProvider.userBikePlans.values
+                  .elementAt(index)
+                  .periodEnd
+                  .toDate());
+          if (result < 0) {
+            return SizedBox.shrink();
+          } else {
+           return SvgPicture.asset(
+              "assets/icons/batch_tick.svg",
+              height: 20.h,
+            );
+          }
+        }else{
+          return SizedBox.shrink();
+        }
+      }
+    }
+  }else{
+    return SizedBox.shrink();
+  }
+}
+
 
 getCurrentBikeStatusImage(BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
   if (bikeProvider.userBikePlans.isNotEmpty) {
@@ -326,7 +355,6 @@ getCurrentBikeStatusImage(BikeModel bikeModel, BikeProvider bikeProvider, Blueto
 }
 
 getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
-
   if (bikeProvider.userBikePlans.isNotEmpty) {
     for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
       if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {

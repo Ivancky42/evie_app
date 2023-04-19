@@ -1,13 +1,9 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
@@ -18,8 +14,6 @@ import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/location_provider.dart';
 ///import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import '../../../widgets/evie_radio_button.dart';
-import '../../../widgets/evie_switch.dart';
 
 class MapDetails extends StatefulWidget {
 

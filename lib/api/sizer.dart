@@ -25,6 +25,13 @@ extension Sizer on num {
   double get sp => this * SizerUtil.height / 900;
 }
 
+getScreenHeight(){
+  return Platform.isAndroid ? SizerUtil.height / 844 * SizerUtil.height : SizerUtil.height / 928.4 * SizerUtil.height;
+}
+
+getScreenWidth(){
+  return Platform.isAndroid ? SizerUtil.width / 390 *  SizerUtil.width : SizerUtil.width / 429 *  SizerUtil.width;
+}
 ///MediaQuery.of(context).size.height,
 ///// Full screen width and height
 // double width = MediaQuery.of(context).size.width;

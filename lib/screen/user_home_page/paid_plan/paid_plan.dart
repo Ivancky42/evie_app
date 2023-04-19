@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math' as math;
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -87,7 +88,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   //StreamSubscription? locationSubscription;
   //StreamSubscription? userLocationSubscription;
 
-  
   /// +100 , +100
   static const double initialRatio = 424 / 700;
   static const double minRatio = 186 / 700;
@@ -214,6 +214,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     //     }
     //   }
     // }
+
 
     return WillPopScope(
       onWillPop: () async {
@@ -389,11 +390,21 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
                            Expanded(
                               child: SingleChildScrollView(
-                                physics: isActionBarAppear == true ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
+                                                                                                   /// : NeverScrollPhysic
+                                physics: isActionBarAppear == true ? const BouncingScrollPhysics() : const BouncingScrollPhysics(),
                                 child: Padding(
                                   padding: EdgeInsets.all(5),
-                                  child: SizedBox(
-                                    height: isActionBarAppear == true ? double.infinity : 1000.h,
+                                  child: Container(
+                                    color: Colors.transparent,
+                                    height: isActionBarAppear == true ?
+                                    double.infinity :
+                                    Platform.isIOS ?
+                                    ///screen height - bottom navigation bar - (top container -10.h)- padding top
+                                    getScreenHeight() - 90.h -63.33.h - MediaQuery.of(context).padding.top :
+
+                                    ///screen height - bottom navigation bar - padding top
+                                    getScreenHeight()- 55.h - MediaQuery.of(context).padding.top,
+
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: [
@@ -414,15 +425,18 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                         //   ),
                                         // ),
 
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Padding(
-                                                  padding: EdgeInsets.all(8),
-                                                  child: OrbitalAntiTheft(),
+                                        Expanded(
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Padding(
+
+                                                    padding: EdgeInsets.all(6),
+                                                    child: OrbitalAntiTheft(),
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
@@ -468,6 +482,19 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                         ],
                       ),
                     ),
+
+                    // Column(
+                    //   children: [
+                    //     SizedBox(
+                    //       height: 73.33.h
+                    //     ),
+                    //     Container(
+                    //       color: Colors.redAccent,
+                    //       height: getScreenHeight() - 73.33.h - 55.h,
+                    //     ),
+                    //
+                    //   ],
+                    // )
                   ],),
               )
           )

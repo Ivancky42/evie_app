@@ -497,7 +497,7 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                               //.where('type', whereIn: _bikeProvider.threatFilterArray)
                               .orderBy("created", descending: true),
 
-                        itemsPerPage: snapshotLength ?? 10,
+                        itemsPerPage:  10,
                         // to fetch real-time data
                         isLive: false,
                         listeners: [
