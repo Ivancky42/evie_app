@@ -145,7 +145,6 @@ class _MapDetailsState extends State<MapDetails> {
           ),
             gestureRecognizers: [Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer())].toSet(),
         ),
-
         ),
         ],
       ),
