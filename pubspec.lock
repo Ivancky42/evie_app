@@ -441,6 +441,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  enum_to_string:
+    dependency: transitive
+    description:
+      name: enum_to_string
+      sha256: bd9e83a33b754cb43a75b36a9af2a0b92a757bfd9847d2621ca0b1bed45f8e7a
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -1159,41 +1167,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
-  mapbox_gl:
-    dependency: "direct overridden"
+  mapbox_maps_flutter:
+    dependency: "direct main"
     description:
-      path: "."
-      ref: f505fcf5c79b75c165703028af77f3af62d382ae
-      resolved-ref: f505fcf5c79b75c165703028af77f3af62d382ae
-      url: "https://github.com/flutter-mapbox-gl/maps.git"
-    source: git
-    version: "0.16.0"
-  mapbox_gl_dart:
-    dependency: transitive
-    description:
-      name: mapbox_gl_dart
-      sha256: de6d03718e5eb05c9eb1ddaae7f0383b28acb5afa16405e1deed7ff04dd34f3d
+      name: mapbox_maps_flutter
+      sha256: bc18567183eab2c1089c64e761f3c53108b7d7d654fd41114396863a66e7915b
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.1"
-  mapbox_gl_platform_interface:
-    dependency: "direct overridden"
-    description:
-      path: mapbox_gl_platform_interface
-      ref: f505fcf5c79b75c165703028af77f3af62d382ae
-      resolved-ref: f505fcf5c79b75c165703028af77f3af62d382ae
-      url: "https://github.com/flutter-mapbox-gl/maps.git"
-    source: git
-    version: "0.16.0"
-  mapbox_gl_web:
-    dependency: "direct overridden"
-    description:
-      path: mapbox_gl_web
-      ref: f505fcf5c79b75c165703028af77f3af62d382ae
-      resolved-ref: f505fcf5c79b75c165703028af77f3af62d382ae
-      url: "https://github.com/flutter-mapbox-gl/maps.git"
-    source: git
-    version: "0.16.0"
+    version: "0.4.2"
   matcher:
     dependency: transitive
     description:
@@ -1992,6 +1973,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  turf:
+    dependency: transitive
+    description:
+      name: turf
+      sha256: "153ddb7b9588eaf3c036a411f95625ef48e37d71da862b207c9e5ae56f1ae4d5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.7"
+  turf_equality:
+    dependency: transitive
+    description:
+      name: turf_equality
+      sha256: "2ae3b117afd5fb134412a245a883589cae80d9d9472c587f754a0c34f82fa1b9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   twitter_login:
     dependency: "direct main"
     description:

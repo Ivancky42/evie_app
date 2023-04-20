@@ -1,9 +1,15 @@
 
+import 'dart:typed_data';
+
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +19,7 @@ import '../../../api/function.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/location_provider.dart';
-///import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class MapDetails extends StatefulWidget {
 
@@ -36,12 +42,56 @@ class _MapDetailsState extends State<MapDetails> {
   PaginateRefreshedChangeListener refreshChangeListener = PaginateRefreshedChangeListener();
   int? snapshotLength;
 
+  MapboxMap? mapboxMap;
+
+  OnMapScrollListener? onMapScrollListener;
+
+  ///F I D
+  _onMapCreated(MapboxMap mapboxMap) async {
+    this.mapboxMap = mapboxMap;
+
+    ///When location change marker change
+    mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
+      final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? ""));
+      final Uint8List list = bytes.buffer.asUint8List();
+      var options = <PointAnnotationOptions>[];
+      for (var i = 0; i < 1; i++) {
+        options.add( PointAnnotationOptions(
+          geometry: Point(coordinates:  Position(
+              _locationProvider.locationModel?.geopoint.longitude ?? 0,
+              _locationProvider.locationModel?.geopoint.latitude ?? 0
+          )).toJson(), image: list,
+          iconSize: 1.5.h,
+        ));
+      }
+      pointAnnotationManager.createMulti(options);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
+
+
+    ///When location change marker change
+    mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
+      final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? ""));
+      final Uint8List list = bytes.buffer.asUint8List();
+      var options = <PointAnnotationOptions>[];
+      for (var i = 0; i < 1; i++) {
+        options.add( PointAnnotationOptions(
+          geometry: Point(coordinates:  Position(
+              _locationProvider.locationModel?.geopoint.longitude ?? 0,
+              _locationProvider.locationModel?.geopoint.latitude ?? 0
+          )).toJson(), image: list,
+          iconSize: 1.5.h,
+        ));
+      }
+      pointAnnotationManager.createMulti(options);
+    });
 
     return Container(
       decoration: const BoxDecoration(
@@ -75,18 +125,28 @@ class _MapDetailsState extends State<MapDetails> {
           const Divider(
             thickness: 2,
           ),
-        //
-        // MapWidget(
-        //     resourceOptions: ResourceOptions(
-        //         accessToken: _locationProvider.defPublicAccessToken
-        //     ),
-        //   styleUri: "https://api.mapbox.com/styles/v1/helloevie/claug0xq5002w15mk96ksixpz/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaGVsbG9ldmllIiwiYSI6ImNsN3pvMm9oZTBsM3ozcG4zd2NmenVlZWQifQ.Y1R7b5ban6IwnLODyrf9Zw",
-        //     cameraOptions: CameraOptions(
-        //       zoom: 16,
-        //     )
-        // ),
 
+        Container(
+          height: 600.h,
+          child: MapWidget(
+            onScrollListener: onMapScrollListener,
+              key: const ValueKey("mapWidget"),
+              resourceOptions: ResourceOptions(
+                  accessToken: _locationProvider.defPublicAccessToken
+              ),
+            onMapCreated: _onMapCreated,
+            styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
+            cameraOptions: CameraOptions(
+              center: Point(coordinates: Position(
+                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                  _locationProvider.locationModel?.geopoint.latitude ?? 0
+              )).toJson(),
+                zoom: 16,
+          ),
+            gestureRecognizers: [Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer())].toSet(),
+        ),
 
+        ),
         ],
       ),
       height: 750.h,

@@ -16,8 +16,7 @@ class LocationProvider extends ChangeNotifier {
 
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
   String bikesCollection = dotenv.env['DB_COLLECTION_BIKES'] ?? 'DB not found';
-  String defPublicAccessToken = dotenv.env['DEF_PUBLIC_TOKEN'] ??
-      'DPT not found';
+  String defPublicAccessToken = dotenv.env['DEF_PUBLIC_TOKEN'] ?? 'DPT not found';
   String mapBoxStyleToken = dotenv.env['MAPBOX_STYLE_TOKEN'] ?? 'MST not found';
 
   LocationModel? locationModel;

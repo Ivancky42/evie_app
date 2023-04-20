@@ -899,15 +899,18 @@ PODS:
     - Flutter
   - map_launcher (0.0.1):
     - Flutter
-  - Mapbox-iOS-SDK (6.4.1):
-    - MapboxMobileEvents (~> 0.10.12)
-  - mapbox_gl (0.0.1):
+  - mapbox_maps_flutter (0.4.2):
     - Flutter
-    - Mapbox-iOS-SDK (~> 6.4.0)
-    - MapboxAnnotationExtension (~> 0.0.1-beta.1)
-  - MapboxAnnotationExtension (0.0.1-beta.2):
-    - Mapbox-iOS-SDK (~> 6.0)
-  - MapboxMobileEvents (0.10.14)
+    - MapboxMaps (~> 10.10.0)
+  - MapboxCommon (23.2.3)
+  - MapboxCoreMaps (10.10.0):
+    - MapboxCommon (~> 23.2)
+  - MapboxMaps (10.10.2):
+    - MapboxCommon (= 23.2.3)
+    - MapboxCoreMaps (= 10.10.0)
+    - MapboxMobileEvents (= 1.0.10)
+    - Turf (~> 2.0)
+  - MapboxMobileEvents (1.0.10)
   - MLImage (1.0.0-beta3)
   - MLKitBarcodeScanning (2.2.0):
     - MLKitCommon (~> 8.0)
@@ -1002,6 +1005,7 @@ PODS:
   - SwiftProtobuf (1.20.3)
   - SwiftyGif (5.4.4)
   - Toast (4.0.0)
+  - Turf (2.6.1)
   - twitter_login (0.0.1):
     - Flutter
   - url_launcher_ios (0.0.1):
@@ -1036,7 +1040,7 @@ DEPENDENCIES:
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - map_launcher (from `.symlinks/plugins/map_launcher/ios`)
-  - mapbox_gl (from `.symlinks/plugins/mapbox_gl/ios`)
+  - mapbox_maps_flutter (from `.symlinks/plugins/mapbox_maps_flutter/ios`)
   - mobile_scanner (from `.symlinks/plugins/mobile_scanner/ios`)
   - open_mail_app (from `.symlinks/plugins/open_mail_app/ios`)
   - open_settings (from `.symlinks/plugins/open_settings/ios`)
@@ -1094,8 +1098,9 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - Libuv-gRPC
-    - Mapbox-iOS-SDK
-    - MapboxAnnotationExtension
+    - MapboxCommon
+    - MapboxCoreMaps
+    - MapboxMaps
     - MapboxMobileEvents
     - MLImage
     - MLKitBarcodeScanning
@@ -1117,6 +1122,7 @@ SPEC REPOS:
     - SwiftProtobuf
     - SwiftyGif
     - Toast
+    - Turf
 
 EXTERNAL SOURCES:
   cloud_firestore:
@@ -1163,8 +1169,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/location/ios"
   map_launcher:
     :path: ".symlinks/plugins/map_launcher/ios"
-  mapbox_gl:
-    :path: ".symlinks/plugins/mapbox_gl/ios"
+  mapbox_maps_flutter:
+    :path: ".symlinks/plugins/mapbox_maps_flutter/ios"
   mobile_scanner:
     :path: ".symlinks/plugins/mobile_scanner/ios"
   open_mail_app:
@@ -1259,10 +1265,11 @@ SPEC CHECKSUMS:
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   map_launcher: e325db1261d029ff33e08e03baccffe09593ffea
-  Mapbox-iOS-SDK: f870f83cbdc7aa4a74afcee143aafb0dae390c82
-  mapbox_gl: 33c5ab6306cbfa72289bb3606d2cd2e8baee9ff0
-  MapboxAnnotationExtension: 4eee6c26349ef6d909f1a23a7eae2d0f7ca5fa7d
-  MapboxMobileEvents: 5a172cc9bbf8ac0e45ba86095cbee685ede248cc
+  mapbox_maps_flutter: be1a16ff33006fff69d5c21b1cec8ed82be9c02d
+  MapboxCommon: e7948335faacbe6f8b9b115511fd0dd0354bf565
+  MapboxCoreMaps: 4075a9e415b9b3ab6229d09623fef5f791826a5b
+  MapboxMaps: d8cf7d214d94ec18790c338f3a3fe59dd4048e97
+  MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   MLImage: 489dfec109f21da8621b28d476401aaf7a0d4ff4
   MLKitBarcodeScanning: d92fe1911001ec36870162c5a0eb206f612b7169
   MLKitCommon: f6da6c5659618c070b50a80db01248ebe2964175
@@ -1294,6 +1301,7 @@ SPEC CHECKSUMS:
   SwiftProtobuf: b02b5075dcf60c9f5f403000b3b0c202a11b6ae1
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  Turf: 469ce2c3d22e5e8e4818d5a3b254699a5c89efa4
   twitter_login: 2794db69b7640681171b17b3c2c84ad9dfb4a57f
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
   vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241

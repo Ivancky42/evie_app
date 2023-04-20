@@ -400,7 +400,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                     double.infinity :
                                     Platform.isIOS ?
                                     ///screen height - bottom navigation bar - (top container -10.h)- padding top
-                                    getScreenHeight() - 90.h -63.33.h - MediaQuery.of(context).padding.top :
+                                    getScreenHeight() - 90.h - 63.33.h - MediaQuery.of(context).padding.top :
 
                                     ///screen height - bottom navigation bar - padding top
                                     getScreenHeight()- 55.h - MediaQuery.of(context).padding.top,
