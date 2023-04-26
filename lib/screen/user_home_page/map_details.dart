@@ -1,6 +1,7 @@
-
+import 'dart:async';
 import 'dart:typed_data';
 
+import 'dart:math' as math;
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
@@ -9,7 +10,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:location/location.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
@@ -20,13 +23,11 @@ import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/location_provider.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 
 class MapDetails extends StatefulWidget {
-
-
   MapDetails({
     Key? key,
-
   }) : super(key: key);
 
   @override
@@ -34,69 +35,113 @@ class MapDetails extends StatefulWidget {
 }
 
 class _MapDetailsState extends State<MapDetails> {
-
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late LocationProvider _locationProvider;
 
-  PaginateRefreshedChangeListener refreshChangeListener = PaginateRefreshedChangeListener();
+  PaginateRefreshedChangeListener refreshChangeListener =
+      PaginateRefreshedChangeListener();
   int? snapshotLength;
 
   MapboxMap? mapboxMap;
-
   OnMapScrollListener? onMapScrollListener;
 
-  ///F I D
+  bool isFirstLoadUserLocation = true;
+  bool isFirstLoadMarker = true;
+  var options = <PointAnnotationOptions>[];
+
+  StreamSubscription? userLocationSubscription;
+  LocationData? userLocation;
+
+  final Location _locationService = Location();
+
+  @override
+  void initState() {
+    super.initState();
+    _locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    _locationProvider.addListener(locationListener);
+
+    initLocationService();
+  }
+
+  @override
+  void dispose() {
+    _locationProvider.removeListener(locationListener);
+    userLocationSubscription?.cancel();
+    super.dispose();
+  }
+
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
 
-    ///When location change marker change
-    mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
-      final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? ""));
-      final Uint8List list = bytes.buffer.asUint8List();
-      var options = <PointAnnotationOptions>[];
-      for (var i = 0; i < 1; i++) {
-        options.add( PointAnnotationOptions(
-          geometry: Point(coordinates:  Position(
-              _locationProvider.locationModel?.geopoint.longitude ?? 0,
-              _locationProvider.locationModel?.geopoint.latitude ?? 0
-          )).toJson(), image: list,
-          iconSize: 1.5.h,
-        ));
-      }
-      pointAnnotationManager.createMulti(options);
-    });
+    final ByteData bytes =
+        await rootBundle.load("assets/icons/user_location_icon.png");
+    final Uint8List list = bytes.buffer.asUint8List();
+
+    mapboxMap.location.updateSettings(LocationComponentSettings(
+        enabled: true,
+        pulsingEnabled: true,
+        puckBearingEnabled: true,
+        locationPuck: LocationPuck(
+            locationPuck2D: LocationPuck2D(
+          topImage: list,
+          bearingImage: list,
+          shadowImage: list,
+          //scaleExpression: "50",
+        )
+            // locationPuck3D: LocationPuck3D(
+            //   modelUri:
+            //   "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Embedded/Duck.gltf",)
+            )));
+
+    loadMarker();
+  }
+
+  void initLocationService() async {
+    // ///For user live location
+    // await _locationService.changeSettings(interval: 5000, distanceFilter: 1);
+    //
+    // ///For user live location
+    // userLocationSubscription = _locationService.onLocationChanged.listen((LocationData result) async {
+    //   if (mounted) {
+    //     setState(() {
+    //       userLocation = result;
+    //
+    //       if(userLocation != null && _locationProvider.locationModel?.status != null) {
+    //
+    //         if(isFirstLoadUserLocation == true){
+    //           Future.delayed(const Duration(milliseconds: 50), () {
+    //             animateBounce();
+    //           });
+    //           isFirstLoadUserLocation = false;
+    //         }
+    //
+    //         ///User location update will bounce every once, causing almost infinity bounce if open comment
+    //         //       animateBounce();
+    //
+    //       }
+    //     });
+    //   }
+    // });
+    //
+    // if(userLocation != null && _locationProvider.locationModel?.status != null){
+    //   locationListener();
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
-
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
 
-
-    ///When location change marker change
-    mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
-      final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? ""));
-      final Uint8List list = bytes.buffer.asUint8List();
-      var options = <PointAnnotationOptions>[];
-      for (var i = 0; i < 1; i++) {
-        options.add( PointAnnotationOptions(
-          geometry: Point(coordinates:  Position(
-              _locationProvider.locationModel?.geopoint.longitude ?? 0,
-              _locationProvider.locationModel?.geopoint.latitude ?? 0
-          )).toJson(), image: list,
-          iconSize: 1.5.h,
-        ));
-      }
-      pointAnnotationManager.createMulti(options);
-    });
+    // loadMarker(currentLatLng);
 
     return Container(
       decoration: const BoxDecoration(
         color: EvieColors.grayishWhite,
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16), topRight: Radius.circular(16)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -108,47 +153,201 @@ class _MapDetailsState extends State<MapDetails> {
           //   ),
           // ),
           Row(
-            mainAxisAlignment:
-            MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding:
-                EdgeInsets.only(left: 17.w, top: 10.h, bottom: 11.h),
+                padding: EdgeInsets.only(left: 17.w, top: 10.h, bottom: 11.h),
                 child: Text(
                   "Map",
                   style: EvieTextStyles.h1,
                 ),
               ),
-
             ],
           ),
           const Divider(
             thickness: 2,
           ),
 
-        Container(
-          height: 600.h,
-          child: MapWidget(
-            onScrollListener: onMapScrollListener,
+          Container(
+            height: 600.h,
+            child: MapWidget(
+              onScrollListener: onMapScrollListener,
               key: const ValueKey("mapWidget"),
               resourceOptions: ResourceOptions(
-                  accessToken: _locationProvider.defPublicAccessToken
-              ),
-            onMapCreated: _onMapCreated,
-            styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
-            cameraOptions: CameraOptions(
-              center: Point(coordinates: Position(
-                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                  _locationProvider.locationModel?.geopoint.latitude ?? 0
-              )).toJson(),
+                  accessToken: _locationProvider.defPublicAccessToken),
+              onMapCreated: _onMapCreated,
+              styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
+              cameraOptions: CameraOptions(
+                center: Point(
+                        coordinates: Position(
+                            _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                            _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                    .toJson(),
                 zoom: 16,
+              ),
+              gestureRecognizers: [
+                Factory<OneSequenceGestureRecognizer>(
+                    () => EagerGestureRecognizer())
+              ].toSet(),
+            ),
           ),
-            gestureRecognizers: [Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer())].toSet(),
-        ),
-        ),
         ],
       ),
       height: 750.h,
+    );
+  }
+
+  void locationListener() {
+    //setButtonImage();
+    //getDistanceBetween();
+    animateBounce();
+    // loadImage(currentDangerStatus);
+  }
+
+  var currentAnnotationId;
+
+  loadMarker() {
+
+    options.clear();
+
+    if(currentAnnotationId != null){
+      mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
+    }
+
+
+    mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
+
+      print("!!!!!!!!!!");
+      print(pointAnnotationManager.id);
+
+      ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
+      setState(() {
+        currentAnnotationId = pointAnnotationManager;
+      });
+
+      ///Add danger threat
+      if (_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger") {
+
+        final ByteData bytes = await rootBundle.load("assets/icons/marker_danger.png");
+        final Uint8List list = bytes.buffer.asUint8List();
+
+        ///load a few more marker
+        for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
+          options.add(PointAnnotationOptions(
+            geometry: Point(
+                coordinates: Position(
+              _bikeProvider.threatRoutesLists.values
+                      .elementAt(i)
+                      .geopoint
+                      .longitude ??
+                  0,
+              _bikeProvider.threatRoutesLists.values
+                      .elementAt(i)
+                      .geopoint
+                      .latitude ??
+                  0,
+            )).toJson(),
+            image: list,
+            iconSize: 1.5.h,
+          ));
+
+          pointAnnotationManager.setIconAllowOverlap(false);
+          pointAnnotationManager.createMulti(options);
+        }
+      } else {
+        final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? ""));
+        final Uint8List list = bytes.buffer.asUint8List();
+
+        options.add(PointAnnotationOptions(
+          geometry: Point(
+                  coordinates: Position(
+                      _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                      _locationProvider.locationModel?.geopoint.latitude ?? 0))
+              .toJson(),
+          image: list,
+          iconSize: 1.5.h,
+        ));
+
+        pointAnnotationManager.setIconAllowOverlap(false);
+        pointAnnotationManager.createMulti(options);
+      }
+    });
+
+// if(isFirstLoadMarker == true){
+    //   ///When location change marker change
+    //     mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
+    //     final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? ""));
+    //     final Uint8List list = bytes.buffer.asUint8List();
+    //     for (var i = 0; i < 1; i++) {
+    //       options.add( PointAnnotationOptions(
+    //         geometry: Point(coordinates:  Position(
+    //             _locationProvider.locationModel?.geopoint.longitude ?? 0,
+    //             _locationProvider.locationModel?.geopoint.latitude ?? 0
+    //         )).toJson(), image: list,
+    //         iconSize: 1.5.h,
+    //       ));
+    //     }
+    //     pointAnnotationManager.createMulti(options);
+    //   });
+    //
+    //   setState(() {
+    //     isFirstLoadMarker = false;
+    //   });
+    // }else{
+    //   // pointAnnotationManager.update(options);
+    // }
+  }
+
+  animateBounce() {
+    mapboxMap?.flyTo(
+        CameraOptions(
+          center: Point(
+                  coordinates: Position(
+                      _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                      _locationProvider.locationModel?.geopoint.latitude ?? 0))
+              .toJson(),
+          zoom: 16,
+        ),
+        MapAnimationOptions(duration: 2000, startDelay: 0));
+
+    loadMarker();
+  }
+
+  Widget _buildCompass() {
+    return StreamBuilder<CompassEvent>(
+      stream: FlutterCompass.events,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text('Error reading heading: ${snapshot.error}');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        double? direction = snapshot.data!.heading;
+
+        if (direction == null) {
+          return const Center(
+            child: Text("Device does not have sensors !"),
+          );
+        }
+
+        return Material(
+          shape: CircleBorder(),
+          clipBehavior: Clip.antiAlias,
+          elevation: 0.0,
+          color: Colors.transparent,
+          child: Container(
+            child: Transform.rotate(
+              //   angle: (direction * (math.pi / 180) * -1),
+              angle: (direction * (math.pi / 180) * 1),
+              child: Image.asset('assets/icons/user_location_icon.png'),
+            ),
+          ),
+        );
+      },
     );
   }
 }

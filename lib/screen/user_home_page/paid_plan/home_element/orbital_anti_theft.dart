@@ -318,6 +318,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     return _locationProvider.locationModel;
   }
 
+
   void loadMarker() {
 
     markers = <Marker>[

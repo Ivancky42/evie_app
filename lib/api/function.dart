@@ -455,6 +455,8 @@ getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bike
 
 ///Load image according danger status
 loadMarkerImageString(String dangerStatus){
+  /// connection lost
+
   switch (dangerStatus) {
     case 'safe':
       return "assets/icons/marker_safe.png";

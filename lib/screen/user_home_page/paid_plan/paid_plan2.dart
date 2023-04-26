@@ -219,7 +219,8 @@ class _PaidPlan2State extends State<PaidPlan2> with WidgetsBindingObserver{
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: EdgeInsets.all(6),
+
+                              padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
                               child: OrbitalAntiTheft2(),
                             ),
                           ),
@@ -230,7 +231,7 @@ class _PaidPlan2State extends State<PaidPlan2> with WidgetsBindingObserver{
                                 child: AspectRatio(
                                   aspectRatio: 1,
                                   child: Padding(
-                                    padding: EdgeInsets.fromLTRB(8, 2, 4, 4),
+                                    padding: EdgeInsets.fromLTRB(16, 2, 6, 8),
                                     child: Battery(),
                                   ),
                                 ),
@@ -239,7 +240,7 @@ class _PaidPlan2State extends State<PaidPlan2> with WidgetsBindingObserver{
                                 child: AspectRatio(
                                   aspectRatio: 1,
                                   child: Padding(
-                                    padding: EdgeInsets.fromLTRB(4, 2, 8, 4),
+                                    padding: EdgeInsets.fromLTRB(6, 2, 16, 8),
                                     child: Rides(),
                                   ),
                                 ),
@@ -254,7 +255,7 @@ class _PaidPlan2State extends State<PaidPlan2> with WidgetsBindingObserver{
                                   child: AspectRatio(
                                     aspectRatio: 1,
                                     child: Padding(
-                                      padding: EdgeInsets.fromLTRB(8, 4, 4, 8),
+                                      padding: EdgeInsets.fromLTRB(16, 8, 6, 12),
                                       child: Setting(),
                                     ),
                                   )
@@ -263,7 +264,7 @@ class _PaidPlan2State extends State<PaidPlan2> with WidgetsBindingObserver{
                                   child: AspectRatio(
                                     aspectRatio: 1,
                                     child: Padding(
-                                      padding: EdgeInsets.fromLTRB(4, 4, 8, 8),
+                                      padding: EdgeInsets.fromLTRB(6, 8, 16, 12),
                                       child: UnlockingSystem(),
                                     ),
                                   )

@@ -132,7 +132,6 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                       ),
                       onPressed: () async {
                         SmartDialog.showAttach(
-                          
                             backDismiss: false,
                             keepSingle: true,
                             // maskColorTemp: Colors.transparent,
