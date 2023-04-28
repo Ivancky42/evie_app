@@ -119,39 +119,41 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
                 }
               }),
 
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SvgPicture.asset(getCurrentBikeStatusIcon(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),),
-                Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
-                  style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray),),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SvgPicture.asset(getCurrentBikeStatusIcon(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),),
+                  Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
+                    style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray),),
 
-                selectedGeopoint != null
-                    ? FutureBuilder<dynamic>(
-                    future: _locationProvider.returnPlaceMarks(selectedGeopoint!.latitude, selectedGeopoint!.longitude),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Text(
-                          snapshot.data.name.toString(),
-                          style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
-                        );
-                      }else{
-                        return Text(
-                          "loading",
-                          style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
-                        );
+                  selectedGeopoint != null
+                      ? FutureBuilder<dynamic>(
+                      future: _locationProvider.returnPlaceMarks(selectedGeopoint!.latitude, selectedGeopoint!.longitude),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(
+                            snapshot.data.name.toString(),
+                            style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                          );
+                        }else{
+                          return Text(
+                            "loading",
+                            style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                          );
+                        }
                       }
-                    }
-                )
-                    : Text(_locationProvider.currentPlaceMark?.name ?? "Not available",style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),),
+                  )
+                      : Text(_locationProvider.currentPlaceMark?.name ?? "Not available",style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),),
 
-                ///Bike provider lastUpdated minus current timestamp
-                Text(calculateTimeAgo(_bikeProvider.currentBikeModel!.lastUpdated!.toDate()),
-                    style: EvieTextStyles.body14.copyWith(color: EvieColors.mediumLightBlack)),
-              ],
+                  ///Bike provider lastUpdated minus current timestamp
+                  Text(calculateTimeAgo(_bikeProvider.currentBikeModel!.lastUpdated!.toDate()),
+                      style: EvieTextStyles.body14.copyWith(color: EvieColors.mediumLightBlack)),
+                ],
+              ),
             ),
           ),
         ],

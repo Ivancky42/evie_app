@@ -13,6 +13,7 @@ import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 
+import '../../../api/attach.dart';
 import '../../../api/colours.dart';
 import '../../../api/function.dart';
 import '../../../api/provider/bike_provider.dart';
@@ -80,7 +81,6 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                 EdgeInsets.only(left: 17.w, top: 12.h, bottom: 0.h),
                 child: Text(
                   "Orbital Anti-theft",
-
                   style: EvieTextStyles.headlineB,
                 ),
               ),
@@ -131,25 +131,7 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                         ],
                       ),
                       onPressed: () async {
-                        SmartDialog.showAttach(
-                            backDismiss: false,
-                            keepSingle: true,
-                            // maskColorTemp: Colors.transparent,
-                            targetContext: context,
-                            target: Offset(120, 200),
-
-                            widget: EvieDoubleButtonDialog(
-                                title: "Filter by status",
-                                childContent: const Text("Are you sure you want to close this App?"),
-                                leftContent: "No",
-                                rightContent: "Yes",
-                                onPressedLeft: () {
-                                  SmartDialog.dismiss();
-                                },
-                                onPressedRight: () {
-
-                                })
-                        );
+                      showFilterTreatStatus(context, _bikeProvider, setState);
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -182,25 +164,7 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                         ],
                       ),
                       onPressed: () async {
-                        SmartDialog.showAttach(
-                            backDismiss: false,
-                            keepSingle: true,
-                           // maskColorTemp: Colors.transparent,
-                            targetContext: context,
-                            target: Offset(120, 200),
-
-                            widget: EvieDoubleButtonDialog(
-                            title: "Filter by date",
-                            childContent: const Text("Are you sure you want to close this App?"),
-                            leftContent: "No",
-                            rightContent: "Yes",
-                            onPressedLeft: () {
-                              SmartDialog.dismiss();
-                            },
-                            onPressedRight: () {
-
-                            })
-                        );
+                        showFilterTreatDate(context, _bikeProvider, setState);
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(

@@ -1,5 +1,6 @@
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/widgets/evie_checkbox.dart';
 import 'package:evie_test/widgets/evie_textform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -173,29 +174,14 @@ class _SignUpState extends State<SignUp> {
                 padding:  EdgeInsets.only(left: 16.w, right: 16.w, bottom: EvieLength.buttonWord_ButtonBottom),
                 child: Row(
                     children: [
-                      Checkbox(
-                        value: isCheckTermsCondition,
-                        activeColor: EvieColors.primaryColor,
-                        fillColor:  MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-                          if (states.contains(MaterialState.selected)) {
-                            return EvieColors.primaryColor; // color of the checkbox when it's checked
-                          } else {
-                            return Colors.green; // color of the checkbox when it's unchecked
-                          }
-                        },
-                        ),
-                        onChanged: (bool? value) {
-                          setState(() {
-                            isCheckTermsCondition = value!;
-                          });
-                        },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.w),
-                        ),
-                        side: MaterialStateBorderSide.resolveWith(
-                              (states) => BorderSide(width: 1.w, color:EvieColors.lightGrayishCyan),
-                        ),
-                      ),
+
+                      EvieCheckBox(
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isCheckTermsCondition = value!;
+                            });
+                          },
+                          value: isCheckTermsCondition),
 
                       Expanded(
                         child: Container(

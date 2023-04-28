@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'dart:math' as math;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:map_launcher/map_launcher.dart' as map_launcher;
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
@@ -55,6 +57,10 @@ class _MapDetailsState extends State<MapDetails> {
 
   final Location _locationService = Location();
 
+  List<map_launcher.AvailableMap>? availableMaps;
+  bool isMapListShowing = false;
+  GeoPoint? selectedGeopoint;
+
   @override
   void initState() {
     super.initState();
@@ -74,11 +80,15 @@ class _MapDetailsState extends State<MapDetails> {
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
 
-    final ByteData bytes =
-        await rootBundle.load("assets/icons/user_location_icon.png");
+    ///Disable scaleBar on top left corner
+    mapboxMap.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
+
+    ///User location icon and
+    final ByteData bytes = await rootBundle.load("assets/icons/user_location_icon.png");
     final Uint8List list = bytes.buffer.asUint8List();
 
     mapboxMap.location.updateSettings(LocationComponentSettings(
+        layerBelow: "iconsLayer",
         enabled: true,
         pulsingEnabled: true,
         puckBearingEnabled: true,
@@ -168,27 +178,130 @@ class _MapDetailsState extends State<MapDetails> {
             thickness: 2,
           ),
 
-          Container(
-            height: 600.h,
-            child: MapWidget(
-              onScrollListener: onMapScrollListener,
-              key: const ValueKey("mapWidget"),
-              resourceOptions: ResourceOptions(
-                  accessToken: _locationProvider.defPublicAccessToken),
-              onMapCreated: _onMapCreated,
-              styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
-              cameraOptions: CameraOptions(
-                center: Point(
-                        coordinates: Position(
-                            _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                            _locationProvider.locationModel?.geopoint.latitude ?? 0))
-                    .toJson(),
-                zoom: 16,
+          Expanded(
+            child: Stack(
+              children: [
+                MapWidget(
+                  onScrollListener: onMapScrollListener,
+                  key: const ValueKey("mapWidget"),
+                  resourceOptions: ResourceOptions(
+                      accessToken: _locationProvider.defPublicAccessToken),
+                  onMapCreated: _onMapCreated,
+                  styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
+                  cameraOptions: CameraOptions(
+                    center: Point(
+                            coordinates: Position(
+                                _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                                _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                        .toJson(),
+                    zoom: 16,
+                  ),
+                  gestureRecognizers: [
+                    Factory<OneSequenceGestureRecognizer>(
+                        () => EagerGestureRecognizer())
+                  ].toSet(),
+                ),
+
+              Padding(
+                padding:  EdgeInsets.only(bottom:120.h),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: GestureDetector(
+                    onTap: () async {
+                      List<map_launcher.AvailableMap> availableMaps =
+                      await map_launcher.MapLauncher.installedMaps;
+                      if (isMapListShowing) {
+                        setState(() {
+                          this.availableMaps = null;
+                          isMapListShowing = false;
+                        });
+                      } else {
+                        setState(() {
+                          this.availableMaps = availableMaps;
+                          isMapListShowing = true;
+                        });
+                      }
+                    },
+                    child: Container(
+                        height: 50.h,
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              availableMaps != null
+                                  ? ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      if(selectedGeopoint != null){
+                                        map_launcher.MapLauncher.showDirections(
+                                            mapType: availableMaps![index].mapType,
+                                            destination: map_launcher.Coords(
+                                                selectedGeopoint!.latitude,
+                                                selectedGeopoint!.longitude));
+                                      }else{
+                                        map_launcher.MapLauncher.showDirections(
+                                            mapType: availableMaps![index].mapType,
+                                            destination: map_launcher.Coords(
+                                                _bikeProvider.currentBikeModel!.location!.geopoint.latitude,
+                                                _bikeProvider.currentBikeModel!.location!.geopoint.longitude));
+                                      }
+
+                                    },
+                                    child: SvgPicture.asset(
+                                      availableMaps![index].icon,
+                                      width: 36.w,
+                                      height: 36.h,
+                                    ),
+                                  );
+                                },
+                                itemCount: availableMaps?.length,
+                              )
+                                  : SizedBox(),
+                              Padding(
+                                padding: EdgeInsets.only(right: 8.h),
+                                child: SvgPicture.asset(
+                                  "assets/buttons/direction.svg",
+                                  width: 50.w,
+                                  height: 50.h,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
+                  ),
+                ),
               ),
-              gestureRecognizers: [
-                Factory<OneSequenceGestureRecognizer>(
-                    () => EagerGestureRecognizer())
-              ].toSet(),
+
+            Padding(
+              padding:  EdgeInsets.only(bottom:80.h),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: GestureDetector(
+                  onTap: () async {
+
+                    animateBounce();
+                  },
+                  child: Container(
+                      height: 50.h,
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 8.h),
+                          child: SvgPicture.asset(
+                            "assets/buttons/location.svg",
+                            width: 50.w,
+                            height: 50.h,
+                          ),
+                        ),
+                      )),
+                ),
+              ),
+            ),
+              ],
             ),
           ),
         ],
@@ -200,6 +313,7 @@ class _MapDetailsState extends State<MapDetails> {
   void locationListener() {
     //setButtonImage();
     //getDistanceBetween();
+    selectedGeopoint  = _locationProvider.locationModel?.geopoint;
     animateBounce();
     // loadImage(currentDangerStatus);
   }
@@ -216,9 +330,6 @@ class _MapDetailsState extends State<MapDetails> {
 
 
     mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
-
-      print("!!!!!!!!!!");
-      print(pointAnnotationManager.id);
 
       ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
       setState(() {

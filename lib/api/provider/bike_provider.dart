@@ -1375,6 +1375,46 @@ class BikeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  ///Apply filter for threat history
+  applyThreatFilterStatus(List<String> filter){
+
+    threatFilterArray = filter;
+
+    notifyListeners();
+  }
+
+  ///Apply filter for threat history
+  applyThreatFilterDate(ThreatFilterDate pickedDate, DateTime? pickedDate1, DateTime? pickedDate2){
+
+    switch(pickedDate){
+      case ThreatFilterDate.all:
+        threatFilterDate = ThreatFilterDate.all;
+        break;
+      case ThreatFilterDate.today:
+        threatFilterDate = ThreatFilterDate.today;
+        break;
+      case ThreatFilterDate.yesterday:
+        threatFilterDate = ThreatFilterDate.yesterday;
+        break;
+      case ThreatFilterDate.last7days:
+        threatFilterDate = ThreatFilterDate.last7days;
+        break;
+      case ThreatFilterDate.custom:
+        if(pickedDate1 != null && pickedDate2 != null){
+          threatFilterDate = ThreatFilterDate.custom;
+          threatFilterDate1 = pickedDate1;
+          threatFilterDate2 = pickedDate2;
+        }else{
+          threatFilterDate = ThreatFilterDate.all;
+          threatFilterDate1 = null;
+          threatFilterDate2 = null;
+        }
+        break;
+    }
+
+    notifyListeners();
+  }
+
   calculateIsWithinDistance(String? distanceBetweenNum){
     double? distanceBetween = double.tryParse(distanceBetweenNum ?? "0") ?? 0;
   }
@@ -1409,7 +1449,11 @@ class BikeProvider extends ChangeNotifier {
     await prefs.remove('currentBikeList');
     await prefs.remove('currentBikeImei');
 
+    threatFilterDate = ThreatFilterDate.all;
+    threatFilterDate1 = null;
+    threatFilterDate2 = null;
 
+    threatFilterArray.clear();
     bikeListSubscription?.cancel();
     currentBikeSubscription?.cancel();
     currentThreatRoutesSubscription?.cancel();

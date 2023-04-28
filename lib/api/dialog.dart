@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
@@ -27,6 +28,7 @@ import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../screen/my_bike_setting/my_bike_function.dart';
+import '../widgets/evie_checkbox.dart';
 import '../widgets/evie_divider.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
@@ -554,6 +556,7 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
 
   ///all, today, yesterday, last7days, custom
   ThreatFilterDate pickedDate = ThreatFilterDate.all;
+  DateTimeRange? pickedDateRange;
   DateTime? pickedDate1;
   DateTime? pickedDate2;
 
@@ -567,48 +570,110 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  EvieSwitch(
-                    text: "Movement Detected",
-                    value: warning,
-                    thumbColor: EvieColors.thumbColorTrue,
-                    onChanged: (value) {
-                      setState(() {
-                        warning = value!;
-                      });
-                    },
+                  Row(
+                    children: [
+                      Text(
+                        "Movement Detected", style: EvieTextStyles.body18,
+                      ),
+                      EvieCheckBox(
+                      onChanged: (value) {
+                        setState(() {
+                          warning = value!;
+                        });
+                      },
+                        value: warning,
+                      ),
+                    ],
                   ),
-                  EvieSwitch(
-                    text: "Fall Detected",
-                    value: fall,
-                    thumbColor: EvieColors.thumbColorTrue,
-                    onChanged: (value) async {
-                      setState(() {
-                        fall = value!;
-                      });
-                    },
+                  Row(
+                    children: [
+                      Text(
+                        "Fall Detected", style: EvieTextStyles.body18,
+                      ),
+                      EvieCheckBox(
+                        onChanged: (value) {
+                          setState(() {
+                            fall = value!;
+                          });
+                        },
+                        value: fall,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Theft Attempt", style: EvieTextStyles.body18,
+                      ),
+                      EvieCheckBox(
+                        onChanged: (value) {
+                          setState(() {
+                            danger = value!;
+                          });
+                        },
+                        value: danger,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Crash Alert", style: EvieTextStyles.body18,
+                      ),
+                      EvieCheckBox(
+                        onChanged: (value) {
+                          setState(() {
+                            crash = value!;
+                          });
+                        },
+                        value: crash,
+                      ),
+                    ],
                   ),
 
-                  EvieSwitch(
-                    text: "Theft Attempt",
-                    value: danger,
-                    thumbColor: EvieColors.thumbColorTrue,
-                    onChanged: (value) async {
-                      setState(() {
-                        danger = value!;
-                      });
-                    },
-                  ),
-
-                  EvieSwitch(
-                    text: "Crash Alert",
-                    value: crash,
-                    thumbColor: EvieColors.thumbColorTrue,
-                    onChanged: (value) async {
-                      setState(() {
-                        crash = value!;
-                      });
-                    },
-                  ),
+                  ///Switch
+                  // EvieSwitch(
+                  //   text: "Movement Detected",
+                  //   value: warning,
+                  //   thumbColor: EvieColors.thumbColorTrue,
+                  //   onChanged: (value) {
+                  //     setState(() {
+                  //       warning = value!;
+                  //     });
+                  //   },
+                  // ),
+                  // EvieSwitch(
+                  //   text: "Fall Detected",
+                  //   value: fall,
+                  //   thumbColor: EvieColors.thumbColorTrue,
+                  //   onChanged: (value) async {
+                  //     setState(() {
+                  //       fall = value!;
+                  //     });
+                  //   },
+                  // ),
+                  //
+                  // EvieSwitch(
+                  //   text: "Theft Attempt",
+                  //   value: danger,
+                  //   thumbColor: EvieColors.thumbColorTrue,
+                  //   onChanged: (value) async {
+                  //     setState(() {
+                  //       danger = value!;
+                  //     });
+                  //   },
+                  // ),
+                  //
+                  // EvieSwitch(
+                  //   text: "Crash Alert",
+                  //   value: crash,
+                  //   thumbColor: EvieColors.thumbColorTrue,
+                  //   onChanged: (value) async {
+                  //     setState(() {
+                  //       crash = value!;
+                  //     });
+                  //   },
+                  // ),
 
                   Text("Filter Date", style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),),
 
@@ -678,30 +743,52 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
                           child: EvieButton_PickDate(
                             onPressed: () async {
                               if(_selectedRadio == 3){
-                                pickedDate1 = await showDatePicker(
-                                    context: context,
-                                    initialDate: bikeProvider.threatFilterDate1 ?? pickedDate2 ?? DateTime.now(),
-                                    firstDate: DateTime(DateTime.now().year-2),
-                                    lastDate: pickedDate2 ?? DateTime.now(),
-                                    builder: (context, child) {
-                                      return Theme(data: Theme.of(context).copyWith(
-                                          colorScheme: ColorScheme.light(
-                                            primary: EvieColors.primaryColor,
 
-                                          ), ), child: child!);
-                                    },
+                                var range = await showDateRangePicker(
+                                      context: context,
+                                      initialDateRange: pickedDateRange,
+                                      firstDate: DateTime(DateTime.now().year-2),
+                                      lastDate: pickedDate2 ?? DateTime.now(),
+                                  builder: (context, child) {
+                                        return Theme(data: Theme.of(context).copyWith(
+                                            colorScheme: ColorScheme.light(
+                                              primary: EvieColors.primaryColor,
+
+                                            ), ), child: child!);
+                                      },
                                 );
 
-                                if (pickedDate1 != null) {
-                                  setState(() {
-                                    pickedDate1 = pickedDate1;
-                                  });
+                                // pickedDate1 = await showDatePicker(
+                                //     context: context,
+                                //     initialDate: bikeProvider.threatFilterDate1 ?? pickedDate2 ?? DateTime.now(),
+                                //     firstDate: DateTime(DateTime.now().year-2),
+                                //     lastDate: pickedDate2 ?? DateTime.now(),
+                                //     builder: (context, child) {
+                                //       return Theme(data: Theme.of(context).copyWith(
+                                //           colorScheme: ColorScheme.light(
+                                //             primary: EvieColors.primaryColor,
+                                //
+                                //           ), ), child: child!);
+                                //     },
+                                // );
+                                //
+                                if(range != null){
+                                  pickedDateRange = range;
+                                  pickedDate1 = range.start;
+                                  pickedDate2 = range.end;
+                                 // if (pickedDate1 != null) {
+                                    setState(() {
+                                      pickedDate1 = pickedDate1;
+                                      pickedDate2 = pickedDate2;
+                                    });
+                                  //}
                                 }
+
                               }
                             },
                             child: Row(
                               children: [
-                                Text(pickedDate1!=null ? "${monthsInYear[pickedDate1!.month]} ${pickedDate1!.day} ${pickedDate1!.year}": "",
+                                Text(pickedDate1 != null ? "${monthsInYear[pickedDate1!.month]} ${pickedDate1!.day} ${pickedDate1!.year}": "",
                                   style: TextStyle(color: EvieColors.darkGrayishCyan),),
                                 SvgPicture.asset(
                                   "assets/buttons/calendar.svg",
@@ -719,11 +806,12 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
                         width: 155.w,
                         onPressed: () async {
                           if(_selectedRadio == 3){
-                            pickedDate2 = await showDatePicker(
-                                context: context,
-                                initialDate: bikeProvider.threatFilterDate2 ?? pickedDate1 ?? DateTime.now(),
-                                firstDate: pickedDate1 ?? DateTime(DateTime.now().year-2),
-                                lastDate: DateTime.now(),
+
+                            var range = await showDateRangePicker(
+                              context: context,
+                              initialDateRange: pickedDateRange,
+                              firstDate: DateTime(DateTime.now().year-2),
+                              lastDate: pickedDate2 ?? DateTime.now(),
                               builder: (context, child) {
                                 return Theme(data: Theme.of(context).copyWith(
                                   colorScheme: ColorScheme.light(
@@ -731,14 +819,38 @@ showFilterTreat(BuildContext context, BikeProvider bikeProvider, setState){
 
                                   ), ), child: child!);
                               },
-
                             );
 
-                            if (pickedDate2 != null) {
+                            // pickedDate2 = await showDatePicker(
+                            //     context: context,
+                            //     initialDate: bikeProvider.threatFilterDate2 ?? pickedDate1 ?? DateTime.now(),
+                            //     firstDate: pickedDate1 ?? DateTime(DateTime.now().year-2),
+                            //     lastDate: DateTime.now(),
+                            //   builder: (context, child) {
+                            //     return Theme(data: Theme.of(context).copyWith(
+                            //       colorScheme: ColorScheme.light(
+                            //         primary: EvieColors.primaryColor,
+                            //
+                            //       ), ), child: child!);
+                            //   },
+                            // );
+
+                            if(range != null){
+                              pickedDateRange = range;
+                              pickedDate1 = range.start;
+                              pickedDate2 = range.end;
+                              // if (pickedDate1 != null) {
                               setState(() {
+                                pickedDate1 = pickedDate1;
                                 pickedDate2 = pickedDate2;
                               });
+                              //}
                             }
+                            // if (pickedDate2 != null) {
+                            //   setState(() {
+                            //     pickedDate2 = pickedDate2;
+                            //   });
+                            // }
                           }
                         },
                         child: Row(

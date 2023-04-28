@@ -291,6 +291,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     } else {
         if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == true) {
           return const PaidPlan2();
+
         } else if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == false) {
           return const FreePlan();
         }else{
