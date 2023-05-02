@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -28,8 +30,15 @@ class CurrentUserProvider extends ChangeNotifier {
 
   StreamSubscription? currentUserSubscription;
 
+  CurrentUserProvider() {
+    init();
+  }
+
   ///Initial value
-  Future<void> init(uid) async {
+  Future<void> init() async {
+  }
+
+  Future<void> update(uid) async {
     if (uid != null) {
       getUser(uid);
       //todayRandomQuote();
@@ -180,5 +189,7 @@ class CurrentUserProvider extends ChangeNotifier {
 
     return greeting;
   }
+
+
 }
 

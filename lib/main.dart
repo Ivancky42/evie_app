@@ -123,7 +123,7 @@ class AppProviders extends StatelessWidget {
               create: (_) => CurrentUserProvider(),
               update: (_, authProvider, currentUserProvider) {
                 return currentUserProvider!
-                  ..init(authProvider.getUid);
+                  ..update(authProvider.getUid);
               }
           ),
           ChangeNotifierProxyProvider<CurrentUserProvider, BikeProvider>(

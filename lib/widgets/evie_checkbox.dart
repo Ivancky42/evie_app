@@ -17,25 +17,30 @@ class EvieCheckBox extends StatelessWidget {
 
   }) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
-    return   Checkbox(
-      value: value,
-      activeColor: EvieColors.primaryColor,
-      fillColor:  MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
-          return EvieColors.primaryColor; // color of the checkbox when it's checked
-        } else {
-          return Colors.green; // color of the checkbox when it's unchecked
-        }
-      },
-      ),
-      onChanged: onChanged,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5.w),
-      ),
-      side: MaterialStateBorderSide.resolveWith(
-            (states) => BorderSide(width: 1.w, color:EvieColors.lightGrayishCyan),
+    return  Transform.scale(
+      scale: 1.2,
+      child: Checkbox(
+        value: value,
+        activeColor: EvieColors.primaryColor,
+        fillColor:  MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+          if (states.contains(MaterialState.selected)) {
+            return EvieColors.primaryColor; // color of the checkbox when it's checked
+          } else {
+            return Colors.grey; // color of the checkbox when it's unchecked
+          }
+        },
+        ),
+        onChanged: onChanged,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.w),
+        ),
+        // side: MaterialStateBorderSide.resolveWith(
+        //       (states) => BorderSide(width: 1.w, color:EvieColors.lightGrayishCyan),
+        // ),
+        visualDensity: VisualDensity.comfortable,
       ),
     );
 

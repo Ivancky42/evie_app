@@ -1,13 +1,19 @@
+import 'dart:typed_data';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/api/sheet.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 import '../../../../api/colours.dart';
@@ -16,6 +22,7 @@ import '../../../../api/function.dart';
 import '../../../../api/model/location_model.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/provider/bluetooth_provider.dart';
+import '../../../../api/provider/current_user_provider.dart';
 import '../../../../api/provider/notification_provider.dart';
 import '../../../../bluetooth/modelResult.dart';
 import '../../../../widgets/evie_card.dart';
@@ -40,12 +47,16 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late LocationProvider _locationProvider;
+  late CurrentUserProvider _currentUserProvider;
 
   GeoPoint? selectedGeopoint;
   DeviceConnectResult? deviceConnectResult;
 
-  MapController? mapController;
+  var options = <PointAnnotationOptions>[];
+  MapboxMap? mapboxMap;
+  OnMapScrollListener? onMapScrollListener;
 
+  var currentAnnotationId;
   var markers = <Marker>[];
 
   late AnimationController _animationController;
@@ -57,13 +68,22 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
     super.initState();
     _locationProvider = Provider.of<LocationProvider>(context, listen: false);
     selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    mapController = MapController();
+    _locationProvider.addListener(locationListener);
   }
 
   @override
   void dispose() {
-    mapController?.dispose();
+    _locationProvider.removeListener(locationListener);
     super.dispose();
+  }
+
+  _onMapCreated(MapboxMap mapboxMap) async {
+   this.mapboxMap = mapboxMap;
+
+    ///Disable scaleBar on top left corner
+    await this.mapboxMap?.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
+
+   loadMarker();
   }
 
 
@@ -73,10 +93,10 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
-    loadMarker();
 
     List<Widget> _widgets = [
       Row(
@@ -89,27 +109,48 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
                     padding: EdgeInsets.only(bottom: 16.h),
                     child: SizedBox(
                       width: 176.w,
-                      child: Mapbox_Widget(
-                        isInteract: false,
-                        accessToken: _locationProvider.defPublicAccessToken,
-                        //onMapCreated: _onMapCreated,
-                        mapController: mapController,
-                        markers: markers,
-                        // onUserLocationUpdate: (userLocation) {
-                        //   if (this.userLocation != null) {
-                        //     this.userLocation = userLocation;
-                        //     getDistanceBetween();
-                        //   }
-                        //   else {
-                        //     this.userLocation = userLocation;
-                        //     getDistanceBetween();
-                        //     runSymbol();
-                        //   }
-                        // },
-                        latitude: _locationProvider.locationModel!.geopoint.latitude,
-                        longitude: _locationProvider.locationModel!.geopoint.longitude,
-                        zoom: 15,
+                      child: MapWidget(
+                        onScrollListener: onMapScrollListener,
+                        key: const ValueKey("mapWidget"),
+                        resourceOptions: ResourceOptions(
+                            accessToken: _locationProvider.defPublicAccessToken),
+                        onMapCreated: _onMapCreated,
+                        styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
+                        cameraOptions: CameraOptions(
+                          center: Point(
+                              coordinates: Position(
+                                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                                  _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                              .toJson(),
+                          zoom: 12,
+                        ),
+                        // gestureRecognizers: [
+                        //   Factory<OneSequenceGestureRecognizer>(
+                        //           () => EagerGestureRecognizer())
+                        // ].toSet(),
                       ),
+
+                      // child: Mapbox_Widget(
+                      //   isInteract: false,
+                      //   accessToken: _locationProvider.defPublicAccessToken,
+                      //   //onMapCreated: _onMapCreated,
+                      //   mapController: mapController,
+                      //   markers: markers,
+                      //   // onUserLocationUpdate: (userLocation) {
+                      //   //   if (this.userLocation != null) {
+                      //   //     this.userLocation = userLocation;
+                      //   //     getDistanceBetween();
+                      //   //   }
+                      //   //   else {
+                      //   //     this.userLocation = userLocation;
+                      //   //     getDistanceBetween();
+                      //   //     runSymbol();
+                      //   //   }
+                      //   // },
+                      //   latitude: _locationProvider.locationModel!.geopoint.latitude,
+                      //   longitude: _locationProvider.locationModel!.geopoint.longitude,
+                      //   zoom: 15,
+                      // ),
                     ),
                   );
                 } else {
@@ -181,6 +222,7 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
                             data["geopoint"].latitude,
                             data["geopoint"].longitude),
                         builder: (context, snapshot) {
+
                           if (snapshot.hasData) {
                             _bikeProvider.uploadPlaceMarkAddressToFirestore(
                                 _bikeProvider.currentBikeModel!.deviceIMEI!,
@@ -300,121 +342,93 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
     return _locationProvider.locationModel;
   }
 
-  void loadMarker() {
+  loadMarker(){
 
-    markers = <Marker>[
+    options.clear();
 
-      if(_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger")...{
+    if(currentAnnotationId != null){
+      mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
+    }
+
+    mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
+
+      ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
+        currentAnnotationId = pointAnnotationManager;
+
+      ///Add danger threat
+      if (_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger") {
+
+        final ByteData bytes = await rootBundle.load("assets/icons/marker_danger.png");
+        final Uint8List list = bytes.buffer.asUint8List();
+
+
         ///load a few more marker
-        for(int i = 0; i < _bikeProvider.threatRoutesLists.length; i++)...{
-          Marker(
-            width: 30.w,
-            height: 40.h,
-            point: LatLng(_bikeProvider.threatRoutesLists.values
-                .elementAt(i)
-                .geopoint
-                .latitude ?? 0,
-                _bikeProvider.threatRoutesLists.values
-                    .elementAt(i)
-                    .geopoint
-                    .longitude ?? 0),
-            builder: (ctx) => GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-                setState(() {
-                  selectedGeopoint = _bikeProvider.threatRoutesLists.values
+        for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
+          options.add(PointAnnotationOptions(
+            geometry: Point(
+                coordinates: Position(
+                  _bikeProvider.threatRoutesLists.values
                       .elementAt(i)
-                      .geopoint;
-                });
-              },
-              child: _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint == selectedGeopoint ?
-              SvgPicture.asset("assets/icons/marker_danger.svg",)
-                  : SvgPicture.asset("assets/icons/marker_danger_deactive.svg",),
-            ),
-          ),
-        },
+                      .geopoint
+                      .longitude ??
+                      0,
+                  _bikeProvider.threatRoutesLists.values
+                      .elementAt(i)
+                      .geopoint
+                      .latitude ??
+                      0,
+                )).toJson(),
+            image: list,
+            iconSize: 1.5.h,
+          ));
 
-        Marker(
-          width: 42.w,
-          height: 56.h,
-          point: LatLng(_locationProvider.locationModel?.geopoint.latitude ?? 0,
-              _locationProvider.locationModel?.geopoint.longitude ?? 0),
-          builder: (ctx) =>
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  setState(() {
-                    selectedGeopoint = _locationProvider.locationModel?.geopoint;
-                  });
-                },
-                child: _locationProvider.locationModel?.geopoint == selectedGeopoint ?
-                SvgPicture.asset(
-                  "assets/icons/marker_danger.svg",
-                  height: 56.h,
-                )
-                    : SvgPicture.asset(
-                  "assets/icons/marker_danger_deactive.svg",
-                  height: 56.h,
-                ),
-              ),
-        ),
+          pointAnnotationManager.setIconAllowOverlap(false);
+          pointAnnotationManager.createMulti(options);
+        }
 
-      }else...{
+      } else {
+        final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? "safe"));
+        final Uint8List list = bytes.buffer.asUint8List();
 
-        Marker(
-          width: 42.w,
-          height: 56.h,
-          point: LatLng(_locationProvider.locationModel?.geopoint.latitude ?? 0,
-              _locationProvider.locationModel?.geopoint.longitude ?? 0),
-          builder: (ctx) => Image(
-            image: AssetImage(!_locationProvider.locationModel!.isConnected ? "assets/icons/marker_warning.png" : loadMarkerImageString(_locationProvider.locationModel?.status ?? "")),
-          ),
-        ),
-      },
+        options.add(PointAnnotationOptions(
+          geometry: Point(
+              coordinates: Position(
+                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                  _locationProvider.locationModel?.geopoint.latitude ?? 0))
+              .toJson(),
+          image: list,
+          iconSize: 1.5.h,
+        ));
 
-      ///User marker
-      // Marker(
-      //   width: 42.w,
-      //   height: 56.h,
-      //   point: currentLatLng,
-      //   builder: (ctx) {
-      //     return _buildCompass();
-      //   },
-      // ),
-    ];
+        pointAnnotationManager.setIconAllowOverlap(false);
+        pointAnnotationManager.createMulti(options);
+      }
+    });
+
+
   }
 
+  void locationListener() {
+    //setButtonImage();
+    //getDistanceBetween();
+    selectedGeopoint  = _locationProvider.locationModel?.geopoint;
+    animateBounce();
+    // loadImage(currentDangerStatus);
+  }
+
+
   void animateBounce() {
-    // if (_locationProvider.locationModel != null && userLocation != null) {
-    //
-    //   final LatLng southwest = LatLng(
-    //     min(_locationProvider.locationModel!.geopoint.latitude,
-    //         userLocation!.latitude!),
-    //     min(_locationProvider.locationModel!.geopoint.longitude,
-    //         userLocation!.longitude!),
-    //   );
-    //
-    //   final LatLng northeast = LatLng(
-    //     max(_locationProvider.locationModel!.geopoint.latitude,
-    //         userLocation!.latitude!),
-    //     max(_locationProvider.locationModel!.geopoint.longitude,
-    //         userLocation!.longitude!),
-    //   );
-    //
-    //   latLngBounds = LatLngBounds(southwest, northeast);
-    //
-    //   if (currentScroll <= (initialRatio) && currentScroll > minRatio + 0.01) {
-    //     mapController?.fitBounds(latLngBounds,
-    //         options: FitBoundsOptions(
-    //           padding: EdgeInsets.fromLTRB(170.w, 100.h, 170.w, 360.h),
-    //         ));
-    //   } else if (currentScroll >= minRatio) {
-    //     mapController?.fitBounds(latLngBounds,
-    //         options: FitBoundsOptions(
-    //           padding: EdgeInsets.fromLTRB(80.w, 80.h, 80.w, 120.h),
-    //         ));
-    //   }
-    // }
+    mapboxMap?.flyTo(
+        CameraOptions(
+          center: Point(
+              coordinates: Position(
+                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                  _locationProvider.locationModel?.geopoint.latitude ?? 0))
+              .toJson(),
+          zoom: 12,
+        ),
+        MapAnimationOptions(duration: 2000, startDelay: 0));
+    loadMarker();
   }
 }
 

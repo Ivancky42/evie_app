@@ -23,6 +23,7 @@ class EvieColors {
   static const progressBarGrey = Color(0xffCECFCF);
   static const darkWhite = Color(0xff8E8E8E);
   static const darkGrayish = Color(0xff7A7A79);
+  static const lightGrayish = Color(0xffA0A0A0);
   static const greyFill = Color(0xff717171);
   static const darkGrayishCyan = Color(0xff5F6060);
   static const darkGray = Color(0xff3F3F3F);

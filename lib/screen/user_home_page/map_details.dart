@@ -1,6 +1,13 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:evie_test/screen/user_home_page/paid_plan/home_element/battery.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/home_element/rides.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:image/image.dart' as IMG;
 import 'dart:math' as math;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
@@ -57,6 +64,9 @@ class _MapDetailsState extends State<MapDetails> {
 
   final Location _locationService = Location();
 
+  Position _position = Position(0, 0);
+
+  var currentAnnotationId;
   List<map_launcher.AvailableMap>? availableMaps;
   bool isMapListShowing = false;
   GeoPoint? selectedGeopoint;
@@ -81,30 +91,35 @@ class _MapDetailsState extends State<MapDetails> {
     this.mapboxMap = mapboxMap;
 
     ///Disable scaleBar on top left corner
-    mapboxMap.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
-
-    ///User location icon and
-    final ByteData bytes = await rootBundle.load("assets/icons/user_location_icon.png");
-    final Uint8List list = bytes.buffer.asUint8List();
-
-    mapboxMap.location.updateSettings(LocationComponentSettings(
-        layerBelow: "iconsLayer",
-        enabled: true,
-        pulsingEnabled: true,
-        puckBearingEnabled: true,
-        locationPuck: LocationPuck(
-            locationPuck2D: LocationPuck2D(
-          topImage: list,
-          bearingImage: list,
-          shadowImage: list,
-          //scaleExpression: "50",
-        )
-            // locationPuck3D: LocationPuck3D(
-            //   modelUri:
-            //   "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Embedded/Duck.gltf",)
-            )));
+    await this.mapboxMap?.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
 
     loadMarker();
+
+
+  }
+
+  _onMapLoaded(MapLoadedEventData onMapLoaded) async {
+
+
+    // ///User location icon and
+    // final ByteData bytes = await rootBundle.load("assets/icons/user_location_icon.png");
+    // final Uint8List list = bytes.buffer.asUint8List();
+    //
+    //   mapboxMap?.location.updateSettings(
+    //       LocationComponentSettings(
+    //           layerBelow: "iconsLayer",
+    //           enabled: true,
+    //           pulsingEnabled: true,
+    //           puckBearingEnabled: true,
+    //           locationPuck: LocationPuck(
+    //               locationPuck2D: LocationPuck2D(
+    //                 topImage: list,
+    //                 bearingImage: list,
+    //                 shadowImage: list,
+    //                 //scaleExpression: "50",
+    //               )
+    //           )));
+
   }
 
   void initLocationService() async {
@@ -145,7 +160,8 @@ class _MapDetailsState extends State<MapDetails> {
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
 
-    // loadMarker(currentLatLng);
+    // timer = Timer.periodic(const Duration(seconds: 1),
+    //         (Timer t) => updateUserPositionAndBearing());
 
     return Container(
       decoration: const BoxDecoration(
@@ -153,157 +169,194 @@ class _MapDetailsState extends State<MapDetails> {
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(16), topRight: Radius.circular(16)),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
+      child: Stack(
         children: [
-          // Padding(
-          //   padding:  EdgeInsets.only(top: 13.h),
-          //   child: SvgPicture.asset(
-          //     "assets/buttons/down.svg",
-          //   ),
-          // ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Padding(
-                padding: EdgeInsets.only(left: 17.w, top: 10.h, bottom: 11.h),
-                child: Text(
-                  "Map",
-                  style: EvieTextStyles.h1,
+              // Padding(
+              //   padding:  EdgeInsets.only(top: 13.h),
+              //   child: SvgPicture.asset(
+              //     "assets/buttons/down.svg",
+              //   ),
+              // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 17.w, top: 10.h, bottom: 11.h),
+                    child: Text(
+                      "Map",
+                      style: EvieTextStyles.h1,
+                    ),
+                  ),
+                ],
+              ),
+              const Divider(
+                thickness: 2,
+              ),
+
+              Expanded(
+                child: Stack(
+                  children: [
+                    MapWidget(
+                      onScrollListener: onMapScrollListener,
+                      key: const ValueKey("mapWidget"),
+                      resourceOptions: ResourceOptions(
+                          accessToken: _locationProvider.defPublicAccessToken),
+                      onMapCreated: _onMapCreated,
+                      onMapLoadedListener: _onMapLoaded,
+                      styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
+                      cameraOptions: CameraOptions(
+                        center: Point(
+                                coordinates: Position(
+                                    _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                                    _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                            .toJson(),
+                        zoom: 16,
+                      ),
+                      gestureRecognizers: [
+                        Factory<OneSequenceGestureRecognizer>(
+                            () => EagerGestureRecognizer())
+                      ].toSet(),
+                    ),
+
+                  Padding(
+                    padding:  EdgeInsets.only(bottom:250.h),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: GestureDetector(
+                        onTap: () async {
+                          List<map_launcher.AvailableMap> availableMaps =
+                          await map_launcher.MapLauncher.installedMaps;
+                          if (isMapListShowing) {
+                            setState(() {
+                              this.availableMaps = null;
+                              isMapListShowing = false;
+                            });
+                          } else {
+                            setState(() {
+                              this.availableMaps = availableMaps;
+                              isMapListShowing = true;
+                            });
+                          }
+                        },
+                        child: Container(
+                            height: 50.h,
+                            child: Align(
+                              alignment: Alignment.bottomRight,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  availableMaps != null
+                                      ? ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          if(selectedGeopoint != null){
+                                            map_launcher.MapLauncher.showDirections(
+                                                mapType: availableMaps![index].mapType,
+                                                destination: map_launcher.Coords(
+                                                    selectedGeopoint!.latitude,
+                                                    selectedGeopoint!.longitude));
+                                          }else{
+                                            map_launcher.MapLauncher.showDirections(
+                                                mapType: availableMaps![index].mapType,
+                                                destination: map_launcher.Coords(
+                                                    _bikeProvider.currentBikeModel!.location!.geopoint.latitude,
+                                                    _bikeProvider.currentBikeModel!.location!.geopoint.longitude));
+                                          }
+
+                                        },
+                                        child: SvgPicture.asset(
+                                          availableMaps![index].icon,
+                                          width: 36.w,
+                                          height: 36.h,
+                                        ),
+                                      );
+                                    },
+                                    itemCount: availableMaps?.length,
+                                  )
+                                      : SizedBox(),
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 8.h),
+                                    child: SvgPicture.asset(
+                                      "assets/buttons/direction.svg",
+                                      width: 50.w,
+                                      height: 50.h,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),
+                      ),
+                    ),
+                  ),
+
+                Padding(
+                  padding:  EdgeInsets.only(bottom:200.h),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: GestureDetector(
+                      onTap: () async {
+
+                        pointBounce();
+                      },
+                      child: Container(
+                          height: 50.h,
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 8.h),
+                              child: SvgPicture.asset(
+                                "assets/buttons/location.svg",
+                                width: 50.w,
+                                height: 50.h,
+                              ),
+                            ),
+                          )),
+                    ),
+                  ),
+                ),
+
+                    Padding(
+                      padding:  EdgeInsets.only(bottom:0.h),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(16, 2, 6, 8),
+                                child: Battery(),
+                              ),
+                            ),
+                          ),
+
+                          Expanded(
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(6, 2, 16, 8),
+                                child: UnlockingSystem(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
-          const Divider(
-            thickness: 2,
-          ),
 
-          Expanded(
-            child: Stack(
-              children: [
-                MapWidget(
-                  onScrollListener: onMapScrollListener,
-                  key: const ValueKey("mapWidget"),
-                  resourceOptions: ResourceOptions(
-                      accessToken: _locationProvider.defPublicAccessToken),
-                  onMapCreated: _onMapCreated,
-                  styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
-                  cameraOptions: CameraOptions(
-                    center: Point(
-                            coordinates: Position(
-                                _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                                _locationProvider.locationModel?.geopoint.latitude ?? 0))
-                        .toJson(),
-                    zoom: 16,
-                  ),
-                  gestureRecognizers: [
-                    Factory<OneSequenceGestureRecognizer>(
-                        () => EagerGestureRecognizer())
-                  ].toSet(),
-                ),
-
-              Padding(
-                padding:  EdgeInsets.only(bottom:120.h),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: GestureDetector(
-                    onTap: () async {
-                      List<map_launcher.AvailableMap> availableMaps =
-                      await map_launcher.MapLauncher.installedMaps;
-                      if (isMapListShowing) {
-                        setState(() {
-                          this.availableMaps = null;
-                          isMapListShowing = false;
-                        });
-                      } else {
-                        setState(() {
-                          this.availableMaps = availableMaps;
-                          isMapListShowing = true;
-                        });
-                      }
-                    },
-                    child: Container(
-                        height: 50.h,
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              availableMaps != null
-                                  ? ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      if(selectedGeopoint != null){
-                                        map_launcher.MapLauncher.showDirections(
-                                            mapType: availableMaps![index].mapType,
-                                            destination: map_launcher.Coords(
-                                                selectedGeopoint!.latitude,
-                                                selectedGeopoint!.longitude));
-                                      }else{
-                                        map_launcher.MapLauncher.showDirections(
-                                            mapType: availableMaps![index].mapType,
-                                            destination: map_launcher.Coords(
-                                                _bikeProvider.currentBikeModel!.location!.geopoint.latitude,
-                                                _bikeProvider.currentBikeModel!.location!.geopoint.longitude));
-                                      }
-
-                                    },
-                                    child: SvgPicture.asset(
-                                      availableMaps![index].icon,
-                                      width: 36.w,
-                                      height: 36.h,
-                                    ),
-                                  );
-                                },
-                                itemCount: availableMaps?.length,
-                              )
-                                  : SizedBox(),
-                              Padding(
-                                padding: EdgeInsets.only(right: 8.h),
-                                child: SvgPicture.asset(
-                                  "assets/buttons/direction.svg",
-                                  width: 50.w,
-                                  height: 50.h,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
-                  ),
-                ),
-              ),
-
-            Padding(
-              padding:  EdgeInsets.only(bottom:80.h),
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: GestureDetector(
-                  onTap: () async {
-
-                    animateBounce();
-                  },
-                  child: Container(
-                      height: 50.h,
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 8.h),
-                          child: SvgPicture.asset(
-                            "assets/buttons/location.svg",
-                            width: 50.w,
-                            height: 50.h,
-                          ),
-                        ),
-                      )),
-                ),
-              ),
-            ),
-              ],
-            ),
-          ),
         ],
       ),
       height: 750.h,
@@ -318,23 +371,19 @@ class _MapDetailsState extends State<MapDetails> {
     // loadImage(currentDangerStatus);
   }
 
-  var currentAnnotationId;
 
-  loadMarker() {
-
+  loadMarker() async {
+    ///Marker
     options.clear();
 
     if(currentAnnotationId != null){
       mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
     }
 
-
     mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
 
       ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
-      setState(() {
         currentAnnotationId = pointAnnotationManager;
-      });
 
       ///Add danger threat
       if (_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger") {
@@ -366,7 +415,7 @@ class _MapDetailsState extends State<MapDetails> {
           pointAnnotationManager.createMulti(options);
         }
       } else {
-        final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? ""));
+        final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? "safe"));
         final Uint8List list = bytes.buffer.asUint8List();
 
         options.add(PointAnnotationOptions(
@@ -384,29 +433,39 @@ class _MapDetailsState extends State<MapDetails> {
       }
     });
 
-// if(isFirstLoadMarker == true){
-    //   ///When location change marker change
-    //     mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
-    //     final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? ""));
-    //     final Uint8List list = bytes.buffer.asUint8List();
-    //     for (var i = 0; i < 1; i++) {
-    //       options.add( PointAnnotationOptions(
-    //         geometry: Point(coordinates:  Position(
-    //             _locationProvider.locationModel?.geopoint.longitude ?? 0,
-    //             _locationProvider.locationModel?.geopoint.latitude ?? 0
-    //         )).toJson(), image: list,
-    //         iconSize: 1.5.h,
-    //       ));
-    //     }
-    //     pointAnnotationManager.createMulti(options);
-    //   });
-    //
-    //   setState(() {
-    //     isFirstLoadMarker = false;
-    //   });
-    // }else{
-    //   // pointAnnotationManager.update(options);
-    // }
+    ///User location
+    final ByteData bytes = await rootBundle.load("assets/icons/user_location_icon.png");
+    final Uint8List list = bytes.buffer.asUint8List();
+
+    IMG.Image? img = IMG.decodeImage(list);
+    IMG.Image resized = IMG.copyResize(img!, width: 40.w.toInt(), height: 60.h.toInt());
+    Uint8List resizedImg = Uint8List.fromList(IMG.encodePng(resized));
+
+    mapboxMap?.location.updateSettings(
+        LocationComponentSettings(
+        enabled: true,
+        // pulsingEnabled: true,
+        // puckBearingEnabled: true,
+        locationPuck: LocationPuck(
+            locationPuck2D: LocationPuck2D(
+              topImage: resizedImg,
+              bearingImage: resizedImg,
+              shadowImage: resizedImg,
+              //scaleExpression: "50",
+            ))));
+
+    Layer? layer;
+    if (Platform.isAndroid) {
+      layer =
+      await mapboxMap?.style.getLayer("mapbox-location-indicator-layer");
+    } else {
+      layer = await mapboxMap?.style.getLayer("puck");
+    }
+
+    var location = (layer as LocationIndicatorLayer)?.location;
+    setState(() {
+      _position = Position(location![1]!, location[0]!);
+    });
   }
 
   animateBounce() {
@@ -422,6 +481,46 @@ class _MapDetailsState extends State<MapDetails> {
         MapAnimationOptions(duration: 2000, startDelay: 0));
 
     loadMarker();
+  }
+
+
+  pointBounce() {
+
+    final LatLng southwest = LatLng(
+      min(_locationProvider.locationModel?.geopoint.latitude ?? 0, _position.lat.toDouble()),
+      min(_locationProvider.locationModel?.geopoint.longitude ?? 0, _position.lng.toDouble()),
+    );
+
+    final LatLng northeast = LatLng(
+      max(_locationProvider.locationModel?.geopoint.latitude ?? 0, _position.lat.toDouble()),
+      max(_locationProvider.locationModel?.geopoint.longitude ?? 0, _position.lng.toDouble()),
+    );
+    LatLngBounds latLngBounds = LatLngBounds(southwest, northeast);
+
+    mapboxMap?.flyTo(
+        CameraOptions(
+          padding: MbxEdgeInsets(top: 100.h, left: 170.w, bottom: 180.h, right: 170.w),
+          center: latLngBounds.center.toJson(),
+       //    zoom: _getZoomLevel(latLngBounds, 350.w ,750.h),
+
+        ),
+        MapAnimationOptions(duration: 2000, startDelay: 0),
+    );
+
+  }
+
+  double _getZoomLevel(LatLngBounds bounds, width, height) {
+    const double GLOBE_WIDTH = 256;
+    int zoomLevel = 0;
+    double lngDiff = (bounds.northEast!.longitude - bounds.southWest!.longitude).abs();
+    double latDiff = (bounds.northEast!.latitude - bounds.southWest!.latitude).abs();
+    double pixelRatio = width / GLOBE_WIDTH;
+    double combinedDiff = (lngDiff + latDiff) / 2;
+    while (combinedDiff / pixelRatio > height) {
+      combinedDiff /= 2;
+      zoomLevel++;
+    }
+    return zoomLevel.toDouble();
   }
 
   Widget _buildCompass() {

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:evie_test/api/model/bike_model.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
@@ -57,6 +58,8 @@ class AuthProvider extends ChangeNotifier {
         isEmailVerified = user.emailVerified;
         getIsFirstLogin();
         notifyListeners();
+
+        getDeviceInfo();
       }
     });
   }
@@ -517,6 +520,56 @@ class AuthProvider extends ChangeNotifier {
     await _auth
         .sendPasswordResetEmail(email: email)
         .catchError((e) => debugPrint(e));
+  }
+
+
+  getDeviceInfo() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+    Map<String, dynamic> deviceData;
+
+    if(Platform.isIOS){
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+
+      deviceData = {
+        'platform' : 'ios',
+        'machine': iosInfo.utsname.machine,
+        'systemVer': iosInfo.systemVersion,
+        'brand': iosInfo.model,
+        'deviceId': iosInfo.identifierForVendor,
+        'updated' : DateTime.now(),
+      };
+
+    }else{
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+
+      deviceData = {
+        'platform' : 'android',
+        'machine': androidInfo.model,
+        'systemVer': androidInfo.version.release,
+        'brand': androidInfo.brand,
+        'deviceId': androidInfo.id,
+        'updated' : DateTime.now(),
+      };
+    }
+
+    await uploadDeviceInfoToFirestore(deviceData);
+
+  }
+
+  uploadDeviceInfoToFirestore(Map<String, dynamic>? deviceData)async{
+    if(deviceData != null){
+      try{
+        await FirebaseFirestore.instance
+            .collection(usersCollection)
+            .doc(_uid)
+            .set(
+            {'lastLogin' : deviceData,},
+            SetOptions(merge: true));
+      }catch(e){
+        debugPrint(e.toString());
+      }
+    }
   }
 
   ///User sign out
