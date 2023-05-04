@@ -61,3 +61,52 @@ class _EvieBottomSheetState extends State<EvieBottomSheet> {
 }
 
 
+class EvieBottomSheetDanger extends StatefulWidget {
+
+  Widget? leftChild;
+  Widget? rightChild;
+  Widget? childContext;
+  String? title;
+
+  EvieBottomSheetDanger({
+    this.leftChild,
+    this.rightChild,
+    this.childContext,
+    this.title,
+    Key? key
+  }) : super(key: key);
+
+  @override
+  _EvieBottomSheetDangerState createState() => _EvieBottomSheetDangerState();
+}
+
+class _EvieBottomSheetDangerState extends State<EvieBottomSheetDanger> {
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+      decoration: const BoxDecoration(
+        color: EvieColors.grayishWhite,
+      ),
+      child: Column(
+        children: [
+          /// home indicator
+          Padding(
+            padding: EdgeInsets.only(top: 11.h),
+            child: Image.asset(
+              "assets/buttons/home_indicator.png",
+              width: 40.w,
+              height: 4.h,
+            ),
+          ),
+
+          Expanded(
+            child: widget.childContext ?? Container(),
+          ),
+
+        ],
+      ),
+    );
+  }
+}

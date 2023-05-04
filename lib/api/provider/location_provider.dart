@@ -121,20 +121,18 @@ class LocationProvider extends ChangeNotifier {
     try {
       List<Placemark> placeMarks = await placemarkFromCoordinates(
           latitude, longitude, localeIdentifier: "en");
-
       if (placeMarks.isNotEmpty) {
+        //placeMark = placeMarks[0];
         for (var element in placeMarks) {
           placeMark = element;
         }
       } else {
         placeMark = null;
       }
-
     }catch(error){
       debugPrint(error.toString());
       placeMark = null;
     }
-
     return placeMark;
   }
 

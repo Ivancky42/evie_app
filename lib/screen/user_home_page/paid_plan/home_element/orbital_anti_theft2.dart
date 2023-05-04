@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/api/sheet.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -281,7 +282,11 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
           if(_currentIndex == 0){
             showMapDetailsSheet(context);
           }else{
-            showThreatHistorySheet(context);
+            if(_bikeProvider.currentBikeModel?.location?.status == "danger"){
+              changeToThreatTimeLine(context);
+            }else {
+              showThreatHistorySheet(context);
+            }
           }
         },
         //height: 255.h,

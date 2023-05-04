@@ -288,6 +288,9 @@ class BikeProvider extends ChangeNotifier {
   }
 
   getThreatRoutes() async {
+
+    threatRoutesLists.clear();
+
     if(currentBikeModel?.location?.status == "danger"){
       if(currentBikeModel?.location != null){
         if(currentBikeModel?.location?.eventId != null){
@@ -298,6 +301,7 @@ class BikeProvider extends ChangeNotifier {
                 .collection(theftHistoryCollection)
                 .doc(currentBikeModel!.location!.eventId)
                 .collection(routesCollection)
+                .orderBy("created", descending: true)
                 .snapshots()
                 .listen((snapshot) async {
               if (snapshot.docs.isNotEmpty) {

@@ -178,6 +178,7 @@ class _LoginScreenState extends State<Login> {
                       .login(_emailController.text.trim(),
                           _passwordController.text.trim())
                       .then((result) {
+
                     if (result.toString() == "Verified") {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -186,6 +187,7 @@ class _LoginScreenState extends State<Login> {
                         ),
                       );
 
+                      _currentUserProvider.getDeviceInfo();
                       ///Quit loading and go to user home page
                       if(_authProvider.isFirstLogin == true){
                         changeToStayCloseToBike(context);
@@ -200,6 +202,7 @@ class _LoginScreenState extends State<Login> {
                           duration: Duration(seconds: 2),
                         ),
                       );
+                      _currentUserProvider.getDeviceInfo();
                       changeToVerifyEmailScreen(context);
                     } else {
                       SmartDialog.show(
@@ -217,6 +220,7 @@ class _LoginScreenState extends State<Login> {
                             }),
                       );
                     }
+
                   });
                 },
               ),

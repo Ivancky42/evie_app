@@ -8,7 +8,6 @@ import 'package:evie_test/screen/user_home_page/paid_plan/home_element/rides.dar
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:image/image.dart' as IMG;
-import 'dart:math' as math;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
 import 'package:evie_test/api/fonts.dart';
@@ -21,9 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:location/location.dart';
-import 'package:paginate_firestore/bloc/pagination_listeners.dart';
-import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 
 import '../../../api/colours.dart';
@@ -35,9 +31,7 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:latlong2/latlong.dart';
 
 class MapDetails extends StatefulWidget {
-  MapDetails({
-    Key? key,
-  }) : super(key: key);
+  MapDetails({Key? key}) : super(key: key);
 
   @override
   State<MapDetails> createState() => _MapDetailsState();
@@ -48,8 +42,6 @@ class _MapDetailsState extends State<MapDetails> {
   late BluetoothProvider _bluetoothProvider;
   late LocationProvider _locationProvider;
 
-  PaginateRefreshedChangeListener refreshChangeListener =
-      PaginateRefreshedChangeListener();
   int? snapshotLength;
 
   MapboxMap? mapboxMap;
@@ -57,18 +49,15 @@ class _MapDetailsState extends State<MapDetails> {
 
   bool isFirstLoadUserLocation = true;
   bool isFirstLoadMarker = true;
-  var options = <PointAnnotationOptions>[];
+  bool isMapListShowing = false;
 
   StreamSubscription? userLocationSubscription;
-  LocationData? userLocation;
+  Position userPosition = Position(0, 0);
 
-  final Location _locationService = Location();
-
-  Position _position = Position(0, 0);
-
+  var options = <PointAnnotationOptions>[];
   var currentAnnotationId;
+
   List<map_launcher.AvailableMap>? availableMaps;
-  bool isMapListShowing = false;
   GeoPoint? selectedGeopoint;
 
   @override
@@ -94,64 +83,12 @@ class _MapDetailsState extends State<MapDetails> {
     await this.mapboxMap?.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
 
     loadMarker();
-
-
   }
 
   _onMapLoaded(MapLoadedEventData onMapLoaded) async {
-
-
-    // ///User location icon and
-    // final ByteData bytes = await rootBundle.load("assets/icons/user_location_icon.png");
-    // final Uint8List list = bytes.buffer.asUint8List();
-    //
-    //   mapboxMap?.location.updateSettings(
-    //       LocationComponentSettings(
-    //           layerBelow: "iconsLayer",
-    //           enabled: true,
-    //           pulsingEnabled: true,
-    //           puckBearingEnabled: true,
-    //           locationPuck: LocationPuck(
-    //               locationPuck2D: LocationPuck2D(
-    //                 topImage: list,
-    //                 bearingImage: list,
-    //                 shadowImage: list,
-    //                 //scaleExpression: "50",
-    //               )
-    //           )));
-
   }
 
   void initLocationService() async {
-    // ///For user live location
-    // await _locationService.changeSettings(interval: 5000, distanceFilter: 1);
-    //
-    // ///For user live location
-    // userLocationSubscription = _locationService.onLocationChanged.listen((LocationData result) async {
-    //   if (mounted) {
-    //     setState(() {
-    //       userLocation = result;
-    //
-    //       if(userLocation != null && _locationProvider.locationModel?.status != null) {
-    //
-    //         if(isFirstLoadUserLocation == true){
-    //           Future.delayed(const Duration(milliseconds: 50), () {
-    //             animateBounce();
-    //           });
-    //           isFirstLoadUserLocation = false;
-    //         }
-    //
-    //         ///User location update will bounce every once, causing almost infinity bounce if open comment
-    //         //       animateBounce();
-    //
-    //       }
-    //     });
-    //   }
-    // });
-    //
-    // if(userLocation != null && _locationProvider.locationModel?.status != null){
-    //   locationListener();
-    // }
   }
 
   @override
@@ -159,9 +96,6 @@ class _MapDetailsState extends State<MapDetails> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
-
-    // timer = Timer.periodic(const Duration(seconds: 1),
-    //         (Timer t) => updateUserPositionAndBearing());
 
     return Container(
       decoration: const BoxDecoration(
@@ -174,12 +108,6 @@ class _MapDetailsState extends State<MapDetails> {
           Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              // Padding(
-              //   padding:  EdgeInsets.only(top: 13.h),
-              //   child: SvgPicture.asset(
-              //     "assets/buttons/down.svg",
-              //   ),
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -301,7 +229,6 @@ class _MapDetailsState extends State<MapDetails> {
                     alignment: Alignment.bottomRight,
                     child: GestureDetector(
                       onTap: () async {
-
                         pointBounce();
                       },
                       child: Container(
@@ -377,6 +304,7 @@ class _MapDetailsState extends State<MapDetails> {
     options.clear();
 
     if(currentAnnotationId != null){
+      ///Check if have this id
       mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
     }
 
@@ -396,16 +324,8 @@ class _MapDetailsState extends State<MapDetails> {
           options.add(PointAnnotationOptions(
             geometry: Point(
                 coordinates: Position(
-              _bikeProvider.threatRoutesLists.values
-                      .elementAt(i)
-                      .geopoint
-                      .longitude ??
-                  0,
-              _bikeProvider.threatRoutesLists.values
-                      .elementAt(i)
-                      .geopoint
-                      .latitude ??
-                  0,
+              _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint.longitude ?? 0,
+              _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint.latitude ?? 0,
             )).toJson(),
             image: list,
             iconSize: 1.5.h,
@@ -438,7 +358,7 @@ class _MapDetailsState extends State<MapDetails> {
     final Uint8List list = bytes.buffer.asUint8List();
 
     IMG.Image? img = IMG.decodeImage(list);
-    IMG.Image resized = IMG.copyResize(img!, width: 40.w.toInt(), height: 60.h.toInt());
+    IMG.Image resized = IMG.copyResize(img!, width: 50.w.toInt(), height:70.h.toInt());
     Uint8List resizedImg = Uint8List.fromList(IMG.encodePng(resized));
 
     mapboxMap?.location.updateSettings(
@@ -454,18 +374,18 @@ class _MapDetailsState extends State<MapDetails> {
               //scaleExpression: "50",
             ))));
 
-    Layer? layer;
-    if (Platform.isAndroid) {
-      layer =
-      await mapboxMap?.style.getLayer("mapbox-location-indicator-layer");
-    } else {
-      layer = await mapboxMap?.style.getLayer("puck");
-    }
-
-    var location = (layer as LocationIndicatorLayer)?.location;
-    setState(() {
-      _position = Position(location![1]!, location[0]!);
-    });
+    // Layer? layer;
+    //
+    // // if (Platform.isAndroid) {
+    // //   layer = await mapboxMap?.style.getLayer("mapbox-location-indicator-layer");
+    // // } else {
+    // //   layer = await mapboxMap?.style.getLayer("puck");
+    // // }
+    //
+    // var location = (layer as LocationIndicatorLayer).location;
+    // setState(() {
+    //   userPosition = Position(location![1]!, location[0]!);
+    // });
   }
 
   animateBounce() {
@@ -487,77 +407,24 @@ class _MapDetailsState extends State<MapDetails> {
   pointBounce() {
 
     final LatLng southwest = LatLng(
-      min(_locationProvider.locationModel?.geopoint.latitude ?? 0, _position.lat.toDouble()),
-      min(_locationProvider.locationModel?.geopoint.longitude ?? 0, _position.lng.toDouble()),
+      min(_locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
+      min(_locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
     );
 
     final LatLng northeast = LatLng(
-      max(_locationProvider.locationModel?.geopoint.latitude ?? 0, _position.lat.toDouble()),
-      max(_locationProvider.locationModel?.geopoint.longitude ?? 0, _position.lng.toDouble()),
+      max(_locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
+      max(_locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
     );
     LatLngBounds latLngBounds = LatLngBounds(southwest, northeast);
 
     mapboxMap?.flyTo(
         CameraOptions(
-          padding: MbxEdgeInsets(top: 100.h, left: 170.w, bottom: 180.h, right: 170.w),
+          padding: MbxEdgeInsets(top: 100.h, left: 170.w, bottom: 360.h, right: 170.w),
           center: latLngBounds.center.toJson(),
        //    zoom: _getZoomLevel(latLngBounds, 350.w ,750.h),
 
         ),
         MapAnimationOptions(duration: 2000, startDelay: 0),
-    );
-
-  }
-
-  double _getZoomLevel(LatLngBounds bounds, width, height) {
-    const double GLOBE_WIDTH = 256;
-    int zoomLevel = 0;
-    double lngDiff = (bounds.northEast!.longitude - bounds.southWest!.longitude).abs();
-    double latDiff = (bounds.northEast!.latitude - bounds.southWest!.latitude).abs();
-    double pixelRatio = width / GLOBE_WIDTH;
-    double combinedDiff = (lngDiff + latDiff) / 2;
-    while (combinedDiff / pixelRatio > height) {
-      combinedDiff /= 2;
-      zoomLevel++;
-    }
-    return zoomLevel.toDouble();
-  }
-
-  Widget _buildCompass() {
-    return StreamBuilder<CompassEvent>(
-      stream: FlutterCompass.events,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text('Error reading heading: ${snapshot.error}');
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        double? direction = snapshot.data!.heading;
-
-        if (direction == null) {
-          return const Center(
-            child: Text("Device does not have sensors !"),
-          );
-        }
-
-        return Material(
-          shape: CircleBorder(),
-          clipBehavior: Clip.antiAlias,
-          elevation: 0.0,
-          color: Colors.transparent,
-          child: Container(
-            child: Transform.rotate(
-              //   angle: (direction * (math.pi / 180) * -1),
-              angle: (direction * (math.pi / 180) * 1),
-              child: Image.asset('assets/icons/user_location_icon.png'),
-            ),
-          ),
-        );
-      },
     );
   }
 }

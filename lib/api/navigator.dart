@@ -62,6 +62,7 @@ import '../screen/signup_method.dart';
 import '../screen/signup_page.dart';
 
 import '../abandon/user_notification_details.dart';
+import '../screen/user_home_page/paid_plan/threat_timeline.dart';
 import '../test/test.dart';
 import 'model/bike_model.dart';
 import 'model/plan_model.dart';
@@ -587,6 +588,16 @@ void changeToShareBikeUserListScreen(BuildContext context) {
     PageTransition(
       type: PageTransitionType.rightToLeft,
       child: const ShareBikeUserList(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
+void changeToThreatTimeLine(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.bottomToTop,
+      child: ThreatTimeLine(),
       duration: const Duration(milliseconds: 300),
     ),
   );

@@ -13,6 +13,7 @@ import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
+import 'package:evie_test/test/widget_test.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import 'package:evie_test/widgets/evie_radio_button.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -1001,6 +1002,23 @@ showAddEVKeySuccess(BuildContext context, String rfidNumber){
 
             changeToNameEVKey(context, rfidNumber);
           }));
+}
+
+showExitOrbitalAntiTheft(BuildContext context){
+  SmartDialog.show(
+      widget: EvieDoubleButtonDialog(
+          title: "Exit Orbital Anti-theft?",
+          childContent: Text("Are you sure you would like to exit orbital anti-theft page?",style: EvieTextStyles.body18,),
+          leftContent: "Cancel",
+          rightContent: "OK",
+        onPressedLeft: (){
+            SmartDialog.dismiss();
+        },
+          onPressedRight: () {
+            SmartDialog.dismiss();
+            changeToUserHomePageScreen(context);
+          },
+          ));
 }
 
 showMeasurementUnit(SettingProvider settingProvider){

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:evie_test/api/navigator.dart';
+import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -25,10 +26,14 @@ class SignUpMethod extends StatefulWidget {
 class _SignUpMethodState extends State<SignUpMethod> {
 
   late AuthProvider _authProvider;
+  late CurrentUserProvider _currentUserProvider;
 
   @override
   Widget build(BuildContext context) {
+
     _authProvider = Provider.of<AuthProvider>(context);
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
+
     return WillPopScope(
       onWillPop: () async {
         changeToInputNameScreen(context);
@@ -111,6 +116,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                               .signInWithAppleID(widget.name)
                               .then((result) {
                             if (result == true) {
+                              _currentUserProvider.getDeviceInfo();
                               changeToStayCloseToBike(context);
                             } else {
                               SmartDialog.show(
@@ -151,6 +157,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                           .signInWithGoogle(widget.name)
                           .then((result) {
                         if (result == true) {
+                          _currentUserProvider.getDeviceInfo();
                         changeToStayCloseToBike(context);
                         } else {
                           SmartDialog.show(
@@ -189,6 +196,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                           .signInWithFacebook(widget.name)
                           .then((result) {
                         if (result == true) {
+                          _currentUserProvider.getDeviceInfo();
                           changeToStayCloseToBike(context);
                         } else {
                           SmartDialog.show(

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'last_login_model.dart';
 import 'notification_setting_model.dart';
 
 class UserModel {
@@ -14,6 +15,7 @@ class UserModel {
   String? stripeId;
   String? stripeLink;
   NotificationSettingModel? notificationSettings;
+  LastLoginModel? lastLogin;
 
   UserModel({
     required this.uid,
@@ -27,6 +29,7 @@ class UserModel {
     this.stripeId,
     this.stripeLink,
     this.notificationSettings,
+    this.lastLogin,
   });
 
   factory UserModel.fromJson(Map json) {
@@ -42,6 +45,7 @@ class UserModel {
       stripeId:           json['stripeId']?? '',
       stripeLink:         json['stripeLink']?? '',
       notificationSettings:  json['notificationSettings'] != null ? NotificationSettingModel.fromJson(json['notificationSettings'] as Map<String, dynamic>) : null,
+      lastLogin:  json['lastLogin'] != null ? LastLoginModel.fromJson(json['lastLogin'] as Map<String, dynamic>) : null,
     );
   }
 

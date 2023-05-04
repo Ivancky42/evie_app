@@ -80,8 +80,8 @@ class _RecentActivityState extends State<RecentActivity> {
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
-
-                    changeToRideHistory(context, _tripProvider.currentTripHistoryLists.keys.elementAt(index), _tripProvider.currentTripHistoryLists.values.elementAt(index));
+                    Navigator.pop(context);
+                    //changeToRideHistory(context, _tripProvider.currentTripHistoryLists.keys.elementAt(index), _tripProvider.currentTripHistoryLists.values.elementAt(index));
 
                   },
                   child: Container(
