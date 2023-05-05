@@ -1045,6 +1045,24 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
+  Future uploadThreatRoutesAddressToFirestore(String eventID, String routeID, String address) async {
+    try {
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel?.deviceIMEI)
+          .collection(theftHistoryCollection)
+          .doc(eventID)
+          .collection(routesCollection)
+          .doc(routeID)
+          .set({
+        'address': address,
+      }, SetOptions(merge: true));
+
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
 
   updateBikeName(name) async {
     try {

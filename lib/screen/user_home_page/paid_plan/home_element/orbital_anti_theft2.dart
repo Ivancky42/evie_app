@@ -172,8 +172,7 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
                   Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
                     style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray),),
 
-                  selectedGeopoint != null
-                      ? FutureBuilder<dynamic>(
+                  selectedGeopoint != null ? FutureBuilder<dynamic>(
                       future: _locationProvider.returnPlaceMarks(selectedGeopoint!.latitude, selectedGeopoint!.longitude),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
@@ -280,7 +279,11 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
       child: EvieCard(
         onPress: (){
           if(_currentIndex == 0){
-            showMapDetailsSheet(context);
+            if(_bikeProvider.currentBikeModel?.location?.status == "danger") {
+            changeToThreatMap(context);
+            }else{
+              showMapDetailsSheet(context);
+            }
           }else{
             if(_bikeProvider.currentBikeModel?.location?.status == "danger"){
               changeToThreatTimeLine(context);
@@ -366,9 +369,24 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
         final ByteData bytes = await rootBundle.load("assets/icons/marker_danger.png");
         final Uint8List list = bytes.buffer.asUint8List();
 
+        final ByteData bytes2 = await rootBundle.load("assets/icons/marker_danger_deactivate.png");
+        final Uint8List list2 = bytes2.buffer.asUint8List();
+
+        ///First marker
+        options.add(
+            PointAnnotationOptions(
+          geometry: Point(
+              coordinates: Position(
+                _bikeProvider.threatRoutesLists.values.elementAt(0).geopoint.longitude ?? 0,
+                _bikeProvider.threatRoutesLists.values.elementAt(0).geopoint.latitude ?? 0,
+              )).toJson(),
+          image: list,
+          iconSize: 1.4.h,
+        )
+        );
 
         ///load a few more marker
-        for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
+        for (int i = 1; i < _bikeProvider.threatRoutesLists.length; i++) {
           options.add(PointAnnotationOptions(
             geometry: Point(
                 coordinates: Position(
@@ -383,8 +401,8 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
                       .latitude ??
                       0,
                 )).toJson(),
-            image: list,
-            iconSize: 1.5.h,
+            image: list2,
+            iconSize: 2.0.h,
           ));
 
           pointAnnotationManager.setIconAllowOverlap(false);
