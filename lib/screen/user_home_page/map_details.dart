@@ -27,6 +27,13 @@ import '../../../api/provider/location_provider.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:latlong2/latlong.dart';
 
+class MyPointAnnotationClickListener extends OnPointAnnotationClickListener {
+  @override
+  void onPointAnnotationClick(PointAnnotation annotation) {
+    print('Point annotation clicked: ${annotation.id}');
+  }
+}
+
 class MapDetails extends StatefulWidget {
   MapDetails({
     Key? key,
@@ -364,6 +371,8 @@ class _MapDetailsState extends State<MapDetails> {
 
           pointAnnotationManager.setIconAllowOverlap(false);
           pointAnnotationManager.createMulti(options);
+          OnPointAnnotationClickListener listener = MyPointAnnotationClickListener();
+          pointAnnotationManager.addOnPointAnnotationClickListener(listener);
         }
       } else {
         final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? ""));
@@ -408,6 +417,7 @@ class _MapDetailsState extends State<MapDetails> {
     //   // pointAnnotationManager.update(options);
     // }
   }
+
 
   animateBounce() {
     mapboxMap?.flyTo(
