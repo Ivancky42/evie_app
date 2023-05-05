@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:evie_test/api/navigator.dart';
+import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -24,12 +25,14 @@ class SignInMethod extends StatefulWidget {
 class _SignInMethodState extends State<SignInMethod> {
   late AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
+  late CurrentUserProvider _currentUserProvider;
 
   @override
   Widget build(BuildContext context) {
 
     _authProvider = Provider.of<AuthProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -116,6 +119,7 @@ class _SignInMethodState extends State<SignInMethod> {
                         onPressed: () async {
                           _authProvider.signInWithAppleID("").then((result) {
                             if (result == true) {
+                              _currentUserProvider.getDeviceInfo();
                               changeToUserHomePageScreen(context);
                             } else {
                               SmartDialog.show(
@@ -157,6 +161,7 @@ class _SignInMethodState extends State<SignInMethod> {
                     onPressed: () async {
                       _authProvider.signInWithGoogle("").then((result) {
                         if (result == true) {
+                          _currentUserProvider.getDeviceInfo();
                           changeToUserHomePageScreen(context);
                         } else {
                           SmartDialog.show(
@@ -195,6 +200,7 @@ class _SignInMethodState extends State<SignInMethod> {
                     onPressed: () async {
                       _authProvider.signInWithFacebook("").then((result) {
                         if (result == true) {
+                          _currentUserProvider.getDeviceInfo();
                           changeToUserHomePageScreen(context);
                         } else {
                           SmartDialog.show(

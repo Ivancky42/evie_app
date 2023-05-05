@@ -40,6 +40,9 @@ class _ThreatHistoryState extends State<ThreatHistory> {
   PaginateRefreshedChangeListener refreshChangeListener = PaginateRefreshedChangeListener();
   int? snapshotLength;
 
+  bool isPickedStatusExpand = false;
+  bool isPickedDateExpand = false;
+
   @override
   Widget build(BuildContext context) {
 
@@ -89,9 +92,6 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                 child: IconButton(
                   onPressed: () {
 
-                    ///Open filter dialog
-                    showFilterTreat(context, _bikeProvider, setState);
-
                   },
                   icon: SvgPicture.asset(
                     "assets/buttons/list_selected.svg",
@@ -111,14 +111,52 @@ class _ThreatHistoryState extends State<ThreatHistory> {
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
+                Visibility(
+                  visible: _bikeProvider.threatFilterDate != ThreatFilterDate.all || _bikeProvider.threatFilterArray.length != 4,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.w, right: 0.w),
+                    child: Container(
+                      height: 33.h,
+                      width: 46.w,
+                      padding: EdgeInsets.zero,
+                      child: ElevatedButton(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "x",
+                              style: EvieTextStyles.ctaSmall.copyWith(color: EvieColors.darkGrayish),
+                            ),
+                          ],
+                        ),
+                        onPressed: () async {
+                          _bikeProvider.applyThreatFilterDate(ThreatFilterDate.all, DateTime.now(), DateTime.now());
+
+                          List<String> filter = ["warning","fall","danger","crash"];
+                          await _bikeProvider.applyThreatFilterStatus(filter);
+
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              side:  BorderSide(color: EvieColors.darkGray, width: 1.0.w)),
+                          elevation: 0.0,
+                          backgroundColor: Colors.transparent,
+
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.only(left: 16.w, right: 12.w),
                   child: Container(
                     height: 33.h,
-                    width: 96.w,
+                    width: 110.w,
                     padding: EdgeInsets.zero,
                     child: ElevatedButton(
-                      child: Row(
+                      child: _bikeProvider.threatFilterArray.length == 4 ?
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
@@ -129,16 +167,32 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                             "assets/buttons/down_mini_bold.svg",
                           ),
                         ],
+                      ) :
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${_bikeProvider.threatFilterArray.length} Status",
+                            style: EvieTextStyles.ctaSmall.copyWith(color: _bikeProvider.threatFilterArray.length == 4 ? EvieColors.darkGray : EvieColors.dividerWhite),
+                          ),
+                          SvgPicture.asset(
+                            "assets/buttons/down_mini_bold_white.svg",
+                          ),
+                        ],
                       ),
                       onPressed: () async {
-                      showFilterTreatStatus(context, _bikeProvider, setState);
+                        setState(() {
+                          isPickedStatusExpand = true;
+                        });
+                      showFilterTreatStatus(context, _bikeProvider, isPickedStatusExpand ,setState);
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
-                            side:  BorderSide(color: EvieColors.darkGray, width: 1.0.w)),
+                            side:  _bikeProvider.threatFilterArray.length == 4 ? BorderSide(color: EvieColors.darkGray, width: 1.0.w) : BorderSide(color: Colors.transparent,width: 0)),
                         elevation: 0.0,
-                        backgroundColor: Colors.transparent,
+                        backgroundColor: _bikeProvider.threatFilterArray.length == 4 ? Colors.transparent : EvieColors.lightGrayish,
 
                       ),
                     ),
@@ -156,22 +210,25 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                         children: [
                           Text(
                             "Date",
-                            style: EvieTextStyles.ctaSmall.copyWith(color: EvieColors.darkGray),
+                            style: EvieTextStyles.ctaSmall.copyWith(color: _bikeProvider.threatFilterDate == ThreatFilterDate.all ? EvieColors.darkGray : EvieColors.dividerWhite),
                           ),
                           SvgPicture.asset(
-                            "assets/buttons/down_mini_bold.svg",
+                            _bikeProvider.threatFilterDate == ThreatFilterDate.all ? "assets/buttons/down_mini_bold.svg" : "assets/buttons/down_mini_bold_white.svg",
                           ),
                         ],
                       ),
                       onPressed: () async {
-                        showFilterTreatDate(context, _bikeProvider, setState);
+                        setState(() {
+                          isPickedDateExpand = true;
+                        });
+                        showFilterTreatDate(context, _bikeProvider, isPickedDateExpand ,setState);
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
-                            side:  BorderSide(color: EvieColors.darkGray, width: 1.0.w)),
+                            side:  _bikeProvider.threatFilterDate == ThreatFilterDate.all ? BorderSide(color: EvieColors.darkGray, width: 1.0.w) : BorderSide(color: Colors.transparent,width: 0)),
                         elevation: 0.0,
-                        backgroundColor: Colors.transparent,
+                        backgroundColor: _bikeProvider.threatFilterDate == ThreatFilterDate.all ? Colors.transparent : EvieColors.lightGrayish,
 
                       ),
                     ),

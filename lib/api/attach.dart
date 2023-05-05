@@ -16,7 +16,7 @@ import 'dialog.dart';
 import 'fonts.dart';
 import 'function.dart';
 
-showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, setState){
+showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPickedStatusExpand, setState){
 
   bool warning = bikeProvider.threatFilterArray.contains("warning") ? true : false;
   bool fall = bikeProvider.threatFilterArray.contains("fall") ? true : false;
@@ -48,10 +48,10 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, setState)
                         crash = true;
                       });
 
-
                   List<String> filter = ["warning","fall","danger","crash"];
                   await bikeProvider.applyThreatFilterStatus(filter);
 
+                  SmartDialog.dismiss();
                 }
                     , child: Text("Clear", style: EvieTextStyles.body18.copyWith(color: EvieColors.primaryColor, fontWeight: FontWeight.w900),))
               ],
@@ -135,6 +135,9 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, setState)
             leftContent: "Cancel",
             rightContent: "Apply Filter",
             onPressedLeft: (){
+              setState(() {
+                isPickedStatusExpand = true;
+              });
               SmartDialog.dismiss();
             },
             onPressedRight: () async {
@@ -156,15 +159,24 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, setState)
 }
 
 
-showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, setState){
+showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPickedDateExpand , setState){
   int _selectedRadio = -1;
 
+  if (bikeProvider.threatFilterDate == ThreatFilterDate.today){
+    _selectedRadio = 0;
+  }else if(bikeProvider.threatFilterDate == ThreatFilterDate.yesterday){
+    _selectedRadio = 1;
+  }else if(bikeProvider.threatFilterDate == ThreatFilterDate.last7days){
+    _selectedRadio = 2;
+  }else if(bikeProvider.threatFilterDate == ThreatFilterDate.custom){
+    _selectedRadio = 3;
+  }
+
   ///all, today, yesterday, last7days, custom
-  ThreatFilterDate pickedDate = ThreatFilterDate.all;
+  ThreatFilterDate pickedDate = bikeProvider.threatFilterDate;
   DateTimeRange? pickedDateRange;
   DateTime? pickedDate1;
   DateTime? pickedDate2;
-
 
   SmartDialog.show(
       useSystem: true,
@@ -189,6 +201,8 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, setState){
                         pickedDateRange = null;
                       });
                       bikeProvider.applyThreatFilterDate(ThreatFilterDate.all, DateTime.now(), DateTime.now());
+
+                      SmartDialog.dismiss();
                     }
                         , child: Text("Clear", style: EvieTextStyles.body18.copyWith(color: EvieColors.primaryColor, fontWeight: FontWeight.w900)))
                   ],
@@ -197,7 +211,6 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, setState){
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       EvieRadioButton(
                           text: "Today",
                           value: 0,
@@ -266,13 +279,19 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, setState){
                                       context: context,
                                       initialDateRange: pickedDateRange,
                                       firstDate: DateTime(DateTime.now().year-2),
-                                      lastDate: pickedDate2 ?? DateTime.now(),
+                                      lastDate: DateTime.now(),
                                       builder: (context, child) {
-                                        return Theme(data: Theme.of(context).copyWith(
-                                          colorScheme: ColorScheme.light(
-                                            primary: EvieColors.primaryColor,
-
-                                          ), ), child: child!);
+                                        return Theme(
+                                          data: ThemeData(
+                                            primaryColor: EvieColors.primaryColor, // set the primary color of the theme
+                                            accentColor: EvieColors.primaryColor, // set the accent color of the theme
+                                            colorScheme: ColorScheme.light(primary: EvieColors.primaryColor,), // set the color scheme
+                                            textTheme: TextTheme(
+                                              subtitle1: TextStyle(color: Colors.black), // set the text color of the top bar
+                                            ),
+                                          ),
+                                          child: child!,
+                                        );
                                       },
                                     );
 
@@ -329,13 +348,19 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, setState){
                                       context: context,
                                       initialDateRange: pickedDateRange,
                                       firstDate: DateTime(DateTime.now().year-2),
-                                      lastDate: pickedDate2 ?? DateTime.now(),
+                                      lastDate: DateTime.now(),
                                       builder: (context, child) {
-                                        return Theme(data: Theme.of(context).copyWith(
-                                          colorScheme: ColorScheme.light(
-                                            primary: EvieColors.primaryColor,
-
-                                          ), ), child: child!);
+                                        return Theme(
+                                          data: ThemeData(
+                                            primaryColor: EvieColors.primaryColor, // set the primary color of the theme
+                                            accentColor: EvieColors.primaryColor, // set the accent color of the theme
+                                            colorScheme: ColorScheme.light(primary: EvieColors.primaryColor,), // set the color scheme
+                                            textTheme: TextTheme(
+                                              subtitle1: TextStyle(color: Colors.black), // set the text color of the top bar
+                                            ),
+                                          ),
+                                          child: child!,
+                                        );
                                       },
                                     );
 
@@ -393,6 +418,9 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, setState){
                 leftContent: "Cancel",
                 rightContent: "Apply Filter",
                 onPressedLeft: (){
+                  setState(() {
+                    isPickedDateExpand = true;
+                  });
                   SmartDialog.dismiss();
                 },
                 onPressedRight: () async {

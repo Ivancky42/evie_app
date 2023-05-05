@@ -4,14 +4,19 @@ import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:evie_test/api/model/bike_model.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twitter_login/twitter_login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -518,6 +523,7 @@ class AuthProvider extends ChangeNotifier {
         .sendPasswordResetEmail(email: email)
         .catchError((e) => debugPrint(e));
   }
+
 
   ///User sign out
   Future signOut(BuildContext context) async {

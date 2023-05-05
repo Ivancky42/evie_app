@@ -1,14 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import '../model/user_model.dart';
 import '../todays_quote.dart';
 import 'auth_provider.dart';
@@ -28,8 +32,15 @@ class CurrentUserProvider extends ChangeNotifier {
 
   StreamSubscription? currentUserSubscription;
 
+  CurrentUserProvider() {
+    init();
+  }
+
   ///Initial value
-  Future<void> init(uid) async {
+  Future<void> init() async {
+  }
+
+  Future<void> update(uid) async {
     if (uid != null) {
       getUser(uid);
       //todayRandomQuote();
@@ -180,5 +191,89 @@ class CurrentUserProvider extends ChangeNotifier {
 
     return greeting;
   }
+
+
+  getDeviceInfo() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+    Map<String, dynamic> deviceData;
+
+    if(Platform.isIOS){
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+
+      deviceData = {
+        'platform' : 'ios',
+        'machine': iosInfo.utsname.machine,
+        'systemVer': iosInfo.systemVersion,
+        'brand': iosInfo.model,
+        'deviceId': iosInfo.identifierForVendor,
+        'updated' : DateTime.now(),
+      };
+
+    }else{
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+
+      deviceData = {
+        'platform' : 'android',
+        'machine': androidInfo.model,
+        'systemVer': androidInfo.version.release,
+        'brand': androidInfo.brand,
+        'deviceId': androidInfo.id,
+        'updated' : DateTime.now(),
+      };
+    }
+
+    Future.delayed(const Duration(seconds: 5), () async {
+
+      await uploadDeviceInfoToFirestore(deviceData);
+      compareUserLocation();
+
+    });
+  }
+
+  compareUserLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    List<Placemark> placeMarks = await placemarkFromCoordinates(
+        position.latitude, position.longitude);
+
+    Placemark place = placeMarks[0];
+
+    if (currentUserModel?.lastLogin?.country == null ||
+        currentUserModel?.lastLogin?.country == "" ||
+        currentUserModel?.lastLogin?.country != place.country) {
+
+      debugPrint("User country not match database info");
+      print(currentUserModel?.lastLogin?.country);
+
+      Map<String, dynamic> deviceData = {
+        'country' : place.country,
+        'updated' : DateTime.now(),
+      };
+
+      await uploadDeviceInfoToFirestore(deviceData);
+
+    }else{
+      debugPrint("User country match database info");
+    }
+  }
+
+  uploadDeviceInfoToFirestore(Map<String, dynamic>? deviceData) async{
+    if(deviceData != null){
+      try{
+        await FirebaseFirestore.instance
+            .collection(usersCollection)
+            .doc(currentUserModel?.uid)
+            .set(
+            {'lastLogin' : deviceData,},
+            SetOptions(merge: true));
+      }catch(e){
+        debugPrint(e.toString());
+      }
+    }
+  }
+
+
 }
 

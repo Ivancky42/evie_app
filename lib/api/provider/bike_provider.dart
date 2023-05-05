@@ -97,7 +97,7 @@ class BikeProvider extends ChangeNotifier {
   String? distanceBetween;
   List userBikeNotificationList = ["~connection-lost","~movement-detect","~theft-attempt","~lock-reminder","~plan-reminder","~fall-detect", "crash"];
 
-  List<String> threatFilterArray = ["warning", "danger","fall","crash","lock"];
+  List<String> threatFilterArray = ["warning", "danger","fall","crash"];
   DateTime? threatFilterDate1;
   DateTime? threatFilterDate2;
 
@@ -288,6 +288,9 @@ class BikeProvider extends ChangeNotifier {
   }
 
   getThreatRoutes() async {
+
+    threatRoutesLists.clear();
+
     if(currentBikeModel?.location?.status == "danger"){
       if(currentBikeModel?.location != null){
         if(currentBikeModel?.location?.eventId != null){
@@ -298,6 +301,7 @@ class BikeProvider extends ChangeNotifier {
                 .collection(theftHistoryCollection)
                 .doc(currentBikeModel!.location!.eventId)
                 .collection(routesCollection)
+                .orderBy("created", descending: true)
                 .snapshots()
                 .listen((snapshot) async {
               if (snapshot.docs.isNotEmpty) {
@@ -1041,6 +1045,24 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
+  Future uploadThreatRoutesAddressToFirestore(String eventID, String routeID, String address) async {
+    try {
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel?.deviceIMEI)
+          .collection(theftHistoryCollection)
+          .doc(eventID)
+          .collection(routesCollection)
+          .doc(routeID)
+          .set({
+        'address': address,
+      }, SetOptions(merge: true));
+
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
 
   updateBikeName(name) async {
     try {
@@ -1453,7 +1475,7 @@ class BikeProvider extends ChangeNotifier {
     threatFilterDate1 = null;
     threatFilterDate2 = null;
 
-    threatFilterArray.clear();
+    threatFilterArray = ["warning", "danger","fall","crash"];
     bikeListSubscription?.cancel();
     currentBikeSubscription?.cancel();
     currentThreatRoutesSubscription?.cancel();

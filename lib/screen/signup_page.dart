@@ -237,6 +237,8 @@ class _SignUpState extends State<SignUp> {
                                 ),
                               );
                               changeToVerifyEmailScreen(context);
+
+                              _currentUserProvider.getDeviceInfo();
                             } else {
                               SmartDialog.show(
                                 widget: EvieSingleButtonDialog(

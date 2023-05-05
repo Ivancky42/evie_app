@@ -378,7 +378,7 @@ packages:
     source: hosted
     version: "0.7.8"
   device_info_plus:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: device_info_plus
       sha256: b809c4ed5f7fcdb325ccc70b80ad934677dc4e2aa414bf46859a42bfdfafcbb6
@@ -1949,6 +1949,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.16"
+  timelines:
+    dependency: "direct main"
+    description:
+      name: timelines
+      sha256: "40214f5ab772ff45459cb8c15e5f60505a6828af0c0eb1eec6f29ed911a4c1c5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   timezone:
     dependency: transitive
     description:
