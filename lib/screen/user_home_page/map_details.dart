@@ -313,8 +313,22 @@ class _MapDetailsState extends State<MapDetails> {
       ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
         currentAnnotationId = pointAnnotationManager;
 
-      ///Add danger threat
-      if (_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger") {
+        if(_locationProvider.locationModel!.isConnected == false){
+          final ByteData bytes = await rootBundle.load("assets/icons/marker_warning.png");
+          final Uint8List list = bytes.buffer.asUint8List();
+
+          options.add(PointAnnotationOptions(
+            geometry: Point(
+                coordinates: Position(
+                    _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                    _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                .toJson(),
+            image: list,
+            iconSize: 1.5.h,
+          ));
+
+          ///Add danger threat
+        }else if (_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger") {
 
         final ByteData bytes = await rootBundle.load("assets/icons/marker_danger.png");
         final Uint8List list = bytes.buffer.asUint8List();
@@ -330,9 +344,6 @@ class _MapDetailsState extends State<MapDetails> {
             image: list,
             iconSize: 1.5.h,
           ));
-
-          pointAnnotationManager.setIconAllowOverlap(false);
-          pointAnnotationManager.createMulti(options);
         }
       } else {
         final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? "safe"));
@@ -347,10 +358,9 @@ class _MapDetailsState extends State<MapDetails> {
           image: list,
           iconSize: 1.5.h,
         ));
-
+      }
         pointAnnotationManager.setIconAllowOverlap(false);
         pointAnnotationManager.createMulti(options);
-      }
     });
 
     ///User location

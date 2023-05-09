@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:math';
 
@@ -97,6 +96,18 @@ class _ThreatMapState extends State<ThreatMap> {
   }
 
   void initLocationService() async {
+  }
+
+  var currentClickedAnnotation;
+
+  @override
+  onPointAnnotationClick(PointAnnotation annotation) {
+    print('Point annotation clicked: ${annotation.id}');
+
+    currentClickedAnnotation = annotation;
+
+    print("hello");
+
   }
 
   @override
@@ -312,12 +323,12 @@ class _ThreatMapState extends State<ThreatMap> {
   }
 
   void locationListener() {
-    //setButtonImage();
+    print("location did change");
     //getDistanceBetween();
     selectedGeopoint  = _locationProvider.locationModel?.geopoint;
     animateBounce();
-    // loadImage(currentDangerStatus);
   }
+
 
 
   loadMarker() async {
@@ -341,20 +352,23 @@ class _ThreatMapState extends State<ThreatMap> {
       final Uint8List list2 = bytes2.buffer.asUint8List();
 
       ///First marker
-      options.add(PointAnnotationOptions(
-        geometry: Point(
-            coordinates: Position(
-              _bikeProvider.threatRoutesLists.values.elementAt(0).geopoint.longitude ?? 0,
-              _bikeProvider.threatRoutesLists.values.elementAt(0).geopoint.latitude ?? 0,
-            )).toJson(),
-        image: list,
-        iconSize: 1.4.h,
-      )
+      options.add(
+          PointAnnotationOptions(
+            geometry: Point(
+                coordinates: Position(
+                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                  _locationProvider.locationModel?.geopoint.latitude ?? 0,
+                )).toJson(),
+            image: list,
+            iconSize: 1.4.h,
+          ),
       );
 
+
         ///load a few more marker
-        for (int i = 1; i < _bikeProvider.threatRoutesLists.length; i++) {
-          options.add(PointAnnotationOptions(
+        for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
+          options.add(
+            PointAnnotationOptions(
             geometry: Point(
                 coordinates: Position(
                   _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint.longitude ?? 0,
@@ -364,8 +378,11 @@ class _ThreatMapState extends State<ThreatMap> {
             iconSize: 2.0.h,
           ),);
 
-          pointAnnotationManager.setIconAllowOverlap(false);
-          pointAnnotationManager.createMulti(options);
+           pointAnnotationManager.setIconAllowOverlap(false);
+           pointAnnotationManager.createMulti(options);
+
+          OnPointAnnotationClickListener listener = MyPointAnnotationClickListener();
+          pointAnnotationManager.addOnPointAnnotationClickListener(listener);
         }
     });
 
@@ -403,6 +420,7 @@ class _ThreatMapState extends State<ThreatMap> {
     //   userPosition = Position(location![1]!, location[0]!);
     // });
   }
+
 
   animateBounce() {
     mapboxMap?.flyTo(
@@ -443,5 +461,21 @@ class _ThreatMapState extends State<ThreatMap> {
       MapAnimationOptions(duration: 2000, startDelay: 0),
     );
   }
+}
 
+
+class MyPointAnnotationClickListener extends OnPointAnnotationClickListener {
+  static var currentClickedAnnotation;
+
+  @override
+   onPointAnnotationClick(PointAnnotation annotation) {
+    print('Point annotation clicked: ${annotation.id}');
+
+    currentClickedAnnotation = annotation;
+
+  }
+
+  getAnnotation(){
+    return currentClickedAnnotation;
+  }
 }
