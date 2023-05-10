@@ -84,7 +84,6 @@ class _BikeContainerState extends State<BikeContainer> {
               await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
               Navigator.pop(context);
             }
-
           }
 
         },

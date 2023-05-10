@@ -11,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../api/colours.dart';
 import '../api/dialog.dart';
+import '../api/length.dart';
 import '../widgets/evie_button.dart';
 
 class Welcome extends StatefulWidget {
@@ -31,66 +32,81 @@ class _WelcomeState extends State<Welcome> {
       },
 
     child:  Scaffold(
-        body: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.start,
+        body: Stack(
           children: [
-            SizedBox(
-              height: 142.h,
+            Column(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 142.h,
+                ),
+
+                Image(
+                  image: AssetImage("assets/logo/evie_logo.png",),
+                  width: 191.w,
+                  height: 42.h,),
+
+                SizedBox(
+                  height: 99.h,
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Container(
+                    width: 395.92.w,
+                    height: 279.62.h,
+                    alignment: Alignment.bottomRight,
+                    child: const Image(
+                      image: AssetImage("assets/images/evie_bike_shadow.png"),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height:93.38.h,
+                ),
+
+              ],
             ),
 
-            Image(
-              image: AssetImage("assets/logo/evie_logo.png",),
-              width: 191.w,
-              height: 42.h,),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding:  EdgeInsets.only(left: 16.w, right: 16.w, bottom: 180.h),
+                child:  EvieButton(
+                  height: 48.h,
+                  width: double.infinity,
+                  child: Text(
+                    "Get Started",
+                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                  ),
 
-            SizedBox(
-              height: 99.h,
-            ),
+                  onPressed: () async {
+                    changeToInputNameScreen(context);
+                    //changeToLetsGoScreen(context);
+                  },
+                ),
+               )
+              ),
             Align(
-              alignment: Alignment.bottomRight,
-              child: Container(
-                width: 395.92.w,
-                height: 279.62.h,
-                alignment: Alignment.bottomRight,
-                child: const Image(
-                  image: AssetImage("assets/images/evie_bike_shadow.png"),
-                ),
-              ),
-            ),
-            SizedBox(
-              height:93.38.h,
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
-              child: EvieButton(
-                height: 48.h,
-                width: double.infinity,
-                child: Text(
-                  "Get Started",
-                  style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                ),
-
-                onPressed: () async {
-                  changeToInputNameScreen(context);
-                  //changeToLetsGoScreen(context);
-                },
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              child: RawMaterialButton(
-                elevation: 0.0,
-                padding: EdgeInsets.fromLTRB(0, 23.5.h, 0, 0),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
-                onPressed: () {
-                  changeToSignInMethodScreen(context);
-                },
-                child: Text(
-                    "I already have an account",
-                    style: EvieTextStyles.body14.copyWith(color: EvieColors.primaryColor, decoration: TextDecoration.underline,)),
-              ),
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding:  EdgeInsets.only(left: 16.w, right: 16.w, bottom: 135.h),
+                  child:       Container(
+                    width: double.infinity,
+                    child: RawMaterialButton(
+                      elevation: 0.0,
+                      padding: EdgeInsets.fromLTRB(0, 23.5.h, 0, 0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0)),
+                      onPressed: () {
+                        changeToSignInMethodScreen(context);
+                      },
+                      child: Text(
+                          "I already have an account",
+                          style: EvieTextStyles.body14.copyWith(color: EvieColors.primaryColor, decoration: TextDecoration.underline,)),
+                    ),
+                  ),
+                )
             ),
           ],
         ),

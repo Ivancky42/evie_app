@@ -51,8 +51,7 @@ class NotificationProvider extends ChangeNotifier {
   ///Get fcm token
   void firebaseCloudMessaging_Listeners() {
     messaging.getToken().then((newToken) {
-      print("FCM token");
-      print(newToken);
+      print("FCM toke: $newToken");
     });
   }
 
@@ -65,7 +64,7 @@ class NotificationProvider extends ChangeNotifier {
   ///Unsubscribe function block
   unsubscribeFromTopic(String? topic) async {
     await messaging.unsubscribeFromTopic(topic!);
-    debugPrint("Unsubscribe to : $topic");
+    // debugPrint("Unsubscribe to : $topic");
   }
 
   Future<void> getNotification(String? uid) async {

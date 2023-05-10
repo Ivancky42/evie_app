@@ -110,9 +110,9 @@ class _MyGarageState extends State<MyGarage> {
                 shrinkWrap: true,
                 itemCount: _bikeProvider.userBikeList.length,
                 itemBuilder: (context, index) {
+
+
                   return listItem(
-                    
-                    _bikeProvider.userBikeList.keys.elementAt(index),
                     _bikeProvider.userBikeList[_bikeProvider.userBikeList.keys.elementAt(index)],
                     _bikeProvider.userBikeDetails[_bikeProvider.userBikeList.keys.elementAt(index)],
                     _bikeProvider.userBikePlans.isNotEmpty ? _bikeProvider.userBikePlans[_bikeProvider.userBikeList.keys.elementAt(index)] : null,
@@ -150,7 +150,7 @@ class _MyGarageState extends State<MyGarage> {
     );
   }
 
-  Widget listItem(String deviceIMEI, UserBikeModel userBikeList, BikeModel userBikeDetails, BikePlanModel? userBikePlan) {
+  Widget listItem(UserBikeModel userBikeList, BikeModel userBikeDetails, BikePlanModel? userBikePlan) {
 
     bool isPlanSubscript = false;
 
@@ -163,13 +163,12 @@ class _MyGarageState extends State<MyGarage> {
       }
     }
 
-
       return Padding(
           padding:EdgeInsets.only(left:16.w, right: 16.w, top:28.h),
           child: Stack(
             children: [
               SizedBox(
-                  height: 370.h,
+                  height: 385.h,
                   child: Stack(
                       children: [
                     Align(
@@ -293,6 +292,7 @@ class _MyGarageState extends State<MyGarage> {
                                   ),
                                 ],
                               ),
+
                               style: ElevatedButton.styleFrom(
                                   side: const BorderSide(
                               width: 1.5,
@@ -310,7 +310,7 @@ class _MyGarageState extends State<MyGarage> {
                               }
                             )
                         ),
-                           //   SizedBox(height: 5.h),
+                              SizedBox(height: 15.h),
                             ],
                           ),
                         ),

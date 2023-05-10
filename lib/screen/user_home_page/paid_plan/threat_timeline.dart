@@ -46,7 +46,7 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
-    
+
     return Container(
       decoration: const BoxDecoration(
         color: EvieColors.grayishWhite,

@@ -98,7 +98,6 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
-
     List<Widget> _widgets = [
       Row(
         children: [
@@ -279,13 +278,17 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
       child: EvieCard(
         onPress: (){
           if(_currentIndex == 0){
-            if(_bikeProvider.currentBikeModel?.location?.status == "danger") {
+            if(_locationProvider.locationModel?.isConnected == false){
+              showMapDetailsSheet(context);
+            }else if(_bikeProvider.currentBikeModel?.location?.status == "danger") {
             changeToThreatMap(context);
             }else{
               showMapDetailsSheet(context);
             }
           }else{
-            if(_bikeProvider.currentBikeModel?.location?.status == "danger"){
+            if(_locationProvider.locationModel?.isConnected == false){
+              showThreatHistorySheet(context);
+            }else if(_bikeProvider.currentBikeModel?.location?.status == "danger"){
               changeToThreatTimeLine(context);
             }else {
               showThreatHistorySheet(context);
@@ -351,7 +354,6 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
   }
 
   loadMarker(){
-
     options.clear();
 
     if(currentAnnotationId != null){
@@ -363,51 +365,39 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
       ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
         currentAnnotationId = pointAnnotationManager;
 
-      ///Add danger threat
-      if (_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger") {
+        ///Add disconnected threat
+      if(_locationProvider.locationModel!.isConnected == false){
+        final ByteData bytes = await rootBundle.load("assets/icons/marker_warning.png");
+        final Uint8List list = bytes.buffer.asUint8List();
+
+        options.add(PointAnnotationOptions(
+          geometry: Point(
+              coordinates: Position(
+                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                  _locationProvider.locationModel?.geopoint.latitude ?? 0))
+              .toJson(),
+          image: list,
+          iconSize: 1.5.h,
+        ));
+
+        ///Add danger threat
+      }else if (_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger") {
 
         final ByteData bytes = await rootBundle.load("assets/icons/marker_danger.png");
         final Uint8List list = bytes.buffer.asUint8List();
-
-        final ByteData bytes2 = await rootBundle.load("assets/icons/marker_danger_deactivate.png");
-        final Uint8List list2 = bytes2.buffer.asUint8List();
 
         ///First marker
         options.add(
             PointAnnotationOptions(
           geometry: Point(
               coordinates: Position(
-                _bikeProvider.threatRoutesLists.values.elementAt(0).geopoint.longitude ?? 0,
-                _bikeProvider.threatRoutesLists.values.elementAt(0).geopoint.latitude ?? 0,
+                _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                _locationProvider.locationModel?.geopoint.latitude ?? 0,
               )).toJson(),
           image: list,
-          iconSize: 1.4.h,
+          iconSize: 1.5.h,
         )
         );
-
-        ///load a few more marker
-        for (int i = 1; i < _bikeProvider.threatRoutesLists.length; i++) {
-          options.add(PointAnnotationOptions(
-            geometry: Point(
-                coordinates: Position(
-                  _bikeProvider.threatRoutesLists.values
-                      .elementAt(i)
-                      .geopoint
-                      .longitude ??
-                      0,
-                  _bikeProvider.threatRoutesLists.values
-                      .elementAt(i)
-                      .geopoint
-                      .latitude ??
-                      0,
-                )).toJson(),
-            image: list2,
-            iconSize: 2.0.h,
-          ));
-
-          pointAnnotationManager.setIconAllowOverlap(false);
-          pointAnnotationManager.createMulti(options);
-        }
 
       } else {
         final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? "safe"));
@@ -422,10 +412,11 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
           image: list,
           iconSize: 1.5.h,
         ));
+      }
 
         pointAnnotationManager.setIconAllowOverlap(false);
         pointAnnotationManager.createMulti(options);
-      }
+
     });
 
 
