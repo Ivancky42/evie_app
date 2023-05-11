@@ -100,65 +100,81 @@ class _OrbitalAntiTheft2State extends State<OrbitalAntiTheft2> with SingleTicker
 
     List<Widget> _widgets = [
       Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          FutureBuilder(
-              future: getLocationModel(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 16.h),
-                    child: SizedBox(
-                      width: 176.w,
-                      child: MapWidget(
-                        onScrollListener: onMapScrollListener,
-                        key: const ValueKey("mapWidget"),
-                        resourceOptions: ResourceOptions(
-                            accessToken: _locationProvider.defPublicAccessToken),
-                        onMapCreated: _onMapCreated,
-                        styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
-                        cameraOptions: CameraOptions(
-                          center: Point(
-                              coordinates: Position(
-                                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                                  _locationProvider.locationModel?.geopoint.latitude ?? 0))
-                              .toJson(),
-                          zoom: 12,
-                        ),
-                        // gestureRecognizers: [
-                        //   Factory<OneSequenceGestureRecognizer>(
-                        //           () => EagerGestureRecognizer())
-                        // ].toSet(),
-                      ),
+          Expanded(
+            child: FutureBuilder(
+                future: getLocationModel(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Stack(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 16.h),
+                          child: Center(
+                            child: SingleChildScrollView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 220.h,
+                                  child: MapWidget(
+                                    onScrollListener: onMapScrollListener,
+                                    key: const ValueKey("mapWidget"),
+                                    resourceOptions: ResourceOptions(
+                                        accessToken: _locationProvider.defPublicAccessToken),
+                                    onMapCreated: _onMapCreated,
+                                    styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
+                                    cameraOptions: CameraOptions(
+                                      center: Point(
+                                          coordinates: Position(
+                                              _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                                              _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                                          .toJson(),
+                                      zoom: 12,
+                                    ),
+                                    // gestureRecognizers: [
+                                    //   Factory<OneSequenceGestureRecognizer>(
+                                    //           () => EagerGestureRecognizer())
+                                    // ].toSet(),
+                                  ),
 
-                      // child: Mapbox_Widget(
-                      //   isInteract: false,
-                      //   accessToken: _locationProvider.defPublicAccessToken,
-                      //   //onMapCreated: _onMapCreated,
-                      //   mapController: mapController,
-                      //   markers: markers,
-                      //   // onUserLocationUpdate: (userLocation) {
-                      //   //   if (this.userLocation != null) {
-                      //   //     this.userLocation = userLocation;
-                      //   //     getDistanceBetween();
-                      //   //   }
-                      //   //   else {
-                      //   //     this.userLocation = userLocation;
-                      //   //     getDistanceBetween();
-                      //   //     runSymbol();
-                      //   //   }
-                      //   // },
-                      //   latitude: _locationProvider.locationModel!.geopoint.latitude,
-                      //   longitude: _locationProvider.locationModel!.geopoint.longitude,
-                      //   zoom: 15,
-                      // ),
-                    ),
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              }),
+                                  // child: Mapbox_Widget(
+                                  //   isInteract: false,
+                                  //   accessToken: _locationProvider.defPublicAccessToken,
+                                  //   //onMapCreated: _onMapCreated,
+                                  //   mapController: mapController,
+                                  //   markers: markers,
+                                  //   // onUserLocationUpdate: (userLocation) {
+                                  //   //   if (this.userLocation != null) {
+                                  //   //     this.userLocation = userLocation;
+                                  //   //     getDistanceBetween();
+                                  //   //   }
+                                  //   //   else {
+                                  //   //     this.userLocation = userLocation;
+                                  //   //     getDistanceBetween();
+                                  //   //     runSymbol();
+                                  //   //   }
+                                  //   // },
+                                  //   latitude: _locationProvider.locationModel!.geopoint.latitude,
+                                  //   longitude: _locationProvider.locationModel!.geopoint.longitude,
+                                  //   zoom: 15,
+                                  // ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
+          ),
 
           Expanded(
             child: Padding(

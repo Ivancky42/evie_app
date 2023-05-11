@@ -33,6 +33,7 @@ class BikeModel {
   Timestamp? registered;
   String? ownerUid;
   String? ownerName;
+  String? serialNumber;
 
   BikeModel({
     required this.batteryPercent,
@@ -58,6 +59,7 @@ class BikeModel {
     required this.registered,
     this.ownerUid,
     this.ownerName,
+    this.serialNumber,
 
   });
 
@@ -92,6 +94,7 @@ class BikeModel {
       protVersion: json['protVersion']?? '',
       firmVer: json['firmVer']?? '',
       registered:    timestampFromJson(json['registered']),
+      serialNumber: json['serialNumber']?? ''
     );
   }
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -408,20 +409,20 @@ class _ThreatMapState extends State<ThreatMap> {
                   //scaleExpression: "50",
                 ))));
 
-    // Layer? layer;
-    //
-    // // if (Platform.isAndroid) {
-    // //   layer = await mapboxMap?.style.getLayer("mapbox-location-indicator-layer");
-    // // } else {
-    // //   layer = await mapboxMap?.style.getLayer("puck");
-    // // }
-    //
-    // var location = (layer as LocationIndicatorLayer).location;
-    // setState(() {
-    //   userPosition = Position(location![1]!, location[0]!);
-    // });
-  }
+    Layer? layer;
 
+    // if (Platform.isAndroid) {
+    //   layer = await mapboxMap?.style.getLayer("mapbox-location-indicator-layer");
+    // } else {
+    //   layer = await mapboxMap?.style.getLayer("puck");
+    // }
+
+
+     var location = (layer as LocationIndicatorLayer).location;
+     setState(() {
+       userPosition = Position(location![1]!, location[0]!);
+     });
+  }
 
   animateBounce() {
     mapboxMap?.flyTo(

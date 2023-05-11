@@ -84,29 +84,23 @@ class _AboutBikeState extends State<AboutBike> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
                   child:TextColumn(
-                      title: "Model Number",
-                      body: "Model Number"),
-                ),
-                const AccountPageDivider(),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
-                  child:TextColumn(
                       title: "Serial Number",
-                      body: "1234567890"),
+                      body: _bikeProvider.currentBikeModel?.serialNumber ?? "-"),
                 ),
                 const AccountPageDivider(),
+
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
                   child:TextColumn(
-                      title: "Bluetooth Number",
-                      body: "1234567890"),
+                      title: "Bluetooth Name",
+                      body: _bikeProvider.currentBikeModel?.bleName ?? "-"),
                 ),
                 const AccountPageDivider(),
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
                   child:TextColumn(
                       title: "Bluetooth Mac Address",
-                      body: "1234567890"),
+                      body: _bikeProvider.currentBikeModel?.macAddr ?? "-"),
                 ),
                 const AccountPageDivider(),
                 Padding(

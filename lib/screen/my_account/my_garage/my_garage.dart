@@ -165,167 +165,163 @@ class _MyGarageState extends State<MyGarage> {
 
       return Padding(
           padding:EdgeInsets.only(left:16.w, right: 16.w, top:28.h),
-          child: Stack(
-            children: [
-              SizedBox(
-                  height: 385.h,
-                  child: Stack(
-                      children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        height: 280.h,
-                        decoration: const BoxDecoration(
-                          color: EvieColors.lightGrayishCyan,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10.0),
-                          ),
-                        ),
-                        child: Padding(
-                          padding:EdgeInsets.only(left:16.w, right: 16.w),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                userBikeDetails.deviceName!,
-                                style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.bold, color: EvieColors.mediumLightBlack),
-                                ),
-                                Visibility(
-                                  visible: isPlanSubscript,
-                                  child: SvgPicture.asset(
-                                  "assets/icons/batch_tick.svg",
-                                ),)
-                              ],
-                            ),
-
-                              SizedBox(height: 14.h),
-
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Plan",
-                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
-                                  ),
-
-                                  Text(
-                                    isPlanSubscript ? "Pro Plan" : "Free Plan",
-                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 0.8.h),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Plan Expiry",
-                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
-                                  ),
-                                  Text(
-                                      isPlanSubscript ? "${monthsInYear[userBikePlan?.periodEnd!.toDate().month]} ${userBikePlan?.periodEnd!.toDate().day}, ${userBikePlan?.periodEnd!.toDate().year}"
-                                          : "Free Forever",
-                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
-                                  ),
-                                ],
-                              ),
-
-                              SizedBox(height: 0.8.h),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Model",
-                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
-                                  ),
-                                  Text(
-                                    "EVIE S series",
-                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 0.8.h),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Owner",
-                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                       userBikeDetails.ownerName ?? "owner",
-                                        style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
-                                      ),
-                                      Visibility(
-                                        visible: _currentUserProvider.currentUserModel!.name == userBikeDetails.ownerName,
-                                        child: Text(
-                                            " (You)",
-                                            style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan)),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                        SizedBox(height: 15.h,),
-                        Container(
-                            height: 48.h,
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-
-                                  SvgPicture.asset(
-                                    "assets/icons/setting.svg",
-                                    height:24.h,
-                                    color: EvieColors.primaryColor,
-                                  ),
-                                  Text(
-                                    "Bike Setting",
-                                    style: EvieTextStyles.ctaBig.copyWith(color:EvieColors.primaryColor),
-                                  ),
-                                ],
-                              ),
-
-                              style: ElevatedButton.styleFrom(
-                                  side: const BorderSide(
-                              width: 1.5,
-                              color: EvieColors.primaryColor,
-                              ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.w)
-                                ),
-                                elevation: 0.0,
-                                backgroundColor: EvieColors.lightGrayishCyan,
-                              ),
-                              onPressed: () async {
-                                await _bikeProvider.changeBikeUsingIMEI(userBikeList.deviceIMEI);
-                                changeToBikeSetting(context, 'MyGarage');
-                              }
-                            )
-                        ),
-                              SizedBox(height: 15.h),
-                            ],
-                          ),
-                        ),
+          child: SizedBox(
+              height: 385.h,
+              child: Stack(
+                  children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    height: 280.h,
+                    decoration: const BoxDecoration(
+                      color: EvieColors.lightGrayishCyan,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Image(
-                        height: 111.65.h,
-                        image: const AssetImage(
-                            "assets/images/bike_HPStatus/bike_normal.png"),
+                    child: Padding(
+                      padding:EdgeInsets.only(left:16.w, right: 16.w),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                            userBikeDetails.deviceName!,
+                            style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.bold, color: EvieColors.mediumLightBlack),
+                            ),
+                            Visibility(
+                              visible: isPlanSubscript,
+                              child: SvgPicture.asset(
+                              "assets/icons/batch_tick.svg",
+                            ),)
+                          ],
+                        ),
+
+                          SizedBox(height: 14.h),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Plan",
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
+                              ),
+
+                              Text(
+                                isPlanSubscript ? "Pro Plan" : "Free Plan",
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 0.8.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Plan Expiry",
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
+                              ),
+                              Text(
+                                  isPlanSubscript ? "${monthsInYear[userBikePlan?.periodEnd!.toDate().month]} ${userBikePlan?.periodEnd!.toDate().day}, ${userBikePlan?.periodEnd!.toDate().year}"
+                                      : "Free Forever",
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
+                              ),
+                            ],
+                          ),
+
+                          SizedBox(height: 0.8.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Model",
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
+                              ),
+                              Text(
+                                "EVIE S series",
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 0.8.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Owner",
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                   userBikeDetails.ownerName ?? "owner",
+                                    style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
+                                  ),
+                                  Visibility(
+                                    visible: _currentUserProvider.currentUserModel!.name == userBikeDetails.ownerName,
+                                    child: Text(
+                                        " (You)",
+                                        style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                    SizedBox(height: 15.h,),
+                    Container(
+                        height: 48.h,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+
+                              SvgPicture.asset(
+                                "assets/icons/setting.svg",
+                                height:24.h,
+                                color: EvieColors.primaryColor,
+                              ),
+                              Text(
+                                "Bike Setting",
+                                style: EvieTextStyles.ctaBig.copyWith(color:EvieColors.primaryColor),
+                              ),
+                            ],
+                          ),
+
+                          style: ElevatedButton.styleFrom(
+                              side: const BorderSide(
+                          width: 1.5,
+                          color: EvieColors.primaryColor,
+                          ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.w)
+                            ),
+                            elevation: 0.0,
+                            backgroundColor: EvieColors.lightGrayishCyan,
+                          ),
+                          onPressed: () async {
+                            await _bikeProvider.changeBikeUsingIMEI(userBikeList.deviceIMEI);
+                            changeToBikeSetting(context, 'MyGarage');
+                          }
+                        )
+                    ),
+                          SizedBox(height: 15.h),
+                        ],
                       ),
-                    )
-                  ])),
-            ],
-          ));
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Image(
+                    height: 111.65.h,
+                    image: const AssetImage(
+                        "assets/images/bike_HPStatus/bike_normal.png"),
+                  ),
+                ),
+              ])));
   }
 }
