@@ -383,6 +383,7 @@ class _ThreatMapState extends State<ThreatMap> {
 
           OnPointAnnotationClickListener listener = MyPointAnnotationClickListener();
           pointAnnotationManager.addOnPointAnnotationClickListener(listener);
+        
         }
     });
 

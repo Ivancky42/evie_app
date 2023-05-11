@@ -349,7 +349,7 @@ class BikeProvider extends ChangeNotifier {
     SharedPreferences prefs = await _prefs;
     await prefs.setString('currentBikeImei', deviceIMEI.trim());
 
-    await getBike(deviceIMEI.trim());
+    await getBike(deviceIMEI);
   }
 
   /// ****************************************** ///
