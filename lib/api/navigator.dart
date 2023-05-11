@@ -63,6 +63,7 @@ import '../screen/signup_page.dart';
 
 import '../abandon/user_notification_details.dart';
 import '../screen/user_home_page/paid_plan/home_element/threat_map.dart';
+import '../screen/user_home_page/paid_plan/home_element/threat_map2.dart';
 import '../screen/user_home_page/paid_plan/threat_timeline.dart';
 import '../test/test.dart';
 import 'model/bike_model.dart';
@@ -598,7 +599,7 @@ void changeToThreatMap(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.bottomToTop,
-      child: ThreatMap(),
+      child: ThreatMap2(),
       duration: const Duration(milliseconds: 300),
     ),
   );

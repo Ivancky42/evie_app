@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:collection';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/utils.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -22,6 +24,8 @@ class LocationProvider extends ChangeNotifier {
   LocationModel? locationModel;
   //UserLocation? userPosition;
   Placemark? currentPlaceMark;
+  PointAnnotation? selectedPointAnnotation;
+  GeoPoint? selectedAnnotationGeopoint;
 
   LocationProvider() {
     checkLocationPermissionStatus();
@@ -134,6 +138,22 @@ class LocationProvider extends ChangeNotifier {
       placeMark = null;
     }
     return placeMark;
+  }
+
+  void setDefaultSelectedGeopoint() {
+    selectedAnnotationGeopoint = locationModel?.geopoint;
+    notifyListeners();
+  }
+
+  void setSelectedAnnotation(PointAnnotation pointAnnotation) {
+    selectedPointAnnotation = pointAnnotation;
+    print(pointAnnotation.geometry!['coordinates'].toString());
+    Object? coordinatesList = pointAnnotation.geometry!['coordinates'];
+    List<double> doublesList = (coordinatesList as List).map((coord) => coord as double).toList();
+    double longitude = doublesList[0];
+    double latitude = doublesList[1];
+    selectedAnnotationGeopoint = GeoPoint(latitude, longitude);
+    notifyListeners();
   }
 
 
