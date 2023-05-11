@@ -12,6 +12,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../../../api/backend/debouncer.dart';
 import '../../../api/colours.dart';
+import '../../../api/fonts.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
@@ -138,6 +139,7 @@ class _BikeSettingState extends State<BikeSetting> {
 
       child: Scaffold(
           appBar: PageAppbar(
+            enable: widget.source != 'Home',
             title: 'My Bike Setting',
             onPressed: () {
               if(widget.source == 'MyGarage'){
@@ -154,6 +156,29 @@ class _BikeSettingState extends State<BikeSetting> {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                mainAxisAlignment:
+                MainAxisAlignment.spaceBetween,
+                children: [
+                  Visibility(
+                    visible: widget.source == 'Home',
+                    child: Column(children: [
+                      Padding(
+                        padding:
+                        EdgeInsets.only(left: 17.w, top: 10.h, bottom: 0.h),
+                        child: Text(
+                          "My Bike Setting",
+                          style: EvieTextStyles.h1,
+                        ),
+                      ),
+                    ],
+                    ),
+                  ),
+
+                  const Divider(
+                    thickness: 2,
+                  ),
+                  ],),
 
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),

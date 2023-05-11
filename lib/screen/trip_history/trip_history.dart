@@ -54,7 +54,7 @@ class _TripHistoryState extends State<TripHistory> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.fromLTRB(16.w, 51.h, 0.w, 22.h),
+                          padding: EdgeInsets.fromLTRB(16.w, 10.h, 0.w, 22.h),
                           child: Container(
                             child: Text(
                               "Rides",

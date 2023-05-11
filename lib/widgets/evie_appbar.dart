@@ -36,18 +36,20 @@ class EvieAppbar_Back extends StatelessWidget implements PreferredSizeWidget {
 
 
 class PageAppbar extends StatelessWidget implements PreferredSizeWidget {
+  final bool? enable;
   final String title;
   final VoidCallback onPressed;
 
   const PageAppbar({
     Key? key,
+    this.enable,
     required this.title,
     required this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
+    return enable == null || enable == true ? AppBar(
       leading: IconButton(
         icon: SvgPicture.asset("assets/buttons/back_big.svg"),
         onPressed: onPressed,
@@ -56,10 +58,10 @@ class PageAppbar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title, style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),
       ),
-    );
+    ) : Container();
   }
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(48.h);
+  Size get preferredSize => enable == null || enable == true ? Size.fromHeight(48.h) : Size.fromHeight(0);
 }
