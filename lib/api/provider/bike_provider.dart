@@ -443,7 +443,7 @@ class BikeProvider extends ChangeNotifier {
         'role': 'user',
         'status': 'pending',
         'justInvited': false,
-      //  'userId': userId,
+        'ownerName': currentUserModel!.name,
         'ownerUid': currentUserModel!.uid,
       }, SetOptions(merge: true));
 
