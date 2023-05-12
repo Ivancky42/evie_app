@@ -1,13 +1,20 @@
+import 'dart:typed_data';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/api/sheet.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 import '../../../../api/colours.dart';
@@ -16,6 +23,7 @@ import '../../../../api/function.dart';
 import '../../../../api/model/location_model.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/provider/bluetooth_provider.dart';
+import '../../../../api/provider/current_user_provider.dart';
 import '../../../../api/provider/notification_provider.dart';
 import '../../../../bluetooth/modelResult.dart';
 import '../../../../widgets/evie_card.dart';
@@ -25,8 +33,6 @@ import 'package:latlong2/latlong.dart';
 import '../../home_page_widget.dart';
 
 class OrbitalAntiTheft extends StatefulWidget {
-
-
   OrbitalAntiTheft({
     Key? key
   }) : super(key: key);
@@ -40,12 +46,16 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late LocationProvider _locationProvider;
+  late CurrentUserProvider _currentUserProvider;
 
   GeoPoint? selectedGeopoint;
   DeviceConnectResult? deviceConnectResult;
 
-  MapController? mapController;
+  var options = <PointAnnotationOptions>[];
+  MapboxMap? mapboxMap;
+  OnMapScrollListener? onMapScrollListener;
 
+  var currentAnnotationId;
   var markers = <Marker>[];
 
   late AnimationController _animationController;
@@ -57,25 +67,22 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     super.initState();
     _locationProvider = Provider.of<LocationProvider>(context, listen: false);
     selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    mapController = MapController();
-
-    // _animationController = AnimationController(vsync: this,duration: Duration(milliseconds: 3000));
-    // _animationController..addStatusListener((status) {
-    //   if(status == AnimationStatus.completed) _animationController.forward(from: 0);
-    // });
-    // _animationController.addListener(() {
-    //   setState(() {
-    //   });
-    // });
-    // _animationController.repeat(max: 1);
-    // _animationController.forward();
+    _locationProvider.addListener(locationListener);
   }
 
   @override
   void dispose() {
-    mapController?.dispose();
-    // _animationController.dispose();
+    _locationProvider.removeListener(locationListener);
     super.dispose();
+  }
+
+  _onMapCreated(MapboxMap mapboxMap) async {
+   this.mapboxMap = mapboxMap;
+
+    ///Disable scaleBar on top left corner
+    await this.mapboxMap?.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
+
+   loadMarker();
   }
 
 
@@ -85,58 +92,87 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
-    loadMarker();
-
     List<Widget> _widgets = [
       Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          FutureBuilder(
-              future: getLocationModel(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 16.h),
-                    child: SizedBox(
-                      width: 176.w,
-                      child: Mapbox_Widget(
-                        isInteract: false,
-                        accessToken: _locationProvider.defPublicAccessToken,
-                        //onMapCreated: _onMapCreated,
-                        mapController: mapController,
-                        markers: markers,
-                        // onUserLocationUpdate: (userLocation) {
-                        //   if (this.userLocation != null) {
-                        //     this.userLocation = userLocation;
-                        //     getDistanceBetween();
-                        //   }
-                        //   else {
-                        //     this.userLocation = userLocation;
-                        //     getDistanceBetween();
-                        //     runSymbol();
-                        //   }
-                        // },
-                        latitude: _locationProvider.locationModel!.geopoint.latitude,
-                        longitude: _locationProvider.locationModel!.geopoint.longitude,
-                        zoom: 15,
-                      ),
-                    ),
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              }),
+          Expanded(
+            child: FutureBuilder(
+                future: getLocationModel(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Stack(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 16.h),
+                          child: Center(
+                            child: SingleChildScrollView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 220.h,
+                                  child: MapWidget(
+                                    onScrollListener: onMapScrollListener,
+                                    key: const ValueKey("mapWidget"),
+                                    resourceOptions: ResourceOptions(
+                                        accessToken: _locationProvider.defPublicAccessToken),
+                                    onMapCreated: _onMapCreated,
+                                    styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
+                                    cameraOptions: CameraOptions(
+                                      center: Point(
+                                          coordinates: Position(
+                                              _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                                              _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                                          .toJson(),
+                                      zoom: 12,
+                                    ),
+                                    // gestureRecognizers: [
+                                    //   Factory<OneSequenceGestureRecognizer>(
+                                    //           () => EagerGestureRecognizer())
+                                    // ].toSet(),
+                                  ),
 
-          // Selector<BikeProvider, int>(
-          //   selector: (context, bikeProvider) => bikeProvider.currentBikeList,
-          //   builder: (context, myValue, child) {
-          //     return Text('My Value: $myValue');
-          //   },
-          // ),
+                                  // child: Mapbox_Widget(
+                                  //   isInteract: false,
+                                  //   accessToken: _locationProvider.defPublicAccessToken,
+                                  //   //onMapCreated: _onMapCreated,
+                                  //   mapController: mapController,
+                                  //   markers: markers,
+                                  //   // onUserLocationUpdate: (userLocation) {
+                                  //   //   if (this.userLocation != null) {
+                                  //   //     this.userLocation = userLocation;
+                                  //   //     getDistanceBetween();
+                                  //   //   }
+                                  //   //   else {
+                                  //   //     this.userLocation = userLocation;
+                                  //   //     getDistanceBetween();
+                                  //   //     runSymbol();
+                                  //   //   }
+                                  //   // },
+                                  //   latitude: _locationProvider.locationModel!.geopoint.latitude,
+                                  //   longitude: _locationProvider.locationModel!.geopoint.longitude,
+                                  //   zoom: 15,
+                                  // ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
+          ),
 
           Expanded(
             child: Padding(
@@ -149,8 +185,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                   Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
                     style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray),),
 
-                  selectedGeopoint != null
-                      ? FutureBuilder<dynamic>(
+                  selectedGeopoint != null ? FutureBuilder<dynamic>(
                       future: _locationProvider.returnPlaceMarks(selectedGeopoint!.latitude, selectedGeopoint!.longitude),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
@@ -179,90 +214,104 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
       ),
 
       PaginateFirestore(
-          itemBuilderType: PaginateBuilderType.listView,
-          itemBuilder: (context, documentSnapshots, index) {
-            final data = documentSnapshots[index].data() as Map?;
-            if(_bikeProvider.threatFilterArray.contains(data!['type'])) {
-              return Column(
-                children: [
-                  ListTile(
-                      leading: data == null ? const Text('Error')
-                          : SvgPicture.asset(
-                        getSecurityIconWidget(data['type']),
-                        height: 36.h,
-                        width: 36.w,
-                      ),
-                      title: data == null ? const Text('Error')
-                          : data["address"] != null
-                          ? Text(data["address"], style: EvieTextStyles.body18,)
-                          : FutureBuilder<dynamic>(
-                          future: _locationProvider.returnPlaceMarks(
-                              data["geopoint"].latitude,
-                              data["geopoint"].longitude),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              _bikeProvider.uploadPlaceMarkAddressToFirestore(
-                                  _bikeProvider.currentBikeModel!.deviceIMEI!,
-                                  documentSnapshots[index].id, snapshot.data
-                                  .name.toString());
-                              return Text(
-                                snapshot.data.name.toString(),
-                                style: EvieTextStyles.body18,
-                              );
-                            } else {
-                              return const Text(
-                                "loading",
-                              );
-                            }
+        itemBuilderType: PaginateBuilderType.listView,
+        itemBuilder: (context, documentSnapshots, index) {
+          final data = documentSnapshots[index].data() as Map?;
+          if(_bikeProvider.threatFilterArray.contains(data!['type'])) {
+            return Column(
+              children: [
+                ListTile(
+                    leading: data == null ? const Text('Error')
+                        : SvgPicture.asset(
+                      getSecurityIconWidget(data['type']),
+                      height: 36.h,
+                      width: 36.w,
+                    ),
+                    title: data == null ? const Text('Error')
+                        : data["address"] != null
+                        ? Text(data["address"], style: EvieTextStyles.body18,)
+                        : FutureBuilder<dynamic>(
+                        future: _locationProvider.returnPlaceMarks(
+                            data["geopoint"].latitude,
+                            data["geopoint"].longitude),
+                        builder: (context, snapshot) {
+
+                          if (snapshot.hasData) {
+                            _bikeProvider.uploadPlaceMarkAddressToFirestore(
+                                _bikeProvider.currentBikeModel!.deviceIMEI!,
+                                documentSnapshots[index].id, snapshot.data
+                                .name.toString());
+                            return Text(
+                              snapshot.data.name.toString(),
+                              style: EvieTextStyles.body18,
+                            );
+                          } else {
+                            return const Text(
+                              "loading",
+                            );
                           }
-                      ),
-                      subtitle: data == null
-                          ? const Text('Error in data')
-                          : Text("${getSecurityTextWidget(
-                          data["type"])} • ${calculateTimeAgoWithTime(
-                          data["created"]!.toDate())}",
-                        style: EvieTextStyles.body12,)
+                        }
+                    ),
+                    subtitle: data == null
+                        ? const Text('Error in data')
+                        : Text("${getSecurityTextWidget(
+                        data["type"])} • ${calculateTimeAgoWithTime(
+                        data["created"]!.toDate())}",
+                      style: EvieTextStyles.body12,)
 
-                  ),
-                  const Divider(height: 1),
-                ],
-              );
-            }else{
-              return Container();
-            }
+                ),
+                const Divider(height: 1),
+              ],
+            );
+          }else{
+            return Container();
+          }
 
-          },
-          query: FirebaseFirestore.instance.collection("bikes")
-              .doc(_bikeProvider.currentBikeModel!.deviceIMEI!)
-              .collection("events")
-          //.where('type', whereIn: ['lock'])
-          //.where('type', whereIn: _bikeProvider.threatFilterArray)
-              .orderBy("created", descending: true),
-          itemsPerPage: 3,
-          isLive: false,
-          ),
+        },
+        query: FirebaseFirestore.instance.collection("bikes")
+            .doc(_bikeProvider.currentBikeModel!.deviceIMEI!)
+            .collection("events")
+        //.where('type', whereIn: ['lock'])
+        //.where('type', whereIn: _bikeProvider.threatFilterArray)
+            .orderBy("created", descending: true),
+        itemsPerPage: 3,
+        isLive: false,
+      ),
     ];
 
     return Container(
       padding: EdgeInsets.all(5.0),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.w),
-          // gradient: SweepGradient(
-          //     startAngle: 0,
-          //     colors: [Colors.white,EvieColors.lightRed,Colors.white,EvieColors.lightRed],
-          //     transform: GradientRotation(_animationController.value*6)
-          // )
+        borderRadius: BorderRadius.circular(10.w),
+        // gradient: SweepGradient(
+        //     startAngle: 0,
+        //     colors: [Colors.white,EvieColors.lightRed,Colors.white,EvieColors.lightRed],
+        //     transform: GradientRotation(_animationController.value*6)
+        // )
       ),
       child: EvieCard(
         onPress: (){
           if(_currentIndex == 0){
-            showMapDetailsSheet(context);
+            if(_locationProvider.locationModel?.isConnected == false){
+              showMapDetailsSheet(context);
+            }else if(_bikeProvider.currentBikeModel?.location?.status == "danger") {
+            changeToThreatMap(context);
+            }else{
+              showMapDetailsSheet(context);
+            }
           }else{
-            showThreatHistorySheet(context);
+            if(_locationProvider.locationModel?.isConnected == false){
+              showThreatHistorySheet(context);
+            }else if(_bikeProvider.currentBikeModel?.location?.status == "danger"){
+              changeToThreatTimeLine(context);
+            }else {
+              showThreatHistorySheet(context);
+            }
           }
         },
         //height: 255.h,
-         height: double.infinity,
+        height: double.infinity,
+        width: double.infinity,
         title: "Orbital Anti-theft",
         child: Expanded(
           child: Column(
@@ -318,122 +367,96 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     return _locationProvider.locationModel;
   }
 
+  loadMarker(){
+    options.clear();
 
-  void loadMarker() {
+    if(currentAnnotationId != null){
+      mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
+    }
 
-    markers = <Marker>[
+    mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
 
-      if(_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger")...{
-        ///load a few more marker
-        for(int i = 0; i < _bikeProvider.threatRoutesLists.length; i++)...{
-          Marker(
-            width: 30.w,
-            height: 40.h,
-            point: LatLng(_bikeProvider.threatRoutesLists.values
-                .elementAt(i)
-                .geopoint
-                .latitude ?? 0,
-                _bikeProvider.threatRoutesLists.values
-                    .elementAt(i)
-                    .geopoint
-                    .longitude ?? 0),
-            builder: (ctx) => GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-                setState(() {
-                  selectedGeopoint = _bikeProvider.threatRoutesLists.values
-                      .elementAt(i)
-                      .geopoint;
-                });
-              },
-              child: _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint == selectedGeopoint ?
-              SvgPicture.asset("assets/icons/marker_danger.svg",)
-                  : SvgPicture.asset("assets/icons/marker_danger_deactive.svg",),
-            ),
-          ),
-        },
+      ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
+        currentAnnotationId = pointAnnotationManager;
 
-        Marker(
-          width: 42.w,
-          height: 56.h,
-          point: LatLng(_locationProvider.locationModel?.geopoint.latitude ?? 0,
-              _locationProvider.locationModel?.geopoint.longitude ?? 0),
-          builder: (ctx) =>
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  setState(() {
-                    selectedGeopoint = _locationProvider.locationModel?.geopoint;
-                  });
-                },
-                child: _locationProvider.locationModel?.geopoint == selectedGeopoint ?
-                SvgPicture.asset(
-                  "assets/icons/marker_danger.svg",
-                  height: 56.h,
-                )
-                    : SvgPicture.asset(
-                  "assets/icons/marker_danger_deactive.svg",
-                  height: 56.h,
-                ),
-              ),
-        ),
+        ///Add disconnected threat
+      if(_locationProvider.locationModel!.isConnected == false){
+        final ByteData bytes = await rootBundle.load("assets/icons/marker_warning.png");
+        final Uint8List list = bytes.buffer.asUint8List();
 
-      }else...{
+        options.add(PointAnnotationOptions(
+          geometry: Point(
+              coordinates: Position(
+                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                  _locationProvider.locationModel?.geopoint.latitude ?? 0))
+              .toJson(),
+          image: list,
+          iconSize: 1.5.h,
+        ));
 
-        Marker(
-          width: 42.w,
-          height: 56.h,
-          point: LatLng(_locationProvider.locationModel?.geopoint.latitude ?? 0,
-              _locationProvider.locationModel?.geopoint.longitude ?? 0),
-          builder: (ctx) => Image(
-            image: AssetImage(!_locationProvider.locationModel!.isConnected ? "assets/icons/marker_warning.png" : loadMarkerImageString(_locationProvider.locationModel?.status ?? "")),
-          ),
-        ),
-      },
+        ///Add danger threat
+      }else if (_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger") {
 
-      ///User marker
-      // Marker(
-      //   width: 42.w,
-      //   height: 56.h,
-      //   point: currentLatLng,
-      //   builder: (ctx) {
-      //     return _buildCompass();
-      //   },
-      // ),
-    ];
+        final ByteData bytes = await rootBundle.load("assets/icons/marker_danger.png");
+        final Uint8List list = bytes.buffer.asUint8List();
+
+        ///First marker
+        options.add(
+            PointAnnotationOptions(
+          geometry: Point(
+              coordinates: Position(
+                _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                _locationProvider.locationModel?.geopoint.latitude ?? 0,
+              )).toJson(),
+          image: list,
+          iconSize: 1.5.h,
+        )
+        );
+
+      } else {
+        final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? "safe"));
+        final Uint8List list = bytes.buffer.asUint8List();
+
+        options.add(PointAnnotationOptions(
+          geometry: Point(
+              coordinates: Position(
+                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                  _locationProvider.locationModel?.geopoint.latitude ?? 0))
+              .toJson(),
+          image: list,
+          iconSize: 1.5.h,
+        ));
+      }
+
+        pointAnnotationManager.setIconAllowOverlap(false);
+        pointAnnotationManager.createMulti(options);
+
+    });
+
+
   }
 
+  void locationListener() {
+    //setButtonImage();
+    //getDistanceBetween();
+    selectedGeopoint  = _locationProvider.locationModel?.geopoint;
+    animateBounce();
+    // loadImage(currentDangerStatus);
+  }
+
+
   void animateBounce() {
-    // if (_locationProvider.locationModel != null && userLocation != null) {
-    //
-    //   final LatLng southwest = LatLng(
-    //     min(_locationProvider.locationModel!.geopoint.latitude,
-    //         userLocation!.latitude!),
-    //     min(_locationProvider.locationModel!.geopoint.longitude,
-    //         userLocation!.longitude!),
-    //   );
-    //
-    //   final LatLng northeast = LatLng(
-    //     max(_locationProvider.locationModel!.geopoint.latitude,
-    //         userLocation!.latitude!),
-    //     max(_locationProvider.locationModel!.geopoint.longitude,
-    //         userLocation!.longitude!),
-    //   );
-    //
-    //   latLngBounds = LatLngBounds(southwest, northeast);
-    //
-    //   if (currentScroll <= (initialRatio) && currentScroll > minRatio + 0.01) {
-    //     mapController?.fitBounds(latLngBounds,
-    //         options: FitBoundsOptions(
-    //           padding: EdgeInsets.fromLTRB(170.w, 100.h, 170.w, 360.h),
-    //         ));
-    //   } else if (currentScroll >= minRatio) {
-    //     mapController?.fitBounds(latLngBounds,
-    //         options: FitBoundsOptions(
-    //           padding: EdgeInsets.fromLTRB(80.w, 80.h, 80.w, 120.h),
-    //         ));
-    //   }
-    // }
+    mapboxMap?.flyTo(
+        CameraOptions(
+          center: Point(
+              coordinates: Position(
+                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                  _locationProvider.locationModel?.geopoint.latitude ?? 0))
+              .toJson(),
+          zoom: 12,
+        ),
+        MapAnimationOptions(duration: 2000, startDelay: 0));
+    loadMarker();
   }
 }
 

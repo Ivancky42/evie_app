@@ -1,22 +1,27 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
 import 'colours.dart';
 import 'model/bike_model.dart';
+import 'package:latlong2/latlong.dart';
 
 checkBleStatusAndConnectDevice(BluetoothProvider _bluetoothProvider, BikeProvider _bikeProvider) {
   BleStatus? bleStatus = _bluetoothProvider.bleStatus;
@@ -507,5 +512,43 @@ getSecurityTextWidget(String eventType) {
   }
 }
 
+animateBounce(mapboxMap, locationProvider) {
+  mapboxMap?.flyTo(
+      CameraOptions(
+        center: Point(
+            coordinates: Position(
+                locationProvider.locationModel?.geopoint.longitude ?? 0,
+                locationProvider.locationModel?.geopoint.latitude ?? 0))
+            .toJson(),
+        zoom: 16,
+      ),
+      MapAnimationOptions(duration: 2000, startDelay: 0));
+
+}
+
+
+pointBounce(mapboxMap, LocationProvider locationProvider, userPosition) {
+
+  final LatLng southwest = LatLng(
+    min(locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
+    min(locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
+  );
+
+  final LatLng northeast = LatLng(
+    max(locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
+    max(locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
+  );
+  LatLngBounds latLngBounds = LatLngBounds(southwest, northeast);
+
+  mapboxMap?.flyTo(
+    CameraOptions(
+      padding: MbxEdgeInsets(top: 100.h, left: 170.w, bottom: 360.h, right: 170.w),
+      center: latLngBounds.center.toJson(),
+      //    zoom: _getZoomLevel(latLngBounds, 350.w ,750.h),
+
+    ),
+    MapAnimationOptions(duration: 2000, startDelay: 0),
+  );
+}
 
 

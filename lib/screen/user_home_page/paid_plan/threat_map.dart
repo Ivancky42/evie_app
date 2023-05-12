@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,26 +25,26 @@ import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 
-import '../../../../api/colours.dart';
-import '../../../../api/function.dart';
-import '../../../../api/navigator.dart';
-import '../../../../api/provider/bike_provider.dart';
-import '../../../../api/provider/bluetooth_provider.dart';
-import '../../../../api/provider/location_provider.dart';
+import '../../../api/colours.dart';
+import '../../../api/function.dart';
+import '../../../api/navigator.dart';
+import '../../../api/provider/bike_provider.dart';
+import '../../../api/provider/bluetooth_provider.dart';
+import '../../../api/provider/location_provider.dart';
 import 'package:latlong2/latlong.dart';
 
-import 'battery.dart';
+import 'home_element/battery.dart';
 
 
-class ThreatMap2 extends StatefulWidget {
+class ThreatMap extends StatefulWidget {
 
-  const ThreatMap2({Key? key,}) : super(key: key);
+  const ThreatMap({Key? key,}) : super(key: key);
 
   @override
-  State<ThreatMap2> createState() => _ThreatMap2State();
+  State<ThreatMap> createState() => _ThreatMapState();
 }
 
-class _ThreatMap2State extends State<ThreatMap2> {
+class _ThreatMapState extends State<ThreatMap> {
 
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
@@ -176,7 +177,7 @@ class _ThreatMap2State extends State<ThreatMap2> {
                     ),
 
                     Padding(
-                      padding:  EdgeInsets.only(bottom:250.h),
+                      padding:  EdgeInsets.only(bottom:280.h),
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
@@ -250,12 +251,12 @@ class _ThreatMap2State extends State<ThreatMap2> {
                     ),
 
                     Padding(
-                      padding:  EdgeInsets.only(bottom:200.h),
+                      padding:  EdgeInsets.only(bottom:230.h),
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
                           onTap: () async {
-                            pointBounce();
+                            pointBounce(mapboxMap, _locationProvider, userPosition);
                           },
                           child: Container(
                               height: 50.h,
@@ -317,7 +318,8 @@ class _ThreatMap2State extends State<ThreatMap2> {
     print("location did change");
     //getDistanceBetween();
     selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    animateBounce();
+    animateBounce(mapboxMap, _locationProvider);
+    loadMarker();
   }
 
 
@@ -370,10 +372,8 @@ class _ThreatMap2State extends State<ThreatMap2> {
           ),);
       }
 
-
         ///load a few more marker
         for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
-
           GeoPoint routeGeopoint = _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint;
 
           if (_locationProvider.selectedAnnotationGeopoint == routeGeopoint) {
@@ -420,6 +420,8 @@ class _ThreatMap2State extends State<ThreatMap2> {
           OnPointAnnotationClickListener listener = MyPointAnnotationClickListener(_locationProvider);
           pointAnnotationManager.addOnPointAnnotationClickListener(listener);
         }
+
+
     });
 
     ///User location
@@ -442,50 +444,20 @@ class _ThreatMap2State extends State<ThreatMap2> {
                   shadowImage: resizedImg,
                   //scaleExpression: "50",
                 ))));
-  }
 
+    Layer? layer;
 
-  animateBounce() {
-    mapboxMap?.flyTo(
-        CameraOptions(
-          center: Point(
-              coordinates: Position(
-                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                  _locationProvider.locationModel?.geopoint.latitude ?? 0))
-              .toJson(),
-          zoom: 16,
-        ),
-        MapAnimationOptions(duration: 2000, startDelay: 0));
+    if (Platform.isAndroid) {
+      layer = await mapboxMap?.style.getLayer("mapbox-location-indicator-layer");
+    } else {
+      layer = await mapboxMap?.style.getLayer("puck");
+    }
 
-    loadMarker();
-  }
+    var location = (layer as LocationIndicatorLayer).location;
+      userPosition = Position(location![1]!, location[0]!);
 
-
-  pointBounce() {
-
-    final LatLng southwest = LatLng(
-      min(_locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
-      min(_locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
-    );
-
-    final LatLng northeast = LatLng(
-      max(_locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
-      max(_locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
-    );
-    LatLngBounds latLngBounds = LatLngBounds(southwest, northeast);
-
-    mapboxMap?.flyTo(
-      CameraOptions(
-        padding: MbxEdgeInsets(top: 100.h, left: 170.w, bottom: 360.h, right: 170.w),
-        center: latLngBounds.center.toJson(),
-        //    zoom: _getZoomLevel(latLngBounds, 350.w ,750.h),
-
-      ),
-      MapAnimationOptions(duration: 2000, startDelay: 0),
-    );
   }
 }
-
 
 class MyPointAnnotationClickListener extends OnPointAnnotationClickListener {
   PointAnnotation? currentClickedAnnotation;

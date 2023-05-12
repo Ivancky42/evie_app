@@ -82,16 +82,17 @@ class _RideHistoryState extends State<RideHistory> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToTripHistory(context);
+        Navigator.pop(context);
         return false;
       },
+
       child: Scaffold(
-        appBar: PageAppbar(
-          title: 'Ride History',
-          onPressed: () {
-            changeToTripHistory(context);
-          },
-        ),
+        // appBar: PageAppbar(
+        //   title: 'Ride History',
+        //   onPressed: () {
+        //     changeToTripHistory(context);
+        //   },
+        // ),
         body: Stack(
           children: [
             Column(

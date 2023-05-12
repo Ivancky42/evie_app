@@ -6,6 +6,7 @@ import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/provider/trip_provider.dart';
+import 'package:evie_test/api/sheet.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
@@ -80,8 +81,8 @@ class _RecentActivityState extends State<RecentActivity> {
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
-                    Navigator.pop(context);
-                    //changeToRideHistory(context, _tripProvider.currentTripHistoryLists.keys.elementAt(index), _tripProvider.currentTripHistoryLists.values.elementAt(index));
+                    //Navigator.pop(context);
+                    showRideHistorySheet(context, _tripProvider.currentTripHistoryLists.keys.elementAt(index), _tripProvider.currentTripHistoryLists.values.elementAt(index));
 
                   },
                   child: Container(

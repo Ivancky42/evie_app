@@ -22,11 +22,11 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../../api/colours.dart';
-import '../../../api/function.dart';
-import '../../../api/provider/bike_provider.dart';
-import '../../../api/provider/bluetooth_provider.dart';
-import '../../../api/provider/location_provider.dart';
+import '../../../../api/colours.dart';
+import '../../../../api/function.dart';
+import '../../../../api/provider/bike_provider.dart';
+import '../../../../api/provider/bluetooth_provider.dart';
+import '../../../../api/provider/location_provider.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -236,7 +236,7 @@ class _MapDetailsState extends State<MapDetails> {
                     alignment: Alignment.bottomRight,
                     child: GestureDetector(
                       onTap: () async {
-                        pointBounce();
+                        pointBounce(mapboxMap, _locationProvider, userPosition);
                       },
                       child: Container(
                           height: 50.h,
@@ -301,7 +301,8 @@ class _MapDetailsState extends State<MapDetails> {
     //setButtonImage();
     //getDistanceBetween();
     selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    animateBounce();
+    animateBounce(mapboxMap, _locationProvider);
+    loadMarker();
     // loadImage(currentDangerStatus);
   }
 
@@ -309,7 +310,6 @@ class _MapDetailsState extends State<MapDetails> {
   loadMarker() async {
     ///Marker
     options.clear();
-
     if(currentAnnotationId != null){
       ///Check if have this id
       mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
@@ -391,58 +391,15 @@ class _MapDetailsState extends State<MapDetails> {
               //scaleExpression: "50",
             ))));
 
-    // Layer? layer;
-    //
-    // // if (Platform.isAndroid) {
-    // //   layer = await mapboxMap?.style.getLayer("mapbox-location-indicator-layer");
-    // // } else {
-    // //   layer = await mapboxMap?.style.getLayer("puck");
-    // // }
-    //
-    // var location = (layer as LocationIndicatorLayer).location;
-    // setState(() {
-    //   userPosition = Position(location![1]!, location[0]!);
-    // });
-  }
+    Layer? layer;
 
+    if (Platform.isAndroid) {
+      layer = await mapboxMap?.style.getLayer("mapbox-location-indicator-layer");
+    } else {
+      layer = await mapboxMap?.style.getLayer("puck");
+    }
 
-  animateBounce() {
-    mapboxMap?.flyTo(
-        CameraOptions(
-          center: Point(
-                  coordinates: Position(
-                      _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                      _locationProvider.locationModel?.geopoint.latitude ?? 0))
-              .toJson(),
-          zoom: 16,
-        ),
-        MapAnimationOptions(duration: 2000, startDelay: 0));
-
-    loadMarker();
-  }
-
-
-  pointBounce() {
-
-    final LatLng southwest = LatLng(
-      min(_locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
-      min(_locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
-    );
-
-    final LatLng northeast = LatLng(
-      max(_locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
-      max(_locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
-    );
-    LatLngBounds latLngBounds = LatLngBounds(southwest, northeast);
-
-    mapboxMap?.flyTo(
-        CameraOptions(
-          padding: MbxEdgeInsets(top: 100.h, left: 170.w, bottom: 360.h, right: 170.w),
-          center: latLngBounds.center.toJson(),
-       //    zoom: _getZoomLevel(latLngBounds, 350.w ,750.h),
-
-        ),
-        MapAnimationOptions(duration: 2000, startDelay: 0),
-    );
+    var location = (layer as LocationIndicatorLayer).location;
+      userPosition = Position(location![1]!, location[0]!);
   }
 }

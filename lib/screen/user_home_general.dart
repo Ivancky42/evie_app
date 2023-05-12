@@ -5,7 +5,7 @@ import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/screen/user_home_page/add_new_bike/add_new_bike.dart';
 import 'package:evie_test/screen/user_home_page/free_plan/free_plan.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/paid_plan.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/paid_plan2.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/paid_plan.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -290,7 +290,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       return const AddNewBike();
     } else {
         if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == true) {
-          return const PaidPlan2();
+          return const PaidPlan();
 
         } else if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == false) {
           return const FreePlan();
