@@ -31,18 +31,28 @@ class TripProvider extends ChangeNotifier {
   TripHistoryModel? currentTripHistoryModel;
   BikeModel? currentBikeModel;
 
+  List<String> totalData = ["Mileage", "No of Ride", "Carbon Footprint"];
+  late String currentData;
+
   TripProvider() {
     init();
   }
 
   ///Initial value
   Future<void> init() async {
+    currentData = totalData.first;
     getTripHistory();
+    notifyListeners();
   }
 
   Future<void> update(BikeModel? currentBikeModel) async {
     this.currentBikeModel = currentBikeModel;
     getTripHistory();
+  }
+
+  setCurrentData(data){
+    currentData = data;
+    notifyListeners();
   }
 
   getTripHistory() async {

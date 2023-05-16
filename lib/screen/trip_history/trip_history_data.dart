@@ -32,8 +32,7 @@ class TripHistoryData extends StatefulWidget{
 
 class _TripHistoryDataState extends State<TripHistoryData> {
 
-  List<String> totalData = ["Mileage", "No of Ride", "Carbon Footprint"];
-  late String currentData;
+
   late List<TripHistoryModel> currentTripHistoryListDay = [];
 
   late List<ChartData> chartData = [];
@@ -71,7 +70,6 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           );
         });
 
-    currentData = totalData.first;
     super.initState();
   }
 
@@ -99,7 +97,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
             child: Row(
               children: [
 
-                if(currentData == totalData.elementAt(0))...{
+                if(_tripProvider.currentData == _tripProvider.totalData.elementAt(0))...{
                   _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
                   Row(
                     children: [
@@ -114,36 +112,31 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                     ],
                   ),
 
-                }else if(currentData == totalData.elementAt(1))...{
+                }else if(_tripProvider.currentData == _tripProvider.totalData.elementAt(1))...{
                   // Text(_bikeProvider.currentTripHistoryLists.length.toStringAsFixed(0), style: EvieTextStyles.display,),
                   Text(currentTripHistoryListDay.length.toStringAsFixed(0), style: EvieTextStyles.display,),
                   Text("rides", style: EvieTextStyles.body18,),
-                }else if(currentData == totalData.elementAt(2))...{
+                }else if(_tripProvider.currentData == _tripProvider.totalData.elementAt(2))...{
                   Text(" 0", style: EvieTextStyles.display,),
                   Text(" g", style: EvieTextStyles.body18,),
                 },
 
                 SizedBox(width: 4.w,),
                 EvieOvalGray(
-                  buttonText: currentData,
+                  buttonText: _tripProvider.currentData,
                   onPressed: (){
-                    if(currentData == totalData.first){
-                      setState(() {
-                        currentData = totalData.elementAt(1);
-                      });
-                    }else if(currentData == totalData.elementAt(1)){
-                      setState(() {
-                        currentData = totalData.last;
-                      });
-                    }else if(currentData == totalData.last){
-                      setState(() {
-                        currentData = totalData.first;
-                      });
+                    if(_tripProvider.currentData == _tripProvider.totalData.first){
+                      _tripProvider.setCurrentData(_tripProvider.totalData.elementAt(1));
+                    }else if(_tripProvider.currentData == _tripProvider.totalData.elementAt(1)){
+                      _tripProvider.setCurrentData(_tripProvider.totalData.last);
+                    }else if(_tripProvider.currentData == _tripProvider.totalData.last){
+                      _tripProvider.setCurrentData(_tripProvider.totalData.first);
                     }
                   },)
               ],
             ),
           ),
+
           Padding(
             padding: EdgeInsets.only(left: 16.w, right: 16.w),
             child: Row(
