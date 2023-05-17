@@ -551,4 +551,41 @@ pointBounce(mapboxMap, LocationProvider locationProvider, userPosition) {
   );
 }
 
+pointBounce2(MapboxMap? mapboxMap, LocationProvider locationProvider, userPosition) async {
+
+  final LatLng southwest = LatLng(
+    min(locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
+    min(locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
+  );
+
+  final LatLng northeast = LatLng(
+    max(locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
+    max(locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
+  );
+
+  final CameraOptions cameraOpt = await mapboxMap!.cameraForCoordinateBounds(
+    CoordinateBounds(
+      northeast: Point(
+        coordinates: Position(northeast.longitude, northeast.latitude),
+      ).toJson(),
+      southwest: Point(
+          coordinates: Position(southwest.longitude, southwest.latitude)
+      ).toJson(),
+      infiniteBounds: true,
+    ),
+    MbxEdgeInsets(
+      // use whatever padding you need
+      left: 170.w,
+      top: 50.h,
+      bottom: 1000.h,
+      right: 170.w,
+    ),
+    null,
+    null,
+  );
+
+  mapboxMap.flyTo(cameraOpt, MapAnimationOptions(duration: 2000, startDelay: 0));
+
+}
+
 

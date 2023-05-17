@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../screen/trip_history/ride_history.dart';
+import '../screen/user_home_page/paid_plan/map_details2.dart';
 import '../screen/user_home_page/paid_plan/threat_timeline.dart';
 import 'model/trip_history_model.dart';
 
@@ -74,7 +75,8 @@ void showMapDetailsSheet(BuildContext context) {
         MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
     context: context,
     builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: MapDetails(),);
+      //return EvieBottomSheet(childContext: MapDetails(),);
+      return EvieBottomSheet(childContext: MapDetails2(),);
     },
   );
 }
