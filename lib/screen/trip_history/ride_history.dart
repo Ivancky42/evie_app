@@ -381,9 +381,8 @@ class _RideHistoryState extends State<RideHistory> {
   }
 }
 
-
 ///======================================== old flutter map with icon
-//
+
 // class RideHistory extends StatefulWidget{
 //   final String tripId;
 //   final TripHistoryModel currentTripHistoryList;

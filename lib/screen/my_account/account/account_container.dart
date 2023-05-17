@@ -399,13 +399,14 @@ class _AccountContainerState extends State<AccountContainer> {
                 ),
               ),
             ),
+
             Padding(
               padding: EdgeInsets.only(bottom: 14.h),
               child: Center(
                 child: Column(
                   children: [
                     Text(
-                      "Evie v1.0.0 (30)",
+                      "Evie v1.0.0 (31)",
                       style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                     ),
                     Text(

@@ -301,7 +301,7 @@ class _MapDetailsState extends State<MapDetails> {
     //setButtonImage();
     //getDistanceBetween();
     selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    animateBounce(mapboxMap, _locationProvider);
+    animateBounce(mapboxMap, _locationProvider.locationModel?.geopoint.longitude ?? 0, _locationProvider.locationModel?.geopoint.latitude ?? 0);
     loadMarker();
     // loadImage(currentDangerStatus);
   }

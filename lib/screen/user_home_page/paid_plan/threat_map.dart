@@ -318,7 +318,7 @@ class _ThreatMapState extends State<ThreatMap> {
     print("location did change");
     //getDistanceBetween();
     selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    animateBounce(mapboxMap, _locationProvider);
+    animateBounce(mapboxMap, _locationProvider.locationModel?.geopoint.longitude ?? 0, _locationProvider.locationModel?.geopoint.latitude ?? 0);
     loadMarker();
   }
 

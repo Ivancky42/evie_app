@@ -149,6 +149,7 @@ const Map<int,String> monthsInYear = {
 };
 
 
+
 capitalizeFirstCharacter(String sentence){
   List<String> words = sentence.split(' ');
   for (int i = 0; i < words.length; i++) {
@@ -158,6 +159,12 @@ capitalizeFirstCharacter(String sentence){
     }
   }
   return words.join(' ');
+}
+
+splitCapitalString(String word){
+  RegExp pattern = RegExp(r'(?=[A-Z])'); // Lookahead for capital letter
+
+  return word.split(pattern).join(' ');
 }
 
 /// Yesterday : calculateDifference(date) == -1.
@@ -512,13 +519,13 @@ getSecurityTextWidget(String eventType) {
   }
 }
 
-animateBounce(mapboxMap, locationProvider) {
+animateBounce(mapboxMap, longitude, latitude) {
   mapboxMap?.flyTo(
       CameraOptions(
         center: Point(
             coordinates: Position(
-                locationProvider.locationModel?.geopoint.longitude ?? 0,
-                locationProvider.locationModel?.geopoint.latitude ?? 0))
+                longitude,
+                latitude))
             .toJson(),
         zoom: 16,
       ),

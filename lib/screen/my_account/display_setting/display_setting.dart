@@ -80,11 +80,10 @@ class _DisplaySettingState extends State<DisplaySetting> {
                         "Measurements",
                         style: EvieTextStyles.body18,
                       ),
-
                       Row(
                         children: [
                           Text(
-                            capitalizeFirstCharacter(_settingProvider.currentMeasurementSetting.toString().split('.').last),
+                            splitCapitalString(capitalizeFirstCharacter(_settingProvider.currentMeasurementSetting.toString().split('.').last)),
                             style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayish),
                           ),
                           SvgPicture.asset(
