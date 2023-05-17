@@ -28,6 +28,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../api/colours.dart';
 import '../../api/dialog.dart';
+import '../../api/filter.dart';
 import '../../api/fonts.dart';
 import '../../api/function.dart';
 import '../../api/model/bike_model.dart';
@@ -193,7 +194,7 @@ class _FeedsState extends State<Feeds> {
                     Divider(height: 1.5.h,),
 
                     Container(
-                      child: _notificationProvider.notificationList.isNotEmpty ?
+                      child: _notificationProvider.notificationList.isNotEmpty || EvieFilter.isAllBikeSafe(_bikeProvider.userBikeDetails) != true ?
                       ListView.separated(
                         physics: const ClampingScrollPhysics(),
                         padding: EdgeInsets.zero,

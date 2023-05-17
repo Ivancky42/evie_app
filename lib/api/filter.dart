@@ -1,8 +1,16 @@
+import 'dart:collection';
 
-class SensitiveWords{
+class EvieFilter {
 
-  static const List<String> sensitiveWords = [
-    "shit","",""
-  ];
+  static isAllBikeSafe(LinkedHashMap userBikeDetails){
+    bool isAllBikeSafe = true;
+
+    for (var element in userBikeDetails.values) {
+      if(element.location.status == "fall" || element.location.status == "warning" ||element.location.status == "crash" ||element.location.status == "danger" ){
+        isAllBikeSafe = false;
+      }
+    }
+    return isAllBikeSafe;
+  }
 
 }

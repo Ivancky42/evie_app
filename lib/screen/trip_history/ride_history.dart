@@ -101,7 +101,19 @@ class _RideHistoryState extends State<RideHistory> {
               children: [
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
+                  padding: EdgeInsets.only(left: 16.w, top: 16.h),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Ride History",
+                    style: EvieTextStyles.h1,
+                     ),
+                   ]
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w,4.h),
                   child: Text(
                       calculateDateAgo(widget.currentTripHistoryList.startTime!.toDate(),widget.currentTripHistoryList.endTime!.toDate()),
                     style: EvieTextStyles.body18,
