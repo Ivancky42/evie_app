@@ -411,6 +411,9 @@ class _ThreatMapState extends State<ThreatMap> {
                     )).toJson(),
                 image: list2,
                 iconSize: 2.0.h,
+                // textField: "Text",
+                // textOffset: [0.0, 3],
+                // textColor: Colors.black.value,
               ),);
           }
 

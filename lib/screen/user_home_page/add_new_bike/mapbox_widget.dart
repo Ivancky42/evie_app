@@ -42,7 +42,6 @@ class _Mapbox_WidgetState extends State<Mapbox_Widget> {
       mapController: widget.mapController,
       options: MapOptions(
         interactiveFlags: widget.isInteract == false ? InteractiveFlag.none : InteractiveFlag.pinchZoom | InteractiveFlag.drag ,
-
         zoom: widget.zoom ?? 16,
         center: LatLng(
             widget.latitude,

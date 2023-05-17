@@ -120,7 +120,6 @@ class _BikeSettingState extends State<BikeSetting> {
       showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, context, _navigator);
     }
 
-
     return WillPopScope(
         onWillPop: () async {
 
@@ -131,7 +130,7 @@ class _BikeSettingState extends State<BikeSetting> {
           }else if(widget.source == 'Home'){
             changeToUserHomePageScreen(context);
           }else{
-            changeToMyGarageScreen(context);
+            changeToUserHomePageScreen(context);
           }
 
       return false;
@@ -149,7 +148,7 @@ class _BikeSettingState extends State<BikeSetting> {
               }else if(widget.source == 'Home'){
                 changeToUserHomePageScreen(context);
               }else{
-                changeToMyGarageScreen(context);
+                changeToUserHomePageScreen(context);
               }
             },
           ),
