@@ -248,14 +248,14 @@ class _RideHistoryState extends State<RideHistory> {
     );
   }
 
-  loadMarkerNew(){
+  loadMarkerNew() async {
     options.clear();
 
     if(currentAnnotationId != null){
-      mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
+      await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
     }
 
-    mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
+    await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
 
       ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
       currentAnnotationId = pointAnnotationManager;

@@ -256,7 +256,7 @@ class _ThreatMapState extends State<ThreatMap> {
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
                           onTap: () async {
-                            pointBounce(mapboxMap, _locationProvider, userPosition);
+                            pointBounce2(mapboxMap, _locationProvider, userPosition);
                           },
                           child: Container(
                               height: 50.h,
@@ -330,10 +330,10 @@ class _ThreatMapState extends State<ThreatMap> {
 
     if(currentAnnotationId != null){
       ///Check if have this id
-      mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
+      await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
     }
 
-    mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
+    await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
 
       ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
       currentAnnotationId = pointAnnotationManager;

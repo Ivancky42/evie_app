@@ -181,7 +181,7 @@ class _MapDetails2State extends State<MapDetails2> {
                     ),
 
                     Padding(
-                      padding:  EdgeInsets.only(bottom:250.h),
+                      padding:  EdgeInsets.only(bottom:280.h),
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
@@ -255,7 +255,7 @@ class _MapDetails2State extends State<MapDetails2> {
                     ),
 
                     Padding(
-                      padding:  EdgeInsets.only(bottom:200.h),
+                      padding:  EdgeInsets.only(bottom:230.h),
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
@@ -326,7 +326,7 @@ class _MapDetails2State extends State<MapDetails2> {
     //setButtonImage();
     //getDistanceBetween();
     selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    animateBounce(mapboxMap, _locationProvider);
+    animateBounce(mapboxMap, _locationProvider.locationModel?.geopoint.longitude ?? 0, _locationProvider.locationModel?.geopoint.latitude ?? 0);
     loadMarker();
     // loadImage(currentDangerStatus);
     //pointBounce(mapboxMap, _locationProvider, userPosition);
@@ -338,10 +338,10 @@ class _MapDetails2State extends State<MapDetails2> {
     options.clear();
     if(currentAnnotationId != null){
       ///Check if have this id
-      mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
+      await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
     }
 
-    mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
+    await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
 
       ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
       currentAnnotationId = pointAnnotationManager;

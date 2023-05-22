@@ -113,10 +113,10 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                             child: SingleChildScrollView(
                               physics: const NeverScrollableScrollPhysics(),
                               child: Align(
-                                alignment: Alignment.center,
+                                alignment: Alignment.bottomCenter,
                                 child: Container(
-                                  alignment: Alignment.center,
-                                  height: 220.h,
+                                  alignment: Alignment.bottomCenter,
+                                  height: 240.h,
                                   child: MapWidget(
                                     onScrollListener: onMapScrollListener,
                                     key: const ValueKey("mapWidget"),
@@ -367,14 +367,14 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     return _locationProvider.locationModel;
   }
 
-  loadMarker(){
+  loadMarker() async {
     options.clear();
 
     if(currentAnnotationId != null){
-      mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
+      await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
     }
 
-    mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
+    await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
 
       ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
         currentAnnotationId = pointAnnotationManager;
