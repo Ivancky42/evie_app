@@ -1,4 +1,3 @@
-
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -9,7 +8,6 @@ import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-
 
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -59,6 +57,8 @@ class _QRScanningState extends State<QRScanning> {
     AuthProvider _authProvider =  Provider.of<AuthProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
 
+    bool isCameraEnable = true;
+
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -68,47 +68,62 @@ class _QRScanningState extends State<QRScanning> {
         body: Stack(
             children:[
 
-              MobileScanner(
-                fit: BoxFit.cover,
-                scanWindow: scanWindow,
-                controller: cameraController,
-                onDetect: (BarcodeCapture barcode) async {
+              Visibility(
+                visible: isCameraEnable,
+                child: MobileScanner(
+                  fit: BoxFit.cover,
+                  scanWindow: scanWindow,
+                  controller: cameraController,
+                  onDetect: (BarcodeCapture barcode) async {
 
-                 for (var element in barcode.barcodes) {
-                      cameraController.stop();
-                     final String code = element.rawValue!;
-                     debugPrint('Barcode found, $code');
+                   for (var element in barcode.barcodes) {
+                        cameraController.stop();
+                       final String code = element.rawValue!;
+                       debugPrint('Barcode found, $code');
 
-                     SmartDialog.showLoading();
+                       SmartDialog.showLoading();
 
-                     await _bikeProvider.handleBarcodeData(code);
+                       await _bikeProvider.handleBarcodeData(code);
 
-                     if (_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success) {
-                       SmartDialog.dismiss(status: SmartStatus.loading);
-                       changeToBikeConnectSuccessScreen(context);
-                     } else {
-                       SmartDialog.dismiss(status: SmartStatus.loading);
-                       changeToBikeConnectFailedScreen(context);
+                       if (_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success) {
+                         SmartDialog.dismiss(status: SmartStatus.loading);
+                         changeToBikeConnectSuccessScreen(context);
+                       } else {
+                         SmartDialog.dismiss(status: SmartStatus.loading);
+                         changeToBikeConnectFailedScreen(context);
+                       }
+
                      }
-
-                   }
-                }
-                ),
-
-              Positioned.fill(
-                child: Container(
-                  height:10,
-                  width: 20,
-                  decoration: ShapeDecoration(
-                    shape: QrScannerOverlayShape(
-                      borderColor: Colors.white,
-                      borderRadius: 10,
-                      borderLength: 20,
-                      borderWidth: 5,
-                      cutOutSize: 184.h,
-                    ),
+                  }
                   ),
+              ),
 
+              Visibility(
+                visible: isCameraEnable,
+                child: Positioned.fill(
+                  child: Container(
+                    height:10,
+                    width: 20,
+                    decoration: ShapeDecoration(
+                      shape: QrScannerOverlayShape(
+                        borderColor: Colors.white,
+                        borderRadius: 10,
+                        borderLength: 20,
+                        borderWidth: 5,
+                        cutOutSize: 184.h,
+                      ),
+                    ),
+
+                  ),
+                ),
+              ),
+
+              Visibility(
+                visible: !isCameraEnable,
+                child: Positioned.fill(
+                  child: Container(
+                    color: EvieColors.lightBlack,
+                  ),
                 ),
               ),
 
@@ -159,34 +174,84 @@ class _QRScanningState extends State<QRScanning> {
                 ],
               ),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20.w, 153.h, 20.w, 123.h),
-                    child: Text(
-                      "Align the QR code within the frame to scan",
-                      style: TextStyle(fontSize: 16.sp, color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20.w, 190.h, 20.w, 123.h),
-                    child: TextButton(
-                      onPressed: (){
-                        showWhereToFindQRCode();
-                      },
-                      child: Text("Where to find QR code?",
-                        style: EvieTextStyles.body16.copyWith(fontWeight:FontWeight.w900, color: EvieColors.thumbColorTrue, decoration: TextDecoration.underline,),
+              Visibility(
+                visible: !isCameraEnable,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(20.w, 276.h, 20.w, 123.h),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Let EVIE App access your camera in",
+                            style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                          ),
+                          Text(
+                            "order to scan ownership QR code.",
+                            style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+              ),
+
+              Visibility(
+                visible: !isCameraEnable,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(20.w, 375.h, 20.w, 123.h),
+                      child: TextButton(
+                        onPressed: (){
+
+                        },
+                        child: Text("Enable Camera Access",
+                          style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Visibility(
+                visible: isCameraEnable,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(20.w, 153.h, 20.w, 123.h),
+                      child: Text(
+                        "Align the QR code within the frame to scan",
+                        style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Visibility(
+                visible: isCameraEnable,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(20.w, 190.h, 20.w, 123.h),
+                      child: TextButton(
+                        onPressed: (){
+                          showWhereToFindQRCode();
+                        },
+                        child: Text("Where to find QR code?",
+                          style: EvieTextStyles.body16.copyWith(fontWeight:FontWeight.w900, color: EvieColors.thumbColorTrue, decoration: TextDecoration.underline,),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
 
             Align(

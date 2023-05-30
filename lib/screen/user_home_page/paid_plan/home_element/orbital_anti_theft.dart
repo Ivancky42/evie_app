@@ -214,6 +214,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
       ),
 
       PaginateFirestore(
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
         itemBuilderType: PaginateBuilderType.listView,
         itemBuilder: (context, documentSnapshots, index) {
           final data = documentSnapshots[index].data() as Map?;
@@ -221,6 +223,10 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
             return Column(
               children: [
                 ListTile(
+                    minLeadingWidth : 10,
+                    minVerticalPadding: 10,
+                    horizontalTitleGap: 10,
+                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                     leading: data == null ? const Text('Error')
                         : SvgPicture.asset(
                       getSecurityIconWidget(data['type']),
@@ -280,7 +286,6 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     ];
 
     return Container(
-      padding: EdgeInsets.all(5.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.w),
         // gradient: SweepGradient(
@@ -338,24 +343,29 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                 ),
               ),
 
+
               Padding(
-                padding:  EdgeInsets.only(top: 9.h, bottom: 9.h),
+                padding: EdgeInsets.only(top: 9.h, bottom: 9.h, right:25.w),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: _widgets.map((item) {
                     int index = _widgets.indexOf(item);
+                    bool isCurrentIndex = _currentIndex == index;
+                    double horizontalMargin = index == 0 ? 0.0 : 6.0;
+
                     return Container(
                       width: 6.w,
                       height: 6.h,
-                      margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 2.0),
+                      margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: horizontalMargin),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: _currentIndex == index ? EvieColors.primaryColor : EvieColors.progressBarGrey,
+                        color: isCurrentIndex ? EvieColors.primaryColor : EvieColors.progressBarGrey,
                       ),
                     );
                   }).toList(),
                 ),
               ),
+
             ],
           ),
         ),

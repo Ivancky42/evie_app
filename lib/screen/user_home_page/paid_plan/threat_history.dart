@@ -149,7 +149,7 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 16.w, right: 12.w),
+                  padding: EdgeInsets.only(left: 12.w, right: 12.w),
                   child: Container(
                     height: 33.h,
                     width: 110.w,

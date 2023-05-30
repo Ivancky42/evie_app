@@ -14,14 +14,14 @@ import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../api/provider/auth_provider.dart';
 
-class StayCloseToBike extends StatefulWidget {
-  const StayCloseToBike({Key? key}) : super(key: key);
+class BeforeYouStart extends StatefulWidget {
+  const BeforeYouStart({Key? key}) : super(key: key);
 
   @override
-  _StayCloseToBikeState createState() => _StayCloseToBikeState();
+  _BeforeYouStartState createState() => _BeforeYouStartState();
 }
 
-class _StayCloseToBikeState extends State<StayCloseToBike> {
+class _BeforeYouStartState extends State<BeforeYouStart> {
   late AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
@@ -47,32 +47,48 @@ class _StayCloseToBikeState extends State<StayCloseToBike> {
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w,76.h,16.w,4.h),
                 child:  Text(
-                  "Stay close to your bike",
+                  "Things you'll need before you start",
                   style: EvieTextStyles.h2,
                 ),
               ),
 
               Padding(
-                padding: EdgeInsets.fromLTRB(16.w,4.h,16.w,4.h),
+                padding: EdgeInsets.fromLTRB(16.w,4.h,16.w,0.h),
                 child: Container(
                   child:   Text(
-                    "Assemble your bike fully. Keep your device close to your bike for the following steps. Please note that registering your bike may take up to 5 minutes.",
+                    "1. Assemble your buke fully.",
                     style: EvieTextStyles.body18,
                   ),
                 ),
               ),
 
               Padding(
-                padding: EdgeInsets.fromLTRB(11.w,4.h,16.w,98.h),
+                padding: EdgeInsets.fromLTRB(26.w,0.h,16.w,0.h),
                   child: TextButton(
                       onPressed: (){
                         Uri.http("www.google.com");
                       },
-                      child: Text("How to assemble my bike?",
-                        style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),
+                      child: Row(
+                        children: [
+                          Text("How to assemble my bike?",
+                            style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),
                     ),
+                          SvgPicture.asset(
+                            "assets/buttons/external_link_purple.svg",
+                          ),
+                        ],
+                      ),
                   ),
-              )],
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(16.w,0.h,16.w,98.h),
+                child: Container(
+                  child:   Text(
+                    "2. Get ownership card ready.",
+                    style: EvieTextStyles.body18,
+                  ),
+                ),
+              ),],
           ),
 
             Align(
@@ -85,32 +101,33 @@ class _StayCloseToBikeState extends State<StayCloseToBike> {
               ),
         ),
 
-            Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom),
-            child: SizedBox(
-              height: 48.h,
-              width: double.infinity,
-              child: EvieButton(
+           Align(
+           alignment: Alignment.bottomCenter,
+            child: Padding(
+             padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom),
+             child: SizedBox(
+               height: 48.h,
                 width: double.infinity,
-                child:Text(
-                  "I'm ready",
-                  style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                ),
-                onPressed: () async {
-                  //changeToTurnOnLocationScreen(context);
-                  var locationStatus = await Permission.location.status;
+                child: EvieButton(
+                  width: double.infinity,
+                   child:Text(
+                     "I'm ready",
+                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                   ),
+                   onPressed: () async {
+                  // var locationStatus = await Permission.location.status;
+                  //
+                  // if (_bluetoothProvider.bleStatus == BleStatus.unauthorized && locationStatus == PermissionStatus.granted) {
+                  //   changeToTurnOnBluetoothScreen(context);
+                  // }
+                  // else if (locationStatus == PermissionStatus.granted && _bluetoothProvider.bleStatus != BleStatus.unauthorized) {
 
-                  if (_bluetoothProvider.bleStatus == BleStatus.unauthorized && locationStatus == PermissionStatus.granted) {
-                    changeToTurnOnBluetoothScreen(context);
-                  }
-                  else if (locationStatus == PermissionStatus.granted && _bluetoothProvider.bleStatus != BleStatus.unauthorized) {
                     changeToTurnOnQRScannerScreen(context);
-                  }
-                  else {
-                    changeToTurnOnLocationScreen(context);
-                  }
+
+                  //}
+                  // else {
+                  //   changeToTurnOnLocationScreen(context);
+                  // }
 
                 },
               ),

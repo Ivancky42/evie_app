@@ -65,3 +65,20 @@ class PageAppbar extends StatelessWidget implements PreferredSizeWidget {
   // TODO: implement preferredSize
   Size get preferredSize => enable == null || enable == true ? Size.fromHeight(48.h) : Size.fromHeight(0);
 }
+
+class EmptyAppbar extends StatelessWidget implements PreferredSizeWidget {
+
+  const EmptyAppbar({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+    );
+  }
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => Size.fromHeight(0.h);
+}

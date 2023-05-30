@@ -30,6 +30,8 @@ import '../../../../api/provider/location_provider.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:latlong2/latlong.dart';
 
+import 'home_element/status.dart';
+
 class MyPointAnnotationClickListener extends OnPointAnnotationClickListener {
   @override
   void onPointAnnotationClick(PointAnnotation annotation) {
@@ -142,16 +144,30 @@ class _MapDetails2State extends State<MapDetails2> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 17.w, top: 10.h, bottom: 11.h),
+                    padding: EdgeInsets.only(left: 17.w, top: 10.h, bottom: 0.h),
                     child: Text(
-                      "Map",
+                      "Orbital Anti-Theft",
                       style: EvieTextStyles.h1,
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.only( top: 12.h,),
+                    child: IconButton(
+                      onPressed: () {
+
+                      },
+                      icon: SvgPicture.asset(
+                        "assets/buttons/list_purple.svg",
+
+                      ),
                     ),
                   ),
                 ],
               ),
               const Divider(
-                thickness: 2,
+                thickness: 0.5,
+                color: EvieColors.darkWhite,
               ),
 
               Expanded(
@@ -182,6 +198,32 @@ class _MapDetails2State extends State<MapDetails2> {
 
                     Padding(
                       padding:  EdgeInsets.only(bottom:280.h),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: GestureDetector(
+                          onTap: () async {
+                            pointBounce2(mapboxMap, _locationProvider, userPosition);
+                            //animateBounce(mapboxMap, _locationProvider);
+                          },
+                          child: Container(
+                              height: 50.h,
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: Padding(
+                                  padding: EdgeInsets.only(right: 8.h),
+                                  child: SvgPicture.asset(
+                                    "assets/buttons/location.svg",
+                                    width: 50.w,
+                                    height: 50.h,
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ),
+
+                    Padding(
+                      padding:  EdgeInsets.only(bottom:230.h),
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
@@ -254,31 +296,6 @@ class _MapDetails2State extends State<MapDetails2> {
                       ),
                     ),
 
-                    Padding(
-                      padding:  EdgeInsets.only(bottom:230.h),
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: GestureDetector(
-                          onTap: () async {
-                            pointBounce2(mapboxMap, _locationProvider, userPosition);
-                            //animateBounce(mapboxMap, _locationProvider);
-                          },
-                          child: Container(
-                              height: 50.h,
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: Padding(
-                                  padding: EdgeInsets.only(right: 8.h),
-                                  child: SvgPicture.asset(
-                                    "assets/buttons/location.svg",
-                                    width: 50.w,
-                                    height: 50.h,
-                                  ),
-                                ),
-                              )),
-                        ),
-                      ),
-                    ),
 
                     Padding(
                       padding:  EdgeInsets.only(bottom:0.h),
@@ -292,7 +309,7 @@ class _MapDetails2State extends State<MapDetails2> {
                                 aspectRatio: 1,
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(16, 2, 6, 8),
-                                  child: Battery(),
+                                  child: Status(),
                                 ),
                               ),
                             ),

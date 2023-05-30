@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart' as lottie;
@@ -15,6 +18,7 @@ import '../../../api/fonts.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/notification_provider.dart';
 import '../../../bluetooth/modelResult.dart';
+import '../../../widgets/evie_appbar.dart';
 import '../switch_bike.dart';
 import 'package:location/location.dart';
 import 'home_element/battery.dart';
@@ -69,6 +73,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
       child: Scaffold(
           backgroundColor: EvieColors.lightBlack,
+          appBar: const EmptyAppbar(),
           body: SafeArea(
               child: Container(
                 color: EvieColors.grayishWhite,
@@ -84,7 +89,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                               return GestureDetector(
                                 onTap: (){},
                                 child:Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  padding: EdgeInsets.fromLTRB(0, Platform.isIOS ? 5.h : 10.h, 0, 5.h),
                                   child: Container(
                                       height: 73.33.h,
                                       color:  EvieColors.lightBlack,
@@ -122,70 +127,72 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                                       ),
                                                       Container(
                                                         //color: Colors.green,
-                                                        child: Row(
-                                                          children: [
-                                                            Row(
-                                                              children: [
-                                                                _bikeProvider.currentBikeModel?.location?.isConnected == true ?
-                                                                Row(
-                                                                  children: [
-                                                                    SvgPicture.asset(
-                                                                      "assets/icons/wifi_connected.svg",
-                                                                    ),
-                                                                    Text(
-                                                                      "Online",
-                                                                      style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                                                    ),
-                                                                  ],
-                                                                ) :
-                                                                Row(
-                                                                  children: [
-                                                                    SvgPicture.asset(
-                                                                      "assets/icons/wifi_offline.svg",
-                                                                    ),
-                                                                    Text(
-                                                                      "Offline",
-                                                                      style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            Padding(
-                                                              padding: EdgeInsets.only(left: 9.w, right: 5.w),
-                                                              child: SvgPicture.asset(
-                                                                "assets/icons/break_line.svg",
-                                                                height: 20.h,
+                                                        child: Expanded(
+                                                          child: Row(
+                                                            children: [
+                                                              Row(
+                                                                children: [
+                                                                  _bikeProvider.currentBikeModel?.location?.isConnected == true ?
+                                                                  Row(
+                                                                    children: [
+                                                                      SvgPicture.asset(
+                                                                        "assets/icons/wifi_connected.svg",
+                                                                      ),
+                                                                      Text(
+                                                                        "Online",
+                                                                        style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                                                      ),
+                                                                    ],
+                                                                  ) :
+                                                                  Row(
+                                                                    children: [
+                                                                      SvgPicture.asset(
+                                                                        "assets/icons/wifi_offline.svg",
+                                                                      ),
+                                                                      Text(
+                                                                        "Offline",
+                                                                        style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ],
                                                               ),
-                                                            ),
-                                                            Row(
-                                                              children: [
-                                                                deviceConnectResult == DeviceConnectResult.connected ?
-                                                                Row(
-                                                                  children: [
-                                                                    SvgPicture.asset(
-                                                                      "assets/icons/bluetooth_connected.svg",
-                                                                    ),
-                                                                    Text(
-                                                                      "Connected",
-                                                                      style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                                                    ),
-                                                                  ],
-                                                                ) :
-                                                                Row(
-                                                                  children: [
-                                                                    SvgPicture.asset(
-                                                                      "assets/icons/bluetooth_disconnected.svg",
-                                                                    ),
-                                                                    Text(
-                                                                      "Disconnected",
-                                                                      style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                                                    ),
-                                                                  ],
+                                                              Padding(
+                                                                padding: EdgeInsets.only(left: 9.w, right: 5.w),
+                                                                child: SvgPicture.asset(
+                                                                  "assets/icons/break_line.svg",
+                                                                  height: 20.h,
                                                                 ),
-                                                              ],
-                                                            )
-                                                          ],),
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  deviceConnectResult == DeviceConnectResult.connected ?
+                                                                  Row(
+                                                                    children: [
+                                                                      SvgPicture.asset(
+                                                                        "assets/icons/bluetooth_connected.svg",
+                                                                      ),
+                                                                      Text(
+                                                                        "Connected",
+                                                                        style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                                                      ),
+                                                                    ],
+                                                                  ) :
+                                                                  Row(
+                                                                    children: [
+                                                                      SvgPicture.asset(
+                                                                        "assets/icons/bluetooth_disconnected.svg",
+                                                                      ),
+                                                                      Text(
+                                                                        "Disconnected",
+                                                                        style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              )
+                                                            ],),
+                                                        ),
                                                       )
                                                     ],
                                                   ),
@@ -227,8 +234,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                         children: [
                           Expanded(
                             child: Padding(
-
-                              padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
+                              padding: EdgeInsets.fromLTRB(19.w, 16.42.h, 19.w, 16.w),
                               child: OrbitalAntiTheft(),
                             ),
                           ),
@@ -239,7 +245,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                 child: AspectRatio(
                                   aspectRatio: 1,
                                   child: Padding(
-                                    padding: EdgeInsets.fromLTRB(16, 2, 6, 8),
+                                    padding: EdgeInsets.fromLTRB(19.w, 0, 16.w, 16.h),
                                     child: Battery(),
                                   ),
                                 ),
@@ -248,7 +254,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                 child: AspectRatio(
                                   aspectRatio: 1,
                                   child: Padding(
-                                    padding: EdgeInsets.fromLTRB(6, 2, 16, 8),
+                                    padding: EdgeInsets.fromLTRB(0, 0, 19.w, 16.h),
                                     child: Rides(),
                                   ),
                                 ),
@@ -263,7 +269,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                   child: AspectRatio(
                                     aspectRatio: 1,
                                     child: Padding(
-                                      padding: EdgeInsets.fromLTRB(16, 8, 6, 12),
+                                      padding: EdgeInsets.fromLTRB(19.w, 0, 16.w, 20.h),
                                       child: Setting(),
                                     ),
                                   )
@@ -272,7 +278,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                   child: AspectRatio(
                                     aspectRatio: 1,
                                     child: Padding(
-                                      padding: EdgeInsets.fromLTRB(6, 8, 16, 12),
+                                      padding: EdgeInsets.fromLTRB(0, 0, 19.w, 20.h),
                                       child: UnlockingSystem(),
                                     ),
                                   )

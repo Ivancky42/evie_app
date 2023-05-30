@@ -190,7 +190,7 @@ class _LoginScreenState extends State<Login> {
                       _currentUserProvider.getDeviceInfo();
                       ///Quit loading and go to user home page
                       if(_authProvider.isFirstLogin == true){
-                        changeToStayCloseToBike(context);
+                        changeToBeforeYouStart(context);
                       }else{
                         changeToUserHomePageScreen(context);
                       }

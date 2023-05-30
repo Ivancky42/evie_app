@@ -50,7 +50,7 @@ class _TurnOnQRScannerState extends State<TurnOnQRScanner> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
                       child: Text(
-                        "Scan the QR Code",
+                        "First up, scan the QR Code",
                         style: EvieTextStyles.h2,
                       ),
                     ),
@@ -60,7 +60,7 @@ class _TurnOnQRScannerState extends State<TurnOnQRScanner> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 113.h),
                       child: Text(
-                        "You can find the QR on the back of the manual.",
+                        "You can find the QR on the ownership card.",
                         style: EvieTextStyles.body18,
                       ),
                     ),

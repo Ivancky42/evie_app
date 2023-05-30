@@ -23,6 +23,12 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
   bool danger = bikeProvider.threatFilterArray.contains("danger") ? true : false;
   bool crash = bikeProvider.threatFilterArray.contains("crash") ? true : false;
 
+  if (bikeProvider.threatFilterArray.toSet().containsAll(['warning', 'fall', 'danger', 'crash'])) {
+    warning = false;
+    fall = false;
+    danger = false;
+    crash = false;
+  }
 
   SmartDialog.show(
       backDismiss: false,

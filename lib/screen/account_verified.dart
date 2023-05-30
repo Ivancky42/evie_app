@@ -89,7 +89,7 @@ class _AccountVerifiedState extends State<AccountVerified> {
                 ),
                 onPressed: () async {
                   _authProvider.setIsFirstLogin(true);
-                  changeToStayCloseToBike(context);
+                  changeToBeforeYouStart(context);
                 },
               ),
             ),

@@ -10,7 +10,7 @@ import 'package:evie_test/screen/my_account/edit_profile.dart';
 import 'package:evie_test/screen/my_account/enter_new_password.dart';
 import 'package:evie_test/screen/my_account/verify_password.dart';
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_sensitivity.dart';
-import 'package:evie_test/screen/onboarding_addNewBike/stay_close_to_bike.dart';
+import 'package:evie_test/screen/onboarding_addNewBike/before_you_start.dart';
 import 'package:evie_test/screen/signup_method.dart';
 import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/screen/verify_email.dart';
@@ -89,6 +89,7 @@ Future main() async {
       sound: true,
     );
   }
+
 
   ///Provider
   runApp(const AppProviders(
@@ -214,12 +215,13 @@ class MyApp extends StatelessWidget {
       }
     }
 
+
     return Sizer(builder: (context, orientation, deviceType) {
 
       return AnnotatedRegion<SystemUiOverlayStyle>(
 
         value: const SystemUiOverlayStyle(
-          statusBarIconBrightness: Brightness.dark,
+          statusBarIconBrightness: Brightness.light,
           statusBarColor: Colors.transparent,
         ),
 
@@ -243,7 +245,7 @@ class MyApp extends StatelessWidget {
             "/signInMethod": (context) => const SignInMethod(),
             "/verifyEmail": (context) => const VerifyEmail(),
             "/accountVerified": (context) => const AccountVerified(),
-            "/letsGo": (context) => const StayCloseToBike(),
+            "/letsGo": (context) => const BeforeYouStart(),
             "/signIn": (context) => const SignIn(),
             "/forgetPassword": (context) => const ForgetYourPassword(),
             "/userProfile": (context) => const UserProfile(),

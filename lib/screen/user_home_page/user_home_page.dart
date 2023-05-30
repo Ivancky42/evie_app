@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:evie_test/screen/user_home_general.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import '../../api/colours.dart';
 import '../../test/test.dart';
 import '../feeds/feeds.dart';
 import '../my_account/account/my_account.dart';
@@ -51,7 +52,8 @@ class _UserHomePageState extends State<UserHomePage> {
         body: screen[currentIndex],
 
         bottomNavigationBar: BottomAppBar(
-         height:  Platform.isIOS ? 90.h : 55.h,
+          color: EvieColors.dividerWhite,
+         height:  Platform.isIOS ? 90.h : 60.h,
           child: SingleChildScrollView(
             physics: NeverScrollableScrollPhysics(),
             child: BottomNavigationBar(
@@ -68,6 +70,7 @@ class _UserHomePageState extends State<UserHomePage> {
 
               items: [
                 BottomNavigationBarItem(
+                  backgroundColor: EvieColors.dividerWhite,
                   icon: Transform.translate(
                     offset: Offset(0, EvieLength.bottom_bar_icon_offset),
                     child: Container(

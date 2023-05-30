@@ -387,6 +387,7 @@ class _AccountContainerState extends State<AccountContainer> {
                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                   ),
                   onPressed: () {
+                    changeToBeforeYouStart(context);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(

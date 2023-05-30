@@ -117,7 +117,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                               .then((result) {
                             if (result == true) {
                               _currentUserProvider.getDeviceInfo();
-                              changeToStayCloseToBike(context);
+                              changeToBeforeYouStart(context);
                             } else {
                               SmartDialog.show(
                                   widget: EvieSingleButtonDialog(
@@ -158,7 +158,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                           .then((result) {
                         if (result == true) {
                           _currentUserProvider.getDeviceInfo();
-                        changeToStayCloseToBike(context);
+                        changeToBeforeYouStart(context);
                         } else {
                           SmartDialog.show(
                               widget: EvieSingleButtonDialog(
@@ -197,7 +197,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
                           .then((result) {
                         if (result == true) {
                           _currentUserProvider.getDeviceInfo();
-                          changeToStayCloseToBike(context);
+                          changeToBeforeYouStart(context);
                         } else {
                           SmartDialog.show(
                               widget: EvieSingleButtonDialog(

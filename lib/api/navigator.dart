@@ -50,7 +50,7 @@ import '../screen/onboarding_addNewBike/bike_connect_failed.dart';
 import '../screen/onboarding_addNewBike/bike_connect_success.dart';
 import '../screen/onboarding_addNewBike/congrats_bike_added.dart';
 import '../screen/onboarding_addNewBike/email_preference_control.dart';
-import '../screen/onboarding_addNewBike/stay_close_to_bike.dart';
+import '../screen/onboarding_addNewBike/before_you_start.dart';
 import '../screen/onboarding_addNewBike/name_bike.dart';
 import '../screen/onboarding_addNewBike/qr_add_manually.dart';
 import '../screen/onboarding_addNewBike/qr_scanning.dart';
@@ -190,9 +190,9 @@ void changeToRideHistory(BuildContext context, String tripId, TripHistoryModel c
   );
 }
 
-void changeToStayCloseToBike(BuildContext context) {
+void changeToBeforeYouStart(BuildContext context) {
   Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const StayCloseToBike())
+      builder: (context) => const BeforeYouStart())
   );
 }
 
