@@ -10,6 +10,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 import '../../../api/colours.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
+import '../../../api/sheet.dart';
 
 
 
@@ -89,7 +90,7 @@ class _FirmwareUpdateFailedState extends State<FirmwareUpdateFailed> {
                         ),
                       ),
                       onPressed: () {
-                        changeToBikeSetting(context);
+                        showBikeSettingSheet(context);
                       },
                     ),
                   ),

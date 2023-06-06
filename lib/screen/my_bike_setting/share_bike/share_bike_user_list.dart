@@ -21,6 +21,7 @@ import '../../../api/function.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/current_user_provider.dart';
+import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 
@@ -54,14 +55,14 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToBikeSetting(context);
+        showBikeSettingSheet(context);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'Share Bike',
           onPressed: () {
-            changeToBikeSetting(context);
+            showBikeSettingSheet(context);
           },
         ),
         body: Stack(
@@ -196,7 +197,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                     onPressed: () {
                       ///Check if bike already have 5 user
                       if(_bikeProvider.bikeUserList.length <= 5 ){
-                        changeToShareBikeScreen(context);
+                        showShareBikeSheet(context);
                       }else{
                         SmartDialog.show(widget: EvieSingleButtonDialog(
                             title: "Exist Limit",

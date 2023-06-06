@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -30,9 +31,10 @@ class QRScanning extends StatefulWidget {
 class _QRScanningState extends State<QRScanning> {
 
   late MobileScannerController cameraController;
+  late AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
   bool onTorch = false;
-
+  
   @override
   void initState() {
    cameraController = MobileScannerController();
@@ -45,6 +47,8 @@ class _QRScanningState extends State<QRScanning> {
     super.dispose();
   }
 
+  bool isCameraEnable = true;
+
   @override
   Widget build(BuildContext context) {
 
@@ -54,10 +58,10 @@ class _QRScanningState extends State<QRScanning> {
       height: 184.h,
     );
 
-    AuthProvider _authProvider =  Provider.of<AuthProvider>(context);
+    _authProvider =  Provider.of<AuthProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
 
-    bool isCameraEnable = true;
+    checkCameraPermission();
 
     return WillPopScope(
       onWillPop: () async {
@@ -297,6 +301,35 @@ class _QRScanningState extends State<QRScanning> {
       ),
     );
   }
+
+  Future<void> checkCameraPermission() async {
+    PermissionStatus status = await Permission.camera.status;
+    if (status.isGranted) {
+      setState(() {
+        isCameraEnable = true;
+      });
+    } else {
+      setState(() {
+        isCameraEnable = false;
+      });
+    }
+  }
+
+
+
+
+
+  Future<bool> requestCameraPermission() async {
+    PermissionStatus status = await Permission.camera.request();
+    if (status.isGranted) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+
 }
 
 

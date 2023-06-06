@@ -23,6 +23,7 @@ import '../../../api/colours.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
+import '../../../api/sheet.dart';
 
 
 class EVAddFailed extends StatefulWidget {
@@ -44,7 +45,7 @@ class _EVAddFailedState extends State<EVAddFailed> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToBikeSetting(context);
+        showBikeSettingSheet(context);
         return false;
       },
       child: Scaffold(
@@ -130,7 +131,7 @@ class _EVAddFailedState extends State<EVAddFailed> {
                       if(_bikeProvider.rfidList.length >0){
                         changeToEVKeyList(context);
                       }else{
-                        changeToBikeSetting(context);
+                        showBikeSettingSheet(context);
                       }
                     },
                   ),

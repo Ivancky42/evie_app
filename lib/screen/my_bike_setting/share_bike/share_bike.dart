@@ -13,6 +13,7 @@ import '../../../api/length.dart';
 import '../../../api/model/bike_user_model.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
+import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 
 
@@ -38,14 +39,14 @@ class _ShareBikeState extends State<ShareBike> {
 
      return WillPopScope(
       onWillPop: () async {
-        changeToBikeSetting(context);
+        showBikeSettingSheet(context);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'Share Bike',
           onPressed: () {
-            changeToBikeSetting(context);
+            showBikeSettingSheet(context);
           },
         ),
         body: Stack(

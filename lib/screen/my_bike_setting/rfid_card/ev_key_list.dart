@@ -16,6 +16,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 import '../../../api/colours.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
+import '../../../api/sheet.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
@@ -45,14 +46,14 @@ class _EVKeyListState extends State<EVKeyList> {
 
     return WillPopScope(
       onWillPop: () async {
-       changeToBikeSetting(context);
+       showBikeSettingSheet(context);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'EV-Key',
           onPressed: () {
-            changeToBikeSetting(context);
+            showBikeSettingSheet(context);
           },
         ),
         body: Stack(

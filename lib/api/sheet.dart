@@ -10,6 +10,9 @@ import 'package:evie_test/widgets/evie_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
+import '../screen/my_bike_setting/share_bike/share_bike.dart';
+import '../screen/my_bike_setting/share_bike/share_bike_user_list.dart';
 import '../screen/trip_history/ride_history.dart';
 import '../screen/user_home_page/paid_plan/map_details2.dart';
 import '../screen/user_home_page/paid_plan/threat_timeline.dart';
@@ -28,7 +31,7 @@ void showTripHistorySheet(BuildContext context) {
   );
 }
 
-void showBikeSettingSheet(BuildContext context) {
+void showBikeSettingSheet(BuildContext context, [String? source]) {
   showModalBottomSheet(
     isScrollControlled: true,
     constraints: BoxConstraints.tight(Size(
@@ -36,10 +39,50 @@ void showBikeSettingSheet(BuildContext context) {
         MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
     context: context,
     builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: const BikeSetting("Home"),);
+      return EvieBottomSheet(childContext: BikeSetting(source ?? 'Home'),);
     },
   );
 }
+
+void showBikeStatusAlertSheet(BuildContext context) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    constraints: BoxConstraints.tight(Size(
+        MediaQuery.of(context).size.width,
+        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
+    context: context,
+    builder: (BuildContext context) {
+      return EvieBottomSheet(childContext: const BikeStatusAlert());
+    },
+  );
+}
+
+void showShareBikeSheet(BuildContext context) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    constraints: BoxConstraints.tight(Size(
+        MediaQuery.of(context).size.width,
+        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
+    context: context,
+    builder: (BuildContext context) {
+      return EvieBottomSheet(childContext: const ShareBike());
+    },
+  );
+}
+
+void showShareBikeUserListSheet(BuildContext context) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    constraints: BoxConstraints.tight(Size(
+        MediaQuery.of(context).size.width,
+        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
+    context: context,
+    builder: (BuildContext context) {
+      return EvieBottomSheet(childContext: const ShareBikeUserList());
+    },
+  );
+}
+
 
 void showThreatHistorySheet(BuildContext context) {
   showModalBottomSheet(

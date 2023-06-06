@@ -317,15 +317,15 @@ void changeToMyGarageScreen(BuildContext context) {
 }
 
 
-void changeToBikeSetting(BuildContext context, [String? source]) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child:  BikeSetting(source),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
+// void changeToBikeSetting(BuildContext context, [String? source]) {
+//   Navigator.pushReplacement(context,
+//     PageTransition(
+//       type: PageTransitionType.rightToLeft,
+//       child:  BikeSetting(source),
+//       duration: const Duration(milliseconds: 300),
+//     ),
+//   );
+// }
 
 
 

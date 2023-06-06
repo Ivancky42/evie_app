@@ -8,6 +8,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
+import '../../../api/sheet.dart';
 
 
 
@@ -81,7 +82,7 @@ class _FirmwareUpdateCompletedState extends State<FirmwareUpdateCompleted> {
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
-                       changeToBikeSetting(context);
+                       showBikeSettingSheet(context);
                       },
                     ),
                   ),

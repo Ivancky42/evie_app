@@ -14,6 +14,7 @@ import '../../../api/model/bike_user_model.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/notification_provider.dart';
+import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_divider.dart';
 import '../../../widgets/evie_switch.dart';
@@ -47,14 +48,14 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToBikeSetting(context);
+        showBikeSettingSheet(context);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
-          title: 'Bike Status Alert',
+          title: 'Orbital Anti-theft',
           onPressed: () {
-            changeToBikeSetting(context);
+            showBikeSettingSheet(context);
           },
         ),
         body: Stack(

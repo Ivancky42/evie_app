@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
+import '../../../api/sheet.dart';
 import '../../../bluetooth/modelResult.dart';
 
 class BikeSettingSearchContainer extends StatefulWidget {
@@ -47,7 +48,7 @@ class _BikeSettingSearchContainerState extends State<BikeSettingSearchContainer>
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                changeToBikeStatusAlertScreen(context);
+                showBikeStatusAlertSheet(context);
               },
               child: Container(
                 height: 62.h,
@@ -83,49 +84,49 @@ class _BikeSettingSearchContainerState extends State<BikeSettingSearchContainer>
             const EvieDivider(),
           ],
         );
-      case "SOS Center":
-        return Column(
-          children: [
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-                changeToSOSCenterScreen(context);
-              },
-              child: Container(
-                height: 62.h,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          RichText(
-                            text: searchMatch(widget.searchResult),
-                          ),
-                          Text(
-                            label!,
-                            style:EvieTextStyles.body18.copyWith( color: EvieColors.darkGrayishCyan,),
-
-                          )
-                        ],
-                      ),
-                      SvgPicture.asset(
-                        "assets/buttons/next.svg",
-                        height: 24.h,
-                        width: 24.w,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const EvieDivider(),
-          ],
-        );
+      // case "SOS Center":
+      //   return Column(
+      //     children: [
+      //       GestureDetector(
+      //         behavior: HitTestBehavior.translucent,
+      //         onTap: () {
+      //           changeToSOSCenterScreen(context);
+      //         },
+      //         child: Container(
+      //           height: 62.h,
+      //           child: Padding(
+      //             padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+      //             child: Row(
+      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //               crossAxisAlignment: CrossAxisAlignment.center,
+      //               children: [
+      //                 Column(
+      //                   crossAxisAlignment: CrossAxisAlignment.start,
+      //                   mainAxisAlignment: MainAxisAlignment.center,
+      //                   children: [
+      //                     RichText(
+      //                       text: searchMatch(widget.searchResult),
+      //                     ),
+      //                     Text(
+      //                       label!,
+      //                       style:EvieTextStyles.body18.copyWith( color: EvieColors.darkGrayishCyan,),
+      //
+      //                     )
+      //                   ],
+      //                 ),
+      //                 SvgPicture.asset(
+      //                   "assets/buttons/next.svg",
+      //                   height: 24.h,
+      //                   width: 24.w,
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      //         ),
+      //       ),
+      //       const EvieDivider(),
+      //     ],
+      //   );
       default:
         return Container(
           child: const Center(

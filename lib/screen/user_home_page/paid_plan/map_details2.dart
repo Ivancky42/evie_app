@@ -197,7 +197,7 @@ class _MapDetails2State extends State<MapDetails2> {
                     ),
 
                     Padding(
-                      padding:  EdgeInsets.only(bottom:280.h),
+                      padding:  EdgeInsets.only(bottom:270.h),
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
@@ -223,7 +223,7 @@ class _MapDetails2State extends State<MapDetails2> {
                     ),
 
                     Padding(
-                      padding:  EdgeInsets.only(bottom:230.h),
+                      padding:  EdgeInsets.only(bottom:220.h),
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(

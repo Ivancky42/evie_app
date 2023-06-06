@@ -15,6 +15,7 @@ import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/firmware_provider.dart';
+import '../../../api/sheet.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 
@@ -352,16 +353,21 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
           children: [
             GestureDetector(
               behavior: HitTestBehavior.translucent,
-              onTap: () {
+              onTap: () async {
                 if (getOpacityByRole() == 0.3) {
                   showUpgradePlanToast(context);
                 }
                 else {
                   if (getOpacityByRole() == 0.3) {
                     showUpgradePlanToast(10.h);
+                    showUpgradePlanToast(10.h);
                   }
                   else {
-                    changeToShareBikeUserListScreen(context);
+
+                    showShareBikeUserListSheet(context);
+                    
+                    //await _bikeProvider.createTeam("Team Sherryen");
+
                     //showControlAdmissionToast(10.h);
                   }
                 }
@@ -383,7 +389,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                             Row(
                               children: [
                                 Text(
-                                  label!,
+                                  "PedalPals",
                                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                                 ),
                                 deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
@@ -400,7 +406,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                             Row(
                               children: [
                                 Text(
-                                  "${_bikeProvider.bikeUserList.length} Riders",
+                                  "${_bikeProvider.bikeUserList.length} Sharing Pal",
                                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                                 ),
                                 SizedBox(width: 8.17.w,),
@@ -434,7 +440,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
               behavior: HitTestBehavior.translucent,
               onTap: () {
                 if (checkFunctionByRole()) {
-                  changeToBikeStatusAlertScreen(context);
+                  showBikeStatusAlertSheet(context);
                 }
                 else {
                   if (getOpacityByRole() == 0.3) {
@@ -457,7 +463,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                           Row(
                             children: [
                               Text(
-                                label!,
+                                'Orbital Anti-theft',
                                 style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                               ),
                               SizedBox(width: 8.17.w,),
@@ -478,108 +484,110 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             const EvieDivider(),
           ],
         );
-      case "SOS Center":
-        return Column(
-          children: [
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-                if (checkFunctionByRole()) {
-                  changeToSOSCenterScreen(context);
-                }
-                else {
-                  if (getOpacityByRole() == 0.3) {
-                    showUpgradePlanToast(context);
-                  }
-                  else {
-                    showControlAdmissionToast(context);
-                  }
-                }
-              },
-              child: Opacity(
-                opacity: getOpacityByRole(),
-                child: Container(
-                  height: 44.h,
-                  child: Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                label!,
-                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-                              ),
-                              SizedBox(width: 8.17.w,),
-                              SvgPicture.asset(
-                                "assets/icons/batch_tick.svg",
-                              ),
-                            ],
-                          ),
-                          SvgPicture.asset(
-                            "assets/buttons/next.svg",
-                          ),
-                        ],
-                      )
-                  ),
-                ),
-              )
-            ),
-            const EvieDivider(),
-          ],
-        );
-      case "View Data":
-        return Column(
-          children: [
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-                if (checkFunctionByRole()) {
+      // case "SOS Center":
+      //   return Column(
+      //     children: [
+      //       GestureDetector(
+      //         behavior: HitTestBehavior.translucent,
+      //         onTap: () {
+      //           if (checkFunctionByRole()) {
+      //             changeToSOSCenterScreen(context);
+      //           }
+      //           else {
+      //             if (getOpacityByRole() == 0.3) {
+      //               showUpgradePlanToast(context);
+      //             }
+      //             else {
+      //               showControlAdmissionToast(context);
+      //             }
+      //           }
+      //         },
+      //         child: Opacity(
+      //           opacity: getOpacityByRole(),
+      //           child: Container(
+      //             height: 44.h,
+      //             child: Padding(
+      //                 padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+      //                 child: Row(
+      //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                   children: [
+      //                     Row(
+      //                       children: [
+      //                         Text(
+      //                           label!,
+      //                           style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+      //                         ),
+      //                         SizedBox(width: 8.17.w,),
+      //                         SvgPicture.asset(
+      //                           "assets/icons/batch_tick.svg",
+      //                         ),
+      //                       ],
+      //                     ),
+      //                     SvgPicture.asset(
+      //                       "assets/buttons/next.svg",
+      //                     ),
+      //                   ],
+      //                 )
+      //             ),
+      //           ),
+      //         )
+      //       ),
+      //       const EvieDivider(),
+      //     ],
+      //   );
 
-                }
-                else {
-                  if (getOpacityByRole() == 0.3) {
-                    showUpgradePlanToast(context);
-                  }
-                  else {
-                    showControlAdmissionToast(context);
-                  }
-                }
-              },
-              child: Opacity(
-                opacity: getOpacityByRole(),
-                child: Container(
-                  height: 44.h,
-                  child: Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                label!,
-                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-                              ),
-                              SizedBox(width: 8.17.w,),
-                              SvgPicture.asset(
-                                "assets/icons/batch_tick.svg",
-                              ),
-                            ],
-                          ),
-                          SvgPicture.asset(
-                            "assets/buttons/next.svg",
-                          ),
-                        ],
-                      )
-                  ),
-                ),
-            ),
-            ),
-            const EvieDivider(),
-          ],
-        );
+
+      // case "View Data":
+      //   return Column(
+      //     children: [
+      //       GestureDetector(
+      //         behavior: HitTestBehavior.translucent,
+      //         onTap: () {
+      //           if (checkFunctionByRole()) {
+      //
+      //           }
+      //           else {
+      //             if (getOpacityByRole() == 0.3) {
+      //               showUpgradePlanToast(context);
+      //             }
+      //             else {
+      //               showControlAdmissionToast(context);
+      //             }
+      //           }
+      //         },
+      //         child: Opacity(
+      //           opacity: getOpacityByRole(),
+      //           child: Container(
+      //             height: 44.h,
+      //             child: Padding(
+      //                 padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+      //                 child: Row(
+      //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                   children: [
+      //                     Row(
+      //                       children: [
+      //                         Text(
+      //                           label!,
+      //                           style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+      //                         ),
+      //                         SizedBox(width: 8.17.w,),
+      //                         SvgPicture.asset(
+      //                           "assets/icons/batch_tick.svg",
+      //                         ),
+      //                       ],
+      //                     ),
+      //                     SvgPicture.asset(
+      //                       "assets/buttons/next.svg",
+      //                     ),
+      //                   ],
+      //                 )
+      //             ),
+      //           ),
+      //       ),
+      //       ),
+      //       const EvieDivider(),
+      //     ],
+      //   );
       case "About Bike":
         return Column(
           children: [

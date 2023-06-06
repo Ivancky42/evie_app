@@ -16,6 +16,7 @@ import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
+import '../../../api/sheet.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
 
@@ -42,14 +43,14 @@ class _EVKeyState extends State<EVKey> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToBikeSetting(context);
+        showBikeSettingSheet(context);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'EV-Key',
           onPressed: () {
-            changeToBikeSetting(context);
+            showBikeSettingSheet(context);
           },
         ),
         body: Stack(
@@ -109,7 +110,7 @@ class _EVKeyState extends State<EVKey> {
                             || deviceConnectResult == DeviceConnectResult.scanError
                             || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
                             ) {
-                             changeToBikeSetting(context);
+                             showBikeSettingSheet(context);
                             showConnectDialog(_bluetoothProvider, _bikeProvider);
                               }
                               else if (deviceConnectResult == DeviceConnectResult.connected) {

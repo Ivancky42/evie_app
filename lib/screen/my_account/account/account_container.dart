@@ -420,10 +420,8 @@ class _AccountContainerState extends State<AccountContainer> {
             ),
           ],
         );
-
       default:
         return Container();
     }
   }
-
 }

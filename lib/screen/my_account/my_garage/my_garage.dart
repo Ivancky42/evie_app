@@ -27,6 +27,7 @@ import '../../../api/model/user_bike_model.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
+import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 
 
@@ -304,7 +305,7 @@ class _MyGarageState extends State<MyGarage> {
                           ),
                           onPressed: () async {
                             await _bikeProvider.changeBikeUsingIMEI(userBikeList.deviceIMEI);
-                            changeToBikeSetting(context, 'MyGarage');
+                            showBikeSettingSheet(context, 'MyGarage');
                           }
                         )
                     ),

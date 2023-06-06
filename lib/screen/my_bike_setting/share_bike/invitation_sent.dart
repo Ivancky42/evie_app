@@ -9,6 +9,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
+import '../../../api/sheet.dart';
 
 
 class InvitationSent extends StatefulWidget{
@@ -83,7 +84,7 @@ class _InvitationSentState extends State<InvitationSent> {
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
-                        changeToShareBikeUserListScreen(context);
+                        showShareBikeUserListSheet(context);
                       },
                     ),
                   ),

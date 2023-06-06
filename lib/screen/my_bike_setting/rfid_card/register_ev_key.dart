@@ -15,6 +15,7 @@ import '../../../api/dialog.dart';
 import '../../../api/fonts.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bluetooth_provider.dart';
+import '../../../api/sheet.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
@@ -50,7 +51,7 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
         if(_bikeProvider.rfidList.length >0){
           changeToEVKeyList(context);
         }else{
-          changeToBikeSetting(context);
+          showBikeSettingSheet(context);
         }
 
         return false;
@@ -63,7 +64,7 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
             if(_bikeProvider.rfidList.length >0){
               changeToEVKeyList(context);
             }else{
-              changeToBikeSetting(context);
+              showBikeSettingSheet(context);
             }
           },
         ),

@@ -16,6 +16,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
+import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_double_button_dialog.dart';
 import '../../../widgets/evie_textform.dart';
@@ -48,14 +49,14 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToBikeSetting(context);
+        showBikeSettingSheet(context);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'Share Bike',
           onPressed: () {
-            changeToBikeSetting(context);
+            showBikeSettingSheet(context);
           },
         ),
         body: Stack(

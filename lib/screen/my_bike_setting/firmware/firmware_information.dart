@@ -24,6 +24,7 @@ import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/firmware_provider.dart';
+import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_button.dart';
 
@@ -71,7 +72,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
     return WillPopScope(
       onWillPop: () async {
         if(_firmwareProvider.isUpdating == true){}else{
-          changeToBikeSetting(context);
+          showBikeSettingSheet(context);
         }
         return false;
       },
@@ -82,7 +83,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
             if(_firmwareProvider.isUpdating == true){
 
             }else{
-              changeToBikeSetting(context);
+              showBikeSettingSheet(context);
             }
           },
         ),

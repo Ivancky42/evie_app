@@ -146,7 +146,7 @@ class _BikeContainerState extends State<BikeContainer> {
                   //   onPressed: () async {
                   //     ///Switch bike animation
                   //     await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
-                  //     changeToBikeSetting(context, 'SwitchBike');
+                  //     showBikeSettingSheet(context, 'SwitchBike');
                   //   },
                   //   style: ElevatedButton.styleFrom(
                   //     shape: RoundedRectangleBorder(

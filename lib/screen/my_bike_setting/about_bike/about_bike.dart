@@ -24,6 +24,7 @@ import '../../../api/navigator.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/firmware_provider.dart';
 import '../../../api/provider/trip_provider.dart';
+import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_button.dart';
 
@@ -55,7 +56,7 @@ class _AboutBikeState extends State<AboutBike> {
     return WillPopScope(
       onWillPop: () async {
 
-          changeToBikeSetting(context);
+          showBikeSettingSheet(context);
 
         return false;
       },
@@ -64,7 +65,7 @@ class _AboutBikeState extends State<AboutBike> {
           title: 'About Bike',
           onPressed: () {
 
-              changeToBikeSetting(context);
+              showBikeSettingSheet(context);
 
           },
         ),

@@ -108,7 +108,7 @@ class AppProviders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      ///In summary, setting lazy to true delays the creation of the provider's instance until it is first accessed,
+      ///Setting lazy to true delays the creation of the provider's instance until it is first accessed,
       ///while setting it to false creates the instance immediately when the Provider widget is built.
         providers: [
           ChangeNotifierProvider<AuthProvider>(
