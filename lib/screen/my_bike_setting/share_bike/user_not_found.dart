@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/sheet.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -79,25 +80,6 @@ class _UserNotFoundState extends State<UserNotFound> {
 
               ]),
 
-
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
-                    child: EvieButton(
-                      width: double.infinity,
-                      height: 48.h,
-                      child: Text(
-                        "Done",
-                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
-                      ),
-                      onPressed: () {
-                        changeToShareBikeInvitationScreen(context);
-                      },
-                    ),
-                  ),
-                ),
-
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
@@ -110,14 +92,16 @@ class _UserNotFoundState extends State<UserNotFound> {
                           style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                       ),
                       onPressed: () async {
-                         const urlPreview = 'https://play.google.com/store/apps/details?id=com.king.candycrushsaga&hl=en';
-                         await Share.share('Download evie app from: \n $urlPreview');
+
+                        var urlPreview = Platform.isIOS ?
+                        'https://apps.apple.com/my/app/pok%C3%A9mon-magikarp-jump/id1162679453' :
+                        'https://play.google.com/store/apps/details?id=jp.pokemon.koiking&hl=en&gl=US';
+
+                        await Share.share('Hello there, you could download EVIE app from: \n $urlPreview');
 
                         // List<XFile> xfiles = [XFile('assets/images/evie_bike_shadow_half.png')];
                         //
                         // await Share.shareXFiles(xfiles,text: 'Share some files');
-
-
 
 
                         // final urlImage = Uri.parse('https://cdn.shopify.com/s/files/1/0662/8510/9531/products/evie-bikes-s1-832210_1500x1500.webp?v=1680153934');
@@ -132,6 +116,27 @@ class _UserNotFoundState extends State<UserNotFound> {
                     ),
                   ),
                 ),
+
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
+                    child: EvieButton(
+                      width: double.infinity,
+                      height: 48.h,
+                      child: Text(
+                        "Done",
+                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        showShareBikeInvitationSheet(context);
+                      },
+                    ),
+                  ),
+                ),
+
+
 
 
 

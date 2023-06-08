@@ -65,6 +65,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
 
+
     return WillPopScope(
       onWillPop: () async {
         bool? exitApp = await showQuitApp() as bool?;
@@ -245,7 +246,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                 child: AspectRatio(
                                   aspectRatio: 1,
                                   child: Padding(
-                                    padding: EdgeInsets.fromLTRB(19.w, 0, 16.w, 16.h),
+                                    padding: EdgeInsets.fromLTRB(19.w, 0, 8.w, 16.h),
                                     child: Battery(),
                                   ),
                                 ),
@@ -254,7 +255,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                 child: AspectRatio(
                                   aspectRatio: 1,
                                   child: Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 19.w, 16.h),
+                                    padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 16.h),
                                     child: Rides(),
                                   ),
                                 ),
@@ -269,7 +270,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                   child: AspectRatio(
                                     aspectRatio: 1,
                                     child: Padding(
-                                      padding: EdgeInsets.fromLTRB(19.w, 0, 16.w, 20.h),
+                                      padding: EdgeInsets.fromLTRB(19.w, 0, 8.w, 20.h),
                                       child: Setting(),
                                     ),
                                   )
@@ -278,7 +279,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                   child: AspectRatio(
                                     aspectRatio: 1,
                                     child: Padding(
-                                      padding: EdgeInsets.fromLTRB(0, 0, 19.w, 20.h),
+                                      padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 20.h),
                                       child: UnlockingSystem(),
                                     ),
                                   )

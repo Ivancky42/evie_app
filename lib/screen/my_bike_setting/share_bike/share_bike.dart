@@ -39,6 +39,7 @@ class _ShareBikeState extends State<ShareBike> {
 
      return WillPopScope(
       onWillPop: () async {
+        Navigator.of(context).pop();
         showBikeSettingSheet(context);
         return false;
       },
@@ -46,6 +47,7 @@ class _ShareBikeState extends State<ShareBike> {
         appBar: PageAppbar(
           title: 'Share Bike',
           onPressed: () {
+            Navigator.of(context).pop();
             showBikeSettingSheet(context);
           },
         ),
@@ -106,7 +108,8 @@ class _ShareBikeState extends State<ShareBike> {
                       style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                   ),
                   onPressed: () {
-                    changeToShareBikeInvitationScreen(context);
+                    Navigator.of(context).pop();
+                    showShareBikeInvitationSheet(context);
                   },
                 ),
               ),

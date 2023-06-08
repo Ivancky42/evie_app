@@ -6,6 +6,7 @@ import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
+import 'package:evie_test/widgets/evie_divider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -24,6 +25,7 @@ import '../../../api/provider/current_user_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
+import '../../../widgets/evie_textform.dart';
 
 
 ///User profile page with user account information
@@ -45,6 +47,9 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
   bool isManageList = false;
   bool isOwner = false;
 
+  final TextEditingController _nameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
@@ -55,13 +60,15 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
 
     return WillPopScope(
       onWillPop: () async {
+        Navigator.of(context).pop();
         showBikeSettingSheet(context);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
-          title: 'Share Bike',
+          title: 'PedalPals',
           onPressed: () {
+            Navigator.of(context).pop();
             showBikeSettingSheet(context);
           },
         ),
@@ -71,6 +78,36 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20.w, 28.h, 22.7.w, 14.h),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+
+                      Text(
+                        _bikeProvider.currentBikeModel?.pedalPalsModel?.name ?? "None",
+                        style: EvieTextStyles.h3,
+                      ),
+
+                      GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: (){
+
+                        },
+                        child: SvgPicture.asset(
+                          "assets/buttons/pen_edit.svg",
+                          height: 24.h,
+                          width: 24.w,
+                        ),
+                      ),
+                  ],
+                  ),
+                ),
+
+
+                EvieDivider( thickness: 0.5,),
+
                 Padding(
                   padding: EdgeInsets.fromLTRB(0.w, 28.h, 0.w, 4.h),
                   child: ListView.separated(
@@ -191,12 +228,13 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                     width: double.infinity,
                     height: 48.h,
                     child: Text(
-                      "Add Rider",
+                      "Invite Pal",
                         style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                     ),
                     onPressed: () {
                       ///Check if bike already have 5 user
                       if(_bikeProvider.bikeUserList.length <= 5 ){
+                        Navigator.of(context).pop();
                         showShareBikeSheet(context);
                       }else{
                         SmartDialog.show(widget: EvieSingleButtonDialog(
@@ -251,7 +289,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                       width: double.infinity,
                       height: 52.h,
                       child: Text(
-                        "Remove All Rider",
+                        "Remove All Pal",
                           style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)
                       ),
                       onPressed: () {

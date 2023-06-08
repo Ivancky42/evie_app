@@ -48,6 +48,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
 
     return WillPopScope(
       onWillPop: () async {
+        Navigator.of(context).pop();
         showBikeSettingSheet(context);
         return false;
       },
@@ -55,6 +56,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
         appBar: PageAppbar(
           title: 'Orbital Anti-theft',
           onPressed: () {
+            Navigator.of(context).pop();
             showBikeSettingSheet(context);
           },
         ),

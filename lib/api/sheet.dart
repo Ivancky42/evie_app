@@ -10,13 +10,33 @@ import 'package:evie_test/widgets/evie_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../screen/my_bike_setting/bike_setting_navigator.dart';
 import '../screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
+import '../screen/my_bike_setting/share_bike/invitation_sent.dart';
 import '../screen/my_bike_setting/share_bike/share_bike.dart';
+import '../screen/my_bike_setting/share_bike/share_bike_invitation.dart';
 import '../screen/my_bike_setting/share_bike/share_bike_user_list.dart';
+import '../screen/my_bike_setting/share_bike/user_not_found.dart';
+import '../screen/my_bike_setting/subscription/current_plan.dart';
 import '../screen/trip_history/ride_history.dart';
 import '../screen/user_home_page/paid_plan/map_details2.dart';
 import '../screen/user_home_page/paid_plan/threat_timeline.dart';
+import 'enumerated.dart';
 import 'model/trip_history_model.dart';
+
+
+void showBikeSettingContentSheet(BuildContext context, BikeSettingList content, [String? source]) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    constraints: BoxConstraints.tight(Size(
+        MediaQuery.of(context).size.width,
+        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
+    context: context,
+    builder: (BuildContext context) {
+      return EvieBottomSheet(childContext: BikeSettingNavigator(content, source ?? 'Home'),);
+    },
+  );
+}
 
 void showTripHistorySheet(BuildContext context) {
   showModalBottomSheet(
@@ -39,7 +59,7 @@ void showBikeSettingSheet(BuildContext context, [String? source]) {
         MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
     context: context,
     builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: BikeSetting(source ?? 'Home'),);
+      return EvieBottomSheet(childContext: BikeSetting(source ?? 'Home'));
     },
   );
 }
@@ -57,6 +77,19 @@ void showBikeStatusAlertSheet(BuildContext context) {
   );
 }
 
+void showCurrentPlanSheet(BuildContext context) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    constraints: BoxConstraints.tight(Size(
+        MediaQuery.of(context).size.width,
+        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
+    context: context,
+    builder: (BuildContext context) {
+      return EvieBottomSheet(childContext: const CurrentPlan());
+    },
+  );
+}
+
 void showShareBikeSheet(BuildContext context) {
   showModalBottomSheet(
     isScrollControlled: true,
@@ -69,6 +102,7 @@ void showShareBikeSheet(BuildContext context) {
     },
   );
 }
+
 
 void showShareBikeUserListSheet(BuildContext context) {
   showModalBottomSheet(
@@ -83,6 +117,44 @@ void showShareBikeUserListSheet(BuildContext context) {
   );
 }
 
+void showShareBikeInvitationSheet(BuildContext context) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    constraints: BoxConstraints.tight(Size(
+        MediaQuery.of(context).size.width,
+        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
+    context: context,
+    builder: (BuildContext context) {
+      return EvieBottomSheet(childContext: const ShareBikeInvitation());
+    },
+  );
+}
+
+void showUserNotFoundSheet(BuildContext context, String email) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    constraints: BoxConstraints.tight(Size(
+        MediaQuery.of(context).size.width,
+        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
+    context: context,
+    builder: (BuildContext context) {
+      return EvieBottomSheet(childContext: UserNotFound(email));
+    },
+  );
+}
+
+void showInvitationSentSheet(BuildContext context, String email) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    constraints: BoxConstraints.tight(Size(
+        MediaQuery.of(context).size.width,
+        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
+    context: context,
+    builder: (BuildContext context) {
+      return EvieBottomSheet(childContext: InvitationSent(email));
+    },
+  );
+}
 
 void showThreatHistorySheet(BuildContext context) {
   showModalBottomSheet(

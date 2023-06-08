@@ -351,7 +351,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                   children: _widgets.map((item) {
                     int index = _widgets.indexOf(item);
                     bool isCurrentIndex = _currentIndex == index;
-                    double horizontalMargin = index == 0 ? 0.0 : 6.0;
+                  //  double horizontalMargin = index == 0 ? 0.0 : 6.0;
+                    double horizontalMargin = index == 0 ? 6.0 : 0.0;
 
                     return Container(
                       width: 6.w,

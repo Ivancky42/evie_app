@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/movement_setting_model.dart';
+import 'package:evie_test/api/model/pedal_pals_model.dart';
 import 'package:evie_test/api/model/plan_model.dart';
 import 'package:evie_test/api/model/simcard_model.dart';
 import 'package:evie_test/api/model/trip_history_model.dart';
@@ -22,6 +23,7 @@ class BikeModel {
   Timestamp? lastUpdated;
   LocationModel? location;
   TripHistoryModel? tripHistoryModel;
+  PedalPalsModel? pedalPalsModel;
   MovementSettingModel? movementSetting;
   SimSettingModel? simSetting;
   BikePlanModel? bikePlanModel;
@@ -50,6 +52,7 @@ class BikeModel {
     required this.lastUpdated,
     required this.location,
     this.tripHistoryModel,
+    this.pedalPalsModel,
     this.movementSetting,
     this.bikePlanModel,
     this.simSetting,
@@ -88,6 +91,7 @@ class BikeModel {
       lastUpdated:    timestampFromJson(json['lastUpdated']),
       location:   LocationModel.fromJson(json['location'] as Map<String, dynamic>),
       //tripHistoryModel:   TripHistoryModel.fromJson(json['tripHistory'] as Map<String, dynamic>),
+      pedalPalsModel:   PedalPalsModel.fromJson(json['pedalPals'] as Map<String, dynamic>),
       movementSetting: json['movementSetting'] != null ? MovementSettingModel.fromJson(json['movementSetting'] as Map<String, dynamic>) : null,
       simSetting:   json['simSetting'] != null ? SimSettingModel.fromJson(json['simSetting'] as Map<String, dynamic>) : null,
       bikePlanModel:   json['plans'] != null ? BikePlanModel.fromJson(json['plans'] as Map<String, dynamic>) : null,
@@ -112,4 +116,5 @@ class BikeModel {
   setTripHistory(dynamic data){
     tripHistoryModel = data;
   }
+
 }

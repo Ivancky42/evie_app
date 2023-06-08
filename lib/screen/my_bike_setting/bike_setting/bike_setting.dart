@@ -159,15 +159,22 @@ class _BikeSettingState extends State<BikeSetting> {
                 mainAxisAlignment:
                 MainAxisAlignment.spaceBetween,
                 children: [
+
                   Visibility(
-                    visible: widget.source == 'Home',
+                    //visible: widget.source == 'Home',
+                    visible: true,
                     child: Column(children: [
-                      Padding(
-                        padding:
-                        EdgeInsets.only(left: 17.w, top: 10.h, bottom: 0.h),
-                        child: Text(
-                          "My Bike Setting",
-                          style: EvieTextStyles.h1,
+                      GestureDetector(
+                        onTap: (){
+                          changeToUserHomePageScreen(context);
+                        },
+                        child: Padding(
+                          padding:
+                          EdgeInsets.only(left: 17.w, top: 10.h, bottom: 0.h),
+                          child: Text(
+                            "My Bike Setting",
+                            style: EvieTextStyles.h1,
+                          ),
                         ),
                       ),
                     ],

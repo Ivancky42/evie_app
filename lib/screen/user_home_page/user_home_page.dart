@@ -2,9 +2,6 @@ import 'dart:io';
 
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/test_ble.dart';
-import 'package:evie_test/screen/trip_history/trip_history.dart';
-import 'package:evie_test/screen/user_home_page/free_plan/free_plan.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/screen/user_home_general.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,7 +12,6 @@ import '../feeds/feeds.dart';
 import '../my_account/account/my_account.dart';
 import '../../abandon/user_notification.dart';
 
-///User default home page when login condition is true
 
 class UserHomePage extends StatefulWidget {
   final int? currentIndex;

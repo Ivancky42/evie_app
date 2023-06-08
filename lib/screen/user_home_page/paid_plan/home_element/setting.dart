@@ -1,3 +1,4 @@
+import 'package:evie_test/api/enumerated.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class _SettingState extends State<Setting> {
     return EvieCard(
       onPress: (){
         showBikeSettingSheet(context);
+        //showBikeSettingContentSheet(context, BikeSettingList.bikeSetting, 'Home');
       },
       title: "Setting",
       child: Expanded(

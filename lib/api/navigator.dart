@@ -544,7 +544,6 @@ void changeToFirmwareUpdateFailed(BuildContext context) {
 }
 
 
-
 void changeToShareBikeScreen(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(

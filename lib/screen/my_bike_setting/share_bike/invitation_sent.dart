@@ -84,6 +84,7 @@ class _InvitationSentState extends State<InvitationSent> {
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
+                        Navigator.of(context).pop();
                         showShareBikeUserListSheet(context);
                       },
                     ),

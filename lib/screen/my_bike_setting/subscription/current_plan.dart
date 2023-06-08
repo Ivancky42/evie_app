@@ -46,6 +46,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
 
     return WillPopScope(
       onWillPop: () async {
+        Navigator.of(context).pop();
         showBikeSettingSheet(context);
         return false;
       },
@@ -53,6 +54,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
         appBar: PageAppbar(
           title: 'Subscription',
           onPressed: () {
+            Navigator.of(context).pop();
             showBikeSettingSheet(context);
           },
         ),

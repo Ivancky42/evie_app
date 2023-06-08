@@ -1,5 +1,6 @@
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 
@@ -75,6 +76,7 @@ class EmptyAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      systemOverlayStyle: SystemUiOverlayStyle.light,
     );
   }
 

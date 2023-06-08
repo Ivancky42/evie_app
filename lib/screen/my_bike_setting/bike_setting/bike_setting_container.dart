@@ -1,5 +1,6 @@
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/dialog.dart';
+import 'package:evie_test/api/enumerated.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -288,7 +289,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                changeToCurrentPlanScreen(context);
+                Navigator.of(context).pop();
+                showCurrentPlanSheet(context);
               },
               child: Container(
                 height: 62.h,
@@ -364,8 +366,9 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                   }
                   else {
 
+                    Navigator.of(context).pop();
                     showShareBikeUserListSheet(context);
-                    
+
                     //await _bikeProvider.createTeam("Team Sherryen");
 
                     //showControlAdmissionToast(10.h);
@@ -440,6 +443,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
               behavior: HitTestBehavior.translucent,
               onTap: () {
                 if (checkFunctionByRole()) {
+                  Navigator.of(context).pop();
                   showBikeStatusAlertSheet(context);
                 }
                 else {

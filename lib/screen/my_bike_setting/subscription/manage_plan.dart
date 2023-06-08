@@ -20,6 +20,7 @@ import '../../../api/colours.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
+import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import 'essential_plan/essential_plan.dart';
 
@@ -43,14 +44,14 @@ class _ManagePlanState extends State<ManagePlan> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToCurrentPlanScreen(context);
+        showCurrentPlanSheet(context);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'Manage Plan',
           onPressed: () {
-            changeToCurrentPlanScreen(context);
+            showCurrentPlanSheet(context);
           },
         ),
         body: DefaultTabController(
