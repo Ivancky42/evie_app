@@ -1,4 +1,4 @@
-import 'package:evie_test/api/enumerated.dart';
+import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

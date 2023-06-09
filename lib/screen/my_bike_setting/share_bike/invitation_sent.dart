@@ -54,7 +54,6 @@ class _InvitationSentState extends State<InvitationSent> {
                         ),
                       ),
 
-
                       Align(
                         alignment: Alignment.center,
                         child: Padding(
@@ -64,10 +63,7 @@ class _InvitationSentState extends State<InvitationSent> {
                           ),
                         ),
                       ),
-
                     ]),
-
-
 
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -90,10 +86,7 @@ class _InvitationSentState extends State<InvitationSent> {
                     ),
                   ),
                 ),
-
-
               ]),
         ));
   }
-
 }

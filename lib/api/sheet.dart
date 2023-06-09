@@ -18,10 +18,11 @@ import '../screen/my_bike_setting/share_bike/share_bike_invitation.dart';
 import '../screen/my_bike_setting/share_bike/share_bike_user_list.dart';
 import '../screen/my_bike_setting/share_bike/user_not_found.dart';
 import '../screen/my_bike_setting/subscription/current_plan.dart';
+import '../screen/my_bike_setting/subscription/manage_plan.dart';
 import '../screen/trip_history/ride_history.dart';
 import '../screen/user_home_page/paid_plan/map_details2.dart';
 import '../screen/user_home_page/paid_plan/threat_timeline.dart';
-import 'enumerated.dart';
+import 'enumerate.dart';
 import 'model/trip_history_model.dart';
 
 
@@ -86,6 +87,19 @@ void showCurrentPlanSheet(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return EvieBottomSheet(childContext: const CurrentPlan());
+    },
+  );
+}
+
+void showManagePlanSheet(BuildContext context) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    constraints: BoxConstraints.tight(Size(
+        MediaQuery.of(context).size.width,
+        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
+    context: context,
+    builder: (BuildContext context) {
+      return EvieBottomSheet(childContext: const ManagePlan());
     },
   );
 }

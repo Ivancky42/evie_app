@@ -1,4 +1,3 @@
-
 enum BikeSettingList{
   bikeSetting,
   evKey,

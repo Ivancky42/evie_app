@@ -1,6 +1,6 @@
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/dialog.dart';
-import 'package:evie_test/api/enumerated.dart';
+import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/sizer.dart';

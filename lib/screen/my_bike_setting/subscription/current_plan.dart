@@ -1,9 +1,5 @@
-import 'dart:async';
-import 'dart:io';
-import 'package:evie_test/api/provider/auth_provider.dart';
+
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/bluetooth/modelResult.dart';
-import 'package:evie_test/screen/my_account/my_account_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -21,9 +17,6 @@ import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_divider.dart';
-
-
-
 
 
 class CurrentPlan extends StatefulWidget {
@@ -130,7 +123,8 @@ class _CurrentPlanState extends State<CurrentPlan> {
                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                   ),
                   onPressed: () {
-                    changeToManagePlanScreen(context);
+                    Navigator.of(context).pop();
+                    showManagePlanSheet(context);
                   },
                 ),
               ),

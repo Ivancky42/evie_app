@@ -44,6 +44,7 @@ class _ManagePlanState extends State<ManagePlan> {
 
     return WillPopScope(
       onWillPop: () async {
+        Navigator.of(context).pop();
         showCurrentPlanSheet(context);
         return false;
       },
@@ -51,6 +52,7 @@ class _ManagePlanState extends State<ManagePlan> {
         appBar: PageAppbar(
           title: 'Manage Plan',
           onPressed: () {
+            Navigator.of(context).pop();
             showCurrentPlanSheet(context);
           },
         ),
@@ -82,6 +84,7 @@ class _ManagePlanState extends State<ManagePlan> {
                               // Creates border
                               color: EvieColors.dividerWhite),
                           tabs: [
+
                             Text(
                               "Starter",
                               style: EvieTextStyles.ctaSmall,

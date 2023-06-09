@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../api/colours.dart';
-import '../../api/enumerated.dart';
+import '../../api/enumerate.dart';
 import '../../api/navigator.dart';
 import 'bike_setting/bike_setting.dart';
 
