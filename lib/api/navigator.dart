@@ -31,17 +31,17 @@ import '../screen/my_bike_setting/about_bike/about_bike.dart';
 import '../screen/my_bike_setting/bike_setting/bike_setting.dart';
 import '../screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
 import '../screen/my_bike_setting/firmware/firmware_update_completed.dart';
+import '../screen/my_bike_setting/pedal_pals/pedal_pals_list.dart';
 import '../screen/my_bike_setting/reset_bike/reset_bike.dart';
 import '../screen/my_bike_setting/rfid_card/register_ev_key.dart';
 import '../screen/my_bike_setting/rfid_card/name_ev.dart';
 import '../screen/my_bike_setting/rfid_card/ev_add_failed.dart';
 import '../screen/my_bike_setting/rfid_card/ev_key.dart';
 import '../screen/my_bike_setting/rfid_card/ev_key_list.dart';
-import '../screen/my_bike_setting/share_bike/invitation_sent.dart';
-import '../screen/my_bike_setting/share_bike/share_bike.dart';
-import '../screen/my_bike_setting/share_bike/share_bike_invitation.dart';
-import '../screen/my_bike_setting/share_bike/share_bike_user_list.dart';
-import '../screen/my_bike_setting/share_bike/user_not_found.dart';
+import '../screen/my_bike_setting/pedal_pals/share_bike.dart';
+import '../screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
+import '../screen/my_bike_setting/pedal_pals/user_not_found.dart';
+import '../screen/my_bike_setting/pedal_pals/invitation_sent.dart';
 import '../screen/my_bike_setting/sos_center/sos_center.dart';
 import '../screen/my_bike_setting/subscription/current_plan.dart';
 import '../screen/my_bike_setting/subscription/manage_plan.dart';
@@ -584,11 +584,11 @@ void changeToUserNotFoundScreen(BuildContext context, String email) {
   );
 }
 
-void changeToShareBikeUserListScreen(BuildContext context) {
+void changeToPedalPalsListScreen(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: const ShareBikeUserList(),
+      child: const PedalPalsList(),
       duration: const Duration(milliseconds: 300),
     ),
   );

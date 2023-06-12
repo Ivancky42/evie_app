@@ -18,10 +18,12 @@ import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
 import '../../../api/dialog.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/function.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/current_user_provider.dart';
+import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
@@ -30,19 +32,20 @@ import '../../../widgets/evie_textform.dart';
 
 ///User profile page with user account information
 
-class ShareBikeUserList extends StatefulWidget {
-  const ShareBikeUserList({Key? key}) : super(key: key);
+class PedalPalsList extends StatefulWidget {
+  const PedalPalsList({Key? key}) : super(key: key);
 
   @override
-  _ShareBikeUserListState createState() => _ShareBikeUserListState();
+  _PedalPalsListState createState() => _PedalPalsListState();
 }
 
-class _ShareBikeUserListState extends State<ShareBikeUserList> {
+class _PedalPalsListState extends State<PedalPalsList> {
 
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late CurrentUserProvider _currentUserProvider;
   late StreamSubscription deleteRFIDStream;
+  late SettingProvider _settingProvider;
 
   bool isManageList = false;
   bool isOwner = false;
@@ -55,21 +58,20 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     isOwner = _bikeProvider.isOwner!;
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop();
-        showBikeSettingSheet(context);
+        _settingProvider.changeSheetElement(SheetList.bikeSetting);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'PedalPals',
           onPressed: () {
-            Navigator.of(context).pop();
-            showBikeSettingSheet(context);
+            _settingProvider.changeSheetElement(SheetList.bikeSetting);
           },
         ),
         body: Stack(

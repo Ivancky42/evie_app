@@ -1,4 +1,5 @@
 import 'package:evie_test/api/enumerate.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,12 +22,17 @@ class Setting extends StatefulWidget {
 
 class _SettingState extends State<Setting> {
 
+  late SettingProvider _settingProvider;
+
   @override
   Widget build(BuildContext context) {
 
+    _settingProvider = Provider.of<SettingProvider>(context);
+
     return EvieCard(
       onPress: (){
-        showBikeSettingSheet(context);
+        _settingProvider.changeSheetElement(SheetList.bikeSetting);
+        showBikeSettingContentSheet(context, 'Home');
         //showBikeSettingContentSheet(context, BikeSettingList.bikeSetting, 'Home');
       },
       title: "Setting",

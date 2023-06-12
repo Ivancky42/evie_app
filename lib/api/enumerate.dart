@@ -1,7 +1,9 @@
-enum BikeSettingList{
+enum SheetList{
   bikeSetting,
   evKey,
+  evKeyList,
   motionSensitivity,
+  evCurrentSubscription,
   evPlusSubscription,
   pedalPals,
   pedalPalsList,

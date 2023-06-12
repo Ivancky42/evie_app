@@ -5,6 +5,7 @@ import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/home_element/setting.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -16,6 +17,7 @@ import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/firmware_provider.dart';
+import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
@@ -33,6 +35,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
   late BikeProvider _bikeProvider;
   late FirmwareProvider _firmwareProvider;
   late BluetoothProvider _bluetoothProvider;
+  late SettingProvider _settingProvider;
 
   DeviceConnectResult? deviceConnectResult;
   String? label;
@@ -47,6 +50,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _firmwareProvider = Provider.of<FirmwareProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
+
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
     if(deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice){
@@ -366,8 +371,9 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                   }
                   else {
 
-                    Navigator.of(context).pop();
-                    showShareBikeUserListSheet(context);
+                    _settingProvider.changeSheetElement(SheetList.pedalPalsList);
+                    // Navigator.of(context).pop();
+                    // showShareBikeUserListSheet(context);
 
                     //await _bikeProvider.createTeam("Team Sherryen");
 

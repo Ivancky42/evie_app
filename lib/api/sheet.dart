@@ -1,6 +1,7 @@
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting.dart';
+
 import 'package:evie_test/screen/trip_history/recent_activity.dart';
 import 'package:evie_test/screen/trip_history/trip_history.dart';
 import 'package:evie_test/screen/user_home_page/battery_details.dart';
@@ -9,14 +10,16 @@ import 'package:evie_test/screen/user_home_page/paid_plan/threat_history.dart';
 import 'package:evie_test/widgets/evie_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../screen/my_bike_setting/bike_setting_navigator.dart';
 import '../screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
-import '../screen/my_bike_setting/share_bike/invitation_sent.dart';
-import '../screen/my_bike_setting/share_bike/share_bike.dart';
-import '../screen/my_bike_setting/share_bike/share_bike_invitation.dart';
-import '../screen/my_bike_setting/share_bike/share_bike_user_list.dart';
-import '../screen/my_bike_setting/share_bike/user_not_found.dart';
+import '../screen/my_bike_setting/pedal_pals/invitation_sent.dart';
+import '../screen/my_bike_setting/pedal_pals/pedal_pals_list.dart';
+import '../screen/my_bike_setting/pedal_pals/share_bike.dart';
+import '../screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
+
+import '../screen/my_bike_setting/pedal_pals/user_not_found.dart';
 import '../screen/my_bike_setting/subscription/current_plan.dart';
 import '../screen/my_bike_setting/subscription/manage_plan.dart';
 import '../screen/trip_history/ride_history.dart';
@@ -26,7 +29,7 @@ import 'enumerate.dart';
 import 'model/trip_history_model.dart';
 
 
-void showBikeSettingContentSheet(BuildContext context, BikeSettingList content, [String? source]) {
+void showBikeSettingContentSheet(BuildContext context, [String? source]) {
   showModalBottomSheet(
     isScrollControlled: true,
     constraints: BoxConstraints.tight(Size(
@@ -34,7 +37,7 @@ void showBikeSettingContentSheet(BuildContext context, BikeSettingList content, 
         MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
     context: context,
     builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: BikeSettingNavigator(content, source ?? 'Home'),);
+      return EvieBottomSheet(childContext: BikeSettingNavigator(source ?? 'Home'),);
     },
   );
 }
@@ -126,7 +129,7 @@ void showShareBikeUserListSheet(BuildContext context) {
         MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
     context: context,
     builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: const ShareBikeUserList());
+      return EvieBottomSheet(childContext: const PedalPalsList());
     },
   );
 }
