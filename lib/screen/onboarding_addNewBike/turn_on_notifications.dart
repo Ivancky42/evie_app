@@ -65,7 +65,7 @@ class _TurnOnNotificationsState extends State<TurnOnNotifications> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const EvieProgressIndicator(currentPageNumber: 6),
+                    const EvieProgressIndicator(currentPageNumber: 6, totalSteps: 8,),
 
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),

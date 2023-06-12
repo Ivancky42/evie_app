@@ -5,8 +5,14 @@ enum SheetList{
   motionSensitivity,
   evCurrentSubscription,
   evPlusSubscription,
+
   pedalPals,
+  createTeam,
+  shareBikeInvitation,
+  invitationSent,
+  userNotFound,
   pedalPalsList,
+
   orbitalAntiThefts,
   aboutBike,
   bikeSoftware,

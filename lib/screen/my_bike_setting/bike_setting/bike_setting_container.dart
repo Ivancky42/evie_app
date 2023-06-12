@@ -371,12 +371,13 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                   }
                   else {
 
-                    _settingProvider.changeSheetElement(SheetList.pedalPalsList);
+                    _settingProvider.changeSheetElement(SheetList.pedalPals);
+                    //_settingProvider.changeSheetElement(SheetList.pedalPalsList);
+
                     // Navigator.of(context).pop();
                     // showShareBikeUserListSheet(context);
 
                     //await _bikeProvider.createTeam("Team Sherryen");
-
                     //showControlAdmissionToast(10.h);
                   }
                 }

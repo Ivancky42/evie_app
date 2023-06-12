@@ -16,7 +16,7 @@ import '../screen/my_bike_setting/bike_setting_navigator.dart';
 import '../screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
 import '../screen/my_bike_setting/pedal_pals/invitation_sent.dart';
 import '../screen/my_bike_setting/pedal_pals/pedal_pals_list.dart';
-import '../screen/my_bike_setting/pedal_pals/share_bike.dart';
+import '../screen/my_bike_setting/pedal_pals/pedal_pals.dart';
 import '../screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
 
 import '../screen/my_bike_setting/pedal_pals/user_not_found.dart';
@@ -29,7 +29,7 @@ import 'enumerate.dart';
 import 'model/trip_history_model.dart';
 
 
-void showBikeSettingContentSheet(BuildContext context, [String? source]) {
+void showBikeSettingContentSheet(BuildContext context, [String? source, String? strings]) {
   showModalBottomSheet(
     isScrollControlled: true,
     constraints: BoxConstraints.tight(Size(
@@ -37,7 +37,7 @@ void showBikeSettingContentSheet(BuildContext context, [String? source]) {
         MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
     context: context,
     builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: BikeSettingNavigator(source ?? 'Home'),);
+      return EvieBottomSheet(childContext: BikeSettingNavigator(source ?? 'Home', strings ?? ''),);
     },
   );
 }
@@ -107,7 +107,7 @@ void showManagePlanSheet(BuildContext context) {
   );
 }
 
-void showShareBikeSheet(BuildContext context) {
+void showPedalPalsSheet(BuildContext context) {
   showModalBottomSheet(
     isScrollControlled: true,
     constraints: BoxConstraints.tight(Size(
@@ -115,7 +115,7 @@ void showShareBikeSheet(BuildContext context) {
         MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
     context: context,
     builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: const ShareBike());
+      return EvieBottomSheet(childContext: const PedalPals());
     },
   );
 }

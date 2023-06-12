@@ -15,12 +15,15 @@ import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
+import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_double_button_dialog.dart';
+import '../../../widgets/evie_progress_indicator.dart';
 import '../../../widgets/evie_textform.dart';
 import '../../my_account/my_account_widget.dart';
 
@@ -40,6 +43,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
 
   late AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
+  late SettingProvider _settingProvider;
 
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -48,11 +52,11 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop();
-        showBikeSettingSheet(context);
+        _settingProvider.changeSheetElement(SheetList.bikeSetting);
         return false;
       },
       child: Scaffold(
@@ -66,7 +70,12 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 82.h, 16.w, 4.h),
+                    padding: EdgeInsets.only(bottom: 21.h),
+                    child: EvieProgressIndicator(currentPageNumber: 1, totalSteps: 3,),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(16.w, 21.h, 16.w, 4.h),
                     child: Text(
                       "Send bike sharing invitation",
                       style: EvieTextStyles.h2,
@@ -124,8 +133,8 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                             rightContent: "Close",
                                             onPressedRight: () {
                                               SmartDialog.dismiss();
-                                              Navigator.of(context).pop();
-                                              showUserNotFoundSheet(context, _emailController.text.trim());
+                                              _settingProvider.changeSheetElement(SheetList.userNotFound);
+
                                             }
                                         ));
                                     return;
@@ -161,8 +170,10 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                                           rightContent: "Close",
                                                           onPressedRight: () {
                                                             SmartDialog.dismiss();
-                                                            Navigator.of(context).pop();
-                                                            showInvitationSentSheet(context, _emailController.text.trim());
+
+                                                            _settingProvider.changeSheetElement(SheetList.invitationSent);
+                                                            // Navigator.of(context).pop();
+                                                            // showInvitationSentSheet(context, _emailController.text.trim());
 
                                                           }
                                                       ));
@@ -217,14 +228,14 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                       style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pop();
-                      showShareBikeUserListSheet(context);
+
+                      _settingProvider.changeSheetElement(SheetList.pedalPalsList);
+
                     },
                   ),
                 ),
               ),
             ),
-
           ],
         ),
       ),

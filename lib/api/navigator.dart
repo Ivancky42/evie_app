@@ -38,7 +38,7 @@ import '../screen/my_bike_setting/rfid_card/name_ev.dart';
 import '../screen/my_bike_setting/rfid_card/ev_add_failed.dart';
 import '../screen/my_bike_setting/rfid_card/ev_key.dart';
 import '../screen/my_bike_setting/rfid_card/ev_key_list.dart';
-import '../screen/my_bike_setting/pedal_pals/share_bike.dart';
+import '../screen/my_bike_setting/pedal_pals/pedal_pals.dart';
 import '../screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
 import '../screen/my_bike_setting/pedal_pals/user_not_found.dart';
 import '../screen/my_bike_setting/pedal_pals/invitation_sent.dart';
@@ -544,11 +544,11 @@ void changeToFirmwareUpdateFailed(BuildContext context) {
 }
 
 
-void changeToShareBikeScreen(BuildContext context) {
+void changeToPedalPalsScreen(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: const ShareBike(),
+      child: const PedalPals(),
       duration: const Duration(milliseconds: 300),
     ),
   );

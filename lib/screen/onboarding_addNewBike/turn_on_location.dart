@@ -45,7 +45,7 @@ class _TurnOnLocationState extends State<TurnOnLocation> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-           const EvieProgressIndicator(currentPageNumber: 0),
+            const EvieProgressIndicator(currentPageNumber: 0, totalSteps: 8,),
 
             Padding(
               padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),

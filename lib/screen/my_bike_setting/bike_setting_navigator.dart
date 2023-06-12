@@ -1,7 +1,11 @@
 import 'package:evie_test/screen/my_bike_setting/about_bike/about_bike.dart';
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/motion_sensitivity.dart';
+import 'package:evie_test/screen/my_bike_setting/pedal_pals/create_team.dart';
+import 'package:evie_test/screen/my_bike_setting/pedal_pals/invitation_sent.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals_list.dart';
-import 'package:evie_test/screen/my_bike_setting/pedal_pals/share_bike.dart';
+import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals.dart';
+import 'package:evie_test/screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
+import 'package:evie_test/screen/my_bike_setting/pedal_pals/user_not_found.dart';
 import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_key.dart';
 import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_key_list.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/current_plan.dart';
@@ -19,10 +23,12 @@ import 'bike_setting/bike_setting.dart';
 
 class BikeSettingNavigator extends StatefulWidget {
 
-  final String? source;
+  final String source;
+  final String stringPassing;
 
-  const BikeSettingNavigator(
+   const BikeSettingNavigator(
       this.source,
+      this.stringPassing,
       {Key? key}) : super(key: key);
 
   @override
@@ -51,10 +57,22 @@ class _BikeSettingNavigatorState extends State<BikeSettingNavigator> {
         return CurrentPlan();
       case SheetList.evPlusSubscription:
         break;
+
+
       case SheetList.pedalPals:
-        return ShareBike();
+        return PedalPals();
+      case SheetList.createTeam:
+        return CreateTeam();
+      case SheetList.shareBikeInvitation:
+        return ShareBikeInvitation();
+      case SheetList.invitationSent:
+        return InvitationSent(widget.stringPassing);
+      case SheetList.userNotFound:
+        return UserNotFound(widget.stringPassing);
       case SheetList.pedalPalsList:
         return PedalPalsList();
+
+
       case SheetList.orbitalAntiThefts:
         break;
       case SheetList.aboutBike:
