@@ -115,6 +115,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                             child: Container(
                               alignment: Alignment.bottomCenter,
                               height: 300.h,
+                              width: 150.w,
                               child: Transform.translate(
                                 offset: Offset(0, -75.h),
                                 child: MapWidget(
@@ -160,6 +161,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                               //   longitude: _locationProvider.locationModel!.geopoint.longitude,
                               //   zoom: 15,
                               // ),
+
                             ),
                           ),
                         ),
@@ -175,43 +177,45 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
 
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SvgPicture.asset(getCurrentBikeStatusIcon(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),),
-                  Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
-                    style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray),),
+              padding: EdgeInsets.only(left:8.w, right:8.w),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset(getCurrentBikeStatusIcon(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),),
+                    Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
+                      style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray),),
 
-                  selectedGeopoint != null ? FutureBuilder<dynamic>(
-                      future: _locationProvider.returnPlaceMarks(selectedGeopoint!.latitude, selectedGeopoint!.longitude),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(
-                            snapshot.data.name.toString(),
-                            style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                          );
-                        }else{
-                          return Text(
-                            "loading",
-                            style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
-                          );
+                    selectedGeopoint != null ? FutureBuilder<dynamic>(
+                        future: _locationProvider.returnPlaceMarks(selectedGeopoint!.latitude, selectedGeopoint!.longitude),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Text(
+                              snapshot.data.name.toString(),
+                              style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack, height:1.2),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            );
+                          }else{
+                            return Text(
+                              "loading",
+                              style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                            );
+                          }
                         }
-                      }
-                  )
-                      : Text(_locationProvider.currentPlaceMark?.name ?? "Not available",
-                    style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                  
-                  ///Bike provider lastUpdated minus current timestamp
-                  Text(calculateTimeAgo(_bikeProvider.currentBikeModel!.lastUpdated!.toDate()),
-                      style: EvieTextStyles.body14.copyWith(color: EvieColors.mediumLightBlack)),
-                ],
+                    )
+                        : Text(_locationProvider.currentPlaceMark?.name ?? "Not available",
+                      style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
+
+                    ///Bike provider lastUpdated minus current timestamp
+                    Text(calculateTimeAgo(_bikeProvider.currentBikeModel!.lastUpdated!.toDate()),
+                        style: EvieTextStyles.body14.copyWith(color: EvieColors.mediumLightBlack)),
+                  ],
+                ),
               ),
             ),
           ),
@@ -277,7 +281,6 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
           }else{
             return Container();
           }
-
         },
         query: FirebaseFirestore.instance.collection("bikes")
             .doc(_bikeProvider.currentBikeModel!.deviceIMEI!)
@@ -319,6 +322,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
             }
           }
         },
+
         //height: 255.h,
         height: double.infinity,
         width: double.infinity,

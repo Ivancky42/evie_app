@@ -1,5 +1,9 @@
 import 'package:evie_test/screen/my_bike_setting/about_bike/about_bike.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
+import 'package:evie_test/screen/my_bike_setting/firmware/firmware_information.dart';
+import 'package:evie_test/screen/my_bike_setting/firmware/firmware_update_completed.dart';
+import 'package:evie_test/screen/my_bike_setting/firmware/firmware_update_failed.dart';
+import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_sensitivity.dart';
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/motion_sensitivity.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/create_team.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/invitation_sent.dart';
@@ -7,9 +11,16 @@ import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals_list.dart
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/user_not_found.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/reset_bike.dart';
+import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_add_failed.dart';
 import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_key.dart';
 import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_key_list.dart';
+import 'package:evie_test/screen/my_bike_setting/rfid_card/name_ev.dart';
+import 'package:evie_test/screen/my_bike_setting/rfid_card/register_ev_key.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/current_plan.dart';
+import 'package:evie_test/screen/my_bike_setting/subscription/essential_plan/essential_plan.dart';
+import 'package:evie_test/screen/my_bike_setting/subscription/manage_plan.dart';
+import 'package:evie_test/screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
 import 'package:evie_test/widgets/evie_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,21 +33,21 @@ import '../../api/navigator.dart';
 import '../../api/provider/setting_provider.dart';
 import 'bike_setting/bike_setting.dart';
 
-class BikeSettingNavigator extends StatefulWidget {
+class SheetNavigator extends StatefulWidget {
 
   final String source;
   final String stringPassing;
 
-   const BikeSettingNavigator(
+   const SheetNavigator(
       this.source,
       this.stringPassing,
       {Key? key}) : super(key: key);
 
   @override
-  State<BikeSettingNavigator> createState() => _BikeSettingNavigatorState();
+  State<SheetNavigator> createState() => _SheetNavigatorState();
 }
 
-class _BikeSettingNavigatorState extends State<BikeSettingNavigator> {
+class _SheetNavigatorState extends State<SheetNavigator> {
 
   late SettingProvider _settingProvider;
 
@@ -48,13 +59,32 @@ class _BikeSettingNavigatorState extends State<BikeSettingNavigator> {
     switch(_settingProvider.currentSheetList){
       case SheetList.bikeSetting:
         return BikeSetting(widget.source);
+
       case SheetList.evKey:
         return EVKey();
       case SheetList.evKeyList:
         return EVKeyList();
+      case SheetList.evAddFailed:
+        return EVAddFailed();
+      case SheetList.nameEv:
+        //return NameEV(rfidNumber);
+        break;
+      case SheetList.registerEvKey:
+        return RegisterEVKey();
+
       case SheetList.motionSensitivity:
         return MotionSensitivity();
+      case SheetList.detectionSensitivity:
+        return DetectionSensitivity();
 
+      case SheetList.currentPlan:
+        return CurrentPlan();
+      case SheetList.managePlan:
+        return ManagePlan();
+      case SheetList.essentialPlan:
+        return EssentialPlan();
+      case SheetList.proPlan:
+        return ProPlan();
 
       case SheetList.pedalPals:
         return PedalPals();
@@ -69,18 +99,25 @@ class _BikeSettingNavigatorState extends State<BikeSettingNavigator> {
       case SheetList.pedalPalsList:
         return PedalPalsList();
 
-
       case SheetList.orbitalAntiThefts:
         return BikeStatusAlert();
 
       case SheetList.aboutBike:
         return AboutBike();
 
+      case SheetList.firmwareInformation:
+        return FirmwareInformation();
+      case SheetList.firmwareUpdateCompleted:
+        return FirmwareUpdateCompleted();
+      case SheetList.firmwareUpdateFailed:
+        return FirmwareUpdateFailed();
+
       case SheetList.userManual:
         break;
+
       case SheetList.resetBike:
-        // TODO: Handle this case.
-        break;
+        return ResetBike();
+
       default:
         break;
     }

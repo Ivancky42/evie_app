@@ -12,7 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import '../screen/my_bike_setting/bike_setting_navigator.dart';
+import '../screen/my_bike_setting/sheet_navigator.dart';
 import '../screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
 import '../screen/my_bike_setting/pedal_pals/invitation_sent.dart';
 import '../screen/my_bike_setting/pedal_pals/pedal_pals_list.dart';
@@ -37,7 +37,7 @@ void showBikeSettingContentSheet(BuildContext context, [String? source, String? 
         MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
     context: context,
     builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: BikeSettingNavigator(source ?? 'Home', strings ?? ''),);
+      return EvieBottomSheet(childContext: SheetNavigator(source ?? 'Home', strings ?? ''),);
     },
   );
 }
