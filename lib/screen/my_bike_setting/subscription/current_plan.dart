@@ -15,9 +15,11 @@ import '../../../api/colours.dart';
 import '../../../api/fonts.dart';
 import '../../../api/function.dart';
 import '../../../api/length.dart';
+import '../../../api/model/plan_model.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
+import '../../../api/provider/plan_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_divider.dart';
@@ -36,12 +38,14 @@ class CurrentPlan extends StatefulWidget {
 class _CurrentPlanState extends State<CurrentPlan> {
 
   late BikeProvider _bikeProvider;
+  late PlanProvider _planProvider;
   late BluetoothProvider _bluetoothProvider;
 
   @override
   Widget build(BuildContext context) {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _planProvider = Provider.of<PlanProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     return WillPopScope(
@@ -50,9 +54,11 @@ class _CurrentPlanState extends State<CurrentPlan> {
         showBikeSettingSheet(context);
         return false;
       },
-      child: Scaffold(
+    child: Padding(
+    padding: EdgeInsets.all(18.5),
+    child: Scaffold(
         appBar: PageAppbar(
-          title: 'Subscription',
+          title: 'EV+ Subscription',
           onPressed: () {
             Navigator.of(context).pop();
             showBikeSettingSheet(context);
@@ -70,19 +76,35 @@ class _CurrentPlanState extends State<CurrentPlan> {
                     padding: EdgeInsets.only(top:28.h),
                     child: Text("Current Plan", style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),),
                   ),
-                  Text(_bikeProvider.isPlanSubscript == false ? "Starter" : "Premium", style: EvieTextStyles.headline.copyWith(color: EvieColors.lightBlack)),
-                  Text(_bikeProvider.isPlanSubscript == false ?"Forever" : "${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodStart?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().year} - "
+
+                  Text(_bikeProvider.isPlanSubscript == false ? "No Subscription" : "EV-Secure", style: EvieTextStyles.headline.copyWith(color: EvieColors.lightBlack)),
+                  Text(_bikeProvider.isPlanSubscript == false ?"" : "${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodStart?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().year} - "
                                                                             "${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}",
-                    style: EvieTextStyles.body18.copyWith(color:EvieColors.darkGrayishCyan)),
-                  Padding(
-                    padding: EdgeInsets.only(top:19.h),
-                    child: Text("Status",style: EvieTextStyles.body14.copyWith(color:EvieColors.darkGrayishCyan),),
+                  style: EvieTextStyles.body18.copyWith(color:EvieColors.darkGrayishCyan)),
+
+                  Container(
+                      child: _bikeProvider.isPlanSubscript == false?
+                      Text(""):
+                      Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 19.h),
+                            child: Text(
+                              "Status",
+                              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                            ),
+                          ),
+                          Text(
+                            "Active",
+                            style: EvieTextStyles.body16.copyWith(color: EvieColors.green),
+                          ),
+                          SizedBox(height: 10.h),
+                        ],
+                      ),
                   ),
-                  ///Active Color (0xff05A454)    Expired Color (0xffF42525)
-                  Text("Active",style: EvieTextStyles.body16.copyWith(color: EvieColors.green)),
-                  SizedBox(height: 10.h,),
-                  
-                  const EvieDivider(),
+
+
+        const EvieDivider(),
 
                   _bikeProvider.currentBikePlanModel != null ?
                   Visibility(
@@ -95,7 +117,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
                           padding: EdgeInsets.only(top:28.h),
                           child: Text("Previously on", style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),),
                         ),
-                        Text("Premium", style: EvieTextStyles.headline.copyWith(color: EvieColors.lightBlack)),
+                        Text("EV-Secure", style: EvieTextStyles.headline.copyWith(color: EvieColors.lightBlack)),
                         Text("${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodStart?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().year} - "
                             "${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}",
                             style: EvieTextStyles.body18.copyWith(color:EvieColors.darkGrayishCyan)),
@@ -130,13 +152,28 @@ class _CurrentPlanState extends State<CurrentPlan> {
                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                   ),
                   onPressed: () {
-                    changeToManagePlanScreen(context);
-                  },
+                    if (_bikeProvider.isPlanSubscript == false) {
+                      String key = _planProvider.availablePlanList.keys.elementAt(0);
+                      PlanModel planModel = _planProvider.availablePlanList[key];
+
+
+
+                      _planProvider.getPrice(planModel).then((priceModel) {
+                        _planProvider.purchasePlan(_bikeProvider.currentBikeModel!.deviceIMEI!, planModel.id!, priceModel.id).then((value) {
+                          changeToStripeCheckoutScreen(context, value, _bikeProvider.currentBikeModel!, planModel, priceModel);
+                        });
+                      });
+                    } else {
+                      showProPlanSheet(context);
+                    }
+                  }
                 ),
               ),
             ),
           ],
-        ),),
+        ),
+    ),
+    ),
     );
   }
 }

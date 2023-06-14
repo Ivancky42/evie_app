@@ -1,6 +1,10 @@
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting.dart';
+//import 'package:evie_test/screen/my_bike_setting/subscription2/pro_plan2/pro_plan2.dart';
+//import 'package:evie_test/screen/my_bike_setting/subscription2/current_plan2.dart';
+//import 'package:evie_test/screen/my_bike_setting/subscription2/essential_plan2/essential_plan2.dart';
+//import 'package:evie_test/screen/my_bike_setting/subscription2/manage_plan2.dart';
 import 'package:evie_test/screen/trip_history/recent_activity.dart';
 import 'package:evie_test/screen/trip_history/trip_history.dart';
 import 'package:evie_test/screen/user_home_page/battery_details.dart';
@@ -18,6 +22,8 @@ import '../screen/my_bike_setting/share_bike/share_bike_invitation.dart';
 import '../screen/my_bike_setting/share_bike/share_bike_user_list.dart';
 import '../screen/my_bike_setting/share_bike/user_not_found.dart';
 import '../screen/my_bike_setting/subscription/current_plan.dart';
+import '../screen/my_bike_setting/subscription/essential_plan/essential_plan.dart';
+import '../screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
 import '../screen/trip_history/ride_history.dart';
 import '../screen/user_home_page/paid_plan/map_details2.dart';
 import '../screen/user_home_page/paid_plan/threat_timeline.dart';
@@ -90,7 +96,7 @@ void showCurrentPlanSheet(BuildContext context) {
   );
 }
 
-void showShareBikeSheet(BuildContext context) {
+void showProPlanSheet(BuildContext context) {
   showModalBottomSheet(
     isScrollControlled: true,
     constraints: BoxConstraints.tight(Size(
@@ -98,13 +104,12 @@ void showShareBikeSheet(BuildContext context) {
         MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
     context: context,
     builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: const ShareBike());
+      return EvieBottomSheet(childContext: const ProPlan());
     },
   );
 }
 
-
-void showShareBikeUserListSheet(BuildContext context) {
+void showEssentialPlanSheet(BuildContext context) {
   showModalBottomSheet(
     isScrollControlled: true,
     constraints: BoxConstraints.tight(Size(
@@ -112,99 +117,187 @@ void showShareBikeUserListSheet(BuildContext context) {
         MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
     context: context,
     builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: const ShareBikeUserList());
+      return EvieBottomSheet(childContext: const EssentialPlan());
     },
   );
 }
 
-void showShareBikeInvitationSheet(BuildContext context) {
-  showModalBottomSheet(
-    isScrollControlled: true,
-    constraints: BoxConstraints.tight(Size(
-        MediaQuery.of(context).size.width,
-        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
-    context: context,
-    builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: const ShareBikeInvitation());
-    },
-  );
-}
+          void showShareBikeSheet(BuildContext context) {
+            showModalBottomSheet(
+              isScrollControlled: true,
+              constraints: BoxConstraints.tight(Size(
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .height * EvieLength.sheet_expand)),
+              context: context,
+              builder: (BuildContext context) {
+                return EvieBottomSheet(childContext: const ShareBike());
+              },
+            );
+          }
 
-void showUserNotFoundSheet(BuildContext context, String email) {
-  showModalBottomSheet(
-    isScrollControlled: true,
-    constraints: BoxConstraints.tight(Size(
-        MediaQuery.of(context).size.width,
-        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
-    context: context,
-    builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: UserNotFound(email));
-    },
-  );
-}
 
-void showInvitationSentSheet(BuildContext context, String email) {
-  showModalBottomSheet(
-    isScrollControlled: true,
-    constraints: BoxConstraints.tight(Size(
-        MediaQuery.of(context).size.width,
-        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
-    context: context,
-    builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: InvitationSent(email));
-    },
-  );
-}
+          void showShareBikeUserListSheet(BuildContext context) {
+            showModalBottomSheet(
+              isScrollControlled: true,
+              constraints: BoxConstraints.tight(Size(
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .height * EvieLength.sheet_expand)),
+              context: context,
+              builder: (BuildContext context) {
+                return EvieBottomSheet(childContext: const ShareBikeUserList());
+              },
+            );
+          }
 
-void showThreatHistorySheet(BuildContext context) {
-  showModalBottomSheet(
-    isScrollControlled: true,
-    constraints: BoxConstraints.tight(Size(
-        MediaQuery.of(context).size.width,
-        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
-    context: context,
-    builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: ThreatHistory(),);
-    },
-  );
-}
+          void showShareBikeInvitationSheet(BuildContext context) {
+            showModalBottomSheet(
+              isScrollControlled: true,
+              constraints: BoxConstraints.tight(Size(
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .height * EvieLength.sheet_expand)),
+              context: context,
+              builder: (BuildContext context) {
+                return EvieBottomSheet(
+                    childContext: const ShareBikeInvitation());
+              },
+            );
+          }
 
-void showBatteryDetailsSheet(BuildContext context) {
-  showModalBottomSheet(
-    isScrollControlled: true,
-    constraints: BoxConstraints.tight(Size(
-        MediaQuery.of(context).size.width,
-        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
-    context: context,
-    builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: BatteryDetails(),);
-    },
-  );
-}
+          void showUserNotFoundSheet(BuildContext context, String email) {
+            showModalBottomSheet(
+              isScrollControlled: true,
+              constraints: BoxConstraints.tight(Size(
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .height * EvieLength.sheet_expand)),
+              context: context,
+              builder: (BuildContext context) {
+                return EvieBottomSheet(childContext: UserNotFound(email));
+              },
+            );
+          }
 
-void showMapDetailsSheet(BuildContext context) {
-  showModalBottomSheet(
-    isScrollControlled: true,
-    constraints: BoxConstraints.tight(Size(
-        MediaQuery.of(context).size.width,
-        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
-    context: context,
-    builder: (BuildContext context) {
-      //return EvieBottomSheet(childContext: MapDetails(),);
-      return EvieBottomSheet(childContext: MapDetails2(),);
-    },
-  );
-}
+          void showInvitationSentSheet(BuildContext context, String email) {
+            showModalBottomSheet(
+              isScrollControlled: true,
+              constraints: BoxConstraints.tight(Size(
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .height * EvieLength.sheet_expand)),
+              context: context,
+              builder: (BuildContext context) {
+                return EvieBottomSheet(childContext: InvitationSent(email));
+              },
+            );
+          }
 
-void showRideHistorySheet(BuildContext context,String tripId, TripHistoryModel currentTripHistoryList) {
-  showModalBottomSheet(
-    isScrollControlled: true,
-    constraints: BoxConstraints.tight(Size(
-        MediaQuery.of(context).size.width,
-        MediaQuery.of(context).size.height * EvieLength.sheet_expand)),
-    context: context,
-    builder: (BuildContext context) {
-      return EvieBottomSheet(childContext: RideHistory(tripId, currentTripHistoryList),);
-    },
-  );
-}
+          void showThreatHistorySheet(BuildContext context) {
+            showModalBottomSheet(
+              isScrollControlled: true,
+              constraints: BoxConstraints.tight(Size(
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .height * EvieLength.sheet_expand)),
+              context: context,
+              builder: (BuildContext context) {
+                return EvieBottomSheet(childContext: ThreatHistory(),);
+              },
+            );
+          }
+
+          void showBatteryDetailsSheet(BuildContext context) {
+            showModalBottomSheet(
+              isScrollControlled: true,
+              constraints: BoxConstraints.tight(Size(
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .height * EvieLength.sheet_expand)),
+              context: context,
+              builder: (BuildContext context) {
+                return EvieBottomSheet(childContext: BatteryDetails(),);
+              },
+            );
+          }
+
+          void showMapDetailsSheet(BuildContext context) {
+            showModalBottomSheet(
+              isScrollControlled: true,
+              constraints: BoxConstraints.tight(Size(
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .height * EvieLength.sheet_expand)),
+              context: context,
+              builder: (BuildContext context) {
+                //return EvieBottomSheet(childContext: MapDetails(),);
+                return EvieBottomSheet(childContext: MapDetails2(),);
+              },
+            );
+          }
+
+          void showRideHistorySheet(BuildContext context, String tripId,
+              TripHistoryModel currentTripHistoryList) {
+            showModalBottomSheet(
+              isScrollControlled: true,
+              constraints: BoxConstraints.tight(Size(
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .height * EvieLength.sheet_expand)),
+              context: context,
+              builder: (BuildContext context) {
+                return EvieBottomSheet(
+                  childContext: RideHistory(tripId, currentTripHistoryList),);
+              },
+            );
+          }
+
+
+
+

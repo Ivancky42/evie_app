@@ -291,6 +291,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
               onTap: () {
                 Navigator.of(context).pop();
                 showCurrentPlanSheet(context);
+
               },
               child: Container(
                 height: 62.h,

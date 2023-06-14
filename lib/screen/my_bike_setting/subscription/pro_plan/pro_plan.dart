@@ -4,6 +4,7 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 
@@ -11,12 +12,14 @@ import '../../../../api/fonts.dart';
 import '../../../../api/model/plan_model.dart';
 import '../../../../api/navigator.dart';
 import '../../../../api/provider/bike_provider.dart';
+import '../../../../api/sheet.dart';
+import '../../../../widgets/evie_appbar.dart';
 import '../../../../widgets/evie_button.dart';
 import '../../../../widgets/evie_container.dart';
 
 
 class ProPlan extends StatefulWidget{
-  const ProPlan({Key? key,}) : super(key: key);
+  const ProPlan({Key? key}) : super(key: key);
 
   @override
   State<ProPlan> createState() => _ProPlanState();
@@ -33,8 +36,26 @@ class _ProPlanState extends State<ProPlan> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _planProvider = Provider.of<PlanProvider>(context);
 
-    return Padding(
-      padding: EdgeInsets.only(left: 16.w, right: 16.w),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pop();
+        showCurrentPlanSheet(context);
+        return false;
+      },
+
+    child: Padding(
+        padding: EdgeInsets.only(top: 18.5.h),
+      child: Scaffold(
+          backgroundColor: EvieColors.grayishWhite,
+      appBar: PageAppbar(
+      title: 'EV+ Subscription',
+      onPressed: () {
+        Navigator.of(context).pop();
+        showCurrentPlanSheet(context);
+      },
+    ),
+    body: Padding(
+      padding: EdgeInsets.only(left: 16.w, right: 16.w, top:24.5.h),
       child: ListView(
         shrinkWrap: true,
         children: [
@@ -42,10 +63,18 @@ class _ProPlanState extends State<ProPlan> {
             height: 664.h,
             width: 326.w,
             decoration: BoxDecoration(
-                color: EvieColors.lightGrayishCyan,
+                color: EvieColors.dividerWhite,
                 border: Border.all(
-                  color: EvieColors.lightGrayishCyan,
+                  color: EvieColors.dividerWhite,
                 ),
+                boxShadow:[
+                  BoxShadow(
+                    color: EvieColors.dividerWhite,
+                    //spreadRadius: 2,
+                    blurRadius: 24,
+                    offset: Offset(0, 12),
+                  ),
+                ],
                 borderRadius:
                 BorderRadius.all(Radius.circular(10))),
 
@@ -58,18 +87,47 @@ class _ProPlanState extends State<ProPlan> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(top: 40.h, bottom: 20.h),
-                        child: Text("Premium", style: EvieTextStyles.body20.copyWith(color: EvieColors.darkGrayish),),
+                        padding: EdgeInsets.only(top: 24.h, bottom: 16.h),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                                "EV-Secure",
+                                style: EvieTextStyles.body20.copyWith(color: EvieColors.darkGrayish),
+                              ),
+
+                            SizedBox(width: 9),
+                            SvgPicture.asset(
+                              "assets/icons/batch_tick.svg",
+                            ),
+                          ],
+                        ),
                       ),
-                      Text("USD29.90",style: EvieTextStyles.display),
+
+
+                      Text("\$29.90",style: EvieTextStyles.display),
 
                       Align(
-                          alignment: Alignment(0.3, -12),
+                          alignment: Alignment(0.4, -12),
                           child: Text("/per month",style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayish),)),
 
-                      SizedBox(height: 40.h,),
-                      Text("Best for worry free: Remote monitor bike status and receive theft alert notification.",
-                          style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack,height: 1.2.h)),
+                      Padding(
+                        padding: EdgeInsets.only(top: 17.h, bottom: 16.h),
+                        child: Text("You are currently on this plan.", style: EvieTextStyles.body16.copyWith(color: EvieColors.primaryColor),),
+                      ),
+
+                      SizedBox(height: 16.h),
+                      Padding(
+                        padding: EdgeInsets.only(left:16.w, right:16.w),
+                        child: Text("Orbital Anti-theft: Remote monitor bike status and receive theft alert notification.",
+                          style: EvieTextStyles.body18.copyWith(
+                            color: EvieColors.lightBlack,
+                            height: 1.2.h,
+                          ),
+                        ),
+                      ),
+
+
 
                       Padding(
                         padding: EdgeInsets.only(top: 14.h, bottom: 12.h),
@@ -80,47 +138,17 @@ class _ProPlanState extends State<ProPlan> {
                         Text("Includes",style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack, fontWeight: FontWeight.bold),),
                       ]),
 
-                      const PlanPageElementRow(content: "All Lite includes"),
                       const PlanPageElementRow(content: "GPS tracking"),
                       const PlanPageElementRow(content: "Alert notification"),
-                      const PlanPageElementRow(content: "Theft detection"),
+                      const PlanPageElementRow(content: "Theft Detection"),
                       const PlanPageElementRow(content: "Remote monitoring"),
-                      const PlanPageElementRow(content: "Fall detection with alerts"),
                       const PlanPageElementRow(content: "Ride history"),
-                      const PlanPageElementRow(content: "Exclusive promotions"),
                       const PlanPageElementRow(content: "Bike Sharing"),
-                      const PlanPageElementRow(content: "Unlimited data package"),
 
                     ],
                   ),
                 ),
 
-                Align(
-                  alignment: Alignment(-1.9.h,-0.94.h),
-                  child:RotationTransition(
-                    turns: new AlwaysStoppedAnimation(-45 / 360),
-                    child: Container(
-                      height: 28.h,
-                      width: 200.w,
-                      decoration: BoxDecoration(
-                          color: EvieColors.primaryColor,
-                          border: Border.all(
-                            color: EvieColors.primaryColor,
-                          ),
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(5))),
-                      child: Center(
-                        child: Text(
-                          "Best Value",
-                          style: TextStyle(
-                              fontSize: 17.sp,
-                              fontWeight: FontWeight.w900,
-                              color: Color(0xffECEDEB)),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
 
                 Visibility(
                   visible: !_bikeProvider.isPlanSubscript!,
@@ -154,6 +182,6 @@ class _ProPlanState extends State<ProPlan> {
           ),
         ],
       ),
-    );
+    ))));
   }
 }

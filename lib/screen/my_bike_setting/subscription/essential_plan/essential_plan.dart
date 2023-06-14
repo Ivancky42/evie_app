@@ -4,80 +4,168 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../api/length.dart';
+import '../../../../api/model/plan_model.dart';
+import '../../../../api/navigator.dart';
+import '../../../../api/provider/bike_provider.dart';
+import '../../../../api/provider/plan_provider.dart';
+import '../../../../api/sheet.dart';
+import '../../../../widgets/evie_appbar.dart';
+import '../../../../widgets/evie_button.dart';
 import '../../../../widgets/evie_container.dart';
 
 
-class EssentialPlan extends StatelessWidget{
+class EssentialPlan extends StatefulWidget{
+  const EssentialPlan({Key? key}) : super(key: key);
+  @override
+  State<EssentialPlan> createState() => _EssentialPlanState();
+}
 
-  const EssentialPlan({Key? key,}) : super(key: key);
+class _EssentialPlanState extends State<EssentialPlan> {
 
+  late BikeProvider _bikeProvider;
+  late PlanProvider _planProvider;
 
   @override
   Widget build(BuildContext context) {
-    return   Padding(
-      padding: EdgeInsets.only(left: 16.w, right: 16.w),
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          Container(
-            height: 664.h,
-            width: 326.w,
-            decoration: BoxDecoration(
-                color: EvieColors.lightGrayishCyan,
-                border: Border.all(
-                  color: EvieColors.lightGrayishCyan,
+
+    _bikeProvider = Provider.of<BikeProvider>(context);
+    _planProvider = Provider.of<PlanProvider>(context);
+
+    return WillPopScope(
+        onWillPop: () async {
+          Navigator.of(context).pop();
+          showCurrentPlanSheet(context);
+          return false;
+        },
+
+        child: Padding(
+            padding: EdgeInsets.only(top: 18.5.h),
+            child: Scaffold(
+                backgroundColor: EvieColors.grayishWhite,
+                appBar: PageAppbar(
+                  title: 'EV+ Subscription',
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    showCurrentPlanSheet(context);
+                  },
                 ),
-                borderRadius:
-                const BorderRadius.all(Radius.circular(10))),
-
-            child: Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(right: 16.w, left: 16.w),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                   crossAxisAlignment: CrossAxisAlignment.center,
+                body: Padding(
+                  padding: EdgeInsets.only(left: 16.w, right: 16.w, top:24.5.h),
+                  child: ListView(
+                    shrinkWrap: true,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 40.h, bottom: 20.h),
-                        child: Text("Starter", style: EvieTextStyles.body20.copyWith(color: EvieColors.darkGrayish),),
+                      Container(
+                        height: 664.h,
+                        width: 326.w,
+                        decoration: BoxDecoration(
+                            color: EvieColors.dividerWhite,
+                            border: Border.all(
+                              color: EvieColors.dividerWhite,
+                            ),
+                            boxShadow:[
+                              BoxShadow(
+                                color: EvieColors.dividerWhite,
+                                //spreadRadius: 2,
+                                blurRadius: 24,
+                                offset: Offset(0, 12),
+                              ),
+                            ],
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10))),
+
+                        child: Stack(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 16.w, left: 16.w),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 24.h, bottom: 16.h),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                         Text(
+                                            "EV-Secure",
+                                            style: EvieTextStyles.body20.copyWith(color: EvieColors.darkGrayish),
+                                          ),
+                                        SizedBox(width: 9),
+                                        SvgPicture.asset(
+                                          "assets/icons/batch_tick.svg",
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  Text("\$29.90",style: EvieTextStyles.display),
+
+                                  Align(
+                                      alignment: Alignment(0.4, -12),
+                                      child: Text("/per month",style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayish),)),
+
+                                  SizedBox(height: 16.h),
+                                  Padding(
+                                    padding: EdgeInsets.only(left:16.w, right:16.w, top: 53.h),
+                                    child: Text("Orbital Anti-theft: Remote monitor bike status and receive theft alert notification.",
+                                      style: EvieTextStyles.body18.copyWith(
+                                        color: EvieColors.lightBlack,
+                                        height: 1.2.h,
+                                      ),
+                                    ),
+                                  ),
+
+
+
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 14.h, bottom: 12.h),
+                                    child: Divider(height: 1.h,color: EvieColors.darkWhite,),
+                                  ),
+
+                                  Row(children: [
+                                    Text("Includes",style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack, fontWeight: FontWeight.bold),),
+                                  ]),
+
+                                  const PlanPageElementRow(content: "GPS tracking"),
+                                  const PlanPageElementRow(content: "Alert notification"),
+                                  const PlanPageElementRow(content: "Theft Detection"),
+                                  const PlanPageElementRow(content: "Remote monitoring"),
+                                  const PlanPageElementRow(content: "Ride history"),
+                                  const PlanPageElementRow(content: "Bike Sharing"),
+
+                                ],
+                              ),
+                            ),
+
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
+                                child:  EvieButton(
+                                  width: double.infinity,
+                                  height: 48.h,
+                                  child: Text(_bikeProvider.isPlanSubscript == false ? "Upgrade Plan" : "See Plan Detail",
+                                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                                  ),
+                                  onPressed: () {
+                                    showCurrentPlanSheet(context);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      Text("FREE",style: EvieTextStyles.display),
 
-                      Align(
-                          alignment: Alignment(0.3, -12),
-                          child: Text("for life",style:  EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayish),)),
-
-                      SizedBox(height: 40.h,),
-                      Text("Best for essential: Bike setting, lock and unlock bike.",
-                          style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack,height: 1.2.h)),
-
-                      Padding(
-                        padding: EdgeInsets.only(top: 14.h, bottom: 12.h),
-                        child: Divider(height: 1.h,color: EvieColors.darkWhite,),
-                      ),
-
-                      Row(children: [
-                        Text("Includes",style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack, fontWeight: FontWeight.bold),),
-                      ]),
-
-                      const PlanPageElementRow(content: "Bike dashboard"),
-                      const PlanPageElementRow(content: "Bike setting"),
-                      const PlanPageElementRow(content: "Firmware updates"),
-                      const PlanPageElementRow(content: "EV-Key unlocking"),
-                      const PlanPageElementRow(content: "App unlocking"),
-                      const PlanPageElementRow(content: "Integrated U-lock"),
-                      const PlanPageElementRow(content: "Theft Alarm"),
-                      const PlanPageElementRow(content: "Add multiple bike"),
                     ],
+
+
                   ),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+                ))));
   }
 }
+

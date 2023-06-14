@@ -9,7 +9,8 @@ import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/motion_sensi
 
 import 'package:evie_test/screen/my_account/edit_profile.dart';
 import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_set_colour_code.dart';
-
+//import 'package:evie_test/screen/my_bike_setting/subscription2/essential_plan2/essential_plan2.dart';
+import 'package:evie_test/screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
 
 import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/screen/test_ble.dart';
@@ -44,7 +45,6 @@ import '../screen/my_bike_setting/share_bike/share_bike_user_list.dart';
 import '../screen/my_bike_setting/share_bike/user_not_found.dart';
 import '../screen/my_bike_setting/sos_center/sos_center.dart';
 import '../screen/my_bike_setting/subscription/current_plan.dart';
-import '../screen/my_bike_setting/subscription/manage_plan.dart';
 
 import '../screen/onboarding_addNewBike/bike_connect_failed.dart';
 import '../screen/onboarding_addNewBike/bike_connect_success.dart';
@@ -69,6 +69,7 @@ import '../test/test.dart';
 import 'model/bike_model.dart';
 import 'model/plan_model.dart';
 import 'model/price_model.dart';
+
 
 void changeToWelcomeScreen(BuildContext context) {
   Navigator.of(context).pushNamedAndRemoveUntil("/welcome", (route) => false);
@@ -451,11 +452,13 @@ void changeToCurrentPlanScreen(BuildContext context) {
   );
 }
 
-void changeToManagePlanScreen(BuildContext context) {
+
+
+void changeToProPlanScreen(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: const ManagePlan(),
+      child: const ProPlan(),
       duration: const Duration(milliseconds: 300),
     ),
   );
