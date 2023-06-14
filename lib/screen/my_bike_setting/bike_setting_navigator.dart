@@ -1,4 +1,5 @@
 import 'package:evie_test/screen/my_bike_setting/about_bike/about_bike.dart';
+import 'package:evie_test/screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/motion_sensitivity.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/create_team.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/invitation_sent.dart';
@@ -53,10 +54,6 @@ class _BikeSettingNavigatorState extends State<BikeSettingNavigator> {
         return EVKeyList();
       case SheetList.motionSensitivity:
         return MotionSensitivity();
-      case SheetList.evCurrentSubscription:
-        return CurrentPlan();
-      case SheetList.evPlusSubscription:
-        break;
 
 
       case SheetList.pedalPals:
@@ -74,14 +71,14 @@ class _BikeSettingNavigatorState extends State<BikeSettingNavigator> {
 
 
       case SheetList.orbitalAntiThefts:
-        break;
+        return BikeStatusAlert();
+
       case SheetList.aboutBike:
         return AboutBike();
-      case SheetList.bikeSoftware:
-        break;
+
       case SheetList.userManual:
         break;
-      case SheetList.reset:
+      case SheetList.resetBike:
         // TODO: Handle this case.
         break;
       default:

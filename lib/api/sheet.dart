@@ -77,7 +77,7 @@ void showBikeStatusAlertSheet(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return EvieBottomSheet(childContext: const BikeStatusAlert());
-    },
+    }
   );
 }
 

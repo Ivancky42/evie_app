@@ -10,10 +10,12 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/model/bike_user_model.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/notification_provider.dart';
+import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_divider.dart';
@@ -35,6 +37,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
 
   late NotificationProvider _notificationProvider;
   late BikeProvider _bikeProvider;
+  late SettingProvider _settingProvider;
 
   final Color _thumbColor = EvieColors.thumbColorTrue;
 
@@ -43,21 +46,20 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _notificationProvider = Provider.of<NotificationProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     var currentNotificationSettings = _bikeProvider.userBikeList[_bikeProvider.currentBikeModel?.deviceIMEI];
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop();
-        showBikeSettingSheet(context);
+        _settingProvider.changeSheetElement(SheetList.bikeSetting);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'Orbital Anti-theft',
           onPressed: () {
-            Navigator.of(context).pop();
-            showBikeSettingSheet(context);
+            _settingProvider.changeSheetElement(SheetList.bikeSetting);
           },
         ),
         body: Stack(
@@ -195,37 +197,37 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
                     )
                 ),
                 const EvieDivider(),
-                Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
-                    child: EvieSwitch(
-                      text: "Plan Reminder",
-                      value:  currentNotificationSettings?.notificationSettings?.planReminder ?? false,
-                      thumbColor: _thumbColor,
-                      onChanged: (value) async {
-                          SmartDialog.showLoading();
-                          var result = await _bikeProvider.updateFirestoreNotification("planReminder", value!);
-                          if(result == true){
-                            SmartDialog.dismiss();
-                            switch(value){
-                              case true:
-                                await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~plan-reminder");
-                                break;
-                              case false:
-                                await _notificationProvider.unsubscribeFromTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~plan-reminder");
-                                break;
-                            }
-                          }else{
-                            SmartDialog.show(
-                                widget: EvieSingleButtonDialog(
-                                    title: "Error",
-                                    content: "Try again",
-                                    rightContent: "OK",
-                                    onPressedRight: (){SmartDialog.dismiss();}));
-                          }
-                      },
-                    )
-                ),
-                const EvieDivider(),
+                // Padding(
+                //     padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
+                //     child: EvieSwitch(
+                //       text: "Plan Reminder",
+                //       value:  currentNotificationSettings?.notificationSettings?.planReminder ?? false,
+                //       thumbColor: _thumbColor,
+                //       onChanged: (value) async {
+                //           SmartDialog.showLoading();
+                //           var result = await _bikeProvider.updateFirestoreNotification("planReminder", value!);
+                //           if(result == true){
+                //             SmartDialog.dismiss();
+                //             switch(value){
+                //               case true:
+                //                 await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~plan-reminder");
+                //                 break;
+                //               case false:
+                //                 await _notificationProvider.unsubscribeFromTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~plan-reminder");
+                //                 break;
+                //             }
+                //           }else{
+                //             SmartDialog.show(
+                //                 widget: EvieSingleButtonDialog(
+                //                     title: "Error",
+                //                     content: "Try again",
+                //                     rightContent: "OK",
+                //                     onPressedRight: (){SmartDialog.dismiss();}));
+                //           }
+                //       },
+                //     )
+                // ),
+                // const EvieDivider(),
 
             ],
             ),

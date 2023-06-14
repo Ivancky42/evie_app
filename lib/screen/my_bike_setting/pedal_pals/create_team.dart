@@ -1,15 +1,9 @@
-import 'dart:collection';
-import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
@@ -20,13 +14,9 @@ import '../../../api/enumerate.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
-import '../../../api/sheet.dart';
-import '../../../widgets/evie_appbar.dart';
-import '../../../widgets/evie_double_button_dialog.dart';
 import '../../../widgets/evie_progress_indicator.dart';
 import '../../../widgets/evie_textform.dart';
 import '../../my_account/my_account_widget.dart';
-
 
 
 class CreateTeam extends StatefulWidget{

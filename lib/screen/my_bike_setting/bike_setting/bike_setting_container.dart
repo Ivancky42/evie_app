@@ -105,15 +105,15 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                                 label!,
                                 style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                               ),
-                              deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
-                                "assets/icons/bluetooth_disconnect_filled.svg",
-                                height: 15.h,
-                                width: 15.w,
-                              ) : SvgPicture.asset(
-                                "assets/icons/bluetooth_disconnect.svg",
-                                height: 15.h,
-                                width: 15.w,
-                              ),
+                              // deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
+                              //   "assets/icons/bluetooth_disconnect_filled.svg",
+                              //   height: 15.h,
+                              //   width: 15.w,
+                              // ) : SvgPicture.asset(
+                              //   "assets/icons/bluetooth_disconnect.svg",
+                              //   height: 15.h,
+                              //   width: 15.w,
+                              // ),
                             ],
                           ),
                           Text(
@@ -284,7 +284,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             const EvieDivider(),
           ],
         );
-      case "Subscription":
+      case "EV+ Subscription":
         return Column(
           children: [
             Divider(
@@ -315,15 +315,15 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                                 label!,
                                 style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                               ),
-                              deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
-                                "assets/icons/bluetooth_disconnect_filled.svg",
-                                height: 15.h,
-                                width: 15.w,
-                              ) : SvgPicture.asset(
-                                "assets/icons/bluetooth_disconnect.svg",
-                                height: 15.h,
-                                width: 15.w,
-                              ),
+                              // deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
+                              //   "assets/icons/bluetooth_disconnect_filled.svg",
+                              //   height: 15.h,
+                              //   width: 15.w,
+                              // ) : SvgPicture.asset(
+                              //   "assets/icons/bluetooth_disconnect.svg",
+                              //   height: 15.h,
+                              //   width: 15.w,
+                              // ),
                             ],
                           ),
                           Row(
@@ -355,7 +355,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             const EvieDivider(),
           ],
         );
-      case "Share Bike":
+      case "Pedal Pals":
         return Column(
           children: [
             GestureDetector(
@@ -371,8 +371,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                   }
                   else {
 
-                    _settingProvider.changeSheetElement(SheetList.pedalPals);
-                    //_settingProvider.changeSheetElement(SheetList.pedalPalsList);
+                    //_settingProvider.changeSheetElement(SheetList.pedalPals);
+                    _settingProvider.changeSheetElement(SheetList.pedalPalsList);
 
                     // Navigator.of(context).pop();
                     // showShareBikeUserListSheet(context);
@@ -399,18 +399,19 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                             Row(
                               children: [
                                 Text(
-                                  "PedalPals",
+                                  label!,
                                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                                 ),
-                                deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
-                                  "assets/icons/bluetooth_disconnect_filled.svg",
-                                  height: 15.h,
-                                  width: 15.w,
-                                ) : SvgPicture.asset(
-                                  "assets/icons/bluetooth_disconnect.svg",
-                                  height: 15.h,
-                                  width: 15.w,
-                                ),
+                                // deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
+                                //   "assets/icons/bluetooth_disconnect_filled.svg",
+                                //   height: 15.h,
+                                //   width: 15.w,
+                                // ) : SvgPicture.asset(
+                                //   "assets/icons/bluetooth_disconnect.svg",
+                                //   height: 15.h,
+                                //   width: 15.w,
+                                // ),
+
                               ],
                             ),
                             Row(
@@ -450,8 +451,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
               behavior: HitTestBehavior.translucent,
               onTap: () {
                 if (checkFunctionByRole()) {
-                  Navigator.of(context).pop();
-                  showBikeStatusAlertSheet(context);
+                  _settingProvider.changeSheetElement(SheetList.orbitalAntiThefts);
                 }
                 else {
                   if (getOpacityByRole() == 0.3) {
@@ -495,6 +495,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             const EvieDivider(),
           ],
         );
+
+      //case "SOS Center", "View Data"
       // case "SOS Center":
       //   return Column(
       //     children: [
@@ -609,8 +611,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-
-                changeToAboutBike(context);
+                _settingProvider.changeSheetElement(SheetList.aboutBike);
               },
               child: Container(
                 height: 44.h,
@@ -675,7 +676,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                             Row(
                               children: [
                                 Text(
-                                  label!,
+                                  "Bike Software",
                                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                                 ),
                                 deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(

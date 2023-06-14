@@ -7,11 +7,13 @@ class EvieProgressIndicator extends StatelessWidget {
 
   final int currentPageNumber;
   final int totalSteps;
+  final EdgeInsetsGeometry;
 
   const EvieProgressIndicator({
     Key? key,
     required this.currentPageNumber,
     required this.totalSteps,
+    this.EdgeInsetsGeometry,
 
   }) : super(key: key);
 

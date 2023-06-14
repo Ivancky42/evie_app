@@ -105,66 +105,65 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                 future: getLocationModel(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Stack(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 16.h),
-                          child: Center(
-                            child: SingleChildScrollView(
-                              physics: const NeverScrollableScrollPhysics(),
-                              child: Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Container(
-                                  alignment: Alignment.bottomCenter,
-                                  height: 240.h,
-                                  child: MapWidget(
-                                    onScrollListener: onMapScrollListener,
-                                    key: const ValueKey("mapWidget"),
-                                    resourceOptions: ResourceOptions(
-                                        accessToken: _locationProvider.defPublicAccessToken),
-                                    onMapCreated: _onMapCreated,
-                                    styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
-                                    cameraOptions: CameraOptions(
-                                      center: Point(
-                                          coordinates: Position(
-                                              _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                                              _locationProvider.locationModel?.geopoint.latitude ?? 0))
-                                          .toJson(),
-                                      zoom: 12,
-                                    ),
-                                    // gestureRecognizers: [
-                                    //   Factory<OneSequenceGestureRecognizer>(
-                                    //           () => EagerGestureRecognizer())
-                                    // ].toSet(),
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 16.h),
+                      child: Center(
+                        child: SingleChildScrollView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              alignment: Alignment.bottomCenter,
+                              height: 300.h,
+                              child: Transform.translate(
+                                offset: Offset(0, -75.h),
+                                child: MapWidget(
+                                  onScrollListener: onMapScrollListener,
+                                  key: const ValueKey("mapWidget"),
+                                  resourceOptions: ResourceOptions(
+                                      accessToken: _locationProvider.defPublicAccessToken),
+                                  onMapCreated: _onMapCreated,
+                                  styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
+                                  cameraOptions: CameraOptions(
+                                    center: Point(
+                                        coordinates: Position(
+                                            _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                                            _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                                        .toJson(),
+                                    zoom: 12,
                                   ),
-
-                                  // child: Mapbox_Widget(
-                                  //   isInteract: false,
-                                  //   accessToken: _locationProvider.defPublicAccessToken,
-                                  //   //onMapCreated: _onMapCreated,
-                                  //   mapController: mapController,
-                                  //   markers: markers,
-                                  //   // onUserLocationUpdate: (userLocation) {
-                                  //   //   if (this.userLocation != null) {
-                                  //   //     this.userLocation = userLocation;
-                                  //   //     getDistanceBetween();
-                                  //   //   }
-                                  //   //   else {
-                                  //   //     this.userLocation = userLocation;
-                                  //   //     getDistanceBetween();
-                                  //   //     runSymbol();
-                                  //   //   }
-                                  //   // },
-                                  //   latitude: _locationProvider.locationModel!.geopoint.latitude,
-                                  //   longitude: _locationProvider.locationModel!.geopoint.longitude,
-                                  //   zoom: 15,
-                                  // ),
+                                  // gestureRecognizers: [
+                                  //   Factory<OneSequenceGestureRecognizer>(
+                                  //           () => EagerGestureRecognizer())
+                                  // ].toSet(),
                                 ),
                               ),
+
+                              // child: Mapbox_Widget(
+                              //   isInteract: false,
+                              //   accessToken: _locationProvider.defPublicAccessToken,
+                              //   //onMapCreated: _onMapCreated,
+                              //   mapController: mapController,
+                              //   markers: markers,
+                              //   // onUserLocationUpdate: (userLocation) {
+                              //   //   if (this.userLocation != null) {
+                              //   //     this.userLocation = userLocation;
+                              //   //     getDistanceBetween();
+                              //   //   }
+                              //   //   else {
+                              //   //     this.userLocation = userLocation;
+                              //   //     getDistanceBetween();
+                              //   //     runSymbol();
+                              //   //   }
+                              //   // },
+                              //   latitude: _locationProvider.locationModel!.geopoint.latitude,
+                              //   longitude: _locationProvider.locationModel!.geopoint.longitude,
+                              //   zoom: 15,
+                              // ),
                             ),
                           ),
                         ),
-                      ],
+                      ),
                     );
                   } else {
                     return const Center(
@@ -174,7 +173,6 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                 }),
           ),
 
-          ///hello
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -193,6 +191,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                           return Text(
                             snapshot.data.name.toString(),
                             style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
                           );
                         }else{
                           return Text(
@@ -202,8 +202,12 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                         }
                       }
                   )
-                      : Text(_locationProvider.currentPlaceMark?.name ?? "Not available",style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),),
-
+                      : Text(_locationProvider.currentPlaceMark?.name ?? "Not available",
+                    style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                  
                   ///Bike provider lastUpdated minus current timestamp
                   Text(calculateTimeAgo(_bikeProvider.currentBikeModel!.lastUpdated!.toDate()),
                       style: EvieTextStyles.body14.copyWith(color: EvieColors.mediumLightBlack)),

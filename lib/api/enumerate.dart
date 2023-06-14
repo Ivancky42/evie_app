@@ -1,10 +1,19 @@
 enum SheetList{
   bikeSetting,
+
   evKey,
   evKeyList,
+  evAddFailed,
+  nameEv,
+  registerEvKey,
+
   motionSensitivity,
-  evCurrentSubscription,
-  evPlusSubscription,
+  detectionSensitivity,
+
+  currentPlan,
+  managePlan,
+  essentialPlan,
+  proPlan,
 
   pedalPals,
   createTeam,
@@ -14,8 +23,14 @@ enum SheetList{
   pedalPalsList,
 
   orbitalAntiThefts,
+
   aboutBike,
-  bikeSoftware,
+
+  firmwareInformation,
+  firmwareUpdateCompleted,
+  firmwareUpdateFailed,
+
   userManual,
-  reset,
+
+  resetBike,
 }

@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
@@ -95,7 +96,60 @@ class _PedalPalsListState extends State<PedalPalsList> {
                       GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: (){
+                          SmartDialog.show(
+                              widget: Form(
+                                key: _formKey,
+                                child: EvieDoubleButtonDialog(
+                                    title: "Team Name",
+                                    childContent: Container(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text("Give your team an epic name", style: TextStyle(fontSize: 16.sp, color: Color(0xff252526)),),
+                                          Padding(
+                                            padding:  EdgeInsets.fromLTRB(0.h, 12.h, 0.h, 8.h),
+                                            child: EvieTextFormField(
+                                              controller: _nameController,
+                                              obscureText: false,
+                                              keyboardType: TextInputType.name,
+                                              hintText: "Create an epic team name",
+                                              labelText: "Team Name",
+                                              validator: (value) {
+                                                if (value == null || value.isEmpty) {
+                                                  return 'Please enter your name';
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    leftContent: "Cancel",
+                                    rightContent: "Save",
+                                    onPressedLeft: (){SmartDialog.dismiss();},
+                                    onPressedRight: () async {
+                                      if (_formKey.currentState!.validate()) {
+                                        SmartDialog.dismiss();
+                                        final result = await _bikeProvider.updateTeamName(_nameController.text.trim());
 
+                                        result == true ?
+                                        SmartDialog.show(widget: EvieSingleButtonDialog(
+                                            title: "Success",
+                                            content: "Team name uploaded",
+                                            rightContent: "OK",
+                                            onPressedRight: (){SmartDialog.dismiss();}))
+                                            :
+                                        SmartDialog.show(widget: EvieSingleButtonDialog(
+                                            title: "Error",
+                                            content: "Please try again",
+                                            rightContent: "OK",
+                                            onPressedRight: (){
+                                              SmartDialog.dismiss();
+                                            }));
+                                      }
+                                    }),
+                              ));
                         },
                         child: SvgPicture.asset(
                           "assets/buttons/pen_edit.svg",
