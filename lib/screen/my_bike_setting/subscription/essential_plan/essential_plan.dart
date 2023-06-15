@@ -1,5 +1,7 @@
 import 'package:evie_test/api/colours.dart';
+import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/fonts.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 
@@ -28,17 +30,18 @@ class _EssentialPlanState extends State<EssentialPlan> {
 
   late BikeProvider _bikeProvider;
   late PlanProvider _planProvider;
+  late SettingProvider _settingProvider;
 
   @override
   Widget build(BuildContext context) {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
     _planProvider = Provider.of<PlanProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
         onWillPop: () async {
-          Navigator.of(context).pop();
-          showCurrentPlanSheet(context);
+          _settingProvider.changeSheetElement(SheetList.currentPlan);
           return false;
         },
 
@@ -49,8 +52,7 @@ class _EssentialPlanState extends State<EssentialPlan> {
                 appBar: PageAppbar(
                   title: 'EV+ Subscription',
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    showCurrentPlanSheet(context);
+                    _settingProvider.changeSheetElement(SheetList.currentPlan);
                   },
                 ),
                 body: Padding(
@@ -152,7 +154,7 @@ class _EssentialPlanState extends State<EssentialPlan> {
                                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                                   ),
                                   onPressed: () {
-                                    showCurrentPlanSheet(context);
+                                    _settingProvider.changeSheetElement(SheetList.currentPlan);
                                   },
                                 ),
                               ),

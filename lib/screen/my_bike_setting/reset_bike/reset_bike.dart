@@ -2,8 +2,11 @@ import 'dart:collection';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/dialog.dart';
+import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/home_element/setting.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,21 +30,23 @@ class ResetBike extends StatefulWidget{
 class _ResetBikeState extends State<ResetBike> {
 
   late BikeProvider _bikeProvider;
+  late SettingProvider _settingProvider;
 
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
-        showBikeSettingSheet(context);
+        _settingProvider.changeSheetElement(SheetList.bikeSetting);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'Reset Bike',
           onPressed: () {
-            showBikeSettingSheet(context);
+            _settingProvider.changeSheetElement(SheetList.bikeSetting);
           },
         ),
         body: Stack(
@@ -50,7 +55,6 @@ class _ResetBikeState extends State<ResetBike> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
 
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),

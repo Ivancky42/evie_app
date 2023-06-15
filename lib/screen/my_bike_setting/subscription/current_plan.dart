@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/bluetooth/modelResult.dart';
-import 'package:evie_test/screen/my_account/my_account_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -12,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/function.dart';
 import '../../../api/length.dart';
@@ -20,11 +19,10 @@ import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/plan_provider.dart';
+import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_divider.dart';
-
-
 
 
 
@@ -40,6 +38,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
   late BikeProvider _bikeProvider;
   late PlanProvider _planProvider;
   late BluetoothProvider _bluetoothProvider;
+  late SettingProvider _settingProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +46,11 @@ class _CurrentPlanState extends State<CurrentPlan> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _planProvider = Provider.of<PlanProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop();
-        showBikeSettingSheet(context);
+        _settingProvider.changeSheetElement(SheetList.bikeSetting);
         return false;
       },
     child: Padding(
@@ -60,8 +59,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
         appBar: PageAppbar(
           title: 'EV+ Subscription',
           onPressed: () {
-            Navigator.of(context).pop();
-            showBikeSettingSheet(context);
+            _settingProvider.changeSheetElement(SheetList.bikeSetting);
           },
         ),
         body: Stack(
@@ -155,15 +153,13 @@ class _CurrentPlanState extends State<CurrentPlan> {
                       String key = _planProvider.availablePlanList.keys.elementAt(0);
                       PlanModel planModel = _planProvider.availablePlanList[key];
 
-
-
                       _planProvider.getPrice(planModel).then((priceModel) {
                         _planProvider.purchasePlan(_bikeProvider.currentBikeModel!.deviceIMEI!, planModel.id!, priceModel.id).then((value) {
                           changeToStripeCheckoutScreen(context, value, _bikeProvider.currentBikeModel!, planModel, priceModel);
                         });
                       });
                     } else {
-                      showProPlanSheet(context);
+                      _settingProvider.changeSheetElement(SheetList.proPlan);
                     }
                   }
                 ),

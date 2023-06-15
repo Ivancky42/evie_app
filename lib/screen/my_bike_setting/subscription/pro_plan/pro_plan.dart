@@ -8,10 +8,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 
+import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
 import '../../../../api/model/plan_model.dart';
 import '../../../../api/navigator.dart';
 import '../../../../api/provider/bike_provider.dart';
+import '../../../../api/provider/setting_provider.dart';
 import '../../../../api/sheet.dart';
 import '../../../../widgets/evie_appbar.dart';
 import '../../../../widgets/evie_button.dart';
@@ -29,17 +31,18 @@ class _ProPlanState extends State<ProPlan> {
 
   late BikeProvider _bikeProvider;
   late PlanProvider _planProvider;
+  late SettingProvider _settingProvider;
 
   @override
   Widget build(BuildContext context) {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
     _planProvider = Provider.of<PlanProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop();
-        showCurrentPlanSheet(context);
+        _settingProvider.changeSheetElement(SheetList.currentPlan);
         return false;
       },
 
@@ -50,8 +53,7 @@ class _ProPlanState extends State<ProPlan> {
       appBar: PageAppbar(
       title: 'EV+ Subscription',
       onPressed: () {
-        Navigator.of(context).pop();
-        showCurrentPlanSheet(context);
+        _settingProvider.changeSheetElement(SheetList.currentPlan);
       },
     ),
     body: Padding(
