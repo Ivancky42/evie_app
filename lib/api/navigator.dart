@@ -8,8 +8,7 @@ import 'package:evie_test/screen/my_bike_setting/firmware/firmware_update_failed
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/motion_sensitivity.dart';
 
 import 'package:evie_test/screen/my_account/edit_profile.dart';
-import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_set_colour_code.dart';
-//import 'package:evie_test/screen/my_bike_setting/subscription2/essential_plan2/essential_plan2.dart';
+//import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_set_colour_code.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
 
 import 'package:evie_test/screen/stripe_checkout.dart';
@@ -33,6 +32,8 @@ import '../screen/my_bike_setting/bike_setting/bike_setting.dart';
 import '../screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
 import '../screen/my_bike_setting/firmware/firmware_update_completed.dart';
 import '../screen/my_bike_setting/pedal_pals/invitation_sent.dart';
+import '../screen/my_bike_setting/pedal_pals/pedal_pals.dart';
+import '../screen/my_bike_setting/pedal_pals/pedal_pals_list.dart';
 import '../screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
 import '../screen/my_bike_setting/pedal_pals/user_not_found.dart';
 import '../screen/my_bike_setting/reset_bike/reset_bike.dart';
@@ -41,11 +42,6 @@ import '../screen/my_bike_setting/rfid_card/name_ev.dart';
 import '../screen/my_bike_setting/rfid_card/ev_add_failed.dart';
 import '../screen/my_bike_setting/rfid_card/ev_key.dart';
 import '../screen/my_bike_setting/rfid_card/ev_key_list.dart';
-import '../screen/my_bike_setting/share_bike/invitation_sent.dart';
-import '../screen/my_bike_setting/share_bike/share_bike.dart';
-import '../screen/my_bike_setting/share_bike/share_bike_invitation.dart';
-import '../screen/my_bike_setting/share_bike/share_bike_user_list.dart';
-import '../screen/my_bike_setting/share_bike/user_not_found.dart';
 import '../screen/my_bike_setting/sos_center/sos_center.dart';
 import '../screen/my_bike_setting/subscription/current_plan.dart';
 
@@ -554,7 +550,7 @@ void changeToShareBikeScreen(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: const ShareBike(),
+      child: const PedalPals(),
       duration: const Duration(milliseconds: 300),
     ),
   );
@@ -594,7 +590,7 @@ void changeToShareBikeUserListScreen(BuildContext context) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: const ShareBikeUserList(),
+      child: const PedalPalsList(),
       duration: const Duration(milliseconds: 300),
     ),
   );
