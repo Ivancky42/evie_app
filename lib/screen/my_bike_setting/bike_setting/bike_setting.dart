@@ -263,98 +263,107 @@ class _BikeSettingState extends State<BikeSetting> {
               Container(
                 height: 96.h,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding:
-                      EdgeInsets.fromLTRB(27.7.w, 14.67.h, 18.67.w, 14.67.h),
-                      child: Image(
-                        ///Change based on status
-                        image: AssetImage(
-                            returnBikeStatusImage(_bikeProvider.currentBikeModel?.location?.isConnected ?? true, _bikeProvider.currentBikeModel?.location?.status ?? "")),
-                        width: 86.86.h,
-                        height: 54.85.h,
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
+
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 6.w),
-                              child: Text(
-                                _bikeProvider.currentBikeModel?.deviceName ?? "",
-                                style: TextStyle(
-                                    fontSize: 18.sp, fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr?
-                        Container(
-                          width: 143.w,
-                          height: 30.h,
-                          child: OutlinedButton(
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/icons/bluetooth_small_white.svg",
-                                    height:16.h,
-                                    width: 16.w,
-                                    color: EvieColors.primaryColor,
-                                  ),
-                                  Text("Disconnect Bike", style: TextStyle(fontSize: 12.sp, color: EvieColors.primaryColor,)),]
-                            ),
-                            onPressed: () async {
-                              await _bluetoothProvider.stopScan();
-                              await _bluetoothProvider.disconnectDevice();
-                            },
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(width: 1.0, color: EvieColors.primaryColor),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)
-                              ),
-                              elevation: 0.0,
-                              backgroundColor: Colors.transparent,
-                            ),
-                          ),
-                        ) :
-                        Container(
-                          width: 143.w,
-                          height: 30.h,
-                          child: ElevatedButton(
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/icons/bluetooth_small_white.svg",
-                                    height:16.h,
-                                    width: 16.w,
-                                  ),
-                                  Text(
-                                    deviceConnectResult == DeviceConnectResult.connecting
-                                        || deviceConnectResult == DeviceConnectResult.scanning
-                                        || deviceConnectResult == DeviceConnectResult.partialConnected ? "Connecting"
-                                        :_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr
-                                        ?  "Connected" : "Connect Bike", style: TextStyle(fontSize: 12.sp, color: Color(0xffECEDEB)),),]
-                            ),
-                            onPressed: () async {
-                              checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              elevation: 0.0,
-                              backgroundColor: EvieColors.primaryColor,
-                            ),
+                        Padding(
+                          padding:
+                          EdgeInsets.fromLTRB(27.7.w, 14.67.h, 6.w, 14.67.h),
+                          child: Image(
+                            ///Change based on status
+                            image: const AssetImage(
+                              //returnBikeStatusImage(_bikeProvider.currentBikeModel?.location?.isConnected ?? true, _bikeProvider.currentBikeModel?.location?.status ?? "")),
+                                "assets/buttons/bike_update_photo.png"),
+                            width: 49.h,
+                            height: 49.h,
                           ),
                         ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 6.w),
+                          child: Text(
+                            _bikeProvider.currentBikeModel?.deviceName ?? "",
+                            style: EvieTextStyles.h3,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ),
+                        Visibility(
+                          visible: _bikeProvider.isPlanSubscript ?? false,
+                          child: SvgPicture.asset(
+                            "assets/icons/batch_tick.svg",
+                            height: 25.h,
+                            width: 25.w,
+                          ),)
                       ],
+                    ),
+
+                    deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr?
+                    Padding(
+                      padding: EdgeInsets.only(right:19.w),
+                      child: Container(
+                        width: 143.w,
+                        height: 30.h,
+                        child: OutlinedButton(
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/icons/bluetooth_small_white.svg",
+                                  height:16.h,
+                                  width: 16.w,
+                                  color: EvieColors.primaryColor,
+                                ),
+                                Text("Disconnect Bike", style: TextStyle(fontSize: 12.sp, color: EvieColors.primaryColor,)),]
+                          ),
+                          onPressed: () async {
+                            await _bluetoothProvider.stopScan();
+                            await _bluetoothProvider.disconnectDevice();
+                          },
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(width: 1.0, color: EvieColors.primaryColor),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)
+                            ),
+                            elevation: 0.0,
+                            backgroundColor: Colors.transparent,
+                          ),
+                        ),
+                      ),
+                    ) :
+                    Padding(
+                      padding: EdgeInsets.only(right:19.w),
+                      child: Container(
+                        width: 143.w,
+                        height: 30.h,
+                        child: ElevatedButton(
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/icons/bluetooth_small_white.svg",
+                                  height:16.h,
+                                  width: 16.w,
+                                ),
+                                Text(
+                                  deviceConnectResult == DeviceConnectResult.connecting
+                                      || deviceConnectResult == DeviceConnectResult.scanning
+                                      || deviceConnectResult == DeviceConnectResult.partialConnected ? "Connecting"
+                                      :_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr
+                                      ?  "Connected" : "Connect Bike", style: TextStyle(fontSize: 12.sp, color: Color(0xffECEDEB)),),]
+                          ),
+                          onPressed: () async {
+                            checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            elevation: 0.0,
+                            backgroundColor: EvieColors.primaryColor,
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 ),

@@ -57,7 +57,7 @@ class _NameBikeState extends State<NameBike> {
                     SizedBox(
                       height: 5.h,
                     ),
-                    const EvieProgressIndicator(currentPageNumber: 5),
+                    const EvieProgressIndicator(currentPageNumber: 5, totalSteps: 8,),
 
                     Text(
                       "Name your bike",

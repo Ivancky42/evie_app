@@ -6,20 +6,24 @@ import '../../api/colours.dart';
 class EvieProgressIndicator extends StatelessWidget {
 
   final int currentPageNumber;
+  final int totalSteps;
+  final EdgeInsetsGeometry;
 
   const EvieProgressIndicator({
     Key? key,
     required this.currentPageNumber,
+    required this.totalSteps,
+    this.EdgeInsetsGeometry,
 
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-    padding: EdgeInsets.fromLTRB(70.w, 66.h, 70.w,50.h),
+    padding: totalSteps == 8 ? EdgeInsets.fromLTRB(70.w, 66.h, 70.w,50.h) : EdgeInsets.fromLTRB(151.w, 36.h, 151.w,0.h),
     child: StepProgressIndicator(
     customColor: (index) => index < currentPageNumber ? EvieColors.lightPurple : index > currentPageNumber ? EvieColors.progressBarGrey : EvieColors.primaryColor,
-    totalSteps: 8,
+    totalSteps: totalSteps,
     currentStep: currentPageNumber,
     selectedSize: 4,
     unselectedSize: 4,

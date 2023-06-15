@@ -9,7 +9,9 @@ import 'package:evie_test/widgets/evie_button.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
+import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
+import '../../../widgets/evie_progress_indicator.dart';
 
 
 class InvitationSent extends StatefulWidget{
@@ -21,8 +23,12 @@ class InvitationSent extends StatefulWidget{
 
 class _InvitationSentState extends State<InvitationSent> {
 
+  late SettingProvider _settingProvider;
+
   @override
   Widget build(BuildContext context) {
+
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
         onWillPop: () async {
@@ -37,7 +43,12 @@ class _InvitationSentState extends State<InvitationSent> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.fromLTRB(16.w,76.h,16.w,4.h),
+                        padding: EdgeInsets.only(bottom: 21.h),
+                        child: EvieProgressIndicator(currentPageNumber: 2, totalSteps: 3,),
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(16.w, 21.h, 16.w, 4.h),
                         child: Text(
                           "Invitation Sent",
                           style: EvieTextStyles.h2,
@@ -54,7 +65,6 @@ class _InvitationSentState extends State<InvitationSent> {
                         ),
                       ),
 
-
                       Align(
                         alignment: Alignment.center,
                         child: Padding(
@@ -64,10 +74,7 @@ class _InvitationSentState extends State<InvitationSent> {
                           ),
                         ),
                       ),
-
                     ]),
-
-
 
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -90,10 +97,7 @@ class _InvitationSentState extends State<InvitationSent> {
                     ),
                   ),
                 ),
-
-
               ]),
         ));
   }
-
 }

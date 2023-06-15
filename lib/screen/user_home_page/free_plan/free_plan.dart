@@ -206,76 +206,79 @@ class _FreePlanState extends State<FreePlan> {
                                         color:  EvieColors.lightBlack,
                                         child: Container(
                                           alignment: Alignment.centerLeft,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Image.asset('assets/images/bike_round.png'),
-                                                ),
-                                                Padding(
-                                                  padding:  EdgeInsets.only(left: 12.w),
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-
-                                                      Row(
-                                                        children: [
-                                                          Text(
-                                                            _bikeProvider.currentBikeModel?.deviceName ?? "loading",
-                                                            style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite),
-                                                          ),
-                                                          // Text(
-                                                          //   "icons",
-                                                          //   style: EvieTextStyles.h3.copyWith(color: EvieColors.grayishWhite),
-                                                          // ),
-                                                        ],
-                                                      ),
-
-                                                      deviceConnectResult == DeviceConnectResult.connected ?
-                                                      Row(
-                                                        children: [
-                                                          SvgPicture.asset(
-                                                            "assets/icons/bluetooth_connected.svg",
-                                                          ),
-                                                          Text(
-                                                            "Connected",
-                                                            style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                                          ),
-                                                        ],
-                                                      ) :
-                                                      Row(
-                                                        children: [
-                                                          SvgPicture.asset(
-                                                            "assets/icons/bluetooth_disconnected.svg",
-                                                          ),
-                                                          Text(
-                                                            "Disconnected",
-                                                            style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
+                                          child: SingleChildScrollView(
+                                            physics: NeverScrollableScrollPhysics(),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Image.asset('assets/images/bike_round.png'),
                                                   ),
+                                                  Padding(
+                                                    padding:  EdgeInsets.only(left: 12.w),
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              _bikeProvider.currentBikeModel?.deviceName ?? "loading",
+                                                              style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite),
+                                                            ),
+                                                            // Text(
+                                                            //   "icons",
+                                                            //   style: EvieTextStyles.h3.copyWith(color: EvieColors.grayishWhite),
+                                                            // ),
+                                                          ],
+                                                        ),
+
+                                                        deviceConnectResult == DeviceConnectResult.connected ?
+                                                        Row(
+                                                          children: [
+                                                            SvgPicture.asset(
+                                                              "assets/icons/bluetooth_connected.svg",
+                                                            ),
+                                                            Text(
+                                                              "Connected",
+                                                              style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                                            ),
+                                                          ],
+                                                        ) :
+                                                        Row(
+                                                          children: [
+                                                            SvgPicture.asset(
+                                                              "assets/icons/bluetooth_disconnected.svg",
+                                                            ),
+                                                            Text(
+                                                              "Disconnected",
+                                                              style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],),
+                                                Padding(
+                                                  padding: EdgeInsets.only(right: 22.5.w),
+                                                  child: IconButton(
+                                                      onPressed: (){
+                                                        showMaterialModalBottomSheet(
+                                                            expand: false,
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return SwitchBike();
+                                                            });
+                                                  },
+                                                      icon: SvgPicture.asset("assets/buttons/down_white.svg",)),
                                                 ),
-                                              ],),
-                                              Padding(
-                                                padding: EdgeInsets.only(right: 22.5.w),
-                                                child: IconButton(
-                                                    onPressed: (){
-                                                      showMaterialModalBottomSheet(
-                                                          expand: false,
-                                                          context: context,
-                                                          builder: (context) {
-                                                            return SwitchBike();
-                                                          });
-                                                },
-                                                    icon: SvgPicture.asset("assets/buttons/down_white.svg",)),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         )
                                     ),

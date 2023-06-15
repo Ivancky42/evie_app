@@ -12,16 +12,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
 import '../../../api/dialog.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/function.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/current_user_provider.dart';
+import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
@@ -30,19 +33,20 @@ import '../../../widgets/evie_textform.dart';
 
 ///User profile page with user account information
 
-class ShareBikeUserList extends StatefulWidget {
-  const ShareBikeUserList({Key? key}) : super(key: key);
+class PedalPalsList extends StatefulWidget {
+  const PedalPalsList({Key? key}) : super(key: key);
 
   @override
-  _ShareBikeUserListState createState() => _ShareBikeUserListState();
+  _PedalPalsListState createState() => _PedalPalsListState();
 }
 
-class _ShareBikeUserListState extends State<ShareBikeUserList> {
+class _PedalPalsListState extends State<PedalPalsList> {
 
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late CurrentUserProvider _currentUserProvider;
   late StreamSubscription deleteRFIDStream;
+  late SettingProvider _settingProvider;
 
   bool isManageList = false;
   bool isOwner = false;
@@ -55,21 +59,20 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     isOwner = _bikeProvider.isOwner!;
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop();
-        showBikeSettingSheet(context);
+        _settingProvider.changeSheetElement(SheetList.bikeSetting);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'PedalPals',
           onPressed: () {
-            Navigator.of(context).pop();
-            showBikeSettingSheet(context);
+            _settingProvider.changeSheetElement(SheetList.bikeSetting);
           },
         ),
         body: Stack(
@@ -93,7 +96,60 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                       GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: (){
+                          SmartDialog.show(
+                              widget: Form(
+                                key: _formKey,
+                                child: EvieDoubleButtonDialog(
+                                    title: "Team Name",
+                                    childContent: Container(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text("Give your team an epic name", style: TextStyle(fontSize: 16.sp, color: Color(0xff252526)),),
+                                          Padding(
+                                            padding:  EdgeInsets.fromLTRB(0.h, 12.h, 0.h, 8.h),
+                                            child: EvieTextFormField(
+                                              controller: _nameController,
+                                              obscureText: false,
+                                              keyboardType: TextInputType.name,
+                                              hintText: "Create an epic team name",
+                                              labelText: "Team Name",
+                                              validator: (value) {
+                                                if (value == null || value.isEmpty) {
+                                                  return 'Please enter your name';
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    leftContent: "Cancel",
+                                    rightContent: "Save",
+                                    onPressedLeft: (){SmartDialog.dismiss();},
+                                    onPressedRight: () async {
+                                      if (_formKey.currentState!.validate()) {
+                                        SmartDialog.dismiss();
+                                        final result = await _bikeProvider.updateTeamName(_nameController.text.trim());
 
+                                        result == true ?
+                                        SmartDialog.show(widget: EvieSingleButtonDialog(
+                                            title: "Success",
+                                            content: "Team name uploaded",
+                                            rightContent: "OK",
+                                            onPressedRight: (){SmartDialog.dismiss();}))
+                                            :
+                                        SmartDialog.show(widget: EvieSingleButtonDialog(
+                                            title: "Error",
+                                            content: "Please try again",
+                                            rightContent: "OK",
+                                            onPressedRight: (){
+                                              SmartDialog.dismiss();
+                                            }));
+                                      }
+                                    }),
+                              ));
                         },
                         child: SvgPicture.asset(
                           "assets/buttons/pen_edit.svg",
@@ -235,7 +291,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                       ///Check if bike already have 5 user
                       if(_bikeProvider.bikeUserList.length <= 5 ){
                         Navigator.of(context).pop();
-                        showShareBikeSheet(context);
+                        showPedalPalsSheet(context);
                       }else{
                         SmartDialog.show(widget: EvieSingleButtonDialog(
                             title: "Exist Limit",

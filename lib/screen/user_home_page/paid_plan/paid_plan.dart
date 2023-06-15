@@ -230,6 +230,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                             }
                           }),
                     ),
+
                     Expanded(
                       child: Column(
                         children: [

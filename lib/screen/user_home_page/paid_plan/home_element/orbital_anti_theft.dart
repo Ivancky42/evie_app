@@ -105,66 +105,67 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                 future: getLocationModel(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Stack(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 16.h),
-                          child: Center(
-                            child: SingleChildScrollView(
-                              physics: const NeverScrollableScrollPhysics(),
-                              child: Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Container(
-                                  alignment: Alignment.bottomCenter,
-                                  height: 240.h,
-                                  child: MapWidget(
-                                    onScrollListener: onMapScrollListener,
-                                    key: const ValueKey("mapWidget"),
-                                    resourceOptions: ResourceOptions(
-                                        accessToken: _locationProvider.defPublicAccessToken),
-                                    onMapCreated: _onMapCreated,
-                                    styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
-                                    cameraOptions: CameraOptions(
-                                      center: Point(
-                                          coordinates: Position(
-                                              _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                                              _locationProvider.locationModel?.geopoint.latitude ?? 0))
-                                          .toJson(),
-                                      zoom: 12,
-                                    ),
-                                    // gestureRecognizers: [
-                                    //   Factory<OneSequenceGestureRecognizer>(
-                                    //           () => EagerGestureRecognizer())
-                                    // ].toSet(),
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 16.h),
+                      child: Center(
+                        child: SingleChildScrollView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              alignment: Alignment.bottomCenter,
+                              height: 300.h,
+                              width: 150.w,
+                              child: Transform.translate(
+                                offset: Offset(0, -75.h),
+                                child: MapWidget(
+                                  onScrollListener: onMapScrollListener,
+                                  key: const ValueKey("mapWidget"),
+                                  resourceOptions: ResourceOptions(
+                                      accessToken: _locationProvider.defPublicAccessToken),
+                                  onMapCreated: _onMapCreated,
+                                  styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
+                                  cameraOptions: CameraOptions(
+                                    center: Point(
+                                        coordinates: Position(
+                                            _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                                            _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                                        .toJson(),
+                                    zoom: 12,
                                   ),
-
-                                  // child: Mapbox_Widget(
-                                  //   isInteract: false,
-                                  //   accessToken: _locationProvider.defPublicAccessToken,
-                                  //   //onMapCreated: _onMapCreated,
-                                  //   mapController: mapController,
-                                  //   markers: markers,
-                                  //   // onUserLocationUpdate: (userLocation) {
-                                  //   //   if (this.userLocation != null) {
-                                  //   //     this.userLocation = userLocation;
-                                  //   //     getDistanceBetween();
-                                  //   //   }
-                                  //   //   else {
-                                  //   //     this.userLocation = userLocation;
-                                  //   //     getDistanceBetween();
-                                  //   //     runSymbol();
-                                  //   //   }
-                                  //   // },
-                                  //   latitude: _locationProvider.locationModel!.geopoint.latitude,
-                                  //   longitude: _locationProvider.locationModel!.geopoint.longitude,
-                                  //   zoom: 15,
-                                  // ),
+                                  // gestureRecognizers: [
+                                  //   Factory<OneSequenceGestureRecognizer>(
+                                  //           () => EagerGestureRecognizer())
+                                  // ].toSet(),
                                 ),
                               ),
+
+                              // child: Mapbox_Widget(
+                              //   isInteract: false,
+                              //   accessToken: _locationProvider.defPublicAccessToken,
+                              //   //onMapCreated: _onMapCreated,
+                              //   mapController: mapController,
+                              //   markers: markers,
+                              //   // onUserLocationUpdate: (userLocation) {
+                              //   //   if (this.userLocation != null) {
+                              //   //     this.userLocation = userLocation;
+                              //   //     getDistanceBetween();
+                              //   //   }
+                              //   //   else {
+                              //   //     this.userLocation = userLocation;
+                              //   //     getDistanceBetween();
+                              //   //     runSymbol();
+                              //   //   }
+                              //   // },
+                              //   latitude: _locationProvider.locationModel!.geopoint.latitude,
+                              //   longitude: _locationProvider.locationModel!.geopoint.longitude,
+                              //   zoom: 15,
+                              // ),
+
                             ),
                           ),
                         ),
-                      ],
+                      ),
                     );
                   } else {
                     return const Center(
@@ -174,40 +175,47 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                 }),
           ),
 
-          ///hello
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SvgPicture.asset(getCurrentBikeStatusIcon(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),),
-                  Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
-                    style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray),),
+              padding: EdgeInsets.only(left:8.w, right:8.w),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset(getCurrentBikeStatusIcon(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),),
+                    Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
+                      style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray),),
 
-                  selectedGeopoint != null ? FutureBuilder<dynamic>(
-                      future: _locationProvider.returnPlaceMarks(selectedGeopoint!.latitude, selectedGeopoint!.longitude),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(
-                            snapshot.data.name.toString(),
-                            style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
-                          );
-                        }else{
-                          return Text(
-                            "loading",
-                            style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
-                          );
+                    selectedGeopoint != null ? FutureBuilder<dynamic>(
+                        future: _locationProvider.returnPlaceMarks(selectedGeopoint!.latitude, selectedGeopoint!.longitude),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Text(
+                              snapshot.data.name.toString(),
+                              style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack, height:1.2),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            );
+                          }else{
+                            return Text(
+                              "loading",
+                              style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                            );
+                          }
                         }
-                      }
-                  )
-                      : Text(_locationProvider.currentPlaceMark?.name ?? "Not available",style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),),
+                    )
+                        : Text(_locationProvider.currentPlaceMark?.name ?? "Not available",
+                      style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
 
-                  ///Bike provider lastUpdated minus current timestamp
-                  Text(calculateTimeAgo(_bikeProvider.currentBikeModel!.lastUpdated!.toDate()),
-                      style: EvieTextStyles.body14.copyWith(color: EvieColors.mediumLightBlack)),
-                ],
+                    ///Bike provider lastUpdated minus current timestamp
+                    Text(calculateTimeAgo(_bikeProvider.currentBikeModel!.lastUpdated!.toDate()),
+                        style: EvieTextStyles.body14.copyWith(color: EvieColors.mediumLightBlack)),
+                  ],
+                ),
               ),
             ),
           ),
@@ -273,7 +281,6 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
           }else{
             return Container();
           }
-
         },
         query: FirebaseFirestore.instance.collection("bikes")
             .doc(_bikeProvider.currentBikeModel!.deviceIMEI!)
@@ -315,6 +322,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
             }
           }
         },
+
         //height: 255.h,
         height: double.infinity,
         width: double.infinity,

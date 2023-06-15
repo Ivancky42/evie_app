@@ -1,27 +1,21 @@
 import 'dart:collection';
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sheet.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_single_button_dialog.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:http/http.dart' as http;
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
+import 'package:provider/provider.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import 'package:share_plus/share_plus.dart';
+
+import '../../../api/provider/setting_provider.dart';
 
 
 class UserNotFound extends StatefulWidget{
@@ -32,10 +26,11 @@ class UserNotFound extends StatefulWidget{
 }
 
 class _UserNotFoundState extends State<UserNotFound> {
-
+  late SettingProvider _settingProvider;
   @override
   Widget build(BuildContext context) {
 
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -61,22 +56,15 @@ class _UserNotFoundState extends State<UserNotFound> {
                       padding: EdgeInsets.fromLTRB(16.w,4.h,16.w,4.h),
                       child: Container(
                         child: Text(
-                          "User not found in EVIE database.",
+                          "Share this app with the rider you would like to share bike with. Ask to install and register, then share again."
+                              "\n\n\n"
+                              "1. Share the app: Easily share the app with the rider you wish to bike with. \n"
+                              "2. Install and register: Kindly ask them to install the app and complete the registration process. \n"
+                              "3. Share once more: Once they are registered, share the app again to ensure seamless connection.",
                           style: EvieTextStyles.body18,
                         ),
                       ),
                     ),
-
-                    Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(28.w,98.h,28.w,127.84.h),
-                        child: SvgPicture.asset(
-                          "assets/images/send_email.svg",
-                        ),
-                      ),
-                    ),
-
 
               ]),
 
@@ -129,8 +117,7 @@ class _UserNotFoundState extends State<UserNotFound> {
                           style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                       ),
                       onPressed: () {
-                        Navigator.of(context).pop();
-                        showShareBikeInvitationSheet(context);
+                        _settingProvider.changeSheetElement(SheetList.shareBikeInvitation);
                       },
                     ),
                   ),

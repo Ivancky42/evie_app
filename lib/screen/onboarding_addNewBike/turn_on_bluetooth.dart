@@ -52,7 +52,7 @@ class _TurnOnBluetoothState extends State<TurnOnBluetooth> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
 
-                    const EvieProgressIndicator(currentPageNumber: 1),
+                    const EvieProgressIndicator(currentPageNumber: 1, totalSteps: 8,),
 
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),

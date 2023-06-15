@@ -1,7 +1,9 @@
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../api/colours.dart';
 import 'evie_textform.dart';
 
 ///Cupertino switch widget
@@ -27,30 +29,35 @@ class EvieSwitch extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         title != null
-            ? Column(
+            ? Expanded(
+              child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title ?? "",
-              style: TextStyle(fontSize: 16.sp, color: Color(0xff252526)),
-            ),
-            Container(
-              width: 290.w,
-              child: Text(
-                text,
-                style: TextStyle(fontSize: 15.sp, color: Color(0xff5F6060)),
+              Text(
+                title ?? "",
+                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
               ),
-            ),
+
+              Container(
+                child: Text(
+                  text,
+                  style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                ),
+              ),
           ],
-        )
+        ),
+            )
         : Text(text, style: TextStyle(fontSize: 16.sp),),
 
-    CupertinoSwitch(
-    value: value,
-    activeColor:  const Color(0xff6A51CA),
-    thumbColor: thumbColor,
-    trackColor: const Color(0xff6A51CA).withOpacity(0.5),
-    onChanged: onChanged,
+    Padding(
+      padding: EdgeInsets.only(left: 8.w),
+      child: CupertinoSwitch(
+      value: value,
+      activeColor:  const Color(0xff6A51CA),
+      thumbColor: thumbColor,
+      trackColor: const Color(0xff6A51CA).withOpacity(0.5),
+      onChanged: onChanged,
+      ),
     ),
       ],
     );

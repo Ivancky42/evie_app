@@ -435,6 +435,29 @@ class BikeProvider extends ChangeNotifier {
     return result;
   }
 
+  Future updateTeamName(String teamName) async {
+    bool result;
+
+    try {
+
+      await FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI)
+          .set({
+        "pedalPals" : {
+          'name' : teamName,
+          'updated' : Timestamp.now(),
+        },
+      }, SetOptions(merge: true));
+
+      result = true;
+    } catch (e) {
+      debugPrint(e.toString());
+      result = false;
+    }
+    return result;
+  }
+
   Future updateSharedBike(UserModel userModel) async {
     bool result;
 

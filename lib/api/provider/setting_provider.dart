@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../enumerate.dart';
+
 enum MeasurementSetting{
   ///meters
   metricSystem,
@@ -18,6 +20,8 @@ class SettingProvider with ChangeNotifier {
 
   ThemeMode? currentThemeMode;
   String? themeString;
+
+  SheetList? currentSheetList;
 
   SettingProvider() {
     init();
@@ -111,6 +115,11 @@ class SettingProvider with ChangeNotifier {
     currentThemeMode = ThemeMode.dark;
     SharedPreferences prefs = await _prefs;
     await prefs.setString('themeMode', "dark");
+    notifyListeners();
+  }
+
+  changeSheetElement(SheetList sheetList){
+    currentSheetList = sheetList;
     notifyListeners();
   }
 
