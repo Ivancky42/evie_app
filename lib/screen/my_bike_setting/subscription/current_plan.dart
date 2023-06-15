@@ -140,7 +140,6 @@ class _CurrentPlanState extends State<CurrentPlan> {
               ),
             ),
 
-
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(

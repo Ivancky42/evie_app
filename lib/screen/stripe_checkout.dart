@@ -54,6 +54,7 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
             _redirectToStripe(widget.sessionId);
           }
         },
+
         navigationDelegate: (NavigationRequest request) {
           if (request.url.startsWith('https://evie-126a6.web.app/success.html')) {
             SmartDialog.show(widget: EvieSingleButtonDialog(title: 'Successfully subscribed', content: 'Plan Already subscribed.', rightContent: 'View Plan', onPressedRight: () {Navigator.of(context).pop();},));

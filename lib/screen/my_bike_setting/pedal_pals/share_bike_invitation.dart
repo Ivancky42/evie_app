@@ -132,7 +132,6 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                             content: "Email not register in database",
                                             rightContent: "Close",
                                             onPressedRight: () {
-                                              SmartDialog.dismiss();
                                               _settingProvider.changeSheetElement(SheetList.userNotFound);
 
                                             }

@@ -71,7 +71,7 @@ class _UserNotFoundState extends State<UserNotFound> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom = 108.h),
+                    padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
                     child: EvieButton(
                       width: double.infinity,
                       height: 48.h,
@@ -85,7 +85,13 @@ class _UserNotFoundState extends State<UserNotFound> {
                         'https://apps.apple.com/my/app/pok%C3%A9mon-magikarp-jump/id1162679453' :
                         'https://play.google.com/store/apps/details?id=jp.pokemon.koiking&hl=en&gl=US';
 
-                        await Share.share('Hello there, you could download EVIE app from: \n $urlPreview');
+                        try{
+                          await Share.share('Hello there, you could download EVIE app from: \n $urlPreview');
+                          print("Success");
+                        }catch(e){
+                          print("Share fail");
+                        }
+
 
                         // List<XFile> xfiles = [XFile('assets/images/evie_bike_shadow_half.png')];
                         //
@@ -104,24 +110,25 @@ class _UserNotFoundState extends State<UserNotFound> {
                     ),
                   ),
                 ),
-
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
-                    child: EvieButton(
-                      width: double.infinity,
-                      height: 48.h,
-                      child: Text(
-                        "Done",
-                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
-                      ),
-                      onPressed: () {
-                        _settingProvider.changeSheetElement(SheetList.shareBikeInvitation);
-                      },
-                    ),
-                  ),
-                ),
+                
+                //
+                // Align(
+                //   alignment: Alignment.bottomCenter,
+                //   child: Padding(
+                //     padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
+                //     child: EvieButton(
+                //       width: double.infinity,
+                //       height: 48.h,
+                //       child: Text(
+                //         "Done",
+                //           style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
+                //       ),
+                //       onPressed: () {
+                //         _settingProvider.changeSheetElement(SheetList.shareBikeInvitation);
+                //       },
+                //     ),
+                //   ),
+                // ),
 
 
 
