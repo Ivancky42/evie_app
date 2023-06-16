@@ -67,7 +67,8 @@ class _YearStatusState extends State<YearStatus> {
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
                 Text(
-                  "${carbonFootPrint.toInt()}g/month",
+                  ///Carbon footprint per month = total carbon footprint / 12
+                  "${((_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.carbonPrint!))/12).toStringAsFixed(0)}g/month",
                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                 )
               ],

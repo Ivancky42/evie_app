@@ -595,4 +595,23 @@ pointBounce2(MapboxMap? mapboxMap, LocationProvider locationProvider, userPositi
 
 }
 
+returnBorderColour(LocationProvider locationProvider){
+  if(locationProvider.locationModel?.isConnected == false || locationProvider.locationModel?.status == "fall" || locationProvider.locationModel?.status == "warning"){
+    return Border.all(
+      color: EvieColors.orange,
+      width: 2.8.w,
+    );
+  }else if(locationProvider.locationModel?.status == "danger"){
+    return Border.all(
+      color: EvieColors.darkRed,
+      width: 2.8.w,
+    );
+  }else{
+    return Border.all(
+      color: Colors.transparent,
+      width: 2.8.w,
+    );
+  }
+
+}
 

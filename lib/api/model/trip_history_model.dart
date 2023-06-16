@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TripHistoryModel {
   ///m, meter
+  int? carbonPrint;
+
   int? distance;
 
   int? startBattery;
@@ -17,6 +19,8 @@ class TripHistoryModel {
   String? endAddress;
 
   TripHistoryModel({
+    this.carbonPrint,
+
     this.distance,
 
     this.startBattery,
@@ -34,6 +38,8 @@ class TripHistoryModel {
 
   factory TripHistoryModel.fromJson(Map json) {
     return TripHistoryModel(
+      carbonPrint: json['carbonPrint'] ?? 0,
+      
       distance: json['distance'] ?? 0,
 
       startBattery: json['startBattery'] ?? 0,

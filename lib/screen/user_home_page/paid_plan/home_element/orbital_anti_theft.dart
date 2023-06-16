@@ -106,16 +106,15 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Padding(
-                      padding: EdgeInsets.only(bottom: 16.h),
+                      padding: EdgeInsets.only(bottom: 10.h),
                       child: Center(
                         child: SingleChildScrollView(
-                          physics: const NeverScrollableScrollPhysics(),
                           child: Align(
-                            alignment: Alignment.bottomCenter,
+                            alignment: Alignment.bottomLeft,
                             child: Container(
-                              alignment: Alignment.bottomCenter,
+                              alignment: Alignment.bottomLeft,
                               height: 300.h,
-                              width: 150.w,
+                              width: 170.w,
                               child: Transform.translate(
                                 offset: Offset(0, -75.h),
                                 child: MapWidget(
@@ -177,45 +176,45 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
 
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(left:8.w, right:8.w),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SvgPicture.asset(getCurrentBikeStatusIcon(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),),
-                    Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
-                      style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray),),
+              padding: EdgeInsets.only(left:3.w, right:8.w),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SvgPicture.asset(getCurrentBikeStatusIcon(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),),
+                  Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
+                    style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray),),
 
-                    selectedGeopoint != null ? FutureBuilder<dynamic>(
-                        future: _locationProvider.returnPlaceMarks(selectedGeopoint!.latitude, selectedGeopoint!.longitude),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Text(
-                              snapshot.data.name.toString(),
-                              style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack, height:1.2),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                            );
-                          }else{
-                            return Text(
-                              "loading",
-                              style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
-                            );
-                          }
+                  selectedGeopoint != null ? FutureBuilder<dynamic>(
+                      future: _locationProvider.returnPlaceMarks(selectedGeopoint!.latitude, selectedGeopoint!.longitude),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(
+                            snapshot.data.name.toString(),
+                            style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack, height:1.2),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          );
+                        }else{
+                          return Text(
+                            "loading",
+                            style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                          );
                         }
-                    )
-                        : Text(_locationProvider.currentPlaceMark?.name ?? "Not available",
-                      style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                    ),
+                      }
+                  )
+                      : Text(_locationProvider.currentPlaceMark?.name ?? "Not available",
+                    style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
 
-                    ///Bike provider lastUpdated minus current timestamp
-                    Text(calculateTimeAgo(_bikeProvider.currentBikeModel!.lastUpdated!.toDate()),
+                  ///Bike provider lastUpdated minus current timestamp
+                  SingleChildScrollView(
+                    child: Text(calculateTimeAgo(_bikeProvider.currentBikeModel!.lastUpdated!.toDate()),
                         style: EvieTextStyles.body14.copyWith(color: EvieColors.mediumLightBlack)),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -296,6 +295,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.w),
+          border: returnBorderColour(_locationProvider),
         // gradient: SweepGradient(
         //     startAngle: 0,
         //     colors: [Colors.white,EvieColors.lightRed,Colors.white,EvieColors.lightRed],
