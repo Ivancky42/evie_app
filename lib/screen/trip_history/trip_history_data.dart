@@ -53,11 +53,12 @@ class _TripHistoryDataState extends State<TripHistoryData> {
   void initState() {
     pickedDate = DateTime(now.year, now.month, now.day);
 
-    selectedDate = widget.format == TripFormat.week ?
-    "${pickedDate!.subtract(Duration(days: 6)).day}-${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}" :
-    widget.format == TripFormat.month ?
-    "${monthsInYear[pickedDate!.month]} ${pickedDate!.year}" :
-    "${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}";
+    selectedDate = widget.format ==
+        TripFormat.week ?
+        "${monthsInYear[pickedDate!.month]} ${pickedDate!.subtract(Duration(days: 6)).day}-${pickedDate!.day} ${pickedDate!.year}" :
+        widget.format == TripFormat.month ?
+        "${monthsInYear[pickedDate!.month]} ${pickedDate!.year}" :
+        "${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}";
 
     _tooltip = TooltipBehavior(
         enable: true,
@@ -171,18 +172,24 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                             ), ), child: child!);
                         },
                       );
-
                         if(picked == null){
                           setState(() {
                             pickedDate == DateTime.now();
                           });
                         }else{
-                          setState(() {
-                            pickedDate = picked;
-                            isFirst = false;
-                            selectedDate = "${monthsInYear[pickedDate!.month]} ${pickedDate!.day}-${pickedDate!.add(Duration(days: 6)).day} ${pickedDate!.year}";
-
-                          });
+                          if(picked.day == DateTime.now().day && picked.month == DateTime.now().month && picked.year == DateTime.now().year){
+                            setState(() {
+                              pickedDate = picked;
+                              isFirst = true;
+                              selectedDate = "${monthsInYear[pickedDate!.month]} ${pickedDate!.subtract(Duration(days: 6)).day}-${pickedDate!.day} ${pickedDate!.year}";
+                            });
+                          }else{
+                            setState(() {
+                              pickedDate = picked;
+                              isFirst = false;
+                              selectedDate = "${monthsInYear[pickedDate!.month]} ${pickedDate!.day}-${pickedDate!.add(Duration(days: 6)).day} ${pickedDate!.year}";
+                            });
+                          }
                         }
                     },
                     child: SvgPicture.asset(
