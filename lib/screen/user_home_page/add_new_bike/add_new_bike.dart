@@ -129,47 +129,49 @@ class _AddNewBikeState extends State<AddNewBike> {
                         SingleChildScrollView(
                           child: Column(
                             children: [
-                          Container(
-                            height: 73.33.h,
-                            color:  EvieColors.lightBlack,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Image.asset('assets/images/bike_round.png'),
-                                    ),
-                                    Padding(
-                                      padding:  EdgeInsets.only(left: 12.w),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-
-                                          Row(
-                                            children: [
-                                              Text(
-                                                "My Bike",
-                                                style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite),
-                                              ),
-                                              // Text(
-                                              //   "icons",
-                                              //   style: EvieTextStyles.h3.copyWith(color: EvieColors.grayishWhite),
-                                              // ),
-                                            ],
-                                          ),
-
-                                          Text(
-                                            "Bike status",
-                                            style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                          ),
-                                        ],
+                          SingleChildScrollView(
+                            child: Container(
+                              height: 73.33.h,
+                              color:  EvieColors.lightBlack,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image.asset('assets/images/bike_round.png'),
                                       ),
-                                    ),
-                                  ],),
-                              ],
+                                      Padding(
+                                        padding:  EdgeInsets.only(left: 12.w),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  "My Bike",
+                                                  style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite),
+                                                ),
+                                                // Text(
+                                                //   "icons",
+                                                //   style: EvieTextStyles.h3.copyWith(color: EvieColors.grayishWhite),
+                                                // ),
+                                              ],
+                                            ),
+
+                                            Text(
+                                              "Bike status",
+                                              style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],),
+                                ],
+                              ),
                             ),
                           ),
 
