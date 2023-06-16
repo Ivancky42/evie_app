@@ -355,11 +355,11 @@ class _FreePlanState extends State<FreePlan> {
                                                mainAxisAlignment: MainAxisAlignment.end,
                                                children: [
                                                  SvgPicture.asset(
-                                                   getBatteryImage(_bikeProvider.currentBikeModel?.batteryPercent ?? 0),
+                                                   getBatteryImage(int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")),
                                                    width: 36.w,
                                                    height: 36.h,
                                                  ),
-                                                 Text("${_bikeProvider.currentBikeModel?.batteryPercent ?? 0} %", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
+                                                 Text("${int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")} %", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
                                                  Text("Est 0km", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                                                  ),
                                                  SizedBox(height: 16.h,),

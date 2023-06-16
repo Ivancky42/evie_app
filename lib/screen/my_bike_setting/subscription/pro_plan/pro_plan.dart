@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-
 import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
 import '../../../../api/model/plan_model.dart';
@@ -18,7 +17,6 @@ import '../../../../api/sheet.dart';
 import '../../../../widgets/evie_appbar.dart';
 import '../../../../widgets/evie_button.dart';
 import '../../../../widgets/evie_container.dart';
-
 
 class ProPlan extends StatefulWidget{
   const ProPlan({Key? key}) : super(key: key);

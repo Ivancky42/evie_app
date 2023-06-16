@@ -70,12 +70,12 @@ class _RidesState extends State<Rides> {
               child: EvieOvalGray(
                 buttonText: _tripProvider.currentData == "Carbon Footprint" ? "CO2" : _tripProvider.currentData,
                 onPressed: (){
-                  if(_tripProvider.currentData == _tripProvider.totalData.first){
-                    _tripProvider.setCurrentData(_tripProvider.totalData.elementAt(1));
-                  }else if(_tripProvider.currentData == _tripProvider.totalData.elementAt(1)){
-                    _tripProvider.setCurrentData(_tripProvider.totalData.last);
-                  }else if(_tripProvider.currentData == _tripProvider.totalData.last){
-                    _tripProvider.setCurrentData(_tripProvider.totalData.first);
+                  if(_tripProvider.currentData == _tripProvider.dataType.first){
+                    _tripProvider.setCurrentData(_tripProvider.dataType.elementAt(1));
+                  }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(1)){
+                    _tripProvider.setCurrentData(_tripProvider.dataType.last);
+                  }else if(_tripProvider.currentData == _tripProvider.dataType.last){
+                    _tripProvider.setCurrentData(_tripProvider.dataType.first);
                   }
                 },),
             ),
@@ -85,7 +85,7 @@ class _RidesState extends State<Rides> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
 
-                  if(_tripProvider.currentData == _tripProvider.totalData.elementAt(0))...{
+                  if(_tripProvider.currentData == _tripProvider.dataType.elementAt(0))...{
                     _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
                     Row(
                       children: [
@@ -99,17 +99,17 @@ class _RidesState extends State<Rides> {
                         Text(" miles", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
                       ],
                     ),
-                  }else if(_tripProvider.currentData == _tripProvider.totalData.elementAt(1))...{
+                  }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(1))...{
                     Row(
                       children: [
                         Text("${currentTripHistoryListDay.length.toStringAsFixed(0)}", style: EvieTextStyles.display,),
                         Text(" rides ", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
                       ],
                     ),
-                  }else if(_tripProvider.currentData == _tripProvider.totalData.elementAt(2))...{
+                  }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(2))...{
                     Row(
                       children: [
-                        Text("0", style: EvieTextStyles.display,),
+                        Text("${(currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.carbonPrint!.toDouble())).toStringAsFixed(0)}", style: EvieTextStyles.display,),
                         Text(" g", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
                       ],
                     ),

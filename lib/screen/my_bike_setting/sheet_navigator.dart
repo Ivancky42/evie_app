@@ -21,6 +21,7 @@ import 'package:evie_test/screen/my_bike_setting/rfid_card/register_ev_key.dart'
 import 'package:evie_test/screen/my_bike_setting/subscription/current_plan.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/essential_plan/essential_plan.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
+import 'package:evie_test/screen/my_bike_setting/user_manual/user_manual.dart';
 import 'package:evie_test/widgets/evie_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -111,7 +112,7 @@ class _SheetNavigatorState extends State<SheetNavigator> {
         return FirmwareUpdateFailed();
 
       case SheetList.userManual:
-        break;
+        return UserManual();
 
       case SheetList.resetBike:
         return ResetBike();

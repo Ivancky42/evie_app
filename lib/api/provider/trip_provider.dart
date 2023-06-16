@@ -31,7 +31,7 @@ class TripProvider extends ChangeNotifier {
   TripHistoryModel? currentTripHistoryModel;
   BikeModel? currentBikeModel;
 
-  List<String> totalData = ["Mileage", "No of Ride", "Carbon Footprint"];
+  List<String> dataType = ["Mileage", "No of Ride", "Carbon Footprint"];
   late String currentData;
 
   TripProvider() {
@@ -40,7 +40,7 @@ class TripProvider extends ChangeNotifier {
 
   ///Initial value
   Future<void> init() async {
-    currentData = totalData.first;
+    currentData = dataType.first;
     getTripHistory();
     notifyListeners();
   }
@@ -62,8 +62,8 @@ class TripProvider extends ChangeNotifier {
       try{
         tripHistorySubscription = FirebaseFirestore.instance
             .collection(bikesCollection)
-///            .doc(currentBikeModel!.deviceIMEI)
-            .doc("862205055084620")
+            .doc(currentBikeModel!.deviceIMEI)
+///            .doc("862205055084620")
             .collection(tripHistoryCollection)
             .orderBy("startTime", descending: true)
             .snapshots()
@@ -127,6 +127,9 @@ class TripProvider extends ChangeNotifier {
 
     totalAverageSpeed = calculateAverageSpeed(totalMileage, totalTime);
     totalDuration = (totalTime/noOfRide);
+
+    ///Carbon footprint per month = total carbon footprint / 12
+
 
     returnData.add(totalMileage);
     returnData.add(noOfRide);

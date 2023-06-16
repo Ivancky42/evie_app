@@ -57,7 +57,7 @@ class _WelcomeState extends State<Welcome> {
                     height: 279.62.h,
                     alignment: Alignment.bottomRight,
                     child: const Image(
-                      image: AssetImage("assets/images/evie_bike_shadow.png"),
+                      image: AssetImage("assets/images/evie_test_shadow.png"),
                     ),
                   ),
                 ),

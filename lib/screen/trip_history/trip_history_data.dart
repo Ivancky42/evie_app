@@ -97,7 +97,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
             child: Row(
               children: [
 
-                if(_tripProvider.currentData == _tripProvider.totalData.elementAt(0))...{
+                if(_tripProvider.currentData == _tripProvider.dataType.elementAt(0))...{
                   _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
                   Row(
                     children: [
@@ -112,12 +112,12 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                     ],
                   ),
 
-                }else if(_tripProvider.currentData == _tripProvider.totalData.elementAt(1))...{
+                }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(1))...{
                   // Text(_bikeProvider.currentTripHistoryLists.length.toStringAsFixed(0), style: EvieTextStyles.display,),
                   Text(currentTripHistoryListDay.length.toStringAsFixed(0), style: EvieTextStyles.display,),
                   Text("rides", style: EvieTextStyles.body18,),
-                }else if(_tripProvider.currentData == _tripProvider.totalData.elementAt(2))...{
-                  Text(" 0", style: EvieTextStyles.display,),
+                }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(2))...{
+                  Text("${(currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.carbonPrint!.toDouble())).toStringAsFixed(0)}", style: EvieTextStyles.display,),
                   Text(" g", style: EvieTextStyles.body18,),
                 },
 
@@ -125,12 +125,12 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                 EvieOvalGray(
                   buttonText: _tripProvider.currentData,
                   onPressed: (){
-                    if(_tripProvider.currentData == _tripProvider.totalData.first){
-                      _tripProvider.setCurrentData(_tripProvider.totalData.elementAt(1));
-                    }else if(_tripProvider.currentData == _tripProvider.totalData.elementAt(1)){
-                      _tripProvider.setCurrentData(_tripProvider.totalData.last);
-                    }else if(_tripProvider.currentData == _tripProvider.totalData.last){
-                      _tripProvider.setCurrentData(_tripProvider.totalData.first);
+                    if(_tripProvider.currentData == _tripProvider.dataType.first){
+                      _tripProvider.setCurrentData(_tripProvider.dataType.elementAt(1));
+                    }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(1)){
+                      _tripProvider.setCurrentData(_tripProvider.dataType.last);
+                    }else if(_tripProvider.currentData == _tripProvider.dataType.last){
+                      _tripProvider.setCurrentData(_tripProvider.dataType.first);
                     }
                   },)
               ],

@@ -1,4 +1,6 @@
+import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -25,11 +27,13 @@ class Battery extends StatefulWidget {
 class _BatteryState extends State<Battery> {
 
   late BikeProvider _bikeProvider;
+  late BluetoothProvider _bluetoothProvider;
 
   @override
   Widget build(BuildContext context) {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     return EvieCard(
       onPress: (){
@@ -42,12 +46,11 @@ class _BatteryState extends State<Battery> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             SvgPicture.asset(
-              getBatteryImage(
-                  _bikeProvider.currentBikeModel?.batteryPercent ?? 0),
+              getBatteryImage(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ? int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0") : _bikeProvider.currentBikeModel?.batteryPercent ?? 0),
               width: 36.w,
               height: 36.h,
             ),
-            Text("${_bikeProvider.currentBikeModel?.batteryPercent ?? 0} %", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
+            Text("${_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ? int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0") : _bikeProvider.currentBikeModel?.batteryPercent ?? 0} %", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
             Text("Est 0km", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
             ),
             SizedBox(height: 16.h,),

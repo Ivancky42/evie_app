@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:evie_test/api/dialog.dart';
-import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
@@ -20,6 +19,7 @@ import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:wakelock/wakelock.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bluetooth_provider.dart';
@@ -29,14 +29,14 @@ import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_button.dart';
 
-class AboutBike extends StatefulWidget {
-  const AboutBike({Key? key}) : super(key: key);
+class UserManual extends StatefulWidget {
+  const UserManual({Key? key}) : super(key: key);
 
   @override
-  _AboutBikeState createState() => _AboutBikeState();
+  _UserManualState createState() => _UserManualState();
 }
 
-class _AboutBikeState extends State<AboutBike> {
+class _UserManualState extends State<UserManual> {
 
   late TripProvider _tripProvider;
   late BikeProvider _bikeProvider;
@@ -57,13 +57,13 @@ class _AboutBikeState extends State<AboutBike> {
     return WillPopScope(
       onWillPop: () async {
 
-          _settingProvider.changeSheetElement(SheetList.bikeSetting);
+        _settingProvider.changeSheetElement(SheetList.bikeSetting);
 
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
-          title: 'About Bike',
+          title: 'User Manual',
           onPressed: () {
 
             _settingProvider.changeSheetElement(SheetList.bikeSetting);
@@ -115,11 +115,11 @@ class _AboutBikeState extends State<AboutBike> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
                   child:TextColumn(
-                      title: "Total Mileage",
-                      body: _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
-                      "${(_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2)} km":
-                      "${_settingProvider.convertMeterToMilesInString(_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()))} miles",
-                ),
+                    title: "Total Mileage",
+                    body: _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
+                    "${(_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2)} km":
+                    "${_settingProvider.convertMeterToMilesInString(_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()))} miles",
+                  ),
                 ),
                 const AccountPageDivider(),
               ],

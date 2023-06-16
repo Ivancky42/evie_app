@@ -93,7 +93,7 @@ class _UserNotFoundState extends State<UserNotFound> {
                         }
 
 
-                        // List<XFile> xfiles = [XFile('assets/images/evie_bike_shadow_half.png')];
+                        // List<XFile> xfiles = [XFile('assets/images/evie_test_shadow_half.png')];
                         //
                         // await Share.shareXFiles(xfiles,text: 'Share some files');
 
