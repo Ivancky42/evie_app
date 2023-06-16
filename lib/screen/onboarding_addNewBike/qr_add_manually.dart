@@ -59,10 +59,9 @@ class _QRAddManuallyState extends State<QRAddManually> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
 
-                    const EvieProgressIndicator(currentPageNumber: 5, totalSteps: 8,),
 
                     Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
+                      padding: EdgeInsets.fromLTRB(16.w, 120.h, 16.w,4.h),
                       child: Text(
                         "Please enter the following codes. "
                             "You'll find them next to the QR code on the back of your manual.",

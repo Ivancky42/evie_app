@@ -174,27 +174,32 @@ class _AddNewBikeState extends State<AddNewBike> {
                           ),
 
 
-                              Padding(
-                                padding: EdgeInsets.only(top: 20.68.h),
-                                child: Stack(
-                                  children: [
-                                    Center(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(left:15.w, right:15.w),
-                                        child: SvgPicture.asset(
-                                          "assets/images/bike_register_required.svg",
-                                          height:608.h,
+                              GestureDetector(
+                                onTap: (){
+                                  changeToBeforeYouStart(context);
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 20.68.h),
+                                  child: Stack(
+                                    children: [
+                                      Center(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left:15.w, right:15.w),
+                                          child: SvgPicture.asset(
+                                            "assets/images/bike_register_required.svg",
+                                            height:608.h,
+                                          ),
                                         ),
                                       ),
-                                    ),
 
-                                    Center(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(top: 120.h),
-                                        child: Lottie.asset('assets/animations/add-bike.json'),
+                                      Center(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(top: 120.h),
+                                          child: Lottie.asset('assets/animations/add-bike.json'),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                         ],

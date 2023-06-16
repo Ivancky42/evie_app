@@ -76,41 +76,41 @@ class _AccountContainerState extends State<AccountContainer> {
             const EvieDivider(),
           ],
         );
-      case "My Garage":
-        return Column(
-          children: [
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-
-        changeToMyGarageScreen(context);
-              },
-              child: Container(
-                height: 44.h,
-                child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              label!,
-                              style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-                            ),
-                          ],
-                        ),
-                        SvgPicture.asset(
-                          "assets/buttons/next.svg",
-                        ),
-                      ],
-                    )
-                ),
-              ),
-            ),
-            const EvieDivider(),
-          ],
-        );
+      // case "My Garage":
+      //   return Column(
+      //     children: [
+      //       GestureDetector(
+      //         behavior: HitTestBehavior.translucent,
+      //         onTap: () {
+      //
+      //   changeToMyGarageScreen(context);
+      //         },
+      //         child: Container(
+      //           height: 44.h,
+      //           child: Padding(
+      //               padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+      //               child: Row(
+      //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                 children: [
+      //                   Row(
+      //                     children: [
+      //                       Text(
+      //                         label!,
+      //                         style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                   SvgPicture.asset(
+      //                     "assets/buttons/next.svg",
+      //                   ),
+      //                 ],
+      //               )
+      //           ),
+      //         ),
+      //       ),
+      //       const EvieDivider(),
+      //     ],
+      //   );
       case "Push Notification":
         return Column(
           children: [

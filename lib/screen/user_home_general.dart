@@ -290,10 +290,10 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       return const AddNewBike();
     } else {
         if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == true) {
-          return const PaidPlan();
+          return const AddNewBike();
 
         } else if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == false) {
-          return const FreePlan();
+          return const AddNewBike();
         }else{
 
           ///For not become unlimited Circular

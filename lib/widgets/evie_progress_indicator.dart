@@ -20,7 +20,7 @@ class EvieProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-    padding: totalSteps == 8 ? EdgeInsets.fromLTRB(70.w, 66.h, 70.w,50.h) : EdgeInsets.fromLTRB(151.w, 36.h, 151.w,0.h),
+    padding: totalSteps == 8 ? EdgeInsets.fromLTRB(70.w, 66.h, 70.w,50.h) : totalSteps == 3 ? EdgeInsets.fromLTRB(151.w, 36.h, 151.w,0.h) : EdgeInsets.fromLTRB(118.w, 66.h, 118.w,50.h),
     child: StepProgressIndicator(
     customColor: (index) => index < currentPageNumber ? EvieColors.lightPurple : index > currentPageNumber ? EvieColors.progressBarGrey : EvieColors.primaryColor,
     totalSteps: totalSteps,
