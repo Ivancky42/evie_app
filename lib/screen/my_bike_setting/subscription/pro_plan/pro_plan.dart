@@ -132,7 +132,7 @@ class _ProPlanState extends State<ProPlan> {
 
 
                       Padding(
-                        padding: EdgeInsets.only(top: 14.h, bottom: 12.h),
+                        padding: EdgeInsets.only(top: 14.h, bottom: 16.h),
                         child: Divider(height: 1.h,color: EvieColors.darkWhite,),
                       ),
 
@@ -152,33 +152,6 @@ class _ProPlanState extends State<ProPlan> {
                 ),
 
 
-                Visibility(
-                  visible: !_bikeProvider.isPlanSubscript!,
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, 16.h),
-                      child:   EvieButton(
-                        width: double.infinity,
-                        height: 48.h,
-                        child: Text(
-                          "Unlock Plan",
-                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
-                        ),
-                        onPressed: () {
-                          String key = _planProvider.availablePlanList.keys.elementAt(0);
-                          PlanModel planModel = _planProvider.availablePlanList[key];
-
-                          _planProvider.getPrice(planModel).then((priceModel) {
-                            _planProvider.purchasePlan(_bikeProvider.currentBikeModel!.deviceIMEI!, planModel.id!, priceModel.id).then((value) {
-                              changeToStripeCheckoutScreen(context, value, _bikeProvider.currentBikeModel!, planModel, priceModel);
-                            });
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),

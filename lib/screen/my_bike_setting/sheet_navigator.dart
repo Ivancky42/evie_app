@@ -12,6 +12,7 @@ import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/user_not_found.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/reset_bike.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/reset_bike2.dart';
 import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_add_failed.dart';
 import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_key.dart';
 import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_key_list.dart';
@@ -114,6 +115,8 @@ class _SheetNavigatorState extends State<SheetNavigator> {
 
       case SheetList.resetBike:
         return ResetBike();
+      case SheetList.resetBike2:
+        return ResetBike2();
 
       default:
         break;

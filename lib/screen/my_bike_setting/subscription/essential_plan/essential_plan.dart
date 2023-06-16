@@ -112,7 +112,7 @@ class _EssentialPlanState extends State<EssentialPlan> {
 
                                   SizedBox(height: 16.h),
                                   Padding(
-                                    padding: EdgeInsets.only(left:16.w, right:16.w, top: 53.h),
+                                    padding: EdgeInsets.only(left:16.w, right:16.w),
                                     child: Text("Orbital Anti-theft: Remote monitor bike status and receive theft alert notification.",
                                       style: EvieTextStyles.body18.copyWith(
                                         color: EvieColors.lightBlack,
@@ -124,7 +124,7 @@ class _EssentialPlanState extends State<EssentialPlan> {
 
 
                                   Padding(
-                                    padding: EdgeInsets.only(top: 14.h, bottom: 12.h),
+                                    padding: EdgeInsets.only(top: 14.h, bottom: 16.h),
                                     child: Divider(height: 1.h,color: EvieColors.darkWhite,),
                                   ),
 

@@ -71,7 +71,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top:28.h),
+                    padding: EdgeInsets.only(top:24.h),
                     child: Text("Current Plan", style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),),
                   ),
 
@@ -81,24 +81,25 @@ class _CurrentPlanState extends State<CurrentPlan> {
                   style: EvieTextStyles.body18.copyWith(color:EvieColors.darkGrayishCyan)),
 
                   Container(
-                      child: _bikeProvider.isPlanSubscript == false?
-                      Text(""):
-                      Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 19.h),
-                            child: Text(
-                              "Status",
-                              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
-                            ),
+                    child: _bikeProvider.isPlanSubscript == false ? Text("") : Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 21.h),
+                          child: Text(
+                            "Status",
+                            style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                           ),
-                          Text(
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 4.h),
+                          child: Text(
                             "Active",
                             style: EvieTextStyles.body16.copyWith(color: EvieColors.green),
                           ),
-                          SizedBox(height: 10.h),
-                        ],
-                      ),
+                        ),
+                        SizedBox(height: 10.h),
+                      ],
+                    ),
                   ),
 
 

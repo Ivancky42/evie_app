@@ -759,13 +759,14 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             const EvieDivider(),
           ],
         );
+
       case "Reset Bike":
         return Column(
           children: [
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                _settingProvider.changeSheetElement(SheetList.resetBike);
+                _settingProvider.changeSheetElement(SheetList.resetBike2);
               },
               child: Container(
                 height: 44.h,
