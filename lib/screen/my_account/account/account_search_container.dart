@@ -1,9 +1,9 @@
-import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/dialog.dart';
-import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
-import 'package:evie_test/widgets/evie_divider.dart';
+import 'package:evie_bike/api/colours.dart';
+import 'package:evie_bike/api/dialog.dart';
+import 'package:evie_bike/api/fonts.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
+import 'package:evie_bike/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';

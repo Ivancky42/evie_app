@@ -1,6 +1,6 @@
-import 'package:evie_test/api/provider/bike_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_divider.dart';
+import 'package:evie_bike/api/provider/bike_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/widgets/evie_divider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';

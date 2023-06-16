@@ -1,11 +1,11 @@
 import 'dart:collection';
 import 'dart:io';
-import 'package:evie_test/api/sheet.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/sheet.dart';
+import 'package:evie_bike/api/sizer.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:flutter/material.dart';
-import 'package:evie_test/widgets/evie_button.dart';
+import 'package:evie_bike/widgets/evie_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../../api/colours.dart';

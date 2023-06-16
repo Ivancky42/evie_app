@@ -1,6 +1,6 @@
-import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/provider/bluetooth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/fonts.dart';
+import 'package:evie_bike/api/provider/bluetooth_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';

@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:evie_test/api/dialog.dart';
-import 'package:evie_test/api/provider/bike_provider.dart';
-import 'package:evie_test/api/provider/bluetooth_provider.dart';
-import 'package:evie_test/api/provider/location_provider.dart';
-import 'package:evie_test/api/provider/notification_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/bluetooth/modelResult.dart';
+import 'package:evie_bike/api/dialog.dart';
+import 'package:evie_bike/api/provider/bike_provider.dart';
+import 'package:evie_bike/api/provider/bluetooth_provider.dart';
+import 'package:evie_bike/api/provider/location_provider.dart';
+import 'package:evie_bike/api/provider/notification_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/bluetooth/modelResult.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';

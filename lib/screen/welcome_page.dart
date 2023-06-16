@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/navigator.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
+import 'package:evie_bike/api/fonts.dart';
+import 'package:evie_bike/api/navigator.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/widgets/evie_double_button_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';

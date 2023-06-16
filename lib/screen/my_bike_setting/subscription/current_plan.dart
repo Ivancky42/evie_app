@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/provider/auth_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:evie_test/widgets/evie_button.dart';
+import 'package:evie_bike/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
 import '../../../api/enumerate.dart';

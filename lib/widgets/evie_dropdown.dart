@@ -1,6 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/fonts.dart';
+import 'package:evie_bike/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';

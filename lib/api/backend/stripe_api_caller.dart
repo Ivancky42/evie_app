@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
-import 'package:evie_test/api/backend/server_api_base.dart';
+import 'package:evie_bike/api/backend/server_api_base.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 ///These keys are revoked. Use keys and product ids from Stripe dashboard.

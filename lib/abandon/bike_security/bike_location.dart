@@ -4,10 +4,10 @@
 // import 'dart:typed_data';
 //
 // import 'package:carousel_slider/carousel_slider.dart';
-// import 'package:evie_test/api/model/location_model.dart';
-// import 'package:evie_test/api/sizer.dart';
-// import 'package:evie_test/widgets/evie_button.dart';
-// import 'package:evie_test/widgets/evie_single_button_dialog.dart';
+// import 'package:evie_bike/api/model/location_model.dart';
+// import 'package:evie_bike/api/sizer.dart';
+// import 'package:evie_bike/widgets/evie_button.dart';
+// import 'package:evie_bike/widgets/evie_single_button_dialog.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 // import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';

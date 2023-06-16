@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/user_home_page/bike_container.dart';
+import 'package:evie_bike/api/provider/current_user_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/screen/user_home_page/bike_container.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

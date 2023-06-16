@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/user_home_page/switch_bike.dart';
+import 'package:evie_bike/api/fonts.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/screen/user_home_page/switch_bike.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evie_test/api/backend/stripe_api_caller.dart';
-import 'package:evie_test/api/model/bike_model.dart';
-import 'package:evie_test/api/model/plan_model.dart';
-import 'package:evie_test/api/model/price_model.dart';
+import 'package:evie_bike/api/backend/stripe_api_caller.dart';
+import 'package:evie_bike/api/model/bike_model.dart';
+import 'package:evie_bike/api/model/plan_model.dart';
+import 'package:evie_bike/api/model/price_model.dart';
 import 'package:flutter/widgets.dart';
 import '../model/user_model.dart';
 

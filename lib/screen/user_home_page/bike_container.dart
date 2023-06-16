@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
-import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/model/user_bike_model.dart';
-import 'package:evie_test/api/provider/notification_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_button.dart';
-import 'package:evie_test/widgets/evie_single_button_dialog.dart';
+import 'package:evie_bike/api/fonts.dart';
+import 'package:evie_bike/api/model/user_bike_model.dart';
+import 'package:evie_bike/api/provider/notification_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/widgets/evie_button.dart';
+import 'package:evie_bike/widgets/evie_single_button_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';

@@ -1,8 +1,8 @@
 
-import 'package:evie_test/api/navigator.dart';
-import 'package:evie_test/widgets/evie_appbar.dart';
+import 'package:evie_bike/api/navigator.dart';
+import 'package:evie_bike/widgets/evie_appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:evie_bike/api/provider/current_user_provider.dart';
 
 import 'package:sizer/sizer.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';

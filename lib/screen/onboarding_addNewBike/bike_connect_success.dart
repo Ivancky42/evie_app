@@ -1,8 +1,8 @@
 
-import 'package:evie_test/api/navigator.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/navigator.dart';
+import 'package:evie_bike/api/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:evie_bike/api/provider/current_user_provider.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';

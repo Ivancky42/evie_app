@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/provider/bluetooth_provider.dart';
-import 'package:evie_test/api/provider/notification_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/user_home_page/free_plan/mapbox_widget.dart';
+import 'package:evie_bike/api/colours.dart';
+import 'package:evie_bike/api/fonts.dart';
+import 'package:evie_bike/api/provider/auth_provider.dart';
+import 'package:evie_bike/api/provider/bluetooth_provider.dart';
+import 'package:evie_bike/api/provider/notification_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/screen/user_home_page/free_plan/mapbox_widget.dart';
 
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:evie_bike/api/provider/current_user_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map/flutter_map.dart';

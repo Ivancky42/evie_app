@@ -1,6 +1,6 @@
-import 'package:evie_test/api/provider/bike_provider.dart';
-import 'package:evie_test/api/provider/bluetooth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/provider/bike_provider.dart';
+import 'package:evie_bike/api/provider/bluetooth_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,7 +10,7 @@ import '../../api/colours.dart';
 import '../../api/fonts.dart';
 import '../../api/length.dart';
 import '../../api/navigator.dart';
-import 'package:evie_test/widgets/evie_button.dart';
+import 'package:evie_bike/widgets/evie_button.dart';
 
 import '../../api/provider/auth_provider.dart';
 

@@ -1,5 +1,5 @@
-import 'package:evie_test/api/provider/bike_provider.dart';
-import 'package:evie_test/bluetooth/modelResult.dart';
+import 'package:evie_bike/api/provider/bike_provider.dart';
+import 'package:evie_bike/bluetooth/modelResult.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';

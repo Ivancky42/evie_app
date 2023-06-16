@@ -1,12 +1,12 @@
 import 'dart:io';
-import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/fonts.dart';
+import 'package:evie_bike/api/provider/auth_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:evie_test/widgets/evie_button.dart';
+import 'package:evie_bike/widgets/evie_button.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

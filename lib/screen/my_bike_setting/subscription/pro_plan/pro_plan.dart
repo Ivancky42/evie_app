@@ -1,12 +1,11 @@
-import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/provider/plan_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/colours.dart';
+import 'package:evie_bike/api/provider/plan_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-
 
 import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
@@ -18,7 +17,6 @@ import '../../../../api/sheet.dart';
 import '../../../../widgets/evie_appbar.dart';
 import '../../../../widgets/evie_button.dart';
 import '../../../../widgets/evie_container.dart';
-
 
 class ProPlan extends StatefulWidget{
   const ProPlan({Key? key}) : super(key: key);

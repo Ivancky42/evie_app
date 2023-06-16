@@ -1,10 +1,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evie_test/api/dialog.dart';
-import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_divider.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
+import 'package:evie_bike/api/dialog.dart';
+import 'package:evie_bike/api/fonts.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/widgets/evie_divider.dart';
+import 'package:evie_bike/widgets/evie_double_button_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

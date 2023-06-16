@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:evie_test/api/length.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/length.dart';
+import 'package:evie_bike/api/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/screen/user_home_general.dart';
+import 'package:evie_bike/screen/user_home_general.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../../api/colours.dart';

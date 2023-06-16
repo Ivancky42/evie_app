@@ -1,6 +1,6 @@
-import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/colours.dart';
+import 'package:evie_bike/api/provider/auth_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +9,7 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 import '../../api/length.dart';
 import '../../api/navigator.dart';
 
-import 'package:evie_test/widgets/evie_button.dart';
+import 'package:evie_bike/widgets/evie_button.dart';
 
 import '../../widgets/evie_switch.dart';
 

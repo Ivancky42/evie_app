@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
-import 'package:evie_test/bluetooth/command.dart';
+import 'package:evie_bike/bluetooth/command.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';

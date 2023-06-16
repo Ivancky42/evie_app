@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
+import 'package:evie_bike/widgets/evie_double_button_dialog.dart';
 
 
 ///Loading dialog widget

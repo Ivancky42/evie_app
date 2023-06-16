@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_bike/api/provider/bluetooth_provider.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:hex/hex.dart';
 

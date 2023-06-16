@@ -1,15 +1,15 @@
 // import 'dart:async';
 // import 'dart:collection';
 // import 'dart:io';
-// import 'package:evie_test/api/provider/auth_provider.dart';
-// import 'package:evie_test/api/provider/notification_provider.dart';
-// import 'package:evie_test/widgets/evie_appbar.dart';
+// import 'package:evie_bike/api/provider/auth_provider.dart';
+// import 'package:evie_bike/api/provider/notification_provider.dart';
+// import 'package:evie_bike/widgets/evie_appbar.dart';
 //
 // import 'package:flutter/material.dart';
 // import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 // import 'package:provider/provider.dart';
-// import 'package:evie_test/api/provider/current_user_provider.dart';
-// import 'package:evie_test/widgets/evie_button.dart';
+// import 'package:evie_bike/api/provider/current_user_provider.dart';
+// import 'package:evie_bike/widgets/evie_button.dart';
 // import 'package:sizer/sizer.dart';
 //
 // import '../api/model/bike_user_model.dart';

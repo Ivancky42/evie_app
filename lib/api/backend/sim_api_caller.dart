@@ -1,6 +1,6 @@
 
 import 'package:dio/dio.dart';
-import 'package:evie_test/api/backend/server_api_base.dart';
+import 'package:evie_bike/api/backend/server_api_base.dart';
 
 class SimApiCaller {
 

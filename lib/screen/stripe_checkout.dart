@@ -1,4 +1,4 @@
-import 'package:evie_test/api/backend/sim_api_caller.dart';
+import 'package:evie_bike/api/backend/sim_api_caller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';

@@ -1,6 +1,6 @@
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/user_home_page/bike_container.dart';
-import 'package:evie_test/widgets/evie_button.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/screen/user_home_page/bike_container.dart';
+import 'package:evie_bike/widgets/evie_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

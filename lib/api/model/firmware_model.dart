@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evie_test/api/model/movement_setting_model.dart';
-import 'package:evie_test/api/model/plan_model.dart';
-import 'package:evie_test/api/model/simcard_model.dart';
+import 'package:evie_bike/api/model/movement_setting_model.dart';
+import 'package:evie_bike/api/model/plan_model.dart';
+import 'package:evie_bike/api/model/simcard_model.dart';
 
 import 'bike_plan_model.dart';
 import 'location_model.dart';

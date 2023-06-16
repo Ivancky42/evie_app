@@ -1,9 +1,9 @@
-import 'package:evie_test/api/length.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/length.dart';
+import 'package:evie_bike/api/provider/auth_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:evie_bike/api/provider/current_user_provider.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:open_settings/open_settings.dart';
@@ -15,7 +15,7 @@ import '../../api/dialog.dart';
 import '../../api/fonts.dart';
 import '../../api/navigator.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
-import 'package:evie_test/widgets/evie_button.dart';
+import 'package:evie_bike/widgets/evie_button.dart';
 
 import '../../widgets/evie_progress_indicator.dart';
 

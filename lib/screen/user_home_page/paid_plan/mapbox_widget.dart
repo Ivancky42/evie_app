@@ -1,4 +1,4 @@
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';

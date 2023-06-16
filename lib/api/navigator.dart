@@ -1,22 +1,22 @@
 import 'dart:collection';
 
-import 'package:evie_test/api/model/trip_history_model.dart';
-import 'package:evie_test/screen/my_account/my_garage/my_garage.dart';
-import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_sensitivity.dart';
-import 'package:evie_test/screen/my_bike_setting/firmware/firmware_information.dart';
-import 'package:evie_test/screen/my_bike_setting/firmware/firmware_update_failed.dart';
-import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/motion_sensitivity.dart';
+import 'package:evie_bike/api/model/trip_history_model.dart';
+import 'package:evie_bike/screen/my_account/my_garage/my_garage.dart';
+import 'package:evie_bike/screen/my_bike_setting/motion_sensitivity/detection_sensitivity.dart';
+import 'package:evie_bike/screen/my_bike_setting/firmware/firmware_information.dart';
+import 'package:evie_bike/screen/my_bike_setting/firmware/firmware_update_failed.dart';
+import 'package:evie_bike/screen/my_bike_setting/motion_sensitivity/motion_sensitivity.dart';
 
-import 'package:evie_test/screen/my_account/edit_profile.dart';
-//import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_set_colour_code.dart';
-import 'package:evie_test/screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
+import 'package:evie_bike/screen/my_account/edit_profile.dart';
+//import 'package:evie_bike/screen/my_bike_setting/rfid_card/ev_set_colour_code.dart';
+import 'package:evie_bike/screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
 
-import 'package:evie_test/screen/stripe_checkout.dart';
-import 'package:evie_test/screen/test_ble.dart';
-import 'package:evie_test/screen/trip_history/ride_history.dart';
-import 'package:evie_test/screen/trip_history/trip_history.dart';
-import 'package:evie_test/screen/user_home_page/user_home_page.dart';
-import 'package:evie_test/screen/verify_email.dart';
+import 'package:evie_bike/screen/stripe_checkout.dart';
+import 'package:evie_bike/screen/test_ble.dart';
+import 'package:evie_bike/screen/trip_history/ride_history.dart';
+import 'package:evie_bike/screen/trip_history/trip_history.dart';
+import 'package:evie_bike/screen/user_home_page/user_home_page.dart';
+import 'package:evie_bike/screen/verify_email.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';

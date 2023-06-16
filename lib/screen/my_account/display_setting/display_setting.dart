@@ -1,13 +1,13 @@
 import 'dart:collection';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evie_test/api/dialog.dart';
-import 'package:evie_test/api/function.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:evie_test/api/provider/notification_provider.dart';
-import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/dialog.dart';
+import 'package:evie_bike/api/function.dart';
+import 'package:evie_bike/api/provider/auth_provider.dart';
+import 'package:evie_bike/api/provider/current_user_provider.dart';
+import 'package:evie_bike/api/provider/notification_provider.dart';
+import 'package:evie_bike/api/provider/setting_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';

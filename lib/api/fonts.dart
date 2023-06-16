@@ -1,5 +1,5 @@
-import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/colours.dart';
+import 'package:evie_bike/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

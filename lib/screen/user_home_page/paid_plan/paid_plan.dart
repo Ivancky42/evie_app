@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:evie_test/api/dialog.dart';
-import 'package:evie_test/api/provider/bluetooth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
+import 'package:evie_bike/api/dialog.dart';
+import 'package:evie_bike/api/provider/bluetooth_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:evie_bike/api/provider/current_user_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';

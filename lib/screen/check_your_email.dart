@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/provider/auth_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:evie_bike/api/provider/current_user_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,7 +19,7 @@ import '../api/snackbar.dart';
 import '../widgets/evie_appbar.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/widgets.dart';
-import 'package:evie_test/widgets/evie_button.dart';
+import 'package:evie_bike/widgets/evie_button.dart';
 
 class CheckYourEmail extends StatefulWidget {
   const CheckYourEmail({Key? key}) : super(key: key);

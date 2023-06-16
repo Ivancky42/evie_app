@@ -2,10 +2,10 @@ import 'dart:typed_data';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evie_test/api/navigator.dart';
-import 'package:evie_test/api/provider/location_provider.dart';
-import 'package:evie_test/api/sheet.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/navigator.dart';
+import 'package:evie_bike/api/provider/location_provider.dart';
+import 'package:evie_bike/api/sheet.dart';
+import 'package:evie_bike/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';

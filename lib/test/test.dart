@@ -1,11 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:evie_test/api/dialog.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_single_button_dialog.dart';
+import 'package:evie_bike/api/dialog.dart';
+import 'package:evie_bike/api/provider/auth_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:evie_bike/api/provider/current_user_provider.dart';
 import 'package:get/utils.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +15,7 @@ import '../../api/fonts.dart';
 import '../../api/length.dart';
 import '../../api/navigator.dart';
 
-import 'package:evie_test/widgets/evie_button.dart';
+import 'package:evie_bike/widgets/evie_button.dart';
 
 import '../../api/provider/bike_provider.dart';
 import '../../widgets/evie_progress_indicator.dart';

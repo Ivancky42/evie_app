@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/my_account/my_account_widget.dart';
+import 'package:evie_bike/api/fonts.dart';
+import 'package:evie_bike/api/provider/auth_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/screen/my_account/my_account_widget.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';

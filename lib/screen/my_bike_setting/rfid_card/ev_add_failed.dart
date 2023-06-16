@@ -1,14 +1,14 @@
 import 'dart:io';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/provider/bike_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/my_account/my_account_widget.dart';
+import 'package:evie_bike/api/provider/auth_provider.dart';
+import 'package:evie_bike/api/provider/bike_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/screen/my_account/my_account_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:evie_test/widgets/evie_button.dart';
+import 'package:evie_bike/api/provider/current_user_provider.dart';
+import 'package:evie_bike/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
 import '../../../api/fonts.dart';

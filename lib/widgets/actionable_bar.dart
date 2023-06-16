@@ -1,5 +1,5 @@
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_button.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/widgets/evie_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/utils.dart';
 

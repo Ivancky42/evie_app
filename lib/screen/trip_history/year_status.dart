@@ -1,10 +1,10 @@
 import 'dart:math';
 
-import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/provider/bike_provider.dart';
-import 'package:evie_test/api/provider/trip_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_divider.dart';
+import 'package:evie_bike/api/colours.dart';
+import 'package:evie_bike/api/provider/bike_provider.dart';
+import 'package:evie_bike/api/provider/trip_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';

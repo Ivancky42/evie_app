@@ -1,11 +1,11 @@
-import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/dialog.dart';
-import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/my_account/account/account_model.dart';
-import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
-import 'package:evie_test/widgets/evie_divider.dart';
+import 'package:evie_bike/api/colours.dart';
+import 'package:evie_bike/api/dialog.dart';
+import 'package:evie_bike/api/fonts.dart';
+import 'package:evie_bike/api/provider/auth_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/screen/my_account/account/account_model.dart';
+import 'package:evie_bike/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
+import 'package:evie_bike/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -407,7 +407,7 @@ class _AccountContainerState extends State<AccountContainer> {
                 child: Column(
                   children: [
                     Text(
-                      "Evie v1.0.0 (33)",
+                      "Evie v1.0.0 (34)",
                       style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                     ),
                     Text(
@@ -425,3 +425,4 @@ class _AccountContainerState extends State<AccountContainer> {
     }
   }
 }
+

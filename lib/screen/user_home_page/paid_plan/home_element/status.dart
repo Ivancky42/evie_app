@@ -1,5 +1,5 @@
-import 'package:evie_test/api/provider/bluetooth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:evie_bike/api/provider/bluetooth_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

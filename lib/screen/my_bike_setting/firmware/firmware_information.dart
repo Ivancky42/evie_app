@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:evie_test/api/dialog.dart';
-import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/provider/bike_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/my_account/my_account_widget.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
-import 'package:evie_test/widgets/text_column.dart';
+import 'package:evie_bike/api/dialog.dart';
+import 'package:evie_bike/api/fonts.dart';
+import 'package:evie_bike/api/provider/auth_provider.dart';
+import 'package:evie_bike/api/provider/bike_provider.dart';
+import 'package:evie_bike/api/sizer.dart';
+import 'package:evie_bike/screen/my_account/my_account_widget.dart';
+import 'package:evie_bike/widgets/evie_double_button_dialog.dart';
+import 'package:evie_bike/widgets/text_column.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:evie_bike/api/provider/current_user_provider.dart';
 import 'package:wakelock/wakelock.dart';
 
 import '../../../api/colours.dart';
