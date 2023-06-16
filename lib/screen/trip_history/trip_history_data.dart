@@ -46,9 +46,18 @@ class _TripHistoryDataState extends State<TripHistoryData> {
   late TripProvider _tripProvider;
   late SettingProvider _settingProvider;
 
+  bool isFirst = true;
+  late String selectedDate;
+
   @override
   void initState() {
     pickedDate = DateTime(now.year, now.month, now.day);
+
+    selectedDate = widget.format == TripFormat.week ?
+    "${pickedDate!.subtract(Duration(days: 6)).day}-${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}" :
+    widget.format == TripFormat.month ?
+    "${monthsInYear[pickedDate!.month]} ${pickedDate!.year}" :
+    "${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}";
 
     _tooltip = TooltipBehavior(
         enable: true,
@@ -142,13 +151,8 @@ class _TripHistoryDataState extends State<TripHistoryData> {
             child: Row(
               children: [
                 Text(
-                  widget.format == TripFormat.week ?
-                  "${pickedDate!.subtract(Duration(days: 6)).day}-${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}" :
-                   widget.format == TripFormat.month ?
-                  "${monthsInYear[pickedDate!.month]} ${pickedDate!.year}" :
-                  "${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}",
+                  selectedDate,
                   style: const TextStyle(color: EvieColors.darkGrayishCyan),),
-
                 Expanded(
                   child:  EvieButton_PickDate(
                     showColour: false,
@@ -175,6 +179,9 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                         }else{
                           setState(() {
                             pickedDate = picked;
+                            isFirst = false;
+                            selectedDate = "${monthsInYear[pickedDate!.month]} ${pickedDate!.day}-${pickedDate!.add(Duration(days: 6)).day} ${pickedDate!.year}";
+
                           });
                         }
                     },
@@ -325,23 +332,47 @@ class _TripHistoryDataState extends State<TripHistoryData> {
         return;
       case TripFormat.week:
 
-        chartData.clear();
-        currentTripHistoryListDay.clear();
-        // value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)
+        if (isFirst) {
+          chartData.clear();
+          currentTripHistoryListDay.clear();
+          // value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)
 
-        for(int i = 0; i < 7; i ++){
-        chartData.add((ChartData(pickedDate!.subtract(Duration(days: i)), 0)));
-        }
-
-        chartData = chartData.reversed.toList();
-
-        tripProvider.currentTripHistoryLists.forEach((key, value) {
-          if(value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 1))) && value.startTime.toDate().isAfter(pickedDate!.subtract(const Duration(days: 6)))){
-            ChartData newData = chartData.firstWhere((data) => data.x.day == value.startTime.toDate().day);
-            newData.y = newData.y + value.distance.toDouble();
-            currentTripHistoryListDay.add(value);
+          for(int i = 0; i < 7; i ++){
+            chartData.add((ChartData(pickedDate!.subtract(Duration(days: i)), 0)));
           }
-        });
+
+          chartData = chartData.reversed.toList();
+
+          tripProvider.currentTripHistoryLists.forEach((key, value) {
+            if(value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 1))) && value.startTime.toDate().isAfter(pickedDate!.subtract(const Duration(days: 6)))){
+              ChartData newData = chartData.firstWhere((data) => data.x.day == value.startTime.toDate().day);
+              newData.y = newData.y + value.distance.toDouble();
+              currentTripHistoryListDay.add(value);
+            }
+          });
+        }
+        else {
+          chartData.clear();
+          currentTripHistoryListDay.clear();
+          // value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)
+
+          for (int i = 0; i < 7; i ++) {
+            chartData.add((ChartData(pickedDate!.add(Duration(days: i)), 0)));
+          }
+
+          chartData = chartData.reversed.toList();
+
+          tripProvider.currentTripHistoryLists.forEach((key, value) {
+            if(value.startTime.toDate().isAfter(pickedDate) && value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 6)))){
+              ChartData newData = chartData.firstWhere((data) =>
+              data.x.day == value.startTime
+                  .toDate()
+                  .day);
+              newData.y = newData.y + value.distance.toDouble();
+              currentTripHistoryListDay.add(value);
+            }
+          });
+        }
 
         return;
       case TripFormat.month:
