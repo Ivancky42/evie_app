@@ -6,6 +6,7 @@ import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
@@ -35,6 +36,7 @@ class _QRAddManuallyState extends State<QRAddManually> {
   final _formKey = GlobalKey<FormState>();
 
   late BikeProvider _bikeProvider;
+  late AuthProvider _authProvider;
 
   int currentPageNumber = 4;
 
@@ -43,6 +45,7 @@ class _QRAddManuallyState extends State<QRAddManually> {
   Widget build(BuildContext context) {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _authProvider = Provider.of<AuthProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -59,9 +62,27 @@ class _QRAddManuallyState extends State<QRAddManually> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
 
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(20.w, 59.h, 20.w, 16.h),
+                          child:   GestureDetector(
+                            onTap: (){
+                              _authProvider.setIsFirstLogin(false);
+                              _bikeProvider.setIsAddBike(false);
+                              changeToUserHomePageScreen(context);
+                            },
+                            child: SvgPicture.asset(
+                              "assets/buttons/close_black.svg",
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
 
                     Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 120.h, 16.w,4.h),
+                      padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w,4.h),
                       child: Text(
                         "Please enter the following codes. "
                             "You'll find them next to the QR code on the back of your manual.",

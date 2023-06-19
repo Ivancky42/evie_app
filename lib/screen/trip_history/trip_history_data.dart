@@ -367,7 +367,6 @@ class _TripHistoryDataState extends State<TripHistoryData> {
             chartData.add((ChartData(pickedDate!.add(Duration(days: i)), 0)));
           }
 
-          chartData = chartData.reversed.toList();
 
           tripProvider.currentTripHistoryLists.forEach((key, value) {
             if(value.startTime.toDate().isAfter(pickedDate) && value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 6)))){

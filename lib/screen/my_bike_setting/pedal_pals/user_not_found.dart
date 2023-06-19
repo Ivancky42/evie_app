@@ -58,8 +58,8 @@ class _UserNotFoundState extends State<UserNotFound> {
                         child: Text(
                           "Share this app with the rider you would like to share bike with. Ask to install and register, then share again."
                               "\n\n\n"
-                              "1. Share the app: Easily share the app with the rider you wish to bike with. \n"
-                              "2. Install and register: Kindly ask them to install the app and complete the registration process. \n"
+                              "1. Share the app: Easily share the app with the rider you wish to bike with. \n\n"
+                              "2. Install and register: Kindly ask them to install the app and complete the registration process. \n\n"
                               "3. Share once more: Once they are registered, share the app again to ensure seamless connection.",
                           style: EvieTextStyles.body18,
                         ),
@@ -67,6 +67,28 @@ class _UserNotFoundState extends State<UserNotFound> {
                     ),
 
               ]),
+
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom),
+                    child: EvieButton(
+                      width: double.infinity,
+                      height: 48.h,
+                      child: Text(
+                        "Done",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                       showPedalPalsSheet(context);
+                      },
+                    ),
+                  ),
+                ),
 
                 Align(
                   alignment: Alignment.bottomCenter,
