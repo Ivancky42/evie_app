@@ -62,7 +62,6 @@ class _SheetNavigatorState extends State<SheetNavigator> {
     switch(_settingProvider.currentSheetList){
       case SheetList.bikeSetting:
         return BikeSetting(widget.source);
-
       case SheetList.evKey:
         return EVKey();
       case SheetList.evKeyList:

@@ -402,7 +402,7 @@ class _FreePlanState extends State<FreePlan> {
                                          padding: EdgeInsets.all(8),
                                          child: EvieCard(
                                            onPress: (){
-                                             showBikeSettingSheet(context);
+                                             showSheetNavigate(context, 'Home');
                                            },
                                            title: "Setting",
                                            child: Expanded(
