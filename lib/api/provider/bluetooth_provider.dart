@@ -856,7 +856,13 @@ class BluetoothProvider extends ChangeNotifier {
     const asciiDecoder = AsciiDecoder();
     ///if iotDataIndex is lesser than totalBikePacketData
     if (iotDataIndex < totalIotPacketData) {
-      iotInfoString = iotInfoString + asciiDecoder.convert(data.sublist(4, 20)); ///Partial IOTInfo String
+      List<int> sublist = data.sublist(4, 20);
+      bool containsValue196 = sublist.contains(196);
+      if (!containsValue196) {
+        print('Filter data: ' + sublist.toString());
+        iotInfoString = iotInfoString + asciiDecoder.convert(data.sublist(4, 20)); ///Partial IOTInfo String
+      }
+      //iotInfoString = iotInfoString + asciiDecoder.convert(data.sublist(4, 20)); ///Partial IOTInfo String
       /// increase bikeDataIndex
       iotDataIndex++;
       ///send command to get next bikeDataIndex Packet Data.
