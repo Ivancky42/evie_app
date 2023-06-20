@@ -127,7 +127,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                   Text(currentTripHistoryListDay.length.toStringAsFixed(0), style: EvieTextStyles.display,),
                   Text("rides", style: EvieTextStyles.body18,),
                 }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(2))...{
-                  Text("${(currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.carbonPrint!.toDouble())).toStringAsFixed(0)}", style: EvieTextStyles.display,),
+                  Text(thousandFormatting((currentTripHistoryListDay.fold<int>(0, (prev, element) => prev + element.carbonPrint!))), style: EvieTextStyles.display,),
                   Text(" g", style: EvieTextStyles.body18,),
                 },
 

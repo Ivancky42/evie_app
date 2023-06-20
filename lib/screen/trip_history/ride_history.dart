@@ -133,7 +133,7 @@ class _RideHistoryState extends State<RideHistory> {
                   child: Row(
                     children: [
                       Text(
-                        "${widget.currentTripHistoryList.carbonPrint}",
+                        thousandFormatting(widget.currentTripHistoryList.carbonPrint ?? 0),
                         style: EvieTextStyles.display,
                       ),
                       Text(" g",style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan)),

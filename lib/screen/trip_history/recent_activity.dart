@@ -121,7 +121,7 @@ class _RecentActivityState extends State<RecentActivity> {
                                 style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                               ),
                               Text(
-                                "${_tripProvider.currentTripHistoryLists.values.elementAt(index).carbonPrint}g carbon footprint",
+                                "${thousandFormatting(_tripProvider.currentTripHistoryLists.values.elementAt(index).carbonPrint)}g carbon footprint",
                                 style: EvieTextStyles.body14,
                               ),
                             ],

@@ -1,3 +1,4 @@
+import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -109,12 +110,11 @@ class _RidesState extends State<Rides> {
                   }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(2))...{
                     Row(
                       children: [
-                        Text("${(currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.carbonPrint!.toDouble())).toStringAsFixed(0)}", style: EvieTextStyles.display,),
+                        Text("${thousandFormatting((currentTripHistoryListDay.fold<int>(0, (prev, element) => prev + element.carbonPrint!)))}", style: EvieTextStyles.display,),
                         Text(" g", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
                       ],
                     ),
                   },
-
                   Text("ridden this week", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray,height: 1.2),),
                   SizedBox(height: 16.h,),
                 ],
@@ -148,6 +148,7 @@ class _RidesState extends State<Rides> {
         currentTripHistoryListDay.add(value);
       }
     });
+
 
   }
 }
