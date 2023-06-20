@@ -303,7 +303,7 @@ class _BikeSettingState extends State<BikeSetting> {
                     Padding(
                       padding: EdgeInsets.only(right:19.w),
                       child: Container(
-                        width: 143.w,
+                        width: 148.w,
                         height: 30.h,
                         child: OutlinedButton(
                           child: Row(

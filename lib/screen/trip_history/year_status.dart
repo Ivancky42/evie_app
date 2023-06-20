@@ -112,7 +112,7 @@ class _YearStatusState extends State<YearStatus> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "No. of Ride",
+                  "No. of Rides",
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
                 Text(
@@ -142,7 +142,7 @@ class _YearStatusState extends State<YearStatus> {
                 ),
                 Text(
                   _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
-                  "${averageSpeed.toStringAsFixed(2)} kmh":
+                  "${averageSpeed.toStringAsFixed(2)} km/h":
                   "${(averageSpeed*0.621371).toStringAsFixed(2)} mph",
                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                 )

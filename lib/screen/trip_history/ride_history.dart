@@ -157,7 +157,7 @@ class _RideHistoryState extends State<RideHistory> {
                      Column(
                        crossAxisAlignment: CrossAxisAlignment.start,
                        children: [
-                         Text("Mileage", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),),
+                         Text("Distance", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),),
 
                          _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
                          Row(

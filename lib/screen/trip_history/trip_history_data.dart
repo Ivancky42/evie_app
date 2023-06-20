@@ -32,9 +32,6 @@ class TripHistoryData extends StatefulWidget{
 
 class _TripHistoryDataState extends State<TripHistoryData> {
 
-
-  late List<TripHistoryModel> currentTripHistoryListDay = [];
-
   late List<ChartData> chartData = [];
   late TooltipBehavior _tooltip;
 
@@ -111,23 +108,23 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                   _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
                   Row(
                     children: [
-                      Text((currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2), style: EvieTextStyles.display,),
+                      Text((_tripProvider.currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2), style: EvieTextStyles.display,),
                       Text(" km", style: EvieTextStyles.body18,),
                     ],
                   ):
                   Row(
                     children: [
-                      Text(_settingProvider.convertMeterToMilesInString(currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())), style: EvieTextStyles.display,),
+                      Text(_settingProvider.convertMeterToMilesInString(_tripProvider.currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())), style: EvieTextStyles.display,),
                       Text(" miles", style: EvieTextStyles.body18,),
                     ],
                   ),
 
                 }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(1))...{
                   // Text(_bikeProvider.currentTripHistoryLists.length.toStringAsFixed(0), style: EvieTextStyles.display,),
-                  Text(currentTripHistoryListDay.length.toStringAsFixed(0), style: EvieTextStyles.display,),
+                  Text(_tripProvider.currentTripHistoryListDay.length.toStringAsFixed(0), style: EvieTextStyles.display,),
                   Text(" rides", style: EvieTextStyles.body18,),
                 }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(2))...{
-                  Text(thousandFormatting((currentTripHistoryListDay.fold<int>(0, (prev, element) => prev + element.carbonPrint!))), style: EvieTextStyles.display,),
+                  Text(thousandFormatting((_tripProvider.currentTripHistoryListDay.fold<int>(0, (prev, element) => prev + element.carbonPrint!))), style: EvieTextStyles.display,),
                   Text(" g", style: EvieTextStyles.body18,),
                 },
 
@@ -327,13 +324,13 @@ class _TripHistoryDataState extends State<TripHistoryData> {
     switch(widget.format){
       case TripFormat.day:
         chartData.clear();
-        currentTripHistoryListDay.clear();
+        _tripProvider.currentTripHistoryListDay.clear();
 
         tripProvider.currentTripHistoryLists.forEach((key, value) {
           ///Filter date
           if(calculateDateDifference(pickedDate!, value.startTime.toDate()) == 0){
             chartData.add(ChartData(value.startTime.toDate(), value.distance.toDouble()));
-            currentTripHistoryListDay.add(value);
+            _tripProvider.currentTripHistoryListDay.add(value);
           }
         });
         return;
@@ -341,7 +338,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
         if (isFirst) {
           chartData.clear();
-          currentTripHistoryListDay.clear();
+          _tripProvider.currentTripHistoryListDay.clear();
           // value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)
 
           for(int i = 0; i < 7; i ++){
@@ -354,19 +351,18 @@ class _TripHistoryDataState extends State<TripHistoryData> {
             if(value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 1))) && value.startTime.toDate().isAfter(pickedDate!.subtract(const Duration(days: 6)))){
               ChartData newData = chartData.firstWhere((data) => data.x.day == value.startTime.toDate().day);
               newData.y = newData.y + value.distance.toDouble();
-              currentTripHistoryListDay.add(value);
+              _tripProvider.currentTripHistoryListDay.add(value);
             }
           });
         }
         else {
           chartData.clear();
-          currentTripHistoryListDay.clear();
+          _tripProvider.currentTripHistoryListDay.clear();
           // value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)
 
           for (int i = 0; i < 7; i ++) {
             chartData.add((ChartData(pickedDate!.add(Duration(days: i)), 0)));
           }
-
 
           tripProvider.currentTripHistoryLists.forEach((key, value) {
             if(value.startTime.toDate().isAfter(pickedDate) && value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 6)))){
@@ -375,7 +371,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                   .toDate()
                   .day);
               newData.y = newData.y + value.distance.toDouble();
-              currentTripHistoryListDay.add(value);
+              _tripProvider.currentTripHistoryListDay.add(value);
             }
           });
         }
@@ -383,7 +379,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
         return;
       case TripFormat.month:
         chartData.clear();
-        currentTripHistoryListDay.clear();
+        _tripProvider.currentTripHistoryListDay.clear();
 
         final totalDaysInMonth = daysInMonth(pickedDate!.year,  pickedDate!.month);
 
@@ -396,14 +392,14 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
             ChartData newData = chartData.firstWhere((data) => data.x.day == value.startTime.toDate().day);
             newData.y = newData.y + value.distance.toDouble();
-            currentTripHistoryListDay.add(value);
+            _tripProvider.currentTripHistoryListDay.add(value);
           }
         });
 
         return;
       case TripFormat.year:
         chartData.clear();
-        currentTripHistoryListDay.clear();
+        _tripProvider.currentTripHistoryListDay.clear();
 
         for(int i = 1; i <= 12; i ++){
           chartData.add((ChartData(DateTime(pickedDate!.year, i, 1), 0)));
@@ -415,8 +411,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
             ChartData newData = chartData.firstWhere((data) => data.x.month == value.startTime.toDate().month);
             newData.y = newData.y + value.distance.toDouble();
-            currentTripHistoryListDay.add(value);
-
+            _tripProvider.currentTripHistoryListDay.add(value);
           }
         });
         return;
