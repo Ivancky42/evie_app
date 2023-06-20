@@ -1,3 +1,4 @@
+import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -109,12 +110,11 @@ class _RidesState extends State<Rides> {
                   }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(2))...{
                     Row(
                       children: [
-                        Text("${(currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.carbonPrint!.toDouble())).toStringAsFixed(0)}", style: EvieTextStyles.display,),
+                        Text("${thousandFormatting((currentTripHistoryListDay.fold<int>(0, (prev, element) => prev + element.carbonPrint!)))}", style: EvieTextStyles.display,),
                         Text(" g", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
                       ],
                     ),
                   },
-
                   Text("ridden this week", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray,height: 1.2),),
                   SizedBox(height: 16.h,),
                 ],
@@ -136,16 +136,19 @@ class _RidesState extends State<Rides> {
     // value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)
 
     for(int i = 0; i < 7; i ++){
-      chartData.add((ChartData(pickedDate!.add(Duration(days: i)), 0)));
+      chartData.add((ChartData(pickedDate!.subtract(Duration(days: i)), 0)));
     }
 
+    chartData = chartData.reversed.toList();
+
     tripProvider.currentTripHistoryLists.forEach((key, value) {
-      if(value.startTime.toDate().isAfter(pickedDate) && value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 6)))){
+      if(value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 1))) && value.startTime.toDate().isAfter(pickedDate!.subtract(const Duration(days: 6)))){
         ChartData newData = chartData.firstWhere((data) => data.x.day == value.startTime.toDate().day);
         newData.y = newData.y + value.distance.toDouble();
         currentTripHistoryListDay.add(value);
       }
     });
+
 
   }
 }

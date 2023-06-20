@@ -1,3 +1,4 @@
+import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -59,7 +60,8 @@ class _InvitationSentState extends State<InvitationSent> {
                         padding: EdgeInsets.fromLTRB(16.w,4.h,16.w,4.h),
                         child: Container(
                           child: Text(
-                            "Hooray! EVIE have sent invitation to ${widget.email}. Let's enjoy the ride together",
+                          //  "Hooray! EVIE have sent invitation to ${widget.email}. Let's enjoy the ride together",
+                            "Hooray! EVIE have sent the invitation. Let's enjoy the ride together",
                             style: EvieTextStyles.body18,
                           ),
                         ),

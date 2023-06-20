@@ -294,8 +294,9 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-            _settingProvider.changeSheetElement(SheetList.currentPlan);
-
+                print("yes");
+                _settingProvider.changeSheetElement(SheetList.currentPlan);
+                print(_settingProvider.currentSheetList);
               },
               child: Container(
                 height: 62.h,
@@ -370,9 +371,11 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                     showUpgradePlanToast(10.h);
                   }
                   else {
-
-                    //_settingProvider.changeSheetElement(SheetList.pedalPals);
-                    _settingProvider.changeSheetElement(SheetList.pedalPalsList);
+                    if(_bikeProvider.currentBikeModel?.pedalPalsModel == null || _bikeProvider.currentBikeModel?.pedalPalsModel?.name == ""){
+                      _settingProvider.changeSheetElement(SheetList.createTeam);
+                    }else{
+                      _settingProvider.changeSheetElement(SheetList.pedalPalsList);
+                    }
 
                     // Navigator.of(context).pop();
                     // showShareBikeUserListSheet(context);
@@ -417,6 +420,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                             Row(
                               children: [
                                 Text(
+                                  _bikeProvider.bikeUserList.length == 1 ? "No Sharing Pal" :
                                   "${_bikeProvider.bikeUserList.length} Sharing Pal",
                                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                                 ),

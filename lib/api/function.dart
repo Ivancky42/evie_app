@@ -14,6 +14,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -185,6 +186,14 @@ int calculateDateDifference(DateTime date1, DateTime date2) {
 int daysInMonth(int year, int month) {
   final lastDayOfMonth = DateTime(year, month + 1, 0);
   return lastDayOfMonth.day;
+}
+
+/// print(thousandSeparateFormatting(1000)); // Output: 1,000
+/// print(thousandSeparateFormatting(100000.123)); // Output: 100,000
+/// print(thousandSeparateFormatting(100000000)); // Output: 100,000,000
+String thousandFormatting(num numbers){
+  final formatter = NumberFormat('#,###');
+  return formatter.format(numbers);
 }
 
 ///weekdayName[DateTime.now().weekday]) = Mon

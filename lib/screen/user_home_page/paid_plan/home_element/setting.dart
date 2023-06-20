@@ -32,7 +32,7 @@ class _SettingState extends State<Setting> {
     return EvieCard(
       onPress: (){
         _settingProvider.changeSheetElement(SheetList.bikeSetting);
-        showBikeSettingContentSheet(context, 'Home');
+        showSheetNavigate(context, 'Home');
         //showBikeSettingContentSheet(context, BikeSettingList.bikeSetting, 'Home');
       },
       title: "Setting",

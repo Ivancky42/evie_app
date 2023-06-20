@@ -147,15 +147,9 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
                       style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
-                      _authProvider.setIsFirstLogin(false);
-
-                      if(_bikeProvider.isAddBike == true){
                         _authProvider.setIsFirstLogin(false);
                         _bikeProvider.setIsAddBike(false);
                        changeToUserHomePageScreen(context);
-                      }else{
-                        changeToTurnOnNotificationsScreen(context);
-                      }
                     },
                   ),
                 ),

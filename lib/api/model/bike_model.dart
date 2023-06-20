@@ -91,7 +91,7 @@ class BikeModel {
       lastUpdated:    timestampFromJson(json['lastUpdated']),
       location:   LocationModel.fromJson(json['location'] as Map<String, dynamic>),
       //tripHistoryModel:   TripHistoryModel.fromJson(json['tripHistory'] as Map<String, dynamic>),
-      pedalPalsModel:   PedalPalsModel.fromJson(json['pedalPals'] as Map<String, dynamic>),
+      pedalPalsModel:  json['pedalPals'] != null ? PedalPalsModel.fromJson(json['pedalPals'] as Map<String, dynamic>) : null,
       movementSetting: json['movementSetting'] != null ? MovementSettingModel.fromJson(json['movementSetting'] as Map<String, dynamic>) : null,
       simSetting:   json['simSetting'] != null ? SimSettingModel.fromJson(json['simSetting'] as Map<String, dynamic>) : null,
       bikePlanModel:   json['plans'] != null ? BikePlanModel.fromJson(json['plans'] as Map<String, dynamic>) : null,

@@ -53,8 +53,6 @@ class _CurrentPlanState extends State<CurrentPlan> {
         _settingProvider.changeSheetElement(SheetList.bikeSetting);
         return false;
       },
-    child: Padding(
-    padding: EdgeInsets.all(18.5),
     child: Scaffold(
         appBar: PageAppbar(
           title: 'EV+ Subscription',
@@ -129,9 +127,9 @@ class _CurrentPlanState extends State<CurrentPlan> {
 
                         Text("Expired",        style: EvieTextStyles.body16.copyWith(color: EvieColors.lightRed)),
                         SizedBox(height: 10.h,),
-                        
+
                        const EvieDivider(),
-                        
+
                       ],
                     ),
                   ) : Container(),
@@ -168,7 +166,6 @@ class _CurrentPlanState extends State<CurrentPlan> {
             ),
           ],
         ),
-    ),
     ),
     );
   }

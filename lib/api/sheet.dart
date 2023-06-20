@@ -34,7 +34,7 @@ import '../screen/user_home_page/paid_plan/threat_timeline.dart';
 import 'model/trip_history_model.dart';
 
 
-void showBikeSettingContentSheet(BuildContext context, [String? source, String? strings]) {
+void showSheetNavigate(BuildContext context, [String? source, String? strings]) {
   showModalBottomSheet(
     isScrollControlled: true,
     constraints: BoxConstraints.tight(Size(

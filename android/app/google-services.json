@@ -92,6 +92,42 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:484859945311:android:969f49d6ab5184c9fa56ea",
+        "android_client_info": {
+          "package_name": "com.evie.production"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "484859945311-06sc3rro1sfhgr4tm4nn9shcdug5e09s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4u3Urr0u8SUOJnxKZXvULG2jEyjNYPSw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "484859945311-06sc3rro1sfhgr4tm4nn9shcdug5e09s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "484859945311-0pv2mt1rh5cpc4mrt350t7snbmt2ksva.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.evie.config"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

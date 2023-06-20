@@ -133,7 +133,7 @@ class _RideHistoryState extends State<RideHistory> {
                   child: Row(
                     children: [
                       Text(
-                        "${widget.currentTripHistoryList.carbonPrint}",
+                        thousandFormatting(widget.currentTripHistoryList.carbonPrint ?? 0),
                         style: EvieTextStyles.display,
                       ),
                       Text(" g",style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan)),
@@ -296,8 +296,12 @@ class _RideHistoryState extends State<RideHistory> {
       pointAnnotationManager.createMulti(options);
     });
 
-    Future.delayed(Duration(seconds: 1), () {
-      animateBounceNew();
+    // Future.delayed(Duration(seconds: 1), () {
+    //   animateBounceNew();
+    // });
+
+    Future.delayed(Duration(milliseconds: 500), () {
+      animateBounce2();
     });
 
   }
@@ -354,10 +358,8 @@ class _RideHistoryState extends State<RideHistory> {
 
   void animateBounceNew() {
     final LatLng southwest = LatLng(
-      min(widget.currentTripHistoryList.startTrip?.latitude ?? 0,
-        widget.currentTripHistoryList.endTrip?.latitude ?? 0,),
-      min(widget.currentTripHistoryList.startTrip?.longitude ?? 0,
-        widget.currentTripHistoryList.endTrip?.longitude ?? 0,),
+      min(widget.currentTripHistoryList.startTrip?.latitude ?? 0, widget.currentTripHistoryList.endTrip?.latitude ?? 0,),
+      min(widget.currentTripHistoryList.startTrip?.longitude ?? 0, widget.currentTripHistoryList.endTrip?.longitude ?? 0,),
     );
 
     final LatLng northeast = LatLng(
@@ -378,6 +380,53 @@ class _RideHistoryState extends State<RideHistory> {
       ),
       MapAnimationOptions(duration: 2000, startDelay: 0),
     );
+  }
+
+  void animateBounce2() async {
+    try {
+      final LatLng southwest = LatLng(
+        min(widget.currentTripHistoryList.startTrip?.latitude ?? 0,
+          widget.currentTripHistoryList.endTrip?.latitude ?? 0,),
+        min(widget.currentTripHistoryList.startTrip?.longitude ?? 0,
+          widget.currentTripHistoryList.endTrip?.longitude ?? 0,),
+      );
+
+      final LatLng northeast = LatLng(
+        max(widget.currentTripHistoryList.startTrip?.latitude ?? 0,
+          widget.currentTripHistoryList.endTrip?.latitude ?? 0,),
+        max(widget.currentTripHistoryList.startTrip?.longitude ?? 0,
+          widget.currentTripHistoryList.endTrip?.longitude ?? 0,),
+      );
+
+      if (mapboxMap != null) {
+        final CameraOptions cameraOpt = await mapboxMap!
+            .cameraForCoordinateBounds(
+          CoordinateBounds(
+            northeast: Point(
+              coordinates: Position(northeast.longitude, northeast.latitude),
+            ).toJson(),
+            southwest: Point(
+                coordinates: Position(southwest.longitude, southwest.latitude)
+            ).toJson(),
+            infiniteBounds: true,
+          ),
+          MbxEdgeInsets(
+            // use whatever padding you need
+            left: 200.w,
+            top: 200.h,
+            bottom: 200.h,
+            right: 200.w,
+          ),
+          null,
+          null,
+        );
+
+        mapboxMap?.flyTo(
+            cameraOpt, MapAnimationOptions(duration: 500, startDelay: 0));
+      }
+    } catch(error) {
+      print(error);
+    }
   }
 }
 

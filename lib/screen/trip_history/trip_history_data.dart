@@ -53,11 +53,12 @@ class _TripHistoryDataState extends State<TripHistoryData> {
   void initState() {
     pickedDate = DateTime(now.year, now.month, now.day);
 
-    selectedDate = widget.format == TripFormat.week ?
-    "${pickedDate!.subtract(Duration(days: 6)).day}-${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}" :
-    widget.format == TripFormat.month ?
-    "${monthsInYear[pickedDate!.month]} ${pickedDate!.year}" :
-    "${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}";
+    selectedDate = widget.format ==
+        TripFormat.week ?
+        "${monthsInYear[pickedDate!.month]} ${pickedDate!.subtract(Duration(days: 6)).day}-${pickedDate!.day} ${pickedDate!.year}" :
+        widget.format == TripFormat.month ?
+        "${monthsInYear[pickedDate!.month]} ${pickedDate!.year}" :
+        "${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}";
 
     _tooltip = TooltipBehavior(
         enable: true,
@@ -126,7 +127,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                   Text(currentTripHistoryListDay.length.toStringAsFixed(0), style: EvieTextStyles.display,),
                   Text("rides", style: EvieTextStyles.body18,),
                 }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(2))...{
-                  Text("${(currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.carbonPrint!.toDouble())).toStringAsFixed(0)}", style: EvieTextStyles.display,),
+                  Text(thousandFormatting((currentTripHistoryListDay.fold<int>(0, (prev, element) => prev + element.carbonPrint!))), style: EvieTextStyles.display,),
                   Text(" g", style: EvieTextStyles.body18,),
                 },
 
@@ -171,18 +172,24 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                             ), ), child: child!);
                         },
                       );
-
                         if(picked == null){
                           setState(() {
                             pickedDate == DateTime.now();
                           });
                         }else{
-                          setState(() {
-                            pickedDate = picked;
-                            isFirst = false;
-                            selectedDate = "${monthsInYear[pickedDate!.month]} ${pickedDate!.day}-${pickedDate!.add(Duration(days: 6)).day} ${pickedDate!.year}";
-
-                          });
+                          if(picked.day == DateTime.now().day && picked.month == DateTime.now().month && picked.year == DateTime.now().year){
+                            setState(() {
+                              pickedDate = picked;
+                              isFirst = true;
+                              selectedDate = "${monthsInYear[pickedDate!.month]} ${pickedDate!.subtract(Duration(days: 6)).day}-${pickedDate!.day} ${pickedDate!.year}";
+                            });
+                          }else{
+                            setState(() {
+                              pickedDate = picked;
+                              isFirst = false;
+                              selectedDate = "${monthsInYear[pickedDate!.month]} ${pickedDate!.day}-${pickedDate!.add(Duration(days: 6)).day} ${pickedDate!.year}";
+                            });
+                          }
                         }
                     },
                     child: SvgPicture.asset(
@@ -360,7 +367,6 @@ class _TripHistoryDataState extends State<TripHistoryData> {
             chartData.add((ChartData(pickedDate!.add(Duration(days: i)), 0)));
           }
 
-          chartData = chartData.reversed.toList();
 
           tripProvider.currentTripHistoryLists.forEach((key, value) {
             if(value.startTime.toDate().isAfter(pickedDate) && value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 6)))){
