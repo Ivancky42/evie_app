@@ -399,7 +399,7 @@ class BluetoothProvider extends ChangeNotifier {
         getNotifyingData(data);
         break;
       case NotifyDataState.getIotInfo:
-        getIotInfo(data);
+        getIotInfo2(data);
         break;
       case NotifyDataState.updateIotInfo:
         getUpdateIotData(data);
@@ -874,6 +874,51 @@ class BluetoothProvider extends ChangeNotifier {
       iotInfoString = iotInfoString + asciiDecoder.convert(data.sublist(4, 20)); ///Final BikeInfo String.
       //printLog("FINAL IOT Info Data", iotInfoString); ///Print final IOTInfo String.
       iotInfoModel = IotInfoModel(iotInfoString);
+      iotInfoModelListener.add(iotInfoModel!);
+      exitNotifyIotInfoState();
+      sendCommand(bluetoothCommand.getBikeInfo(requestComKeyResult!.communicationKey));
+      sendCommand(bluetoothCommand.getCableLockStatus(requestComKeyResult!.communicationKey));
+      notifyListeners();
+    }
+  }
+
+  void getIotInfo2(data) {
+    ///if iotDataIndex is lesser than totalBikePacketData
+    if (iotDataIndex < totalIotPacketData) {
+      print('IOT index : ' + iotDataIndex.toString());
+      print('Total Packet: ' + totalIotPacketData.toString());
+      List<int> sublist = data.sublist(4, 20);
+      String convertedString = '';
+      for (int value in sublist) {
+        try {
+          convertedString += String.fromCharCode(value);
+        } catch (e) {
+          print('Invalid value: $value');
+          // Handle the invalid value, such as skipping or replacing it
+        }
+      }
+      iotInfoString += convertedString; ///Partial IOTInfo String
+      /// increase bikeDataIndex
+      iotDataIndex++;
+      ///send command to get next bikeDataIndex Packet Data.
+      sendCommand(bluetoothCommand.getPacketDataByIndex(iotDataIndex, requestComKeyResult!.communicationKey));
+      printLog("IOT INFO ", iotInfoString);
+    }
+    /// Check if iotDataIndex is last index
+    else if (iotDataIndex == totalIotPacketData) {
+      List<int> sublist = data.sublist(4, 20);
+      String convertedString = '';
+      for (int value in sublist) {
+        try {
+          convertedString += String.fromCharCode(value);
+        } catch (e) {
+          print('Invalid value: $value');
+          // Handle the invalid value, such as skipping or replacing it
+        }
+      }
+      iotInfoString += convertedString;
+      iotInfoModel = IotInfoModel(iotInfoString);
+      print('IOT FINAL FINAL STRING: ' + iotInfoString);
       iotInfoModelListener.add(iotInfoModel!);
       exitNotifyIotInfoState();
       sendCommand(bluetoothCommand.getBikeInfo(requestComKeyResult!.communicationKey));
