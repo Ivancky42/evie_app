@@ -121,12 +121,15 @@ class TripProvider extends ChangeNotifier {
 
         noOfRide += 1;
         totalMileage += value.distance;
-        totalTime += calculateTimeDifferentInHour(value.endTime!.toDate(), value.startTime!.toDate());
+        totalTime += calculateTimeDifferentInHourMinutes(value.endTime!.toDate(), value.startTime!.toDate());
       }
     });
 
     totalAverageSpeed = calculateAverageSpeed(totalMileage, totalTime);
-    totalDuration = (totalTime/noOfRide);
+    //totalDuration = (totalTime/noOfRide);
+
+    ///Total duration per ride was change to total duration
+    totalDuration = (totalTime);
 
     ///Carbon footprint per month = total carbon footprint / 12
 

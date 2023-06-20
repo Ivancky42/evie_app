@@ -211,7 +211,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
 
                   ///Bike provider lastUpdated minus current timestamp
                   SingleChildScrollView(
-                    child: Text(calculateTimeAgo(_bikeProvider.currentBikeModel!.lastUpdated!.toDate()),
+                    child: Text(calculateTimeAgo(_locationProvider.locationModel!.updated!.toDate()),
                         style: EvieTextStyles.body14.copyWith(color: EvieColors.mediumLightBlack)),
                   ),
                 ],

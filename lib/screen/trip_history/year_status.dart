@@ -50,7 +50,7 @@ class _YearStatusState extends State<YearStatus> {
           width: double.infinity,
           child: Padding(
             padding:  EdgeInsets.only(top: 10.h, left: 16.w, right: 16.w),
-            child: Text("${widget.pickedData.year} Status", style: EvieTextStyles.h4),
+            child: Text("${widget.pickedData.year} Summary", style: EvieTextStyles.h4),
           ),
         ),
 
@@ -63,12 +63,12 @@ class _YearStatusState extends State<YearStatus> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Carbon Footprint",
+                  "CO2 Saved",
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
                 Text(
-                  ///Carbon footprint per month = total carbon footprint / 12
-                  "${thousandFormatting((_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.carbonPrint!))/12)}g/month",
+                  //"${thousandFormatting((_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.carbonPrint!))/12)} g",
+                  "${thousandFormatting((_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.carbonPrint!)))} g",
                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                 )
               ],
@@ -87,13 +87,13 @@ class _YearStatusState extends State<YearStatus> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Mileage",
+                  "Distance",
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
                 Text(
                   _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
-                  "${(totalMileage/1000).toStringAsFixed(2)}km/ride" :
-                  "${_settingProvider.convertMeterToMilesInString(totalMileage)}miles/ride",
+                  "${thousandFormatting((_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.distance!))/1000)} km" :
+                  "${_settingProvider.convertMeterToMilesInString((_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.distance!)))} miles",
                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                 )
               ],
@@ -112,11 +112,11 @@ class _YearStatusState extends State<YearStatus> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "No of Ride",
+                  "No. of Ride",
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
                 Text(
-                  "${noOfRide.toInt()}ride/month",
+                  "${_tripProvider.currentTripHistoryLists.length} rides",
                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                 )
               ],
@@ -142,8 +142,8 @@ class _YearStatusState extends State<YearStatus> {
                 ),
                 Text(
                   _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
-                  "${averageSpeed.toStringAsFixed(2)}kmh/ride":
-                  "${(averageSpeed*0.621371).toStringAsFixed(2)}mph/ride",
+                  "${averageSpeed.toStringAsFixed(2)} kmh":
+                  "${(averageSpeed*0.621371).toStringAsFixed(2)} mph",
                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                 )
               ],
@@ -168,7 +168,7 @@ class _YearStatusState extends State<YearStatus> {
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
                 Text(
-                  "${formatTotalDuration(averageDuration)}/ride",
+                  "${formatTotalDuration(averageDuration)}",
                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                 )
               ],

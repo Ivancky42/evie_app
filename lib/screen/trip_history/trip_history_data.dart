@@ -55,10 +55,10 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
     selectedDate = widget.format ==
         TripFormat.week ?
-        "${monthsInYear[pickedDate!.month]} ${pickedDate!.subtract(Duration(days: 6)).day}-${pickedDate!.day} ${pickedDate!.year}" :
+        "${monthsInYear[pickedDate!.month]} ${pickedDate!.subtract(Duration(days: 6)).day}-${pickedDate!.day}, ${pickedDate!.year}" :
         widget.format == TripFormat.month ?
-        "${monthsInYear[pickedDate!.month]} ${pickedDate!.year}" :
-        "${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}";
+        "${monthsInYear[pickedDate!.month]}, ${pickedDate!.year}" :
+        "${monthsInYear[pickedDate!.month]} ${pickedDate!.day}, ${pickedDate!.year}";
 
     _tooltip = TooltipBehavior(
         enable: true,
@@ -125,7 +125,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                 }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(1))...{
                   // Text(_bikeProvider.currentTripHistoryLists.length.toStringAsFixed(0), style: EvieTextStyles.display,),
                   Text(currentTripHistoryListDay.length.toStringAsFixed(0), style: EvieTextStyles.display,),
-                  Text("rides", style: EvieTextStyles.body18,),
+                  Text(" rides", style: EvieTextStyles.body18,),
                 }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(2))...{
                   Text(thousandFormatting((currentTripHistoryListDay.fold<int>(0, (prev, element) => prev + element.carbonPrint!))), style: EvieTextStyles.display,),
                   Text(" g", style: EvieTextStyles.body18,),
@@ -133,7 +133,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
                 SizedBox(width: 4.w,),
                 EvieOvalGray(
-                  buttonText: _tripProvider.currentData,
+                  buttonText: _tripProvider.currentData == "Carbon Footprint" ? "CO2 Saved" : _tripProvider.currentData == "No of Ride" ? "No. of Rides"  : _tripProvider.currentData == "Mileage" ? "Distance" :_tripProvider.currentData,
                   onPressed: (){
                     if(_tripProvider.currentData == _tripProvider.dataType.first){
                       _tripProvider.setCurrentData(_tripProvider.dataType.elementAt(1));

@@ -73,7 +73,14 @@ calculateTimeAgo(DateTime dateTime){
       timeAgo = "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
     }else if(diff.inHours > 0 && diff.inHours < 24){
       timeAgo = "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
-    }else{
+    }
+
+    ///For current minute
+    else if(dateTime.second > 0 && diff.inMinutes < 60){
+      timeAgo = "1 minutes ago";
+    }
+
+    else{
       timeAgo = "${dateTime.day.toString()} ${monthsInYear[dateTime.month]}";
     }
     return timeAgo;
@@ -104,17 +111,29 @@ calculateDateAgo(DateTime startDateTime, DateTime endDateTime){
   }else if(diff.inHours > 24  && diff.inHours <= 48){
     timeAgo = "Yesterday ${startDateTime.hour.toString().padLeft(2,'0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2,'0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
   }else{
-    timeAgo = "${weekdayNameFull[startDateTime.weekday]}, ${monthNameHalf[startDateTime.month]} ${startDateTime.day} ${startDateTime.hour.toString().padLeft(2,'0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2,'0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
+    timeAgo = "${weekdayNameFull[startDateTime.weekday]}, ${monthNameHalf[startDateTime.month]} ${startDateTime.day}, ${startDateTime.hour.toString().padLeft(2,'0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2,'0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
   }
   return timeAgo;
 }
 
-calculateTimeDifferentInHour(DateTime startDateTime, DateTime endDateTime){
-  if(startDateTime.difference(endDateTime).inHours.toDouble() > 0){
-    return startDateTime.difference(endDateTime).inHours.toDouble();
-  }else{
+calculateTimeDifferentInHourMinutes(DateTime startDateTime, DateTime endDateTime){
+  final duration = startDateTime.difference(endDateTime);
+  if (duration.inMinutes > 0) {
+    final hours = duration.inHours;
+    final minutes = duration.inMinutes.remainder(60);
+    final minutesFraction = (minutes / 60).toDouble();
+
+    print(hours+minutesFraction);
+    return hours + minutesFraction;
+  } else {
     return 1.0;
   }
+
+  // if(startDateTime.difference(endDateTime).inHours.toDouble() > 0){
+  //   return startDateTime.difference(endDateTime).inHours.toDouble();
+  // }else{
+  //   return 1.0;
+  // }
 }
 
 calculateAverageSpeed(double mileage, double time){

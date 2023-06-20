@@ -136,7 +136,7 @@ class _RideHistoryState extends State<RideHistory> {
                         thousandFormatting(widget.currentTripHistoryList.carbonPrint ?? 0),
                         style: EvieTextStyles.display,
                       ),
-                      Text(" g",style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan)),
+                      Text("  g",style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan)),
                     ],
                   ),
                 ),
@@ -144,7 +144,7 @@ class _RideHistoryState extends State<RideHistory> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 12.h),
                   child: Text(
-                    "carbon footprint",
+                    "CO2 Saved",
                     style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
                   ),
                 ),
@@ -163,13 +163,13 @@ class _RideHistoryState extends State<RideHistory> {
                          Row(
                            children: [
                              Text((widget.currentTripHistoryList.distance!/1000).toStringAsFixed(2), style: EvieTextStyles.headlineB,),
-                             Text("km", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
+                             Text(" km", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
                            ],
                          ) :
                          Row(
                            children: [
                              Text(_settingProvider.convertMeterToMilesInString(widget.currentTripHistoryList.distance!.toDouble()), style: EvieTextStyles.headlineB,),
-                             Text("miles", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
+                             Text(" miles", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
                            ],
                          ),
                        ],
@@ -185,17 +185,17 @@ class _RideHistoryState extends State<RideHistory> {
                           Row(
                             children: [
                               Text((calculateAverageSpeed(widget.currentTripHistoryList.distance!.toDouble(),
-                                    calculateTimeDifferentInHour(widget.currentTripHistoryList.endTime!.toDate(),widget.currentTripHistoryList.startTime!.toDate()))).toStringAsFixed(2),
+                                    calculateTimeDifferentInHourMinutes(widget.currentTripHistoryList.endTime!.toDate(), widget.currentTripHistoryList.startTime!.toDate()))).toStringAsFixed(2),
                                     style: EvieTextStyles.headlineB,),
-                              Text("km/h", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
+                              Text(" km/h", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
                             ],
                           ) :
                           Row(
                             children: [
                               Text(((calculateAverageSpeed(widget.currentTripHistoryList.distance!.toDouble(),
-                                  calculateTimeDifferentInHour(widget.currentTripHistoryList.endTime!.toDate(),widget.currentTripHistoryList.startTime!.toDate())))*0.621371).toStringAsFixed(2),
+                                  calculateTimeDifferentInHourMinutes(widget.currentTripHistoryList.endTime!.toDate(),widget.currentTripHistoryList.startTime!.toDate())))*0.621371).toStringAsFixed(2),
                                 style: EvieTextStyles.headlineB,),
-                              Text("mp/h", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
+                              Text(" mp/h", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
                             ],
                           ),
                         ],
@@ -208,7 +208,7 @@ class _RideHistoryState extends State<RideHistory> {
                           Row(
                             children: [
                               Text((widget.currentTripHistoryList.startBattery!.toInt() - widget.currentTripHistoryList.endBattery!.toInt()).toString(), style: EvieTextStyles.headlineB,),
-                              Text("%", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
+                              Text(" %", style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
                             ],
                           ),
                         ],

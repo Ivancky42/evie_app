@@ -63,7 +63,7 @@ class _RecentActivityState extends State<RecentActivity> {
           width: double.infinity,
           child: Padding(
             padding:  EdgeInsets.only(top: 10.h, left: 16.w, right: 16.w),
-            child: Text("Recent Activity", style: EvieTextStyles.h4),
+            child: Text("Trips", style: EvieTextStyles.h4),
           ),
         ),
 
@@ -113,7 +113,7 @@ class _RecentActivityState extends State<RecentActivity> {
                             children: [
                               _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
                               Text(
-                                "${(_tripProvider.currentTripHistoryLists.values.elementAt(index).distance.toDouble()/1000).toStringAsFixed(2)}km",
+                                "${(_tripProvider.currentTripHistoryLists.values.elementAt(index).distance.toDouble()/1000).toStringAsFixed(2)} km",
                                 style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                               ):
                               Text(
@@ -121,7 +121,7 @@ class _RecentActivityState extends State<RecentActivity> {
                                 style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                               ),
                               Text(
-                                "${thousandFormatting(_tripProvider.currentTripHistoryLists.values.elementAt(index).carbonPrint)}g carbon footprint",
+                                "${thousandFormatting(_tripProvider.currentTripHistoryLists.values.elementAt(index).carbonPrint)}g CO2 Saved",
                                 style: EvieTextStyles.body14,
                               ),
                             ],
