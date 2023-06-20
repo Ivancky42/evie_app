@@ -1,0 +1,124 @@
+import 'package:evie_test/api/sizer.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+
+import '../../../api/colours.dart';
+import '../../../api/dialog.dart';
+import '../../../api/enumerate.dart';
+import '../../../api/fonts.dart';
+import '../../../api/length.dart';
+import '../../../api/provider/bike_provider.dart';
+import '../../../api/provider/setting_provider.dart';
+import '../../../widgets/evie_button.dart';
+
+class ForgetIncomplete extends StatefulWidget{
+  const ForgetIncomplete({Key?key}) : super(key:key);
+  @override
+  _ForgetIncompleteState createState() => _ForgetIncompleteState();
+}
+
+class _ForgetIncompleteState extends State<ForgetIncomplete>{
+
+  late BikeProvider _bikeProvider;
+  late SettingProvider _settingProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    _bikeProvider = Provider.of<BikeProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
+
+    return Stack(
+      children: [
+        Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(16.w, 82.h, 16.w, 2.h),
+                child: Text("Forgetting bike incomplete",
+                  style: EvieTextStyles.h2,
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 66.h),
+                child: Text("Something went wrong during the process of saying goodbye to the bike. Please check out \"Get Help\" to reach out for assistance.",
+                  style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                ),
+              ),
+
+              Align(
+                  alignment: Alignment.center,
+                  child: SvgPicture.asset(
+                    "assets/images/bike_fix.svg",
+                    height: 129.74.h,
+                    width: 284.81.w,
+                  ),
+                ),
+            ],
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16.w,145.26.h,16.w, EvieLength.buttonButton_wordBottom),
+            child: EvieButton(
+              width: double.infinity,
+              height: 48.h,
+              child: Text(
+                "Try Again",
+                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+              ),
+              onPressed: () {
+                _settingProvider.changeSheetElement(SheetList.forgetBike);
+              },
+            ),
+          ),
+        ),
+
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16.w,4.h,16.w, EvieLength.buttonWord_ButtonBottom),
+            child: EvieButton(
+              width: double.infinity,
+              height: 48.h,
+              backgroundColor: EvieColors.lightGrayishCyan,
+              child: Text(
+                "Get Help",
+                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
+              ),
+              onPressed: () {
+                showResetBike(context, _bikeProvider); //CHANGE
+              },
+            ),
+          ),
+        ),
+
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, EvieLength.buttonbutton_buttonBottom),
+            child: EvieButton(
+              width: double.infinity,
+              height: 48.h,
+              backgroundColor: EvieColors.grayishWhite,
+              child: Text(
+                "Cancel Reset Bike",
+                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor,
+                  decoration: TextDecoration.underline, // Add underline decoration
+                ),
+              ),
+              onPressed: () {
+                _settingProvider.changeSheetElement(SheetList.bikeSetting);
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

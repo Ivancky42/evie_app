@@ -59,52 +59,60 @@ class _ResetBike2State extends State<ResetBike2> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 36.5.h, 16.w, 2.0.h),
-                  child: Row(
-                    children: [
-                      Text(
-                        "Reset Bike",
-                        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(width: 3.w),
-                      SvgPicture.asset(
-                        "assets/icons/bluetooth_disconnect.svg",
-                        height: 18.0,
-                        width: 18.0,
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 2.w, 16.w, 12.w),
-                  //padding: EdgeInsets.only(left: 16.w, right: 16.w),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                GestureDetector(
+                  onTap: () {
+                    _settingProvider.changeSheetElement(SheetList.restoreBike);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(16.w, 36.5.h, 16.w, 2.0.h),
+                    child: Column(
+                      children: [
+                        Row(
                           children: [
                             Text(
-                              "Restore the bike to its original state while",
-                              style: TextStyle(fontSize: 14.sp, color: EvieColors.darkGrayishCyan),
+                              "Reset Bike",
+                              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
                             ),
-                            Text(
-                              "keeping it connected to your account",
-                              style: TextStyle(fontSize: 14.sp, color: EvieColors.darkGrayishCyan),
+                            SizedBox(width: 3.w),
+                            SvgPicture.asset(
+                              "assets/icons/bluetooth_disconnect.svg",
+                              height: 18.0,
+                              width: 18.0,
                             ),
                           ],
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 8.w),
-                        child: SvgPicture.asset(
-                          "assets/buttons/next.svg",
-                          height: 24.0,
-                          width: 24.0,
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0.w, 2.w, 16.w, 12.w),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Restore the bike to its original state while",
+                                      style: TextStyle(fontSize: 14.sp, color: EvieColors.darkGrayishCyan),
+                                    ),
+                                    Text(
+                                      "keeping it connected to your account",
+                                      style: TextStyle(fontSize: 14.sp, color: EvieColors.darkGrayishCyan),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 8.w),
+                                child: SvgPicture.asset(
+                                  "assets/buttons/next.svg",
+                                  height: 24.0,
+                                  width: 24.0,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
 
@@ -115,36 +123,43 @@ class _ResetBike2State extends State<ResetBike2> {
                 ),
 
 
-                Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 6.h, 16.w, 2.h),
-                  child: Row(
-                    children: [
-                      Text(
-                        "Forget Bike",
-                        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                ),
-
-                Padding(
-                  padding: EdgeInsets.fromLTRB(16.h, 2.h, 16.h, 12.h),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          "Disconnect the bike from your account",
-                          style: TextStyle(fontSize: 14.sp, color: EvieColors.darkGrayishCyan),
+                GestureDetector(
+                  onTap: () {
+                    _settingProvider.changeSheetElement(SheetList.forgetBike);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(16.w, 6.h, 16.w, 2.h),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "Forget Bike",
+                              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
+                            ),
+                          ],
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: SvgPicture.asset(
-                          "assets/buttons/next.svg",
-
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0.h, 2.h, 16.h, 12.h),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Disconnect the bike from your account",
+                                  style: TextStyle(fontSize: 14.sp, color: EvieColors.darkGrayishCyan),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 8.0),
+                                child: SvgPicture.asset(
+                                  "assets/buttons/next.svg",
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
 
@@ -154,27 +169,30 @@ class _ResetBike2State extends State<ResetBike2> {
                 ),
 
 
-                Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 6.h, 16.w, 2.0.h),
-                  child: Row(
-                    children: [
-                      Text(
-                        "Full Reset",
-                        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(width: 3.0),
-                      SvgPicture.asset(
-                        "assets/icons/bluetooth_disconnect.svg",
-                        height: 18.0,
-                        width: 18.0,
-                      ),
-                    ],
-                  ),
+        GestureDetector(
+          onTap: () {
+            _settingProvider.changeSheetElement(SheetList.fullReset);
+          },
+          child: Container(
+            padding: EdgeInsets.fromLTRB(16.w, 6.h, 16.w, 2.0.h),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "Full Reset",
+                      style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(width: 3.0),
+                    SvgPicture.asset(
+                      "assets/icons/bluetooth_disconnect.svg",
+                      height: 18.0,
+                      width: 18.0,
+                    ),
+                  ],
                 ),
-
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 12.h),
-                  //padding: EdgeInsets.only(left: 16.w, right: 16.w),
+                  padding: EdgeInsets.fromLTRB(0.w, 2.h, 16.w, 12.h),
                   child: Row(
                     children: [
                       Expanded(
@@ -202,8 +220,12 @@ class _ResetBike2State extends State<ResetBike2> {
                     ],
                   ),
                 ),
+              ],
+            ),
+          ),
+        ),
 
-                Padding(
+        Padding(
                   padding: EdgeInsets.only(top: 12.h, bottom: 12.h),
                   child: Divider(height: 1.h,color: EvieColors.darkWhite,),
                 ),

@@ -34,4 +34,18 @@ enum SheetList{
 
   resetBike,
   resetBike2,
+
+  restoreBike,
+  forgetBike,
+  fullReset,
+
+  restoreCompleted,
+  restoreIncomplete,
+
+  forgetCompleted,
+  forgetIncomplete,
+
+  fullCompleted,
+  fullIncomplete,
+
 }

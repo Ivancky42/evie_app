@@ -11,8 +11,17 @@ import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals_list.dart
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/user_not_found.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/forget_completed.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/full_completed.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/full_incomplete.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/full_reset.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/reset_bike.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/reset_bike2.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/forget_bike.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/restore_bike.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/restore_completed.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/restore_incomplete.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/forget_incomplete.dart';
 import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_add_failed.dart';
 import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_key.dart';
 import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_key_list.dart';
@@ -27,6 +36,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_container.dart';
+
 
 import '../../api/colours.dart';
 import '../../api/enumerate.dart';
@@ -111,13 +122,42 @@ class _SheetNavigatorState extends State<SheetNavigator> {
       case SheetList.firmwareUpdateFailed:
         return FirmwareUpdateFailed();
 
+      case SheetList.restoreBike:
+        return RestoreBike();
+
+      case SheetList.forgetBike:
+        return ForgetBike();
+
+      case SheetList.fullReset:
+        return FullReset();
+
       case SheetList.userManual:
         return UserManual();
 
       case SheetList.resetBike:
         return ResetBike();
+
       case SheetList.resetBike2:
         return ResetBike2();
+
+      case SheetList.restoreCompleted:
+        return RestoreCompleted();
+
+      case SheetList.restoreIncomplete:
+        return RestoreIncomplete();
+
+
+    case SheetList.forgetCompleted:
+      return ForgetCompleted();
+
+    case SheetList.forgetIncomplete:
+      return ForgetIncomplete();
+
+    case SheetList.fullCompleted:
+      return FullCompleted();
+
+    case SheetList.fullIncomplete:
+      return FullIncomplete();
 
       default:
         break;
