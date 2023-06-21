@@ -38,11 +38,9 @@ class EvieSwitch extends StatelessWidget {
                 style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
               ),
 
-              Container(
-                child: Text(
-                  text,
-                  style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
-                ),
+              Text(
+                text,
+                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
               ),
           ],
         ),

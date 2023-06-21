@@ -220,6 +220,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
+                _settingProvider.changeSheetElement(SheetList.motionSensitivity);
                 if (deviceConnectResult == null
                     || deviceConnectResult == DeviceConnectResult.disconnected
                     || deviceConnectResult == DeviceConnectResult.scanTimeout
@@ -233,7 +234,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                   showConnectDialog(_bluetoothProvider, _bikeProvider);
                 }
                 else if (deviceConnectResult == DeviceConnectResult.connected) {
-                  changeToMotionSensitivityScreen(context);
+                  _settingProvider.changeSheetElement(SheetList.motionSensitivity);
                 }
               },
               child: Container(

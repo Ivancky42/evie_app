@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
@@ -13,6 +14,7 @@ import 'package:provider/provider.dart';
 
 
 import '../../../api/colours.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
@@ -25,6 +27,9 @@ import '../../../widgets/evie_single_button_dialog.dart';
 import '../../../widgets/evie_switch.dart';
 import '../../../widgets/evie_textform.dart';
 import '../../user_home_page/user_home_page.dart';
+
+// import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_sensitivity.dart';
+// import 'package:evie_test/screen/my_bike_setting/sheet_navigator.dart';
 
 
 ///User profile page with user account information
@@ -40,6 +45,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
 
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
+  late SettingProvider _settingProvider;
 
   final Color _thumbColor = EvieColors.thumbColorTrue;
 
@@ -48,6 +54,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
 
     return WillPopScope(
@@ -69,10 +76,11 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 11.h, 16.w, 10.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 35.5.h, 16.w, 6.h),
                   child: Container(
                       child: EvieSwitch(
-                        text: "Motion Sensitivity",
+                        title: "Motion Sensitivity",
+                        text: "Alarm on bike will be triggered when it senses movement.",
                         value: _bikeProvider.currentBikeModel?.movementSetting?.enabled ?? false,
                         thumbColor: _thumbColor,
                         onChanged: (value) async {
@@ -106,41 +114,27 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                                 rightContent: "Ok",
                                 onPressedRight: (){SmartDialog.dismiss();}));
                           }
-
-
                         },
                       )
                   ),
                 ),
 
-                Stack(
-                  children: [
-                    // Divider(
-                    //   thickness: 23.h,
-                    //   color: const Color(0xffF4F4F4),
-                    // ),
-
-                    Padding(
-                      padding: EdgeInsets.only(left: 16.w),
-                      child: Text("Alarm on bike will be triggered when it senses movement.", style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),),
-                    ),
-
-                  ],
+                Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(16.w, 6.h, 16.w,8.h),
+                  child:   const EvieDivider(),
                 ),
-
-                const EvieDivider(),
 
                 _bikeProvider.currentBikeModel?.movementSetting?.enabled == true ? Padding(
                   padding:EdgeInsets.only(top: 5.h,bottom: 5.h,),
                   child: GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: (){
-                      changeToDetectionSensitivityScreen(context);
+                      _settingProvider.changeSheetElement(SheetList.detectionSensitivity);
                     },
                     child: Container(
                       height: 54.h,
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
+                        padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 8.h),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -180,7 +174,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                       child: Container(
                         height: 44.h,
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
+                          padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 8.h),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -210,7 +204,10 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                     ),
                   ),
                  ),
-                const EvieDivider(),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(16.w, 8.h, 16.w,8.h),
+                  child:   const EvieDivider(),
+                ),
 
               ],
             ),

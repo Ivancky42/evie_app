@@ -160,6 +160,12 @@ class _SheetNavigatorState extends State<SheetNavigator> {
     case SheetList.fullIncomplete:
       return FullIncomplete();
 
+      case SheetList.motionSensitivity:
+        return MotionSensitivity();
+
+      case SheetList.detectionSensitivity:
+        return DetectionSensitivity();
+
       default:
         break;
     }
