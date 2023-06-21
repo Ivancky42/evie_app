@@ -2,6 +2,7 @@ import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/account/account_model.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
@@ -29,12 +30,11 @@ class _AccountContainerState extends State<AccountContainer> {
 
   late BikeProvider _bikeProvider;
   late AuthProvider _authProvider;
+  late SettingProvider _settingProvider;
 
   DeviceConnectResult? deviceConnectResult;
   String? label;
   String? pageNavigate;
-
-  PackageInfo? packageInfo;
 
   // @override
   // Future<void> initState() async {
@@ -47,6 +47,7 @@ class _AccountContainerState extends State<AccountContainer> {
     label = widget.accountModel.label;
     _bikeProvider = Provider.of<BikeProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     switch(label) {
       case "Personal Information":
@@ -416,7 +417,7 @@ class _AccountContainerState extends State<AccountContainer> {
                 child: Column(
                   children: [
                     Text(
-                      "${packageInfo?.appName ?? "Evie"} ${packageInfo?.version ?? "v1.0.0"} ${packageInfo?.buildNumber ?? "(0)"}",
+                      "${_settingProvider.packageInfo?.appName ?? "Evie Bike"} ${_settingProvider.packageInfo?.version ?? "v1.0.0"} (${_settingProvider.packageInfo?.buildNumber ?? "0"})",
                       style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                     ),
                     Text(

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../enumerate.dart';
 
@@ -22,6 +23,8 @@ class SettingProvider with ChangeNotifier {
   String? themeString;
 
   SheetList? currentSheetList;
+
+  PackageInfo? packageInfo;
 
   SettingProvider() {
     init();
@@ -54,6 +57,11 @@ class SettingProvider with ChangeNotifier {
     }else{
       currentThemeMode = ThemeMode.system;
     }
+
+    WidgetsFlutterBinding.ensureInitialized();
+    packageInfo = await PackageInfo.fromPlatform();
+
+    print(packageInfo?.version);
 
     notifyListeners();
   }
