@@ -295,9 +295,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                print("yes");
                 _settingProvider.changeSheetElement(SheetList.currentPlan);
-                print(_settingProvider.currentSheetList);
               },
               child: Container(
                 height: 62.h,

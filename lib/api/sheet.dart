@@ -274,8 +274,7 @@ void showEssentialPlanSheet(BuildContext context) {
             );
           }
 
-          void showRideHistorySheet(BuildContext context, String tripId,
-              TripHistoryModel currentTripHistoryList) {
+          void showRideHistorySheet(BuildContext context, String tripId, TripHistoryModel currentTripHistoryList) {
             showModalBottomSheet(
               isScrollControlled: true,
               constraints: BoxConstraints.tight(Size(

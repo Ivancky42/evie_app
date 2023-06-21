@@ -33,7 +33,6 @@ class _RecentActivityState extends State<RecentActivity> {
 
   List<String> totalData = ["Mileage", "No of Ride", "Carbon Footprint"];
   late String currentData;
-  late List<TripHistoryModel> currentTripHistoryListDay = [];
 
   late List<ChartData> chartData = [];
   late TooltipBehavior _tooltip;
@@ -51,19 +50,17 @@ class _RecentActivityState extends State<RecentActivity> {
     _tripProvider = Provider.of<TripProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
-
     return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
 
       children: [
-
 
         Container(
           color: EvieColors.dividerWhite,
           width: double.infinity,
           child: Padding(
             padding:  EdgeInsets.only(top: 10.h, left: 16.w, right: 16.w),
-            child: Text("Recent Activity", style: EvieTextStyles.h4),
+            child: Text("Trips", style: EvieTextStyles.h4),
           ),
         ),
 
@@ -76,66 +73,67 @@ class _RecentActivityState extends State<RecentActivity> {
           },
           itemCount: _tripProvider.currentTripHistoryLists.length,
           itemBuilder: (context, index) {
-            return  Column(
-              children: [
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    //Navigator.pop(context);
-                    showRideHistorySheet(context, _tripProvider.currentTripHistoryLists.keys.elementAt(index), _tripProvider.currentTripHistoryLists.values.elementAt(index));
+            if(_tripProvider.isFilterData(_tripProvider.currentTripHistoryListDay, _tripProvider.currentTripHistoryLists.values.elementAt(index))){
+              return  Column(
+                children: [
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      //Navigator.pop(context);
+                      showRideHistorySheet(context, _tripProvider.currentTripHistoryLists.keys.elementAt(index), _tripProvider.currentTripHistoryLists.values.elementAt(index));
+                    },
+                    child: Container(
+                      height: 77.h,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  calculateDateAgo(_tripProvider.currentTripHistoryLists.values.elementAt(index).startTime.toDate(), _tripProvider.currentTripHistoryLists.values.elementAt(index).endTime.toDate()),
 
-                  },
-                  child: Container(
-                    height: 77.h,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                calculateDateAgo(_tripProvider.currentTripHistoryLists.values.elementAt(index).startTime.toDate(), _tripProvider.currentTripHistoryLists.values.elementAt(index).endTime.toDate()),
-
-                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
-                              ),
-                              SvgPicture.asset(
-                                "assets/buttons/next.svg",
-                                height: 24.h,
-                                width: 24.w,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
-                              Text(
-                                "${(_tripProvider.currentTripHistoryLists.values.elementAt(index).distance.toDouble()/1000).toStringAsFixed(2)}km",
-                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-                              ):
-                              Text(
-                                "${_settingProvider.convertMeterToMilesInString((_tripProvider.currentTripHistoryLists.values.elementAt(index).distance.toDouble()))}miles",
-                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-                              ),
-                              Text(
-                                "${thousandFormatting(_tripProvider.currentTripHistoryLists.values.elementAt(index).carbonPrint)}g carbon footprint",
-                                style: EvieTextStyles.body14,
-                              ),
-                            ],
-                          )
-                        ],
+                                  style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                                ),
+                                SvgPicture.asset(
+                                  "assets/buttons/next.svg",
+                                  height: 24.h,
+                                  width: 24.w,
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
+                                Text(
+                                  "${(_tripProvider.currentTripHistoryLists.values.elementAt(index).distance.toDouble()/1000).toStringAsFixed(2)} km",
+                                  style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                                ):
+                                Text(
+                                  "${_settingProvider.convertMeterToMilesInString((_tripProvider.currentTripHistoryLists.values.elementAt(index).distance.toDouble()))}miles",
+                                  style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                                ),
+                                Text(
+                                  "${thousandFormatting(_tripProvider.currentTripHistoryLists.values.elementAt(index).carbonPrint)}g CO2 Saved",
+                                  style: EvieTextStyles.body14,
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const EvieDivider(),
-
-              ],
-            );
-
+                  const EvieDivider(),
+                ],
+              );
+            }else{
+              return Container();
+            }
           },
         ),
 

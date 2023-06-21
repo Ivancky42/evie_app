@@ -25,6 +25,7 @@ class TripProvider extends ChangeNotifier {
   String tripHistoryCollection = dotenv.env['DB_COLLECTION_TRIPHISTORY'] ?? 'DB not found';
 
   LinkedHashMap currentTripHistoryLists = LinkedHashMap<String, TripHistoryModel>();
+  late List<TripHistoryModel> currentTripHistoryListDay = [];
 
   StreamSubscription? tripHistorySubscription;
 
@@ -121,12 +122,15 @@ class TripProvider extends ChangeNotifier {
 
         noOfRide += 1;
         totalMileage += value.distance;
-        totalTime += calculateTimeDifferentInHour(value.endTime!.toDate(), value.startTime!.toDate());
+        totalTime += calculateTimeDifferentInHourMinutes(value.endTime!.toDate(), value.startTime!.toDate());
       }
     });
 
     totalAverageSpeed = calculateAverageSpeed(totalMileage, totalTime);
-    totalDuration = (totalTime/noOfRide);
+    //totalDuration = (totalTime/noOfRide);
+
+    ///Total duration per ride was change to total duration
+    totalDuration = (totalTime);
 
     ///Carbon footprint per month = total carbon footprint / 12
 
@@ -154,6 +158,20 @@ class TripProvider extends ChangeNotifier {
       debugPrint(e.toString());
     }
   }
+
+
+  isFilterData(List<TripHistoryModel> tripList, TripHistoryModel tripModel){
+    return tripList.any((trip) =>
+        trip.carbonPrint == tripModel.carbonPrint &&
+        trip.distance == tripModel.distance &&
+        trip.startBattery == tripModel.startBattery &&
+        trip.endBattery == tripModel.endBattery &&
+        trip.startTime == tripModel.startTime &&
+        trip.endTime == tripModel.endTime &&
+        trip.startTrip == tripModel.startTrip &&
+        trip.endTrip == tripModel.endTrip);
+  }
+
 
   clear(){
     tripHistorySubscription?.cancel();

@@ -69,7 +69,7 @@ class _RidesState extends State<Rides> {
             Padding(
               padding: EdgeInsets.only(top:12.h),
               child: EvieOvalGray(
-                buttonText: _tripProvider.currentData == "Carbon Footprint" ? "CO2" : _tripProvider.currentData,
+                buttonText: _tripProvider.currentData == "Carbon Footprint" ? "CO2 Saved" : _tripProvider.currentData == "No of Ride" ? "No. of Rides"  : _tripProvider.currentData == "Mileage" ? "Distance" :_tripProvider.currentData,
                 onPressed: (){
                   if(_tripProvider.currentData == _tripProvider.dataType.first){
                     _tripProvider.setCurrentData(_tripProvider.dataType.elementAt(1));
@@ -115,7 +115,7 @@ class _RidesState extends State<Rides> {
                       ],
                     ),
                   },
-                  Text("ridden this week", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray,height: 1.2),),
+                  Text("this week", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray,height: 1.2),),
                   SizedBox(height: 16.h,),
                 ],
               ),
