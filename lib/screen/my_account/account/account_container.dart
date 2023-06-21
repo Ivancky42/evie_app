@@ -11,6 +11,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
@@ -32,6 +33,14 @@ class _AccountContainerState extends State<AccountContainer> {
   DeviceConnectResult? deviceConnectResult;
   String? label;
   String? pageNavigate;
+
+  PackageInfo? packageInfo;
+
+  // @override
+  // Future<void> initState() async {
+  //  packageInfo = await PackageInfo.fromPlatform();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -407,7 +416,7 @@ class _AccountContainerState extends State<AccountContainer> {
                 child: Column(
                   children: [
                     Text(
-                      "Evie v1.0.0 (39)",
+                      "${packageInfo?.appName ?? "Evie"} ${packageInfo?.version ?? "v1.0.0"} ${packageInfo?.buildNumber ?? "(0)"}",
                       style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                     ),
                     Text(

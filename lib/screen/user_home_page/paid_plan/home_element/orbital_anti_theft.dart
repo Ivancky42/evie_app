@@ -16,8 +16,10 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../../../api/colours.dart';
+import '../../../../api/dialog.dart';
 import '../../../../api/fonts.dart';
 import '../../../../api/function.dart';
 import '../../../../api/model/location_model.dart';
@@ -95,6 +97,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
+
+
 
     List<Widget> _widgets = [
       Row(
@@ -304,6 +308,9 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
       ),
       child: EvieCard(
         onPress: (){
+          ///Location
+          locations();
+
           if(_currentIndex == 0){
             if(_locationProvider.locationModel?.isConnected == false){
               showMapDetailsSheet(context);
@@ -477,6 +484,14 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
         ),
         MapAnimationOptions(duration: 2000, startDelay: 0));
     loadMarker();
+  }
+
+  locations() async{
+    if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
+    }else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
+      showLocationServiceDisable();
+      //OpenSettings.openLocationSourceSetting();
+    }
   }
 }
 

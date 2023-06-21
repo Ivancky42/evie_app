@@ -25,6 +25,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import '../../../api/colours.dart';
 import '../../../api/dialog.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/function.dart';
 import '../../../api/model/location_model.dart';
@@ -402,6 +403,7 @@ class _FreePlanState extends State<FreePlan> {
                                          padding: EdgeInsets.all(8),
                                          child: EvieCard(
                                            onPress: (){
+                                             _settingProvider.changeSheetElement(SheetList.bikeSetting);
                                              showSheetNavigate(context, 'Home');
                                            },
                                            title: "Setting",

@@ -24,6 +24,7 @@ class BikeConnectSuccess extends StatefulWidget {
 class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
 
   late BikeProvider _bikeProvider;
+  bool isNext = true;
 
 
   @override
@@ -31,9 +32,17 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
 
-     Future.delayed(const Duration(seconds: 5), (){
-       changeToNameBikeScreen(context);
-     });
+    if(isNext == true){
+      Future.delayed(const Duration(seconds: 5), (){
+        changeToNameBikeScreen(context);
+        setState(() {
+          isNext = false;
+        });
+      });
+      setState(() {
+        isNext = false;
+      });
+    }
 
     return WillPopScope(
       onWillPop: () async {
