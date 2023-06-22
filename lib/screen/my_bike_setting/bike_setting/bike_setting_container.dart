@@ -61,15 +61,16 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             case "EV-Key":
               pageNavigate = null;
               if (_bikeProvider.rfidList.isNotEmpty) {
-                changeToEVKeyList(context);
+                _settingProvider.changeSheetElement(SheetList.evKeyList);
               }
               else {
-                changeToEVKey(context);
+                _settingProvider.changeSheetElement(SheetList.evKey);
               }
               break;
             case "Motion Sensitivity":
               pageNavigate = null;
-              changeToMotionSensitivityScreen(context);
+              _settingProvider.changeSheetElement(SheetList.motionSensitivity);
+
               break;
             case "Firmware Version":
               pageNavigate = null;
@@ -159,10 +160,10 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 }
                 else if (deviceConnectResult == DeviceConnectResult.connected) {
                   if (_bikeProvider.rfidList.isNotEmpty) {
-                    changeToEVKeyList(context);
+                    _settingProvider.changeSheetElement(SheetList.evKeyList);
                   }
                   else {
-                    changeToEVKey(context);
+                    _settingProvider.changeSheetElement(SheetList.evKey);
                   }
                 }
               },
@@ -220,7 +221,6 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                _settingProvider.changeSheetElement(SheetList.motionSensitivity);
                 if (deviceConnectResult == null
                     || deviceConnectResult == DeviceConnectResult.disconnected
                     || deviceConnectResult == DeviceConnectResult.scanTimeout

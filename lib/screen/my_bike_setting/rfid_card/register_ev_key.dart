@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -12,9 +13,11 @@ import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 
 import '../../../api/dialog.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bluetooth_provider.dart';
+import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
@@ -32,6 +35,7 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
 
   late BluetoothProvider _bluetoothProvider;
   late BikeProvider _bikeProvider;
+  late SettingProvider _settingProvider;
   late StreamSubscription addRFIDStream;
 
   @override
@@ -44,12 +48,14 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
   Widget build(BuildContext context) {
     _bluetoothProvider =  Provider.of<BluetoothProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
+        Navigator.of(context).pop();
         addRFIDStream.cancel();
         if(_bikeProvider.rfidList.length >0){
-          changeToEVKeyList(context);
+          _settingProvider.changeSheetElement(SheetList.evKeyList);
         }else{
           showBikeSettingSheet(context);
         }
@@ -58,11 +64,12 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
       },
       child: Scaffold(
         appBar: PageAppbar(
-          title: 'Register your EV-Key',
+          title: 'Register EV-Key',
           onPressed: () {
+            Navigator.of(context).pop();
             addRFIDStream.cancel();
             if(_bikeProvider.rfidList.length >0){
-              changeToEVKeyList(context);
+              _settingProvider.changeSheetElement(SheetList.evKeyList);
             }else{
               showBikeSettingSheet(context);
             }
@@ -75,28 +82,28 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 32.5.h, 16.w,4.h),
                   child: Text(
                     "Flash your EV-Key at the lock",
-                    style: EvieTextStyles.h2,
+                    style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack),
                   ),
                 ),
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 155.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 16.h),
                   child: Text(
                     "Hold and place your EV-Key near the bike's lock.",
                     style: EvieTextStyles.body18,
                   ),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,221.h),
-                    child: Center(
-                      child:  Lottie.asset('assets/animations/RFIDCardRegister.json'),
+                Center(
+                      child: Container(
+                        width: double.infinity,
+                        height: 500.h,
+                        child: Lottie.asset('assets/animations/RFIDCardRegister.json', width: 200.w, height: 228.84.h),
+                      ),
                     ),
-                  ),
-                ),
+
               ],
             ),
           ],
@@ -132,13 +139,14 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
           showEVKeyExistAndUploadToFirestore(context, addRFIDStatus.rfidNumber!);
 
         } else {
-          showAddEVKeyFailed(context);
+          _settingProvider.changeSheetElement(SheetList.evAddFailed);
         }
       }
     }, onError: (error) {
       addRFIDStream.cancel();
       SmartDialog.dismiss(status: SmartStatus.loading);
-      showAddEVKeyFailed(context);
+      //showAddEVKeyFailed(context);
+      _settingProvider.changeSheetElement(SheetList.evAddFailed);
     });
   }
 

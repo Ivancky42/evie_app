@@ -12,10 +12,12 @@ import 'package:lottie/lottie.dart';
 
 import '../../../api/colours.dart';
 import '../../../api/dialog.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
+import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
@@ -33,16 +35,19 @@ class _EVKeyState extends State<EVKey> {
 
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
+  late SettingProvider _settingProvider;
   DeviceConnectResult? deviceConnectResult;
 
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
     return WillPopScope(
       onWillPop: () async {
+        Navigator.of(context).pop();
         showBikeSettingSheet(context);
         return false;
       },
@@ -50,6 +55,7 @@ class _EVKeyState extends State<EVKey> {
         appBar: PageAppbar(
           title: 'EV-Key',
           onPressed: () {
+            Navigator.of(context).pop();
             showBikeSettingSheet(context);
           },
         ),
@@ -61,27 +67,41 @@ class _EVKeyState extends State<EVKey> {
               children: [
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 32.5.h, 16.w,2.h),
                   child: Text(
                     "Unlock bike with EV-Key",
-                    style: EvieTextStyles.h2,
+                    style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack),
                   ),
                 ),
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 50.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 0.h),
                   child: Text(
                     "Unlocking your bike has never been easier with the EV-Key! This convenient and secure method lets you access your bike with just a simple tap.\n\n "
                         "A maximum number of 5 EV-Key can be register.",
-                    style: EvieTextStyles.body18,
+                    style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                   ),
                 ),
 
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,221.h),
+                    padding: EdgeInsets.zero,
                     child: Center(
-                      child:  Lottie.asset('assets/animations/RFIDCardRegister.json'),
+                      child: Container(
+                        width: 200.w,
+                        height: 228.84.h,
+                        child: Lottie.asset('assets/animations/RFIDCardRegister.json'),
+                      ),
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 122.h),
+                  child: Center(
+                    child: Text(
+                      "You don't have EV-Key registered yet.",
+                      style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                     ),
                   ),
                 ),
@@ -110,11 +130,11 @@ class _EVKeyState extends State<EVKey> {
                             || deviceConnectResult == DeviceConnectResult.scanError
                             || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
                             ) {
-                             showBikeSettingSheet(context);
+                            _settingProvider.changeSheetElement(SheetList.registerEvKey);
                             showConnectDialog(_bluetoothProvider, _bikeProvider);
                               }
                               else if (deviceConnectResult == DeviceConnectResult.connected) {
-                              changeToAddNewEVKey(context);
+                          _settingProvider.changeSheetElement(SheetList.registerEvKey);
                               }
                             },
                   ),
