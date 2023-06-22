@@ -2,6 +2,7 @@ import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/account/account_model.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
@@ -28,16 +30,24 @@ class _AccountContainerState extends State<AccountContainer> {
 
   late BikeProvider _bikeProvider;
   late AuthProvider _authProvider;
+  late SettingProvider _settingProvider;
 
   DeviceConnectResult? deviceConnectResult;
   String? label;
   String? pageNavigate;
+
+  // @override
+  // Future<void> initState() async {
+  //  packageInfo = await PackageInfo.fromPlatform();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
     label = widget.accountModel.label;
     _bikeProvider = Provider.of<BikeProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     switch(label) {
       case "Personal Information":
@@ -407,7 +417,7 @@ class _AccountContainerState extends State<AccountContainer> {
                 child: Column(
                   children: [
                     Text(
-                      "Evie v1.0.0 (39)",
+                      "${_settingProvider.packageInfo?.appName ?? "Evie Bike"} ${_settingProvider.packageInfo?.version ?? "v1.0.0"} (${_settingProvider.packageInfo?.buildNumber ?? "0"})",
                       style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                     ),
                     Text(

@@ -73,9 +73,12 @@ class _RecentActivityState extends State<RecentActivity> {
           },
           itemCount: _tripProvider.currentTripHistoryLists.length,
           itemBuilder: (context, index) {
-            if(_tripProvider.isFilterData(_tripProvider.currentTripHistoryListDay, _tripProvider.currentTripHistoryLists.values.elementAt(index))){
+            if(_tripProvider.isFilterData(
+                _tripProvider.currentTripHistoryListDay,
+                _tripProvider.currentTripHistoryLists.values.elementAt(index))){
               return  Column(
                 children: [
+
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
