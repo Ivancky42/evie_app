@@ -67,14 +67,21 @@ class _ProPlanState extends State<ProPlan> {
                 border: Border.all(
                   color: EvieColors.dividerWhite,
                 ),
-                boxShadow:[
-                  BoxShadow(
-                    color: EvieColors.dividerWhite,
-                    //spreadRadius: 2,
-                    blurRadius: 24,
-                    offset: Offset(0, 12),
-                  ),
-                ],
+                boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.05),
+                spreadRadius: 10.0.w,
+                blurRadius: 10.0.w,
+              ),
+            ],
+                // boxShadow:[
+                //   BoxShadow(
+                //     color: EvieColors.dividerWhite,
+                //     //spreadRadius: 2,
+                //     blurRadius: 24,
+                //     offset: Offset(0, 12),
+                //   ),
+                // ],
                 borderRadius:
                 BorderRadius.all(Radius.circular(10))),
 

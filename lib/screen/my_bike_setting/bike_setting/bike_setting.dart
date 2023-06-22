@@ -271,14 +271,27 @@ class _BikeSettingState extends State<BikeSetting> {
                         Padding(
                           padding:
                           EdgeInsets.fromLTRB(27.7.w, 14.67.h, 6.w, 14.67.h),
-                          child: Image(
-                            ///Change based on status
-                            image: const AssetImage(
-                              //returnBikeStatusImage(_bikeProvider.currentBikeModel?.location?.isConnected ?? true, _bikeProvider.currentBikeModel?.location?.status ?? "")),
-                                "assets/buttons/bike_update_photo.png"),
-                            width: 49.h,
-                            height: 49.h,
-                          ),
+                          child: Stack(
+                            children: [
+                              Image(
+                                image: const AssetImage("assets/buttons/bike_left.png"),
+                                width: 49.h,
+                                height: 49.h,
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: SvgPicture.asset(
+                                    "assets/buttons/camera_bike_pic.svg",
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: 6.w),

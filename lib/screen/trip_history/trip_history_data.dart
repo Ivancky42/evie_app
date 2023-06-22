@@ -77,6 +77,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           );
         });
 
+
     super.initState();
   }
 
@@ -86,7 +87,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
     _tripProvider = Provider.of<TripProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
-    getData(_bikeProvider, _tripProvider);
+    _tripProvider.getData(_bikeProvider, widget.format, pickedDate ?? DateTime.now(), isFirst);
 
     return SingleChildScrollView(
       physics:const BouncingScrollPhysics(),
@@ -319,103 +320,5 @@ class _TripHistoryDataState extends State<TripHistoryData> {
     );
   }
 
-  getData(BikeProvider bikeProvider, TripProvider tripProvider){
-
-    switch(widget.format){
-      case TripFormat.day:
-        chartData.clear();
-        _tripProvider.currentTripHistoryListDay.clear();
-
-        tripProvider.currentTripHistoryLists.forEach((key, value) {
-          ///Filter date
-          if(calculateDateDifference(pickedDate!, value.startTime.toDate()) == 0){
-            chartData.add(ChartData(value.startTime.toDate(), value.distance.toDouble()));
-            _tripProvider.currentTripHistoryListDay.add(value);
-          }
-        });
-        return;
-      case TripFormat.week:
-
-        if (isFirst) {
-          chartData.clear();
-          _tripProvider.currentTripHistoryListDay.clear();
-          // value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)
-
-          for(int i = 0; i < 7; i ++){
-            chartData.add((ChartData(pickedDate!.subtract(Duration(days: i)), 0)));
-          }
-
-          chartData = chartData.reversed.toList();
-
-          tripProvider.currentTripHistoryLists.forEach((key, value) {
-            if(value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 1))) && value.startTime.toDate().isAfter(pickedDate!.subtract(const Duration(days: 6)))){
-              ChartData newData = chartData.firstWhere((data) => data.x.day == value.startTime.toDate().day);
-              newData.y = newData.y + value.distance.toDouble();
-              _tripProvider.currentTripHistoryListDay.add(value);
-            }
-          });
-        }
-        else {
-          chartData.clear();
-          _tripProvider.currentTripHistoryListDay.clear();
-          // value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)
-
-          for (int i = 0; i < 7; i ++) {
-            chartData.add((ChartData(pickedDate!.add(Duration(days: i)), 0)));
-          }
-
-          tripProvider.currentTripHistoryLists.forEach((key, value) {
-            if(value.startTime.toDate().isAfter(pickedDate) && value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 6)))){
-              ChartData newData = chartData.firstWhere((data) =>
-              data.x.day == value.startTime
-                  .toDate()
-                  .day);
-              newData.y = newData.y + value.distance.toDouble();
-              _tripProvider.currentTripHistoryListDay.add(value);
-            }
-          });
-        }
-
-        return;
-      case TripFormat.month:
-        chartData.clear();
-        _tripProvider.currentTripHistoryListDay.clear();
-
-        final totalDaysInMonth = daysInMonth(pickedDate!.year,  pickedDate!.month);
-
-        for(int i = 1; i <= totalDaysInMonth; i ++){
-          chartData.add((ChartData(DateTime(pickedDate!.year, pickedDate!.month, i), 0)));
-        }
-        tripProvider.currentTripHistoryLists.forEach((key, value) {
-          ///Filter date
-          if(value.startTime.toDate().month == pickedDate!.month && value.startTime.toDate().year == pickedDate!.year){
-
-            ChartData newData = chartData.firstWhere((data) => data.x.day == value.startTime.toDate().day);
-            newData.y = newData.y + value.distance.toDouble();
-            _tripProvider.currentTripHistoryListDay.add(value);
-          }
-        });
-
-        return;
-      case TripFormat.year:
-        chartData.clear();
-        _tripProvider.currentTripHistoryListDay.clear();
-
-        for(int i = 1; i <= 12; i ++){
-          chartData.add((ChartData(DateTime(pickedDate!.year, i, 1), 0)));
-        }
-
-        tripProvider.currentTripHistoryLists.forEach((key, value) {
-          ///Filter date
-          if(value.startTime.toDate().year == pickedDate!.year){
-
-            ChartData newData = chartData.firstWhere((data) => data.x.month == value.startTime.toDate().month);
-            newData.y = newData.y + value.distance.toDouble();
-            _tripProvider.currentTripHistoryListDay.add(value);
-          }
-        });
-        return;
-    }
-  }
 }
 

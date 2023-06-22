@@ -131,7 +131,7 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
           }
 
       }else if(addRFIDStatus.addRFIDState == AddRFIDState.cardIsExist){
-        ///Upload to firestore and change to name bike page
+        ///Upload to firestore and change to name rfid page
         addRFIDStream.cancel();
         final result = await _bikeProvider.uploadRFIDtoFireStore(addRFIDStatus.rfidNumber!, "RFID Card");
         if (result == true) {

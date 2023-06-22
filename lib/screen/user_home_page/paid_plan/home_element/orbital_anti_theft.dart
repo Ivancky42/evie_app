@@ -197,7 +197,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                             snapshot.data.name.toString(),
                             style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack, height:1.2),
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
+                            maxLines: 2,
                           );
                         }else{
                           return Text(

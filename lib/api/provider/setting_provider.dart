@@ -61,8 +61,6 @@ class SettingProvider with ChangeNotifier {
     WidgetsFlutterBinding.ensureInitialized();
     packageInfo = await PackageInfo.fromPlatform();
 
-    print(packageInfo?.version);
-
     notifyListeners();
   }
 
