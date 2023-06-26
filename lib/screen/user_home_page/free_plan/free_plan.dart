@@ -214,10 +214,14 @@ class _FreePlanState extends State<FreePlan> {
                                               children: [
                                                 Row(
                                                   children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    child: Image.asset('assets/images/bike_round.png'),
-                                                  ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child:    Image(
+                                                        image: const AssetImage("assets/buttons/bike_left.png"),
+                                                        width: 56.h,
+                                                        height: 56.h,
+                                                      ),
+                                                    ),
                                                   Padding(
                                                     padding:  EdgeInsets.only(left: 12.w),
                                                     child: Column(

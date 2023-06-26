@@ -14,6 +14,7 @@ import '../../bluetooth/modelResult.dart';
 import '../../widgets/evie_single_button_dialog.dart';
 import '../dialog.dart';
 import '../model/bike_model.dart';
+import 'bike_provider.dart';
 
 enum NotifyDataState {
   notifying,
@@ -275,6 +276,13 @@ class BluetoothProvider extends ChangeNotifier {
           currentConnectedDevice = currentBikeModel?.macAddr;
           notifyListeners();
           discoverServices(currentBikeModel!.bleKey!);
+
+
+          //print("Yessssss");
+          if(iotInfoModel != null && iotInfoModel?.firmwareVer != null){
+            BikeProvider().checkIsCurrentVersion(iotInfoModel!.firmwareVer!);
+          }
+
           break;
         case DeviceConnectionState.disconnecting:
           deviceConnectStream.add(DeviceConnectResult.disconnecting);

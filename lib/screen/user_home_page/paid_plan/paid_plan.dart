@@ -88,7 +88,9 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               return GestureDetector(
-                                onTap: (){},
+                                onTap: (){
+
+                                },
                                 child:Padding(
                                   padding: EdgeInsets.fromLTRB(0, Platform.isIOS ? 5.h : 10.h, 0, 5.h),
                                   child: Container(
@@ -103,7 +105,11 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                               children: [
                                                 Padding(
                                                   padding: const EdgeInsets.all(8.0),
-                                                  child: Image.asset('assets/images/bike_round.png', width: 56.w, height: 56.w,),
+                                                  child:    Image(
+                                                    image: const AssetImage("assets/buttons/bike_left.png"),
+                                                    width: 56.h,
+                                                    height: 56.h,
+                                                  ),
                                                 ),
                                                 Padding(
                                                   padding:  EdgeInsets.only(left: 12.w),

@@ -39,6 +39,11 @@ class FirmwareProvider extends ChangeNotifier {
 
   Future<void> update(BikeModel? currentBikeModel) async {
     this.currentBikeModel = currentBikeModel;
+
+    if(currentBikeModel?.deviceIMEI != null && currentBikeModel?.firmVer == null || currentBikeModel?.firmVer == ''){
+      ///uploadFirmVerToFirestore("1_V1.0.0");
+    }
+
     getFirmwareDetails();
   }
 
@@ -49,6 +54,7 @@ class FirmwareProvider extends ChangeNotifier {
         .get();
 
     Map<String, dynamic>? obj = snapshot.data();
+
 
     if (obj != null) {
       latestFirmwareModel = FirmwareModel.fromJson(obj);
@@ -61,10 +67,12 @@ class FirmwareProvider extends ChangeNotifier {
     }
   }
 
+  ///Compare latest version in firestore release and firestore bike model
    getIsCurrentVersion() async {
-    if(latestFirmwareModel != null && currentBikeModel != null){
+    if(latestFirmwareModel != null && currentBikeModel != null && currentBikeModel?.firmVer != ''){
       latestFirmVer = latestFirmwareModel!.ver.split("V").last;
       currentFirmVer = currentBikeModel!.firmVer!.split("V").last;
+
 
       if(int.parse(currentFirmVer!.replaceAll('.', '')) >= int.parse(latestFirmVer!.replaceAll('.', ''))){
         isLatestFirmVer = true;
@@ -73,6 +81,8 @@ class FirmwareProvider extends ChangeNotifier {
         isLatestFirmVer = false;
         notifyListeners();
       }
+    }else{
+      currentFirmVer = null;
     }
     notifyListeners();
     }

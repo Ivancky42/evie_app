@@ -27,7 +27,7 @@ class CreateTeam extends StatefulWidget{
 
 class _CreateTeamState extends State<CreateTeam> {
 
-  late AuthProvider _authProvider;
+  late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
   late SettingProvider _settingProvider;
 
@@ -37,7 +37,7 @@ class _CreateTeamState extends State<CreateTeam> {
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
-    _authProvider = Provider.of<AuthProvider>(context);
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
@@ -141,7 +141,22 @@ class _CreateTeamState extends State<CreateTeam> {
                       style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
-
+                      _bikeProvider.createTeam("Team ${_currentUserProvider.currentUserModel!.name}").then((result) {
+                        if(result == true){
+                          _settingProvider.changeSheetElement(SheetList.shareBikeInvitation);
+                        }else{
+                          SmartDialog.show(
+                              backDismiss: false,
+                              widget: EvieSingleButtonDialog(
+                                  title: "Create team fail",
+                                  content: "Please try again",
+                                  rightContent: "Close",
+                                  onPressedRight: () {
+                                    SmartDialog.dismiss();
+                                  }
+                              ));
+                        }
+                      });
                     },
                   ),
                 ),
