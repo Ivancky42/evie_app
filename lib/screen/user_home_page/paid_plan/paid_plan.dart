@@ -105,11 +105,14 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                             Row(
                                               children: [
                                                 _bikeProvider.currentBikeModel?.bikeIMG == ''
-                                                    ? Image(
+                                                    ? Padding(
+                                                  padding: const EdgeInsets.only(left: 15.0),
+                                                      child: Image(
                                                   image: const AssetImage("assets/buttons/bike_left_pic.png"),
                                                   width: 49.h,
                                                   height: 49.h,
-                                                )
+                                                ),
+                                                    )
                                                     : Padding(
                                                   padding: const EdgeInsets.only(left: 15.0),
                                                   child: ClipOval(
@@ -118,8 +121,8 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                                       imageUrl: _bikeProvider.currentBikeModel!.bikeIMG!,
                                                       placeholder: (context, url) => const CircularProgressIndicator(),
                                                       errorWidget: (context, url, error) => Icon(Icons.error),
-                                                      width: 66.67.h,
-                                                      height: 66.67.h,
+                                                      width: 49.h,
+                                                      height: 49.h,
                                                       fit: BoxFit.cover,
                                                     ),
                                                   ),

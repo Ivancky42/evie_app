@@ -106,9 +106,9 @@ class _SheetNavigatorState extends State<SheetNavigator> {
       case SheetList.shareBikeInvitation:
         return ShareBikeInvitation();
       case SheetList.invitationSent:
-        return InvitationSent(widget.stringPassing);
+        return InvitationSent();
       case SheetList.userNotFound:
-        return UserNotFound(widget.stringPassing);
+        return UserNotFound();
       case SheetList.pedalPalsList:
         return PedalPalsList();
 

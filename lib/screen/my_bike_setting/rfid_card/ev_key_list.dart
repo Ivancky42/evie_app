@@ -20,6 +20,7 @@ import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
+import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
@@ -51,16 +52,14 @@ class _EVKeyListState extends State<EVKeyList> {
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop();
-       showBikeSettingSheet(context);
+        _settingProvider.changeSheetElement(SheetList.bikeSetting);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'EV-Key',
           onPressed: () {
-            Navigator.of(context).pop();
-            showBikeSettingSheet(context);
+            _settingProvider.changeSheetElement(SheetList.bikeSetting);
           },
         ),
         body: Stack(
@@ -358,6 +357,9 @@ class _EVKeyListState extends State<EVKeyList> {
 
   deleteSingleFRFID(index){
     SmartDialog.showLoading(msg: "Delete RFID....");
+
+    String name = _bikeProvider.rfidList.values.elementAt(index).rfidName;
+
     deleteRFIDStream = _bluetoothProvider
         .deleteRFID(_bikeProvider
         .rfidList.keys
@@ -371,24 +373,14 @@ class _EVKeyListState extends State<EVKeyList> {
         final result = _bikeProvider.deleteRFIDFirestore(
             _bikeProvider.rfidList.keys
                 .elementAt(index));
-        if (result) {
-          SmartDialog.dismiss(
-              status: SmartStatus.loading);
-          SmartDialog.show(
-              widget:
-              EvieSingleButtonDialog(
-                  title: "Deleted",
-                  content:
-                  "RFID card deleted",
-                  rightContent: "OK",
-                  onPressedRight: () {
-                    SmartDialog
-                        .dismiss();
-                    if(_bikeProvider.rfidList.length == 0){
-                      _settingProvider.changeSheetElement(SheetList.bikeSetting);
-                    }
+        if (result) {SmartDialog.dismiss(status: SmartStatus.loading);
 
-                  }));
+          showEVRemovedToast(context, name);
+
+          if(_bikeProvider.rfidList.length == 0){
+            _settingProvider.changeSheetElement(SheetList.bikeSetting);
+          }
+
         } else {
           SmartDialog.show(
               widget:

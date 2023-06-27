@@ -219,7 +219,7 @@ class _FreePlanState extends State<FreePlan> {
                                                   children: [
                                                     _bikeProvider.currentBikeModel?.bikeIMG == ''
                                                         ? Padding(
-                                                      padding: const EdgeInsets.all(8.0),
+                                                      padding: const EdgeInsets.only(left: 15.0),
                                                       child: Image(
                                                         image: const AssetImage("assets/buttons/bike_left_pic.png"),
                                                         width: 49.h,
@@ -227,15 +227,15 @@ class _FreePlanState extends State<FreePlan> {
                                                       ),
                                                     )
                                                         : Container(
-                                                      padding: const EdgeInsets.all(15.0),
+                                                      padding: const EdgeInsets.only(left: 15.0),
                                                       child: ClipOval(
                                                         child: CachedNetworkImage(
                                                           //imageUrl: document['profileIMG'],
                                                           imageUrl: _bikeProvider.currentBikeModel!.bikeIMG!,
                                                           placeholder: (context, url) => const CircularProgressIndicator(),
                                                           errorWidget: (context, url, error) => Icon(Icons.error),
-                                                          width: 66.67.h,
-                                                          height: 66.67.h,
+                                                          width: 49.h,
+                                                          height: 49.h,
                                                           fit: BoxFit.cover,
                                                         ),
                                                       ),

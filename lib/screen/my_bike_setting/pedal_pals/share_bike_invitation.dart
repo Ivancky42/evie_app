@@ -133,9 +133,8 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                             rightContent: "Close",
                                             onPressedRight: () {
                                               SmartDialog.dismiss();
-                                              
-                                              Navigator.of(context).pop();
-                                              showUserNotFoundSheet(context, _emailController.text.trim());
+
+                                              _settingProvider.changeSheetElement(SheetList.userNotFound, _emailController.text.trim());
                                               //_settingProvider.changeSheetElement(SheetList.userNotFound);
 
                                             }
@@ -173,9 +172,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                                           rightContent: "Close",
                                                           onPressedRight: () {
                                                             SmartDialog.dismiss();
-                                                            //_settingProvider.changeSheetElement(SheetList.invitationSent);
-                                                            Navigator.of(context).pop();
-                                                            showInvitationSentSheet(context, _emailController.text.trim());
+                                                            _settingProvider.changeSheetElement(SheetList.invitationSent, _emailController.text.trim());
 
                                                           }
                                                       ));

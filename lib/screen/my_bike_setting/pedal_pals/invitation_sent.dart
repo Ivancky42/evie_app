@@ -16,8 +16,7 @@ import '../../../widgets/evie_progress_indicator.dart';
 
 
 class InvitationSent extends StatefulWidget{
-  final String email;
-  const InvitationSent(this.email,{ Key? key }) : super(key: key);
+  const InvitationSent({ Key? key }) : super(key: key);
   @override
   _InvitationSentState createState() => _InvitationSentState();
 }
@@ -61,7 +60,7 @@ class _InvitationSentState extends State<InvitationSent> {
                         child: Container(
                           child: Text(
                           //  "Hooray! EVIE have sent invitation to ${widget.email}. Let's enjoy the ride together",
-                            "Hooray! EVIE have sent the invitation. Let's enjoy the ride together",
+                            "Hooray! EVIE have sent the invitation to ${_settingProvider.stringPassing}. Let's enjoy the ride together",
                             style: EvieTextStyles.body18,
                           ),
                         ),
@@ -93,8 +92,7 @@ class _InvitationSentState extends State<InvitationSent> {
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
-                        Navigator.of(context).pop();
-                        showShareBikeUserListSheet(context);
+                        _settingProvider.changeSheetElement(SheetList.pedalPalsList);
                       },
                     ),
                   ),

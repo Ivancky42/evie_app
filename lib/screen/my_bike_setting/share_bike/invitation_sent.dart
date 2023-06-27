@@ -6,9 +6,11 @@ import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
+import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
+import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 
 
@@ -20,10 +22,10 @@ class InvitationSent extends StatefulWidget{
 }
 
 class _InvitationSentState extends State<InvitationSent> {
-
+  late SettingProvider _settingProvider;
   @override
   Widget build(BuildContext context) {
-
+    _settingProvider = Provider.of<SettingProvider>(context);
     return WillPopScope(
         onWillPop: () async {
           return false;
@@ -84,8 +86,7 @@ class _InvitationSentState extends State<InvitationSent> {
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
-                        Navigator.of(context).pop();
-                        showShareBikeUserListSheet(context);
+                        _settingProvider.changeSheetElement(SheetList.pedalPalsList);
                       },
                     ),
                   ),

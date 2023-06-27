@@ -111,7 +111,7 @@ class _BikeContainerState extends State<BikeContainer> {
             leading:
             //padding: EdgeInsets.fromLTRB(16.w, 17.h, 0.w, 0.h),
             Image(
-              image: const AssetImage("assets/buttons/bike_left.png"),
+              image: const AssetImage("assets/buttons/bike_left_pic.png"),
               width: 56.h,
               height: 56.h,
             ),

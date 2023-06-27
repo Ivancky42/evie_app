@@ -351,10 +351,15 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   checkIsCurrentVersion(String firmVer){
-    firmVer = firmVer.split("V").last;
-    if(currentBikeModel?.firmVer == null || int.parse(currentBikeModel!.firmVer!.replaceAll('.', '')) != int.parse(firmVer.replaceAll('.', ''))) {
-      FirmwareProvider().uploadFirmVerToFirestore(firmVer);
-    }
+
+    var firmVerTrim = firmVer.split("V").last;
+
+     if(currentBikeModel != null &&
+        currentBikeModel?.firmVer == '' ||
+        int.parse(currentBikeModel!.firmVer!.split("V").last.replaceAll('.', '')) != int.parse(firmVerTrim.replaceAll('.', ''))) {
+      FirmwareProvider().uploadFirmVerToFirestore(firmVer, currentBikeModel!.deviceIMEI);
+    }else{ }
+
   }
 
   void setIsPairedResult(bool result) {
