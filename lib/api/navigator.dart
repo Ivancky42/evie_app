@@ -329,65 +329,55 @@ void changeToMyGarageScreen(BuildContext context) {
 
 
 
-void changeToEVKey(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const EVKey(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
-
-void changeToAddNewEVKey(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const RegisterEVKey(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
-
-void changeToNameEVKey(BuildContext context, String rfidNumber) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: NameEV(rfidNumber),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
-
-// void changeToEVColourCode(BuildContext context, String rfidNumber) {
+// void changeToEVKey(BuildContext context) {
 //   Navigator.pushReplacement(context,
 //     PageTransition(
 //       type: PageTransitionType.rightToLeft,
-//       child: EVColourCode(rfidNumber),
+//       child: const EVKey(),
 //       duration: const Duration(milliseconds: 300),
 //     ),
 //   );
 // }
-
-void changeToEVKeyList(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const EVKeyList(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
-
-void changeToEVAddFailed(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const EVAddFailed(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
+//
+// void changeToAddNewEVKey(BuildContext context) {
+//   Navigator.pushReplacement(context,
+//     PageTransition(
+//       type: PageTransitionType.rightToLeft,
+//       child: const RegisterEVKey(),
+//       duration: const Duration(milliseconds: 300),
+//     ),
+//   );
+// }
+//
+// void changeToNameEVKey(BuildContext context, String rfidNumber) {
+//   Navigator.pushReplacement(context,
+//     PageTransition(
+//       type: PageTransitionType.rightToLeft,
+//       child: NameEV(rfidNumber),
+//       duration: const Duration(milliseconds: 300),
+//     ),
+//   );
+// }
+//
+// void changeToEVKeyList(BuildContext context) {
+//   Navigator.pushReplacement(context,
+//     PageTransition(
+//       type: PageTransitionType.rightToLeft,
+//       child: const EVKeyList(),
+//       duration: const Duration(milliseconds: 300),
+//     ),
+//   );
+// }
+//
+// void changeToEVAddFailed(BuildContext context) {
+//   Navigator.pushReplacement(context,
+//     PageTransition(
+//       type: PageTransitionType.rightToLeft,
+//       child: const EVAddFailed(),
+//       duration: const Duration(milliseconds: 300),
+//     ),
+//   );
+// }
 
 void changeToMotionSensitivityScreen(BuildContext context) {
   Navigator.pushReplacement(context,

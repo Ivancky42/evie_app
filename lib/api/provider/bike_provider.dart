@@ -119,6 +119,30 @@ class BikeProvider extends ChangeNotifier {
   StreamController<SwitchBikeResult> switchBikeResultListener = StreamController.broadcast();
   StreamController<UploadFirestoreResult> firestoreStatusListener = StreamController.broadcast();
 
+  ///User update bike profile
+  Future updateUserBikeImage(String imageURL) async {
+    try {
+      ///Get current user id, might get from provider
+      // final FirebaseAuth auth = FirebaseAuth.instance;
+      // final User? user = auth.currentUser;
+      // final uid = user?.uid;
+
+      //Update
+      var docUser = FirebaseFirestore.instance.collection(bikesCollection);
+      docUser
+          .doc(currentBikeModel!.deviceIMEI)
+          .update({
+        'bikeIMG': imageURL,
+        'updated': Timestamp.now(),
+      });
+      notifyListeners();
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
   ///Get current user model
   Future<void> update(UserModel? user) async {
     if (user != null) {
@@ -1337,8 +1361,6 @@ class BikeProvider extends ChangeNotifier {
           .doc(rfidID.toString())
           .set({
         'rfidID' : rfidID,
-
-        ///rfidColour
         'rfidName' : rfidName,
         'created': Timestamp.now(),
       }, SetOptions(merge: true));
@@ -1409,11 +1431,10 @@ class BikeProvider extends ChangeNotifier {
 
   ///Compare bluetooth firmware version and firestore bike firmware version
   checkIsCurrentVersion(String firmVer){
+    //print("yessssssssssssssssssss");
     print("check ble firmware ver");
     firmVer = firmVer.split("V").last;
-    if(currentBikeModel?.firmVer == null ||
-        int.parse(currentBikeModel!.firmVer!.replaceAll('.', ''))
-            != int.parse(firmVer.replaceAll('.', ''))) {
+    if(currentBikeModel?.firmVer == null || int.parse(currentBikeModel!.firmVer!.replaceAll('.', '')) != int.parse(firmVer.replaceAll('.', ''))) {
       FirmwareProvider().uploadFirmVerToFirestore(firmVer);
     }
   }

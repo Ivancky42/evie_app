@@ -73,6 +73,7 @@ class _SheetNavigatorState extends State<SheetNavigator> {
     switch(_settingProvider.currentSheetList){
       case SheetList.bikeSetting:
         return BikeSetting(widget.source);
+
       case SheetList.evKey:
         return EVKey();
       case SheetList.evKeyList:
@@ -80,6 +81,7 @@ class _SheetNavigatorState extends State<SheetNavigator> {
       case SheetList.evAddFailed:
         return EVAddFailed();
       case SheetList.nameEv:
+        return NameEV();
         //return NameEV(rfidNumber);
         break;
       case SheetList.registerEvKey:
@@ -137,34 +139,22 @@ class _SheetNavigatorState extends State<SheetNavigator> {
 
       case SheetList.resetBike:
         return ResetBike();
-
       case SheetList.resetBike2:
         return ResetBike2();
-
       case SheetList.restoreCompleted:
         return RestoreCompleted();
-
       case SheetList.restoreIncomplete:
         return RestoreIncomplete();
 
-
     case SheetList.forgetCompleted:
       return ForgetCompleted();
-
     case SheetList.forgetIncomplete:
       return ForgetIncomplete();
-
     case SheetList.fullCompleted:
       return FullCompleted();
-
     case SheetList.fullIncomplete:
       return FullIncomplete();
 
-      case SheetList.motionSensitivity:
-        return MotionSensitivity();
-
-      case SheetList.detectionSensitivity:
-        return DetectionSensitivity();
 
       default:
         break;

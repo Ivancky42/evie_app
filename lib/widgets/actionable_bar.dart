@@ -132,7 +132,7 @@ Widget stackActionableBar(context, BikeProvider bikeProvider, NotificationProvid
         buttonRight: EvieButton(
           child: Text("Add Now",style: TextStyle(color: EvieColors.grayishWhite, fontSize: 17.sp, fontWeight: FontWeight.w900),),
           onPressed: (){
-            changeToEVKey(context);
+            //changeToEVKey(context);
           },)),
   );
 }

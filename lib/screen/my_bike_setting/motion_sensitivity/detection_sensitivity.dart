@@ -71,8 +71,6 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
         appBar: PageAppbar(
           title: 'Motion Sensitivity',
           onPressed: () {
-            //changeToMotionSensitivityScreen(context);
-            // showBikeSettingSheet(context);
             _settingProvider.changeSheetElement(SheetList.motionSensitivity);
           },
         ),

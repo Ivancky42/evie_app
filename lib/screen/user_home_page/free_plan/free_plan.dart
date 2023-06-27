@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math' as math;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
@@ -201,7 +203,8 @@ class _FreePlanState extends State<FreePlan> {
                                 return GestureDetector(
                                   onTap: (){},
                                   child:Padding(
-                                    padding: EdgeInsets.fromLTRB(0.w, 0, 0.w, 0),
+                                    padding: EdgeInsets.fromLTRB(0, Platform.isIOS ? 5.h : 10.h, 0, 5.h),
+
                                     child: Container(
                                         height: 73.33.h,
                                         color:  EvieColors.lightBlack,
@@ -214,57 +217,77 @@ class _FreePlanState extends State<FreePlan> {
                                               children: [
                                                 Row(
                                                   children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    child: Image.asset('assets/images/bike_round.png'),
-                                                  ),
-                                                  Padding(
-                                                    padding:  EdgeInsets.only(left: 12.w),
-                                                    child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-
-                                                        Row(
-                                                          children: [
-                                                            Text(
-                                                              _bikeProvider.currentBikeModel?.deviceName ?? "loading",
-                                                              style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite),
-                                                            ),
-                                                            // Text(
-                                                            //   "icons",
-                                                            //   style: EvieTextStyles.h3.copyWith(color: EvieColors.grayishWhite),
-                                                            // ),
-                                                          ],
+                                                    _bikeProvider.currentBikeModel?.bikeIMG == ''
+                                                        ? Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Image(
+                                                        image: const AssetImage("assets/buttons/bike_left_pic.png"),
+                                                        width: 49.h,
+                                                        height: 49.h,
+                                                      ),
+                                                    )
+                                                        : Container(
+                                                      padding: const EdgeInsets.all(15.0),
+                                                      child: ClipOval(
+                                                        child: CachedNetworkImage(
+                                                          //imageUrl: document['profileIMG'],
+                                                          imageUrl: _bikeProvider.currentBikeModel!.bikeIMG!,
+                                                          placeholder: (context, url) => const CircularProgressIndicator(),
+                                                          errorWidget: (context, url, error) => Icon(Icons.error),
+                                                          width: 66.67.h,
+                                                          height: 66.67.h,
+                                                          fit: BoxFit.cover,
                                                         ),
-
-                                                        deviceConnectResult == DeviceConnectResult.connected ?
-                                                        Row(
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                              "assets/icons/bluetooth_connected.svg",
-                                                            ),
-                                                            Text(
-                                                              "Connected",
-                                                              style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                                            ),
-                                                          ],
-                                                        ) :
-                                                        Row(
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                              "assets/icons/bluetooth_disconnected.svg",
-                                                            ),
-                                                            Text(
-                                                              "Disconnected",
-                                                              style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],),
+                                                    Padding(
+                                                      padding:  EdgeInsets.only(left: 12.w),
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+
+                                                          Row(
+                                                            children: [
+                                                              Text(
+                                                                _bikeProvider.currentBikeModel?.deviceName ?? "loading",
+                                                                style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite),
+                                                              ),
+                                                              // Text(
+                                                              //   "icons",
+                                                              //   style: EvieTextStyles.h3.copyWith(color: EvieColors.grayishWhite),
+                                                              // ),
+                                                            ],
+                                                          ),
+
+                                                          deviceConnectResult == DeviceConnectResult.connected ?
+                                                          Row(
+                                                            children: [
+                                                              SvgPicture.asset(
+                                                                "assets/icons/bluetooth_connected.svg",
+                                                              ),
+                                                              Text(
+                                                                "Connected",
+                                                                style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                                              ),
+                                                            ],
+                                                          ) :
+                                                          Row(
+                                                            children: [
+                                                              SvgPicture.asset(
+                                                                "assets/icons/bluetooth_disconnected.svg",
+                                                              ),
+                                                              Text(
+                                                                "Disconnected",
+                                                                style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],),
+
                                                 Padding(
                                                   padding: EdgeInsets.only(right: 22.5.w),
                                                   child: IconButton(

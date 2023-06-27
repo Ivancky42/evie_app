@@ -77,6 +77,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           );
         });
 
+
     super.initState();
   }
 
@@ -86,7 +87,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
     _tripProvider = Provider.of<TripProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
-    getData(_bikeProvider, _tripProvider);
+    getData();
 
     return SingleChildScrollView(
       physics:const BouncingScrollPhysics(),
@@ -103,7 +104,6 @@ class _TripHistoryDataState extends State<TripHistoryData> {
             padding: EdgeInsets.only(left: 16.w, right: 16.w),
             child: Row(
               children: [
-
                 if(_tripProvider.currentData == _tripProvider.dataType.elementAt(0))...{
                   _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
                   Row(
@@ -319,14 +319,14 @@ class _TripHistoryDataState extends State<TripHistoryData> {
     );
   }
 
-  getData(BikeProvider bikeProvider, TripProvider tripProvider){
+  getData(){
 
     switch(widget.format){
       case TripFormat.day:
         chartData.clear();
         _tripProvider.currentTripHistoryListDay.clear();
 
-        tripProvider.currentTripHistoryLists.forEach((key, value) {
+        _tripProvider.currentTripHistoryLists.forEach((key, value) {
           ///Filter date
           if(calculateDateDifference(pickedDate!, value.startTime.toDate()) == 0){
             chartData.add(ChartData(value.startTime.toDate(), value.distance.toDouble()));
@@ -347,7 +347,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
           chartData = chartData.reversed.toList();
 
-          tripProvider.currentTripHistoryLists.forEach((key, value) {
+          _tripProvider.currentTripHistoryLists.forEach((key, value) {
             if(value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 1))) && value.startTime.toDate().isAfter(pickedDate!.subtract(const Duration(days: 6)))){
               ChartData newData = chartData.firstWhere((data) => data.x.day == value.startTime.toDate().day);
               newData.y = newData.y + value.distance.toDouble();
@@ -364,7 +364,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
             chartData.add((ChartData(pickedDate!.add(Duration(days: i)), 0)));
           }
 
-          tripProvider.currentTripHistoryLists.forEach((key, value) {
+          _tripProvider.currentTripHistoryLists.forEach((key, value) {
             if(value.startTime.toDate().isAfter(pickedDate) && value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 6)))){
               ChartData newData = chartData.firstWhere((data) =>
               data.x.day == value.startTime
@@ -386,7 +386,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
         for(int i = 1; i <= totalDaysInMonth; i ++){
           chartData.add((ChartData(DateTime(pickedDate!.year, pickedDate!.month, i), 0)));
         }
-        tripProvider.currentTripHistoryLists.forEach((key, value) {
+        _tripProvider.currentTripHistoryLists.forEach((key, value) {
           ///Filter date
           if(value.startTime.toDate().month == pickedDate!.month && value.startTime.toDate().year == pickedDate!.year){
 
@@ -405,7 +405,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           chartData.add((ChartData(DateTime(pickedDate!.year, i, 1), 0)));
         }
 
-        tripProvider.currentTripHistoryLists.forEach((key, value) {
+        _tripProvider.currentTripHistoryLists.forEach((key, value) {
           ///Filter date
           if(value.startTime.toDate().year == pickedDate!.year){
 
@@ -417,5 +417,6 @@ class _TripHistoryDataState extends State<TripHistoryData> {
         return;
     }
   }
+
 }
 

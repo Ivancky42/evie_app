@@ -2,10 +2,12 @@ enum SheetList{
   bikeSetting,
 
   evKey,
-  evKeyList,
-  evAddFailed,
-  nameEv,
   registerEvKey,
+  evAddFailed,
+
+  evKeyList,
+  nameEv,
+
 
   motionSensitivity,
   detectionSensitivity,
@@ -47,5 +49,6 @@ enum SheetList{
 
   fullCompleted,
   fullIncomplete,
+
 
 }

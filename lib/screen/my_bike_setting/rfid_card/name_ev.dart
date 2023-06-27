@@ -12,9 +12,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
+import '../../../api/colours.dart';
+import '../../../api/enumerate.dart';
+import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
+import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
@@ -23,9 +27,11 @@ import '../../../widgets/evie_textform.dart';
 
 
 class NameEV extends StatefulWidget {
-  final String rfidNumber;
+  //final String rfidNumber;
 
-  const NameEV(this.rfidNumber, {Key? key}) : super(key: key);
+  const NameEV(
+      //this.rfidNumber,
+      {Key? key}) : super(key: key);
 
   @override
   _NameEVState createState() => _NameEVState();
@@ -34,14 +40,17 @@ class NameEV extends StatefulWidget {
 class _NameEVState extends State<NameEV> {
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
+  late SettingProvider _settingProvider;
+
+  final TextEditingController _rfidNameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
-    final TextEditingController _rfidNameController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
 
     return WillPopScope(
       onWillPop: () async {
@@ -56,15 +65,15 @@ class _NameEVState extends State<NameEV> {
                 },
                 onPressedRight: () {
                   SmartDialog.dismiss();
-                  _bikeProvider.deleteRFIDFirestore(widget.rfidNumber);
-                  _bluetoothProvider.deleteRFID(widget.rfidNumber);
-                  showBikeSettingSheet(context);
+                  _bikeProvider.deleteRFIDFirestore(_settingProvider.stringPassing!);
+                  _bluetoothProvider.deleteRFID(_settingProvider.stringPassing!);
+                  _settingProvider.changeSheetElement(SheetList.bikeSetting);
                 }));
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
-          title: 'New RFID Card',
+          title: 'New EV-Key',
           onPressed: () {
             SmartDialog.show(
                 widget: EvieDoubleButtonDialog(
@@ -77,9 +86,9 @@ class _NameEVState extends State<NameEV> {
                     },
                     onPressedRight: () {
                       SmartDialog.dismiss();
-                      _bikeProvider.deleteRFIDFirestore(widget.rfidNumber);
-                      _bluetoothProvider.deleteRFID(widget.rfidNumber);
-                      showBikeSettingSheet(context);
+                      _bikeProvider.deleteRFIDFirestore(_settingProvider.stringPassing!);
+                      _bluetoothProvider.deleteRFID(_settingProvider.stringPassing!);
+                      _settingProvider.changeSheetElement(SheetList.bikeSetting);
                     }));
           },
         ),
@@ -92,17 +101,17 @@ class _NameEVState extends State<NameEV> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w, 4.h),
+                    padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w, 2.h),
                     child: Text(
-                      "Give your EV-Key a name",
+                      "Label your EV-Key",
                       style: TextStyle(
                           fontSize: 24.sp, fontWeight: FontWeight.w500),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 15.h),
+                    padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 11.h),
                     child: Text(
-                      "Personalize with label",
+                      "Label your EV-Key similar with the name you wrote on the Key so that you can differentiate them easily. ",
                       style: TextStyle(fontSize: 16.sp, height: 1.5.h),
                     ),
                   ),
@@ -111,9 +120,9 @@ class _NameEVState extends State<NameEV> {
                     child: EvieTextFormField(
                       controller: _rfidNameController,
                       obscureText: false,
-                      //     keyboardType: TextInputType.name,
-                      hintText: "Name your RFID Card",
-                      labelText: "Name your RFID Card",
+                      // keyboardType: TextInputType.name,
+                      hintText: "EV-Key Label",
+                      labelText: "EV-Key 1",
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter RFID Card name';
@@ -130,7 +139,7 @@ class _NameEVState extends State<NameEV> {
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(
-                    16.w, 127.84.h, 16.w, EvieLength.button_Bottom),
+                    16.w, 127.84.h, 16.w, EvieLength.buttonWord_ButtonBottom),
                 child: SizedBox(
                   height: 48.h,
                   width: double.infinity,
@@ -146,7 +155,33 @@ class _NameEVState extends State<NameEV> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         addRFIDtoFireStore(_rfidNameController.text.trim());
+
                       }
+                    },
+                  ),
+                ),
+              ),
+            ),
+
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(0.w,25.h,0.w,EvieLength.buttonbutton_buttonBottom),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    child: Text(
+                      "Can't think of any name now",
+                      softWrap: false,
+                      style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                    ),
+                    onPressed: () {
+                      addRFIDtoFireStore("Ev-Key ${_bikeProvider.rfidList.length.toString()}");
+                      // if(_bikeProvider.rfidList.length >0){
+                      //   _settingProvider.changeSheetElement(SheetList.evKeyList);
+                      // }else{
+                      //   showBikeSettingSheet(context);
+                      // }
                     },
                   ),
                 ),
@@ -159,7 +194,7 @@ class _NameEVState extends State<NameEV> {
   }
 
   void addRFIDtoFireStore(String rfidName) async {
-    final result = await _bikeProvider.uploadRFIDtoFireStore(widget.rfidNumber, rfidName);
+    final result = await _bikeProvider.uploadRFIDtoFireStore(_settingProvider.stringPassing!, rfidName);
     if (result == true) {
       SmartDialog.show(
           widget: EvieSingleButtonDialog(
@@ -170,7 +205,7 @@ class _NameEVState extends State<NameEV> {
                 SmartDialog.dismiss();
 
                 ///Change to rfid list
-                changeToEVKeyList(context);
+                _settingProvider.changeSheetElement(SheetList.evKeyList);
               }));
     } else {
       SmartDialog.show(
@@ -180,7 +215,7 @@ class _NameEVState extends State<NameEV> {
               rightContent: "OK",
               onPressedRight: () {
                 SmartDialog.dismiss();
-                changeToEVKey(context);
+                _settingProvider.changeSheetElement(SheetList.evAddFailed);
               }));
     }
   }

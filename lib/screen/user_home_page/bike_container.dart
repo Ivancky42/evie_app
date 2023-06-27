@@ -106,9 +106,15 @@ class _BikeContainerState extends State<BikeContainer> {
           ),
           child: ListTile(
 
+            contentPadding: EdgeInsets.only(left: 18.w, right: 8.w),
+
             leading:
             //padding: EdgeInsets.fromLTRB(16.w, 17.h, 0.w, 0.h),
-            Image.asset('assets/images/bike_round.png', ),
+            Image(
+              image: const AssetImage("assets/buttons/bike_left.png"),
+              width: 56.h,
+              height: 56.h,
+            ),
             title: Padding(
               padding: EdgeInsets.only(top:10.h),
               child: Row(
@@ -131,10 +137,14 @@ class _BikeContainerState extends State<BikeContainer> {
                       height: 20.h,
                       width: 20.w,
                     ),
-                    Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, widget.bikeModel, _bikeProvider,_bluetoothProvider), style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan)),
+                    Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, widget.bikeModel, _bikeProvider,_bluetoothProvider),
+                        style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan,
+                        ),
+                      softWrap: true,
+                      overflow:  TextOverflow.visible,
+                    ),
                   ],
                 ),
-
 
                 Container(
                   // height: 33.h,
@@ -160,7 +170,6 @@ class _BikeContainerState extends State<BikeContainer> {
                 ),
               ],
             ),
-
             trailing: IconButton(
                 onPressed: () async {
                   if(!isSpecificDeviceConnected){

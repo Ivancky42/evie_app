@@ -59,6 +59,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
 
     return WillPopScope(
       onWillPop: () async {
+        Navigator.of(context).pop();
         showBikeSettingSheet(context);
         return false;
       },
@@ -66,6 +67,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
         appBar: PageAppbar(
           title: 'Motion Sensitivity',
           onPressed: () {
+            Navigator.of(context).pop();
             showBikeSettingSheet(context);
           },
         ),

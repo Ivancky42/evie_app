@@ -76,8 +76,7 @@ class _EditProfileState extends State<EditProfile> {
                     child: ClipOval(
                       child: CachedNetworkImage(
                         //imageUrl: document['profileIMG'],
-                        imageUrl:
-                            _currentUserProvider.currentUserModel!.profileIMG,
+                        imageUrl: _currentUserProvider.currentUserModel!.profileIMG,
                         placeholder: (context, url) =>
                             const CircularProgressIndicator(),
                         errorWidget: (context, url, error) => Icon(Icons.error),
@@ -89,6 +88,9 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ),
               ),
+
+              //v comment: start
+              //v comment: logic to pop up the 3 options
               TextButton(
                 onPressed: () {
 
@@ -100,6 +102,8 @@ class _EditProfileState extends State<EditProfile> {
                       });
 
                 },
+
+                //v comment: on tap to pop up the 3 options
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -111,6 +115,8 @@ class _EditProfileState extends State<EditProfile> {
                   ],
                 ),
               ),
+              //v comment: end
+
               Divider(
                 thickness: 0.5.h,
                 color: const Color(0xff8E8E8E),

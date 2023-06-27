@@ -8,6 +8,11 @@ import 'package:evie_test/api/model/trip_history_model.dart';
 import 'bike_plan_model.dart';
 import 'location_model.dart';
 
+// v comment: 3 attributes added
+// String? bikeIMG
+// this.bikeIMG
+// bikeIMG: json['bikeIMG']??''
+
 class BikeModel {
 
   int? batteryPercent;
@@ -37,6 +42,7 @@ class BikeModel {
   String? ownerName;
   String? serialNumber;
   String? type;
+  String? bikeIMG;
 
   BikeModel({
     required this.batteryPercent,
@@ -65,6 +71,7 @@ class BikeModel {
     this.ownerName,
     this.serialNumber,
     this.type,
+    this.bikeIMG,
 
   });
 
@@ -102,6 +109,7 @@ class BikeModel {
       registered:    timestampFromJson(json['registered']),
       serialNumber: json['serialNumber']?? '',
       type: json['type']?? '',
+      bikeIMG: json['bikeIMG']??'',
     );
   }
 

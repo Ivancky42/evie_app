@@ -35,6 +35,8 @@ class TripProvider extends ChangeNotifier {
   List<String> dataType = ["Mileage", "No of Ride", "Carbon Footprint"];
   late String currentData;
 
+  late List<ChartData> chartData = [];
+  
   TripProvider() {
     init();
   }
@@ -158,7 +160,6 @@ class TripProvider extends ChangeNotifier {
       debugPrint(e.toString());
     }
   }
-
 
   isFilterData(List<TripHistoryModel> tripList, TripHistoryModel tripModel){
     return tripList.any((trip) =>
