@@ -133,6 +133,7 @@ class CurrentUserProvider extends ChangeNotifier {
     }
   }
 
+
   ///User update user profile
   void updateUserProfile(imageURL, name, phoneNo) async {
     try {

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -101,9 +102,25 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                           children: [
                                             Row(
                                               children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Image.asset('assets/images/bike_round.png', width: 56.w, height: 56.w,),
+                                                _bikeProvider.currentBikeModel?.bikeIMG == ''
+                                                    ? Image(
+                                                  image: const AssetImage("assets/buttons/bike_left_pic.png"),
+                                                  width: 49.h,
+                                                  height: 49.h,
+                                                )
+                                                    : Padding(
+                                                  padding: const EdgeInsets.only(left: 15.0),
+                                                  child: ClipOval(
+                                                    child: CachedNetworkImage(
+                                                      //imageUrl: document['profileIMG'],
+                                                      imageUrl: _bikeProvider.currentBikeModel!.bikeIMG!,
+                                                      placeholder: (context, url) => const CircularProgressIndicator(),
+                                                      errorWidget: (context, url, error) => Icon(Icons.error),
+                                                      width: 66.67.h,
+                                                      height: 66.67.h,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
                                                 ),
                                                 Padding(
                                                   padding:  EdgeInsets.only(left: 12.w),

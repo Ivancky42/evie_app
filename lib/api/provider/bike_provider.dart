@@ -119,6 +119,30 @@ class BikeProvider extends ChangeNotifier {
   StreamController<SwitchBikeResult> switchBikeResultListener = StreamController.broadcast();
   StreamController<UploadFirestoreResult> firestoreStatusListener = StreamController.broadcast();
 
+  ///User update bike profile
+  Future updateUserBikeImage(String imageURL) async {
+    try {
+      ///Get current user id, might get from provider
+      // final FirebaseAuth auth = FirebaseAuth.instance;
+      // final User? user = auth.currentUser;
+      // final uid = user?.uid;
+
+      //Update
+      var docUser = FirebaseFirestore.instance.collection(bikesCollection);
+      docUser
+          .doc(currentBikeModel!.deviceIMEI)
+          .update({
+        'bikeIMG': imageURL,
+        'updated': Timestamp.now(),
+      });
+      notifyListeners();
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
   ///Get current user model
   Future<void> update(UserModel? user) async {
     if (user != null) {
