@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/sizer.dart';
 
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import '../../../api/backend/debouncer.dart';
 import '../../../api/colours.dart';
@@ -19,6 +21,8 @@ import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
+import '../../my_account/switch_bike_image.dart';
+import '../../my_account/switch_profile_image.dart';
 import '../my_bike_function.dart';
 import 'bike_setting_container.dart';
 import 'bike_setting_model.dart';
@@ -186,6 +190,7 @@ class _BikeSettingState extends State<BikeSetting> {
                   ),
                   ],),
 
+              //search bar
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
                 child: CustomSearchController(
@@ -260,6 +265,7 @@ class _BikeSettingState extends State<BikeSetting> {
                   },
                 ),
               ),
+
               Container(
                 height: 96.h,
                 child: Row(
@@ -267,29 +273,59 @@ class _BikeSettingState extends State<BikeSetting> {
                   children: [
 
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+
+                        //first widget in row, bike pic
                         Padding(
                           padding:
                           EdgeInsets.fromLTRB(27.7.w, 14.67.h, 6.w, 14.67.h),
                           child: Stack(
                             children: [
-                              Image(
-                                image: const AssetImage("assets/buttons/bike_left.png"),
+                              _bikeProvider.currentBikeModel?.bikeIMG == '' ? Image(
+                                image: const AssetImage("assets/buttons/bike_left_pic.png"),
                                 width: 49.h,
                                 height: 49.h,
-                              ),
+                              ) : ClipOval(
+                                  child: CachedNetworkImage(
+                                  //imageUrl: document['profileIMG'],
+                                  imageUrl:
+                                  _bikeProvider.currentBikeModel!.bikeIMG!,
+                                    placeholder: (context, url) =>
+                                    const CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) => Icon(Icons.error),
+                                    width: 66.67.h,
+                                    height: 66.67.h,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+
+                              //second widget in row, stacked onto first widget
                               Positioned(
                                 bottom: 0,
                                 right: 0,
                                 child: Align(
                                   alignment: Alignment.bottomRight,
-                                  child: SvgPicture.asset(
-                                    "assets/buttons/camera_bike_pic.svg",
-                                    width: 24,
-                                    height: 24,
+                                  //onTap camera pic
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showMaterialModalBottomSheet(
+                                        expand: false,
+                                        context: context,
+                                        builder: (context) {
+                                          return SwitchBikeImage();
+                                        },
+                                      );
+                                    },
+                                    child: SvgPicture.asset(
+                                      "assets/buttons/camera_bike_pic.svg",
+                                      width: 24,
+                                      height: 24,
+                                    ),
                                   ),
                                 ),
                               ),
+                                // ),
                             ],
                           )
                         ),

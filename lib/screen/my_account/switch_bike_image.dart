@@ -12,22 +12,24 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../api/provider/bike_provider.dart';
 import '../../widgets/evie_single_button_dialog.dart';
 import '../../widgets/widgets.dart';
 import 'my_account_widget.dart';
 
-class SwitchProfileImage extends StatefulWidget {
-  const SwitchProfileImage({Key? key}) : super(key: key);
+class SwitchBikeImage extends StatefulWidget {
+  const SwitchBikeImage({Key? key}) : super(key: key);
 
   @override
-  State<SwitchProfileImage> createState() => _SwitchProfileImageState();
+  State<SwitchBikeImage> createState() => _SwitchBikeImageState();
 }
 
-class _SwitchProfileImageState extends State<SwitchProfileImage> {
+class _SwitchBikeImageState extends State<SwitchBikeImage> {
   @override
   Widget build(BuildContext context) {
-    CurrentUserProvider _currentUserProvider =
-        Provider.of<CurrentUserProvider>(context);
+
+    BikeProvider _bikeProvider =
+    Provider.of<BikeProvider>(context);
 
     return Wrap(
       children: [
@@ -48,12 +50,11 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
                 ),
               ),
 
-              //V comment:start of 3 options for profile pic
               ChangeImageContainer(
                 onPress: () async {
                   final result = await pickImage(
-                      _currentUserProvider.currentUserModel!.email,
-                      _currentUserProvider);
+                      _bikeProvider.currentBikeModel!.deviceIMEI!,
+                      _bikeProvider);
                   if (result == false) {
                     SmartDialog.show(
                         widget: EvieSingleButtonDialog(
@@ -74,12 +75,11 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
                 content: "Upload from Photo Gallery",),
 
               const AccountPageDivider(),
-
               ChangeImageContainer(
                 onPress: () async {
                   final result = await snapImage(
-                      _currentUserProvider.currentUserModel!.email,
-                      _currentUserProvider);
+                      _bikeProvider.currentBikeModel!.deviceIMEI!,
+                      _bikeProvider);
                   if (result == false) {
                     SmartDialog.show(
                         widget: EvieSingleButtonDialog(
@@ -102,8 +102,8 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
               ChangeImageContainer(
                 onPress: () async {
                   final result = await deleteImage(
-                      _currentUserProvider.currentUserModel!.email,
-                      _currentUserProvider);
+                      _bikeProvider.currentBikeModel!.deviceIMEI!,
+                      _bikeProvider);
                   if (result == false) {
                     SmartDialog.show(
                         widget: EvieSingleButtonDialog(
@@ -123,7 +123,6 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
                 image: "assets/buttons/delete.svg",
                 content: "Remove Current Picture",),
 
-              //V comment:end of 3 options for profile pic
               const AccountPageDivider(),
               SizedBox(height: 50.h)
             ],
@@ -135,22 +134,22 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
 
   //Image picker from phone gallery
   Future pickImage(
-      String email, CurrentUserProvider currentUserProvider) async {
+      String deviceIMEI, BikeProvider bikeProvider) async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
     try {
       ///From widget function, show loading dialog screen
       SmartDialog.showLoading(backDismiss: false);
-      var picName = email;
+      var picName = deviceIMEI;
       Reference ref =
-          FirebaseStorage.instance.ref().child("UserProfilePic/" + picName);
+      FirebaseStorage.instance.ref().child("BikePic/" + picName);
 
       //Upload to firebase storage
       await ref.putFile(File(image!.path));
 
       ref.getDownloadURL().then((value) {
-        currentUserProvider.updateUserProfileImage(value);
+        bikeProvider.updateUserBikeImage(value);
 
         setState(() {});
 
@@ -166,21 +165,22 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
 
   //Image picker from camera
   Future snapImage(
-      String email, CurrentUserProvider currentUserProvider) async {
+      String deviceIMEI, BikeProvider bikeProvider) async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
 
     try {
       ///From widget function, show loading dialog screen
       SmartDialog.showLoading(backDismiss: false);
-      var picName = email;
-      Reference ref = FirebaseStorage.instance.ref().child("UserProfilePic/" + picName);
+      var picName = deviceIMEI!;
+      Reference ref =
+      FirebaseStorage.instance.ref().child("BikePic/" + picName);
 
       //Upload to firebase storage
       await ref.putFile(File(image!.path));
 
       ref.getDownloadURL().then((value) {
-        currentUserProvider.updateUserProfileImage(value);
+        bikeProvider.updateUserBikeImage(value);
 
         setState(() {});
 
@@ -196,12 +196,12 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
 
   //Image picker from phone gallery
   Future deleteImage(
-      String email, CurrentUserProvider currentUserProvider) async {
+      String deviceIMEI, BikeProvider bikeProvider) async {
     try {
       ///From widget function, show loading dialog screen
       SmartDialog.showLoading(backDismiss: false);
-      String profileIMG = dotenv.env['DEFAULT_PROFILE_IMG'] ?? 'DPI not found';
-      currentUserProvider.updateUserProfileImage(profileIMG);
+      String bikeIMG = dotenv.env['DEFAULT_BIKE_IMG'] ?? 'DPI not found';
+      bikeProvider.updateUserBikeImage(bikeIMG);
 
       setState(() {});
 
