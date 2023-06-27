@@ -138,10 +138,6 @@ class _UserNotFoundState extends State<UserNotFound> {
                   ),
                 ),
 
-
-
-
-
               ]),
     ));
   }

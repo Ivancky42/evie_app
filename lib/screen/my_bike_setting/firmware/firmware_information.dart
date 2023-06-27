@@ -213,7 +213,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                      const AccountPageDivider(),
                   Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
-                  child:TextColumn(
+                  child: TextColumn(
                         title: "What's New",
                         body: _firmwareProvider.latestFirmwareModel?.desc ?? "None"),
                   ),
