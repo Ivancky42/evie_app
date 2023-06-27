@@ -95,6 +95,7 @@ class _EVKeyListState extends State<EVKeyList> {
                              backgroundColor: EvieColors.red,
                              foregroundColor: Colors.white,
                              icon: Icons.delete,
+
                            ),
                          ],
                        ),

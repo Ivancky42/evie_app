@@ -15,6 +15,7 @@ import '../../widgets/evie_single_button_dialog.dart';
 import '../dialog.dart';
 import '../model/bike_model.dart';
 import 'bike_provider.dart';
+import 'firmware_provider.dart';
 
 enum NotifyDataState {
   notifying,
@@ -278,10 +279,6 @@ class BluetoothProvider extends ChangeNotifier {
           discoverServices(currentBikeModel!.bleKey!);
 
 
-          //print("Yessssss");
-          if(iotInfoModel != null && iotInfoModel?.firmwareVer != null){
-            BikeProvider().checkIsCurrentVersion(iotInfoModel!.firmwareVer!);
-          }
 
           break;
         case DeviceConnectionState.disconnecting:
@@ -351,6 +348,13 @@ class BluetoothProvider extends ChangeNotifier {
 
     clearBluetoothStatus();
     notifyListeners();
+  }
+
+  checkIsCurrentVersion(String firmVer){
+    firmVer = firmVer.split("V").last;
+    if(currentBikeModel?.firmVer == null || int.parse(currentBikeModel!.firmVer!.replaceAll('.', '')) != int.parse(firmVer.replaceAll('.', ''))) {
+      FirmwareProvider().uploadFirmVerToFirestore(firmVer);
+    }
   }
 
   void setIsPairedResult(bool result) {
@@ -790,6 +794,13 @@ class BluetoothProvider extends ChangeNotifier {
           cableLockState = CableLockResult(decodedData);
           deviceConnectStream.add(DeviceConnectResult.connected);
           deviceConnectResult = DeviceConnectResult.connected;
+
+
+          ///Compare bluetooth firmware version and firestore bike firmware version
+          if(iotInfoModel != null && iotInfoModel?.firmwareVer != null){
+            checkIsCurrentVersion(iotInfoModel!.firmwareVer!);
+          }
+
           notifyListeners();
           break;
         case BluetoothCommand.addRFIDCmd:
