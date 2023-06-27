@@ -89,7 +89,9 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               return GestureDetector(
-                                onTap: (){},
+                                onTap: (){
+
+                                },
                                 child:Padding(
                                   padding: EdgeInsets.fromLTRB(0, Platform.isIOS ? 5.h : 10.h, 0, 5.h),
                                   child: Container(

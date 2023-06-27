@@ -169,7 +169,7 @@ class _BikeSettingState extends State<BikeSetting> {
                     visible: true,
                     child: Column(children: [
                       GestureDetector(
-                        onTap: (){
+                        onLongPress: (){
                           changeToUserHomePageScreen(context);
                         },
                         child: Padding(

@@ -1361,8 +1361,6 @@ class BikeProvider extends ChangeNotifier {
           .doc(rfidID.toString())
           .set({
         'rfidID' : rfidID,
-
-        ///rfidColour
         'rfidName' : rfidName,
         'created': Timestamp.now(),
       }, SetOptions(merge: true));
@@ -1433,11 +1431,10 @@ class BikeProvider extends ChangeNotifier {
 
   ///Compare bluetooth firmware version and firestore bike firmware version
   checkIsCurrentVersion(String firmVer){
+    //print("yessssssssssssssssssss");
     print("check ble firmware ver");
     firmVer = firmVer.split("V").last;
-    if(currentBikeModel?.firmVer == null ||
-        int.parse(currentBikeModel!.firmVer!.replaceAll('.', ''))
-            != int.parse(firmVer.replaceAll('.', ''))) {
+    if(currentBikeModel?.firmVer == null || int.parse(currentBikeModel!.firmVer!.replaceAll('.', '')) != int.parse(firmVer.replaceAll('.', ''))) {
       FirmwareProvider().uploadFirmVerToFirestore(firmVer);
     }
   }

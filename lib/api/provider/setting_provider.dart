@@ -23,6 +23,7 @@ class SettingProvider with ChangeNotifier {
   String? themeString;
 
   SheetList? currentSheetList;
+  String? stringPassing;
 
   PackageInfo? packageInfo;
 
@@ -58,12 +59,10 @@ class SettingProvider with ChangeNotifier {
       currentThemeMode = ThemeMode.system;
     }
 
-    WidgetsFlutterBinding.ensureInitialized();
     packageInfo = await PackageInfo.fromPlatform();
 
     notifyListeners();
   }
-
 
   ///Measurement
   void changeMeasurement(MeasurementSetting measurementSetting) async {
@@ -86,7 +85,6 @@ class SettingProvider with ChangeNotifier {
 
     return milesData.toStringAsFixed(2);
   }
-
 
 
   ///Theme
@@ -124,7 +122,8 @@ class SettingProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  changeSheetElement(SheetList sheetList){
+  changeSheetElement(SheetList sheetList, [String? stringPassing]){
+    this.stringPassing = stringPassing;
     currentSheetList = sheetList;
     notifyListeners();
   }

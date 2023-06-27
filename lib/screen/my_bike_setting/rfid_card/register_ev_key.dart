@@ -124,10 +124,10 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
           final result = await _bikeProvider.uploadRFIDtoFireStore(addRFIDStatus.rfidNumber!, "RFID Card");
           if (result == true) {
 
-            showAddEVKeySuccess(context, addRFIDStatus.rfidNumber!);
+            _settingProvider.changeSheetElement(SheetList.nameEv, addRFIDStatus.rfidNumber!);
 
           } else {
-            showUploadEVKeyToFirestoreFailed(context);
+            _settingProvider.changeSheetElement(SheetList.evAddFailed);
           }
 
       }else if(addRFIDStatus.addRFIDState == AddRFIDState.cardIsExist){
@@ -137,6 +137,7 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
         if (result == true) {
 
           showEVKeyExistAndUploadToFirestore(context, addRFIDStatus.rfidNumber!);
+          _settingProvider.changeSheetElement(SheetList.nameEv, addRFIDStatus.rfidNumber!);
 
         } else {
           _settingProvider.changeSheetElement(SheetList.evAddFailed);

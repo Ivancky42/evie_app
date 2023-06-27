@@ -467,7 +467,7 @@ getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bike
                     if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
                       return "Unlocked";
                     } else {
-                      return "Locked & Secure";
+                      return "Locked & Secured";
                     }
                   }
                 case 'warning':

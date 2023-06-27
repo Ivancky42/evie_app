@@ -74,7 +74,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
               break;
             case "Firmware Version":
               pageNavigate = null;
-              changeToFirmwareInformation(context);
+              _settingProvider.changeSheetElement(SheetList.firmwareInformation);
               break;
           }
         }
@@ -661,7 +661,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                     showConnectDialog(_bluetoothProvider, _bikeProvider);
                   }
                   else if (deviceConnectResult == DeviceConnectResult.connected) {
-                    changeToFirmwareInformation(context);
+                    _settingProvider.changeSheetElement(SheetList.firmwareInformation);
                   }
                 },
                 child: Container(

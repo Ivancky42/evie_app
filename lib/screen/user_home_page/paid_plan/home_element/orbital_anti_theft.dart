@@ -113,6 +113,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                       padding: EdgeInsets.only(bottom: 10.h),
                       child: Center(
                         child: SingleChildScrollView(
+                          physics: NeverScrollableScrollPhysics(),
                           child: Align(
                             alignment: Alignment.bottomLeft,
                             child: Container(
@@ -187,7 +188,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                 children: [
                   SvgPicture.asset(getCurrentBikeStatusIcon(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),),
                   Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
-                    style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray),),
+                    style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray, height: 1.22),),
 
                   selectedGeopoint != null ? FutureBuilder<dynamic>(
                       future: _locationProvider.returnPlaceMarks(selectedGeopoint!.latitude, selectedGeopoint!.longitude),
@@ -213,11 +214,13 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                     maxLines: 2,
                   ),
 
+
                   ///Bike provider lastUpdated minus current timestamp
                   SingleChildScrollView(
                     child: Text(calculateTimeAgo(_locationProvider.locationModel!.updated!.toDate()),
                         style: EvieTextStyles.body14.copyWith(color: EvieColors.mediumLightBlack)),
                   ),
+
                 ],
               ),
             ),

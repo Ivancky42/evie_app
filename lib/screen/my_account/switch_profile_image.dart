@@ -74,6 +74,7 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
                 content: "Upload from Photo Gallery",),
 
               const AccountPageDivider(),
+
               ChangeImageContainer(
                 onPress: () async {
                   final result = await snapImage(
@@ -173,8 +174,7 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
       ///From widget function, show loading dialog screen
       SmartDialog.showLoading(backDismiss: false);
       var picName = email;
-      Reference ref =
-          FirebaseStorage.instance.ref().child("UserProfilePic/" + picName);
+      Reference ref = FirebaseStorage.instance.ref().child("UserProfilePic/" + picName);
 
       //Upload to firebase storage
       await ref.putFile(File(image!.path));

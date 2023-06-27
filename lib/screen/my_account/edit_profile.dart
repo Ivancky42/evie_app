@@ -76,8 +76,7 @@ class _EditProfileState extends State<EditProfile> {
                     child: ClipOval(
                       child: CachedNetworkImage(
                         //imageUrl: document['profileIMG'],
-                        imageUrl:
-                            _currentUserProvider.currentUserModel!.profileIMG,
+                        imageUrl: _currentUserProvider.currentUserModel!.profileIMG,
                         placeholder: (context, url) =>
                             const CircularProgressIndicator(),
                         errorWidget: (context, url, error) => Icon(Icons.error),

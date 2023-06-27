@@ -240,53 +240,54 @@ class _FreePlanState extends State<FreePlan> {
                                                         ),
                                                       ),
                                                     ),
-                                                  Padding(
-                                                    padding:  EdgeInsets.only(left: 12.w),
-                                                    child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
+                                                    Padding(
+                                                      padding:  EdgeInsets.only(left: 12.w),
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
 
-                                                        Row(
-                                                          children: [
-                                                            Text(
-                                                              _bikeProvider.currentBikeModel?.deviceName ?? "loading",
-                                                              style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite),
-                                                            ),
-                                                            // Text(
-                                                            //   "icons",
-                                                            //   style: EvieTextStyles.h3.copyWith(color: EvieColors.grayishWhite),
-                                                            // ),
-                                                          ],
-                                                        ),
+                                                          Row(
+                                                            children: [
+                                                              Text(
+                                                                _bikeProvider.currentBikeModel?.deviceName ?? "loading",
+                                                                style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite),
+                                                              ),
+                                                              // Text(
+                                                              //   "icons",
+                                                              //   style: EvieTextStyles.h3.copyWith(color: EvieColors.grayishWhite),
+                                                              // ),
+                                                            ],
+                                                          ),
 
-                                                        deviceConnectResult == DeviceConnectResult.connected ?
-                                                        Row(
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                              "assets/icons/bluetooth_connected.svg",
-                                                            ),
-                                                            Text(
-                                                              "Connected",
-                                                              style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                                            ),
-                                                          ],
-                                                        ) :
-                                                        Row(
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                              "assets/icons/bluetooth_disconnected.svg",
-                                                            ),
-                                                            Text(
-                                                              "Disconnected",
-                                                              style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
+                                                          deviceConnectResult == DeviceConnectResult.connected ?
+                                                          Row(
+                                                            children: [
+                                                              SvgPicture.asset(
+                                                                "assets/icons/bluetooth_connected.svg",
+                                                              ),
+                                                              Text(
+                                                                "Connected",
+                                                                style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                                              ),
+                                                            ],
+                                                          ) :
+                                                          Row(
+                                                            children: [
+                                                              SvgPicture.asset(
+                                                                "assets/icons/bluetooth_disconnected.svg",
+                                                              ),
+                                                              Text(
+                                                                "Disconnected",
+                                                                style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],),
+                                                  ],),
+
                                                 Padding(
                                                   padding: EdgeInsets.only(right: 22.5.w),
                                                   child: IconButton(

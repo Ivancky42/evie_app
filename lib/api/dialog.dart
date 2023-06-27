@@ -963,7 +963,7 @@ showAddEVKeyFailed(BuildContext context){
           rightContent: "OK",
           onPressedRight: () {
             SmartDialog.dismiss();
-            changeToEVAddFailed(context);
+            //changeToEVAddFailed(context);
           }));
 }
 
@@ -975,7 +975,7 @@ showUploadEVKeyToFirestoreFailed(BuildContext context){
           rightContent: "OK",
           onPressedRight: () {
             SmartDialog.dismiss();
-            changeToEVAddFailed(context);
+
           }));
 }
 
@@ -988,7 +988,6 @@ showEVKeyExistAndUploadToFirestore(BuildContext context, String rfidNumber){
           onPressedRight: () {
             SmartDialog.dismiss();
 
-            changeToNameEVKey(context, rfidNumber);
           }));
 }
 
@@ -1001,7 +1000,6 @@ showAddEVKeySuccess(BuildContext context, String rfidNumber){
           onPressedRight: () {
             SmartDialog.dismiss();
 
-            changeToNameEVKey(context, rfidNumber);
           }));
 }
 

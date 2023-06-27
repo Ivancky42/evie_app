@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:evie_test/api/dialog.dart';
+import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/home_element/setting.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/text_column.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -44,6 +47,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late FirmwareProvider _firmwareProvider;
+  late SettingProvider _settingProvider;
 
   int totalSeconds = 105;
 
@@ -68,11 +72,12 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _firmwareProvider = Provider.of<FirmwareProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
         if(_firmwareProvider.isUpdating == true){}else{
-          showBikeSettingSheet(context);
+         _settingProvider.changeSheetElement(SheetList.bikeSetting);
         }
         return false;
       },
@@ -83,7 +88,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
             if(_firmwareProvider.isUpdating == true){
 
             }else{
-              showBikeSettingSheet(context);
+              _settingProvider.changeSheetElement(SheetList.bikeSetting);
             }
           },
         ),
@@ -91,7 +96,6 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
           children: [
             SingleChildScrollView(
               physics: BouncingScrollPhysics(),
-
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,

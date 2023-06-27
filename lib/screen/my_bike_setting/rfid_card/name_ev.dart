@@ -27,9 +27,11 @@ import '../../../widgets/evie_textform.dart';
 
 
 class NameEV extends StatefulWidget {
-  final String rfidNumber;
+  //final String rfidNumber;
 
-  const NameEV(this.rfidNumber, {Key? key}) : super(key: key);
+  const NameEV(
+      //this.rfidNumber,
+      {Key? key}) : super(key: key);
 
   @override
   _NameEVState createState() => _NameEVState();
@@ -40,14 +42,15 @@ class _NameEVState extends State<NameEV> {
   late BluetoothProvider _bluetoothProvider;
   late SettingProvider _settingProvider;
 
+  final TextEditingController _rfidNameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
-    final TextEditingController _rfidNameController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
 
     return WillPopScope(
       onWillPop: () async {
@@ -62,9 +65,9 @@ class _NameEVState extends State<NameEV> {
                 },
                 onPressedRight: () {
                   SmartDialog.dismiss();
-                  _bikeProvider.deleteRFIDFirestore(widget.rfidNumber);
-                  _bluetoothProvider.deleteRFID(widget.rfidNumber);
-                  showBikeSettingSheet(context);
+                  _bikeProvider.deleteRFIDFirestore(_settingProvider.stringPassing!);
+                  _bluetoothProvider.deleteRFID(_settingProvider.stringPassing!);
+                  _settingProvider.changeSheetElement(SheetList.bikeSetting);
                 }));
         return false;
       },
@@ -83,9 +86,9 @@ class _NameEVState extends State<NameEV> {
                     },
                     onPressedRight: () {
                       SmartDialog.dismiss();
-                      _bikeProvider.deleteRFIDFirestore(widget.rfidNumber);
-                      _bluetoothProvider.deleteRFID(widget.rfidNumber);
-                      showBikeSettingSheet(context);
+                      _bikeProvider.deleteRFIDFirestore(_settingProvider.stringPassing!);
+                      _bluetoothProvider.deleteRFID(_settingProvider.stringPassing!);
+                      _settingProvider.changeSheetElement(SheetList.bikeSetting);
                     }));
           },
         ),
@@ -114,27 +117,18 @@ class _NameEVState extends State<NameEV> {
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: EvieColors.primaryColor,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: EvieTextFormField(
-                        controller: _rfidNameController,
-                        obscureText: false,
-                        // keyboardType: TextInputType.name,
-                        hintText: "EV-Key Label",
-                        labelText: "EV-Key 1",
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter RFID Card name';
-                          }
-                          return null;
-                        },
-                      ),
+                    child: EvieTextFormField(
+                      controller: _rfidNameController,
+                      obscureText: false,
+                      // keyboardType: TextInputType.name,
+                      hintText: "EV-Key Label",
+                      labelText: "EV-Key 1",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter RFID Card name';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ],
@@ -182,11 +176,12 @@ class _NameEVState extends State<NameEV> {
                       style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
-                      if(_bikeProvider.rfidList.length >0){
-                        _settingProvider.changeSheetElement(SheetList.evKeyList);
-                      }else{
-                        showBikeSettingSheet(context);
-                      }
+                      addRFIDtoFireStore("Ev-Key ${_bikeProvider.rfidList.length.toString()}");
+                      // if(_bikeProvider.rfidList.length >0){
+                      //   _settingProvider.changeSheetElement(SheetList.evKeyList);
+                      // }else{
+                      //   showBikeSettingSheet(context);
+                      // }
                     },
                   ),
                 ),
@@ -199,7 +194,7 @@ class _NameEVState extends State<NameEV> {
   }
 
   void addRFIDtoFireStore(String rfidName) async {
-    final result = await _bikeProvider.uploadRFIDtoFireStore(widget.rfidNumber, rfidName);
+    final result = await _bikeProvider.uploadRFIDtoFireStore(_settingProvider.stringPassing!, rfidName);
     if (result == true) {
       SmartDialog.show(
           widget: EvieSingleButtonDialog(
