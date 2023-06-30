@@ -51,9 +51,7 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
               //V comment:start of 3 options for profile pic
               ChangeImageContainer(
                 onPress: () async {
-                  final result = await pickImage(
-                      _currentUserProvider.currentUserModel!.email,
-                      _currentUserProvider);
+                  final result = await pickImage(_currentUserProvider.currentUserModel!.email, _currentUserProvider);
                   if (result == false) {
                     SmartDialog.show(
                         widget: EvieSingleButtonDialog(
@@ -139,28 +137,30 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
-    try {
-      ///From widget function, show loading dialog screen
-      SmartDialog.showLoading(backDismiss: false);
-      var picName = email;
-      Reference ref =
-          FirebaseStorage.instance.ref().child("UserProfilePic/" + picName);
+    if(image != null){
+      try {
+        ///From widget function, show loading dialog screen
+        SmartDialog.showLoading(backDismiss: false);
+        var picName = email;
+        Reference ref =
+        FirebaseStorage.instance.ref().child("UserProfilePic/" + picName);
 
-      //Upload to firebase storage
-      await ref.putFile(File(image!.path));
+        //Upload to firebase storage
+        await ref.putFile(File(image!.path));
 
-      ref.getDownloadURL().then((value) {
-        currentUserProvider.updateUserProfileImage(value);
+        ref.getDownloadURL().then((value) {
+          currentUserProvider.updateUserProfileImage(value);
 
-        setState(() {});
+          setState(() {});
 
-        ///Quit loading dialog
-        Navigator.pop(context);
-      });
+          ///Quit loading dialog
+          Navigator.pop(context);
+        });
 
-      return true;
-    } catch (e) {
-      return false;
+        return true;
+      } catch (e) {
+        return false;
+      }
     }
   }
 
@@ -170,27 +170,29 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
 
-    try {
-      ///From widget function, show loading dialog screen
-      SmartDialog.showLoading(backDismiss: false);
-      var picName = email;
-      Reference ref = FirebaseStorage.instance.ref().child("UserProfilePic/" + picName);
+    if(image != null){
+      try {
+        ///From widget function, show loading dialog screen
+        SmartDialog.showLoading(backDismiss: false);
+        var picName = email;
+        Reference ref = FirebaseStorage.instance.ref().child("UserProfilePic/" + picName);
 
-      //Upload to firebase storage
-      await ref.putFile(File(image!.path));
+        //Upload to firebase storage
+        await ref.putFile(File(image!.path));
 
-      ref.getDownloadURL().then((value) {
-        currentUserProvider.updateUserProfileImage(value);
+        ref.getDownloadURL().then((value) {
+          currentUserProvider.updateUserProfileImage(value);
 
-        setState(() {});
+          setState(() {});
 
-        ///Quit loading dialog
-        Navigator.pop(context);
-      });
+          ///Quit loading dialog
+          Navigator.pop(context);
+        });
 
-      return true;
-    } catch (e) {
-      return false;
+        return true;
+      } catch (e) {
+        return false;
+      }
     }
   }
 

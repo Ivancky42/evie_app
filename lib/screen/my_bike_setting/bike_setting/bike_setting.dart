@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/screen/my_bike_setting/bike_setting/switch_bike_image.dart';
 
 import 'package:evie_test/widgets/custom_search_controller.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,6 @@ import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
-import '../../my_account/switch_bike_image.dart';
 import '../../my_account/switch_profile_image.dart';
 import '../my_bike_function.dart';
 import 'bike_setting_container.dart';

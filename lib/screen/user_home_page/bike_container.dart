@@ -110,7 +110,7 @@ class _BikeContainerState extends State<BikeContainer> {
             contentPadding: EdgeInsets.only(left: 18.w, right: 8.w),
             leading:
             //padding: EdgeInsets.fromLTRB(16.w, 17.h, 0.w, 0.h),
-            _bikeProvider.currentBikeModel?.bikeIMG == '' ?
+            widget.bikeModel.bikeIMG == '' ?
             Image(
               image: const AssetImage("assets/buttons/bike_left_pic.png"),
               width: 56.h,
@@ -118,7 +118,7 @@ class _BikeContainerState extends State<BikeContainer> {
             ):ClipOval(
               child: CachedNetworkImage(
                 //imageUrl: document['profileIMG'],
-                imageUrl: _bikeProvider.currentBikeModel!.bikeIMG!,
+                imageUrl: widget.bikeModel.bikeIMG!,
                 placeholder: (context, url) => const CircularProgressIndicator(),
                 errorWidget: (context, url, error) => Icon(Icons.error),
                 width: 56.h,

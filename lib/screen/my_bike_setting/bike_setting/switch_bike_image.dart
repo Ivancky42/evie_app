@@ -12,10 +12,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../api/provider/bike_provider.dart';
-import '../../widgets/evie_single_button_dialog.dart';
-import '../../widgets/widgets.dart';
-import 'my_account_widget.dart';
+import '../../../api/provider/bike_provider.dart';
+import '../../../widgets/evie_single_button_dialog.dart';
+import '../../my_account/my_account_widget.dart';
+
 
 class SwitchBikeImage extends StatefulWidget {
   const SwitchBikeImage({Key? key}) : super(key: key);
@@ -138,28 +138,30 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
-    try {
-      ///From widget function, show loading dialog screen
-      SmartDialog.showLoading(backDismiss: false);
-      var picName = deviceIMEI;
-      Reference ref =
-      FirebaseStorage.instance.ref().child("BikePic/" + picName);
+    if(image != null){
+      try {
+        ///From widget function, show loading dialog screen
+        SmartDialog.showLoading(backDismiss: false);
+        var picName = deviceIMEI;
+        Reference ref =
+        FirebaseStorage.instance.ref().child("BikePic/" + picName);
 
-      //Upload to firebase storage
-      await ref.putFile(File(image!.path));
+        //Upload to firebase storage
+        await ref.putFile(File(image!.path));
 
-      ref.getDownloadURL().then((value) {
-        bikeProvider.updateUserBikeImage(value);
+        ref.getDownloadURL().then((value) {
+          bikeProvider.updateUserBikeImage(value);
 
-        setState(() {});
+          setState(() {});
 
-        ///Quit loading dialog
-        Navigator.pop(context);
-      });
+          ///Quit loading dialog
+          Navigator.pop(context);
+        });
 
-      return true;
-    } catch (e) {
-      return false;
+        return true;
+      } catch (e) {
+        return false;
+      }
     }
   }
 
@@ -169,28 +171,30 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
 
-    try {
-      ///From widget function, show loading dialog screen
-      SmartDialog.showLoading(backDismiss: false);
-      var picName = deviceIMEI!;
-      Reference ref =
-      FirebaseStorage.instance.ref().child("BikePic/" + picName);
+    if(image != null){
+      try {
+        ///From widget function, show loading dialog screen
+        SmartDialog.showLoading(backDismiss: false);
+        var picName = deviceIMEI!;
+        Reference ref =
+        FirebaseStorage.instance.ref().child("BikePic/" + picName);
 
-      //Upload to firebase storage
-      await ref.putFile(File(image!.path));
+        //Upload to firebase storage
+        await ref.putFile(File(image!.path));
 
-      ref.getDownloadURL().then((value) {
-        bikeProvider.updateUserBikeImage(value);
+        ref.getDownloadURL().then((value) {
+          bikeProvider.updateUserBikeImage(value);
 
-        setState(() {});
+          setState(() {});
 
-        ///Quit loading dialog
-        Navigator.pop(context);
-      });
+          ///Quit loading dialog
+          Navigator.pop(context);
+        });
 
-      return true;
-    } catch (e) {
-      return false;
+        return true;
+      } catch (e) {
+        return false;
+      }
     }
   }
 

@@ -107,6 +107,7 @@ class LocationProvider extends ChangeNotifier {
       if (placeMarks.isNotEmpty) {
         for (var element in placeMarks) {
           currentPlaceMark = element;
+          break; // Exit the loop once a address is found
         }
       } else {
         currentPlaceMark = null;
@@ -129,6 +130,7 @@ class LocationProvider extends ChangeNotifier {
         //placeMark = placeMarks[0];
         for (var element in placeMarks) {
           placeMark = element;
+          break; // Exit the loop once a address is found
         }
       } else {
         placeMark = null;

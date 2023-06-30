@@ -122,8 +122,8 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         try {
-                                await _authProvider.checkIfFirestoreUserExist(_emailController.text.trim(),).then((
-                                    result) async {
+                                await _authProvider.checkIfFirestoreUserExist(_emailController.text.trim()).then((result) async {
+
                                   if (result == null) {
                                     SmartDialog.show(
                                         backDismiss: false,
@@ -207,6 +207,17 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                 });
                         } catch (e) {
                           debugPrint(e.toString());
+                          SmartDialog.show(
+                              backDismiss: false,
+                              widget: EvieSingleButtonDialog(
+                                  title: "Error",
+                                  content: "Please try again",
+                                  rightContent: "Close",
+                                  onPressedRight: () {
+                                    SmartDialog.dismiss();
+
+                                  }
+                              ));
                         }
                       }
                     }
