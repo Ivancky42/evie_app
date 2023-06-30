@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/model/user_bike_model.dart';
@@ -107,14 +108,25 @@ class _BikeContainerState extends State<BikeContainer> {
           child: ListTile(
 
             contentPadding: EdgeInsets.only(left: 18.w, right: 8.w),
-
             leading:
             //padding: EdgeInsets.fromLTRB(16.w, 17.h, 0.w, 0.h),
+            _bikeProvider.currentBikeModel?.bikeIMG == '' ?
             Image(
-              image: const AssetImage("assets/buttons/bike_left.png"),
+              image: const AssetImage("assets/buttons/bike_left_pic.png"),
               width: 56.h,
               height: 56.h,
+            ):ClipOval(
+              child: CachedNetworkImage(
+                //imageUrl: document['profileIMG'],
+                imageUrl: _bikeProvider.currentBikeModel!.bikeIMG!,
+                placeholder: (context, url) => const CircularProgressIndicator(),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                width: 56.h,
+                height:56.h,
+                fit: BoxFit.cover,
+              ),
             ),
+
             title: Padding(
               padding: EdgeInsets.only(top:10.h),
               child: Row(

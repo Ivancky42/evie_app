@@ -348,6 +348,7 @@ class _BikeSettingState extends State<BikeSetting> {
                       ],
                     ),
 
+                    ///when already connected
                     deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr?
                     Padding(
                       padding: EdgeInsets.only(right:19.w),
@@ -417,6 +418,8 @@ class _BikeSettingState extends State<BikeSetting> {
                   ],
                 ),
               ),
+              ///
+
               Divider(
                 thickness: 0.5.h,
                 color: EvieColors.darkWhite,
