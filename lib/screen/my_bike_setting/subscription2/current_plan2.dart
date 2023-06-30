@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
@@ -12,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/function.dart';
 import '../../../api/length.dart';
@@ -37,25 +39,25 @@ class _CurrentPlan2State extends State<CurrentPlan2> {
 
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
+  late SettingProvider _settingProvider;
 
   @override
   Widget build(BuildContext context) {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop();
-        showBikeSettingSheet(context);
+        _settingProvider.changeSheetElement(SheetList.bikeSetting);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'EV+ Subscription',
           onPressed: () {
-            Navigator.of(context).pop();
-            showBikeSettingSheet(context);
+            _settingProvider.changeSheetElement(SheetList.bikeSetting);
           },
         ),
         body: Stack(

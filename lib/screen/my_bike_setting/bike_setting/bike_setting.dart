@@ -294,8 +294,8 @@ class _BikeSettingState extends State<BikeSetting> {
                                     placeholder: (context, url) =>
                                     const CircularProgressIndicator(),
                                     errorWidget: (context, url, error) => Icon(Icons.error),
-                                    width: 66.67.h,
-                                    height: 66.67.h,
+                                    width: 49.h,
+                                    height: 49.h,
                                     fit: BoxFit.cover,
                                   ),
                                 ),

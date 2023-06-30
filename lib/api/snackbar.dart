@@ -445,6 +445,35 @@ showBikeAddSuccessfulToast(context) {
   );
 }
 
+showEVRemovedToast(context, String keyName) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Container(
+              width: 300.w,
+              child: Text(
+                "${keyName} have been removed from your EV-Key list.",
+                style: EvieTextStyles.toast,
+              ),
+            )
+          ],
+        ),
+      ),
+      duration: const Duration(seconds: 5),
+    ),
+  );
+}
+
+
 
 hideCurrentSnackBar(ScaffoldMessengerState _navigator) {
   Future.delayed(Duration.zero).then((value) {

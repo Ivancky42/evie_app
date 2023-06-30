@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
@@ -18,6 +19,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
 import '../../../api/dialog.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/function.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
@@ -42,6 +44,8 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late CurrentUserProvider _currentUserProvider;
+  late SettingProvider _settingProvider;
+
   late StreamSubscription deleteRFIDStream;
 
   bool isManageList = false;
@@ -55,21 +59,21 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     isOwner = _bikeProvider.isOwner!;
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop();
-        showBikeSettingSheet(context);
+
+        _settingProvider.changeSheetElement(SheetList.bikeSetting);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'PedalPals',
           onPressed: () {
-            Navigator.of(context).pop();
-            showBikeSettingSheet(context);
+            _settingProvider.changeSheetElement(SheetList.bikeSetting);
           },
         ),
         body: Stack(
@@ -234,8 +238,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                     onPressed: () {
                       ///Check if bike already have 5 user
                       if(_bikeProvider.bikeUserList.length <= 5 ){
-                        Navigator.of(context).pop();
-                        //showShareBikeSheet(context);
+                        _settingProvider.changeSheetElement(SheetList.shareBikeInvitation);
                       }else{
                         SmartDialog.show(widget: EvieSingleButtonDialog(
                             title: "Exist Limit",

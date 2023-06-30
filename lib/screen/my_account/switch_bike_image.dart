@@ -200,7 +200,7 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
     try {
       ///From widget function, show loading dialog screen
       SmartDialog.showLoading(backDismiss: false);
-      String bikeIMG = dotenv.env['DEFAULT_BIKE_IMG'] ?? 'DPI not found';
+      String bikeIMG = dotenv.env['DEFAULT_BIKE_IMG'] ?? 'DBI not found';
       bikeProvider.updateUserBikeImage(bikeIMG);
 
       setState(() {});

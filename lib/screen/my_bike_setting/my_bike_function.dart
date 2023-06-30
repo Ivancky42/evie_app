@@ -90,10 +90,10 @@ checkBLEPermissionAndAction(BluetoothProvider _bluetoothProvider, DeviceConnectR
 }
 
 
-handleConnection(connectStream, _bluetoothProvider) async {
-  await _bluetoothProvider.disconnectDevice();
-  await _bluetoothProvider.stopScan();
-  connectStream = _bluetoothProvider.startScanAndConnect().listen((deviceConnectResult) {
+handleConnection(connectStream, bluetoothProvider) async {
+  await bluetoothProvider.disconnectDevice();
+  await bluetoothProvider.stopScan();
+  connectStream = bluetoothProvider.startScanAndConnect().listen((deviceConnectResult) {
     switch(deviceConnectResult){
       case DeviceConnectResult.scanning:
       // TODO: Handle this case.
@@ -130,7 +130,7 @@ handleConnection(connectStream, _bluetoothProvider) async {
       // TODO: Handle this case.
         break;
       case DeviceConnectResult.connected:
-        BikeProvider().checkIsCurrentVersion(_bluetoothProvider.iotInfoModel!.firmwareVer!);
+        bluetoothProvider.checkIsCurrentVersion(bluetoothProvider.iotInfoModel!.firmwareVer!);
       // TODO: Handle this case.
         break;
       case DeviceConnectResult.disconnecting:

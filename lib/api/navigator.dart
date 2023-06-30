@@ -556,25 +556,25 @@ void changeToShareBikeInvitationScreen(BuildContext context) {
   );
 }
 
-void changeToInvitationSentScreen(BuildContext context, String email) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child:  InvitationSent(email),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
+// void changeToInvitationSentScreen(BuildContext context, String email) {
+//   Navigator.pushReplacement(context,
+//     PageTransition(
+//       type: PageTransitionType.rightToLeft,
+//       child:  InvitationSent(email),
+//       duration: const Duration(milliseconds: 300),
+//     ),
+//   );
+// }
 
-void changeToUserNotFoundScreen(BuildContext context, String email) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: UserNotFound(email),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
+// void changeToUserNotFoundScreen(BuildContext context, String email) {
+//   Navigator.pushReplacement(context,
+//     PageTransition(
+//       type: PageTransitionType.rightToLeft,
+//       child: UserNotFound(email),
+//       duration: const Duration(milliseconds: 300),
+//     ),
+//   );
+// }
 
 void changeToShareBikeUserListScreen(BuildContext context) {
   Navigator.pushReplacement(context,

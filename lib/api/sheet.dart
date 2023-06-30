@@ -178,43 +178,43 @@ void showEssentialPlanSheet(BuildContext context) {
             );
           }
 
-          void showUserNotFoundSheet(BuildContext context, String email) {
-            showModalBottomSheet(
-              isScrollControlled: true,
-              constraints: BoxConstraints.tight(Size(
-                  MediaQuery
-                      .of(context)
-                      .size
-                      .width,
-                  MediaQuery
-                      .of(context)
-                      .size
-                      .height * EvieLength.sheet_expand)),
-              context: context,
-              builder: (BuildContext context) {
-                return EvieBottomSheet(childContext: UserNotFound(email));
-              },
-            );
-          }
+          // void showUserNotFoundSheet(BuildContext context, String email) {
+          //   showModalBottomSheet(
+          //     isScrollControlled: true,
+          //     constraints: BoxConstraints.tight(Size(
+          //         MediaQuery
+          //             .of(context)
+          //             .size
+          //             .width,
+          //         MediaQuery
+          //             .of(context)
+          //             .size
+          //             .height * EvieLength.sheet_expand)),
+          //     context: context,
+          //     builder: (BuildContext context) {
+          //       return EvieBottomSheet(childContext: UserNotFound(email));
+          //     },
+          //   );
+          // }
 
-          void showInvitationSentSheet(BuildContext context, String email) {
-            showModalBottomSheet(
-              isScrollControlled: true,
-              constraints: BoxConstraints.tight(Size(
-                  MediaQuery
-                      .of(context)
-                      .size
-                      .width,
-                  MediaQuery
-                      .of(context)
-                      .size
-                      .height * EvieLength.sheet_expand)),
-              context: context,
-              builder: (BuildContext context) {
-                return EvieBottomSheet(childContext: InvitationSent(email));
-              },
-            );
-          }
+          // void showInvitationSentSheet(BuildContext context, String email) {
+          //   showModalBottomSheet(
+          //     isScrollControlled: true,
+          //     constraints: BoxConstraints.tight(Size(
+          //         MediaQuery
+          //             .of(context)
+          //             .size
+          //             .width,
+          //         MediaQuery
+          //             .of(context)
+          //             .size
+          //             .height * EvieLength.sheet_expand)),
+          //     context: context,
+          //     builder: (BuildContext context) {
+          //       return EvieBottomSheet(childContext: InvitationSent(email));
+          //     },
+          //   );
+          // }
 
           void showThreatHistorySheet(BuildContext context) {
             showModalBottomSheet(

@@ -18,10 +18,13 @@ import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import 'package:share_plus/share_plus.dart';
+
+import '../../../api/provider/setting_provider.dart';
 
 
 class UserNotFound extends StatefulWidget{
@@ -32,10 +35,10 @@ class UserNotFound extends StatefulWidget{
 }
 
 class _UserNotFoundState extends State<UserNotFound> {
-
+  late SettingProvider _settingProvider;
   @override
   Widget build(BuildContext context) {
-
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -129,16 +132,11 @@ class _UserNotFoundState extends State<UserNotFound> {
                           style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                       ),
                       onPressed: () {
-                        Navigator.of(context).pop();
-                        showShareBikeInvitationSheet(context);
+                        _settingProvider.changeSheetElement(SheetList.shareBikeInvitation);
                       },
                     ),
                   ),
                 ),
-
-
-
-
 
               ]),
     ));

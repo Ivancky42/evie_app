@@ -290,8 +290,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                     onPressed: () {
                       ///Check if bike already have 5 user
                       if(_bikeProvider.bikeUserList.length <= 5 ){
-                        Navigator.of(context).pop();
-                        showShareBikeInvitationSheet(context);
+                        _settingProvider.changeSheetElement(SheetList.shareBikeInvitation);
                       }else{
                         SmartDialog.show(widget: EvieSingleButtonDialog(
                             title: "Exist Limit",

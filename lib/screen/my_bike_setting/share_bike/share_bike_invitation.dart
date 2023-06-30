@@ -1,8 +1,10 @@
 import 'dart:collection';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -40,6 +42,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
 
   late AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
+  late SettingProvider _settingProvider;
 
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -48,11 +51,11 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop();
-        showBikeSettingSheet(context);
+        _settingProvider.changeSheetElement(SheetList.bikeSetting);
         return false;
       },
       child: Scaffold(
@@ -124,8 +127,9 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                             rightContent: "Close",
                                             onPressedRight: () {
                                               SmartDialog.dismiss();
-                                              Navigator.of(context).pop();
-                                              showUserNotFoundSheet(context, _emailController.text.trim());
+
+                                              _settingProvider.changeSheetElement(SheetList.userNotFound, _emailController.text.trim());
+
                                             }
                                         ));
                                     return;
@@ -161,8 +165,8 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                                           rightContent: "Close",
                                                           onPressedRight: () {
                                                             SmartDialog.dismiss();
-                                                            Navigator.of(context).pop();
-                                                            showInvitationSentSheet(context, _emailController.text.trim());
+
+                                                            _settingProvider.changeSheetElement(SheetList.invitationSent, _emailController.text.trim());
 
                                                           }
                                                       ));
@@ -217,8 +221,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                       style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pop();
-                      showShareBikeUserListSheet(context);
+                      _settingProvider.changeSheetElement(SheetList.pedalPalsList);
                     },
                   ),
                 ),

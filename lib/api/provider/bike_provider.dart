@@ -1429,15 +1429,6 @@ class BikeProvider extends ChangeNotifier {
         .snapshots();
   }
 
-  ///Compare bluetooth firmware version and firestore bike firmware version
-  checkIsCurrentVersion(String firmVer){
-    //print("yessssssssssssssssssss");
-    print("check ble firmware ver");
-    firmVer = firmVer.split("V").last;
-    if(currentBikeModel?.firmVer == null || int.parse(currentBikeModel!.firmVer!.replaceAll('.', '')) != int.parse(firmVer.replaceAll('.', ''))) {
-      FirmwareProvider().uploadFirmVerToFirestore(firmVer);
-    }
-  }
 
   ///Apply filter for threat history
   applyThreatFilter(List<String> filter, ThreatFilterDate pickedDate, DateTime? pickedDate1, DateTime? pickedDate2){

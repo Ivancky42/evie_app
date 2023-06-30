@@ -92,10 +92,11 @@ class FirmwareProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-    Future uploadFirmVerToFirestore(String firmVer) async{
+    Future uploadFirmVerToFirestore(String firmVer, [String? deviceIMEI]) async{
+
       await FirebaseFirestore.instance
           .collection(bikesCollection)
-          .doc(currentBikeModel!.deviceIMEI)
+          .doc(deviceIMEI ?? currentBikeModel!.deviceIMEI)
           .set({
           "firmVer": firmVer,
       }, SetOptions(merge: true));

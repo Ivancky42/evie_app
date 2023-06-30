@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/model/bike_user_model.dart';
@@ -30,25 +32,25 @@ class _ShareBikeState extends State<ShareBike> {
 
   late AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
+  late SettingProvider _settingProvider;
 
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
 
      return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop();
-        showBikeSettingSheet(context);
+        _settingProvider.changeSheetElement(SheetList.bikeSetting);
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'Share Bike',
           onPressed: () {
-            Navigator.of(context).pop();
-            showBikeSettingSheet(context);
+            _settingProvider.changeSheetElement(SheetList.bikeSetting);
           },
         ),
         body: Stack(
@@ -108,8 +110,7 @@ class _ShareBikeState extends State<ShareBike> {
                       style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                   ),
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    showShareBikeInvitationSheet(context);
+                    _settingProvider.changeSheetElement(SheetList.shareBikeInvitation);
                   },
                 ),
               ),

@@ -19,8 +19,7 @@ import '../../../api/provider/setting_provider.dart';
 
 
 class UserNotFound extends StatefulWidget{
-  final String email;
-  const UserNotFound(this.email,{ Key? key }) : super(key: key);
+  const UserNotFound({ Key? key }) : super(key: key);
   @override
   _UserNotFoundState createState() => _UserNotFoundState();
 }
@@ -83,8 +82,8 @@ class _UserNotFoundState extends State<UserNotFound> {
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
-                        Navigator.of(context).pop();
-                       showPedalPalsSheet(context);
+                        _settingProvider.changeSheetElement(SheetList.pedalPals);
+
                       },
                     ),
                   ),
