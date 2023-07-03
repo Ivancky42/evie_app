@@ -42,34 +42,33 @@ class _EvieBottomSheetState extends State<EvieBottomSheet> {
           padding: EdgeInsets.only(top: 20.h),
           child: CupertinoPageScaffold(
               backgroundColor: Colors.transparent,
-              child: SafeArea(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: EvieColors.grayishWhite,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-                  ),
-                  child: Column(
-                    children: [
-                      /// home indicator
-                      Padding(
-                        padding: EdgeInsets.only(top: 11.h),
-                        child: Image.asset(
-                          "assets/buttons/home_indicator.png",
-                          width: 40.w,
-                          height: 4.h,
-                        ),
-                      ),
-
-                      Expanded(
-                        child: widget.childContext ?? Container(),
-                      ),
-
-                    ],
-                  ),
+              resizeToAvoidBottomInset: false,
+              child:  Container(
+                decoration: const BoxDecoration(
+                  color: EvieColors.grayishWhite,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16), topRight: Radius.circular(16)),
                 ),
-              )
-          ),
+                child: Column(
+                  children: [
+                    /// home indicator
+                    Padding(
+                      padding: EdgeInsets.only(top: 11.h),
+                      child: Image.asset(
+                        "assets/buttons/home_indicator.png",
+                        width: 40.w,
+                        height: 4.h,
+                      ),
+                    ),
+
+                    Expanded(
+                      child: widget.childContext ?? Container(),
+                    ),
+
+                  ],
+                ),
+              ),
+          )
         ),
     );
   }
