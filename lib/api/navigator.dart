@@ -140,13 +140,21 @@ void changeToTestBLEScreen(BuildContext context) {
 }
 
 void changeToUserHomePageScreen(BuildContext context ) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.bottomToTop,
-      child: const UserHomePage(0),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
+  // Navigator.pushReplacement(context,
+  //   PageTransition(
+  //     type: PageTransitionType.bottomToTop,
+  //     child: const UserHomePage(0),
+  //     duration: const Duration(milliseconds: 300),
+  //   ),
+  // );
+
+  Navigator.of(context).popUntil(
+          (route) => route.settings.name == '/');
+}
+
+void changeToUserHomePageScreen2(BuildContext context ) {
+  Navigator.of(context)
+      .pushNamedAndRemoveUntil("/", (route) => false);
 }
 
 void changeToCheckYourEmail(BuildContext context) {

@@ -76,6 +76,7 @@ class AuthProvider extends ChangeNotifier {
       if (user != null && user.emailVerified == true) {
         _uid = user.uid;
         _email = user.email!;
+        isLogin = true;
 
         notifyListeners();
 

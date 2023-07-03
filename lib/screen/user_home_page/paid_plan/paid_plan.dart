@@ -75,7 +75,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
       child: Scaffold(
           backgroundColor: EvieColors.lightBlack,
-          appBar: const EmptyAppbar(),
+          //appBar: const EmptyAppbar(),
           body: SafeArea(
               child: Container(
                 color: EvieColors.grayishWhite,
@@ -83,7 +83,14 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      color:  EvieColors.lightBlack,
+                      //color:  EvieColors.lightBlack,
+                      decoration: BoxDecoration(
+                        color: EvieColors.lightBlack,
+                        border: Border.all(
+                          color: EvieColors.lightBlack,
+                          width: 0,
+                        ),
+                      ),
                       child: FutureBuilder(
                           future: _currentUserProvider.fetchCurrentUserModel,
                           builder: (context, snapshot) {
