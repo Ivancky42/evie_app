@@ -1402,7 +1402,7 @@ class BikeProvider extends ChangeNotifier {
 
   deleteRFIDFirestore(String rfidID) {
     try {
-      FirebaseFirestore.instance
+          FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(currentBikeModel!.deviceIMEI)
           .collection(rfidCollection)
@@ -1411,6 +1411,7 @@ class BikeProvider extends ChangeNotifier {
 
       notifyListeners();
 
+      print("true");
       return true;
     } catch (e) {
       debugPrint(e.toString());

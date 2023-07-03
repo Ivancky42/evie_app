@@ -88,7 +88,6 @@ class _EVKeyListState extends State<EVKeyList> {
                            SlidableAction(
                              spacing:10,
                              onPressed: (context) async{
-
                                deleteSingleFRFID(index);
                              },
                              backgroundColor: EvieColors.red,
@@ -138,7 +137,7 @@ class _EVKeyListState extends State<EVKeyList> {
                            ),
                            onPressed: () {
                              ///Remove all rfid key
-                             deleteSingleFRFID(index);
+                             //deleteSingleFRFID(index);
                            },
                            style: ElevatedButton.styleFrom(
                              shape: RoundedRectangleBorder(
@@ -370,17 +369,15 @@ class _EVKeyListState extends State<EVKeyList> {
 
       if (deleteRFIDStatus.result == CommandResult.success) {
         deleteRFIDStream.cancel();
-        final result = _bikeProvider.deleteRFIDFirestore(
-            _bikeProvider.rfidList.keys
-                .elementAt(index));
-        if (result) {SmartDialog.dismiss(status: SmartStatus.loading);
+        final result = _bikeProvider.deleteRFIDFirestore(_bikeProvider.rfidList.keys.elementAt(index));
+        if (result == true) {
+          SmartDialog.dismiss(status: SmartStatus.loading);
 
           showEVRemovedToast(context, name);
 
-          if(_bikeProvider.rfidList.length == 0){
+          if(_bikeProvider.rfidList.length == 1){
             _settingProvider.changeSheetElement(SheetList.bikeSetting);
           }
-
         } else {
           SmartDialog.show(
               widget:
