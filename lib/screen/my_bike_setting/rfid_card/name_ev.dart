@@ -63,9 +63,9 @@ class _NameEVState extends State<NameEV> {
                 onPressedLeft: () {
                   SmartDialog.dismiss();
                 },
-                onPressedRight: () {
+                onPressedRight: () async {
                   SmartDialog.dismiss();
-                  _bikeProvider.deleteRFIDFirestore(_settingProvider.stringPassing!);
+                  await _bikeProvider.deleteRFIDFirestore(_settingProvider.stringPassing!);
                   _bluetoothProvider.deleteRFID(_settingProvider.stringPassing!);
                   _settingProvider.changeSheetElement(SheetList.bikeSetting);
                 }));
