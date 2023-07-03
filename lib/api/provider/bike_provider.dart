@@ -91,7 +91,7 @@ class BikeProvider extends ChangeNotifier {
   int currentBikeList = 0;
   String? currentBikeIMEI;
   bool? isPlanSubscript = false;
-  bool? isOwner = false;
+  bool? isOwner;
   bool isAddBike = false;
   bool isReadBike = false;
   String? distanceBetween;
@@ -166,6 +166,7 @@ class BikeProvider extends ChangeNotifier {
   Future<void> getBikeList(String? uid) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     currentBikeModel = null;
+    await bikeListSubscription?.cancel();
     try {
       ///read doc change
       bikeListSubscription = FirebaseFirestore.instance
@@ -319,6 +320,9 @@ class BikeProvider extends ChangeNotifier {
       if(currentBikeModel?.location != null){
         if(currentBikeModel?.location?.eventId != null){
           if(currentBikeModel?.location?.eventId != ""){
+
+            await currentThreatRoutesSubscription?.cancel();
+
             currentThreatRoutesSubscription = FirebaseFirestore.instance
                 .collection(bikesCollection)
                 .doc(currentBikeModel!.deviceIMEI)
@@ -772,9 +776,12 @@ class BikeProvider extends ChangeNotifier {
     return firestoreStatusListener.stream;
   }
 
-  getBikeUserList() {
+  getBikeUserList() async {
     bikeUserList.clear();
     bikeUserDetails.clear();
+
+    await bikeUserSubscription?.cancel();
+
     try {
       //Update
       bikeUserSubscription = FirebaseFirestore.instance
@@ -816,7 +823,8 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
-  getBikeUserDetails(String uid) {
+  getBikeUserDetails(String uid) async {
+    await currentBikeUserSubscription?.cancel();
     try {
       currentBikeUserSubscription = FirebaseFirestore.instance
           .collection(usersCollection)
@@ -841,7 +849,8 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
-  getUserBikeDetails(String deviceIMEI) {
+  getUserBikeDetails(String deviceIMEI) async {
+    await currentUserBikeSubscription?.cancel();
     try {
       currentUserBikeSubscription = FirebaseFirestore.instance
           .collection(bikesCollection)
@@ -869,6 +878,7 @@ class BikeProvider extends ChangeNotifier {
       });
 
 
+      await bikePlanSubscription?.cancel();
       bikePlanSubscription = FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(deviceIMEI)
@@ -1226,7 +1236,7 @@ class BikeProvider extends ChangeNotifier {
   /// Command for plan
 
   getCurrentPlanSubscript() async {
-    currentBikePlanSubscription?.cancel();
+    await currentBikePlanSubscription?.cancel();
     currentBikePlanSubscription = FirebaseFirestore.instance
         .collection(bikesCollection)
         .doc(currentBikeModel!.deviceIMEI)
@@ -1312,7 +1322,8 @@ class BikeProvider extends ChangeNotifier {
   /// Command for RFID
 
 
-  getRFIDList() {
+  getRFIDList() async {
+    await rfidListSubscription?.cancel();
     rfidList.clear();
     try {
       rfidListSubscription = FirebaseFirestore.instance
@@ -1543,15 +1554,16 @@ class BikeProvider extends ChangeNotifier {
     threatFilterDate2 = null;
 
     threatFilterArray = ["warning", "danger","fall","crash"];
-    bikeListSubscription?.cancel();
-    currentBikeSubscription?.cancel();
-    currentThreatRoutesSubscription?.cancel();
-    bikeUserSubscription?.cancel();
-    currentBikeUserSubscription?.cancel();
-    currentUserBikeSubscription?.cancel();
-    currentBikePlanSubscription?.cancel();
-    bikePlanSubscription?.cancel();
-    rfidListSubscription?.cancel();
+    await bikeListSubscription?.cancel();
+    await currentBikeSubscription?.cancel();
+    await currentThreatRoutesSubscription?.cancel();
+    await bikeUserSubscription?.cancel();
+    await currentBikeUserSubscription?.cancel();
+    await currentUserBikeSubscription?.cancel();
+    await currentBikePlanSubscription?.cancel();
+    await bikePlanSubscription?.cancel();
+    await rfidListSubscription?.cancel();
+    await currentSubscription?.cancel();
 
     userBikeList.clear();
     userBikeDetails.clear();
@@ -1561,11 +1573,15 @@ class BikeProvider extends ChangeNotifier {
     rfidList.clear();
     threatRoutesLists.clear();
 
+    isPlanSubscript = false;
+    isOwner = false;
+    isAddBike = false;
+    isReadBike = false;
 
-    isPlanSubscript = null;
+    currentThreatHistoryModel = null;
     currentBikeIMEI = null;
-    currentUserModel = null;
     currentBikeModel = null;
+    currentUserModel = null;
     currentBikePlanModel = null;
     currentRFIDModel = null;
     currentBikeList = 0;
