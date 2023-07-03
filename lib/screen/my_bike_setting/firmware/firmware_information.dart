@@ -219,6 +219,10 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                   ),
                     const AccountPageDivider(),
                   },
+
+                  SizedBox(
+                    height: 150.h,
+                  )
                 ],
               ),
             ),

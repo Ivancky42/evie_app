@@ -91,7 +91,7 @@ class BikeProvider extends ChangeNotifier {
   int currentBikeList = 0;
   String? currentBikeIMEI;
   bool? isPlanSubscript = false;
-  bool? isOwner;
+  bool? isOwner = false;
   bool isAddBike = false;
   bool isReadBike = false;
   String? distanceBetween;

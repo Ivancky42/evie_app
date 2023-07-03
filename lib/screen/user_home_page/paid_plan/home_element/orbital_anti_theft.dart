@@ -110,7 +110,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Padding(
-                      padding: EdgeInsets.only(bottom: 10.h),
+                      padding: EdgeInsets.only(bottom: 10.h, right: 12.w),
                       child: Center(
                         child: SingleChildScrollView(
                           physics: NeverScrollableScrollPhysics(),
@@ -181,7 +181,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
 
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(left:3.w, right:8.w),
+              padding: EdgeInsets.only(left:1.w, right:8.w),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,10 +216,11 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
 
 
                   ///Bike provider lastUpdated minus current timestamp
-                  SingleChildScrollView(
-                    child: Text(calculateTimeAgo(_locationProvider.locationModel!.updated!.toDate()),
-                        style: EvieTextStyles.body14.copyWith(color: EvieColors.mediumLightBlack)),
-                  ),
+                 SingleChildScrollView(
+                   child: Text(calculateTimeAgo(_locationProvider.locationModel!.updated!.toDate()),
+                            style: EvieTextStyles.body14.copyWith(color: EvieColors.mediumLightBlack)),
+                 ),
+
 
                 ],
               ),

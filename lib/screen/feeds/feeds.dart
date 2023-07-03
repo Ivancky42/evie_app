@@ -206,35 +206,35 @@ class _FeedsState extends State<Feeds> {
                             endActionPane:  ActionPane(
                               extentRatio: 0.3,
                               motion: const StretchMotion(),
-                              dismissible: DismissiblePane(
-
-                                ///Confirm dismiss only when decline
-                                // confirmDismiss: () async {
-                                //   return await showDialog(
-                                //     context: context,
-                                //     builder: (BuildContext context) {
-                                //           return EvieDoubleButtonDialog(
-                                //               title: "Are you sure",
-                                //               childContent: const Text("sure ma"),
-                                //               leftContent: "Cancel",
-                                //               rightContent: "ok",
-                                //               onPressedLeft: (){Navigator.of(context).pop(false);},
-                                //               onPressedRight: (){Navigator.of(context).pop(true);});
-                                //     },
-                                //   );
-                                // },
-
-                                onDismissed: () async {
-                                  if(_notificationProvider.notificationList.values.elementAt(index).status == "pending"){
-                                    decline(index);
-                                  }else{
-                                    var result = await _notificationProvider.deleteNotification(_notificationProvider.notificationList.keys.elementAt(index));
-                                    if(!result){
-                                      showDeleteNotificationFailed();
-                                    }
-                                  }
-                                },
-                              ),
+                              // dismissible: DismissiblePane(
+                              //
+                              //   ///Confirm dismiss only when decline
+                              //   // confirmDismiss: () async {
+                              //   //   return await showDialog(
+                              //   //     context: context,
+                              //   //     builder: (BuildContext context) {
+                              //   //           return EvieDoubleButtonDialog(
+                              //   //               title: "Are you sure",
+                              //   //               childContent: const Text("sure ma"),
+                              //   //               leftContent: "Cancel",
+                              //   //               rightContent: "ok",
+                              //   //               onPressedLeft: (){Navigator.of(context).pop(false);},
+                              //   //               onPressedRight: (){Navigator.of(context).pop(true);});
+                              //   //     },
+                              //   //   );
+                              //   // },
+                              //
+                              //   onDismissed: () async {
+                              //     if(_notificationProvider.notificationList.values.elementAt(index).status == "pending"){
+                              //       decline(index);
+                              //     }else{
+                              //       var result = await _notificationProvider.deleteNotification(_notificationProvider.notificationList.keys.elementAt(index));
+                              //       if(!result){
+                              //         showDeleteNotificationFailed();
+                              //       }
+                              //     }
+                              //   },
+                              // ),
                               children: [
                                 SlidableAction(
                                   spacing:10,

@@ -395,6 +395,8 @@ getCurrentBikeStatusImage(BikeModel bikeModel, BikeProvider bikeProvider, Blueto
 }
 
 getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
+
+
   if (bikeProvider.userBikePlans.isNotEmpty) {
     for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
       if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
@@ -413,10 +415,19 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, Bluetoo
               switch (bikeModel.location!.status) {
                 case 'safe':
                   {
-                    if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
-                      return "assets/buttons/bike_security_unlock.svg";
-                    } else {
-                      return "assets/buttons/bike_security_lock_and_secure_black.svg";
+                    if(bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
+                      if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+                        return "assets/buttons/bike_security_unlock.svg";
+                      } else {
+                        return "assets/buttons/bike_security_lock_and_secure_black.svg";
+                      }
+                    }
+                    else{
+                      if(bikeProvider.currentBikeModel!.isLocked == false){
+                        return "assets/buttons/bike_security_unlock.svg";
+                      }else{
+                        return "assets/buttons/bike_security_lock_and_secure_black.svg";
+                      }
                     }
                   }
                 case 'warning':
@@ -447,8 +458,7 @@ getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bike
 
   if (bikeProvider.userBikePlans.isNotEmpty) {
     for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
-      if (bikeModel.deviceIMEI ==
-          bikeProvider.userBikePlans.keys.elementAt(index)) {
+      if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
         if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
           final result = calculateDateDifferenceFromNow(
               bikeProvider.userBikePlans.values
@@ -464,10 +474,19 @@ getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bike
               switch (bikeModel.location!.status) {
                 case 'safe':
                   {
-                    if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
-                      return "Unlocked";
-                    } else {
-                      return "Locked & Secured";
+                    if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
+                      if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+                        return "Unlocked";
+                      } else {
+                        return "Locked & Secured";
+                      }
+                    }
+                    else {
+                      if (bikeProvider.currentBikeModel!.isLocked == false) {
+                        return "Unlocked";
+                      } else {
+                        return "Locked & Secured";
+                      }
                     }
                   }
                 case 'warning':
