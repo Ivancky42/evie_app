@@ -15,6 +15,7 @@ import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/dialog.dart';
 import '../../../api/enumerate.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
@@ -208,16 +209,10 @@ class _EVKeyListState extends State<EVKeyList> {
                                              _bikeProvider.rfidList.keys.elementAt(index),
                                              _rfidNameController.text.trim());
 
-                                         result == true ? SmartDialog.show(
-                                             widget:
-                                             EvieSingleButtonDialog(
-                                                 title: "Success",
-                                                 content: "Name uploaded",
-                                                 rightContent: "OK",
-                                                 onPressedRight: () {
-                                                   SmartDialog.dismiss();
-                                                 }))
-                                             : SmartDialog.show(widget: EvieSingleButtonDialog(
+                                         result == true ?
+                                               showAddEVKeyNameSuccess(context)
+                                             : SmartDialog.show(
+                                                 widget: EvieSingleButtonDialog(
                                                  title: "Error",
                                                  content:
                                                  "Please try again",
@@ -379,32 +374,14 @@ class _EVKeyListState extends State<EVKeyList> {
             _settingProvider.changeSheetElement(SheetList.bikeSetting);
           }
         } else {
-          SmartDialog.show(
-              widget:
-              EvieSingleButtonDialog(
-                  title:
-                  "Error deleting rfid",
-                  content:
-                  "Error deleting rfid",
-                  rightContent: "OK",
-                  onPressedRight: () {
-                    SmartDialog
-                        .dismiss();
-                  }));
+          showDeleteEVKeyFailed(context, "Error deleting EV Card");
         }
       }
     }, onError: (error) {
       deleteRFIDStream.cancel();
-      SmartDialog.dismiss(
-          status: SmartStatus.loading);
-      SmartDialog.show(
-          widget: EvieSingleButtonDialog(
-              title: "Error deleting rfid",
-              content: error.toString(),
-              rightContent: "OK",
-              onPressedRight: () {
-                SmartDialog.dismiss();
-              }));
+      SmartDialog.dismiss(status: SmartStatus.loading);
+      showDeleteEVKeyFailed(context, error.toString());
+
     });
   }
 }

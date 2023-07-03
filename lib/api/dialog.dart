@@ -1003,6 +1003,30 @@ showAddEVKeySuccess(BuildContext context, String rfidNumber){
           }));
 }
 
+
+showAddEVKeyNameSuccess(BuildContext context){
+  SmartDialog.show(
+      widget:EvieSingleButtonDialog(
+          title: "Success",
+          content: "Name uploaded",
+          rightContent: "OK",
+          onPressedRight: () {
+            SmartDialog.dismiss();
+          }));
+}
+
+showDeleteEVKeyFailed(BuildContext context, String error){
+  SmartDialog.show(
+      widget: EvieSingleButtonDialog(
+          title: "Error deleting EV-Card",
+          content: error,
+          rightContent: "OK",
+          onPressedRight: () {
+            SmartDialog.dismiss();
+          }));
+}
+
+
 showExitOrbitalAntiTheft(BuildContext context){
   SmartDialog.show(
       widget: EvieDoubleButtonDialog(
