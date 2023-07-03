@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/screen/user_home_general.dart';
 import 'package:flutter_svg/svg.dart';
@@ -43,112 +44,119 @@ class _UserHomePageState extends State<UserHomePage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      //backgroundColor: Colors.transparent,
+      body: Builder(
+        builder: (context) =>
+            CupertinoPageScaffold(
+              //backgroundColor: Colors.red,
+              child: Scaffold(
+                body: screen[currentIndex],
+                bottomNavigationBar: BottomAppBar(
+                  color: EvieColors.dividerWhite,
+                  height:  Platform.isIOS ? 90.h : 60.h,
+                  child: SingleChildScrollView(
+                    physics: NeverScrollableScrollPhysics(),
+                    child: BottomNavigationBar(
+                      //For disable animation
+                      //type: BottomNavigationBarType.fixed,
+                      //   iconSize: 15,
+                      //selectedItemColor: Color(0xff69489D),
+                      currentIndex: currentIndex,
+                      onTap: (index) {
+                        setState(() {
+                          currentIndex = index;
+                        });
+                      },
 
-        //Body should change when bottom navigation bar state change
-        body: screen[currentIndex],
+                      items: [
+                        BottomNavigationBarItem(
+                          backgroundColor: EvieColors.dividerWhite,
+                          icon: Transform.translate(
+                            offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                            child: Container(
+                              child: SvgPicture.asset(
+                                "assets/buttons/home.svg",
+                              ),
+                              //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                              height: EvieLength.bottom_bar_icon_height,
+                            ),
+                          ),
+                          activeIcon: Transform.translate(
+                            offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                            child: Container(
+                              child: SvgPicture.asset(
+                                "assets/buttons/home_selected.svg",
+                              ),
+                              //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                              height: EvieLength.bottom_bar_icon_height,
 
-        bottomNavigationBar: BottomAppBar(
-          color: EvieColors.dividerWhite,
-         height:  Platform.isIOS ? 90.h : 60.h,
-          child: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
-            child: BottomNavigationBar(
-              //For disable animation
-              //type: BottomNavigationBarType.fixed,
-         //   iconSize: 15,
-              //selectedItemColor: Color(0xff69489D),
-              currentIndex: currentIndex,
-              onTap: (index) {
-                setState(() {
-                  currentIndex = index;
-                });
-              },
+                            ),
+                          ),
+                          tooltip: 'Home',
+                          label: '',
+                        ),
 
-              items: [
-                BottomNavigationBarItem(
-                  backgroundColor: EvieColors.dividerWhite,
-                  icon: Transform.translate(
-                    offset: Offset(0, EvieLength.bottom_bar_icon_offset),
-                    child: Container(
-                      child: SvgPicture.asset(
-                        "assets/buttons/home.svg",
-                      ),
-            //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                      height: EvieLength.bottom_bar_icon_height,
+
+                        BottomNavigationBarItem(
+                          icon: Transform.translate(
+                            offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                            child: Container(
+                              child: SvgPicture.asset(
+                                "assets/buttons/notification.svg",
+                              ),
+                              //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                              height: EvieLength.bottom_bar_icon_height,
+                            ),
+                          ),
+
+                          activeIcon:Transform.translate(
+                            offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                            child: Container(
+                              child: SvgPicture.asset(
+                                "assets/buttons/notification_selected.svg",
+                              ),
+                              //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                              height: EvieLength.bottom_bar_icon_height,
+                            ),
+                          ),
+                          tooltip: 'Feeds',
+                          label: '',
+                        ),
+
+
+                        BottomNavigationBarItem(
+                          icon: Transform.translate(
+                            offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                            child: Container(
+                              child: SvgPicture.asset(
+                                "assets/buttons/user.svg",
+                              ),
+                              //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                              height: EvieLength.bottom_bar_icon_height,
+                            ),
+                          ),
+
+                          activeIcon: Transform.translate(
+                            offset: Offset(0, EvieLength.bottom_bar_icon_offset),
+                            child: Container(
+                              child: SvgPicture.asset(
+                                "assets/buttons/user_selected.svg",
+                              ),
+                              //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                              height: EvieLength.bottom_bar_icon_height,
+                            ),
+                          ),
+                          tooltip: 'User',
+                          label: '',
+                        ),
+                      ],
                     ),
                   ),
-                  activeIcon: Transform.translate(
-                    offset: Offset(0, EvieLength.bottom_bar_icon_offset),
-                    child: Container(
-                      child: SvgPicture.asset(
-                        "assets/buttons/home_selected.svg",
-                      ),
-        //          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                      height: EvieLength.bottom_bar_icon_height,
-
-                    ),
-                  ),
-                  tooltip: 'Home',
-                  label: '',
-                ),
-
-
-                BottomNavigationBarItem(
-                  icon: Transform.translate(
-                    offset: Offset(0, EvieLength.bottom_bar_icon_offset),
-                    child: Container(
-                      child: SvgPicture.asset(
-                        "assets/buttons/notification.svg",
-                      ),
-            //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                      height: EvieLength.bottom_bar_icon_height,
-                    ),
-                  ),
-
-                  activeIcon:Transform.translate(
-                    offset: Offset(0, EvieLength.bottom_bar_icon_offset),
-                    child: Container(
-                      child: SvgPicture.asset(
-                        "assets/buttons/notification_selected.svg",
-                      ),
-             //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                      height: EvieLength.bottom_bar_icon_height,
-                    ),
-                  ),
-                  tooltip: 'Feeds',
-                  label: '',
-                ),
-
-
-                BottomNavigationBarItem(
-                  icon: Transform.translate(
-                    offset: Offset(0, EvieLength.bottom_bar_icon_offset),
-                    child: Container(
-                      child: SvgPicture.asset(
-                        "assets/buttons/user.svg",
-                      ),
-                      //        padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                      height: EvieLength.bottom_bar_icon_height,
-                    ),
-                  ),
-
-                  activeIcon: Transform.translate(
-                    offset: Offset(0, EvieLength.bottom_bar_icon_offset),
-                    child: Container(
-                      child: SvgPicture.asset(
-                        "assets/buttons/user_selected.svg",
-                      ),
-                      //       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                      height: EvieLength.bottom_bar_icon_height,
-                    ),
-                  ),
-                  tooltip: 'User',
-                  label: '',
-                ),
-              ],
+                ) ,
+              ),
             ),
-          ),
-        ));
+      ),
+    );
   }
 }
 

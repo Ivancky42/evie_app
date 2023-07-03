@@ -24,6 +24,7 @@ DB_COLLECTION_THEFTHISTORY=theftHistory
 DB_COLLECTION_ROUTES=routes
 DB_COLLECTION_TRIPHISTORY=tripHistory
 DEFAULT_PROFILE_IMG='https://firebasestorage.googleapis.com/v0/b/evie-126a6.appspot.com/o/UserProfilePic%2Fblank_profile.jpeg?alt=media&token=fe95e4d3-3693-4293-a9a3-aa2fe563ecab'
+DEFAULT_BIKE_IMG = 'https://firebasestorage.googleapis.com/v0/b/evie-126a6.appspot.com/o/BikePic%2Fbike_default.png?alt=media&token=00630679-2263-49e4-85da-7302e43e9b02'
 
 #Bluetooth Data
 BLE_SERVICE_UUID='6e400001-b5a3-f393-e0a9-e50e24dcca9e'

@@ -211,7 +211,8 @@ class CurrentUserProvider extends ChangeNotifier {
         'updated' : DateTime.now(),
       };
 
-    }else{
+    }
+    else{
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
 
       deviceData = {

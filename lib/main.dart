@@ -1,3 +1,4 @@
+import 'package:cupertino_modal_sheet/cupertino_modal_sheet.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
@@ -203,7 +204,7 @@ class MyApp extends StatelessWidget {
       if (_authProvider.isLogin == true) {
         if (_authProvider.isEmailVerified == true) {
           if (_authProvider.isFirstLogin == false) {
-            return '/userHomePage';
+            return '/';
           } else {
             return '/letsGo';
           }
@@ -234,9 +235,18 @@ class MyApp extends StatelessWidget {
 
           //Change the app to dark theme when user's phone is set to dark mode
           darkTheme: AppTheme.lightTheme,
-          initialRoute:
-          decideMainPage(),
+          initialRoute: decideMainPage(),
          // _authProvider.isLogin == true ? '/userHomePage' : '/welcome',
+
+          onGenerateRoute: (RouteSettings settings) {
+            switch (settings.name) {
+              case '/':
+                return CupertinoModalSheetRoute(
+                    builder: (_) => UserHomePage(0),
+                    settings: settings);
+            }
+            return null;
+          },
 
           ///Routes setting for page navigation
           routes: {
