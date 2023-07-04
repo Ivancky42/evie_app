@@ -1,3 +1,4 @@
+import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -8,6 +9,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
+import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet_2.dart';
 
 
@@ -20,8 +22,12 @@ class FirmwareUpdateCompleted extends StatefulWidget{
 
 class _FirmwareUpdateCompletedState extends State<FirmwareUpdateCompleted> {
 
+  late SettingProvider _settingProvider;
+
   @override
   Widget build(BuildContext context) {
+
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
         onWillPop: () async {
@@ -82,7 +88,7 @@ class _FirmwareUpdateCompletedState extends State<FirmwareUpdateCompleted> {
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
-                       showBikeSettingSheet(context);
+                       _settingProvider.changeSheetElement(SheetList.bikeSetting);
                       },
                     ),
                   ),

@@ -241,7 +241,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                       style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                     ),
                     onPressed: () {
-                      showFirmwareUpdate(context, _firmwareProvider, stream, _bluetoothProvider);
+                      showFirmwareUpdate(context, _firmwareProvider, stream, _bluetoothProvider, _settingProvider);
                     },
                   ),
                 ),

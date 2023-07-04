@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
@@ -466,7 +467,7 @@ showDeleteNotificationFailed(){
       ));
 }
 
-showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscription? stream, BluetoothProvider bluetoothProvider){
+showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscription? stream, BluetoothProvider bluetoothProvider, SettingProvider settingProvider){
   SmartDialog.show(
       widget:   EvieDoubleButtonDialog(
           title: "Firmware update",
@@ -502,12 +503,12 @@ showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscriptio
                 firmwareProvider.changeIsUpdating(false);
                 stream?.cancel();
                 firmwareProvider.uploadFirmVerToFirestore("57_V${firmwareProvider.latestFirmVer!}");
-                changeToFirmwareUpdateCompleted(context);
+                settingProvider.changeSheetElement(SheetList.firmwareUpdateCompleted);
               }
               else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeFailed) {
                 firmwareProvider.changeIsUpdating(false);
                 stream?.cancel();
-                changeToFirmwareUpdateFailed(context);
+                settingProvider.changeSheetElement(SheetList.firmwareUpdateFailed);
               }else{}
             });
 
