@@ -148,8 +148,11 @@ void changeToUserHomePageScreen(BuildContext context ) {
   //   ),
   // );
 
-  Navigator.of(context).popUntil(
-          (route) => route.settings.name == '/');
+  // Navigator.of(context).popUntil(
+  //         (route) => route.settings.name == '/');
+
+  Navigator.of(context)
+      .pushNamedAndRemoveUntil("/", (route) => false);
 }
 
 void changeToUserHomePageScreen2(BuildContext context ) {
