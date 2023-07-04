@@ -363,10 +363,21 @@ getCurrentBikeStatusImage(BikeModel bikeModel, BikeProvider bikeProvider, Blueto
               switch (bikeModel.location!.status) {
                 case 'safe':
                   {
-                    if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
-                      return "assets/images/bike_HPStatus/bike_safe.png";
-                    } else {
-                      return "assets/images/bike_HPStatus/bike_safe.png";
+                    if (bluetoothProvider.deviceConnectResult ==
+                        DeviceConnectResult.connected) {
+                      if (bluetoothProvider.cableLockState?.lockState ==
+                          LockState.unlock) {
+                        return "assets/images/bike_HPStatus/bike_safe.png";
+                      } else {
+                        return "assets/images/bike_HPStatus/bike_safe.png";
+                      }
+                    }
+                    else {
+                      if (bikeModel.isLocked == false) {
+                        return "assets/images/bike_HPStatus/bike_safe.png";
+                      } else {
+                        return "assets/images/bike_HPStatus/bike_safe.png";
+                      }
                     }
                   }
                 case 'warning':
@@ -423,7 +434,7 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, Bluetoo
                       }
                     }
                     else{
-                      if(bikeProvider.currentBikeModel!.isLocked == false){
+                      if(bikeModel.isLocked == false){
                         return "assets/buttons/bike_security_unlock.svg";
                       }else{
                         return "assets/buttons/bike_security_lock_and_secure_black.svg";
@@ -456,6 +467,7 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, Bluetoo
 
 getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
 
+
   if (bikeProvider.userBikePlans.isNotEmpty) {
     for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
       if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
@@ -482,7 +494,7 @@ getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bike
                       }
                     }
                     else {
-                      if (bikeProvider.currentBikeModel!.isLocked == false) {
+                      if (bikeModel.isLocked == false) {
                         return "Unlocked";
                       } else {
                         return "Locked & Secured";
