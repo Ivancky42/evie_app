@@ -841,7 +841,7 @@ class BikeProvider extends ChangeNotifier {
           if (obj == null) {
             bikeUserDetails.removeWhere((key, value) => key == obj?.keys);
             notifyListeners();
-          };
+          }
         }
       });
     } catch (e) {
@@ -1411,7 +1411,6 @@ class BikeProvider extends ChangeNotifier {
 
       notifyListeners();
 
-      print("true");
       return true;
     } catch (e) {
       debugPrint(e.toString());
@@ -1555,16 +1554,16 @@ class BikeProvider extends ChangeNotifier {
     threatFilterDate2 = null;
 
     threatFilterArray = ["warning", "danger","fall","crash"];
-    await bikeListSubscription?.cancel();
-    await currentBikeSubscription?.cancel();
-    await currentThreatRoutesSubscription?.cancel();
-    await bikeUserSubscription?.cancel();
-    await currentBikeUserSubscription?.cancel();
-    await currentUserBikeSubscription?.cancel();
-    await currentBikePlanSubscription?.cancel();
-    await bikePlanSubscription?.cancel();
-    await rfidListSubscription?.cancel();
-    await currentSubscription?.cancel();
+    bikeListSubscription?.cancel();
+    currentBikeSubscription?.cancel();
+    currentThreatRoutesSubscription?.cancel();
+    bikeUserSubscription?.cancel();
+    currentBikeUserSubscription?.cancel();
+    currentUserBikeSubscription?.cancel();
+    currentBikePlanSubscription?.cancel();
+    bikePlanSubscription?.cancel();
+    rfidListSubscription?.cancel();
+    currentSubscription?.cancel();
 
     userBikeList.clear();
     userBikeDetails.clear();

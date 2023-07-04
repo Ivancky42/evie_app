@@ -123,7 +123,6 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                       if (_formKey.currentState!.validate()) {
                         try {
                                 await _authProvider.checkIfFirestoreUserExist(_emailController.text.trim()).then((result) async {
-
                                   if (result == null) {
                                     SmartDialog.show(
                                         backDismiss: false,
