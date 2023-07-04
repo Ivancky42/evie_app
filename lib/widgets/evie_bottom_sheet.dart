@@ -32,44 +32,52 @@ class _EvieBottomSheetState extends State<EvieBottomSheet> {
   @override
   Widget build(BuildContext context) {
 
-    return WillPopScope(
-        onWillPop: () async {
-          Navigator.of(context).popUntil(
-                  (route) => route.settings.name == '/');
-          return false;
-        },
-        child:  Padding(
-          padding: EdgeInsets.only(top: 20.h),
-          child: CupertinoPageScaffold(
-              backgroundColor: Colors.transparent,
-              resizeToAvoidBottomInset: false,
-              child:  Container(
-                decoration: const BoxDecoration(
-                  color: EvieColors.grayishWhite,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-                ),
-                child: Column(
-                  children: [
-                    /// home indicator
-                    Padding(
-                      padding: EdgeInsets.only(top: 11.h),
-                      child: Image.asset(
-                        "assets/buttons/home_indicator.png",
-                        width: 40.w,
-                        height: 4.h,
+    return GestureDetector(
+
+      ///To prevent sheet drag dismiss
+      // onVerticalDragStart: (details) {
+      //   // Prevent vertical dragging.
+      //   if (details.localPosition.dy != 0) {
+      //   }
+      // },
+      child: WillPopScope(
+          onWillPop: () async {
+            Navigator.of(context).popUntil((route) => route.settings.name == '/');
+            return false;
+          },
+          child:  Padding(
+            padding: EdgeInsets.only(top: 20.h),
+            child: CupertinoPageScaffold(
+                backgroundColor: Colors.transparent,
+                resizeToAvoidBottomInset: false,
+                child:  Container(
+                  decoration: const BoxDecoration(
+                    color: EvieColors.grayishWhite,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+                  ),
+                  child: Column(
+                    children: [
+                      /// home indicator
+                      Padding(
+                        padding: EdgeInsets.only(top: 11.h),
+                        child: Image.asset(
+                          "assets/buttons/home_indicator.png",
+                          width: 40.w,
+                          height: 4.h,
+                        ),
                       ),
-                    ),
 
-                    Expanded(
-                      child: widget.childContext ?? Container(),
-                    ),
+                      Expanded(
+                        child: widget.childContext ?? Container(),
+                      ),
 
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-          )
-        ),
+            )
+          ),
+      ),
     );
   }
 }

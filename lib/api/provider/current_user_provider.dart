@@ -211,8 +211,7 @@ class CurrentUserProvider extends ChangeNotifier {
         'updated' : DateTime.now(),
       };
 
-    }
-    else{
+    } else{
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
 
       deviceData = {
@@ -225,7 +224,7 @@ class CurrentUserProvider extends ChangeNotifier {
       };
     }
 
-    Future.delayed(const Duration(seconds: 5), () async {
+    Future.delayed(const Duration(seconds: 10), () async {
 
       await uploadDeviceInfoToFirestore(deviceData);
       compareUserLocation();
@@ -254,7 +253,11 @@ class CurrentUserProvider extends ChangeNotifier {
         'updated' : DateTime.now(),
       };
 
-      await uploadDeviceInfoToFirestore(deviceData);
+      Future.delayed(const Duration(seconds: 10), () async {
+
+        await uploadDeviceInfoToFirestore(deviceData);
+
+      });
 
     }else{
       debugPrint("User country match database info");
@@ -262,11 +265,11 @@ class CurrentUserProvider extends ChangeNotifier {
   }
 
   uploadDeviceInfoToFirestore(Map<String, dynamic>? deviceData) async{
-    if(deviceData != null){
+    if(deviceData != null && currentUserModel != null){
       try{
         await FirebaseFirestore.instance
             .collection(usersCollection)
-            .doc(currentUserModel?.uid)
+            .doc(currentUserModel!.uid)
             .set(
             {'lastLogin' : deviceData,},
             SetOptions(merge: true));
