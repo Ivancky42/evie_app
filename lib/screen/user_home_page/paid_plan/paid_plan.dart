@@ -66,7 +66,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
 
-
     return WillPopScope(
       onWillPop: () async {
         bool? exitApp = await showQuitApp() as bool?;

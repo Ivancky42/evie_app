@@ -28,6 +28,8 @@ class FirmwareProvider extends ChangeNotifier {
   bool isUpdating = false;
   BikeModel? currentBikeModel;
 
+  StreamSubscription? currentFirmwareSubscription;
+
   FirmwareProvider() {
     init();
   }
@@ -48,22 +50,30 @@ class FirmwareProvider extends ChangeNotifier {
   }
 
   getFirmwareDetails() async {
-    final snapshot = await FirebaseFirestore.instance
-        .collection(releasesCollection)
-        .doc(firmwareCollection)
-        .get();
+    await currentFirmwareSubscription?.cancel();
+    try {
+      currentFirmwareSubscription = FirebaseFirestore.instance
+          .collection(releasesCollection)
+          .doc(firmwareCollection)
+          .snapshots()
+          .listen((snapshot) {
+        if (snapshot.data() != null) {
+          Map<String, dynamic>? obj = snapshot.data();
+          if (obj != null) {
+            latestFirmwareModel = FirmwareModel.fromJson(obj);
+            notifyListeners();
 
-    Map<String, dynamic>? obj = snapshot.data();
+            getIsCurrentVersion();
 
+          } else if (obj == null) {
+            latestFirmwareModel = null;
+            notifyListeners();
+          }
 
-    if (obj != null) {
-      latestFirmwareModel = FirmwareModel.fromJson(obj);
-      notifyListeners();
-
-      getIsCurrentVersion();
-    } else {
-      latestFirmwareModel = null;
-      notifyListeners();
+        }
+      });
+    } catch (e) {
+      debugPrint(e.toString());
     }
   }
 

@@ -6,10 +6,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/widgets/evie_button.dart';
+import 'package:provider/provider.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
+import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet_2.dart';
 
 
@@ -23,9 +26,12 @@ class FirmwareUpdateFailed extends StatefulWidget{
 
 class _FirmwareUpdateFailedState extends State<FirmwareUpdateFailed> {
 
+  late SettingProvider _settingProvider;
+
   @override
   Widget build(BuildContext context) {
 
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
         onWillPop: () async {
@@ -90,7 +96,7 @@ class _FirmwareUpdateFailedState extends State<FirmwareUpdateFailed> {
                         ),
                       ),
                       onPressed: () {
-                        showBikeSettingSheet(context);
+                        _settingProvider.changeSheetElement(SheetList.bikeSetting);
                       },
                     ),
                   ),
