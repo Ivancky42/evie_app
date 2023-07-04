@@ -244,6 +244,14 @@ class MyApp extends StatelessWidget {
                 return CupertinoModalSheetRoute(
                     builder: (_) => UserHomePage(0),
                     settings: settings);
+              case '/feed':
+                return CupertinoModalSheetRoute(
+                    builder: (_) => UserHomePage(1),
+                    settings: settings);
+              case '/account':
+                return CupertinoModalSheetRoute(
+                    builder: (_) => UserHomePage(2),
+                    settings: settings);
             }
             return null;
           },

@@ -178,13 +178,8 @@ void changeToTripHistory(BuildContext context){
 }
 
 void changeToFeedsScreen(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const UserHomePage(1),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
+  Navigator.of(context)
+      .pushNamedAndRemoveUntil("/feed", (route) => false);
 }
 
 
@@ -462,13 +457,15 @@ void changeToProPlanScreen(BuildContext context) {
 }
 
 void changeToMyAccount(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const UserHomePage(2),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
+  // Navigator.pushReplacement(context,
+  //   PageTransition(
+  //     type: PageTransitionType.rightToLeft,
+  //     child: const UserHomePage(2),
+  //     duration: const Duration(milliseconds: 300),
+  //   ),
+  // );
+  Navigator.of(context)
+      .pushNamedAndRemoveUntil("/account", (route) => false);
 }
 
 
