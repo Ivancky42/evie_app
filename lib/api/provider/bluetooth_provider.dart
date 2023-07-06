@@ -78,6 +78,7 @@ class BluetoothProvider extends ChangeNotifier {
   String? get deviceID => _deviceID;
 
   bool isUnlocking = false;
+  bool isTransportMode = false;
 
   NotifyDataState notifyDataState = NotifyDataState.notifying;
 
@@ -127,6 +128,8 @@ class BluetoothProvider extends ChangeNotifier {
   StreamController<IotInfoModel> iotInfoModelListener =
   StreamController.broadcast();
   late Stream<IotInfoModel> iotInfoModelStream;
+  StreamController<TransportModeResult> transportModeResultListener =
+  StreamController.broadcast();
 
 
   BluetoothProvider() {
@@ -435,6 +438,7 @@ class BluetoothProvider extends ChangeNotifier {
     bikeInfoResult = null;
     iotInfoModel = null;
     currentConnectedDevice = null;
+    isTransportMode = false;
     exitNotifyIotInfoState();
     exitNotifyFirmwareUpgradeState();
     notifyListeners();
@@ -560,6 +564,29 @@ class BluetoothProvider extends ChangeNotifier {
       }
     } else {
       return chgBleNameResultListener.stream
+          .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
+        sink.addError("Communication key is empty value");
+      });
+    }
+  }
+
+  Stream<TransportModeResult> setTransportMode(bool isEnabled) {
+    if (requestComKeyResult != null) {
+      bool isConnected = sendCommand(
+          bluetoothCommand.setTransportMode(requestComKeyResult!.communicationKey, isEnabled));
+      if (isConnected) {
+        return transportModeResultListener.stream
+            .timeout(const Duration(seconds: 6), onTimeout: (sink) {
+          sink.addError("Operation timeout");
+        });
+      } else {
+        return transportModeResultListener.stream
+            .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
+          sink.addError("Bike is not connected.");
+        });
+      }
+    } else {
+      return transportModeResultListener.stream
           .timeout(const Duration(milliseconds: 500), onTimeout: (sink) {
         sink.addError("Communication key is empty value");
       });
@@ -784,6 +811,9 @@ class BluetoothProvider extends ChangeNotifier {
           break;
         case BluetoothCommand.errorPromptInstruction:
           errorPromptResult = ErrorPromptResult(decodedData);
+          if (errorPromptResult?.errorMessage == ErrorMessage.transportMode) {
+            isTransportMode = true;
+          }
           notifyListeners();
           break;
         case BluetoothCommand.unlockBikeCmd:
@@ -834,6 +864,10 @@ class BluetoothProvider extends ChangeNotifier {
           break;
         case BluetoothCommand.dataTransferCmd:
           enterNotifyIotInfoState(decodedData);
+          break;
+        case BluetoothCommand.transportModeCmd:
+          transportModeResultListener.add(TransportModeResult(decodedData));
+          notifyListeners();
           break;
         default:
           break;

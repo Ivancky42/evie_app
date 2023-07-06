@@ -36,6 +36,7 @@ class BluetoothCommand {
   static const int deleteRFIDCmd = 0x86; ///4.5.11
   static const int queryRFIDCmd = 0x87; ///4.5.11
   static const int externalCableLock = 0x81; ///4.5.11  ///1:add card 0:delete card
+  static const int transportModeCmd = 0x91; ///4.5.19
 
   String dataString = "";
   int dataIndex = 0;
@@ -500,6 +501,23 @@ class BluetoothCommand {
     //print("DataWithCRC: " + dataWithCrc.toString());
 
     return dataWithCrc;
+  }
+
+  List<int> setTransportMode(int comKey, bool isEnabled) {
+    int dataSize = 0x01;
+    int totalDataSize = 6 + dataSize;
+    List<int> data = List<int>.filled(totalDataSize, 0, growable: true);
+    int rand = random.nextInt(255);
+
+    data[0] = header[0]; /// header
+    data[1] = header[1]; /// header
+    data[2] = dataSize; /// data length
+    data[3] = rand; /// random number
+    data[4] = comKey; ///  Communication key
+    data[5] = transportModeCmd; /// cmd : 0x91
+    data[6] = isEnabled ? 0x01 : 0x02;
+
+    return encodeData(dataSize, data);
   }
 
   List<int> encodeData(int dataSize, List<int> data) {

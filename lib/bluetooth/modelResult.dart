@@ -33,6 +33,7 @@ enum ErrorMessage {
   crcAuthErr, ///CRC authentication error
   comKeyNotObtained, ///The communication KEY was not obtained
   wrongComKey, ///The communication KEY has been obtained, but the communication KEY is wrong
+  transportMode
 }
 
 enum AddRFIDState {
@@ -96,7 +97,9 @@ class ErrorPromptResult {
     errorMessage =
     data[6] == 1 ? ErrorMessage.crcAuthErr :
     data[6] == 2 ? ErrorMessage.comKeyNotObtained :
-    ErrorMessage.wrongComKey;
+    data[6] == 3 ? ErrorMessage.wrongComKey :
+    data[6] == 4 ? ErrorMessage.transportMode :
+    ErrorMessage.unknown;
     print(errorMessage);
   }
 }
@@ -365,4 +368,14 @@ class FirmwareUpgradeResult {
   double progress;
 
   FirmwareUpgradeResult({this.firmwareUpgradeState = FirmwareUpgradeState.startUpgrade, this.progress = 0});
+}
+
+class TransportModeResult{
+  int dataSize = 0;
+  CommandResult result = CommandResult.unknown;
+
+  TransportModeResult(List<int> data) {
+    result = data[6] == 1 ? CommandResult.failed : CommandResult.success;
+    print(result);
+  }
 }
