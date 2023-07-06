@@ -3,8 +3,10 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/battery.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/rides.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/home_element/setting.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:image/image.dart' as IMG;
@@ -20,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../api/colours.dart';
@@ -30,6 +33,8 @@ import '../../../../api/provider/location_provider.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../../api/dialog.dart';
+import '../../../api/provider/setting_provider.dart';
 import 'home_element/status.dart';
 
 class MyPointAnnotationClickListener extends OnPointAnnotationClickListener {
@@ -50,6 +55,7 @@ class _MapDetails2State extends State<MapDetails2> {
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late LocationProvider _locationProvider;
+  late SettingProvider _settingProvider;
   Timer? timer;
 
   int? snapshotLength;
@@ -128,6 +134,7 @@ class _MapDetails2State extends State<MapDetails2> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return Container(
       decoration: const BoxDecoration(
@@ -144,7 +151,7 @@ class _MapDetails2State extends State<MapDetails2> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 17.w, top: 10.h, bottom: 0.h),
+                    padding: EdgeInsets.only(left: 17.w, top: 0.h, bottom: 0.h),
                     child: Text(
                       "Orbital Anti-Theft",
                       style: EvieTextStyles.h1,
@@ -155,7 +162,7 @@ class _MapDetails2State extends State<MapDetails2> {
                     padding: EdgeInsets.only( top: 12.h,),
                     child: IconButton(
                       onPressed: () {
-
+                        _settingProvider.changeSheetElement(SheetList.threatHistory);
                       },
                       icon: SvgPicture.asset(
                         "assets/buttons/list_purple.svg",
@@ -202,8 +209,15 @@ class _MapDetails2State extends State<MapDetails2> {
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
                           onTap: () async {
-                            pointBounce2(mapboxMap, _locationProvider, userPosition);
-                            //animateBounce(mapboxMap, _locationProvider);
+                            _locationProvider.hasLocationPermission == true ?
+                            pointBounce2(mapboxMap, _locationProvider, userPosition) :
+                            {
+                              if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
+                                _locationProvider.checkLocationPermissionStatus()
+                              }else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
+                                showLocationServiceDisable()
+                              }
+                            };
                           },
                           child: Container(
                               height: 50.h,
@@ -212,7 +226,7 @@ class _MapDetails2State extends State<MapDetails2> {
                                 child: Padding(
                                   padding: EdgeInsets.only(right: 8.h),
                                   child: SvgPicture.asset(
-                                    "assets/buttons/location.svg",
+                                    _locationProvider.hasLocationPermission == true ? "assets/buttons/location.svg" : "assets/buttons/location_unavailable.svg",
                                     width: 50.w,
                                     height: 50.h,
                                   ),

@@ -36,8 +36,8 @@ class _EvieBottomSheetState extends State<EvieBottomSheet> {
 
       ///To prevent sheet drag dismiss
       // onVerticalDragStart: (details) {
-      //   // Prevent vertical dragging.
       //   if (details.localPosition.dy != 0) {
+      //     // Prevent vertical dragging.
       //   }
       // },
       child: WillPopScope(
@@ -60,7 +60,7 @@ class _EvieBottomSheetState extends State<EvieBottomSheet> {
                     children: [
                       /// home indicator
                       Padding(
-                        padding: EdgeInsets.only(top: 11.h),
+                        padding: EdgeInsets.only(top: 11.h, bottom:10.h),
                         child: Image.asset(
                           "assets/buttons/home_indicator.png",
                           width: 40.w,

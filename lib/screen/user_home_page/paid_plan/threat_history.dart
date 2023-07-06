@@ -15,10 +15,12 @@ import 'package:provider/provider.dart';
 
 import '../../../api/attach.dart';
 import '../../../api/colours.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/function.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/location_provider.dart';
+import '../../../api/provider/setting_provider.dart';
 import '../../../widgets/evie_radio_button.dart';
 import '../../../widgets/evie_switch.dart';
 
@@ -36,7 +38,8 @@ class _ThreatHistoryState extends State<ThreatHistory> {
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late LocationProvider _locationProvider;
-  
+  late SettingProvider _settingProvider;
+
   PaginateRefreshedChangeListener refreshChangeListener = PaginateRefreshedChangeListener();
   int? snapshotLength;
 
@@ -49,7 +52,8 @@ class _ThreatHistoryState extends State<ThreatHistory> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
-    
+    _settingProvider = Provider.of<SettingProvider>(context);
+
     return Container(
       decoration: const BoxDecoration(
         color: EvieColors.grayishWhite,
@@ -69,7 +73,7 @@ class _ThreatHistoryState extends State<ThreatHistory> {
             children: [
 
               Padding(
-                padding:  EdgeInsets.only(left: 6.w, top: 12.h),
+                padding:  EdgeInsets.only(left: 6.w, top: 0.h),
                 child: IconButton(
                     onPressed: (){
                       Navigator.pop(context);
@@ -91,7 +95,8 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                 padding: EdgeInsets.only( top: 12.h,),
                 child: IconButton(
                   onPressed: () {
-
+                    _locationProvider.locations();
+                    _settingProvider.changeSheetElement(SheetList.mapDetails);
                   },
                   icon: SvgPicture.asset(
                     "assets/buttons/list_selected.svg",

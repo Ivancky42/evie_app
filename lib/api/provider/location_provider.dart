@@ -11,6 +11,7 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../dialog.dart';
 import '../model/location_model.dart';
 
 class LocationProvider extends ChangeNotifier {
@@ -27,6 +28,10 @@ class LocationProvider extends ChangeNotifier {
   PointAnnotation? selectedPointAnnotation;
   GeoPoint? selectedAnnotationGeopoint;
 
+  bool hasLocationPermission = false;
+
+  StreamSubscription? locationPermissionStatus;
+
   LocationProvider() {
     checkLocationPermissionStatus();
   }
@@ -41,7 +46,6 @@ class LocationProvider extends ChangeNotifier {
       }
     }
 
-    // checkLocationPermissionStatus();
     // if (locationModel == null) {}
     // else {
     //   this.locationModel = locationModel;
@@ -57,26 +61,55 @@ class LocationProvider extends ChangeNotifier {
   }
 
   checkLocationPermissionStatus() async {
-    var locationStatus = await Permission.location.status;
-    debugPrint("Location Status ${locationStatus.toString()}");
+    locationPermissionStatus?.cancel();
+    locationPermissionStatus = Permission.location.status.asStream().listen((event) {
 
-    switch (locationStatus) {
-      case PermissionStatus.granted:
-        return PermissionStatus.granted;
-      case PermissionStatus.denied:
-        return PermissionStatus.denied;
-      case PermissionStatus.permanentlyDenied:
-        return PermissionStatus.permanentlyDenied;
-      case PermissionStatus.restricted:
-      // Pass
-        break;
-      case PermissionStatus.limited:
-      // Pass
-        break;
-      default:
-        break;
-    }
+      print(event.toString());
+
+      switch (event) {
+        case PermissionStatus.granted:
+          hasLocationPermission = true;
+          break;
+        case PermissionStatus.denied:
+          hasLocationPermission = false;
+          break;
+        case PermissionStatus.permanentlyDenied:
+          hasLocationPermission = false;
+          break;
+        case PermissionStatus.restricted:
+        // Pass
+          break;
+        case PermissionStatus.limited:
+        // Pass
+          break;
+        default:
+          break;
+      }
+    });
+
     notifyListeners();
+
+    // debugPrint("Location Status ${locationStatus.toString()}");
+    //
+    // switch (locationStatus) {
+    //   case PermissionStatus.granted:
+    //     hasLocationPermission = true;
+    //     return PermissionStatus.granted;
+    //   case PermissionStatus.denied:
+    //     hasLocationPermission = false;
+    //     return PermissionStatus.denied;
+    //   case PermissionStatus.permanentlyDenied:
+    //     hasLocationPermission = false;
+    //     return PermissionStatus.permanentlyDenied;
+    //   case PermissionStatus.restricted:
+    //   // Pass
+    //     break;
+    //   case PermissionStatus.limited:
+    //   // Pass
+    //     break;
+    //   default:
+    //     break;
+    // }
   }
 
   void handlePermission() async {
@@ -160,7 +193,14 @@ class LocationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
+  locations() async{
+    if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
+      checkLocationPermissionStatus();
+    }else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
+      showLocationServiceDisable();
+      //OpenSettings.openLocationSourceSetting();
+    }
+  }
   // updateUserPosition(UserLocation userLocation) async {
   //   userPosition = userLocation;
   //   //notifyListeners();

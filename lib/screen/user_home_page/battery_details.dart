@@ -68,7 +68,7 @@ class _BatteryDetailsState extends State<BatteryDetails> {
             children: [
               Padding(
                 padding:
-                EdgeInsets.only(left: 17.w, top: 10.h, bottom: 11.h),
+                EdgeInsets.only(left: 17.w, top: 0.h, bottom: 11.h),
                 child: Text(
                   "Battery",
                   style: EvieTextStyles.h1,

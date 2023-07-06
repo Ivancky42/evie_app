@@ -1,4 +1,8 @@
 enum SheetList{
+
+  mapDetails,
+  threatHistory,
+
   bikeSetting,
 
   evKey,
@@ -7,7 +11,6 @@ enum SheetList{
 
   evKeyList,
   nameEv,
-
 
   motionSensitivity,
   detectionSensitivity,
@@ -49,6 +52,4 @@ enum SheetList{
 
   fullCompleted,
   fullIncomplete,
-
-
 }

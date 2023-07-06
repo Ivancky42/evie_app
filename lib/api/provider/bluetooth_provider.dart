@@ -451,6 +451,7 @@ class BluetoothProvider extends ChangeNotifier {
     if (bleConnectStatus.isGranted) {
       //return PermissionStatus.granted;
       var bleScanStatus = await Permission.bluetoothScan.request();
+
       if (bleScanStatus.isDenied){
         return PermissionStatus.denied;
       }

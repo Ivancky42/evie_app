@@ -20,6 +20,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../../../api/colours.dart';
 import '../../../../api/dialog.dart';
+import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
 import '../../../../api/function.dart';
 import '../../../../api/model/location_model.dart';
@@ -27,6 +28,7 @@ import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/provider/bluetooth_provider.dart';
 import '../../../../api/provider/current_user_provider.dart';
 import '../../../../api/provider/notification_provider.dart';
+import '../../../../api/provider/setting_provider.dart';
 import '../../../../api/sheet_2.dart';
 import '../../../../bluetooth/modelResult.dart';
 import '../../../../widgets/evie_card.dart';
@@ -50,6 +52,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
   late BluetoothProvider _bluetoothProvider;
   late LocationProvider _locationProvider;
   late CurrentUserProvider _currentUserProvider;
+  late SettingProvider _settingProvider;
 
   GeoPoint? selectedGeopoint;
   DeviceConnectResult? deviceConnectResult;
@@ -96,6 +99,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
@@ -123,25 +127,48 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                               width: 170.w,
                               child: Transform.translate(
                                 offset: Offset(0, -75.h),
-                                child: MapWidget(
-                                  onScrollListener: onMapScrollListener,
-                                  key: const ValueKey("mapWidget"),
-                                  resourceOptions: ResourceOptions(
-                                      accessToken: _locationProvider.defPublicAccessToken),
-                                  onMapCreated: _onMapCreated,
-                                  styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
-                                  cameraOptions: CameraOptions(
-                                    center: Point(
-                                        coordinates: Position(
-                                            _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                                            _locationProvider.locationModel?.geopoint.latitude ?? 0))
-                                        .toJson(),
-                                    zoom: 12,
-                                  ),
-                                  // gestureRecognizers: [
-                                  //   Factory<OneSequenceGestureRecognizer>(
-                                  //           () => EagerGestureRecognizer())
-                                  // ].toSet(),
+                                child: Stack(
+                                  children: [
+                                    MapWidget(
+                                      onScrollListener: onMapScrollListener,
+                                      key: const ValueKey("mapWidget"),
+                                      resourceOptions: ResourceOptions(
+                                          accessToken: _locationProvider.defPublicAccessToken),
+                                      onMapCreated: _onMapCreated,
+                                      styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
+                                      cameraOptions: CameraOptions(
+                                        center: Point(
+                                            coordinates: Position(
+                                                _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                                                _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                                            .toJson(),
+                                        zoom: 12,
+                                      ),
+                                      // gestureRecognizers: [
+                                      //   Factory<OneSequenceGestureRecognizer>(
+                                      //           () => EagerGestureRecognizer())
+                                      // ].toSet(),
+                                    ),
+
+                                    _locationProvider.hasLocationPermission == true ? SizedBox.shrink() : Positioned(
+                                      bottom: 90.h,
+                                      right: 10.w,
+                                      child: Align(
+                                        alignment: Alignment.bottomRight,
+                                        //onTap camera pic
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                           _locationProvider.locations();
+                                          },
+                                          child: SvgPicture.asset(
+                                            "assets/buttons/location_unavailable.svg",
+                                            width: 36.w,
+                                            height: 36.h,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
 
@@ -314,23 +341,29 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
       child: EvieCard(
         onPress: (){
           ///Location
-          locations();
 
           if(_currentIndex == 0){
+            _locationProvider.locations();
             if(_locationProvider.locationModel?.isConnected == false){
-              showMapDetailsSheet(context);
+              _settingProvider.changeSheetElement(SheetList.mapDetails);
+              showSheetNavigate(context);
             }else if(_bikeProvider.currentBikeModel?.location?.status == "danger") {
             changeToThreatMap(context);
             }else{
-              showMapDetailsSheet(context);
+              _settingProvider.changeSheetElement(SheetList.mapDetails);
+              showSheetNavigate(context);
             }
           }else{
             if(_locationProvider.locationModel?.isConnected == false){
-              showThreatHistorySheet(context);
+              _locationProvider.locations();
+              _settingProvider.changeSheetElement(SheetList.threatHistory);
+              showSheetNavigate(context);
             }else if(_bikeProvider.currentBikeModel?.location?.status == "danger"){
+              _locationProvider.locations();
               changeToThreatTimeLine(context);
             }else {
-              showThreatHistorySheet(context);
+              _settingProvider.changeSheetElement(SheetList.threatHistory);
+              showSheetNavigate(context);
             }
           }
         },
@@ -491,13 +524,6 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     loadMarker();
   }
 
-  locations() async{
-    if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
-    }else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
-      showLocationServiceDisable();
-      //OpenSettings.openLocationSourceSetting();
-    }
-  }
 }
 
 

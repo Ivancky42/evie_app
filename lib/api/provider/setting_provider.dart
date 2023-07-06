@@ -24,6 +24,7 @@ class SettingProvider with ChangeNotifier {
 
   SheetList? currentSheetList;
   String? stringPassing;
+  dynamic dataPassing;
 
   PackageInfo? packageInfo;
 

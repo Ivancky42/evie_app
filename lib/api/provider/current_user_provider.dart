@@ -224,7 +224,7 @@ class CurrentUserProvider extends ChangeNotifier {
       };
     }
 
-    Future.delayed(const Duration(seconds: 10), () async {
+    Future.delayed(const Duration(seconds: 8), () async {
 
       await uploadDeviceInfoToFirestore(deviceData);
       compareUserLocation();
@@ -253,7 +253,7 @@ class CurrentUserProvider extends ChangeNotifier {
         'updated' : DateTime.now(),
       };
 
-      Future.delayed(const Duration(seconds: 10), () async {
+      Future.delayed(const Duration(seconds: 8), () async {
 
         await uploadDeviceInfoToFirestore(deviceData);
 

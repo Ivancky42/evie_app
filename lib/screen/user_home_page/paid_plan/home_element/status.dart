@@ -39,7 +39,7 @@ class _StatusState extends State<Status> {
 
     return EvieCard(
       onPress: (){
-        showBatteryDetailsSheet(context);
+
       },
 
       title: "Status",
