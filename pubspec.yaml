@@ -106,7 +106,6 @@ dependencies:
   timelines: ^0.1.0
   share_plus: ^6.3.4
   intl: ^0.17.0
-  cupertino_modal_sheet: ^1.0.0
 
 dev_dependencies:
   build_runner: ^2.1.2
