@@ -24,7 +24,7 @@ class SettingProvider with ChangeNotifier {
 
   SheetList? currentSheetList;
   String? stringPassing;
-  dynamic dataPassing;
+  bool enableDragDismiss = true;
 
   PackageInfo? packageInfo;
 
@@ -123,9 +123,14 @@ class SettingProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  changeSheetElement(SheetList sheetList, [String? stringPassing]){
+  changeSheetElement(SheetList sheetList,  [String? stringPassing]){
     this.stringPassing = stringPassing;
     currentSheetList = sheetList;
+    notifyListeners();
+  }
+
+  changeEnableDragAndDismiss(bool enabled){
+    enableDragDismiss = enabled;
     notifyListeners();
   }
 

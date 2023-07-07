@@ -1,5 +1,4 @@
 
-import 'package:cupertino_modal_sheet/cupertino_modal_sheet.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals_list.dart';
 import 'package:evie_test/screen/trip_history/trip_history.dart';
@@ -7,8 +6,9 @@ import 'package:evie_test/screen/user_home_page/battery_details.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/threat_history.dart';
 import 'package:evie_test/widgets/evie_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:sheet/route.dart';
 import '../screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
 import '../screen/my_bike_setting/pedal_pals/pedal_pals.dart';
 import '../screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
@@ -77,17 +77,18 @@ void showRideHistorySheet(BuildContext context, String tripId, TripHistoryModel 
 }
 
 void showCupertinoSheet(BuildContext context, Widget widget) {
-  // showCupertinoModalBottomSheet(
-  //   expand: true,
-  //   // isDismissible: true,
-  //   // useRootNavigator: false,
-  //   context: context,
-  //   builder: (context) => EvieBottomSheet(childContext: widget,),
+  // Navigator.of(context).push(
+  //   CupertinoSheetRoute<void>(
+  //     builder: (BuildContext context) => ModalWithNavigator(widget: widget,),
+  //   ),
   // );
-  showCupertinoModalSheet(
-    useRootNavigator: false,
+  showCupertinoModalBottomSheet(
+    expand: true,
+    useRootNavigator: true,
+    ///enableDrag: false,
+    ///isDismissible: false,
     context: context,
-    builder: (context) => EvieBottomSheet(childContext: widget,),
+    builder: (context) => EvieBottomSheet(widget: widget,),
   );
 }
 
