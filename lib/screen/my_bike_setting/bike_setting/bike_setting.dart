@@ -27,6 +27,7 @@ import '../my_bike_function.dart';
 import 'bike_setting_container.dart';
 import 'bike_setting_model.dart';
 import 'bike_setting_search_container.dart';
+import 'package:lottie/lottie.dart' as lottie;
 
 
 class BikeSetting extends StatefulWidget {
@@ -46,6 +47,7 @@ class _BikeSettingState extends State<BikeSetting> {
   CableLockResult? cableLockState;
   StreamController? connectStream;
 
+  Widget? buttonImage;
   List<BikeSettingModel> bikeSettingList = [];
   List<BikeSettingModel> _searchFirstResult = [];
   LinkedHashMap<String, BikeSettingModel> _searchSecondResult = LinkedHashMap<String, BikeSettingModel>();
@@ -107,6 +109,8 @@ class _BikeSettingState extends State<BikeSetting> {
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
+
+    setButtonImage();
 
     if (deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr) {
       print("BLE Connected : " + _bluetoothProvider.currentConnectedDevice!);
@@ -348,77 +352,66 @@ class _BikeSettingState extends State<BikeSetting> {
                       ],
                     ),
 
+                    ///bluetooth round button on my bike setting page
                     ///when already connected
-                    deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr?
+                    deviceConnectResult == DeviceConnectResult.connected &&
+                        _bluetoothProvider.currentConnectedDevice ==
+                            _bikeProvider.currentBikeModel?.macAddr ?
                     Padding(
-                      padding: EdgeInsets.only(right:19.w),
+                      padding: EdgeInsets.only(right: 8.w),
                       child: Container(
-                        width: 148.w,
-                        height: 30.h,
+                        // width: 148.w,
+                        height: 36.h,
                         child: OutlinedButton(
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SvgPicture.asset(
-                                  "assets/icons/bluetooth_small_white.svg",
-                                  height:16.h,
-                                  width: 16.w,
-                                  color: EvieColors.primaryColor,
-                                ),
-                                Text("Disconnect Bike", style: TextStyle(fontSize: 12.sp, color: EvieColors.primaryColor,)),]
+                                buttonImage!,
+                              ]
                           ),
                           onPressed: () async {
                             await _bluetoothProvider.stopScan();
                             await _bluetoothProvider.disconnectDevice();
                           },
                           style: OutlinedButton.styleFrom(
-                            side: BorderSide(width: 1.0, color: EvieColors.primaryColor),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)
-                            ),
-                            elevation: 0.0,
-                            backgroundColor: Colors.transparent,
-                          ),
-                        ),
-                      ),
-                    ) :
-                    Padding(
-                      padding: EdgeInsets.only(right:19.w),
-                      child: Container(
-                        width: 143.w,
-                        height: 30.h,
-                        child: ElevatedButton(
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/icons/bluetooth_small_white.svg",
-                                  height:16.h,
-                                  width: 16.w,
-                                ),
-                                Text(
-                                  deviceConnectResult == DeviceConnectResult.connecting
-                                      || deviceConnectResult == DeviceConnectResult.scanning
-                                      || deviceConnectResult == DeviceConnectResult.partialConnected ? "Connecting"
-                                      :_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr
-                                      ?  "Connected" : "Connect Bike", style: TextStyle(fontSize: 12.sp, color: Color(0xffECEDEB)),),]
-                          ),
-                          onPressed: () async {
-                            checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
+                            side: BorderSide(
+                                width: 1.0, color: EvieColors.primaryColor),
+                            shape: CircleBorder(),
                             elevation: 0.0,
                             backgroundColor: EvieColors.primaryColor,
                           ),
                         ),
                       ),
                     )
+                        : Padding(
+                      padding: EdgeInsets.only(right: 8.w),
+                      child: Container(
+                        // width:90.w,
+                        height: 36.h,
+                        child: ElevatedButton(
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                buttonImage!,
+                              ]
+                          ),
+                          onPressed: () async {
+                            checkBleStatusAndConnectDevice(
+                                _bluetoothProvider, _bikeProvider);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: CircleBorder(),
+                            elevation: 0.0,
+                            backgroundColor: EvieColors.pastelPurple,
+                          ),
+                        ),
+                      ),
+                    )
+
+                    ///bluetooth round button ends
                   ],
                 ),
               ),
-              ///
 
               Divider(
                 thickness: 0.5.h,
@@ -466,5 +459,44 @@ class _BikeSettingState extends State<BikeSetting> {
             ],
           )),
     );
+  }
+
+  void setButtonImage() {
+    if (deviceConnectResult == DeviceConnectResult.connected &&
+        _bluetoothProvider.currentConnectedDevice ==
+            _bikeProvider.currentBikeModel?.macAddr) {
+      buttonImage = SvgPicture.asset(
+        "assets/buttons/ble_button_connect.svg",
+        width: 52.w,
+        height: 50.h,
+      );
+    }  else if (deviceConnectResult == DeviceConnectResult.connecting ||
+        deviceConnectResult == DeviceConnectResult.scanning ||
+        deviceConnectResult == DeviceConnectResult.partialConnected) {
+      buttonImage =
+          Stack(
+            children: [
+              lottie.Lottie.asset(
+                'assets/animations/loading_button.json',
+                width: 45.w,
+                height: 50.h,
+              ),
+            ],
+          );
+    }
+    else if (deviceConnectResult == DeviceConnectResult.disconnected) {
+      buttonImage = SvgPicture.asset(
+        "assets/buttons/ble_button_disconnect.svg",
+        width: 52.w,
+        height: 50.h,
+      );
+    }
+    else {
+      buttonImage = SvgPicture.asset(
+        "assets/buttons/ble_button_disconnect.svg",
+        width: 52.w,
+        height: 50.h,
+      );
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 class EvieColors {
   static const primaryColor = Color(0xFF6A51CA);
+  static const pastelPurple = Color(0xffDAD4F2);
   static const softPurple = Color(0xffC1B7E8);
   static const lightPurple = Color(0xFFCDC5ED);
   static const blue = Color(0xFF0075FF);

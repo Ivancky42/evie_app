@@ -64,8 +64,6 @@ class LocationProvider extends ChangeNotifier {
     locationPermissionStatus?.cancel();
     locationPermissionStatus = Permission.location.status.asStream().listen((event) {
 
-      print(event.toString());
-
       switch (event) {
         case PermissionStatus.granted:
           hasLocationPermission = true;
