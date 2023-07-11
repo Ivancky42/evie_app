@@ -94,8 +94,9 @@ class _EditProfileState extends State<EditProfile> {
               TextButton(
                 onPressed: () {
 
-                  showMaterialModalBottomSheet(
+                  showCupertinoModalBottomSheet(
                       expand: false,
+                      useRootNavigator: true,
                       context: context,
                       builder: (context) {
                         return SwitchProfileImage();

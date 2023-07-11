@@ -33,6 +33,7 @@ import '../../../api/function.dart';
 import '../../../api/model/location_model.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/location_provider.dart';
+import '../../../api/sheet.dart';
 import '../../../api/sheet_2.dart';
 import '../../../api/snackbar.dart';
 import '../../../api/toast.dart';
@@ -292,8 +293,9 @@ class _FreePlanState extends State<FreePlan> {
                                                   padding: EdgeInsets.only(right: 22.5.w),
                                                   child: IconButton(
                                                       onPressed: (){
-                                                        showMaterialModalBottomSheet(
+                                                        showCupertinoModalBottomSheet(
                                                             expand: false,
+                                                            useRootNavigator: true,
                                                             context: context,
                                                             builder: (context) {
                                                               return SwitchBike();

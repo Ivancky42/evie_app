@@ -232,8 +232,9 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                               padding: EdgeInsets.only(right: 22.5.w),
                                               child: IconButton(
                                                   onPressed: (){
-                                                    showMaterialModalBottomSheet(
+                                                    showCupertinoModalBottomSheet(
                                                         expand: false,
+                                                        useRootNavigator: true,
                                                         context: context,
                                                         builder: (context) {
                                                           return SwitchBike();

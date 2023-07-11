@@ -1704,14 +1704,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
-  sheet:
-    dependency: "direct main"
-    description:
-      name: sheet
-      sha256: "4007db1db1c7000889d80efca8ab8009dd0ebe618dd77b5ed76cd9bda56763c0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0-pre"
   shelf:
     dependency: transitive
     description:

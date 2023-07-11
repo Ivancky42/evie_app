@@ -313,13 +313,16 @@ class _BikeSettingState extends State<BikeSetting> {
                                   //onTap camera pic
                                   child: GestureDetector(
                                     onTap: () {
-                                      showMaterialModalBottomSheet(
+
+                                      showCupertinoModalBottomSheet(
                                         expand: false,
+                                        useRootNavigator: true,
                                         context: context,
                                         builder: (context) {
                                           return SwitchBikeImage();
                                         },
                                       );
+
                                     },
                                     child: SvgPicture.asset(
                                       "assets/buttons/camera_bike_pic.svg",
