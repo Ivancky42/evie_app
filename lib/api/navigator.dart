@@ -19,6 +19,7 @@ import 'package:evie_test/screen/user_home_page/user_home_page.dart';
 import 'package:evie_test/screen/verify_email.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../screen/check_your_email.dart';
@@ -79,13 +80,13 @@ void changeToInputNameScreen(BuildContext context) {
 }
 
 void changeToSignUpMethodScreen(BuildContext context, name) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
+  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
           builder: (context) => SignUpMethod(name))
   );
 }
 
 void changeToSignUpScreen(BuildContext context, name) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
+  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
       builder: (context) => SignUp(name))
   );
 }
@@ -95,7 +96,7 @@ void changeToAccountVerifiedScreen(BuildContext context) {
 }
 
 void changeToVerifyEmailScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
+  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
       builder: (context) => VerifyEmail())
   );
 }
@@ -129,17 +130,27 @@ void changeToSharesBikeScreen(BuildContext context) {
 }
 
 void changeToNotificationScreen(BuildContext context) {
-  Navigator.of(context)
-      .pushNamedAndRemoveUntil("/notification", (route) => false);
+  Navigator.of(context).pushNamedAndRemoveUntil("/notification", (route) => false);
 }
 
 void changeToTestBLEScreen(BuildContext context) {
   Navigator.pushReplacement(context,
-    MaterialPageRoute(builder: (context) => const TestBle()),
+    MaterialWithModalsPageRoute(builder: (context) => const TestBle()),
   );
 }
 
 void changeToUserHomePageScreen(BuildContext context ) {
+  // Navigator.of(context).pushReplacement(
+  //     MaterialWithModalsPageRoute(builder: (context) => UserHomePage(0)));
+  Navigator.of(context).pushNamedAndRemoveUntil("/", (route) => false);
+
+}
+
+void changeToUserHomePageScreen2(BuildContext context ) {
+
+  // Navigator.of(context).pushReplacement(
+  //     MaterialWithModalsPageRoute(builder: (context) => UserHomePage(0)));
+
   // Navigator.pushReplacement(context,
   //   PageTransition(
   //     type: PageTransitionType.bottomToTop,
@@ -148,16 +159,8 @@ void changeToUserHomePageScreen(BuildContext context ) {
   //   ),
   // );
 
-  // Navigator.of(context).popUntil(
-  //         (route) => route.settings.name == '/');
+  Navigator.of(context).pushNamedAndRemoveUntil("/", (route) => false);
 
-  Navigator.of(context)
-      .pushNamedAndRemoveUntil("/", (route) => false);
-}
-
-void changeToUserHomePageScreen2(BuildContext context ) {
-  Navigator.of(context)
-      .pushNamedAndRemoveUntil("/", (route) => false);
 }
 
 void changeToCheckYourEmail(BuildContext context) {
@@ -181,8 +184,7 @@ void changeToTripHistory(BuildContext context){
 }
 
 void changeToFeedsScreen(BuildContext context) {
-  Navigator.of(context)
-      .pushNamedAndRemoveUntil("/feed", (route) => false);
+  Navigator.of(context).pushNamedAndRemoveUntil("/feeds", (route) => false);
 }
 
 
@@ -197,7 +199,7 @@ void changeToRideHistory(BuildContext context, String tripId, TripHistoryModel c
 }
 
 void changeToBeforeYouStart(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
+  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
       builder: (context) => const BeforeYouStart())
   );
 }
@@ -467,8 +469,14 @@ void changeToMyAccount(BuildContext context) {
   //     duration: const Duration(milliseconds: 300),
   //   ),
   // );
-  Navigator.of(context)
-      .pushNamedAndRemoveUntil("/account", (route) => false);
+
+  // Navigator.of(context)
+  //     .pushNamedAndRemoveUntil("/account", (route) => false);
+
+  Navigator.of(context).pushReplacement(
+      MaterialWithModalsPageRoute(
+      builder: (context) => const UserHomePage(2))
+  );
 }
 
 
@@ -617,8 +625,10 @@ void changeToThreatTimeLine(BuildContext context) {
 
 
 void changeToEditProfile(BuildContext context) {
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil("/editProfile", (route) => false);
+  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
+      builder: (context) => const EditProfile())
+  );
+    // Navigator.of(context).pushNamedAndRemoveUntil("/editProfile", (route) => false);
   }
 
 void changeToVerifyPassword(BuildContext context) {
@@ -646,7 +656,7 @@ void changeToStripeCheckoutScreen(
     PlanModel planModel,
     PriceModel priceModel) {
   Navigator.push(context,
-    MaterialPageRoute(builder: (context) => StripeCheckoutScreen(
+    MaterialWithModalsPageRoute(builder: (context) => StripeCheckoutScreen(
       sessionId: value,
       bikeModel: bikeModel,
       planModel: planModel,
@@ -657,7 +667,7 @@ void changeToStripeCheckoutScreen(
 
 
 void changeToTestScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(
+  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
       builder: (context) => const BorderPaint())
   );
 }

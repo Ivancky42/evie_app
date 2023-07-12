@@ -34,6 +34,7 @@ import '../../../api/provider/location_provider.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'home_element/battery.dart';
+import 'home_element/status.dart';
 
 
 class ThreatMap extends StatefulWidget {
@@ -287,7 +288,7 @@ class _ThreatMapState extends State<ThreatMap> {
                                 aspectRatio: 1,
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(16, 2, 6, 8),
-                                  child: Battery(),
+                                  child: Status(),
                                 ),
                               ),
                             ),

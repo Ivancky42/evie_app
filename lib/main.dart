@@ -1,4 +1,3 @@
-import 'package:cupertino_modal_sheet/cupertino_modal_sheet.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
@@ -29,6 +28,7 @@ import 'package:evie_test/screen/user_home_page/user_home_page.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:evie_test/abandon/user_change_password.dart';
@@ -236,20 +236,20 @@ class MyApp extends StatelessWidget {
           //Change the app to dark theme when user's phone is set to dark mode
           darkTheme: AppTheme.lightTheme,
           initialRoute: decideMainPage(),
-         // _authProvider.isLogin == true ? '/userHomePage' : '/welcome',
+          // _authProvider.isLogin == true ? '/userHomePage' : '/welcome',
 
           onGenerateRoute: (RouteSettings settings) {
             switch (settings.name) {
               case '/':
-                return CupertinoModalSheetRoute(
+                return MaterialWithModalsPageRoute(
                     builder: (_) => UserHomePage(0),
                     settings: settings);
               case '/feed':
-                return CupertinoModalSheetRoute(
+                return MaterialWithModalsPageRoute(
                     builder: (_) => UserHomePage(1),
                     settings: settings);
               case '/account':
-                return CupertinoModalSheetRoute(
+                return MaterialWithModalsPageRoute(
                     builder: (_) => UserHomePage(2),
                     settings: settings);
             }
@@ -268,9 +268,10 @@ class MyApp extends StatelessWidget {
             "/forgetPassword": (context) => const ForgetYourPassword(),
             "/userProfile": (context) => const UserProfile(),
             "/userHomePage": (context) => const UserHomePage(0),
+            "/account": (context) => const UserHomePage(2),
             "/userChangePassword": (context) => const UserChangePassword(),
             "/testBle": (context) => const TestBle(),
-        //    "/notification": (context) => const UserNotification(),
+            //    "/notification": (context) => const UserNotification(),
             "/editProfile": (context) => const EditProfile(),
             "/verifyPassword": (context) => const VerifyPassword(),
             "/enterNewPassword": (context) => const EnterNewPassword(),
@@ -328,6 +329,5 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     );
   }
 }
-
 
 
