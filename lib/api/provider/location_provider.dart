@@ -170,8 +170,15 @@ class LocationProvider extends ChangeNotifier {
       debugPrint(error.toString());
       placeMark = null;
     }
+
+    if(placeMark != null && placeMark.name!.contains("NO HOUSE NUMBER, ")){
+        placeMark.name!.replaceAll("NO HOUSE NUMBER, ", "");
+    }
+
     return placeMark;
   }
+
+
 
   void setDefaultSelectedGeopoint() {
     selectedAnnotationGeopoint = locationModel?.geopoint;

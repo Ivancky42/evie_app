@@ -161,7 +161,7 @@ class AppProviders extends StatelessWidget {
               }
           ),
           ChangeNotifierProxyProvider<BikeProvider, FirmwareProvider>(
-              lazy: true,
+              lazy: false,
               create: (_) => FirmwareProvider(),
               update: (_, bikeProvider, firmwareProvider) {
                 return firmwareProvider!

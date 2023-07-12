@@ -53,7 +53,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
     _settingProvider = Provider.of<SettingProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
-
+    
     if(deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice){
       Future.delayed(Duration.zero, () {
         if(pageNavigate != null){
