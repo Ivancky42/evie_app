@@ -30,6 +30,10 @@ import '../../../api/provider/firmware_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_button.dart';
+import 'package:lottie/lottie.dart' as lottie;
+
+import 'package:intl/intl.dart';
+import 'package:package_info/package_info.dart';
 
 
 ///User profile page with user account information
@@ -49,10 +53,11 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
   late FirmwareProvider _firmwareProvider;
   late SettingProvider _settingProvider;
 
+  bool isExpanded = false;
+
   int totalSeconds = 105;
 
   StreamSubscription? stream;
-
 
   @override
   void initState() {
@@ -74,19 +79,22 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
     _firmwareProvider = Provider.of<FirmwareProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
+
     return WillPopScope(
       onWillPop: () async {
-        if(_firmwareProvider.isUpdating == true){}else{
+        if(_firmwareProvider.isUpdating == true){
+          showFirmwareUpdateQuit(context, stream);
+        }else{
          _settingProvider.changeSheetElement(SheetList.bikeSetting);
         }
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
-          title: 'Firmware Information',
+          title: 'Bike Software',
           onPressed: () {
             if(_firmwareProvider.isUpdating == true){
-
+              showFirmwareUpdateQuit(context, stream);
             }else{
               _settingProvider.changeSheetElement(SheetList.bikeSetting);
             }
@@ -103,25 +111,90 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
 
                   if(_firmwareProvider.isLatestFirmVer == true)...{
                     Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
+                      padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w,13.h),
                       child: Text(
-                        "Your firmware is up to date",
+                        "Your bike software is up to date.",
                         style: EvieTextStyles.h2,
                       ),
                     ),
+
                   Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 13.h, 16.w,4.h),
                     child:TextColumn(
                         title: "Current Version",
                         body: _firmwareProvider.currentFirmVer ?? "Not available"),
                   ),
+
                     const AccountPageDivider(),
+
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
+                      child:TextColumn(
+                          title: "Last Update",
+                          body:  DateFormat('MMMM d, yyyy').format(_firmwareProvider.latestFirmwareModel!.updated!.toDate()),
+                      ),
+                    ),
+
+                    const AccountPageDivider(),
+
                   Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,0.h),
                     child:TextColumn(
-                        title: "What's New",
-                        body: _firmwareProvider.latestFirmwareModel?.desc ?? "Not available"),
+                      title: "About This Update",
+                      body: ''),
                   ),
+
+                  Column(
+                        children: [
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.fromLTRB(16.w,0.h,40.w,0.h),
+                                      child: Text(
+                                        isExpanded
+                                            ? _firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "\n") ?? ''
+                                            : (_firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "\n")?.substring(0, 155) ?? ''),
+                                        softWrap: true,
+                                        style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                                        overflow: TextOverflow.fade,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    isExpanded = !isExpanded;
+                                  });
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 20.w),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        isExpanded ? 'View Less' : 'View More',
+                                        style: TextStyle(color: EvieColors.primaryColor),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 5.w),
+                                        child: SvgPicture.asset(
+                                            isExpanded ?
+                                            "assets/buttons/up_mini.svg" : "assets/buttons/down_mini.svg"
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+
                     const AccountPageDivider(),
                   }
 
@@ -130,12 +203,12 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
                       child: Text(
-                        "Better Firmware available",
+                        "Better bike software available",
                         style:EvieTextStyles.h2,
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
+                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,13.h),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -198,25 +271,72 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                     ),
 
                   Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 13.h, 16.w,4.h),
                     child:TextColumn(
-                        title: "Update Version",
-                        body: _firmwareProvider.latestFirmVer ?? "None"),
+                        title: "Current Version",
+                        body: _firmwareProvider.currentFirmVer ?? "None"),
                   ),
                     const AccountPageDivider(),
                   Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
                     child:TextColumn(
-                        title: "Current Version",
-                        body: _firmwareProvider.currentFirmVer ?? "None"),
+                        title: "Last Update",
+                  body: DateFormat('MMMM d, yyyy').format(_firmwareProvider.latestFirmwareModel!.updated!.toDate()),
+                    ),
                   ),
                      const AccountPageDivider(),
                   Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,0.h),
                   child: TextColumn(
                         title: "What's New",
-                        body: _firmwareProvider.latestFirmwareModel?.desc ?? "None"),
+                        body: ''),
                   ),
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(16.w,0.h,40.w,0.h),
+                                child: Text(
+                                  isExpanded
+                                      ? _firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "\n") ?? ''
+                                      : (_firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "\n")?.substring(0, 155) ?? ''),
+                                  softWrap: true,
+                                  style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                                  overflow: TextOverflow.fade,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isExpanded = !isExpanded;
+                            });
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 20.w),
+                            child: Row(
+                              children: [
+                                Text(
+                                  isExpanded ? 'View Less' : 'View More',
+                                  style: TextStyle(color: EvieColors.primaryColor),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 5.w),
+                                  child: SvgPicture.asset(
+                                      isExpanded ?
+                                      "assets/buttons/up_mini.svg" : "assets/buttons/down_mini.svg"
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     const AccountPageDivider(),
                   },
 
@@ -227,9 +347,8 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
               ),
             ),
 
-            Visibility(
-              visible: !_firmwareProvider.isLatestFirmVer && _firmwareProvider.isUpdating == false,
-              child: Align(
+            !_firmwareProvider.isLatestFirmVer && _firmwareProvider.isUpdating == false?
+              Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
@@ -245,8 +364,40 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                     },
                   ),
                 ),
+              ): !_firmwareProvider.isLatestFirmVer && _firmwareProvider.isUpdating == true?
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
+                child: EvieButton(
+                  width: double.infinity,
+                  height: 48.h,
+                  backgroundColor: EvieColors.lightPurple,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/buttons/update_loading.svg',
+                        width: 24.w,
+                        height: 24.h,
+                        //color: EvieColors.green,
+                      ),
+                      Text(
+                        "Updating",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+
+                  onPressed: () {
+                    _settingProvider.changeSheetElement(SheetList.bikeSetting);
+                  },
+                ),
               ),
-            ),
+            ): Container(),
           ],
         ),),
     );

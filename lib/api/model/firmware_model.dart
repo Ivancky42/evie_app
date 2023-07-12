@@ -12,13 +12,16 @@ class FirmwareModel {
   String title;
   String ver;
   String url;
+  Timestamp? updated;
 
   FirmwareModel({
     required this.desc,
+
     required this.id,
     required this.title,
     required this.ver,
     required this.url,
+    required this.updated,
   });
 
   factory FirmwareModel.fromJson(Map json) {
@@ -28,7 +31,7 @@ class FirmwareModel {
       title: json['title']?? '',
       ver: json['ver']?? '',
       url: json['url']?? '',
-    );
+      updated: timestampFromJson(json['updated']), );
   }
 
   Map<String, dynamic> toJson() => {

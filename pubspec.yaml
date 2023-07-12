@@ -24,6 +24,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  package_info: ^2.0.2
+  
 
   #mapbox_gl:
   #  git:

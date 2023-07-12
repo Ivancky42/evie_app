@@ -44,7 +44,7 @@ class _FirmwareUpdateCompletedState extends State<FirmwareUpdateCompleted> {
                       Padding(
                         padding: EdgeInsets.fromLTRB(16.w,76.h,16.w,4.h),
                         child: Text(
-                          "Upgrade Completed!",
+                          "Upgrade completed!",
                           style: TextStyle(fontSize: 24.sp),
                         ),
                       ),

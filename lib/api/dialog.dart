@@ -470,11 +470,22 @@ showDeleteNotificationFailed(){
 showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscription? stream, BluetoothProvider bluetoothProvider, SettingProvider settingProvider){
   SmartDialog.show(
       widget:   EvieDoubleButtonDialog(
-          title: "Firmware update",
-          childContent: Text(
-            "Stay close with your bike and make sure keeping EVIE app opened during firmware update. "
-                "Firmware update will ne disrupted if you close the app.",
-            style: TextStyle(fontSize: 16.sp),
+          title: "Better bike software update",
+          childContent: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Get more out of your EVIE bike with the latest firmware update. Smoother ride, "
+                    "longer battery, fewer bugs. Charge bike and ensure stable Wi-Fi connection before updating. ",
+                style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumBlack),
+              ),
+              SizedBox(height: 14.h),
+              Text("Tip: Stay connected during update.",
+                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.mediumBlack),
+                  textAlign: TextAlign.left,
+                ),
+              SizedBox(height: 14.h),
+            ],
           ),
           leftContent: "Later",
           rightContent: "Update Now",
@@ -523,10 +534,11 @@ showFirmwareUpdateQuit(context, StreamSubscription? stream){
       keepSingle: true,
       backDismiss: false,
       widget: EvieDoubleButtonDialog(
-          title: "Quit Update",
-          childContent: Text("App must stay open to complete update. Are you sure you want to quit?"),
+          title: "Exit Update?",
+          childContent: Text("App need to be stay open to complete upgrade."
+              " Any changes made during the update may not be saved if exit update."),
           leftContent: "Cancel Update",
-          rightContent: "Stay",
+          rightContent: "Stay Updating",
           onPressedLeft: (){
             SmartDialog.dismiss();
             showBikeSettingSheet(context);

@@ -48,7 +48,7 @@ class _FirmwareUpdateFailedState extends State<FirmwareUpdateFailed> {
                       Padding(
                         padding: EdgeInsets.fromLTRB(16.w,76.h,16.w,4.h),
                         child: Text(
-                          "Oops! Firmware update fail.",
+                          "Oops!Bike software update fail.",
                           style: TextStyle(fontSize: 24.sp),
                         ),
                       ),
@@ -58,8 +58,8 @@ class _FirmwareUpdateFailedState extends State<FirmwareUpdateFailed> {
                         child: Container(
                           child: Text(
                             "We're sorry, but your EVIE firmware upgrade was not successful. "
-                                "Please check if your Evie bike is still functioning properly and if not, reach out to our support team for assistance. "
-                                    "We'll help you troubleshoot the issue and find a solution. THank you for trying to upgrade your device!",
+                                "Please check if your Evie bike is still functioning properly, and if not, reach out to our support team for assistance. "
+                                    "We'll help you troubleshoot the issue and find a solution. Thank you for trying to upgrade your bike!",
                             style: TextStyle(fontSize: 16.sp,height: 1.5.h),
                           ),
                         ),
