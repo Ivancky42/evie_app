@@ -30,6 +30,9 @@ import 'package:evie_test/screen/my_bike_setting/rfid_card/register_ev_key.dart'
 import 'package:evie_test/screen/my_bike_setting/subscription/current_plan.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/essential_plan/essential_plan.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
+import 'package:evie_test/screen/my_bike_setting/subscription2/current_plan2.dart';
+import 'package:evie_test/screen/my_bike_setting/subscription2/essential_plan2/essential_plan2.dart';
+import 'package:evie_test/screen/my_bike_setting/subscription2/pro_plan2/pro_plan2.dart';
 import 'package:evie_test/screen/my_bike_setting/user_manual/user_manual.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/map_details2.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/threat_history.dart';
@@ -100,9 +103,9 @@ class _SheetNavigatorState extends State<SheetNavigator> {
         return DetectionSensitivity();
 
       case SheetList.currentPlan:
-        return CurrentPlan();
+        return CurrentPlan2();
       case SheetList.essentialPlan:
-        return EssentialPlan();
+        return EssentialPlan2();
       case SheetList.proPlan:
         return ProPlan();
 

@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
+import '../../../../api/length.dart';
 import '../../../../api/model/plan_model.dart';
 import '../../../../api/navigator.dart';
 import '../../../../api/provider/bike_provider.dart';
@@ -38,6 +39,7 @@ class _ProPlanState extends State<ProPlan> {
     _planProvider = Provider.of<PlanProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
+    print(_bikeProvider.isPlanSubscript);
     return WillPopScope(
       onWillPop: () async {
         _settingProvider.changeSheetElement(SheetList.currentPlan);
@@ -119,7 +121,9 @@ class _ProPlanState extends State<ProPlan> {
 
                     Padding(
                       padding: EdgeInsets.only(top: 17.h, bottom: 16.h),
-                      child: Text("You are currently on this plan.", style: EvieTextStyles.body16.copyWith(color: EvieColors.primaryColor),),
+                      child:
+                        Text(_bikeProvider.isPlanSubscript == false ?"":"You are currently on this plan.",
+                          style: EvieTextStyles.body16.copyWith(color: EvieColors.primaryColor),),
                     ),
 
                     SizedBox(height: 16.h),
@@ -150,17 +154,46 @@ class _ProPlanState extends State<ProPlan> {
                     const PlanPageElementRow(content: "Remote monitoring"),
                     const PlanPageElementRow(content: "Ride history"),
                     const PlanPageElementRow(content: "Bike Sharing"),
-
                   ],
                 ),
               ),
+              Visibility(
+                visible: _bikeProvider.isPlanSubscript! == false,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
+                    child:  EvieButton(
+                      width: double.infinity,
+                      height: 48.h,
+                      child: Text(_bikeProvider.isPlanSubscript == false ? "Upgrade Plan" : "See Plan Detail",
+                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                      ),
+                      onPressed: () {
+                        String key = _planProvider.availablePlanList.keys.elementAt(0);
+                        PlanModel planModel = _planProvider.availablePlanList[key];
 
-
-            ],
+                        _planProvider.getPrice(planModel).then((priceModel) {
+                          _planProvider.purchasePlan(_bikeProvider.currentBikeModel!.deviceIMEI!, planModel.id!, priceModel.id).then((value) {
+                            changeToStripeCheckoutScreen(context, value, _bikeProvider.currentBikeModel!, planModel, priceModel);
+                          });
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),],
           ),
         ),
       ],
     ),
-    )));
+    ),
+
+
+
+
+
+    ),
+    );
   }
 }

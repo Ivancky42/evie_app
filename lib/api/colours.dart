@@ -5,6 +5,7 @@ class EvieColors {
   static const pastelPurple = Color(0xffDAD4F2);
   static const softPurple = Color(0xffC1B7E8);
   static const lightPurple = Color(0xFFCDC5ED);
+  static const strongPurple = Color(0xFF836ED3);
   static const blue = Color(0xFF0075FF);
   static const yellow = Color(0xffFFD600);
   static const lightOrange = Color(0xffF4B13B);

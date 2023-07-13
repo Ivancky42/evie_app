@@ -362,12 +362,12 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
               behavior: HitTestBehavior.translucent,
               onTap: () async {
                 if (getOpacityByRole() == 0.3) {
-                  showUpgradePlanToast(context);
+                  showUpgradePlanToast(context, _settingProvider);
                 }
                 else {
                   if (getOpacityByRole() == 0.3) {
-                    showUpgradePlanToast(10.h);
-                    showUpgradePlanToast(10.h);
+                    showUpgradePlanToast(10.h, _settingProvider);
+                    showUpgradePlanToast(10.h, _settingProvider);
                   }
                   else {
                     if(_bikeProvider.currentBikeModel?.pedalPalsModel == null || _bikeProvider.currentBikeModel?.pedalPalsModel?.name == ""){
@@ -458,7 +458,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 }
                 else {
                   if (getOpacityByRole() == 0.3) {
-                    showUpgradePlanToast(context);
+                    showUpgradePlanToast(context, _settingProvider);
                   }
                   else {
                     showControlAdmissionToast(context);

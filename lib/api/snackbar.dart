@@ -1,11 +1,15 @@
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
+import 'package:evie_test/api/sheet.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import '../bluetooth/modelResult.dart';
+import 'colours.dart';
+import 'enumerate.dart';
 import 'model/bike_model.dart';
 
 showConnectionStatusToast(
@@ -301,6 +305,102 @@ showToLockBikeInstructionToast(context) {
   );
 }
 
+// showUpgradePlanToast(context, SettingProvider settingProvider){
+//   ScaffoldMessenger.of(context).showSnackBar(
+//     SnackBar(
+//       behavior: SnackBarBehavior.floating,
+//       shape: RoundedRectangleBorder(
+//           borderRadius:
+//           BorderRadius.all(Radius.circular(10)
+//           )
+//       ),
+//       content: SingleChildScrollView(
+//         scrollDirection: Axis.horizontal,
+//         child:Column(
+//           crossAxisAlignment: CrossAxisAlignment.end,
+//           mainAxisAlignment: MainAxisAlignment.end,
+//           children: [
+//              Column(
+//                   children: [
+//                     Text(
+//                         "Limited access. Upgrade your plan to access this feature.",
+//                         style: EvieTextStyles.toast,
+//                       ),
+//                     Align(
+//                       alignment: Alignment.bottomRight,
+//                         child: TextButton(
+//                           onPressed: () {
+//                             settingProvider.changeSheetElement(SheetList.proPlan);
+//                           },
+//                           child: Text(
+//                             "UNLOCK FEATURE NOW",
+//                             style: EvieTextStyles.body16.copyWith(
+//                               color: EvieColors.strongPurple,
+//                               fontWeight: FontWeight.w900,
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//                   ],
+//                 ),
+//
+//           ],
+//         ),
+//       ),
+//       duration: const Duration(seconds: 2),
+//     ),
+//   );
+// }
+
+showUpgradePlanToast(context, SettingProvider settingProvider){
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Container(
+              width: 330.w,
+              child: Text(
+                "Limited access. Upgrade your plan to access this feature.",
+                style: EvieTextStyles.toast,
+              ),
+
+            ),
+            Container(
+              //width: 170.w,
+              alignment: Alignment.bottomRight,
+              child: GestureDetector(
+                onTap: () {
+                  settingProvider.changeSheetElement(SheetList.proPlan);
+                },
+                child: Text(
+                  "UNLOCK FEATURE NOW",
+                  style: EvieTextStyles.body16.copyWith(
+                    color: EvieColors.strongPurple,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
+
+
+
 showControlAdmissionToast(context) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
@@ -312,45 +412,15 @@ showControlAdmissionToast(context) {
       ),
       content: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Row(
+        child: Column(
           children: [
-            SizedBox(width: 4.w,),
             Container(
               width: 300.w,
               child: Text(
-                "Your account doesn't have control admission for this setting.",
+                "Limited access. Upgrade your plan to access this feature.",
                 style: EvieTextStyles.toast,
               ),
-            )
-          ],
-        ),
-      ),
-      duration: const Duration(seconds: 2),
-    ),
-  );
-}
-
-showUpgradePlanToast(context) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-          borderRadius:
-          BorderRadius.all(Radius.circular(10)
-          )
-      ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            SizedBox(width: 4.w,),
-            Container(
-              width: 300.w,
-              child: Text(
-                "This feature only available for pro plan user. You can upgrade your plan in setting page. ",
-                style: EvieTextStyles.toast,
-              ),
-            )
+            ),
           ],
         ),
       ),
