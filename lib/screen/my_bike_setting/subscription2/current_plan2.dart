@@ -24,10 +24,6 @@ import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_divider.dart';
 
-
-
-
-
 class CurrentPlan2 extends StatefulWidget {
   const CurrentPlan2({Key? key}) : super(key: key);
 
@@ -72,17 +68,27 @@ class _CurrentPlan2State extends State<CurrentPlan2> {
                     padding: EdgeInsets.only(top:28.h),
                     child: Text("Current Plan", style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),),
                   ),
-                  Text(_bikeProvider.isPlanSubscript == false ? "No Subscription" : "EV-Secure", style: EvieTextStyles.headline.copyWith(color: EvieColors.lightBlack)),
-                  // Text(_bikeProvider.isPlanSubscript == false ?"Forever" : "${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodStart?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().year} - "
-                  //     "${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}",
-                  //     style: EvieTextStyles.body18.copyWith(color:EvieColors.darkGrayishCyan)),
-                  // Padding(
-                  //   padding: EdgeInsets.only(top:19.h),
-                  //   child: Text("Status",style: EvieTextStyles.body14.copyWith(color:EvieColors.darkGrayishCyan),),
-                  // ),
-                  // ///Active Color (0xff05A454)    Expired Color (0xffF42525)
-                  // Text("Active",style: EvieTextStyles.body16.copyWith(color: EvieColors.green)),
-                  SizedBox(height: 10.h,),
+                 Text(_bikeProvider.isPlanSubscript == false ? "No Subscription" : "EV-Secure", style: EvieTextStyles.headline.copyWith(color: EvieColors.lightBlack)),
+                  Text(_bikeProvider.isPlanSubscript == false ?"" : "${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodStart?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().year} - "
+                        "${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}",
+                        style: EvieTextStyles.body18.copyWith(color:EvieColors.darkGrayishCyan)),
+                  SizedBox(height:11.h,),
+
+                  Visibility(
+                    visible: _bikeProvider.isPlanSubscript == true,
+                    child: Column(
+                      children: [
+                        Text(
+                          _bikeProvider.isPlanSubscript == false ? "" : "Status",
+                          style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                        ),
+                        Text(
+                          _bikeProvider.isPlanSubscript == false ? "" : "Active",
+                          style: EvieTextStyles.body16.copyWith(color: EvieColors.green),
+                        ),
+                      ],
+                    ),
+                  ),
 
                   const EvieDivider(),
 
@@ -119,7 +125,6 @@ class _CurrentPlan2State extends State<CurrentPlan2> {
                 ],
               ),
             ),
-
 
             Align(
               alignment: Alignment.bottomCenter,
