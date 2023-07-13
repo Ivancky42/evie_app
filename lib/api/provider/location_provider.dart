@@ -178,8 +178,6 @@ class LocationProvider extends ChangeNotifier {
     return placeMark;
   }
 
-
-
   void setDefaultSelectedGeopoint() {
     selectedAnnotationGeopoint = locationModel?.geopoint;
     notifyListeners();
