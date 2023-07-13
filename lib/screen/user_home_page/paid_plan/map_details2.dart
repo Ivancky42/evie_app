@@ -341,11 +341,38 @@ class _MapDetails2State extends State<MapDetails2> {
                         ),
                       ),
                     ),
+
+
+                    Padding(
+                        padding: EdgeInsets.only(left:16.w, right: 16.w),
+                        child: Container(
+                          width: double.infinity,
+                          height: 36.h,
+                          child: Row(
+                            children: [
+                              Text("Connection Lost", style: EvieTextStyles.body16.copyWith(color: EvieColors.grayishWhite),),
+                            ],
+                          ),
+                          decoration: BoxDecoration(
+                            color: EvieColors.orange,
+                            borderRadius: BorderRadius.circular(10.w),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color.fromRGBO(122, 122, 121, 0.15),
+                                offset: Offset(0, 3),
+                                blurRadius: 12.0,
+                                spreadRadius: 0.0,
+                              ),
+                            ],
+                          ),
+                        )
+                    )
                   ],
                 ),
               ),
             ],
           ),
+
 
         ],
       ),

@@ -151,7 +151,6 @@ class LocationProvider extends ChangeNotifier {
   }
 
   Future<Placemark?> returnPlaceMarks(double latitude, double longitude) async {
-
     Placemark? placeMark;
 
     try {
@@ -172,7 +171,8 @@ class LocationProvider extends ChangeNotifier {
     }
 
     if(placeMark != null && placeMark.name!.contains("NO HOUSE NUMBER, ")){
-        placeMark.name!.replaceAll("NO HOUSE NUMBER, ", "");
+      ///'name' can't be used as a setter because it's final. Remove final from placemark library.
+        placeMark.name = placeMark.name!.replaceAll("NO HOUSE NUMBER, ", "");
     }
 
     return placeMark;

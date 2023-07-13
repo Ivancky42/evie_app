@@ -385,7 +385,7 @@ showUpgradePlanToast(context, SettingProvider settingProvider){
                   "UNLOCK FEATURE NOW",
                   style: EvieTextStyles.body16.copyWith(
                     color: EvieColors.strongPurple,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
