@@ -33,7 +33,6 @@ import '../../../widgets/evie_button.dart';
 import 'package:lottie/lottie.dart' as lottie;
 
 import 'package:intl/intl.dart';
-import 'package:package_info/package_info.dart';
 
 
 ///User profile page with user account information

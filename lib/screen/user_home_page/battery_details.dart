@@ -48,46 +48,76 @@ class _BatteryDetailsState extends State<BatteryDetails> {
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
 
-    return Container(
-      decoration: const BoxDecoration(
-        color: EvieColors.grayishWhite,
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          // Padding(
-          //   padding:  EdgeInsets.only(top: 13.h),
-          //   child: SvgPicture.asset(
-          //     "assets/buttons/down.svg",
-          //   ),
-          // ),
-          Row(
-            mainAxisAlignment:
-            MainAxisAlignment.spaceBetween,
+    return Material(
+      child: WillPopScope(
+        onWillPop: () async {
+          bool shouldClose = true;
+          await showCupertinoDialog<void>(
+              context: context,
+              builder: (BuildContext context) => CupertinoAlertDialog(
+                title: const Text('Should Close?'),
+                actions: <Widget>[
+                  CupertinoButton(
+                    child: const Text('Yes'),
+                    onPressed: () {
+                      shouldClose = true;
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  CupertinoButton(
+                    child: const Text('No'),
+                    onPressed: () {
+                      shouldClose = false;
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ));
+          return shouldClose;
+        },
+
+        child: Container(
+          decoration: const BoxDecoration(
+            color: EvieColors.grayishWhite,
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Padding(
-                padding:
-                EdgeInsets.only(left: 17.w, top: 0.h, bottom: 11.h),
-                child: Text(
-                  "Battery",
-                  style: EvieTextStyles.h1,
-                ),
+              // Padding(
+              //   padding:  EdgeInsets.only(top: 13.h),
+              //   child: SvgPicture.asset(
+              //     "assets/buttons/down.svg",
+              //   ),
+              // ),
+              Row(
+                mainAxisAlignment:
+                MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding:
+                    EdgeInsets.only(left: 17.w, top: 0.h, bottom: 11.h),
+                    child: Text(
+                      "Battery",
+                      style: EvieTextStyles.h1,
+                    ),
+                  ),
+
+                ],
               ),
 
+              const Divider(
+                thickness: 2,
+              ),
+
+              Text("Model"),
+              Text("Battery Life"),
+              Text("Any Other Information"),
             ],
           ),
-
-          const Divider(
-            thickness: 2,
-          ),
-
-          Text("Model"),
-          Text("Battery Life"),
-          Text("Any Other Information"),
-        ],
+          height: 750.h,
+        ),
       ),
-      height: 750.h,
     );
   }
 }

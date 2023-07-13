@@ -64,7 +64,14 @@ void showThreatHistorySheet(BuildContext context) {
 }
 
 void showBatteryDetailsSheet(BuildContext context) {
-  showCupertinoSheet(context, BatteryDetails());
+  // Navigator.of(context).push(
+  //   CupertinoModalBottomSheetRoute<void>(
+  //     expanded: true,
+  //     builder: (BuildContext context) =>
+  //     BatteryDetails(),
+  //   ),
+  // );
+   showCupertinoSheet(context, BatteryDetails());
 }
 
 void showMapDetailsSheet(BuildContext context) {

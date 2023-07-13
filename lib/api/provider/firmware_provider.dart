@@ -86,14 +86,13 @@ class FirmwareProvider extends ChangeNotifier {
 
       if(int.parse(currentFirmVer!.replaceAll('.', '')) >= int.parse(latestFirmVer!.replaceAll('.', ''))){
         isLatestFirmVer = true;
-        notifyListeners();
       }else{
         isLatestFirmVer = false;
-        notifyListeners();
       }
     }else{
       currentFirmVer = null;
     }
+
     notifyListeners();
     }
 
