@@ -170,10 +170,7 @@ class LocationProvider extends ChangeNotifier {
       placeMark = null;
     }
 
-    if(placeMark != null && placeMark.name!.contains("NO HOUSE NUMBER, ")){
-      ///'name' can't be used as a setter because it's final. Remove final from placemark library.
-        placeMark.name = placeMark.name!.replaceAll("NO HOUSE NUMBER, ", "");
-    }
+    placeMark?.name = placeMark.name?.replaceAll("NO HOUSE NUMBER, ", "");
 
     return placeMark;
   }

@@ -67,6 +67,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       await _notificationProvider.getNotificationFromNotificationId(data);
 
       Future.delayed(Duration.zero, () {
+
         changeToFeedsScreen(context);
       });
 
@@ -114,6 +115,15 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    hideCurrentSnackBar(_navigator);
+    _textFocus.dispose();
+    super.dispose();
+  }
+
+
+
   ///Foreground notification setting
   Future foreNotificationSetting() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
@@ -136,10 +146,13 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   ///Foreground select Notification android
   Future<void> onSelectNotification(String? payload) async {
     ///Pass notification id to get body and key
+    ///
+    await _notificationProvider.getNotificationFromNotificationId(payload);
 
-    await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
-      changeToFeedsScreen(context);
-    });
+      Future.delayed(Duration.zero, () {
+        changeToFeedsScreen(context);
+      });
+
 
     /*
     await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
@@ -167,11 +180,11 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       int? id, String? title, String? body, String? payload) async {
     // display a dialog with the notification details, tap ok to go to another page
     ///Pass notification id to get body and key
-    _notificationProvider.getNotificationFromNotificationId(payload);
+    await _notificationProvider.getNotificationFromNotificationId(payload);
 
-    await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
-      changeToFeedsScreen(context);
-    });
+      Future.delayed(Duration.zero, () {
+        changeToFeedsScreen(context);
+      });
 
     // if (_notificationProvider.currentSingleNotification?.notificationId !=
     //     null) {
@@ -212,13 +225,6 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     // TODO: implement didChangeDependencies
     _navigator = ScaffoldMessenger.of(context);
     super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    hideCurrentSnackBar(_navigator);
-    _textFocus.dispose();
-    super.dispose();
   }
 
   ///Update bike name in firebase once !focus

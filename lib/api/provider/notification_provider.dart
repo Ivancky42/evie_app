@@ -142,14 +142,11 @@ class NotificationProvider extends ChangeNotifier {
     return result;
   }
 
-
   Future<Object?> getNotificationFromNotificationId(String? notificationId) async {
     currentSingleNotification = null;
     try {
 
-      if(currentNotificationSubscription != null){
         currentNotificationSubscription?.cancel();
-      }
 
       currentNotificationSubscription = FirebaseFirestore.instance
           .collection(usersCollection)
@@ -161,15 +158,13 @@ class NotificationProvider extends ChangeNotifier {
         if (event.data() != null) {
           Map<String, dynamic>? obj = event.data();
 
-          currentSingleNotification =
-              NotificationModel.fromJson(obj!, event.id);
+          currentSingleNotification = NotificationModel.fromJson(obj!, event.id);
 
           //  singleNotificationList.putIfAbsent(
           //      event.id, () => NotificationModel.fromJson(obj!, event.id));
-
-          print(currentSingleNotification!.body);
-
           notifyListeners();
+        }else{
+
         }
       });
       return currentSingleNotification;

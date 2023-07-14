@@ -35,6 +35,7 @@ import 'package:latlong2/latlong.dart';
 
 import '../../../api/dialog.dart';
 import '../../../api/provider/setting_provider.dart';
+import '../../../bluetooth/modelResult.dart';
 import 'home_element/status.dart';
 
 class MyPointAnnotationClickListener extends OnPointAnnotationClickListener {
@@ -342,19 +343,36 @@ class _MapDetails2State extends State<MapDetails2> {
                       ),
                     ),
 
-
                     Padding(
                         padding: EdgeInsets.only(left:16.w, right: 16.w),
                         child: Container(
                           width: double.infinity,
                           height: 36.h,
-                          child: Row(
-                            children: [
-                              Text("Connection Lost", style: EvieTextStyles.body16.copyWith(color: EvieColors.grayishWhite),),
-                            ],
+                          child: Padding(
+                            padding: EdgeInsets.only(left:8.w, right: 8.w),
+                            child: Row(
+                              children: [
+                                ///Get icon by status
+                                SvgPicture.asset(
+                                  getCurrentBikeStatusIconSimple(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
+                                ),
+
+                                SizedBox(width: 5.w),
+
+                                ///Get text by status
+                              Text(getCurrentBikeStatusString(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
+                                style: EvieTextStyles.body16.copyWith(color: EvieColors.grayishWhite),),
+                              ],
+                            ),
                           ),
                           decoration: BoxDecoration(
-                            color: EvieColors.orange,
+
+                            ///Get colour by status
+                            color: _bikeProvider.currentBikeModel!.location!.isConnected == false ||
+                                   _bikeProvider.currentBikeModel!.location!.status == "warning" ||
+                                   _bikeProvider.currentBikeModel!.location!.status == "fall" ?
+                                   EvieColors.orange : EvieColors.darkWhite,
+
                             borderRadius: BorderRadius.circular(10.w),
                             boxShadow: const [
                               BoxShadow(
@@ -367,6 +385,7 @@ class _MapDetails2State extends State<MapDetails2> {
                           ),
                         )
                     )
+
                   ],
                 ),
               ),

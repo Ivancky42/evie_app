@@ -110,20 +110,31 @@ class _BikeContainerState extends State<BikeContainer> {
             contentPadding: EdgeInsets.only(left: 18.w, right: 8.w),
             leading:
             //padding: EdgeInsets.fromLTRB(16.w, 17.h, 0.w, 0.h),
-            widget.bikeModel.bikeIMG == '' ?
-            Image(
-              image: const AssetImage("assets/buttons/bike_left_pic.png"),
+            Container(
               width: 56.h,
               height: 56.h,
-            ):ClipOval(
-              child: CachedNetworkImage(
-                //imageUrl: document['profileIMG'],
-                imageUrl: widget.bikeModel.bikeIMG!,
-                placeholder: (context, url) => const CircularProgressIndicator(),
-                errorWidget: (context, url, error) => Icon(Icons.error),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: getCurrentBikeStatusColour(deviceConnectResult == DeviceConnectResult.connected, widget.bikeModel, _bikeProvider,_bluetoothProvider),
+                  width: 2.5.w,
+                ),
+              ),
+              child: widget.bikeModel.bikeIMG == ''
+                  ? Image(
+                image: const AssetImage("assets/buttons/bike_left_pic.png"),
                 width: 56.h,
-                height:56.h,
-                fit: BoxFit.cover,
+                height: 56.h,
+              )
+                  : ClipOval(
+                child: CachedNetworkImage(
+                  imageUrl: widget.bikeModel.bikeIMG!,
+                  placeholder: (context, url) => const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  width: 56.h,
+                  height: 56.h,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
 
@@ -150,7 +161,8 @@ class _BikeContainerState extends State<BikeContainer> {
                       width: 20.w,
                     ),
                     Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, widget.bikeModel, _bikeProvider,_bluetoothProvider),
-                        style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan,
+                        style: EvieTextStyles.body18.copyWith(color:
+                        getCurrentBikeStatusColourText(deviceConnectResult == DeviceConnectResult.connected, widget.bikeModel, _bikeProvider,_bluetoothProvider),
                         ),
                       softWrap: true,
                       overflow:  TextOverflow.visible,
