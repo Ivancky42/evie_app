@@ -296,8 +296,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                //_settingProvider.changeSheetElement(SheetList.currentPlan);
-                showEvieBikeRecoveredDialog(context);
+                _settingProvider.changeSheetElement(SheetList.currentPlan);
               },
               child: Container(
                 height: 62.h,
