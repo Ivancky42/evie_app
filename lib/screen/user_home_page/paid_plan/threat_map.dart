@@ -130,7 +130,7 @@ class _ThreatMapState extends State<ThreatMap> {
 
                   GestureDetector(
                       onTap: (){
-                        showExitOrbitalAntiTheft(context);
+                        showEvieExitOrbitalDialog(context);
                       },
                       child: SvgPicture.asset(
                         "assets/buttons/close.svg",

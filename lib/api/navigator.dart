@@ -110,8 +110,7 @@ void changeToSignInScreen(BuildContext context) {
 }
 
 void changeToForgetPasswordScreen(BuildContext context) {
-  Navigator.of(context)
-      .pushNamedAndRemoveUntil("/forgetPassword", (route) => false);
+  Navigator.of(context).pushNamedAndRemoveUntil("/forgetPassword", (route) => false);
 }
 
 void changeToUserProfileScreen(BuildContext context) {

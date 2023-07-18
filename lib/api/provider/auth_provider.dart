@@ -97,8 +97,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   ///Data for user email sign up
-  Future signUp(
-      String email, String password, String name, String phoneNo) async {
+  Future signUp(String email, String password, String name, String phoneNo) async {
     User? firebaseUser;
     credentialProvider = "email";
 

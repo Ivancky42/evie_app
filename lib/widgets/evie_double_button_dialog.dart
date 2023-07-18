@@ -451,23 +451,19 @@ class EvieTwoButtonDialog extends StatelessWidget{
             mainAxisSize: MainAxisSize.min,
             children: [
 
-              svgpicture == null? Container(
-            alignment: Alignment.center,
-            child: Padding(
-                  padding: EdgeInsets.only(top: 32.h),
-                  child: SvgPicture.asset(
-                    "assets/images/people_search.svg",
-                    height: 150.h,
-                    width: 239.w,
+              Center(
+                child: svgpicture == null? Container(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 32.h),
+                    child: SvgPicture.asset(
+                      "assets/images/people_search.svg",
+                      height: 150.h,
+                      width: 239.w,
+                    ),
                   ),
-                ),
-            ): Padding(
-            padding: EdgeInsets.only(top: 32.h),
-            child: SvgPicture.asset(
-            "assets/images/bike_champion.svg",
-            height: 157.h,
-            width: 164.w,),
-          ),
+                ): svgpicture!,
+              ),
 
 
               Container(
