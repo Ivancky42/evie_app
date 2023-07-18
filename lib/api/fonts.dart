@@ -29,6 +29,9 @@ class EvieTextStyles {
 
  static TextStyle caption = TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400,);
 
+ static TextStyle title = TextStyle(fontSize: 30.sp, fontWeight: FontWeight.w800,);
+ static TextStyle miniTitle = TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w800,);
+
  static TextStyle toast = TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400, color: EvieColors.grayishWhite);
 
 }

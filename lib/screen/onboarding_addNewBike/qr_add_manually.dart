@@ -6,6 +6,7 @@ import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../api/provider/bluetooth_provider.dart';
 import '../../widgets/evie_progress_indicator.dart';
+import '../../widgets/evie_single_button_dialog.dart';
 import '../../widgets/evie_text_input_formatter.dart';
 import '../../widgets/evie_textform.dart';
 
@@ -94,7 +96,7 @@ class _QRAddManuallyState extends State<QRAddManually> {
                       padding: EdgeInsets.fromLTRB(11.w,4.h,16.w,12.h),
                       child: TextButton(
                         onPressed: (){
-                          showWhereToFindCodes();
+                          showEvieFindSerialDialog(context);
                         },
                         child: Text("Where to find these?",
                           style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),

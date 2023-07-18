@@ -1100,3 +1100,238 @@ showMeasurementUnit(SettingProvider settingProvider){
          rightContent: "Ok",
           onPressedRight: (){SmartDialog.dismiss();} ));
 }
+
+///V DIALOGS
+///Email resent
+showEvieResendDialog(BuildContext context) {
+  SmartDialog.show(
+    widget: EvieOneDialog(
+        title: "Email re-sent",
+        content1: "We've re-sent email to ",
+        content2: ". Do check the spam mailbox too!",
+        email: "hello@evie.io",
+        middleContent: "Done",
+        onPressedMiddle: () {
+          SmartDialog.dismiss();
+        }));
+}
+
+///User not found
+showEvieNotFoundDialog (BuildContext context){
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("User not found",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Oops, it seems like the email address you "
+            "entered is incorrect. Please double-check and try again, "
+            "or sign up for a new account if you haven't already.",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        upContent: "Retry",
+        downContent: "Register Now",
+        onPressedUp: () {
+          SmartDialog.dismiss();
+        },
+        onPressedDown: () {
+          SmartDialog.dismiss();
+          changeToWelcomeScreen(context);
+        }),
+  );
+}
+
+///Exit Registration
+showEvieExitRegistrationDialog(BuildContext context) {
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+      title: Text(
+        "Exit Registration?",
+        style: EvieTextStyles.h2,
+        textAlign: TextAlign.center,
+      ),
+      childContent: Text(
+        "Are you sure you want to cancel registering your bike?",
+        textAlign: TextAlign.center,
+        style: EvieTextStyles.body18,
+      ),
+      svgpicture: SvgPicture.asset("assets/images/people_search.svg"),
+      upContent: "Not Now",
+      downContent: "Exit Registration",
+      onPressedUp: () {
+        SmartDialog.dismiss();
+      },
+      onPressedDown: () {
+        // change to new way of changing pages
+        SmartDialog.dismiss();
+        changeToUserHomePageScreen(context);
+      },
+    ),
+  );
+}
+
+showEvieFindQRDialog(BuildContext context){
+  SmartDialog.show(
+      widget: EvieOneButtonDialog(
+          title: "Where to find QR Code?",
+          content: "QR code can be found on the ownership card.",
+          middleContent: "Done",
+          onPressedMiddle: () {
+            SmartDialog.dismiss();
+          }
+          ));
+}
+
+///where to find serial number and validation key
+showEvieFindSerialDialog(BuildContext context){
+  SmartDialog.show(
+      widget: EvieOneButtonDialog(
+          title: "Where to find these?",
+          content: "Serial Number and Validation Key can be found on the ownership card.",
+          middleContent: "Done",
+          onPressedMiddle: () {
+            SmartDialog.dismiss();
+          }
+          ));
+}
+
+///free/paid plan bluetooth connection
+showEviePlanBluetoothDialog (BuildContext context){
+  /// icon not yet altered
+  SmartDialog.show(
+      widget: Evie2IconOneButtonDialog(
+          title: "Sync. Ride. Thrive.",
+          miniTitle1: "Stay Connected",
+          miniTitle2: "One Tap Unlock",
+          content1:"Seamlessly sync your bike and stay in control with Bluetooth connectivity." ,
+          content2:"Security has never been this convenient with EVIE's built-in locking system." ,
+          middleContent: "Allow Bluetooth",
+          onPressedMiddle: (){
+            SmartDialog.dismiss();
+            SmartDialog.show(
+                widget: Evie3IconOneButtonDialog(
+                    title: "Master Your Ride",
+                    miniTitle1: "Bike Setting",
+                    miniTitle2: "Battery Life",
+                    miniTitle3: "Multiple Accounts",
+                    content1:"Tailor your ride to perfection with Bike Setting. "
+                        "Fine-tune your preferences, optimize performance, "
+                        "and create your ultimate cycling experience." ,
+                    content2:"Check your bike’s battery life before it needs its next charge." ,
+                    content3: "See all your bikes’ details and switch between accounts easily." ,
+                    middleContent: "Done",
+                    onPressedMiddle: (){
+                      SmartDialog.dismiss();
+                    }));;
+          }));
+
+}
+
+///Allow location permission to access Orbital Anti_Theft
+///icon paddings need to be altered
+showEvieAllowOrbitalDialog(BuildContext context){
+  SmartDialog.show(
+      widget:Evie2IconBatchOneButtonDialog(
+          title: "Worry-free with EV-Secure",
+          miniTitle1: "Orbital Anti-theft",
+          miniTitle2: "GPS Tracking",
+          content1:"Built-in theft detection, GPS tracking and notifications" ,
+          content2:"Built-in theft detection, GPS tracking and notifications" ,
+          middleContent: "Allow Location",
+          onPressedMiddle: (){
+            SmartDialog.dismiss();
+          }));
+}
+
+///Signal Strength Indicator
+showEvieSignalStrengthDialog(BuildContext context) {
+  SmartDialog.show(
+    widget: EvieOneButtonDialog(
+      title: "Signal Strength Indicator",
+      content: "Use this as an indicator to find out if you are near your bike. "
+          "You can only connect to your bike if you have sufficient signal strength.",
+      middleContent: "Connect Bike",
+      onPressedMiddle: () {
+        SmartDialog.dismiss();
+      },
+    ),
+  );
+}
+
+///What should i do?
+showEvieOrbitalQuestionDialog(BuildContext context) {
+  SmartDialog.show(
+    widget: EvieOneButtonDialog(
+      title: "What should I do?",
+      content: "You can ...",
+      middleContent: "Done",
+      onPressedMiddle: () {
+        SmartDialog.dismiss();
+      },
+    ),
+  );
+}
+
+///Exit Orbital Anti-Theft
+showEvieExitOrbitalDialog(BuildContext context) {
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+      title: Text(
+        "Exit Orbital Anti-theft?",
+        style: EvieTextStyles.h2,
+        textAlign: TextAlign.center,
+      ),
+      childContent: Text(
+        "Are you sure you would like to exit the Orbital Anti-theft page?",
+        textAlign: TextAlign.center,
+        style: EvieTextStyles.body18,
+      ),
+      svgpicture: SvgPicture.asset("assets/images/people_search.svg"),
+      upContent: "Exit Orbital Anti-theft",
+      downContent: "Cancel",
+      onPressedUp: () {
+        SmartDialog.dismiss();
+      },
+      onPressedDown: () {
+        SmartDialog.dismiss();
+      },
+    ),
+  );
+}
+
+///Bike recovered
+showEvieBikeRecoveredDialog(BuildContext context) {
+  SmartDialog.show(
+    widget: EvieOneButtonDialog(
+      svgpicture: SvgPicture.asset(
+        "assets/images/bike_champion.svg",
+        height: 157.h,
+        width: 164.w,),
+      title: "Bike Recovered!",
+      content: "Your bike is back in your possession after a theft attempt. "
+          "Ensure [bike name]'s security and enjoy it once again.",
+      middleContent: "Done",
+      onPressedMiddle: () {
+        SmartDialog.dismiss();
+      },
+    ),
+  );
+}
+
+///Actionable bar
+showEvieActionableBarDialog(BuildContext context) {
+  SmartDialog.show(
+    widget: EvieOneButtonDialog(
+      title: "Bluetooth Connection Needed",
+      content: "Embark on the next step by connecting with your bike. "
+          "An essential requirement to unlock and progress through this seamless process.",
+      middleContent: "Connect Bike",
+      onPressedMiddle: () {
+        SmartDialog.dismiss();
+      },
+    ),
+  );
+}

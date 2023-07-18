@@ -8,14 +8,17 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../api/colours.dart';
+import '../api/dialog.dart';
 import '../api/fonts.dart';
 import '../api/navigator.dart';
 import '../api/provider/notification_provider.dart';
+import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
 
 class SignIn extends StatefulWidget {
@@ -26,6 +29,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+
   @override
   Widget build(BuildContext context) {
     ///Disable phone rotation
@@ -46,11 +50,14 @@ class Login extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
+
 class _LoginScreenState extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   late AuthProvider _authProvider;
   late CurrentUserProvider _currentUserProvider;
+
+  Widget? twoButton;
 
   //For user input password visibility true/false
   bool _isObscure = true;
@@ -62,6 +69,7 @@ class _LoginScreenState extends State<Login> {
   Widget build(BuildContext context) {
     _authProvider = Provider.of<AuthProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    setTwoButton();
 
     return WillPopScope(
       onWillPop: () async {
@@ -205,22 +213,9 @@ class _LoginScreenState extends State<Login> {
                       _currentUserProvider.getDeviceInfo();
                       changeToVerifyEmailScreen(context);
                     } else {
-                      SmartDialog.show(
-                        widget: EvieSingleButtonDialog(
-                            title: "Error",
-                            content: result.toString(),
-                            rightContent: "Ok",
-                            widget: Image.asset(
-                              "assets/images/error.png",
-                              width: 36,
-                              height: 36,
-                            ),
-                            onPressedRight: () {
-                              SmartDialog.dismiss();
-                            }),
-                      );
-                    }
 
+                      showEvieNotFoundDialog(context);
+                    }
                   });
                 },
               ),
@@ -254,6 +249,32 @@ class _LoginScreenState extends State<Login> {
           ),
         ]),
       ),
+    );
+  }
+
+  void setTwoButton () {
+    SmartDialog.show(
+      widget: EvieTwoButtonDialog(
+          title: Text("User Not Found",
+            style:EvieTextStyles.h2,
+            textAlign: TextAlign.center,
+          ),
+          childContent: Text("Oops, it seems like the email address you "
+              "entered is incorrect. Please double-check and try again, "
+              "or sign up for a new account if you haven't already.",
+            textAlign: TextAlign.center,
+            style: EvieTextStyles.body18,),
+          svgpicture: SvgPicture.asset(
+            "assets/images/people_search.svg",
+          ),
+          upContent: "Register Now",
+          downContent: "Retry",
+          onPressedUp: () {
+            SmartDialog.dismiss();
+          },
+          onPressedDown: () {
+            SmartDialog.dismiss();
+          }),
     );
   }
 }

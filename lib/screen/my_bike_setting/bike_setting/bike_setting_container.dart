@@ -21,6 +21,7 @@ import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
+import '../../../widgets/evie_single_button_dialog.dart';
 
 class BikeSettingContainer extends StatefulWidget {
   final BikeSettingModel bikeSettingModel;
@@ -295,7 +296,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                _settingProvider.changeSheetElement(SheetList.currentPlan);
+                //_settingProvider.changeSheetElement(SheetList.currentPlan);
+                showEvieBikeRecoveredDialog(context);
               },
               child: Container(
                 height: 62.h,

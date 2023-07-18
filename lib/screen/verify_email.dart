@@ -179,7 +179,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
               padding: EdgeInsets.only(left: 16, right: 16, bottom:  EvieLength.buttonWord_WordBottom-20.h),
               child: SizedBox(
                 height: 35,
-                width: 100,
                 child: TextButton(
                   child: Text(
                     "resend email.",
@@ -191,13 +190,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
                       showResentEmailFailedToast(context);
 
                     }else if(isCountDownOver == true){
-                      _authProvider.sendFirestoreVerifyEmail();
-                     showResentEmailSuccess(_currentUserProvider);
-                        setState(() {
-                          isCountDownOver = false;
-                          resetTimer();
-                          startCountDownTimer();
-                        });
+
+                      showEvieResendDialog (context);
                     }
                   },
                 ),

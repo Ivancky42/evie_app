@@ -3,6 +3,7 @@ import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 
 import 'package:evie_test/widgets/evie_appbar.dart';
+import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -19,6 +20,7 @@ import '../../api/fonts.dart';
 import '../../api/length.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../widgets/evie_button.dart';
+import '../../widgets/evie_double_button_dialog.dart';
 import '../../widgets/page_widget/qr_scanner_overlay.dart';
 
 class QRScanning extends StatefulWidget {
@@ -168,7 +170,8 @@ class _QRScanningState extends State<QRScanning> {
                       onTap: (){
                         _authProvider.setIsFirstLogin(false);
                         _bikeProvider.setIsAddBike(false);
-                        changeToUserHomePageScreen(context);
+
+                        showEvieExitRegistrationDialog(context);
                       },
                       child: SvgPicture.asset(
                         "assets/buttons/close.svg",
@@ -247,7 +250,7 @@ class _QRScanningState extends State<QRScanning> {
                       padding: EdgeInsets.fromLTRB(20.w, 190.h, 20.w, 123.h),
                       child: TextButton(
                         onPressed: (){
-                          showWhereToFindQRCode();
+                          showEvieFindQRDialog(context);
                         },
                         child: Text("Where to find QR code?",
                           style: EvieTextStyles.body16.copyWith(fontWeight:FontWeight.w900, color: EvieColors.thumbColorTrue, decoration: TextDecoration.underline,),

@@ -3,6 +3,7 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../api/fonts.dart';
 import 'evie_button.dart';
@@ -289,6 +290,232 @@ class EvieDoubleButtonDialogFilter extends StatelessWidget{
                               style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                             ),
                             onPressed: onPressedRight
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+
+            ],
+          ),
+        )
+    );
+  }
+}
+
+// ///Single button dialog
+// ///V made it
+// class EvieTwoButtonDialog extends StatelessWidget{
+//   final String title;
+//   final String? content;
+//   final SvgPicture? svgpicture;
+//   final Widget? widget;
+//   final String middleContent;
+//   final VoidCallback onPressedMiddle;
+//
+//   const EvieTwoButtonDialog({
+//     Key? key,
+//     required this.title,
+//     this.content,
+//     this.widget,
+//     this.svgpicture,
+//     required this.middleContent,
+//     required this.onPressedMiddle
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Dialog(
+//         insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(10),
+//         ),
+//         elevation: 0.0,
+//         backgroundColor: EvieColors.grayishWhite,
+//         child: Container(
+//           padding:  EdgeInsets.only(
+//               left: 17.w,
+//               right: 17.w,
+//               top: 16.w,
+//               bottom: 16.w
+//           ),
+//
+//           child: Column(
+//             //crossAxisAlignment: CrossAxisAlignment.start,
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//
+//               Padding(
+//                 padding: EdgeInsets.only(top: 32.h),
+//                 child: SvgPicture.asset(
+//                   "assets/images/people_search.svg",
+//                   height: 150.h,
+//                   width: 239.w,),
+//               ),
+//
+//               Container(
+//                 width: 325.w,
+//                 child: Padding(
+//                   padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
+//                   child: Text(title,
+//                     style:EvieTextStyles.h2,
+//                     textAlign: TextAlign.center,
+//                   ),
+//                 ),
+//               ),
+//
+//               content != null? Container(
+//                 width: 326.w,
+//                 child: Text(
+//                   content ?? "" ,
+//                   textAlign: TextAlign.center,
+//                   style: EvieTextStyles.body18,
+//                 ),
+//               ) : Container(),
+//
+//               widget != null ? widget! : SizedBox(),
+//
+//               Padding(
+//                 padding: EdgeInsets.only(top: 37.h, bottom: 16.h),
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   children: [
+//                     Expanded(
+//                       child:
+//                       EvieButton(
+//                           width: double.infinity,
+//                           height: 48.h,
+//                           child: Text(
+//                             middleContent,
+//                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+//                           ),
+//                           onPressed: onPressedMiddle
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               )
+//             ],
+//           ),
+//         )
+//     );
+//
+//   }
+// }
+
+///Double button dialog
+///V MADE IT
+class EvieTwoButtonDialog extends StatelessWidget{
+  final Widget title;
+  final Widget childContent;
+  final SvgPicture? svgpicture;
+  final String upContent;
+  final String downContent;
+  final VoidCallback onPressedDown;
+  final VoidCallback onPressedUp;
+
+
+  const EvieTwoButtonDialog({
+    Key? key,
+    required this.title,
+    required this.childContent,
+    required this.svgpicture,
+    required this.upContent,
+    required this.downContent,
+    required this.onPressedDown,
+    required this.onPressedUp
+
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Dialog(
+        insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        elevation: 0.0,
+        backgroundColor: EvieColors.grayishWhite,
+        child: Container(
+          padding:  EdgeInsets.only(
+              left: 17.w,
+              right: 17.w,
+              top: 16.w,
+              bottom: 16.w
+          ),
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
+              svgpicture == null? Container(
+            alignment: Alignment.center,
+            child: Padding(
+                  padding: EdgeInsets.only(top: 32.h),
+                  child: SvgPicture.asset(
+                    "assets/images/people_search.svg",
+                    height: 150.h,
+                    width: 239.w,
+                  ),
+                ),
+            ): Padding(
+            padding: EdgeInsets.only(top: 32.h),
+            child: SvgPicture.asset(
+            "assets/images/bike_champion.svg",
+            height: 157.h,
+            width: 164.w,),
+          ),
+
+
+              Container(
+                width: 325.w,
+                child: Padding(
+                  padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
+                  child: title,
+                ),
+              ),
+
+              Container(
+                  width: 326.w,
+                  child: childContent),
+
+              Padding(
+                padding: EdgeInsets.only(top: 37.h),
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child:
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 4.h),
+                        child: EvieButton(
+                            width: double.infinity,
+                            height: 48.h,
+                            child: Text(
+                              upContent,
+                              style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                            ),
+                            onPressed: onPressedUp
+                        ),
+                      ),
+                    ),
+
+
+                    Flexible(
+                      child:  Padding(
+                        padding: EdgeInsets.only(top: 4.h),
+                        child: EvieButton_ReversedColor(
+                          width: double.infinity,
+                          height: 48.h,
+                          child: Text(
+                            downContent,
+                            style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
+                          ),
+                          onPressed: onPressedDown,
                         ),
                       ),
                     ),
