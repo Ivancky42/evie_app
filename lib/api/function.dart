@@ -407,7 +407,6 @@ getCurrentBikeStatusImage(BikeModel bikeModel, BikeProvider bikeProvider, Blueto
 
 getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
 
-
   if (bikeProvider.userBikePlans.isNotEmpty) {
     for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
       if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
@@ -467,7 +466,6 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, Bluetoo
 
 getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
 
-
   if (bikeProvider.userBikePlans.isNotEmpty) {
     for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
       if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
@@ -523,6 +521,126 @@ getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bike
     return "-";
   }
 }
+
+getCurrentBikeStatusColour(bool isLocked, BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
+
+  if (bikeProvider.userBikePlans.isNotEmpty) {
+    for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
+      if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
+        if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
+          final result = calculateDateDifferenceFromNow(
+              bikeProvider.userBikePlans.values
+                  .elementAt(index)
+                  .periodEnd
+                  .toDate());
+          if (result < 0) {
+            return Colors.transparent;
+          } else {
+            if (bikeModel.location?.isConnected == false) {
+              return EvieColors.orange;
+            } else {
+              switch (bikeModel.location!.status) {
+                case 'safe':
+                  return Colors.transparent;
+                case 'warning':
+                  return EvieColors.orange;
+                case 'danger':
+                  return EvieColors.darkRed;
+                case 'fall':
+                  return EvieColors.orange;
+                case 'crash':
+                  return EvieColors.darkRed;
+                default:
+                  return Colors.transparent;
+              }
+            }
+          }
+        }else{
+          return Colors.transparent;
+        }
+      }
+    }
+  }else{
+    return Colors.transparent;
+  }
+}
+
+getCurrentBikeStatusColourText(bool isLocked, BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
+
+  if (bikeProvider.userBikePlans.isNotEmpty) {
+    for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
+      if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
+        if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
+          final result = calculateDateDifferenceFromNow(
+              bikeProvider.userBikePlans.values
+                  .elementAt(index)
+                  .periodEnd
+                  .toDate());
+          if (result < 0) {
+            return EvieColors.darkGrayishCyan;
+          } else {
+            if (bikeModel.location?.isConnected == false) {
+              return EvieColors.orange;
+            } else {
+              switch (bikeModel.location!.status) {
+                case 'safe':
+                  return EvieColors.darkGrayishCyan;
+                case 'warning':
+                  return EvieColors.orange;
+                case 'danger':
+                  return EvieColors.darkRed;
+                case 'fall':
+                  return EvieColors.orange;
+                case 'crash':
+                  return EvieColors.darkRed;
+                default:
+                  return EvieColors.darkGrayishCyan;
+              }
+            }
+          }
+        }else{
+          return EvieColors.darkGrayishCyan;
+        }
+      }
+    }
+  }else{
+    return EvieColors.darkGrayishCyan;
+  }
+}
+
+getCurrentBikeStatusIconSimple(BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
+
+  if (bikeModel.location?.isConnected == false) {
+    return "assets/icons/warning_white.svg";
+  } else {
+    switch (bikeModel.location!.status) {
+      case 'safe':
+        {
+          if(bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
+            if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+              return "assets/icons/bike_unlock_white.svg";
+            } else {
+              return "assets/icons/locked_lightpurple.svg";
+            }
+          }
+          else{
+            if(bikeModel.isLocked == false){
+              return "assets/icons/bike_unlock_white.svg";
+            }else{
+              return "assets/icons/locked_lightpurple.svg";
+            }
+          }
+        }
+      case 'warning':
+        return "assets/icons/warning_white.svg";
+      case 'fall':
+        return "assets/icons/warning_white.svg";
+      default:
+        return "assets/icons/unlock_lightpurple.svg";
+    }
+  }
+
+    }
 
 ///Load image according danger status
 loadMarkerImageString(String dangerStatus){

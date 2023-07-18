@@ -184,7 +184,10 @@ void changeToTripHistory(BuildContext context){
 }
 
 void changeToFeedsScreen(BuildContext context) {
-  Navigator.of(context).pushNamedAndRemoveUntil("/feeds", (route) => false);
+  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
+      builder: (context) => const UserHomePage(1))
+  );
+  // Navigator.of(context).pushNamedAndRemoveUntil("/feeds", (route) => false);
 }
 
 

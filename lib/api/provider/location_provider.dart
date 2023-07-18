@@ -151,7 +151,6 @@ class LocationProvider extends ChangeNotifier {
   }
 
   Future<Placemark?> returnPlaceMarks(double latitude, double longitude) async {
-
     Placemark? placeMark;
 
     try {
@@ -171,9 +170,7 @@ class LocationProvider extends ChangeNotifier {
       placeMark = null;
     }
 
-    if(placeMark != null && placeMark.name!.contains("NO HOUSE NUMBER, ")){
-        placeMark.name!.replaceAll("NO HOUSE NUMBER, ", "");
-    }
+    placeMark?.name = placeMark.name?.replaceAll("NO HOUSE NUMBER, ", "");
 
     return placeMark;
   }
