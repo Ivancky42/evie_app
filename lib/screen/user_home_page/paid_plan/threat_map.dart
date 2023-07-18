@@ -316,14 +316,14 @@ class _ThreatMapState extends State<ThreatMap> {
   }
 
   void locationListener() {
+
     print("location did change");
+
     //getDistanceBetween();
     selectedGeopoint  = _locationProvider.locationModel?.geopoint;
     animateBounce(mapboxMap, _locationProvider.locationModel?.geopoint.longitude ?? 0, _locationProvider.locationModel?.geopoint.latitude ?? 0);
     loadMarker();
   }
-
-
 
   loadMarker() async {
     ///Marker
@@ -339,93 +339,60 @@ class _ThreatMapState extends State<ThreatMap> {
       ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
       currentAnnotationId = pointAnnotationManager;
 
-        final ByteData bytes = await rootBundle.load("assets/icons/marker_danger.png");
-        final Uint8List list = bytes.buffer.asUint8List();
+      // for (int i = 1; i <= 7; i++) {}
+      final ByteData bytes1 = await rootBundle.load("assets/icons/danger_pin/danger_pin_1.png");
+      final ByteData bytes2 = await rootBundle.load("assets/icons/danger_pin/danger_pin_2.png");
+      final ByteData bytes3 = await rootBundle.load("assets/icons/danger_pin/danger_pin_3.png");
+      final ByteData bytes4 = await rootBundle.load("assets/icons/danger_pin/danger_pin_4.png");
+      final ByteData bytes5 = await rootBundle.load("assets/icons/danger_pin/danger_pin_5.png");
+      final ByteData bytes6 = await rootBundle.load("assets/icons/danger_pin/danger_pin_6.png");
+      final ByteData bytes7 = await rootBundle.load("assets/icons/danger_pin/danger_pin_7.png");
 
-      final ByteData bytes2 = await rootBundle.load("assets/icons/marker_danger_deactivate.png");
-      final Uint8List list2 = bytes2.buffer.asUint8List();
+      final Uint8List pin1 = bytes1.buffer.asUint8List();
+      final Uint8List pin2 = bytes2.buffer.asUint8List();
+      final Uint8List pin3 = bytes3.buffer.asUint8List();
+      final Uint8List pin4 = bytes4.buffer.asUint8List();
+      final Uint8List pin5 = bytes5.buffer.asUint8List();
+      final Uint8List pin6 = bytes6.buffer.asUint8List();
+      final Uint8List pin7 = bytes7.buffer.asUint8List();
 
+      List<Uint8List> pins = [
+        pin1, pin2, pin3, pin4, pin5, pin6, pin7,
+      ];
 
-      if (_locationProvider.selectedAnnotationGeopoint == _locationProvider.locationModel?.geopoint) {
-        ///First marker
-        options.add(
-          PointAnnotationOptions(
-            geometry: Point(
-                coordinates: Position(
-                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                  _locationProvider.locationModel?.geopoint.latitude ?? 0,
-                )).toJson(),
-            image: list,
-            iconSize: 1.4.h,
-          ),
-        );
+      ///load a few more marker
+      //for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
+      ///Only load 7 latest of threatRouteList value to display marker
+      for (int i = 0; i < 7; i++) {
+
+        // GeoPoint routeGeopoint = _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint;
+
+          options.add(
+            PointAnnotationOptions(
+              geometry: Point(
+                  coordinates: Position(
+                    _bikeProvider.threatRoutesLists.values
+                        .elementAt(i)
+                        .geopoint
+                        .longitude ?? 0,
+                    _bikeProvider.threatRoutesLists.values
+                        .elementAt(i)
+                        .geopoint
+                        .latitude ?? 0,
+                  )).toJson(),
+              image: pins[i],
+              iconSize: 2.h,
+              // textField: "Text",
+              // textOffset: [0.0, 3],
+              // textColor: Colors.black.value,
+            ),);
+
+        pointAnnotationManager.setIconAllowOverlap(false);
+        pointAnnotationManager.createMulti(options);
+
+        OnPointAnnotationClickListener listener = MyPointAnnotationClickListener(_locationProvider);
+        pointAnnotationManager.addOnPointAnnotationClickListener(listener);
       }
-      else {
-        options.add(
-          PointAnnotationOptions(
-            geometry: Point(
-                coordinates: Position(
-                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                  _locationProvider.locationModel?.geopoint.latitude ?? 0,
-                )).toJson(),
-            image: list2,
-            iconSize: 2.0.h,
-          ),);
-      }
-
-        ///load a few more marker
-        for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
-          GeoPoint routeGeopoint = _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint;
-
-          if (_locationProvider.selectedAnnotationGeopoint == routeGeopoint) {
-            options.add(
-              PointAnnotationOptions(
-                geometry: Point(
-                    coordinates: Position(
-                      _bikeProvider.threatRoutesLists.values
-                          .elementAt(i)
-                          .geopoint
-                          .longitude ?? 0,
-                      _bikeProvider.threatRoutesLists.values
-                          .elementAt(i)
-                          .geopoint
-                          .latitude ?? 0,
-                    )).toJson(),
-                image: list,
-                iconSize: 1.4.h,
-              ),
-            );
-          }
-          else {
-            options.add(
-              PointAnnotationOptions(
-                geometry: Point(
-                    coordinates: Position(
-                      _bikeProvider.threatRoutesLists.values
-                          .elementAt(i)
-                          .geopoint
-                          .longitude ?? 0,
-                      _bikeProvider.threatRoutesLists.values
-                          .elementAt(i)
-                          .geopoint
-                          .latitude ?? 0,
-                    )).toJson(),
-                image: list2,
-                iconSize: 2.0.h,
-                // textField: "Text",
-                // textOffset: [0.0, 3],
-                // textColor: Colors.black.value,
-              ),);
-          }
-
-           pointAnnotationManager.setIconAllowOverlap(false);
-           pointAnnotationManager.createMulti(options);
-
-          OnPointAnnotationClickListener listener = MyPointAnnotationClickListener(_locationProvider);
-          pointAnnotationManager.addOnPointAnnotationClickListener(listener);
-        }
-
-
     });
 
     ///User location
@@ -458,9 +425,146 @@ class _ThreatMapState extends State<ThreatMap> {
     }
 
     var location = (layer as LocationIndicatorLayer).location;
-      userPosition = Position(location![1]!, location[0]!);
+    userPosition = Position(location![1]!, location[0]!);
 
   }
+
+  // loadMarker() async {
+  //   ///Marker
+  //   options.clear();
+  //
+  //   if(currentAnnotationId != null){
+  //     ///Check if have this id
+  //     await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
+  //   }
+  //
+  //   await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
+  //
+  //     ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
+  //     currentAnnotationId = pointAnnotationManager;
+  //
+  //       final ByteData bytes = await rootBundle.load("assets/icons/marker_danger.png");
+  //       final Uint8List list = bytes.buffer.asUint8List();
+  //
+  //     final ByteData bytes2 = await rootBundle.load("assets/icons/marker_danger_deactivate.png");
+  //     final Uint8List list2 = bytes2.buffer.asUint8List();
+  //
+  //
+  //     if (_locationProvider.selectedAnnotationGeopoint == _locationProvider.locationModel?.geopoint) {
+  //       ///First marker
+  //       options.add(
+  //         PointAnnotationOptions(
+  //           geometry: Point(
+  //               coordinates: Position(
+  //                 _locationProvider.locationModel?.geopoint.longitude ?? 0,
+  //                 _locationProvider.locationModel?.geopoint.latitude ?? 0,
+  //               )).toJson(),
+  //           image: list,
+  //           iconSize: 1.4.h,
+  //         ),
+  //       );
+  //     }
+  //     else {
+  //       options.add(
+  //         PointAnnotationOptions(
+  //           geometry: Point(
+  //               coordinates: Position(
+  //                 _locationProvider.locationModel?.geopoint.longitude ?? 0,
+  //                 _locationProvider.locationModel?.geopoint.latitude ?? 0,
+  //               )).toJson(),
+  //           image: list2,
+  //           iconSize: 2.0.h,
+  //         ),);
+  //     }
+  //
+  //       ///load a few more marker
+  //       for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
+  //         GeoPoint routeGeopoint = _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint;
+  //
+  //         if (_locationProvider.selectedAnnotationGeopoint == routeGeopoint) {
+  //           options.add(
+  //             PointAnnotationOptions(
+  //               geometry: Point(
+  //                   coordinates: Position(
+  //                     _bikeProvider.threatRoutesLists.values
+  //                         .elementAt(i)
+  //                         .geopoint
+  //                         .longitude ?? 0,
+  //                     _bikeProvider.threatRoutesLists.values
+  //                         .elementAt(i)
+  //                         .geopoint
+  //                         .latitude ?? 0,
+  //                   )).toJson(),
+  //               image: list,
+  //               iconSize: 1.4.h,
+  //             ),
+  //           );
+  //         }
+  //         else {
+  //           options.add(
+  //             PointAnnotationOptions(
+  //               geometry: Point(
+  //                   coordinates: Position(
+  //                     _bikeProvider.threatRoutesLists.values
+  //                         .elementAt(i)
+  //                         .geopoint
+  //                         .longitude ?? 0,
+  //                     _bikeProvider.threatRoutesLists.values
+  //                         .elementAt(i)
+  //                         .geopoint
+  //                         .latitude ?? 0,
+  //                   )).toJson(),
+  //               image: list2,
+  //               iconSize: 2.0.h,
+  //               // textField: "Text",
+  //               // textOffset: [0.0, 3],
+  //               // textColor: Colors.black.value,
+  //             ),);
+  //         }
+  //
+  //          pointAnnotationManager.setIconAllowOverlap(false);
+  //          pointAnnotationManager.createMulti(options);
+  //
+  //         OnPointAnnotationClickListener listener = MyPointAnnotationClickListener(_locationProvider);
+  //         pointAnnotationManager.addOnPointAnnotationClickListener(listener);
+  //       }
+  //
+  //
+  //   });
+  //
+  //   ///User location
+  //   final ByteData bytes = await rootBundle.load("assets/icons/user_location_icon.png");
+  //   final Uint8List list = bytes.buffer.asUint8List();
+  //
+  //   IMG.Image? img = IMG.decodeImage(list);
+  //   IMG.Image resized = IMG.copyResize(img!, width: 50.w.toInt(), height:70.h.toInt());
+  //   Uint8List resizedImg = Uint8List.fromList(IMG.encodePng(resized));
+  //
+  //   mapboxMap?.location.updateSettings(
+  //       LocationComponentSettings(
+  //           enabled: true,
+  //           // pulsingEnabled: true,
+  //           // puckBearingEnabled: true,
+  //           locationPuck: LocationPuck(
+  //               locationPuck2D: LocationPuck2D(
+  //                 topImage: resizedImg,
+  //                 bearingImage: resizedImg,
+  //                 shadowImage: resizedImg,
+  //                 //scaleExpression: "50",
+  //               ))));
+  //
+  //   Layer? layer;
+  //
+  //   if (Platform.isAndroid) {
+  //     layer = await mapboxMap?.style.getLayer("mapbox-location-indicator-layer");
+  //   } else {
+  //     layer = await mapboxMap?.style.getLayer("puck");
+  //   }
+  //
+  //   var location = (layer as LocationIndicatorLayer).location;
+  //     userPosition = Position(location![1]!, location[0]!);
+  //
+  // }
 }
 
 class MyPointAnnotationClickListener extends OnPointAnnotationClickListener {

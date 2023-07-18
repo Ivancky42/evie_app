@@ -119,6 +119,8 @@ class BikeProvider extends ChangeNotifier {
   StreamController<SwitchBikeResult> switchBikeResultListener = StreamController.broadcast();
   StreamController<UploadFirestoreResult> firestoreStatusListener = StreamController.broadcast();
 
+  LinkedHashMap? get getThreatRoutesLists => threatRoutesLists;
+  
   ///User update bike profile
   Future updateUserBikeImage(String imageURL) async {
     try {

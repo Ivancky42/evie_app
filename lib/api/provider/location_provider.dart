@@ -13,6 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../dialog.dart';
 import '../model/location_model.dart';
+import '../model/threat_routes_model.dart';
 
 class LocationProvider extends ChangeNotifier {
   ///Mapbox default public token was store in gradle.properties file //Android
@@ -21,6 +22,9 @@ class LocationProvider extends ChangeNotifier {
   String bikesCollection = dotenv.env['DB_COLLECTION_BIKES'] ?? 'DB not found';
   String defPublicAccessToken = dotenv.env['DEF_PUBLIC_TOKEN'] ?? 'DPT not found';
   String mapBoxStyleToken = dotenv.env['MAPBOX_STYLE_TOKEN'] ?? 'MST not found';
+
+  LinkedHashMap? threatRoutesLists = LinkedHashMap<String, ThreatRoutesModel>();
+  LinkedHashMap? get getThreatRoutesLists => threatRoutesLists;
 
   LocationModel? locationModel;
   //UserLocation? userPosition;
@@ -36,7 +40,9 @@ class LocationProvider extends ChangeNotifier {
     checkLocationPermissionStatus();
   }
 
-  Future<void> update(LocationModel? locationModel) async {
+  Future<void> update(LocationModel? locationModel, threatRoutesLists) async {
+
+    print("updates");
 
     if (locationModel != null) {
       if (this.locationModel != locationModel) {
@@ -44,6 +50,10 @@ class LocationProvider extends ChangeNotifier {
         getPlaceMarks(locationModel.geopoint.latitude, locationModel.geopoint.longitude);
         notifyListeners();
       }
+    }
+
+    if(threatRoutesLists != null){
+      this.threatRoutesLists = threatRoutesLists;
     }
 
     // if (locationModel == null) {}

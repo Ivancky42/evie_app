@@ -153,11 +153,11 @@ class AppProviders extends StatelessWidget {
               }
           ),
           ChangeNotifierProxyProvider<BikeProvider, LocationProvider>(
-              lazy: true,
+              lazy: false,
               create: (_) => LocationProvider(),
               update: (_, bikeProvider, locationProvider) {
                 return locationProvider!
-                  ..update(bikeProvider.currentBikeModel?.location);
+                  ..update(bikeProvider.currentBikeModel?.location, bikeProvider.getThreatRoutesLists);
               }
           ),
           ChangeNotifierProxyProvider<BikeProvider, FirmwareProvider>(
