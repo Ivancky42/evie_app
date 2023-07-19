@@ -11,6 +11,7 @@ class EvieColors {
   static const lightOrange = Color(0xffF4B13B);
   static const orange = Color(0xffE59200);
   static const red = Color(0xFFFE4A49);
+  static const veryLightRed = Color(0xFFFF7373);
   static const lightRed = Color(0xffF42525);
   static const darkRed = Color(0xffCA0D0D);
   static const lightGreen = Color(0xff00D015);

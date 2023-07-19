@@ -20,6 +20,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
@@ -142,7 +143,7 @@ class _ThreatMapState extends State<ThreatMap> {
 
                   GestureDetector(
                       onTap: (){
-                        changeToThreatTimeLine(context);
+                        changeToThreatTimeLine(context, PageTransitionType.fade);
                       },
                       child: SvgPicture.asset(
                         "assets/buttons/list.svg",
@@ -317,11 +318,9 @@ class _ThreatMapState extends State<ThreatMap> {
 
   void locationListener() {
 
-    print("location did change");
-
     //getDistanceBetween();
     selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    animateBounce(mapboxMap, _locationProvider.locationModel?.geopoint.longitude ?? 0, _locationProvider.locationModel?.geopoint.latitude ?? 0);
+    //animateBounce(mapboxMap, _locationProvider.locationModel?.geopoint.longitude ?? 0, _locationProvider.locationModel?.geopoint.latitude ?? 0);
     loadMarker();
   }
 
@@ -363,6 +362,8 @@ class _ThreatMapState extends State<ThreatMap> {
       ///load a few more marker
       //for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
       ///Only load 7 latest of threatRouteList value to display marker
+
+      options.clear();
       for (int i = 0; i < 7; i++) {
 
         // GeoPoint routeGeopoint = _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint;
@@ -375,13 +376,14 @@ class _ThreatMapState extends State<ThreatMap> {
                         .elementAt(i)
                         .geopoint
                         .longitude ?? 0,
+
                     _bikeProvider.threatRoutesLists.values
                         .elementAt(i)
                         .geopoint
                         .latitude ?? 0,
                   )).toJson(),
               image: pins[i],
-              iconSize: 2.h,
+              iconSize: 2.0.h,
               // textField: "Text",
               // textOffset: [0.0, 3],
               // textColor: Colors.black.value,
