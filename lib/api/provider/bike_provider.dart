@@ -320,8 +320,6 @@ class BikeProvider extends ChangeNotifier {
 
     if(currentBikeModel?.location?.status == "danger"){
       if(currentBikeModel?.location != null){
-        if(currentBikeModel?.location?.eventId != null){
-          if(currentBikeModel?.location?.eventId != ""){
 
             await currentThreatRoutesSubscription?.cancel();
 
@@ -353,19 +351,25 @@ class BikeProvider extends ChangeNotifier {
                       break;
                   }
                 }
+
+                ///Sort threatRouteList based on timestamp created
+                List<MapEntry> entries = threatRoutesLists.entries.toList();
+                entries.sort((b, a) => a.value.created.compareTo(b.value.created));
+                threatRoutesLists.clear();
+                for (var entry in entries) {
+                  threatRoutesLists[entry.key] = entry.value;
+                }
+                notifyListeners();
+
+
               }else{
                 threatRoutesLists.clear();
                 currentThreatRoutesSubscription?.cancel();
               }
             });
-          }else{
-            threatRoutesLists.clear();
-            currentThreatRoutesSubscription?.cancel();
-          }
-        }else{
-          threatRoutesLists.clear();
-          currentThreatRoutesSubscription?.cancel();
-        }
+      }else{
+        threatRoutesLists.clear();
+        currentThreatRoutesSubscription?.cancel();
       }
     }
   }

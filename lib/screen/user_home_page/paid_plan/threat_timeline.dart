@@ -10,6 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
@@ -80,7 +81,7 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
 
                   GestureDetector(
                       onTap: (){
-                        changeToThreatMap(context);
+                        changeToThreatMap(context, PageTransitionType.fade);
                       },
                       child: SvgPicture.asset(
                         "assets/buttons/list_selected.svg",
@@ -89,6 +90,7 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
               ),
             ),
           ),
+
 
 
           Expanded(
@@ -116,14 +118,14 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
                           if(index == 0){
                             return const TransparentConnector();
                           }else{
-                            return   const DashedLineConnector();
+                            return const DashedLineConnector(thickness: 1.2, color: EvieColors.lightGrayish);
                           }
                         },
                         endConnectorBuilder: (context, index) {
                           if(index == _bikeProvider.threatRoutesLists.length - 1){
                             return const TransparentConnector();
                           }else {
-                            return const DashedLineConnector();
+                            return const DashedLineConnector(thickness: 1.2, color: EvieColors.lightGrayish);
                           }
                         },
                         indicatorBuilder: (context, index) {
@@ -133,7 +135,7 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
                               height: 20,
                             );
                           }else{
-                            return DotIndicator();
+                            return const DotIndicator(color: EvieColors.veryLightRed);
                           }
                         },
                           oppositeContentsBuilder: (context, index){

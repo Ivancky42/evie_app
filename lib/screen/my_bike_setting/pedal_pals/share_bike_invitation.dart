@@ -60,7 +60,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
         return false;
       },
       child: Scaffold(
-
+        resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
             Form(
@@ -108,6 +108,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
               ),
             ),
 
+
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
@@ -153,7 +154,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                                 .currentBikeModel!.deviceName}"
                                                 " with ${_emailController.text
                                                 .trim()} ?"),
-                                            
+
                                             leftContent: "Cancel",
                                             onPressedLeft: () =>
                                                 SmartDialog.dismiss(),

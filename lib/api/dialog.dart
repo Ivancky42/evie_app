@@ -1103,13 +1103,13 @@ showMeasurementUnit(SettingProvider settingProvider){
 
 ///V DIALOGS
 ///Email resent
-showEvieResendDialog(BuildContext context) {
+showEvieResendDialog(BuildContext context, String email) {
   SmartDialog.show(
     widget: EvieOneDialog(
         title: "Email re-sent",
         content1: "We've re-sent email to ",
         content2: ". Do check the spam mailbox too!",
-        email: "hello@evie.io",
+        email: email,
         middleContent: "Done",
         onPressedMiddle: () {
           SmartDialog.dismiss();
@@ -1294,6 +1294,7 @@ showEvieExitOrbitalDialog(BuildContext context) {
       downContent: "Cancel",
       onPressedUp: () {
         SmartDialog.dismiss();
+        changeToUserHomePageScreen(context);
       },
       onPressedDown: () {
         SmartDialog.dismiss();
