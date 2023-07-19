@@ -334,8 +334,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
         border: returnBorderColour(_locationProvider),
         boxShadow: [
           BoxShadow(
-            color: Color(0x7A7A79).withOpacity(0.15), // Hex color with opacity
-            offset: Offset(0, 6), // X and Y offset
+            color: Color(0xFF7A7A79).withOpacity(0.15), // Hex color with opacity
+            offset: Offset(0, 8), // X and Y offset
             blurRadius: 16, // Blur radius
             spreadRadius: 0, // Spread radius
           ),

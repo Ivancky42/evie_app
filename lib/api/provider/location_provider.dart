@@ -180,8 +180,7 @@ class LocationProvider extends ChangeNotifier {
       placeMark = null;
     }
 
-    placeMark?.name = placeMark.name?.replaceAll("NO HOUSE NUMBER, ", "");
-
+    // placeMark?.name= placeMark.name?.replaceAll("NO HOUSE NUMBER, ", "");
     return placeMark;
   }
 

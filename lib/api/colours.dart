@@ -19,8 +19,10 @@ class EvieColors {
   static const white = Color(0xffFFFFFF);
   static const thumbColorTrue = Color(0xffFAFAFA);
   static const lightGrayishCyan = Color(0xffDFE0E0);
-  static const grayishWhite = Color(0xFFECEDEB);
-  static const dividerWhite = Color(0xffF4F4F4);
+  //static const grayishWhite = Color(0xFFECEDEB);
+  static const grayishWhite = Color.fromARGB(255, 236, 237, 235);
+  //static const dividerWhite = Color(0xffF4F4F4);
+  static const dividerWhite = Color.fromARGB(255, 244, 244, 244);
   static const lightGray = Color(0xffD4D4D4);
   static const progressBarGrey = Color(0xffCECFCF);
   static const darkWhite = Color(0xff8E8E8E);
