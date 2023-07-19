@@ -69,7 +69,7 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
 
                   GestureDetector(
                       onTap: (){
-                        showExitOrbitalAntiTheft(context);
+                        showEvieExitOrbitalDialog(context);
                       },
                       child: SvgPicture.asset(
                         "assets/buttons/close.svg",
@@ -148,7 +148,7 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 _bikeProvider.threatRoutesLists.values.elementAt(index) == null ? const Text('Error')
-                                    : _bikeProvider.threatRoutesLists.values.elementAt(index).address != null
+                                    : _bikeProvider.threatRoutesLists.values.elementAt(index).address != null && _bikeProvider.threatRoutesLists.values.elementAt(index).address != 'null'
                                     ? Text(_bikeProvider.threatRoutesLists.values.elementAt(index).address, style: EvieTextStyles.body18,)
                                     :  FutureBuilder<dynamic>(
                                     future: _locationProvider.returnPlaceMarks(

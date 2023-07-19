@@ -321,14 +321,15 @@ class BikeProvider extends ChangeNotifier {
     if(currentBikeModel?.location?.status == "danger"){
       if(currentBikeModel?.location != null){
 
+            ///No more event ID
             await currentThreatRoutesSubscription?.cancel();
 
             currentThreatRoutesSubscription = FirebaseFirestore.instance
                 .collection(bikesCollection)
                 .doc(currentBikeModel!.deviceIMEI)
                 .collection(theftHistoryCollection)
-                .doc(currentBikeModel!.location!.eventId)
-                .collection(routesCollection)
+                //.doc(currentBikeModel!.location!.eventId)
+                //.collection(routesCollection)
                 .orderBy("created", descending: true)
                 .snapshots()
                 .listen((snapshot) async {
@@ -1146,8 +1147,8 @@ class BikeProvider extends ChangeNotifier {
           .collection(bikesCollection)
           .doc(currentBikeModel?.deviceIMEI)
           .collection(theftHistoryCollection)
-          .doc(eventID)
-          .collection(routesCollection)
+          // .doc(eventID)
+          // .collection(routesCollection)
           .doc(routeID)
           .set({
         'address': address,

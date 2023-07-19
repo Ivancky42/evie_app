@@ -138,6 +138,7 @@ class LocationProvider extends ChangeNotifier {
 
   getPlaceMarks(double latitude, double longitude) async {
 
+    Placemark? holder;
     currentPlaceMark = null;
 
     try {
@@ -146,9 +147,13 @@ class LocationProvider extends ChangeNotifier {
 
       if (placeMarks.isNotEmpty) {
         for (var element in placeMarks) {
-          currentPlaceMark = element;
+          holder = element;
           break; // Exit the loop once a address is found
         }
+
+        currentPlaceMark = Placemark(
+          name : holder?.name?.replaceAll("NO HOUSE NUMBER, ", ""),
+        );
       } else {
         currentPlaceMark = null;
       }
@@ -156,6 +161,7 @@ class LocationProvider extends ChangeNotifier {
       debugPrint(error.toString());
       currentPlaceMark = null;
     }
+
     notifyListeners();
   }
 
@@ -183,7 +189,6 @@ class LocationProvider extends ChangeNotifier {
     placeMarkRenamed = Placemark(
       name : placeMark?.name?.replaceAll("NO HOUSE NUMBER, ", ""),
     );
-
 
     return placeMarkRenamed;
   }
