@@ -36,6 +36,7 @@ import 'package:latlong2/latlong.dart';
 import '../../../api/dialog.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../bluetooth/modelResult.dart';
+import 'home_element/location.dart';
 import 'home_element/status.dart';
 
 class MyPointAnnotationClickListener extends OnPointAnnotationClickListener {
@@ -324,7 +325,7 @@ class _MapDetails2State extends State<MapDetails2> {
                                 aspectRatio: 1,
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(16, 2, 6, 8),
-                                  child: Status(),
+                                  child: Location(),
                                 ),
                               ),
                             ),

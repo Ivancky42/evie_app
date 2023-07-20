@@ -35,6 +35,7 @@ import '../../../api/provider/location_provider.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'home_element/battery.dart';
+import 'home_element/location.dart';
 import 'home_element/status.dart';
 
 
@@ -65,7 +66,7 @@ class _ThreatMapState extends State<ThreatMap> {
   Position userPosition = Position(0, 0);
 
   var options = <PointAnnotationOptions>[];
-  var currentAnnotationManager;
+  PointAnnotationManager? currentAnnotationManager;
   List<PointAnnotation>? pointAnnotation;
 
   List<map_launcher.AvailableMap>? availableMaps;
@@ -302,7 +303,7 @@ class _ThreatMapState extends State<ThreatMap> {
                                 aspectRatio: 1,
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(16, 2, 6, 8),
-                                  child: Status(),
+                                  child: Location(),
                                 ),
                               ),
                             ),
@@ -339,38 +340,26 @@ class _ThreatMapState extends State<ThreatMap> {
   }
 
   loadMarker() async {
-    ///Marker
-    options.clear();
+    List<Uint8List> pins = [];
 
-    // if(currentAnnotationManager != null){
-    //   ///Check if have this id
-    //   await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager);
-    // }
+    ///Clear Marker
+    options.clear();
+    if(currentAnnotationManager != null){
+      ///Check if have this id
+      await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager as BaseAnnotationManager);
+      currentAnnotationManager = null;
+    }
 
     await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
 
-      ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
+      ///Using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
       currentAnnotationManager = pointAnnotationManager;
 
-      // for (int i = 1; i <= 7; i++) {}
-      final ByteData bytes1 = await rootBundle.load("assets/icons/danger_pin/danger_pin_1.png");
-      final Uint8List pin1 = bytes1.buffer.asUint8List();
-      final ByteData bytes2 = await rootBundle.load("assets/icons/danger_pin/danger_pin_2.png");
-      final Uint8List pin2 = bytes2.buffer.asUint8List();
-      final ByteData bytes3 = await rootBundle.load("assets/icons/danger_pin/danger_pin_3.png");
-      final Uint8List pin3 = bytes3.buffer.asUint8List();
-      final ByteData bytes4 = await rootBundle.load("assets/icons/danger_pin/danger_pin_4.png");
-      final Uint8List pin4 = bytes4.buffer.asUint8List();
-      final ByteData bytes5 = await rootBundle.load("assets/icons/danger_pin/danger_pin_5.png");
-      final Uint8List pin5 = bytes5.buffer.asUint8List();
-      final ByteData bytes6 = await rootBundle.load("assets/icons/danger_pin/danger_pin_6.png");
-      final Uint8List pin6 = bytes6.buffer.asUint8List();
-      final ByteData bytes7 = await rootBundle.load("assets/icons/danger_pin/danger_pin_7.png");
-      final Uint8List pin7 = bytes7.buffer.asUint8List();
-
-      List<Uint8List> pins = [
-        pin1, pin2, pin3, pin4, pin5, pin6, pin7,
-      ];
+      ///Load and add image
+      for (int i = 1; i <= 7; i++) {
+        var bytes = await rootBundle.load("assets/icons/danger_pin/danger_pin_${i.toString()}.png");
+        pins.add(bytes.buffer.asUint8List());
+      }
 
       ///load a few more marker
       //for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
@@ -380,7 +369,7 @@ class _ThreatMapState extends State<ThreatMap> {
 
       if(pointAnnotation != null){
         pointAnnotation?.forEach((element) {
-          pointAnnotationManager.delete(element);
+          currentAnnotationManager?.delete(element);
         });
         pointAnnotation?.clear();
       }
@@ -414,8 +403,8 @@ class _ThreatMapState extends State<ThreatMap> {
           //     // textColor: Colors.black.value,
           //   ),);
 
-        pointAnnotationManager.setIconAllowOverlap(false);
-        // pointAnnotationManager.createMulti(options);
+        currentAnnotationManager?.setIconAllowOverlap(false);
+        // currentAnnotationManager.createMulti(options);
 
         //OnPointAnnotationClickListener listener = MyPointAnnotationClickListener(_locationProvider);
         //pointAnnotationManager.addOnPointAnnotationClickListener(listener);
