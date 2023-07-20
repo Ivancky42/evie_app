@@ -101,20 +101,22 @@ showWhereToFindCodes(){
   );
 }
 
-showBackToHome(context, BikeProvider _bikeProvider, AuthProvider _authProvider){
+showBackToLogin(context, BikeProvider _bikeProvider, AuthProvider _authProvider){
   SmartDialog.show(
       widget:
       EvieDoubleButtonDialog(
-          title: "Back to Home Page?",
-          childContent: Text("Are you sure you want to sign out and back to home page?"),
+          title: "Back to Login Page?",
+          childContent: Text("Are you sure you want to sign out and back to login page?"),
           leftContent: "No",
           rightContent: "Yes",
           onPressedLeft: (){SmartDialog.dismiss();},
           onPressedRight: () async {
+            SmartDialog.dismiss();
+            SmartDialog.showLoading();
             await _authProvider.signOut(context).then((result) async {
               if(result == true){
                 await _bikeProvider.clear();
-                SmartDialog.dismiss();
+                SmartDialog.dismiss(status: SmartStatus.loading);
                 // _authProvider.clear();
 
                 changeToWelcomeScreen(context);
@@ -127,7 +129,7 @@ showBackToHome(context, BikeProvider _bikeProvider, AuthProvider _authProvider){
                         seconds: 2),),
                 );
               }else{
-                SmartDialog.dismiss();
+                SmartDialog.dismiss(status: SmartStatus.loading);
                 ScaffoldMessenger.of(context)
                     .showSnackBar(
                   const SnackBar(
@@ -1114,6 +1116,33 @@ showEvieResendDialog(BuildContext context, String email) {
         onPressedMiddle: () {
           SmartDialog.dismiss();
         }));
+}
+
+showErrorLoginDialog (BuildContext context){
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Login Error",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Oops, the password you "
+            "entered is incorrect or you do not have an account yet. "
+            "Please double-check and try again",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        upContent: "Retry",
+        downContent: "Register Now",
+        onPressedUp: () {
+          SmartDialog.dismiss();
+        },
+        onPressedDown: () {
+          SmartDialog.dismiss();
+          changeToWelcomeScreen(context);
+        }),
+  );
 }
 
 ///User not found

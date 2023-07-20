@@ -35,6 +35,7 @@ import '../../../api/provider/location_provider.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'home_element/battery.dart';
+import 'home_element/location.dart';
 import 'home_element/status.dart';
 
 
@@ -52,8 +53,6 @@ class _ThreatMapState extends State<ThreatMap> {
   late BluetoothProvider _bluetoothProvider;
   late LocationProvider _locationProvider;
 
-  int? snapshotLength;
-
   MapboxMap? mapboxMap;
   OnMapScrollListener? onMapScrollListener;
 
@@ -61,16 +60,18 @@ class _ThreatMapState extends State<ThreatMap> {
   bool isFirstLoadMarker = true;
   bool isMapListShowing = false;
 
+  int? snapshotLength;
+
   StreamSubscription? userLocationSubscription;
   Position userPosition = Position(0, 0);
 
-  var options = <PointAnnotationOptions>[];
-  var currentAnnotationManager;
+  PointAnnotationManager? currentAnnotationManager;
   List<PointAnnotation>? pointAnnotation;
-
   List<map_launcher.AvailableMap>? availableMaps;
+
   GeoPoint? selectedGeopoint;
 
+  var options = <PointAnnotationOptions>[];
   var currentClickedAnnotation;
 
 
@@ -86,10 +87,16 @@ class _ThreatMapState extends State<ThreatMap> {
   }
 
   @override
-  void dispose() {
+  Future<void> dispose() async {
+    super.dispose();
     _locationProvider.removeListener(locationListener);
     userLocationSubscription?.cancel();
-    super.dispose();
+    options.clear();
+
+    if(currentAnnotationManager != null){
+      await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager as BaseAnnotationManager);
+    currentAnnotationManager = null;
+    }
   }
 
   _onMapCreated(MapboxMap mapboxMap) async {
@@ -97,14 +104,14 @@ class _ThreatMapState extends State<ThreatMap> {
 
     ///Disable scaleBar on top left corner
     await this.mapboxMap?.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
-
     loadMarker();
   }
 
   _onMapLoaded(MapLoadedEventData onMapLoaded) async {
+    ///On map create function
   }
-
   void initLocationService() async {
+    ///Any location service
   }
 
 
@@ -127,7 +134,6 @@ class _ThreatMapState extends State<ThreatMap> {
             color: EvieColors.lightBlack,
             child: Padding(
               padding: EdgeInsets.only(left: 17.w, top: 45.h, bottom: 11.h, right:17.w),
-
               child: Row(
                 mainAxisAlignment:
                 MainAxisAlignment.spaceBetween,
@@ -143,7 +149,7 @@ class _ThreatMapState extends State<ThreatMap> {
                   Text(
                     "Orbital Anti-theft",
                     style: EvieTextStyles.h2.copyWith(color: EvieColors.grayishWhite),
-                  ),
+                   ),
 
                   GestureDetector(
                       onTap: (){
@@ -157,23 +163,14 @@ class _ThreatMapState extends State<ThreatMap> {
             ),
           ),
 
-
-
           Expanded(
                 child: Stack(
                   children: [
 
-                    // SvgPicture.asset(
-                    //  "assets/buttons/info.svg",
-                    //   width: 42.w,
-                    //   height: 42.h,
-                    // ),
-
                     MapWidget(
                       onScrollListener: onMapScrollListener,
                       key: const ValueKey("mapWidget"),
-                      resourceOptions: ResourceOptions(
-                          accessToken: _locationProvider.defPublicAccessToken),
+                      resourceOptions: ResourceOptions(accessToken: _locationProvider.defPublicAccessToken),
                       onMapCreated: _onMapCreated,
                       onMapLoadedListener: _onMapLoaded,
                       styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
@@ -218,8 +215,7 @@ class _ThreatMapState extends State<ThreatMap> {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    availableMaps != null
-                                        ? ListView.builder(
+                                    availableMaps != null ? ListView.builder(
                                       scrollDirection: Axis.horizontal,
                                       shrinkWrap: true,
                                       itemBuilder: (context, index) {
@@ -271,7 +267,14 @@ class _ThreatMapState extends State<ThreatMap> {
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
                           onTap: () async {
-                            pointBounce2(mapboxMap, _locationProvider, userPosition);
+                            //pointBounce2(mapboxMap, _locationProvider, userPosition);
+                            mapboxMap?.flyTo(
+                                CameraOptions(
+                                    center: Point(
+                                        coordinates: Position(userPosition.lng, userPosition.lat)).toJson(),
+                                    zoom: 16
+                                  ),
+                                MapAnimationOptions(duration: 2000, startDelay: 0));
                           },
                           child: Container(
                               height: 50.h,
@@ -302,7 +305,7 @@ class _ThreatMapState extends State<ThreatMap> {
                                 aspectRatio: 1,
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(16, 2, 6, 8),
-                                  child: Status(),
+                                  child: Location(),
                                 ),
                               ),
                             ),
@@ -330,58 +333,36 @@ class _ThreatMapState extends State<ThreatMap> {
   }
 
   void locationListener() {
-
-    //getDistanceBetween();
     selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    //animateBounce(mapboxMap, _locationProvider.locationModel?.geopoint.longitude ?? 0, _locationProvider.locationModel?.geopoint.latitude ?? 0);
-
     loadMarker();
   }
 
   loadMarker() async {
-    ///Marker
+    List<Uint8List> pins = [];
+
+    ///Clear Marker
     options.clear();
 
-    // if(currentAnnotationManager != null){
-    //   ///Check if have this id
-    //   await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager);
-    // }
+    ///Check if have this manager
+    if(currentAnnotationManager != null){
+      await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager as BaseAnnotationManager);
+      currentAnnotationManager = null;
+    }
 
     await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
+      ///Using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
 
-      ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
+      ///Create new annotation manager
       currentAnnotationManager = pointAnnotationManager;
 
-      // for (int i = 1; i <= 7; i++) {}
-      final ByteData bytes1 = await rootBundle.load("assets/icons/danger_pin/danger_pin_1.png");
-      final Uint8List pin1 = bytes1.buffer.asUint8List();
-      final ByteData bytes2 = await rootBundle.load("assets/icons/danger_pin/danger_pin_2.png");
-      final Uint8List pin2 = bytes2.buffer.asUint8List();
-      final ByteData bytes3 = await rootBundle.load("assets/icons/danger_pin/danger_pin_3.png");
-      final Uint8List pin3 = bytes3.buffer.asUint8List();
-      final ByteData bytes4 = await rootBundle.load("assets/icons/danger_pin/danger_pin_4.png");
-      final Uint8List pin4 = bytes4.buffer.asUint8List();
-      final ByteData bytes5 = await rootBundle.load("assets/icons/danger_pin/danger_pin_5.png");
-      final Uint8List pin5 = bytes5.buffer.asUint8List();
-      final ByteData bytes6 = await rootBundle.load("assets/icons/danger_pin/danger_pin_6.png");
-      final Uint8List pin6 = bytes6.buffer.asUint8List();
-      final ByteData bytes7 = await rootBundle.load("assets/icons/danger_pin/danger_pin_7.png");
-      final Uint8List pin7 = bytes7.buffer.asUint8List();
-
-      List<Uint8List> pins = [
-        pin1, pin2, pin3, pin4, pin5, pin6, pin7,
-      ];
-
-      ///load a few more marker
-      //for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
-      ///Only load 7 latest of threatRouteList value to display marker
-
-      options.clear();
+      ///Load and add 7 image
+      for (int i = 1; i <= 7; i++) {
+        var bytes = await rootBundle.load("assets/icons/danger_pin/danger_pin_${i.toString()}.png");
+        pins.add(bytes.buffer.asUint8List());
+      }
 
       if(pointAnnotation != null){
-        pointAnnotation?.forEach((element) {
-          pointAnnotationManager.delete(element);
-        });
+        pointAnnotation?.forEach((element) {currentAnnotationManager?.delete(element);});
         pointAnnotation?.clear();
       }
 
@@ -414,9 +395,9 @@ class _ThreatMapState extends State<ThreatMap> {
           //     // textColor: Colors.black.value,
           //   ),);
 
-        pointAnnotationManager.setIconAllowOverlap(false);
-        // pointAnnotationManager.createMulti(options);
+        currentAnnotationManager?.setIconAllowOverlap(false);
 
+        // currentAnnotationManager.createMulti(options);
         //OnPointAnnotationClickListener listener = MyPointAnnotationClickListener(_locationProvider);
         //pointAnnotationManager.addOnPointAnnotationClickListener(listener);
       }

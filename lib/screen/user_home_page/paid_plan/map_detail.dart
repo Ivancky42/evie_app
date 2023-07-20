@@ -36,6 +36,7 @@ import 'package:latlong2/latlong.dart';
 import '../../../api/dialog.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../bluetooth/modelResult.dart';
+import 'home_element/location.dart';
 import 'home_element/status.dart';
 
 class MyPointAnnotationClickListener extends OnPointAnnotationClickListener {
@@ -45,14 +46,14 @@ class MyPointAnnotationClickListener extends OnPointAnnotationClickListener {
   }
 }
 
-class MapDetails2 extends StatefulWidget {
-  MapDetails2({Key? key}) : super(key: key);
+class MapDetails extends StatefulWidget {
+  MapDetails({Key? key}) : super(key: key);
 
   @override
-  State<MapDetails2> createState() => _MapDetails2State();
+  State<MapDetails> createState() => _MapDetailsState();
 }
 
-class _MapDetails2State extends State<MapDetails2> {
+class _MapDetailsState extends State<MapDetails> {
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late LocationProvider _locationProvider;
@@ -324,7 +325,7 @@ class _MapDetails2State extends State<MapDetails2> {
                                 aspectRatio: 1,
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(16, 2, 6, 8),
-                                  child: Status(),
+                                  child: Location(),
                                 ),
                               ),
                             ),
@@ -360,8 +361,8 @@ class _MapDetails2State extends State<MapDetails2> {
                                 SizedBox(width: 5.w),
 
                                 ///Get text by status
-                              Text(getCurrentBikeStatusString(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
-                                style: EvieTextStyles.body16.copyWith(color: EvieColors.grayishWhite),),
+                                Text(getCurrentBikeStatusString(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
+                                  style: EvieTextStyles.body16.copyWith(color: EvieColors.grayishWhite),),
                               ],
                             ),
                           ),
@@ -369,9 +370,9 @@ class _MapDetails2State extends State<MapDetails2> {
 
                             ///Get colour by status
                             color: _bikeProvider.currentBikeModel!.location!.isConnected == false ||
-                                   _bikeProvider.currentBikeModel!.location!.status == "warning" ||
-                                   _bikeProvider.currentBikeModel!.location!.status == "fall" ?
-                                   EvieColors.orange : EvieColors.darkWhite,
+                                _bikeProvider.currentBikeModel!.location!.status == "warning" ||
+                                _bikeProvider.currentBikeModel!.location!.status == "fall" ?
+                            EvieColors.orange : EvieColors.darkWhite,
 
                             borderRadius: BorderRadius.circular(10.w),
                             boxShadow: const [

@@ -107,14 +107,14 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
     return WillPopScope(
       onWillPop: () async {
-        bool? exitApp = await showBackToHome(context, _bikeProvider, _authProvider)  as bool?;
+        bool? exitApp = await showBackToLogin(context, _bikeProvider, _authProvider)  as bool?;
         return exitApp ?? false;
       },
 
       child:  Scaffold(
 
         appBar: EvieAppbar_Back(onPressed: () {
-          showBackToHome(context, _bikeProvider, _authProvider) as bool?;
+          showBackToLogin(context, _bikeProvider, _authProvider) as bool?;
         }),
 
 

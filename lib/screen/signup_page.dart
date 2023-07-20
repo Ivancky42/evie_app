@@ -210,6 +210,10 @@ class _SignUpState extends State<SignUp> {
                   ),
                   onPressed: isCheckTermsCondition == true ? () async {
                     if (_formKey.currentState!.validate()) {
+
+                      ///For keyboard un focus
+                      FocusManager.instance.primaryFocus?.unfocus();
+
                       try {
                         if (await _authProvider.signUp(
                             _emailController.text.trim(),

@@ -16,7 +16,7 @@ import '../screen/my_bike_setting/subscription/current_plan.dart';
 import '../screen/my_bike_setting/subscription/essential_plan/essential_plan.dart';
 import '../screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
 import '../screen/trip_history/ride_history.dart';
-import '../screen/user_home_page/paid_plan/map_details2.dart';
+import '../screen/user_home_page/paid_plan/map_detail.dart';
 import 'model/trip_history_model.dart';
 
 void showSheetNavigate(BuildContext context, [String? source, String? strings]) {
@@ -75,7 +75,7 @@ void showBatteryDetailsSheet(BuildContext context) {
 }
 
 void showMapDetailsSheet(BuildContext context) {
-  showCupertinoSheet(context, MapDetails2());
+  showCupertinoSheet(context, MapDetails());
 }
 
 void showRideHistorySheet(BuildContext context, String tripId, TripHistoryModel currentTripHistoryList) {
