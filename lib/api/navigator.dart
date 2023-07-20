@@ -604,10 +604,10 @@ void changeToShareBikeUserListScreen(BuildContext context) {
   );
 }
 
-void changeToThreatMap(BuildContext context) {
+void changeToThreatMap(BuildContext context, [PageTransitionType? pageTransitionType]) {
   Navigator.pushReplacement(context,
     PageTransition(
-      type: PageTransitionType.bottomToTop,
+      type: pageTransitionType ?? PageTransitionType.bottomToTop,
       child: ThreatMap(),
       duration: const Duration(milliseconds: 300),
     ),
@@ -615,10 +615,10 @@ void changeToThreatMap(BuildContext context) {
 }
 
 
-void changeToThreatTimeLine(BuildContext context) {
+void changeToThreatTimeLine(BuildContext context, [PageTransitionType? pageTransitionType]) {
   Navigator.pushReplacement(context,
     PageTransition(
-      type: PageTransitionType.bottomToTop,
+      type: pageTransitionType ?? PageTransitionType.bottomToTop,
       child: ThreatTimeLine(),
       duration: const Duration(milliseconds: 300),
     ),

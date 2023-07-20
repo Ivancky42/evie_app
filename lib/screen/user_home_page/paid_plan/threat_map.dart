@@ -20,6 +20,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
@@ -64,20 +65,24 @@ class _ThreatMapState extends State<ThreatMap> {
   Position userPosition = Position(0, 0);
 
   var options = <PointAnnotationOptions>[];
-  var currentAnnotationId;
+  var currentAnnotationManager;
+  List<PointAnnotation>? pointAnnotation;
 
   List<map_launcher.AvailableMap>? availableMaps;
   GeoPoint? selectedGeopoint;
 
   var currentClickedAnnotation;
 
+
   @override
   void initState() {
     super.initState();
-    _locationProvider = Provider.of<LocationProvider>(context, listen: false);
-    _locationProvider.addListener(locationListener);
-    _locationProvider.setDefaultSelectedGeopoint();
-    initLocationService();
+    Future.delayed(Duration.zero).then((value) {
+      _locationProvider = Provider.of<LocationProvider>(context, listen: false);
+      _locationProvider.addListener(locationListener);
+      _locationProvider.setDefaultSelectedGeopoint();
+      initLocationService();
+    });
   }
 
   @override
@@ -142,7 +147,7 @@ class _ThreatMapState extends State<ThreatMap> {
 
                   GestureDetector(
                       onTap: (){
-                        changeToThreatTimeLine(context);
+                        changeToThreatTimeLine(context, PageTransitionType.fade);
                       },
                       child: SvgPicture.asset(
                         "assets/buttons/list.svg",
@@ -152,9 +157,18 @@ class _ThreatMapState extends State<ThreatMap> {
             ),
           ),
 
+
+
           Expanded(
                 child: Stack(
                   children: [
+
+                    // SvgPicture.asset(
+                    //  "assets/buttons/info.svg",
+                    //   width: 42.w,
+                    //   height: 42.h,
+                    // ),
+
                     MapWidget(
                       onScrollListener: onMapScrollListener,
                       key: const ValueKey("mapWidget"),
@@ -317,11 +331,10 @@ class _ThreatMapState extends State<ThreatMap> {
 
   void locationListener() {
 
-    print("location did change");
-
     //getDistanceBetween();
     selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    animateBounce(mapboxMap, _locationProvider.locationModel?.geopoint.longitude ?? 0, _locationProvider.locationModel?.geopoint.latitude ?? 0);
+    //animateBounce(mapboxMap, _locationProvider.locationModel?.geopoint.longitude ?? 0, _locationProvider.locationModel?.geopoint.latitude ?? 0);
+
     loadMarker();
   }
 
@@ -329,31 +342,30 @@ class _ThreatMapState extends State<ThreatMap> {
     ///Marker
     options.clear();
 
-    if(currentAnnotationId != null){
-      ///Check if have this id
-      await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
-    }
+    // if(currentAnnotationManager != null){
+    //   ///Check if have this id
+    //   await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager);
+    // }
 
     await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
 
       ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
-      currentAnnotationId = pointAnnotationManager;
+      currentAnnotationManager = pointAnnotationManager;
 
       // for (int i = 1; i <= 7; i++) {}
       final ByteData bytes1 = await rootBundle.load("assets/icons/danger_pin/danger_pin_1.png");
-      final ByteData bytes2 = await rootBundle.load("assets/icons/danger_pin/danger_pin_2.png");
-      final ByteData bytes3 = await rootBundle.load("assets/icons/danger_pin/danger_pin_3.png");
-      final ByteData bytes4 = await rootBundle.load("assets/icons/danger_pin/danger_pin_4.png");
-      final ByteData bytes5 = await rootBundle.load("assets/icons/danger_pin/danger_pin_5.png");
-      final ByteData bytes6 = await rootBundle.load("assets/icons/danger_pin/danger_pin_6.png");
-      final ByteData bytes7 = await rootBundle.load("assets/icons/danger_pin/danger_pin_7.png");
-
       final Uint8List pin1 = bytes1.buffer.asUint8List();
+      final ByteData bytes2 = await rootBundle.load("assets/icons/danger_pin/danger_pin_2.png");
       final Uint8List pin2 = bytes2.buffer.asUint8List();
+      final ByteData bytes3 = await rootBundle.load("assets/icons/danger_pin/danger_pin_3.png");
       final Uint8List pin3 = bytes3.buffer.asUint8List();
+      final ByteData bytes4 = await rootBundle.load("assets/icons/danger_pin/danger_pin_4.png");
       final Uint8List pin4 = bytes4.buffer.asUint8List();
+      final ByteData bytes5 = await rootBundle.load("assets/icons/danger_pin/danger_pin_5.png");
       final Uint8List pin5 = bytes5.buffer.asUint8List();
+      final ByteData bytes6 = await rootBundle.load("assets/icons/danger_pin/danger_pin_6.png");
       final Uint8List pin6 = bytes6.buffer.asUint8List();
+      final ByteData bytes7 = await rootBundle.load("assets/icons/danger_pin/danger_pin_7.png");
       final Uint8List pin7 = bytes7.buffer.asUint8List();
 
       List<Uint8List> pins = [
@@ -363,35 +375,50 @@ class _ThreatMapState extends State<ThreatMap> {
       ///load a few more marker
       //for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
       ///Only load 7 latest of threatRouteList value to display marker
-      for (int i = 0; i < 7; i++) {
+
+      options.clear();
+
+      if(pointAnnotation != null){
+        pointAnnotation?.forEach((element) {
+          pointAnnotationManager.delete(element);
+        });
+        pointAnnotation?.clear();
+      }
+
+      ///threatRoutesLists.length is always 7 or less
+      for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
 
         // GeoPoint routeGeopoint = _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint;
-
-          options.add(
-            PointAnnotationOptions(
-              geometry: Point(
-                  coordinates: Position(
-                    _bikeProvider.threatRoutesLists.values
-                        .elementAt(i)
-                        .geopoint
-                        .longitude ?? 0,
-                    _bikeProvider.threatRoutesLists.values
-                        .elementAt(i)
-                        .geopoint
-                        .latitude ?? 0,
-                  )).toJson(),
-              image: pins[i],
-              iconSize: 2.h,
-              // textField: "Text",
-              // textOffset: [0.0, 3],
-              // textColor: Colors.black.value,
-            ),);
+        createOneAnnotation(
+            pins[i],
+            _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint.longitude ?? 0,
+            _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint.latitude ?? 0);
+          // options.add(
+          //   PointAnnotationOptions(
+          //     geometry: Point(
+          //         coordinates: Position(
+          //           _bikeProvider.threatRoutesLists.values
+          //               .elementAt(i)
+          //               .geopoint
+          //               .longitude ?? 0,
+          //
+          //           _bikeProvider.threatRoutesLists.values
+          //               .elementAt(i)
+          //               .geopoint
+          //               .latitude ?? 0,
+          //         )).toJson(),
+          //     image: pins[i],
+          //     iconSize: Platform.isIOS ? 2.5.h : 3.0.h,
+          //     // textField: "Text",
+          //     // textOffset: [0.0, 3],
+          //     // textColor: Colors.black.value,
+          //   ),);
 
         pointAnnotationManager.setIconAllowOverlap(false);
-        pointAnnotationManager.createMulti(options);
+        // pointAnnotationManager.createMulti(options);
 
-        OnPointAnnotationClickListener listener = MyPointAnnotationClickListener(_locationProvider);
-        pointAnnotationManager.addOnPointAnnotationClickListener(listener);
+        //OnPointAnnotationClickListener listener = MyPointAnnotationClickListener(_locationProvider);
+        //pointAnnotationManager.addOnPointAnnotationClickListener(listener);
       }
     });
 
@@ -427,6 +454,17 @@ class _ThreatMapState extends State<ThreatMap> {
     var location = (layer as LocationIndicatorLayer).location;
     userPosition = Position(location![1]!, location[0]!);
 
+  }
+
+  void createOneAnnotation(Uint8List list, latitude, longitude) {
+    currentAnnotationManager?.create(
+        PointAnnotationOptions(
+        geometry: Point(
+            coordinates: Position(
+              latitude, longitude,
+            )).toJson(),
+        iconSize: Platform.isIOS ? 2.5.h : 3.0.h, image: list))
+        .then((value) {pointAnnotation?.add(value);});
   }
 
   // loadMarker() async {

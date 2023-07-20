@@ -191,7 +191,13 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
                     }else if(isCountDownOver == true){
 
-                      showEvieResendDialog (context);
+                      showEvieResendDialog (context, FirebaseAuth.instance.currentUser!.email!);
+
+                      setState(() {
+                        myDuration = const Duration(seconds: 30);
+                        isCountDownOver == false;
+                      });
+                      startCountDownTimer();
                     }
                   },
                 ),

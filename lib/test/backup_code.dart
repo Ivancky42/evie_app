@@ -1,338 +1,200 @@
-// //import 'package:cupertino_modal_sheet/cupertino_modal_sheet.dart';
-// import 'package:evie_test/api/navigator.dart';
-// import 'package:evie_test/api/provider/bluetooth_provider.dart';
-// import 'package:evie_test/api/provider/plan_provider.dart';
-// import 'package:evie_test/api/provider/setting_provider.dart';
-// import 'package:evie_test/profile/user_profile.dart';
-// import 'package:evie_test/screen/account_verified.dart';
-// import 'package:evie_test/screen/input_name.dart';
-// import 'package:evie_test/screen/login_method.dart';
-// import 'package:evie_test/screen/my_account/edit_profile.dart';
-// import 'package:evie_test/screen/my_account/enter_new_password.dart';
-// import 'package:evie_test/screen/my_account/verify_password.dart';
-// import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_sensitivity.dart';
-// import 'package:evie_test/screen/onboarding_addNewBike/before_you_start.dart';
-// import 'package:evie_test/screen/signup_method.dart';
-// import 'package:evie_test/screen/test_ble.dart';
-// import 'package:evie_test/screen/verify_email.dart';
-// import 'package:evie_test/screen/welcome_page.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
-// import 'package:flutter/foundation.dart';
 // import 'package:flutter/material.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:evie_test/screen/signup_page.dart';
-// import 'package:evie_test/screen/login_page.dart';
-// import 'package:evie_test/screen/forget_your_password.dart';
-// import 'package:evie_test/theme/AppTheme.dart';
-// import 'package:evie_test/screen/user_home_page/user_home_page.dart';
 // import 'package:flutter/services.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-// import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-// import 'package:provider/provider.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:evie_test/abandon/user_change_password.dart';
-// import 'package:evie_test/api/provider/current_user_provider.dart';
-// import 'package:sizer/sizer.dart';
-// import 'package:upgrader/upgrader.dart';
+// import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+// import 'package:mapbox_maps_example/utils.dart';
+// import 'package:turf/helpers.dart';
 //
-// import 'api/model/user_model.dart';
-// import 'api/provider/auth_provider.dart';
-// import 'api/provider/bike_provider.dart';
-// import 'api/provider/firmware_provider.dart';
-// import 'api/provider/location_provider.dart';
-// import 'api/provider/notification_provider.dart';
-// import 'api/provider/trip_provider.dart';
+// import 'main.dart';
+// import 'page.dart';
 //
-//
-// ///Main function execution
-// Future main() async {
-//   ///Firebase
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp();
-//
-//   ///Dotnet file loading
-//   await dotenv.load(fileName: "env");
-//
-//   // Upgrader
-//   // Only call clearSavedSettings() during testing to reset internal values.
-//   await Upgrader.clearSavedSettings();
-//
-//   ///Handle firebase cloud message
-//   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-//
-//   if (!kIsWeb) {
-//     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-//
-//     channel = const AndroidNotificationChannel(
-//       'high_importance_channel', // id
-//       'High Importance Notifications', // title
-//       description: 'This channel is used for important notifications.',
-//       playSound: true,
-//       importance: Importance.max,
-//     );
-//
-//     await flutterLocalNotificationsPlugin
-//         .resolvePlatformSpecificImplementation<
-//         AndroidFlutterLocalNotificationsPlugin>()
-//         ?.createNotificationChannel(channel);
-//
-//     await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-//       alert: true,
-//       badge: true,
-//       sound: true,
-//     );
-//
-//     await FirebaseMessaging.instance.requestPermission(
-//       alert: true,
-//       badge: true,
-//       provisional: false,
-//       sound: true,
-//     );
-//   }
-//
-//
-//   ///Provider
-//   runApp(const AppProviders(
-//     child: MyApp(),
-//   )
-//   );
-// }
-//
-//
-// ///Multi provider setup
-// class AppProviders extends StatelessWidget {
-//   final Widget child;
-//
-//   const AppProviders({Key? key, required this.child}) : super(key: key);
+// class PointAnnotationPage extends ExamplePage {
+//   PointAnnotationPage() : super(const Icon(Icons.map), 'Point Annotations');
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     return MultiProvider(
-//       ///Setting lazy to true delays the creation of the provider's instance until it is first accessed,
-//       ///while setting it to false creates the instance immediately when the Provider widget is built.
-//         providers: [
-//           ChangeNotifierProvider<AuthProvider>(
-//             lazy: true,
-//             create: (context) => AuthProvider(),
-//           ),
-//           ChangeNotifierProvider<SettingProvider>(
-//             lazy: true,
-//             create: (context) => SettingProvider(),
-//           ),
-//           ChangeNotifierProxyProvider<AuthProvider, CurrentUserProvider>(
-//               lazy: true,
-//               create: (_) => CurrentUserProvider(),
-//               update: (_, authProvider, currentUserProvider) {
-//                 return currentUserProvider!
-//                   ..update(authProvider.getUid);
-//               }
-//           ),
-//           ChangeNotifierProxyProvider<CurrentUserProvider, BikeProvider>(
-//               lazy: true,
-//               create: (_) => BikeProvider(),
-//               update: (_, currentUserProvider, bikeProvider) {
-//                 return bikeProvider!
-//                   ..update(currentUserProvider.getCurrentUserModel);
-//               }
-//           ),
-//           ChangeNotifierProxyProvider< BikeProvider, BluetoothProvider>(
-//               lazy: true,
-//               create: (_) => BluetoothProvider(),
-//               update: (_, bikeProvider, bluetoothProvider) {
-//                 return bluetoothProvider!
-//                   ..update(bikeProvider.currentBikeModel);
-//               }
-//           ),
-//           ChangeNotifierProxyProvider<CurrentUserProvider, NotificationProvider>(
-//               lazy: true,
-//               create: (_) => NotificationProvider(),
-//               update: (_, currentUserProvider, notificationProvider) {
-//                 return notificationProvider!
-//                   ..init(currentUserProvider.getCurrentUserModel);
-//               }
-//           ),
-//           ChangeNotifierProxyProvider<BikeProvider, LocationProvider>(
-//               lazy: true,
-//               create: (_) => LocationProvider(),
-//               update: (_, bikeProvider, locationProvider) {
-//                 return locationProvider!
-//                   ..update(bikeProvider.currentBikeModel?.location);
-//               }
-//           ),
-//           ChangeNotifierProxyProvider<BikeProvider, FirmwareProvider>(
-//               lazy: true,
-//               create: (_) => FirmwareProvider(),
-//               update: (_, bikeProvider, firmwareProvider) {
-//                 return firmwareProvider!
-//                   ..update(bikeProvider.currentBikeModel);
-//               }
-//           ),
-//           ChangeNotifierProxyProvider<BikeProvider, TripProvider>(
-//               lazy: true,
-//               create: (_) => TripProvider(),
-//               update: (_, bikeProvider, tripProvider) {
-//                 return tripProvider!
-//                   ..update(bikeProvider.currentBikeModel);
-//               }
-//           ),
-//           ChangeNotifierProxyProvider2<CurrentUserProvider, BikeProvider, PlanProvider>(
-//               lazy: true,
-//               create: (context) => PlanProvider(),
-//               update: (_, currentUserProvider, bikeProvider, planProvider) {
-//                 return planProvider!..update(currentUserProvider.getCurrentUserModel, bikeProvider.currentBikeModel);
-//               }
-//           )
-//         ],
-//         child: child
-//     );
+//     return const PointAnnotationPageBody();
 //   }
 // }
 //
+// class PointAnnotationPageBody extends StatefulWidget {
+//   const PointAnnotationPageBody();
 //
-// class MyApp extends StatelessWidget {
-//   const MyApp({Key? key}) : super(key: key);
-//
-//   // This widget is the root of your application.
 //   @override
-//   Widget build(BuildContext context) {
-//     AuthProvider _authProvider = Provider.of<AuthProvider>(context);
-//     SettingProvider _settingProvider = Provider.of<SettingProvider>(context);
-//     //_settingProvider.init();
+//   State<StatefulWidget> createState() => PointAnnotationPageBodyState();
+// }
 //
-//     decideMainPage() {
-//       if (_authProvider.isLogin == true) {
-//         if (_authProvider.isEmailVerified == true) {
-//           if (_authProvider.isFirstLogin == false) {
-//             //return '/';
-//             return '/userHomePage';
-//           } else {
-//             return '/letsGo';
-//           }
-//         } else {
-//           return '/verifyEmail';
-//         }
-//       } else {
-//         return '/welcome';
+// class AnnotationClickListener extends OnPointAnnotationClickListener {
+//   @override
+//   void onPointAnnotationClick(PointAnnotation annotation) {
+//     print("onAnnotationClick, id: ${annotation.id}");
+//   }
+// }
+//
+// class PointAnnotationPageBodyState extends State<PointAnnotationPageBody> {
+//   PointAnnotationPageBodyState();
+//
+//   MapboxMap? mapboxMap;
+//   PointAnnotation? pointAnnotation;
+//   PointAnnotationManager? pointAnnotationManager;
+//   int styleIndex = 1;
+//   _onMapCreated(MapboxMap mapboxMap) {
+//     this.mapboxMap = mapboxMap;
+//     mapboxMap.annotations.createPointAnnotationManager().then((value) async {
+//       pointAnnotationManager = value;
+//       final ByteData bytes =
+//       await rootBundle.load('assets/symbols/custom-icon.png');
+//       final Uint8List list = bytes.buffer.asUint8List();
+//       createOneAnnotation(list);
+//       var options = <PointAnnotationOptions>[];
+//       for (var i = 0; i < 5; i++) {
+//         options.add(PointAnnotationOptions(
+//             geometry: createRandomPoint().toJson(), image: list));
 //       }
-//     }
+//       pointAnnotationManager?.createMulti(options);
 //
-//
-//     return Sizer(builder: (context, orientation, deviceType) {
-//
-//       return AnnotatedRegion<SystemUiOverlayStyle>(
-//
-//         value: const SystemUiOverlayStyle(
-//           statusBarIconBrightness: Brightness.light,
-//           statusBarColor: Colors.transparent,
-//         ),
-//
-//         child: MaterialApp(
-//           title: 'Evie Bike',
-//           themeMode: _settingProvider.currentThemeMode,
-//
-//           //Light theme data
-//           theme: AppTheme.lightTheme,
-//
-//           //Change the app to dark theme when user's phone is set to dark mode
-//           darkTheme: AppTheme.lightTheme,
-//           initialRoute: decideMainPage(),
-//          // _authProvider.isLogin == true ? '/userHomePage' : '/welcome',
-//
-//           onGenerateRoute: (RouteSettings settings) {
-//             switch (settings.name) {
-//               case '/userHomePage':
-//                 return MaterialWithModalsPageRoute(
-//                     builder: (_) => UserHomePage(0),
-//                     settings: settings);
-//               case '/feeds':
-//                 return MaterialWithModalsPageRoute(
-//                     builder: (_) => UserHomePage(1),
-//                     settings: settings);
-//               case '/account':
-//                 return MaterialWithModalsPageRoute(
-//                     builder: (_) => UserHomePage(2),
-//                     settings: settings);
-//
-//             }
-//             return null;
-//           },
-//
-//           ///Routes setting for page navigation
-//           routes: {
-//             //"/": (context) => const UserHomePage(0),
-//             "/welcome": (context) => const Welcome(),
-//             "/inputName": (context) => const InputName(),
-//             "/signInMethod": (context) => const SignInMethod(),
-//             "/verifyEmail": (context) => const VerifyEmail(),
-//             "/accountVerified": (context) => const AccountVerified(),
-//             "/letsGo": (context) => const BeforeYouStart(),
-//             "/signIn": (context) => const SignIn(),
-//             "/forgetPassword": (context) => const ForgetYourPassword(),
-//             "/userProfile": (context) => const UserProfile(),
-//             "/userHomePage": (context) => const UserHomePage(0),
-//             "/feeds": (context) => const UserHomePage(1),
-//             "/account": (context) => const UserHomePage(2),
-//             "/userChangePassword": (context) => const UserChangePassword(),
-//             "/testBle": (context) => const TestBle(),
-//         //    "/notification": (context) => const UserNotification(),
-//             "/editProfile": (context) => const EditProfile(),
-//             "/verifyPassword": (context) => const VerifyPassword(),
-//             "/enterNewPassword": (context) => const EnterNewPassword(),
-//             "/detectionSensitivity": (context) => const DetectionSensitivity(),
-//           },
-//
-//           navigatorObservers: [FlutterSmartDialog.observer],
-//           builder: FlutterSmartDialog.init(),
-//
-//           ///For user version update
-//           /*
-//           home: Scaffold(
-//               appBar: AppBar(title: Text('Upgrader Example')),
-//               body: UpgradeAlert(
-//                 upgrader: Upgrader(dialogStyle: UpgradeDialogStyle.cupertino, appcastConfig: cfg),
-//                 child: Center(child: Text('Checking...')),
-//               )),
-//            */
-//         ),
-//       );
+//       var carOptions = <PointAnnotationOptions>[];
+//       for (var i = 0; i < 20; i++) {
+//         carOptions.add(PointAnnotationOptions(
+//             geometry: createRandomPoint().toJson(), iconImage: "car-15"));
+//       }
+//       pointAnnotationManager?.createMulti(carOptions);
+//       pointAnnotationManager
+//           ?.addOnPointAnnotationClickListener(AnnotationClickListener());
 //     });
 //   }
-// }
 //
-// /// CREATE A [AndroidNotificationChannel] FOR HEADS UP NOTIFICATIONS
-// late AndroidNotificationChannel channel;
+//   void createOneAnnotation(Uint8List list) {
+//     pointAnnotationManager
+//         ?.create(PointAnnotationOptions(
+//         geometry: Point(
+//             coordinates: Position(
+//               0.381457,
+//               6.687337,
+//             )).toJson(),
+//         textField: "custom-icon",
+//         textOffset: [0.0, -2.0],
+//         textColor: Colors.red.value,
+//         iconSize: 1.3,
+//         iconOffset: [0.0, -5.0],
+//         symbolSortKey: 10,
+//         image: list))
+//         .then((value) => pointAnnotation = value);
+//   }
 //
-// /// INITIALIZE THE [FlutterLocalNotificationsPlugin] PACKAGE
-// late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+//   @override
+//   void initState() {
+//     super.initState();
+//   }
 //
-// /// ANDROID BACKGROUND MESSAGE HANDLER
-// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   await Firebase.initializeApp();
-//   debugPrint('Background message : ${message.messageId}');
-//   debugPrint('Background message data: ${message.data["id"]}');
+//   @override
+//   void dispose() {
+//     super.dispose();
+//   }
 //
-//   RemoteNotification? notification = message.notification;
-//   AndroidNotification? android = message.notification?.android;
-//   if (notification != null && android != null && !kIsWeb) {
-//     flutterLocalNotificationsPlugin.show(
-//       notification.hashCode,
-//       notification.title,
-//       notification.body,
-//       NotificationDetails(
-//         android: AndroidNotificationDetails(
-//           channel.id,
-//           channel.name,
-//           channelDescription: channel.description,
-//           // TODO add a proper drawable resource to android, for now using
-//           //      one that already exists in example app.
-//           icon: 'launch_background',
-//         ),
-//       ),
-//       payload : channel.id,
+//   Widget _update() {
+//     return TextButton(
+//       child: Text('update a point annotation'),
+//       onPressed: () {
+//         if (pointAnnotation != null) {
+//           var point = Point.fromJson((pointAnnotation!.geometry)!.cast());
+//           var newPoint = Point(
+//               coordinates: Position(
+//                   point.coordinates.lng + 1.0, point.coordinates.lat + 1.0));
+//           pointAnnotation?.geometry = newPoint.toJson();
+//           pointAnnotationManager?.update(pointAnnotation!);
+//         }
+//       },
 //     );
 //   }
+//
+//   Widget _create() {
+//     return TextButton(
+//         child: Text('create a point annotation'),
+//         onPressed: () async {
+//           final ByteData bytes =
+//           await rootBundle.load('assets/symbols/custom-icon.png');
+//           final Uint8List list = bytes.buffer.asUint8List();
+//           createOneAnnotation(list);
+//         });
+//   }
+//
+//   Widget _delete() {
+//     return TextButton(
+//       child: Text('delete a point annotation'),
+//       onPressed: () {
+//         if (pointAnnotation != null) {
+//           pointAnnotationManager?.delete(pointAnnotation!);
+//         }
+//       },
+//     );
+//   }
+//
+//   Widget _deleteAll() {
+//     return TextButton(
+//       child: Text('delete all point annotations'),
+//       onPressed: () {
+//         pointAnnotationManager?.deleteAll();
+//       },
+//     );
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final MapWidget mapWidget = MapWidget(
+//         key: ValueKey("mapWidget"),
+//         resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
+//         onMapCreated: _onMapCreated);
+//
+//     final List<Widget> listViewChildren = <Widget>[];
+//
+//     listViewChildren.addAll(
+//       <Widget>[_create(), _update(), _delete(), _deleteAll()],
+//     );
+//
+//     final colmn = Column(
+//       mainAxisSize: MainAxisSize.min,
+//       children: [
+//         Center(
+//           child: SizedBox(
+//               width: MediaQuery.of(context).size.width,
+//               height: MediaQuery.of(context).size.height - 400,
+//               child: mapWidget),
+//         ),
+//         Expanded(
+//           child: ListView(
+//             children: listViewChildren,
+//           ),
+//         )
+//       ],
+//     );
+//
+//     return Scaffold(
+//         floatingActionButton: Padding(
+//           padding: const EdgeInsets.all(12.0),
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.end,
+//             children: <Widget>[
+//               FloatingActionButton(
+//                   child: Icon(Icons.swap_horiz),
+//                   heroTag: null,
+//                   onPressed: () {
+//                     mapboxMap?.style.setStyleURI(annotationStyles[
+//                     ++styleIndex % annotationStyles.length]);
+//                   }),
+//               SizedBox(height: 10),
+//               FloatingActionButton(
+//                   child: Icon(Icons.clear),
+//                   heroTag: null,
+//                   onPressed: () {
+//                     if (pointAnnotationManager != null) {
+//                       mapboxMap?.annotations
+//                           .removeAnnotationManager(pointAnnotationManager!);
+//                       pointAnnotationManager = null;
+//                     }
+//                   }),
+//             ],
+//           ),
+//         ),
+//         body: colmn);
+//   }
 // }
-//
-//

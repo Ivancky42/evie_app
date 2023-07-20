@@ -42,19 +42,18 @@ class LocationProvider extends ChangeNotifier {
 
   Future<void> update(LocationModel? locationModel, threatRoutesLists) async {
 
-    print("updates");
-
     if (locationModel != null) {
       if (this.locationModel != locationModel) {
         this.locationModel = locationModel;
         getPlaceMarks(locationModel.geopoint.latitude, locationModel.geopoint.longitude);
-        notifyListeners();
       }
     }
 
     if(threatRoutesLists != null){
       this.threatRoutesLists = threatRoutesLists;
     }
+
+    notifyListeners();
 
     // if (locationModel == null) {}
     // else {
@@ -139,6 +138,7 @@ class LocationProvider extends ChangeNotifier {
 
   getPlaceMarks(double latitude, double longitude) async {
 
+    Placemark? holder;
     currentPlaceMark = null;
 
     try {
@@ -147,9 +147,13 @@ class LocationProvider extends ChangeNotifier {
 
       if (placeMarks.isNotEmpty) {
         for (var element in placeMarks) {
-          currentPlaceMark = element;
+          holder = element;
           break; // Exit the loop once a address is found
         }
+
+        currentPlaceMark = Placemark(
+          name : holder?.name?.replaceAll("NO HOUSE NUMBER, ", ""),
+        );
       } else {
         currentPlaceMark = null;
       }
@@ -157,11 +161,13 @@ class LocationProvider extends ChangeNotifier {
       debugPrint(error.toString());
       currentPlaceMark = null;
     }
+
     notifyListeners();
   }
 
   Future<Placemark?> returnPlaceMarks(double latitude, double longitude) async {
     Placemark? placeMark;
+    Placemark? placeMarkRenamed;
 
     try {
       List<Placemark> placeMarks = await placemarkFromCoordinates(
@@ -180,9 +186,11 @@ class LocationProvider extends ChangeNotifier {
       placeMark = null;
     }
 
-    placeMark?.name = placeMark.name?.replaceAll("NO HOUSE NUMBER, ", "");
+    placeMarkRenamed = Placemark(
+      name : placeMark?.name?.replaceAll("NO HOUSE NUMBER, ", ""),
+    );
 
-    return placeMark;
+    return placeMarkRenamed;
   }
 
   void setDefaultSelectedGeopoint() {

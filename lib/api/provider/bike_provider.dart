@@ -320,17 +320,16 @@ class BikeProvider extends ChangeNotifier {
 
     if(currentBikeModel?.location?.status == "danger"){
       if(currentBikeModel?.location != null){
-        if(currentBikeModel?.location?.eventId != null){
-          if(currentBikeModel?.location?.eventId != ""){
 
+            ///No more event ID
             await currentThreatRoutesSubscription?.cancel();
 
             currentThreatRoutesSubscription = FirebaseFirestore.instance
                 .collection(bikesCollection)
                 .doc(currentBikeModel!.deviceIMEI)
                 .collection(theftHistoryCollection)
-                .doc(currentBikeModel!.location!.eventId)
-                .collection(routesCollection)
+                //.doc(currentBikeModel!.location!.eventId)
+                //.collection(routesCollection)
                 .orderBy("created", descending: true)
                 .snapshots()
                 .listen((snapshot) async {
@@ -353,19 +352,25 @@ class BikeProvider extends ChangeNotifier {
                       break;
                   }
                 }
+
+                ///Sort threatRouteList based on timestamp created
+                List<MapEntry> entries = threatRoutesLists.entries.toList();
+                entries.sort((b, a) => a.value.created.compareTo(b.value.created));
+                threatRoutesLists.clear();
+                for (var entry in entries) {
+                  threatRoutesLists[entry.key] = entry.value;
+                }
+                notifyListeners();
+
+
               }else{
                 threatRoutesLists.clear();
                 currentThreatRoutesSubscription?.cancel();
               }
             });
-          }else{
-            threatRoutesLists.clear();
-            currentThreatRoutesSubscription?.cancel();
-          }
-        }else{
-          threatRoutesLists.clear();
-          currentThreatRoutesSubscription?.cancel();
-        }
+      }else{
+        threatRoutesLists.clear();
+        currentThreatRoutesSubscription?.cancel();
       }
     }
   }
@@ -1142,8 +1147,8 @@ class BikeProvider extends ChangeNotifier {
           .collection(bikesCollection)
           .doc(currentBikeModel?.deviceIMEI)
           .collection(theftHistoryCollection)
-          .doc(eventID)
-          .collection(routesCollection)
+          // .doc(eventID)
+          // .collection(routesCollection)
           .doc(routeID)
           .set({
         'address': address,
