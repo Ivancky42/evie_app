@@ -29,6 +29,7 @@ import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/location_provider.dart';
 import '../../../bluetooth/modelResult.dart';
+import '../../../widgets/evie_button.dart';
 import '../../../widgets/evie_double_button_dialog.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../home_page_widget.dart';
@@ -176,40 +177,114 @@ class _AddNewBikeState extends State<AddNewBike> {
                           ),
 
 
-                              GestureDetector(
-                                onTap: (){
-                                  changeToBeforeYouStart(context);
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: 20.68.h),
+                             // GestureDetector(
+                               // onTap: (){
+                                  //changeToBeforeYouStart(context);
+                                //},
+                                // child: Padding(
+                                //   padding: EdgeInsets.only(top: 20.68.h),
+                                //   child: Stack(
+                                //     children: [
+                                //       Center(
+                                //         child: Padding(
+                                //           padding: EdgeInsets.only(left:15.w, right:15.w),
+                                //           child: SvgPicture.asset(
+                                //             "assets/images/bike_register_required.svg",
+                                //             height:608.h,
+                                //           ),
+                                //         ),
+                                //       ),
+                                //
+                                //       Center(
+                                //         child: Padding(
+                                //           padding: EdgeInsets.only(top: 120.h),
+                                //           child: Lottie.asset('assets/animations/add-bike.json'),
+                                //         ),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
+                              //),
+
+                              Padding(
+                                padding: EdgeInsets.only(top: 16.h),
+                                child: Container(
+                                  width: 357,
+                                  height: 608,
+                                  decoration: BoxDecoration(
+                                    color: EvieColors.primaryColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+
                                   child: Stack(
                                     children: [
-                                      Center(
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Center(
+                                              child: Lottie.asset('assets/animations/add-bike.json'),
+                                          ),
+
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 17.w, right: 14.w),
+                                            child: Text("Register your bike",
+                                              style: EvieTextStyles.h2.copyWith(color: EvieColors.dividerWhite),
+                                            ),
+                                          ),
+
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 17.w, right: 14.w),
+                                            child: Text("To start riding and using EVIE app "
+                                                "you’ll need to pair your bike to your account.",
+                                              style: EvieTextStyles.body18.copyWith(color: EvieColors.dividerWhite, height: 1.35.h),
+                                            ),
+                                          ),
+
+                                        ],
+
+                                      ),
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
                                         child: Padding(
-                                          padding: EdgeInsets.only(left:15.w, right:15.w),
-                                          child: SvgPicture.asset(
-                                            "assets/images/bike_register_required.svg",
-                                            height:608.h,
+                                          padding: EdgeInsets.only(top: 55.h, bottom: 24.h, left: 17.w, right: 14.w),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+
+                                                child: EvieButton_ReversedColor(
+                                                  width: double.infinity,
+                                                  height: 48.h,
+
+                                                  onPressed: () { changeToBeforeYouStart(context); },
+                                                  child: Center(
+                                                    child: Text(
+                                                      "Register New Bike",
+                                                      style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+
+                                            ],
                                           ),
                                         ),
-                                      ),
+                                      )
 
-                                      Center(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(top: 120.h),
-                                          child: Lottie.asset('assets/animations/add-bike.json'),
-                                        ),
-                                      ),
                                     ],
                                   ),
-                                ),
+
+                                    ),
                               ),
+
+
                         ],
                           ),
                         )
                       ],
                     ),
                   ),
+
                 ],
               ),
             ),
