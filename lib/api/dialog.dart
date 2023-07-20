@@ -334,6 +334,10 @@ showEditBikeNameDialog(_formKey, _bikeNameController, _bikeProvider) {
             onPressedLeft: (){SmartDialog.dismiss();},
             onPressedRight: (){
               if (_formKey.currentState!.validate()) {
+
+                ///For keyboard un focus
+                FocusManager.instance.primaryFocus?.unfocus();
+
                 _bikeProvider.updateBikeName(_bikeNameController.text.trim()).then((result){
                   SmartDialog.dismiss();
                   if(result == true){

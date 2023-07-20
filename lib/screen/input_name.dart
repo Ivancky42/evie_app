@@ -85,6 +85,10 @@ class _InputNameState extends State<InputName> {
                   ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
+
+                      ///For keyboard un focus
+                      FocusManager.instance.primaryFocus?.unfocus();
+
                       changeToSignUpMethodScreen(
                           context, _nameController.text.trim());
                     }

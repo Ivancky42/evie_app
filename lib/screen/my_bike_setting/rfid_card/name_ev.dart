@@ -154,6 +154,10 @@ class _NameEVState extends State<NameEV> {
                     ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
+
+                        ///For keyboard un focus
+                        FocusManager.instance.primaryFocus?.unfocus();
+
                         addRFIDtoFireStore(_rfidNameController.text.trim());
 
                       }
