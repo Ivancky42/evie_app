@@ -69,7 +69,6 @@ class _LoginScreenState extends State<Login> {
   Widget build(BuildContext context) {
     _authProvider = Provider.of<AuthProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
-    setTwoButton();
 
     return WillPopScope(
       onWillPop: () async {
@@ -79,7 +78,6 @@ class _LoginScreenState extends State<Login> {
 
       child:Scaffold(
         appBar: EvieAppbar_Back(onPressed: (){ changeToSignInMethodScreen(context);}),
-
         body: Stack(children: [
           Form(
             key: _formKey,
@@ -112,6 +110,8 @@ class _LoginScreenState extends State<Login> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
+                      }else if(!value.contains("@")){
+                        return 'Looks like you entered the wrong email. The correct format for email address ad follow "sample@youremail.com". ';
                       }
                       return null;
                     },
@@ -179,44 +179,47 @@ class _LoginScreenState extends State<Login> {
                 ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // If the form is valid, display a snackbar.
-                  }
-                  //Save to provider
-                  _authProvider
-                      .login(_emailController.text.trim(),
-                          _passwordController.text.trim())
-                      .then((result) {
 
-                    if (result.toString() == "Verified") {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Success'),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
+                    ///For keyboard un focus
+                    FocusManager.instance.primaryFocus?.unfocus();
 
-                      _currentUserProvider.getDeviceInfo();
-                      ///Quit loading and go to user home page
-                      if(_authProvider.isFirstLogin == true){
-                        changeToBeforeYouStart(context);
-                      }else{
-                        changeToUserHomePageScreen2(context);
+                    _authProvider
+                        .login(_emailController.text.trim(),
+                        _passwordController.text.trim())
+                        .then((result) {
+
+                      if (result.toString() == "Verified") {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Success'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+
+                        _currentUserProvider.getDeviceInfo();
+                        ///Quit loading and go to user home page
+                        if(_authProvider.isFirstLogin == true){
+                          changeToBeforeYouStart(context);
+                        }else{
+                          changeToUserHomePageScreen2(context);
+                        }
+
+                      } else if (result.toString() == "Not yet verify") {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Verify your account'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                        _currentUserProvider.getDeviceInfo();
+                        changeToVerifyEmailScreen(context);
+                      } else {
+
+                        showErrorLoginDialog(context);
                       }
+                    });
+                  }
 
-                    } else if (result.toString() == "Not yet verify") {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Verify your account'),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                      _currentUserProvider.getDeviceInfo();
-                      changeToVerifyEmailScreen(context);
-                    } else {
-
-                      showEvieNotFoundDialog(context);
-                    }
-                  });
                 },
               ),
             ),
@@ -252,29 +255,4 @@ class _LoginScreenState extends State<Login> {
     );
   }
 
-  void setTwoButton () {
-    SmartDialog.show(
-      widget: EvieTwoButtonDialog(
-          title: Text("User Not Found",
-            style:EvieTextStyles.h2,
-            textAlign: TextAlign.center,
-          ),
-          childContent: Text("Oops, it seems like the email address you "
-              "entered is incorrect. Please double-check and try again, "
-              "or sign up for a new account if you haven't already.",
-            textAlign: TextAlign.center,
-            style: EvieTextStyles.body18,),
-          svgpicture: SvgPicture.asset(
-            "assets/images/people_search.svg",
-          ),
-          upContent: "Register Now",
-          downContent: "Retry",
-          onPressedUp: () {
-            SmartDialog.dismiss();
-          },
-          onPressedDown: () {
-            SmartDialog.dismiss();
-          }),
-    );
-  }
 }

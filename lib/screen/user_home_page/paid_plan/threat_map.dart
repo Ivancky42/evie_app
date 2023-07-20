@@ -53,8 +53,6 @@ class _ThreatMapState extends State<ThreatMap> {
   late BluetoothProvider _bluetoothProvider;
   late LocationProvider _locationProvider;
 
-  int? snapshotLength;
-
   MapboxMap? mapboxMap;
   OnMapScrollListener? onMapScrollListener;
 
@@ -62,16 +60,18 @@ class _ThreatMapState extends State<ThreatMap> {
   bool isFirstLoadMarker = true;
   bool isMapListShowing = false;
 
+  int? snapshotLength;
+
   StreamSubscription? userLocationSubscription;
   Position userPosition = Position(0, 0);
 
-  var options = <PointAnnotationOptions>[];
   PointAnnotationManager? currentAnnotationManager;
   List<PointAnnotation>? pointAnnotation;
-
   List<map_launcher.AvailableMap>? availableMaps;
+
   GeoPoint? selectedGeopoint;
 
+  var options = <PointAnnotationOptions>[];
   var currentClickedAnnotation;
 
 
@@ -87,10 +87,16 @@ class _ThreatMapState extends State<ThreatMap> {
   }
 
   @override
-  void dispose() {
+  Future<void> dispose() async {
+    super.dispose();
     _locationProvider.removeListener(locationListener);
     userLocationSubscription?.cancel();
-    super.dispose();
+    options.clear();
+
+    if(currentAnnotationManager != null){
+      await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager as BaseAnnotationManager);
+    currentAnnotationManager = null;
+    }
   }
 
   _onMapCreated(MapboxMap mapboxMap) async {
@@ -98,14 +104,14 @@ class _ThreatMapState extends State<ThreatMap> {
 
     ///Disable scaleBar on top left corner
     await this.mapboxMap?.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
-
     loadMarker();
   }
 
   _onMapLoaded(MapLoadedEventData onMapLoaded) async {
+    ///On map create function
   }
-
   void initLocationService() async {
+    ///Any location service
   }
 
 
@@ -128,7 +134,6 @@ class _ThreatMapState extends State<ThreatMap> {
             color: EvieColors.lightBlack,
             child: Padding(
               padding: EdgeInsets.only(left: 17.w, top: 45.h, bottom: 11.h, right:17.w),
-
               child: Row(
                 mainAxisAlignment:
                 MainAxisAlignment.spaceBetween,
@@ -144,7 +149,7 @@ class _ThreatMapState extends State<ThreatMap> {
                   Text(
                     "Orbital Anti-theft",
                     style: EvieTextStyles.h2.copyWith(color: EvieColors.grayishWhite),
-                  ),
+                   ),
 
                   GestureDetector(
                       onTap: (){
@@ -158,23 +163,14 @@ class _ThreatMapState extends State<ThreatMap> {
             ),
           ),
 
-
-
           Expanded(
                 child: Stack(
                   children: [
 
-                    // SvgPicture.asset(
-                    //  "assets/buttons/info.svg",
-                    //   width: 42.w,
-                    //   height: 42.h,
-                    // ),
-
                     MapWidget(
                       onScrollListener: onMapScrollListener,
                       key: const ValueKey("mapWidget"),
-                      resourceOptions: ResourceOptions(
-                          accessToken: _locationProvider.defPublicAccessToken),
+                      resourceOptions: ResourceOptions(accessToken: _locationProvider.defPublicAccessToken),
                       onMapCreated: _onMapCreated,
                       onMapLoadedListener: _onMapLoaded,
                       styleUri: "mapbox://styles/helloevie/claug0xq5002w15mk96ksixpz",
@@ -219,8 +215,7 @@ class _ThreatMapState extends State<ThreatMap> {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    availableMaps != null
-                                        ? ListView.builder(
+                                    availableMaps != null ? ListView.builder(
                                       scrollDirection: Axis.horizontal,
                                       shrinkWrap: true,
                                       itemBuilder: (context, index) {
@@ -272,7 +267,14 @@ class _ThreatMapState extends State<ThreatMap> {
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
                           onTap: () async {
-                            pointBounce2(mapboxMap, _locationProvider, userPosition);
+                            //pointBounce2(mapboxMap, _locationProvider, userPosition);
+                            mapboxMap?.flyTo(
+                                CameraOptions(
+                                    center: Point(
+                                        coordinates: Position(userPosition.lng, userPosition.lat)).toJson(),
+                                    zoom: 16
+                                  ),
+                                MapAnimationOptions(duration: 2000, startDelay: 0));
                           },
                           child: Container(
                               height: 50.h,
@@ -331,11 +333,7 @@ class _ThreatMapState extends State<ThreatMap> {
   }
 
   void locationListener() {
-
-    //getDistanceBetween();
     selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    //animateBounce(mapboxMap, _locationProvider.locationModel?.geopoint.longitude ?? 0, _locationProvider.locationModel?.geopoint.latitude ?? 0);
-
     loadMarker();
   }
 
@@ -344,33 +342,27 @@ class _ThreatMapState extends State<ThreatMap> {
 
     ///Clear Marker
     options.clear();
+
+    ///Check if have this manager
     if(currentAnnotationManager != null){
-      ///Check if have this id
       await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager as BaseAnnotationManager);
       currentAnnotationManager = null;
     }
 
     await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
-
       ///Using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
+
+      ///Create new annotation manager
       currentAnnotationManager = pointAnnotationManager;
 
-      ///Load and add image
+      ///Load and add 7 image
       for (int i = 1; i <= 7; i++) {
         var bytes = await rootBundle.load("assets/icons/danger_pin/danger_pin_${i.toString()}.png");
         pins.add(bytes.buffer.asUint8List());
       }
 
-      ///load a few more marker
-      //for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
-      ///Only load 7 latest of threatRouteList value to display marker
-
-      options.clear();
-
       if(pointAnnotation != null){
-        pointAnnotation?.forEach((element) {
-          currentAnnotationManager?.delete(element);
-        });
+        pointAnnotation?.forEach((element) {currentAnnotationManager?.delete(element);});
         pointAnnotation?.clear();
       }
 
@@ -404,8 +396,8 @@ class _ThreatMapState extends State<ThreatMap> {
           //   ),);
 
         currentAnnotationManager?.setIconAllowOverlap(false);
-        // currentAnnotationManager.createMulti(options);
 
+        // currentAnnotationManager.createMulti(options);
         //OnPointAnnotationClickListener listener = MyPointAnnotationClickListener(_locationProvider);
         //pointAnnotationManager.addOnPointAnnotationClickListener(listener);
       }
