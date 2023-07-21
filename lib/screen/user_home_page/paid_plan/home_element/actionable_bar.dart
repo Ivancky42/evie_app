@@ -55,6 +55,9 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
           backgroundColor: EvieColors.primaryColor,
           onTap: () {
 
+            _settingProvider.changeSheetElement(SheetList.evKey);
+            showSheetNavigate(context);
+
           },
         );
     }

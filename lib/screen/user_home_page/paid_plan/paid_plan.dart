@@ -414,10 +414,12 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
   decideActionableBar(){
     Future.delayed(Duration.zero, () {
-      if (_bikeProvider.rfidList.length == 0) {
-        _settingProvider.changeIsActionableBar(ActionableBarItem.registerEVKey);
-      } else {
-        _settingProvider.changeIsActionableBar(ActionableBarItem.none);
+      if(_bikeProvider.currentBikeModel != null){
+        if (_bikeProvider.rfidList.length == 0) {
+          _settingProvider.changeIsActionableBar(ActionableBarItem.registerEVKey);
+        } else {
+          _settingProvider.changeIsActionableBar(ActionableBarItem.none);
+        }
       }
     });
   }
