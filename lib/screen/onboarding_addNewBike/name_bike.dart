@@ -106,6 +106,10 @@ class _NameBikeState extends State<NameBike> {
                   ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
+
+                      ///For keyboard un focus
+                      FocusManager.instance.primaryFocus?.unfocus();
+
                       _bikeProvider.updateBikeName(_bikeNameController.text.trim()).then((result){
                         if(result == true){
                           /// if(bikeProvider.isAddBike == true) logic inside dialog
@@ -133,6 +137,7 @@ class _NameBikeState extends State<NameBike> {
                       style: TextStyle(fontSize: 14.sp, fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
+
                       _bikeProvider.updateBikeName("Evie Bike").then((result){
                         if(result == true){
                           /// if(bikeProvider.isAddBike == true) logic inside dialog

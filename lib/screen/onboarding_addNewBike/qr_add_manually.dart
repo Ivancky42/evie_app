@@ -157,6 +157,9 @@ class _QRAddManuallyState extends State<QRAddManually> {
                       onPressed: () async {
                 if (_formKey.currentState!.validate()) {
 
+                  ///For keyboard un focus
+                  FocusManager.instance.primaryFocus?.unfocus();
+
                   String code =
                       "serialNumber:${_serialNumberController.text.trim().replaceAll(" ", "")},"
                       "validationKey:${_validationKeyController.text.trim()}";

@@ -165,9 +165,7 @@ class _EVKeyListState extends State<EVKeyList> {
                                          children: [
                                            Text(
                                              "Label your smart key similiar with the name you wrote on the key so that you can differentiate them easily.",
-                                             style: TextStyle(
-                                                 fontSize: 16.sp,
-                                                 color: Color(0xff252526)),
+                                             style: EvieTextStyles.body16.copyWith(color:EvieColors.lightBlack),
                                            ),
                                            Padding(
                                              padding: EdgeInsets.fromLTRB(
@@ -190,9 +188,7 @@ class _EVKeyListState extends State<EVKeyList> {
                                            ),
                                            Text(
                                              "100 Maximum Character",
-                                             style: TextStyle(
-                                                 fontSize: 12.sp,
-                                                 color: Color(0xff252526)),
+                                             style: EvieTextStyles.body12.copyWith(color:EvieColors.lightBlack),
                                            ),
                                          ],
                                        ),
@@ -204,6 +200,10 @@ class _EVKeyListState extends State<EVKeyList> {
                                      },
                                      onPressedRight: () async {
                                        if (_formKey.currentState!.validate()) {
+
+                                         ///For keyboard un focus
+                                         FocusManager.instance.primaryFocus?.unfocus();
+
                                          SmartDialog.dismiss();
                                          final result = await _bikeProvider.updateRFIDCardName(
                                              _bikeProvider.rfidList.keys.elementAt(index),

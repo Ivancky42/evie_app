@@ -111,11 +111,15 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
                         child:   EvieButton(
                           width: double.infinity,
                           child: Text(
-                            "Send Instruction",
+                            "Recover Password",
                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                           ),
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
+
+                              ///For keyboard un focus
+                              FocusManager.instance.primaryFocus?.unfocus();
+
                               //auth provider check if fire store user exist if no pop up if yes change to check your email screen
                               AuthProvider()
                                   .resetPassword(_emailController.text.trim());
@@ -146,7 +150,7 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
                             style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                           ),
                           onPressed: () {
-
+                            changeToInputNameScreen(context);
                           },
                         ),
                       ),
