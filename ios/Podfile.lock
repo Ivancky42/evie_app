@@ -899,15 +899,15 @@ PODS:
     - Flutter
   - map_launcher (0.0.1):
     - Flutter
-  - mapbox_maps_flutter (0.4.3):
+  - mapbox_maps_flutter (0.4.4):
     - Flutter
-    - MapboxMaps (~> 10.10.0)
-  - MapboxCommon (23.2.3)
-  - MapboxCoreMaps (10.10.0):
-    - MapboxCommon (~> 23.2)
-  - MapboxMaps (10.10.2):
-    - MapboxCommon (= 23.2.3)
-    - MapboxCoreMaps (= 10.10.0)
+    - MapboxMaps (~> 10.13.1)
+  - MapboxCommon (23.5.0)
+  - MapboxCoreMaps (10.13.1):
+    - MapboxCommon (~> 23.5)
+  - MapboxMaps (10.13.1):
+    - MapboxCommon (= 23.5.0)
+    - MapboxCoreMaps (= 10.13.1)
     - MapboxMobileEvents (= 1.0.10)
     - Turf (~> 2.0)
   - MapboxMobileEvents (1.0.10)
@@ -1275,10 +1275,10 @@ SPEC CHECKSUMS:
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   map_launcher: e325db1261d029ff33e08e03baccffe09593ffea
-  mapbox_maps_flutter: ce54be31983e3eb91b65c8007aad8b523a355d80
-  MapboxCommon: e7948335faacbe6f8b9b115511fd0dd0354bf565
-  MapboxCoreMaps: 4075a9e415b9b3ab6229d09623fef5f791826a5b
-  MapboxMaps: d8cf7d214d94ec18790c338f3a3fe59dd4048e97
+  mapbox_maps_flutter: b7750303639682268cc7f487bfc6f474a456acab
+  MapboxCommon: fdf7fd31c90b7b607cd9c63e37797f023c01d860
+  MapboxCoreMaps: 24270c7c6b8cb71819fc2f3c549db9620ee4d019
+  MapboxMaps: cb76511b98d3b95c74b0771ed105bc69f30ace6b
   MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   MLImage: 489dfec109f21da8621b28d476401aaf7a0d4ff4
   MLKitBarcodeScanning: d92fe1911001ec36870162c5a0eb206f612b7169

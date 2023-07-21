@@ -43,7 +43,6 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late LocationProvider _locationProvider;
-  late CurrentUserProvider _currentUserProvider;
   late SettingProvider _settingProvider;
 
   GeoPoint? selectedGeopoint;
@@ -55,22 +54,16 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
 
   var currentAnnotationId;
   var markers = <Marker>[];
-
-  late AnimationController _animationController;
-
   int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
     _locationProvider = Provider.of<LocationProvider>(context, listen: false);
-    //selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    //_locationProvider.addListener(locationListener);
   }
 
   @override
   void dispose() {
-    //_locationProvider.removeListener(locationListener);
     super.dispose();
   }
 
@@ -83,24 +76,14 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
    mapCreatedAnimateBounce();
   }
 
-  _onStyleLoaded(StyleLoadedEventData onStyleLoaded) async {
-    print('BEGIN: ' + onStyleLoaded.begin.toString());
-    print('END: ' + onStyleLoaded.end.toString());
-
-  }
-
-
   @override
   Widget build(BuildContext context) {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
-    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
-
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
-
     locationListener();
 
 
@@ -144,10 +127,6 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                                             .toJson(),
                                         zoom: 12,
                                       ),
-                                      // gestureRecognizers: [
-                                      //   Factory<OneSequenceGestureRecognizer>(
-                                      //           () => EagerGestureRecognizer())
-                                      // ].toSet(),
                                     ),
 
                                     _locationProvider.hasLocationPermission == true ? SizedBox.shrink() : Positioned(
@@ -171,29 +150,6 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                                   ],
                                 ),
                               ),
-
-                              // child: Mapbox_Widget(
-                              //   isInteract: false,
-                              //   accessToken: _locationProvider.defPublicAccessToken,
-                              //   //onMapCreated: _onMapCreated,
-                              //   mapController: mapController,
-                              //   markers: markers,
-                              //   // onUserLocationUpdate: (userLocation) {
-                              //   //   if (this.userLocation != null) {
-                              //   //     this.userLocation = userLocation;
-                              //   //     getDistanceBetween();
-                              //   //   }
-                              //   //   else {
-                              //   //     this.userLocation = userLocation;
-                              //   //     getDistanceBetween();
-                              //   //     runSymbol();
-                              //   //   }
-                              //   // },
-                              //   latitude: _locationProvider.locationModel!.geopoint.latitude,
-                              //   longitude: _locationProvider.locationModel!.geopoint.longitude,
-                              //   zoom: 15,
-                              // ),
-
                             ),
                           ),
                         ),
@@ -218,29 +174,36 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                   Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
                     style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray, height: 1.22),),
 
-                  selectedGeopoint != null ? FutureBuilder<dynamic>(
-                      future: _locationProvider.returnPlaceMarks(selectedGeopoint!.latitude, selectedGeopoint!.longitude),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(
-                            snapshot.data.name.toString(),
-                            style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack, height:1.2),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                          );
-                        }else{
-                          return Text(
-                            "loading",
-                            style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
-                          );
-                        }
-                      }
-                  )
-                      : Text(_locationProvider.currentPlaceMark?.name ?? "Not available",
-                    style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                  Text(
+                    _locationProvider.currentPlaceMark?.name ?? 'Loading',
+                    style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack, height: 1.2),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                   ),
+
+                  // selectedGeopoint != null ? FutureBuilder<dynamic>(
+                  //     future: _locationProvider.returnPlaceMarks(selectedGeopoint!.latitude, selectedGeopoint!.longitude),
+                  //     builder: (context, snapshot) {
+                  //       if (snapshot.hasData) {
+                  //         return Text(
+                  //           snapshot.data.name.toString(),
+                  //           style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack, height:1.2),
+                  //           overflow: TextOverflow.ellipsis,
+                  //           maxLines: 2,
+                  //         );
+                  //       }else{
+                  //         return Text(
+                  //           "loading",
+                  //           style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                  //         );
+                  //       }
+                  //     }
+                  // )
+                  //     : Text(_locationProvider.currentPlaceMark?.name ?? "Not available",
+                  //   style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                  //   overflow: TextOverflow.ellipsis,
+                  //   maxLines: 2,
+                  // ),
 
 
                   ///Bike provider lastUpdated minus current timestamp
