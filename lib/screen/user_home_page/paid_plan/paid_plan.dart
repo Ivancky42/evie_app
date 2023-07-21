@@ -121,7 +121,9 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                                     )
                                                     : Padding(
                                                   padding: const EdgeInsets.only(left: 15.0),
-                                                  child: ClipOval(
+                                                  child: _bikeProvider.currentBikeModel != null ?
+                                                  _bikeProvider.currentBikeModel!.bikeIMG != null ?
+                                                  ClipOval(
                                                     child: CachedNetworkImage(
                                                       //imageUrl: document['profileIMG'],
                                                       imageUrl: _bikeProvider.currentBikeModel!.bikeIMG!,
@@ -131,7 +133,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                                       height: 49.h,
                                                       fit: BoxFit.cover,
                                                     ),
-                                                  ),
+                                                  ) : Container() : Container()
                                                 ),
                                                 Padding(
                                                   padding:  EdgeInsets.only(left: 12.w),

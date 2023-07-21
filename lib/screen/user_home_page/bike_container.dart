@@ -100,10 +100,13 @@ class _BikeContainerState extends State<BikeContainer> {
                 blurRadius: 8.0.w,
               ),
             ],
-                border: widget.bikeModel.deviceIMEI == _bikeProvider.currentBikeModel!.deviceIMEI ? Border.all(
+
+            border: _bikeProvider.currentBikeModel != null ?
+                widget.bikeModel.deviceIMEI == _bikeProvider.currentBikeModel!.deviceIMEI ?
+                Border.all(
                   color: EvieColors.primaryColor,
                   width: 2,
-                ) : null,
+                ) : null : null,
           ),
           child: ListTile(
 
