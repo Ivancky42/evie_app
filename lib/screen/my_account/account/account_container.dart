@@ -14,6 +14,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../../api/enumerate.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../bluetooth/modelResult.dart';
@@ -397,7 +398,7 @@ class _AccountContainerState extends State<AccountContainer> {
                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                   ),
                   onPressed: () {
-                    changeToBeforeYouStart(context);
+
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(

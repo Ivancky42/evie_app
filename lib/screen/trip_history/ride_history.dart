@@ -27,6 +27,7 @@ import '../../../api/model/bike_user_model.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../widgets/evie_appbar.dart';
+import '../../api/enumerate.dart';
 import '../../api/function.dart';
 import '../user_home_page/add_new_bike/mapbox_widget.dart';
 import 'package:latlong2/latlong.dart';

@@ -1,4 +1,5 @@
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../api/colours.dart';
+import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/sheet.dart';
@@ -29,12 +31,15 @@ class _BatteryState extends State<Battery> {
 
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
+  late SettingProvider _settingProvider;
 
   @override
   Widget build(BuildContext context) {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
+
 
     return EvieCard(
       onPress: (){

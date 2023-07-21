@@ -13,6 +13,7 @@ import 'package:paginate_firestore/paginate_firestore.dart';
 
 
 import '../../../api/colours.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';

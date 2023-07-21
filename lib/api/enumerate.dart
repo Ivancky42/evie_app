@@ -53,3 +53,31 @@ enum SheetList{
   fullCompleted,
   fullIncomplete,
 }
+
+enum BikeSettingList{
+  bikeSetting,
+  evKey,
+  motionSensitivity,
+  evPlusSubscription,
+  pedalPals,
+  pedalPalsList,
+  orbitalAntiThefts,
+  aboutBike,
+  bikeSoftware,
+  userManual,
+  reset,
+}
+
+enum MeasurementSetting{
+  ///meters
+  metricSystem,
+
+  ///miles
+  imperialSystem,
+}
+
+
+enum ActionableBarItem{
+  none,
+  registerEVKey,
+}

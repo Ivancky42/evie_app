@@ -11,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../bluetooth/modelResult.dart';
 

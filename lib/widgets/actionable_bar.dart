@@ -10,8 +10,73 @@ import '../api/navigator.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/provider/notification_provider.dart';
 
-///Button Widget
 class EvieActionableBar extends StatelessWidget {
+
+  final Widget? icon;
+  final String title;
+  final String text;
+  final GestureTapCallback? onTap;
+  final double? width;
+  final double? height;
+  final Color? backgroundColor;
+
+  const EvieActionableBar({
+    Key? key,
+    this.icon,
+    required this.title,
+    required this.text,
+    required this.onTap,
+    this.width,
+    this.height,
+    this.backgroundColor,
+
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+         height: height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.w),
+          boxShadow: [
+            BoxShadow(
+              color: backgroundColor ?? EvieColors.grayishWhite,// Hex color with opacity/ Spread radius
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: EdgeInsets.only(left:16.w, right: 7.w, bottom:10.h, top: 16.h),
+          child: Row(
+            children: [
+
+              icon != null ? Padding(
+                padding: EdgeInsets.only(right: 12.w),
+                child: icon,
+              ) : SizedBox.shrink(),
+
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: EvieTextStyles.body20.copyWith(color: EvieColors.grayishWhite, fontWeight: FontWeight.w800)),
+                    Text(text, style: EvieTextStyles.body16.copyWith(color: EvieColors.grayishWhite, fontWeight: FontWeight.w400,)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+class EvieActionableBarOld extends StatelessWidget {
 
   final String title;
   final String text;
@@ -21,7 +86,7 @@ class EvieActionableBar extends StatelessWidget {
   final double? height;
   final Color? backgroundColor;
 
-  const EvieActionableBar({
+  const EvieActionableBarOld({
     Key? key,
     required this.title,
     required this.text,
@@ -66,29 +131,6 @@ class EvieActionableBar extends StatelessWidget {
         ),
       ),
     );
-    // return Padding(
-    //   padding: EdgeInsets.only(left:16.w, right: 17.w),
-    //   child: Container(
-    //       width: width,
-    //       height: height,
-    //       color: backgroundColor ?? EvieColors.grayishWhite,
-    //       child: Column(
-    //         children: [
-    //           Text(title, style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w900, color: EvieColors.mediumLightBlack),),
-    //           Text(text, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400,color: EvieColors.darkGrayishCyan),),
-    //           Expanded(
-    //             child: Row(
-    //               children: [
-    //                 buttonLeft,
-    //                 SizedBox(width: 19.5.w,),
-    //                 buttonRight,
-    //               ],
-    //             ),
-    //           ),
-    //         ],
-    //       )
-    //   ),
-    // );
   }
 }
 
@@ -104,7 +146,7 @@ Widget stackActionableBar(context, BikeProvider bikeProvider, NotificationProvid
 
   return Visibility(
     visible: bikeProvider.rfidList.length == 0 && notificationProvider.isTimeArrive,
-    child: EvieActionableBar(
+    child: EvieActionableBarOld(
         title: "Register EV-Key",
         text: "Add EV-Key to unlock your bike without app assistance.",
         buttonLeft: EvieButton_DropDown(

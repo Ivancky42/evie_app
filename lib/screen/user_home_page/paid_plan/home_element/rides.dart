@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../../../../api/colours.dart';
+import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
 import '../../../../api/model/trip_history_model.dart';
 import '../../../../api/provider/bike_provider.dart';

@@ -2,9 +2,12 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/dialog.dart';
+import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
+import 'package:evie_test/widgets/actionable_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +25,7 @@ import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../switch_bike.dart';
 import 'package:location/location.dart';
+import 'home_element/actionable_bar.dart';
 import 'home_element/battery.dart';
 import 'home_element/orbital_anti_theft.dart';
 import 'home_element/rides.dart';
@@ -38,6 +42,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
+  late SettingProvider _settingProvider;
 
   bool isActionBarAppear = false;
 
@@ -62,9 +67,12 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
+
+    decideActionableBar();
 
     return WillPopScope(
       onWillPop: () async {
@@ -262,15 +270,18 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                           }),
                     ),
 
+                    ///No Actionable Bar
+                    _settingProvider.actionableBarItem == ActionableBarItem.none ?
                     Expanded(
                       child: Column(
                         children: [
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(19.w, 16.42.h, 19.w, 16.w),
-                              child: OrbitalAntiTheft(),
-                            ),
-                          ),
+                         Expanded(
+                           child: Padding(
+                               padding: EdgeInsets.fromLTRB(19.w, 19.42.h, 19.w, 16.w),
+                             child: OrbitalAntiTheft(),
+                           ),
+                         ),
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -294,7 +305,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                               ),
                             ],
                           ),
-
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -320,6 +330,79 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                           ),
                         ],
                       ),
+                    )
+
+                    ///Has Actionable Bar
+                        :
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: _settingProvider.actionableBarItem == ActionableBarItem.none ?
+                              EdgeInsets.zero : EdgeInsets.fromLTRB(19.w, 16.42.h, 19.w, 16.w),
+                              child: ActionableBarHome(),
+                            ),
+
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(19.w, 0.h, 19.w, 16.w),
+                              //  padding: EdgeInsets.fromLTRB(19.w, 16.42.h, 19.w, 16.w),
+                              child: Container(
+                                  height: 232.h,
+                                  child: OrbitalAntiTheft()),
+                            ),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: AspectRatio(
+                                    aspectRatio: 1,
+                                    child: Padding(
+                                      padding: EdgeInsets.fromLTRB(19.w, 0, 8.w, 16.h),
+                                      child: Battery(),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: AspectRatio(
+                                    aspectRatio: 1,
+                                    child: Padding(
+                                      padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 16.h),
+                                      child: Rides(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: Padding(
+                                        padding: EdgeInsets.fromLTRB(19.w, 0, 8.w, 20.h),
+                                        child: Setting(),
+                                      ),
+                                    )
+                                ),
+                                Expanded(
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: Padding(
+                                        padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 20.h),
+                                        child: UnlockingSystem(),
+                                      ),
+                                    )
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -327,5 +410,15 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
           )
       ),
     );
+  }
+
+  decideActionableBar(){
+    Future.delayed(Duration.zero, () {
+      if (_bikeProvider.rfidList.length == 0) {
+        _settingProvider.changeIsActionableBar(ActionableBarItem.registerEVKey);
+      } else {
+        _settingProvider.changeIsActionableBar(ActionableBarItem.none);
+      }
+    });
   }
 }

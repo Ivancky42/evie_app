@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/model/movement_setting_model.dart';
 import 'package:evie_test/api/model/notification_setting_model.dart';
 import 'package:evie_test/api/model/trip_history_model.dart';
 import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/provider/trip_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -1365,6 +1367,7 @@ class BikeProvider extends ChangeNotifier {
                 break;
             }
           }
+
         }else{
           rfidList.clear();
         }

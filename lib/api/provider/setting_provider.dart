@@ -5,14 +5,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../enumerate.dart';
 
-enum MeasurementSetting{
-  ///meters
-  metricSystem,
-
-  ///miles
-  imperialSystem,
-}
-
 class SettingProvider with ChangeNotifier {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
@@ -27,6 +19,8 @@ class SettingProvider with ChangeNotifier {
   bool enableDragDismiss = true;
 
   PackageInfo? packageInfo;
+
+  ActionableBarItem actionableBarItem = ActionableBarItem.none;
 
   SettingProvider() {
     init();
@@ -134,6 +128,11 @@ class SettingProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  changeIsActionableBar(ActionableBarItem actionableBarItem){
+
+    this.actionableBarItem = actionableBarItem;
+    notifyListeners();
+  }
 
 
 }
