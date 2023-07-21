@@ -13,6 +13,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../filter.dart';
 import '../function.dart';
 import '../model/bike_model.dart';
 import '../model/bike_plan_model.dart';
@@ -1126,36 +1127,39 @@ class BikeProvider extends ChangeNotifier {
   }
 
   Future uploadPlaceMarkAddressToFirestore(String deviceIMEI, String eventID, String address) async {
-    try {
-      FirebaseFirestore.instance
-          .collection(bikesCollection)
-          .doc(deviceIMEI)
-          .collection(eventsCollection)
-          .doc(eventID)
-          .set({
-        'address': address,
-      }, SetOptions(merge: true));
+    if(EvieFilter.isNullOrBlank(address) == false){
+      try {
+        FirebaseFirestore.instance
+            .collection(bikesCollection)
+            .doc(deviceIMEI)
+            .collection(eventsCollection)
+            .doc(eventID)
+            .set({
+          'address': address,
+        }, SetOptions(merge: true));
 
-    } catch (e) {
-      debugPrint(e.toString());
+      } catch (e) {
+        debugPrint(e.toString());
+      }
     }
   }
 
   Future uploadThreatRoutesAddressToFirestore(String eventID, String routeID, String address) async {
-    try {
-      FirebaseFirestore.instance
-          .collection(bikesCollection)
-          .doc(currentBikeModel?.deviceIMEI)
-          .collection(theftHistoryCollection)
-          // .doc(eventID)
-          // .collection(routesCollection)
-          .doc(routeID)
-          .set({
-        'address': address,
-      }, SetOptions(merge: true));
-
-    } catch (e) {
-      debugPrint(e.toString());
+    if (EvieFilter.isNullOrBlank(address) == false) {
+      try {
+        FirebaseFirestore.instance
+            .collection(bikesCollection)
+            .doc(currentBikeModel?.deviceIMEI)
+            .collection(theftHistoryCollection)
+        // .doc(eventID)
+        // .collection(routesCollection)
+            .doc(routeID)
+            .set({
+          'address': address,
+        }, SetOptions(merge: true));
+      } catch (e) {
+        debugPrint(e.toString());
+      }
     }
   }
 

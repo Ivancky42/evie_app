@@ -17,4 +17,13 @@ class EvieFilter {
     return isAllBikeSafe;
   }
 
+  static isNullOrBlank(String? target){
+    bool isNullOrBlank = false;
+
+    if(target == null || target == "" || target == "null" || target == " "){
+      isNullOrBlank = true;
+    }
+    return isNullOrBlank;
+  }
+
 }
