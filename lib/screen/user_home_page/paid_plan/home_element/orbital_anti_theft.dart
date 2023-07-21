@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/navigator.dart';
@@ -14,12 +13,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/utils.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../../../api/colours.dart';
-import '../../../../api/dialog.dart';
 import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
 import '../../../../api/function.dart';
@@ -27,15 +25,9 @@ import '../../../../api/model/location_model.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/provider/bluetooth_provider.dart';
 import '../../../../api/provider/current_user_provider.dart';
-import '../../../../api/provider/notification_provider.dart';
 import '../../../../api/provider/setting_provider.dart';
-import '../../../../api/sheet_2.dart';
 import '../../../../bluetooth/modelResult.dart';
 import '../../../../widgets/evie_card.dart';
-import '../../add_new_bike/mapbox_widget.dart';
-import 'package:latlong2/latlong.dart';
-
-import '../../home_page_widget.dart';
 
 class OrbitalAntiTheft extends StatefulWidget {
   OrbitalAntiTheft({
@@ -72,13 +64,13 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
   void initState() {
     super.initState();
     _locationProvider = Provider.of<LocationProvider>(context, listen: false);
-    selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    _locationProvider.addListener(locationListener);
+    //selectedGeopoint  = _locationProvider.locationModel?.geopoint;
+    //_locationProvider.addListener(locationListener);
   }
 
   @override
   void dispose() {
-    _locationProvider.removeListener(locationListener);
+    //_locationProvider.removeListener(locationListener);
     super.dispose();
   }
 
@@ -88,7 +80,13 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     ///Disable scaleBar on top left corner
     await this.mapboxMap?.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
 
-   loadMarker();
+   mapCreatedAnimateBounce();
+  }
+
+  _onStyleLoaded(StyleLoadedEventData onStyleLoaded) async {
+    print('BEGIN: ' + onStyleLoaded.begin.toString());
+    print('END: ' + onStyleLoaded.end.toString());
+
   }
 
 
@@ -102,6 +100,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     _settingProvider = Provider.of<SettingProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
+
+    locationListener();
 
 
 
@@ -340,16 +340,10 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
             spreadRadius: 0, // Spread radius
           ),
         ],
-        // gradient: SweepGradient(
-        //     startAngle: 0,
-        //     colors: [Colors.white,EvieColors.lightRed,Colors.white,EvieColors.lightRed],
-        //     transform: GradientRotation(_animationController.value*6)
-        // )
       ),
       child: EvieCard(
         onPress: (){
           ///Location
-
           if(_currentIndex == 0){
             _locationProvider.locations();
             if(_locationProvider.locationModel?.isConnected == false){
@@ -375,8 +369,6 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
             }
           }
         },
-
-        //height: 255.h,
         height: double.infinity,
         width: double.infinity,
         title: "Orbital Anti-theft",
@@ -450,9 +442,9 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
 
       ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
-        currentAnnotationId = pointAnnotationManager;
+      currentAnnotationId = pointAnnotationManager;
 
-        ///Add disconnected threat
+      ///Add disconnected threat
       if(_locationProvider.locationModel!.isConnected == false){
         final ByteData bytes = await rootBundle.load("assets/icons/marker_warning.png");
         final Uint8List list = bytes.buffer.asUint8List();
@@ -476,14 +468,14 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
         ///First marker
         options.add(
             PointAnnotationOptions(
-          geometry: Point(
-              coordinates: Position(
-                _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                _locationProvider.locationModel?.geopoint.latitude ?? 0,
-              )).toJson(),
-          image: list,
-          iconSize: 1.5.h,
-        )
+              geometry: Point(
+                  coordinates: Position(
+                    _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                    _locationProvider.locationModel?.geopoint.latitude ?? 0,
+                  )).toJson(),
+              image: list,
+              iconSize: 1.5.h,
+            )
         );
 
       } else {
@@ -501,24 +493,32 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
         ));
       }
 
-        pointAnnotationManager.setIconAllowOverlap(false);
-        pointAnnotationManager.createMulti(options);
+      pointAnnotationManager.setIconAllowOverlap(false);
+      pointAnnotationManager.createMulti(options);
 
     });
-
-
   }
 
   void locationListener() {
-    //setButtonImage();
-    //getDistanceBetween();
-    selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    animateBounce();
+    if (selectedGeopoint != _locationProvider.locationModel?.geopoint) {
+      selectedGeopoint  = _locationProvider.locationModel?.geopoint;
+      if (mapboxMap != null) {
+        animateBounce();
+      }
+    }
     // loadImage(currentDangerStatus);
+  }
+
+  void mapCreatedAnimateBounce() {
+    selectedGeopoint  = _locationProvider.locationModel?.geopoint;
+    if (mapboxMap != null) {
+      animateBounce();
+    }
   }
 
 
   void animateBounce() {
+    loadMarker();
     mapboxMap?.flyTo(
         CameraOptions(
           center: Point(
@@ -529,7 +529,6 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
           zoom: 12,
         ),
         MapAnimationOptions(duration: 2000, startDelay: 0));
-    loadMarker();
   }
 
 }
