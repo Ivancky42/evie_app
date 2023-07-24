@@ -157,7 +157,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                   setState(() {
                     pageNavigate = label;
                   });
-                  showConnectDialog(_bluetoothProvider, _bikeProvider);
+                  showEvieActionableBarDialog(context, _bluetoothProvider, _bikeProvider);
                 }
                 else if (deviceConnectResult == DeviceConnectResult.connected) {
                   if (_bikeProvider.rfidList.isNotEmpty) {

@@ -35,6 +35,10 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
   late BluetoothProvider _bluetoothProvider;
   late SettingProvider _settingProvider;
 
+  String? pageNavigate;
+
+  DeviceConnectResult? deviceConnectResult;
+
   @override
   Widget build(BuildContext context) {
 
@@ -42,7 +46,27 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
-    switch(_settingProvider.actionableBarItem){
+    deviceConnectResult = _bluetoothProvider.deviceConnectResult;
+
+    if(deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice){
+      Future.delayed(Duration.zero, () {
+        if(pageNavigate != null){
+          switch(pageNavigate){
+            case "registerEVKey":
+              pageNavigate = null;
+              if (_bikeProvider.rfidList.isNotEmpty) {
+                _settingProvider.changeSheetElement(SheetList.evKeyList);
+              }
+              else {
+                _settingProvider.changeSheetElement(SheetList.evKey);
+              }
+              break;
+          }
+        }
+      });
+    }
+
+    switch(_bikeProvider.actionableBarItem){
       case ActionableBarItem.none:
         return SizedBox.shrink();
 
@@ -56,12 +80,15 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
           backgroundColor: EvieColors.primaryColor,
           onTap: () {
 
+            setState(() {
+              pageNavigate = 'registerEVKey';
+            });
             showEvieActionableBarDialog(context, _bluetoothProvider, _bikeProvider);
-
           },
         );
     }
   }
+
 }
 
 

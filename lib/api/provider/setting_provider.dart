@@ -20,8 +20,6 @@ class SettingProvider with ChangeNotifier {
 
   PackageInfo? packageInfo;
 
-  ActionableBarItem actionableBarItem = ActionableBarItem.none;
-
   SettingProvider() {
     init();
   }
@@ -127,12 +125,5 @@ class SettingProvider with ChangeNotifier {
     enableDragDismiss = enabled;
     notifyListeners();
   }
-
-  changeIsActionableBar(ActionableBarItem actionableBarItem){
-
-    this.actionableBarItem = actionableBarItem;
-    notifyListeners();
-  }
-
 
 }
