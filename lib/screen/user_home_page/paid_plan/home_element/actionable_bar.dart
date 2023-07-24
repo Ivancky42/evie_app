@@ -54,12 +54,8 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
           switch(pageNavigate){
             case "registerEVKey":
               pageNavigate = null;
-              if (_bikeProvider.rfidList.isNotEmpty) {
-                _settingProvider.changeSheetElement(SheetList.evKeyList);
-              }
-              else {
                 _settingProvider.changeSheetElement(SheetList.evKey);
-              }
+                showSheetNavigate(context);
               break;
           }
         }
@@ -79,11 +75,21 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
           text: 'Add EV-Key to unlock your bike without app assistance.',
           backgroundColor: EvieColors.primaryColor,
           onTap: () {
-
-            setState(() {
-              pageNavigate = 'registerEVKey';
-            });
-            showEvieActionableBarDialog(context, _bluetoothProvider, _bikeProvider);
+            if (deviceConnectResult == null
+                || deviceConnectResult == DeviceConnectResult.disconnected
+                || deviceConnectResult == DeviceConnectResult.scanTimeout
+                || deviceConnectResult == DeviceConnectResult.connectError
+                || deviceConnectResult == DeviceConnectResult.scanError
+                || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
+            ) {
+              setState(() {
+                pageNavigate = 'registerEVKey';
+              });
+              showEvieActionableBarDialog(context, _bluetoothProvider, _bikeProvider);
+            }
+            else if (deviceConnectResult == DeviceConnectResult.connected) {
+                _settingProvider.changeSheetElement(SheetList.evKey);
+            }
           },
         );
     }
