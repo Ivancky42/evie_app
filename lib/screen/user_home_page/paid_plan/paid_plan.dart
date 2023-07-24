@@ -54,6 +54,8 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    decideActionableBar();
   }
 
   @override
@@ -71,8 +73,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
-
-    decideActionableBar();
 
     return WillPopScope(
       onWillPop: () async {

@@ -342,7 +342,7 @@ class _FreePlanState extends State<FreePlan> {
                                        ),
                                      ],
                                    ),
-                                 child:EvieCard(
+                                 child: EvieCard(
                                    onPress: (){
                                      _settingProvider.changeSheetElement(SheetList.proPlan);
                                      showSheetNavigate(context);
