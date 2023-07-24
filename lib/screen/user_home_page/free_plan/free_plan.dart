@@ -349,45 +349,50 @@ class _FreePlanState extends State<FreePlan> {
                                    },
                                    height: double.infinity,
                                    width: double.infinity,
-                                   child: Stack(
-                                     alignment: Alignment.centerLeft,
-                                     children: [
-                                       Padding(
-                                         padding: EdgeInsets.only(left: 16.w, top: 18.h, bottom: 17.58.h,
-                                             right: 59.79.w
-                                         ),
-                                         child: SvgPicture.asset(
-                                           "assets/images/bike_illustration.svg",
-                                           width: 295.21.w,
-                                           height: 196.42.h,
-                                         ),
-                                       ),
-
-                                       Align(
-                                         alignment: Alignment.bottomRight,
-                                         child: Padding(
-                                           padding: EdgeInsets.only(top: 100.h),
-                                           child: Column(
-                                             mainAxisAlignment: MainAxisAlignment.start,
-                                             crossAxisAlignment: CrossAxisAlignment.start,
-                                             children: [
-                                               Padding(
-                                                 padding: EdgeInsets.only(top: 0.h, left: 0.w),
-                                                 child: Container(
-                                                   width: 180.h,
-                                                   child: Text("Your bike will never be out of sight.",
-                                                       style: EvieTextStyles.headlineB2.copyWith(height: 1.3.h)),
-                                                 ),
-                                               ),
-
-                                               SvgPicture.asset(
-                                                 "assets/buttons/EVIE+.svg",
-                                               )
-                                             ],
+                                   child: Container(
+                                     child: Stack(
+                                       alignment: Alignment.centerLeft,
+                                       children: [
+                                         Padding(
+                                           padding: EdgeInsets.only(left: 16.w, top: 18.h, bottom: 17.58.h,
+                                               right: 59.79.w
+                                           ),
+                                           child: SvgPicture.asset(
+                                             "assets/images/bike_illustration.svg",
+                                             width: 295.21.w,
+                                             height: 196.42.h,
                                            ),
                                          ),
-                                       ),
-                                     ],
+
+                                         Align(
+                                           alignment: Alignment.bottomRight,
+                                           child: Padding(
+                                             padding: EdgeInsets.only(top: 93.h),
+                                             child: Column(
+                                               mainAxisAlignment: MainAxisAlignment.start,
+                                               crossAxisAlignment: CrossAxisAlignment.start,
+                                               children: [
+                                                 Padding(
+                                                   padding: EdgeInsets.only(top: 0.h, left: 185.w, right: 15.w),
+                                                   child: Container(
+                                                     width: 180.h,
+                                                     child: Text("Your bike will never be out of sight.",
+                                                         style: EvieTextStyles.headlineB2.copyWith(height: 1.2.h)),
+                                                   ),
+                                                 ),
+
+                                               ],
+                                             ),
+                                           ),
+                                         ),
+                                         Padding(
+                                           padding: EdgeInsets.only(top: 165.h, left: 185.w, right: 40.79.w),
+                                           child: SvgPicture.asset(
+                                             "assets/buttons/EVIE+.svg",
+                                           ),
+                                         )
+                                       ],
+                                     ),
                                    ),
                                  )
                                ),
