@@ -1356,7 +1356,7 @@ showEvieBikeRecoveredDialog(BuildContext context) {
 }
 
 ///Actionable bar
-showEvieActionableBarDialog(BuildContext context) {
+showEvieActionableBarDialog(BuildContext context, BluetoothProvider bluetoothProvider, BikeProvider bikeProvider) {
   SmartDialog.show(
     widget: EvieOneButtonDialog(
       title: "Bluetooth Connection Needed",
@@ -1365,6 +1365,7 @@ showEvieActionableBarDialog(BuildContext context) {
       middleContent: "Connect Bike",
       onPressedMiddle: () {
         SmartDialog.dismiss();
+        checkBleStatusAndConnectDevice(bluetoothProvider, bikeProvider);
       },
     ),
   );

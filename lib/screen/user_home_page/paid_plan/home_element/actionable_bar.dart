@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../api/colours.dart';
+import '../../../../api/dialog.dart';
 import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
 import '../../../../api/provider/bike_provider.dart';
@@ -55,8 +56,7 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
           backgroundColor: EvieColors.primaryColor,
           onTap: () {
 
-            _settingProvider.changeSheetElement(SheetList.evKey);
-            showSheetNavigate(context);
+            showEvieActionableBarDialog(context, _bluetoothProvider, _bikeProvider);
 
           },
         );
