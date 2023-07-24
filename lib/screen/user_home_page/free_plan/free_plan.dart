@@ -35,7 +35,7 @@ import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/location_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../api/sheet_2.dart';
-import '../../../api/snackbar.dart';
+import '../../../api/snackbar.dart' as SnackBar;
 import '../../../api/toast.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_divider.dart';
@@ -412,6 +412,9 @@ class _FreePlanState extends State<FreePlan> {
                                  child: Padding(
                                      padding: EdgeInsets.only(left: 19.w, right: 8.w, bottom: 8.h),
                                      child: EvieCard(
+                                       onPress: (){
+                                         SnackBar.showUpgradePlanToast(context, _settingProvider, true);
+                                       },
                                        ///Listen to bluetooth provider data
                                        title: "Battery",
                                        child: Expanded(
@@ -442,6 +445,7 @@ class _FreePlanState extends State<FreePlan> {
                                  child: Padding(
                                      padding: EdgeInsets.only(right: 19.w, left: 8.w,  bottom: 8.h),
                                      child: EvieCard(
+                                       onPress: (){    SnackBar.showUpgradePlanToast(context, _settingProvider, true);},
                                        color: EvieColors.grayishWhite,
                                        title: "Rides",
                                        decoration: BoxDecoration(
@@ -533,7 +537,7 @@ class _FreePlanState extends State<FreePlan> {
                                                    ///Check is connected
 
                                                    _bluetoothProvider.setIsUnlocking(true);
-                                                   showUnlockingToast(context);
+                                                   SnackBar.showUnlockingToast(context);
 
                                                    StreamSubscription?
                                                    subscription;
@@ -574,7 +578,7 @@ class _FreePlanState extends State<FreePlan> {
                                                    });
                                                  }
                                                      : (){
-                                                   showToLockBikeInstructionToast(context);
+                                                   SnackBar.showToLockBikeInstructionToast(context);
                                                  },
                                                  //icon inside button
                                                  child: buttonImage,
@@ -874,7 +878,7 @@ class _FreePlanState extends State<FreePlan> {
                                                         ///Check is connected
 
                                                         _bluetoothProvider.setIsUnlocking(true);
-                                                        showUnlockingToast(context);
+                                                        SnackBar.showUnlockingToast(context);
 
                                                         StreamSubscription?
                                                         subscription;
@@ -915,7 +919,7 @@ class _FreePlanState extends State<FreePlan> {
                                                         });
                                                       }
                                                           : (){
-                                                        showToLockBikeInstructionToast(context);
+                                                        SnackBar.showToLockBikeInstructionToast(context);
                                                       },
                                                       //icon inside button
                                                       child: buttonImage,

@@ -352,7 +352,7 @@ showToLockBikeInstructionToast(context) {
 //   );
 // }
 
-showUpgradePlanToast(context, SettingProvider settingProvider){
+showUpgradePlanToast(context, SettingProvider settingProvider,[bool? isPop]){
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -379,7 +379,12 @@ showUpgradePlanToast(context, SettingProvider settingProvider){
               alignment: Alignment.bottomRight,
               child: GestureDetector(
                 onTap: () {
-                  settingProvider.changeSheetElement(SheetList.proPlan);
+                  if(isPop == true){
+                    settingProvider.changeSheetElement(SheetList.proPlan);
+                    showSheetNavigate(context);
+                  }else{
+                    settingProvider.changeSheetElement(SheetList.proPlan);
+                  }
                 },
                 child: Text(
                   "UNLOCK FEATURE NOW",
