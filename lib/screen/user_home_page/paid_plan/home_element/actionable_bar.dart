@@ -89,6 +89,7 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
             }
             else if (deviceConnectResult == DeviceConnectResult.connected) {
                 _settingProvider.changeSheetElement(SheetList.evKey);
+                showSheetNavigate(context);
             }
           },
         );
