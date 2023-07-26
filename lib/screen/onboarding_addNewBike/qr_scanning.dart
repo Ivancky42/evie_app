@@ -36,7 +36,7 @@ class _QRScanningState extends State<QRScanning> {
   late AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
   bool onTorch = false;
-  
+
   @override
   void initState() {
    cameraController = MobileScannerController();
@@ -49,7 +49,7 @@ class _QRScanningState extends State<QRScanning> {
     super.dispose();
   }
 
-  bool isCameraEnable = true;
+  bool isCameraEnable = false;
 
   @override
   Widget build(BuildContext context) {
@@ -60,10 +60,11 @@ class _QRScanningState extends State<QRScanning> {
       height: 184.h,
     );
 
+    checkCameraPermission();
+
     _authProvider =  Provider.of<AuthProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
 
-    checkCameraPermission();
 
     return WillPopScope(
       onWillPop: () async {
@@ -74,35 +75,65 @@ class _QRScanningState extends State<QRScanning> {
         body: Stack(
             children:[
 
-              Visibility(
-                visible: isCameraEnable,
-                child: MobileScanner(
-                  fit: BoxFit.cover,
-                  scanWindow: scanWindow,
-                  controller: cameraController,
-                  onDetect: (BarcodeCapture barcode) async {
 
-                   for (var element in barcode.barcodes) {
+              // Visibility(
+              //   visible: isCameraEnable,
+              //   child: MobileScanner(
+              //       fit: BoxFit.cover,
+              //       scanWindow: scanWindow,
+              //       controller: cameraController,
+              //       onDetect: (BarcodeCapture barcode) async {
+              //
+              //         for (var element in barcode.barcodes) {
+              //           cameraController.stop();
+              //           final String code = element.rawValue!;
+              //           debugPrint('Barcode found, $code');
+              //
+              //           SmartDialog.showLoading();
+              //
+              //           await _bikeProvider.handleBarcodeData(code);
+              //
+              //           if (_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success) {
+              //             SmartDialog.dismiss(status: SmartStatus.loading);
+              //             changeToBikeConnectSuccessScreen(context);
+              //           } else {
+              //             SmartDialog.dismiss(status: SmartStatus.loading);
+              //             changeToBikeConnectFailedScreen(context);
+              //           }
+              //         }
+              //       }
+              //   ),
+              // ),
+
+              if (isCameraEnable)...{
+                MobileScanner(
+                    fit: BoxFit.cover,
+                    scanWindow: scanWindow,
+                    controller: cameraController,
+                    onDetect: (BarcodeCapture barcode) async {
+
+                      for (var element in barcode.barcodes) {
                         cameraController.stop();
-                       final String code = element.rawValue!;
-                       debugPrint('Barcode found, $code');
+                        final String code = element.rawValue!;
+                        debugPrint('Barcode found, $code');
 
-                       SmartDialog.showLoading();
+                        SmartDialog.showLoading();
 
-                       await _bikeProvider.handleBarcodeData(code);
+                        await _bikeProvider.handleBarcodeData(code);
 
-                       if (_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success) {
-                         SmartDialog.dismiss(status: SmartStatus.loading);
-                         changeToBikeConnectSuccessScreen(context);
-                       } else {
-                         SmartDialog.dismiss(status: SmartStatus.loading);
-                         changeToBikeConnectFailedScreen(context);
-                       }
-
-                     }
-                  }
-                  ),
-              ),
+                        if (_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success) {
+                          SmartDialog.dismiss(status: SmartStatus.loading);
+                          changeToBikeConnectSuccessScreen(context);
+                        } else {
+                          SmartDialog.dismiss(status: SmartStatus.loading);
+                          changeToBikeConnectFailedScreen(context);
+                        }
+                      }
+                    }
+                ),
+              } else...{
+                Container(),
+              },
 
               Visibility(
                 visible: isCameraEnable,
@@ -134,32 +165,34 @@ class _QRScanningState extends State<QRScanning> {
               ),
 
 
-                Align(
+              Align(
                 alignment: Alignment.bottomCenter,
                 child:Padding(
-                      padding:  EdgeInsets.only(left: 16.w, right: 16.w, bottom: 180.h),
-                      child: IconButton(
-                        iconSize: 64.h,
-                          icon:  onTorch ? Image(
-                            image: const AssetImage("assets/buttons/torch_on.png"),
-                            height: 64.h,
-                            width: 64.w,
-                          ) : Image(
-                            image: const AssetImage("assets/buttons/torch.png"),
-                            height: 64.h,
-                            width: 64.w,
-                          ),
-                        onPressed: () {
+                  padding:  EdgeInsets.only(left: 16.w, right: 16.w, bottom: 180.h),
+                  child: IconButton(
+                      iconSize: 64.h,
+                      icon:  onTorch ? Image(
+                        image: const AssetImage("assets/buttons/torch_on.png"),
+                        height: 64.h,
+                        width: 64.w,
+                      ) : Image(
+                        image: const AssetImage("assets/buttons/torch.png"),
+                        height: 64.h,
+                        width: 64.w,
+                      ),
+                      onPressed: () {
 
-                          setState(() {
-                            onTorch = !onTorch;
-                          });
-                         cameraController.toggleTorch();
-                            }
+                        setState(() {
+                          onTorch = !onTorch;
+                        });
+                        cameraController.toggleTorch();
+                      }
 
-                          ),
-                        ),
-                    ),
+                  ),
+                ),
+              ),
+
+
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -181,85 +214,92 @@ class _QRScanningState extends State<QRScanning> {
                 ],
               ),
 
-              Visibility(
-                visible: !isCameraEnable,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(20.w, 276.h, 20.w, 123.h),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Let EVIE App access your camera in",
-                            style: TextStyle(fontSize: 16.sp, color: Colors.white),
-                          ),
-                          Text(
-                            "order to scan ownership QR code.",
-                            style: TextStyle(fontSize: 16.sp, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              Visibility(
-                visible: !isCameraEnable,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(20.w, 375.h, 20.w, 123.h),
-                      child: TextButton(
-                        onPressed: (){
-
-                        },
-                        child: Text("Enable Camera Access",
-                          style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),
+                ///camera access not granted
+                Visibility(
+                  visible: !isCameraEnable,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(20.w, 276.h, 20.w, 123.h),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Let EVIE App access your camera in",
+                              style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                            ),
+                            Text(
+                              "order to scan ownership QR code.",
+                              style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
 
-              Visibility(
-                visible: isCameraEnable,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(20.w, 153.h, 20.w, 123.h),
-                      child: Text(
-                        "Align the QR code within the frame to scan",
-                        style: TextStyle(fontSize: 16.sp, color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                Visibility(
+                  visible: !isCameraEnable,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(20.w, 375.h, 20.w, 123.h),
+                        child: TextButton(
+                          onPressed: () async {
+                            if (await Permission.camera.request().isDenied) {
+                            } else if (await Permission.camera.request().isPermanentlyDenied){
+                              showEvieCameraSettingDialog(context);
+                            }
+                          },
 
-              Visibility(
-                visible: isCameraEnable,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(20.w, 190.h, 20.w, 123.h),
-                      child: TextButton(
-                        onPressed: (){
-                          showEvieFindQRDialog(context);
-                        },
-                        child: Text("Where to find QR code?",
-                          style: EvieTextStyles.body16.copyWith(fontWeight:FontWeight.w900, color: EvieColors.thumbColorTrue, decoration: TextDecoration.underline,),
+                          child: Text("Enable Camera Access",
+                            style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+
+                ///camera access granted
+                Visibility(
+                  visible: isCameraEnable,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(20.w, 153.h, 20.w, 123.h),
+                        child: Text(
+                          "Align the QR code within the frame to scan",
+                          style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Visibility(
+                  visible: isCameraEnable,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(20.w, 190.h, 20.w, 123.h),
+                        child: TextButton(
+                          onPressed: (){
+                            showEvieFindQRDialog(context);
+                          },
+                          child: Text("Where to find QR code?",
+                            style: EvieTextStyles.body16.copyWith(fontWeight:FontWeight.w900, color: EvieColors.thumbColorTrue, decoration: TextDecoration.underline,),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
 
             Align(
                 alignment: Alignment.bottomCenter,
@@ -305,6 +345,7 @@ class _QRScanningState extends State<QRScanning> {
     );
   }
 
+  ///ask for camera permission
   Future<void> checkCameraPermission() async {
     PermissionStatus status = await Permission.camera.status;
     if (status.isGranted) {
@@ -318,10 +359,7 @@ class _QRScanningState extends State<QRScanning> {
     }
   }
 
-
-
-
-
+  ///check camera permission status
   Future<bool> requestCameraPermission() async {
     PermissionStatus status = await Permission.camera.request();
     if (status.isGranted) {
@@ -330,8 +368,6 @@ class _QRScanningState extends State<QRScanning> {
       return false;
     }
   }
-
-
 
 }
 

@@ -1206,6 +1206,34 @@ showEvieExitRegistrationDialog(BuildContext context) {
   );
 }
 
+///permission to open settings to enable camera
+showEvieCameraSettingDialog(BuildContext context) {
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+      title: Text(
+        "Open Camera Setting?",
+        style: EvieTextStyles.h2,
+        textAlign: TextAlign.center,
+      ),
+      childContent: Text(
+        "You are required to allow EVIE permission to access your camera. Go to EVIE permission settings?",
+        textAlign: TextAlign.center,
+        style: EvieTextStyles.body18,
+      ),
+      svgpicture: SvgPicture.asset("assets/images/people_search.svg"),
+      upContent: "Yes",
+      downContent: "No",
+      onPressedUp: () {
+        SmartDialog.dismiss();
+        openAppSettings();
+      },
+      onPressedDown: () {
+        SmartDialog.dismiss();
+      },
+    ),
+  );
+}
+
 showEvieFindQRDialog(BuildContext context){
   SmartDialog.show(
       widget: EvieOneButtonDialog(
@@ -1370,3 +1398,5 @@ showEvieActionableBarDialog(BuildContext context, BluetoothProvider bluetoothPro
     ),
   );
 }
+
+

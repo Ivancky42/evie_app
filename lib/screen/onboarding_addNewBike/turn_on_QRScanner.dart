@@ -79,7 +79,7 @@ class _TurnOnQRScannerState extends State<TurnOnQRScanner> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding:    EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.button_Bottom),
+                    padding: EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.button_Bottom),
                     child:  EvieButton(
                       width: double.infinity,
                       height: 48.h,
@@ -91,7 +91,8 @@ class _TurnOnQRScannerState extends State<TurnOnQRScanner> {
                       if (await Permission.camera.request().isGranted){
                         changeToQRScanningScreen(context);
                         }else{
-                          showCameraDisable();
+                        changeToQRScanningScreen(context);
+                          //showCameraDisable();
                         }
                       },
                     ),
