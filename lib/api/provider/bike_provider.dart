@@ -123,7 +123,8 @@ class BikeProvider extends ChangeNotifier {
   StreamController<UploadFirestoreResult> firestoreStatusListener = StreamController.broadcast();
 
   LinkedHashMap? get getThreatRoutesLists => threatRoutesLists;
-  
+
+  ActionableBarItem actionableBarItem = ActionableBarItem.none;
   ///User update bike profile
   Future updateUserBikeImage(String imageURL) async {
     try {
@@ -1367,11 +1368,19 @@ class BikeProvider extends ChangeNotifier {
                 break;
             }
           }
-
         }else{
           rfidList.clear();
         }
+
+        if (rfidList.length == 0) {
+          changeIsActionableBar(ActionableBarItem.registerEVKey);
+        } else {
+          changeIsActionableBar(ActionableBarItem.none);
+        }
+
       });
+
+
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -1486,6 +1495,12 @@ class BikeProvider extends ChangeNotifier {
         break;
     }
 
+    notifyListeners();
+  }
+
+  changeIsActionableBar(ActionableBarItem actionableBarItem){
+
+    this.actionableBarItem = actionableBarItem;
     notifyListeners();
   }
 

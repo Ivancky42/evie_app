@@ -10,6 +10,7 @@ import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking
 import 'package:evie_test/widgets/actionable_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
@@ -49,7 +50,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   CableLockResult? cableLockState;
   DeviceConnectResult? deviceConnectResult;
 
-
   @override
   void initState() {
     super.initState();
@@ -71,8 +71,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
-
-    decideActionableBar();
 
     return WillPopScope(
       onWillPop: () async {
@@ -271,7 +269,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                     ),
 
                     ///No Actionable Bar
-                    _settingProvider.actionableBarItem == ActionableBarItem.none ?
+                    _bikeProvider.actionableBarItem == ActionableBarItem.none ?
                     Expanded(
                       child: Column(
                         children: [
@@ -333,7 +331,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                     )
 
                     ///Has Actionable Bar
-                        :
+                         :
                     Expanded(
                       child: SingleChildScrollView(
                         physics: BouncingScrollPhysics(),
@@ -341,7 +339,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Padding(
-                              padding: _settingProvider.actionableBarItem == ActionableBarItem.none ?
+                              padding: _bikeProvider.actionableBarItem == ActionableBarItem.none ?
                               EdgeInsets.zero : EdgeInsets.fromLTRB(19.w, 16.42.h, 19.w, 16.w),
                               child: ActionableBarHome(),
                             ),
@@ -412,15 +410,4 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     );
   }
 
-  decideActionableBar(){
-    Future.delayed(Duration.zero, () {
-      if(_bikeProvider.currentBikeModel != null){
-        if (_bikeProvider.rfidList.length == 0) {
-          _settingProvider.changeIsActionableBar(ActionableBarItem.registerEVKey);
-        } else {
-          _settingProvider.changeIsActionableBar(ActionableBarItem.none);
-        }
-      }
-    });
-  }
 }

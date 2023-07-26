@@ -35,6 +35,10 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
   late BluetoothProvider _bluetoothProvider;
   late SettingProvider _settingProvider;
 
+  String? pageNavigate;
+
+  DeviceConnectResult? deviceConnectResult;
+
   @override
   Widget build(BuildContext context) {
 
@@ -42,7 +46,23 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
-    switch(_settingProvider.actionableBarItem){
+    deviceConnectResult = _bluetoothProvider.deviceConnectResult;
+
+    if(deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice){
+      Future.delayed(Duration.zero, () {
+        if(pageNavigate != null){
+          switch(pageNavigate){
+            case "registerEVKey":
+              pageNavigate = null;
+                _settingProvider.changeSheetElement(SheetList.evKey);
+                showSheetNavigate(context);
+              break;
+          }
+        }
+      });
+    }
+
+    switch(_bikeProvider.actionableBarItem){
       case ActionableBarItem.none:
         return SizedBox.shrink();
 
@@ -55,13 +75,27 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
           text: 'Add EV-Key to unlock your bike without app assistance.',
           backgroundColor: EvieColors.primaryColor,
           onTap: () {
-
-            showEvieActionableBarDialog(context, _bluetoothProvider, _bikeProvider);
-
+            if (deviceConnectResult == null
+                || deviceConnectResult == DeviceConnectResult.disconnected
+                || deviceConnectResult == DeviceConnectResult.scanTimeout
+                || deviceConnectResult == DeviceConnectResult.connectError
+                || deviceConnectResult == DeviceConnectResult.scanError
+                || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
+            ) {
+              setState(() {
+                pageNavigate = 'registerEVKey';
+              });
+              showEvieActionableBarDialog(context, _bluetoothProvider, _bikeProvider);
+            }
+            else if (deviceConnectResult == DeviceConnectResult.connected) {
+                _settingProvider.changeSheetElement(SheetList.evKey);
+                showSheetNavigate(context);
+            }
           },
         );
     }
   }
+
 }
 
 

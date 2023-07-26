@@ -57,9 +57,11 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
 
         navigationDelegate: (NavigationRequest request) {
           if (request.url.startsWith('https://evie-126a6.web.app/success.html')) {
-            SmartDialog.show(widget: EvieSingleButtonDialog(title: 'Successfully subscribed', content: 'Plan Already subscribed.', rightContent: 'View Plan', onPressedRight: () {Navigator.of(context).pop();},));
+            SmartDialog.show(widget:
+            EvieSingleButtonDialog(title: 'Successfully subscribed', content: 'Plan Already subscribed.', rightContent: 'View Plan', onPressedRight: () {SmartDialog.dismiss();},));
           } else if (request.url.startsWith('https://evie-126a6.web.app/cancel.html')) {
-            SmartDialog.show(widget: EvieSingleButtonDialog(title: 'Operation failed', content: 'User cancelled the action', rightContent: 'BACK', onPressedRight: () {Navigator.of(context).pop();},));
+            SmartDialog.show(widget:
+            EvieSingleButtonDialog(title: 'Operation failed', content: 'User cancelled the action', rightContent: 'BACK', onPressedRight: () {SmartDialog.dismiss();},));
           }
           return NavigationDecision.navigate;
         },
