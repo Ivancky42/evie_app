@@ -16,6 +16,8 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../api/enumerate.dart';
 import '../../api/fonts.dart';
@@ -46,6 +48,8 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
   bool isFirst = true;
   late String selectedDate;
+
+  late SelectionBehavior _selectionBehavior;
 
   @override
   void initState() {
@@ -78,7 +82,15 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           );
         });
 
+      _selectionBehavior = SelectionBehavior(
+        ///
+        enable: true,
+        selectedColor: EvieColors.primaryColor,
+        unselectedColor: EvieColors.lightPrimaryColor,
 
+
+
+     );
     super.initState();
   }
 
@@ -231,7 +243,6 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                     });
                   }else{
                     ///Swipe left, go to next date
-
                     //If picked date less than today
                     if(calculateDateDifferenceFromNow(pickedDate!) < 0){
                       setState(() {
@@ -258,12 +269,21 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                 }
 
               },
-              child:
-              SfCartesianChart(
+
+
+              child: SfCartesianChart(
                 primaryXAxis: CategoryAxis(
                     isVisible: true,
+                    // plotBands: <PlotBand>[
+                    //
+                    //   PlotBand(
+                    //       start: ,
+                    //       end: ,
+                    //       borderColor: EvieColors.primaryColor,
+                    //       borderWidth: 0.5.w,
+                    //       dashArray: const <double>[1,1]),
+                    // ]
                   ),
-
                 ///maximum, data.duration highest
                 primaryYAxis: NumericAxis(
                   //minimum: 0, maximum: 2500, interval: 300,
@@ -273,8 +293,18 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                 tooltipBehavior: _tooltip,
                 series: <ColumnSeries<ChartData, dynamic>>[
                   ColumnSeries<ChartData, dynamic>(
-                    dataSource: chartData,
 
+
+
+
+                    selectionBehavior: _selectionBehavior,
+
+
+
+
+
+
+                    dataSource: chartData,
                     xValueMapper: (ChartData data, _) =>
                       widget.format == TripFormat.day ? "${data.x.hour.toString().padLeft(2,'0')}:${data.x.minute.toString().padLeft(2,'0')}" :
                       widget.format == TripFormat.week ? weekdayName[data.x.weekday] :
@@ -321,6 +351,12 @@ class _TripHistoryDataState extends State<TripHistoryData> {
   }
 
   getData(){
+
+    selectedDate = widget.format == TripFormat.week ?
+    "${monthsInYear[pickedDate!.month]} ${pickedDate!.subtract(Duration(days: 6)).day}-${pickedDate!.day}, ${pickedDate!.year}" :
+    widget.format == TripFormat.month ?
+    "${monthsInYear[pickedDate!.month]}, ${pickedDate!.year}" :
+    "${monthsInYear[pickedDate!.month]} ${pickedDate!.day}, ${pickedDate!.year}";
 
     switch(widget.format){
       case TripFormat.day:

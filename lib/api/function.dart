@@ -123,7 +123,6 @@ calculateTimeDifferentInHourMinutes(DateTime startDateTime, DateTime endDateTime
     final minutes = duration.inMinutes.remainder(60);
     final minutesFraction = (minutes / 60).toDouble();
 
-    print(hours+minutesFraction);
     return hours + minutesFraction;
   } else {
     return 1.0;
@@ -158,7 +157,7 @@ const Map<int,String> monthsInYear = {
   2: "Feb",
   3: "Mar",
   4: "Apr",
-  5: "Mar",
+  5: "May",
   6: "Jun",
   7: "Jul",
   8: "Aug",

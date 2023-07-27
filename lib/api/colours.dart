@@ -2,16 +2,17 @@ import 'dart:ui';
 
 class EvieColors {
   static const primaryColor = Color(0xFF6A51CA);
-  static const pastelPurple = Color(0xffDAD4F2);
+  static const strongPurple = Color(0xFF836ED3);
+  static const lightPrimaryColor = Color(0xFF9C8BDC);
   static const softPurple = Color(0xffC1B7E8);
   static const lightPurple = Color(0xFFCDC5ED);
-  static const strongPurple = Color(0xFF836ED3);
+  static const pastelPurple = Color(0xffDAD4F2);
   static const blue = Color(0xFF0075FF);
   static const yellow = Color(0xffFFD600);
   static const lightOrange = Color(0xffF4B13B);
   static const orange = Color(0xffE59200);
-  static const red = Color(0xFFFE4A49);
   static const veryLightRed = Color(0xFFFF7373);
+  static const red = Color(0xFFFE4A49);
   static const lightRed = Color(0xffF42525);
   static const darkRed = Color(0xffCA0D0D);
   static const lightGreen = Color(0xff00D015);

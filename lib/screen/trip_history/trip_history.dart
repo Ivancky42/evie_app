@@ -64,8 +64,7 @@ class _TripHistoryState extends State<TripHistory> {
                         ),
 
                         Padding(
-                          padding:
-                          EdgeInsets.only(left: 16.w, right: 16.w, bottom: 30.h),
+                          padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 30.h),
                           child: Container(
                             decoration: BoxDecoration(
                                 color: EvieColors.lightGrayishCyan,
@@ -123,6 +122,7 @@ class _TripHistoryState extends State<TripHistory> {
                       ],
                     ),
                   ))
+                  ///Premium plan subscript == false
                       :
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,6 +149,7 @@ class _TripHistoryState extends State<TripHistory> {
                       )
                     ],
                   )
+              ///User no bike
                   :
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

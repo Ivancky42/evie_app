@@ -96,12 +96,6 @@ class _RideHistoryState extends State<RideHistory> {
       },
 
       child: Scaffold(
-        // appBar: PageAppbar(
-        //   title: 'Ride History',
-        //   onPressed: () {
-        //     changeToTripHistory(context);
-        //   },
-        // ),
         body: Stack(
           children: [
             Column(
