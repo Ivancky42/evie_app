@@ -339,7 +339,8 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                   opposedPosition: true,
                 ),
 
-                tooltipBehavior: _tooltip,
+                ///ToolTip
+                //tooltipBehavior: _tooltip,
                 series: <ColumnSeries<ChartData, dynamic>>[
                   ColumnSeries<ChartData, dynamic>(
 
