@@ -80,7 +80,6 @@ class _RecentActivityState extends State<RecentActivity> {
                 _tripProvider.currentTripHistoryLists.values.elementAt(index))){
               return  Column(
                 children: [
-
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
@@ -137,48 +136,48 @@ class _RecentActivityState extends State<RecentActivity> {
                 ],
               );
             }else{
-              return Container();
+              return SizedBox.shrink();
             }
           },
         ),
 
-        Padding(
-          padding:
-          const EdgeInsets.all(6),
-          child:  Padding(
-            padding: EdgeInsets.only(
-                left: 16.w, right: 16.w, top: 0.h, bottom: 6.h),
-            child: Container(
-              height: 45.h,
-              width: double.infinity,
-              child: ElevatedButton(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Show All Data",
-                      style:  EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
-                    ),
-                    SvgPicture.asset(
-                     "assets/buttons/external_link.svg",
-                    ),
-                  ],
-                ),
-                onPressed: () {
-                  ///Go to external link
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      side:  BorderSide(color: Color(0xff7A7A79), width: 1.5.w)),
-                  elevation: 0.0,
-                  backgroundColor: Colors.transparent,
-
-                ),
-              ),
-            ),
-          ),
-        ),
+        // Padding(
+        //   padding:
+        //   const EdgeInsets.all(6),
+        //   child:  Padding(
+        //     padding: EdgeInsets.only(
+        //         left: 16.w, right: 16.w, top: 0.h, bottom: 6.h),
+        //     child: Container(
+        //       height: 45.h,
+        //       width: double.infinity,
+        //       child: ElevatedButton(
+        //         child: Row(
+        //           mainAxisAlignment: MainAxisAlignment.center,
+        //           children: [
+        //             Text(
+        //               "Show All Data",
+        //               style:  EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
+        //             ),
+        //             SvgPicture.asset(
+        //              "assets/buttons/external_link.svg",
+        //             ),
+        //           ],
+        //         ),
+        //         onPressed: () {
+        //           ///Go to external link
+        //         },
+        //         style: ElevatedButton.styleFrom(
+        //           shape: RoundedRectangleBorder(
+        //               borderRadius: BorderRadius.circular(10.0),
+        //               side:  BorderSide(color: Color(0xff7A7A79), width: 1.5.w)),
+        //           elevation: 0.0,
+        //           backgroundColor: Colors.transparent,
+        //
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
 
         ///Hide
         // Center(

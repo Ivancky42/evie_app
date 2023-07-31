@@ -42,17 +42,20 @@ class _UserManualState extends State<UserManual> {
   late BikeProvider _bikeProvider;
   late SettingProvider _settingProvider;
 
-
   int totalSeconds = 105;
 
   StreamSubscription? stream;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     _tripProvider = Provider.of<TripProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
-
 
     return WillPopScope(
       onWillPop: () async {

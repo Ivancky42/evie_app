@@ -48,6 +48,11 @@ class _AboutBikeState extends State<AboutBike> {
   StreamSubscription? stream;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _tripProvider = Provider.of<TripProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);

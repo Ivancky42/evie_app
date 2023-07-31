@@ -51,8 +51,17 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
   late SelectionBehavior _selectionBehavior;
 
+  double? selectedMileageTemp;
+  DateTime? selectedDateTemp;
+  String? selectedMileage;
+  ///Selected carbon footprint
+  String? selectedCF;
+
+  bool isFirstLoad = true;
+
   @override
   void initState() {
+
     pickedDate = DateTime(now.year, now.month, now.day);
 
     selectedDate = widget.format ==
@@ -83,14 +92,12 @@ class _TripHistoryDataState extends State<TripHistoryData> {
         });
 
       _selectionBehavior = SelectionBehavior(
-        ///
         enable: true,
         selectedColor: EvieColors.primaryColor,
         unselectedColor: EvieColors.lightPrimaryColor,
-
-
-
      );
+
+
     super.initState();
   }
 
@@ -100,7 +107,12 @@ class _TripHistoryDataState extends State<TripHistoryData> {
     _tripProvider = Provider.of<TripProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
-    getData();
+    if(isFirstLoad){
+      _tripProvider.changeSelectedIndex(-1, TripFormat.day);
+      getData();
+      isFirstLoad = false;
+    }
+
 
     return SingleChildScrollView(
       physics:const BouncingScrollPhysics(),
@@ -121,23 +133,31 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                   _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
                   Row(
                     children: [
-                      Text((_tripProvider.currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2), style: EvieTextStyles.display,),
+                      Text(
+                        ///Selected km
+                        selectedMileage != null ? ((stringToDouble(selectedMileage!))/1000).toStringAsFixed(2) :
+                        (_tripProvider.currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2), style: EvieTextStyles.display,),
                       Text(" km", style: EvieTextStyles.body18,),
                     ],
                   ):
                   Row(
                     children: [
-                      Text(_settingProvider.convertMeterToMilesInString(_tripProvider.currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())), style: EvieTextStyles.display,),
+                      Text(
+                        selectedMileage != null ? _settingProvider.convertMeterToMilesInString(((stringToDouble(selectedMileage!))/1000).toStringAsFixed(2)) :
+                        _settingProvider.convertMeterToMilesInString(_tripProvider.currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())), style: EvieTextStyles.display,),
                       Text(" miles", style: EvieTextStyles.body18,),
                     ],
                   ),
 
-                }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(1))...{
+                }
+                else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(1))...{
                   // Text(_bikeProvider.currentTripHistoryLists.length.toStringAsFixed(0), style: EvieTextStyles.display,),
                   Text(_tripProvider.currentTripHistoryListDay.length.toStringAsFixed(0), style: EvieTextStyles.display,),
                   Text(" rides", style: EvieTextStyles.body18,),
                 }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(2))...{
-                  Text(thousandFormatting((_tripProvider.currentTripHistoryListDay.fold<int>(0, (prev, element) => prev + element.carbonPrint!))), style: EvieTextStyles.display,),
+                  Text(
+                    selectedCF != null ? thousandFormatting(stringToDouble(selectedCF!)) :
+                    thousandFormatting((_tripProvider.currentTripHistoryListDay.fold<int>(0, (prev, element) => prev + element.carbonPrint!))), style: EvieTextStyles.display,),
                   Text(" g", style: EvieTextStyles.body18,),
                 },
 
@@ -201,6 +221,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                             });
                           }
                         }
+                      getData();
                     },
                     child: SvgPicture.asset(
                       "assets/buttons/calendar.svg",
@@ -218,6 +239,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
               onHorizontalDragEnd: (DragEndDetails details){
+                getData();
                 double velocity = details.velocity.pixelsPerSecond.dx;
                 if(widget.format == TripFormat.month){
                   if(velocity > 0){
@@ -272,6 +294,33 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
 
               child: SfCartesianChart(
+                onSelectionChanged: (SelectionArgs args) {
+                  var tappedData = args.pointIndex < chartData.length
+                      ? chartData[args.pointIndex]
+                      : null;
+                  if (tappedData != null) {
+                   // _tripProvider.changeSelectedIndex(tappedData.y);
+
+                    selectedMileageTemp = tappedData.y;
+                    selectedDateTemp = tappedData.x;
+
+                    if(widget.format == _tripProvider.tripFormat && args.pointIndex == _tripProvider.selectedIndex){
+                      _tripProvider.changeSelectedIndex(-1, TripFormat.day);
+                      setState(() {
+                        selectedMileage = null;
+                        selectedCF = null;
+                      });
+                    }else{
+                      _tripProvider.changeSelectedIndex(args.pointIndex, widget.format);
+                    }
+
+                    getData();
+
+                  }
+                },
+                // onSelectionChanged: (index){
+                //   print(index.pointIndex);
+                // },
                 primaryXAxis: CategoryAxis(
                     isVisible: true,
                     // plotBands: <PlotBand>[
@@ -294,15 +343,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                 series: <ColumnSeries<ChartData, dynamic>>[
                   ColumnSeries<ChartData, dynamic>(
 
-
-
-
                     selectionBehavior: _selectionBehavior,
-
-
-
-
-
 
                     dataSource: chartData,
                     xValueMapper: (ChartData data, _) =>
@@ -370,6 +411,15 @@ class _TripHistoryDataState extends State<TripHistoryData> {
             _tripProvider.currentTripHistoryListDay.add(value);
           }
         });
+
+
+        if(_tripProvider.selectedIndex != -1 && _tripProvider.tripFormat == TripFormat.day){
+          setState(() {
+            selectedMileage = _tripProvider.currentTripHistoryListDay.elementAt(_tripProvider.selectedIndex).distance.toString();
+            selectedCF = _tripProvider.currentTripHistoryListDay.elementAt(_tripProvider.selectedIndex).carbonPrint.toString();
+          });
+        }
+
         return;
       case TripFormat.week:
 
@@ -413,6 +463,31 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           });
         }
 
+        if(_tripProvider.selectedIndex != -1 && _tripProvider.tripFormat == TripFormat.week){
+
+          double tempMileage = 0;
+          double tempCF = 0;
+
+          for (var i = 0; i< _tripProvider.currentTripHistoryListDay.length; i++) {
+            if(selectedDateTemp?.year == _tripProvider.currentTripHistoryListDay.elementAt(i).startTime!.toDate().year &&
+                selectedDateTemp?.month == _tripProvider.currentTripHistoryListDay.elementAt(i).startTime!.toDate().month &&
+                selectedDateTemp?.day == _tripProvider.currentTripHistoryListDay.elementAt(i).startTime!.toDate().day){
+              tempMileage += _tripProvider.currentTripHistoryListDay.elementAt(i).distance!;
+              tempCF += _tripProvider.currentTripHistoryListDay.elementAt(i).carbonPrint!;
+            }
+          }
+
+          setState(() {
+            if(tempMileage != 0){
+              selectedMileage = tempMileage.toString();
+            }
+            if(selectedMileageTemp != 0){
+              selectedCF = tempCF.toString();
+            }
+          });
+
+        }
+
         return;
       case TripFormat.month:
         chartData.clear();
@@ -433,6 +508,32 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           }
         });
 
+        if(_tripProvider.selectedIndex != -1 && _tripProvider.tripFormat == TripFormat.month){
+
+          double tempMileage = 0;
+          double tempCF = 0;
+
+          for (var i = 0; i< _tripProvider.currentTripHistoryListDay.length; i++) {
+            if(selectedDateTemp?.year == _tripProvider.currentTripHistoryListDay.elementAt(i).startTime!.toDate().year &&
+                selectedDateTemp?.month == _tripProvider.currentTripHistoryListDay.elementAt(i).startTime!.toDate().month &&
+                selectedDateTemp?.day == _tripProvider.currentTripHistoryListDay.elementAt(i).startTime!.toDate().day){
+              tempMileage += _tripProvider.currentTripHistoryListDay.elementAt(i).distance!;
+              tempCF += _tripProvider.currentTripHistoryListDay.elementAt(i).carbonPrint!;
+            }
+          }
+
+          setState(() {
+            if(tempMileage != 0){
+              selectedMileage = tempMileage.toString();
+            }
+            if(selectedMileageTemp != 0){
+              selectedCF = tempCF.toString();
+            }
+          });
+
+        }
+
+
         return;
       case TripFormat.year:
         chartData.clear();
@@ -445,12 +546,35 @@ class _TripHistoryDataState extends State<TripHistoryData> {
         _tripProvider.currentTripHistoryLists.forEach((key, value) {
           ///Filter date
           if(value.startTime.toDate().year == pickedDate!.year){
-
             ChartData newData = chartData.firstWhere((data) => data.x.month == value.startTime.toDate().month);
             newData.y = newData.y + value.distance.toDouble();
             _tripProvider.currentTripHistoryListDay.add(value);
           }
         });
+
+        if(_tripProvider.selectedIndex != -1 && _tripProvider.tripFormat == TripFormat.year){
+
+          double tempMileage = 0;
+          double tempCF = 0;
+
+          for (var i = 0; i< _tripProvider.currentTripHistoryListDay.length; i++) {
+            if(selectedDateTemp?.year == _tripProvider.currentTripHistoryListDay.elementAt(i).startTime!.toDate().year &&
+                selectedDateTemp?.month == _tripProvider.currentTripHistoryListDay.elementAt(i).startTime!.toDate().month){
+              tempMileage += _tripProvider.currentTripHistoryListDay.elementAt(i).distance!;
+              tempCF += _tripProvider.currentTripHistoryListDay.elementAt(i).carbonPrint!;
+            }
+          }
+
+          setState(() {
+            if(tempMileage != 0){
+              selectedMileage = tempMileage.toString();
+            }
+            if(selectedMileageTemp != 0){
+              selectedCF = tempCF.toString();
+            }
+          });
+
+       }
         return;
     }
   }

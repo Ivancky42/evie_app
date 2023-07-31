@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:evie_test/api/backend/sim_api_caller.dart';
 import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/provider/plan_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:evie_test/screen/trip_history/trip_history_data.dart';
@@ -28,11 +27,18 @@ class TripHistory extends StatefulWidget {
 class _TripHistoryState extends State<TripHistory> {
 
   late BikeProvider _bikeProvider;
+  late TripProvider _tripProvider;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _tripProvider = Provider.of<TripProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {

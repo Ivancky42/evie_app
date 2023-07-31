@@ -348,7 +348,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                               padding: EdgeInsets.fromLTRB(19.w, 0.h, 19.w, 16.w),
                               //  padding: EdgeInsets.fromLTRB(19.w, 16.42.h, 19.w, 16.w),
                               child: Container(
-                                  height: 232.h,
+                                  height: 240.h,
                                   child: OrbitalAntiTheft()),
                             ),
 

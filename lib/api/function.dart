@@ -186,6 +186,10 @@ splitCapitalString(String word){
   return word.split(pattern).join(' ');
 }
 
+stringToDouble(String target){
+  return double.parse(target);
+}
+
 /// Yesterday : calculateDifference(date) == -1.
 /// Today : calculateDifference(date) == 0.
 /// Tomorrow : calculateDifference(date) == 1

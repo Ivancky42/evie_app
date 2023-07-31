@@ -6,6 +6,7 @@ import 'package:evie_test/api/model/bike_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/utils.dart';
 import '../function.dart';
 import '../model/trip_history_model.dart';
 import 'bike_provider.dart';
@@ -36,6 +37,9 @@ class TripProvider extends ChangeNotifier {
   late String currentData;
 
   late List<ChartData> chartData = [];
+
+  int selectedIndex = -1;
+  TripFormat tripFormat = TripFormat.day;
   
   TripProvider() {
     init();
@@ -44,7 +48,6 @@ class TripProvider extends ChangeNotifier {
   ///Initial value
   Future<void> init() async {
     currentData = dataType.first;
-    getTripHistory();
     notifyListeners();
   }
 
@@ -58,49 +61,30 @@ class TripProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  ///Get data once when load page into trip history data
   getTripHistory() async {
-    tripHistorySubscription?.cancel();
+    //tripHistorySubscription?.cancel();
     if(currentBikeModel != null){
       currentTripHistoryLists.clear();
-      try{
-        tripHistorySubscription = FirebaseFirestore.instance
+        await FirebaseFirestore.instance
             .collection(bikesCollection)
             .doc(currentBikeModel!.deviceIMEI)
 ///            .doc("862205055084620")
             .collection(tripHistoryCollection)
             .orderBy("startTime", descending: true)
-            .snapshots()
-            .listen((snapshot) {
-          if (snapshot.docs.isNotEmpty) {
-            for (var docChange in snapshot.docChanges) {
-              switch (docChange.type) {
-                case DocumentChangeType.added:
-                  Map<String, dynamic>? obj = docChange.doc.data();
-                  currentTripHistoryLists.putIfAbsent(docChange.doc.id, () => TripHistoryModel.fromJson(obj!));
-                  notifyListeners();
-                  break;
-                case DocumentChangeType.removed:
-                  currentTripHistoryLists.removeWhere((key, value) => key == docChange.doc.id);
-                  notifyListeners();
-                  break;
-                case DocumentChangeType.modified:
-                  Map<String, dynamic>? obj = docChange.doc.data();
-                  currentTripHistoryLists.update(docChange.doc.id, (value) => TripHistoryModel.fromJson(obj!));
-                  notifyListeners();
-                  break;
+            .get().then((value) {
+              if(value.docs.isNotEmpty){
+                value.docs.forEach((element) {
+                  Map<String, dynamic>? obj = element.data();
+                  currentTripHistoryLists.putIfAbsent(element.id, () => TripHistoryModel.fromJson(obj));
+                });
+              }else{
+                currentTripHistoryLists.clear();
               }
-            }
-          }else{
-            currentTripHistoryLists.clear();
-          }
-        });
-
-      }catch (e) {
-        debugPrint(e.toString());
-        tripHistorySubscription?.cancel();
-      }
+              notifyListeners();
+           });
+        }
     }
-  }
 
 
    getYearStatusData(DateTime pickedData){
@@ -173,6 +157,11 @@ class TripProvider extends ChangeNotifier {
         trip.endTrip == tripModel.endTrip);
   }
 
+  changeSelectedIndex(dynamic index, TripFormat tripFormat){
+    selectedIndex = index;
+    this.tripFormat = tripFormat;
+
+  }
 
   clear(){
     tripHistorySubscription?.cancel();
