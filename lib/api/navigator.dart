@@ -62,6 +62,7 @@ import '../screen/signup_method.dart';
 import '../screen/signup_page.dart';
 
 import '../abandon/user_notification_details.dart';
+import '../screen/signup_password.dart';
 import '../screen/user_home_page/paid_plan/threat_map.dart';
 import '../screen/user_home_page/paid_plan/threat_map.dart';
 import '../screen/user_home_page/paid_plan/threat_timeline.dart';
@@ -85,12 +86,18 @@ void changeToSignUpMethodScreen(BuildContext context, name) {
   );
 }
 
+
 void changeToSignUpScreen(BuildContext context, name) {
   Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
       builder: (context) => SignUp(name))
   );
 }
 
+void changeToSignUpPasswordScreen(BuildContext context, name, email) {
+  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
+      builder: (context) => SignUpPassword(name, email))
+  );
+}
 void changeToAccountVerifiedScreen(BuildContext context) {
   Navigator.of(context).pushNamedAndRemoveUntil("/accountVerified", (route) => false);
 }
@@ -104,6 +111,11 @@ void changeToVerifyEmailScreen(BuildContext context) {
 changeToSignInMethodScreen(BuildContext context) {
   Navigator.of(context).pushNamedAndRemoveUntil("/signInMethod", (route) => false);
 }
+
+// void changeToSignUpPasswordScreen(BuildContext context) {
+//   Navigator.of(context).pushNamedAndRemoveUntil("/signUpPassword", (route) => false);
+// }
+
 
 void changeToSignInScreen(BuildContext context) {
   Navigator.of(context).pushNamedAndRemoveUntil("/signIn", (route) => false);

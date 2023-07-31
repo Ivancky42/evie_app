@@ -32,9 +32,9 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   //To read data from user input
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
+  // final TextEditingController _passwordController = TextEditingController();
+  // final TextEditingController _passwordConfirmController = TextEditingController();
+  // final TextEditingController _nameController = TextEditingController();
   late AuthProvider _authProvider;
   late CurrentUserProvider _currentUserProvider;
 
@@ -73,12 +73,12 @@ class _SignUpState extends State<SignUp> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
 
-                        Text("${widget.name}, let's finish your setup",
+                        Text("${widget.name}, let's setup your account",
                           style: EvieTextStyles.h2,),
                         SizedBox(
                           height: 4.h,
                         ),
-                        Text("Enter your email address and password",
+                        Text("Enter your email address",
                           style: EvieTextStyles.body18,),
                         SizedBox(
                           height: 9.h,
@@ -93,72 +93,14 @@ class _SignUpState extends State<SignUp> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
                             }else if(!value.contains("@")){
-                              return 'Looks like you entered the wrong email. The correct format for email address ad follow "sample@youremail.com". ';
+                              return 'Looks like you entered the wrong email. '
+                                  'The correct format for email address ad follow "sample@youremail.com". ';
                             }
                             return null;
                           },
                         ),
                         SizedBox(
                           height: 8.h,
-                        ),
-                        EvieTextFormField(
-                          controller: _passwordController,
-                          obscureText: _isObscure,
-                          labelText: "Password",
-                          hintText: "enter your password",
-                          suffixIcon: IconButton(
-                              icon:   _isObscure ?
-                              const Image(
-                                image: AssetImage("assets/buttons/view_off.png"),
-                              ):
-                              const Image(
-                                image: AssetImage("assets/buttons/view_on.png"),
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _isObscure = !_isObscure;
-                                });
-                              }),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your password';
-                            }
-                            if (value.length < 8) {
-                              return 'Password must have at least 8 character';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 8.h,
-                        ),
-                        EvieTextFormField(
-                          controller: _passwordConfirmController,
-                          obscureText: _isObscure2,
-                          labelText: "Confirm your password",
-                          hintText: "confirm your password",
-                          suffixIcon: IconButton(
-                              icon:   _isObscure2 ?
-                              const Image(
-                                image: AssetImage("assets/buttons/view_off.png"),
-                              ):
-                              const Image(
-                                image: AssetImage("assets/buttons/view_on.png"),
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _isObscure2 = !_isObscure2;
-                                });
-                              }),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your password';
-                            }else if (_passwordController.value.text !=
-                                _passwordConfirmController.value.text) {
-                              return 'Passwords do not match';
-                            }
-                            return null;
-                          },
                         ),
 
                       ],
@@ -174,118 +116,21 @@ class _SignUpState extends State<SignUp> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding:  EdgeInsets.only(left: 16.w, right: 16.w, bottom: EvieLength.buttonWord_ButtonBottom),
-                child: Row(
-                    children: [
-
-                      EvieCheckBox(
-                          onChanged: (bool? value) {
-                            setState(() {
-                              isCheckTermsCondition = value!;
-                            });
-                          },
-                          value: isCheckTermsCondition),
-
-                      Expanded(
-                        child: Container(
-
-                            child:Text("By creating an account, I accept EVIE's terms of use and privacy policy.",
-                              style: EvieTextStyles.body14)
-                        ),
-                      ),
-
-
-                    ]),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
                 padding:  EdgeInsets.only(left: 16.w, right: 16.w, bottom: EvieLength.button_Bottom),
                 child: EvieButton(
                   width: double.infinity,
+
                   child: Text(
-                    "Create Account",
+                    "Next",
                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                   ),
-                  onPressed: isCheckTermsCondition == true ? () async {
-                    if (_formKey.currentState!.validate()) {
 
-                      ///For keyboard un focus
-                      FocusManager.instance.primaryFocus?.unfocus();
+                  onPressed: ()  {
+                    if (_formKey.currentState!.validate()){
+                    changeToSignUpPasswordScreen(context, widget.name, _emailController.text.trim());
+                  }
+                  }
 
-                      try {
-                        if (await _authProvider.signUp(
-                            _emailController.text.trim(),
-                            _passwordController.text.trim(),
-                            widget.name,
-                            "empty") ?? true) {
-
-                          _authProvider.setIsFirstLogin(true);
-
-                          await _authProvider
-                              .login(_emailController.text.trim(),
-                              _passwordController.text.trim())
-                              .then((result) {
-                            if (result.toString() == "Verified") {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Success'),
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
-                              ///Quit loading and go to user home page
-                              changeToBeforeYouStart(context);
-                            } else if (result.toString() == "Not yet verify") {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Verify your account'),
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
-                              changeToVerifyEmailScreen(context);
-
-                              _currentUserProvider.getDeviceInfo();
-                            } else {
-                              SmartDialog.show(
-                                widget: EvieSingleButtonDialog(
-                                    title: "Error",
-                                    content: result.toString(),
-                                    rightContent: "Ok",
-                                    widget: Image.asset(
-                                      "assets/images/error.png",
-                                      width: 36,
-                                      height: 36,
-                                    ),
-                                    onPressedRight: () {
-                                      SmartDialog.dismiss();
-                                    }),
-                              );
-                            }
-                          });
-
-                        } else {
-                          debugPrint("Sign Up Error");
-                          SmartDialog.show(
-                            widget: EvieSingleButtonDialog(
-                                title: "Error",
-                                content: "Try again",
-                                rightContent: "Ok",
-                                widget: Image.asset(
-                                  "assets/images/error.png",
-                                  width: 36,
-                                  height: 36,
-                                ),
-                                onPressedRight: () {
-                                  SmartDialog.dismiss();
-                                }),
-                          );
-                        }
-                      } catch (error) {
-                        debugPrint(error.toString());
-                      }
-                    }
-                  } : null,
                 ),
               ),
             ),

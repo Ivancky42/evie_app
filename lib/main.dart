@@ -12,6 +12,7 @@ import 'package:evie_test/screen/my_account/verify_password.dart';
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_sensitivity.dart';
 import 'package:evie_test/screen/onboarding_addNewBike/before_you_start.dart';
 import 'package:evie_test/screen/signup_method.dart';
+import 'package:evie_test/screen/signup_password.dart';
 import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/screen/verify_email.dart';
 import 'package:evie_test/screen/welcome_page.dart';
@@ -276,6 +277,8 @@ class MyApp extends StatelessWidget {
             "/verifyPassword": (context) => const VerifyPassword(),
             "/enterNewPassword": (context) => const EnterNewPassword(),
             "/detectionSensitivity": (context) => const DetectionSensitivity(),
+            //"/signUpPassword": (context, name, email) => SignUpPassword(),
+
           },
 
           navigatorObservers: [FlutterSmartDialog.observer],
