@@ -88,12 +88,21 @@ class _SignUpPasswordState extends State<SignUpPassword> {
       },
 
       child: Scaffold(
+
+        ///ensure words do not collide when keyboard activated
+          resizeToAvoidBottomInset: false,
           appBar: EvieAppbar_Back(onPressed: (){ changeToInputNameScreen(context);}),
 
-          body: Stack(
-            children: [
-              SingleChildScrollView(
-                child: Column(children: [
+        ///on tap closes keyboard
+        body: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                      children: [
                   Form(
                     key: _formKey,
                     child: Padding(
@@ -174,7 +183,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                                 ),
                               } else ...{
                                 SvgPicture.asset(
-                                  "assets/icons/tick.svg",
+                                  "assets/icons/grey_tick.svg",
                                 ),
                               },
 
@@ -194,7 +203,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                                 ),
                               } else...{
                                 SvgPicture.asset(
-                                  "assets/icons/tick.svg",
+                                  "assets/icons/grey_tick.svg",
                                 ),
                               },
                               Text(
@@ -345,6 +354,6 @@ class _SignUpPasswordState extends State<SignUpPassword> {
               ),
               ],
           )),
-    );
+    ));
   }
 }
