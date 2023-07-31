@@ -121,8 +121,8 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                                   padding: const EdgeInsets.only(left: 15.0),
                                                       child: Image(
                                                   image: const AssetImage("assets/buttons/bike_left_pic.png"),
-                                                  width: 49.h,
-                                                  height: 49.h,
+                                                  width: 56.h,
+                                                  height: 56.h,
                                                 ),
                                                     )
                                                     : Padding(
@@ -135,8 +135,8 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                                       imageUrl: _bikeProvider.currentBikeModel!.bikeIMG!,
                                                       placeholder: (context, url) => const CircularProgressIndicator(),
                                                       errorWidget: (context, url, error) => Icon(Icons.error),
-                                                      width: 49.h,
-                                                      height: 49.h,
+                                                      width: 56.h,
+                                                      height: 56.h,
                                                       fit: BoxFit.cover,
                                                     ),
                                                   ) : Container() : Container()

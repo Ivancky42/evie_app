@@ -224,8 +224,8 @@ class _FreePlanState extends State<FreePlan> {
                                                       padding: const EdgeInsets.only(left: 15.0),
                                                       child: Image(
                                                         image: const AssetImage("assets/buttons/bike_left_pic.png"),
-                                                        width: 49.h,
-                                                        height: 49.h,
+                                                        width: 56.h,
+                                                        height: 56.h,
                                                       ),
                                                     )
                                                         : Container(
@@ -236,8 +236,8 @@ class _FreePlanState extends State<FreePlan> {
                                                           imageUrl: _bikeProvider.currentBikeModel!.bikeIMG!,
                                                           placeholder: (context, url) => const CircularProgressIndicator(),
                                                           errorWidget: (context, url, error) => Icon(Icons.error),
-                                                          width: 49.h,
-                                                          height: 49.h,
+                                                          width: 56.h,
+                                                          height: 56.h,
                                                           fit: BoxFit.cover,
                                                         ),
                                                       ),
