@@ -71,7 +71,7 @@ class _RidesState extends State<Rides> {
             Padding(
               padding: EdgeInsets.only(top:12.h),
               child: EvieOvalGray(
-                buttonText: _tripProvider.currentData == "Carbon Footprint" ? "CO2 Saved" : _tripProvider.currentData == "No of Ride" ? "No. of Rides"  : _tripProvider.currentData == "Mileage" ? "Distance" :_tripProvider.currentData,
+                buttonText: _tripProvider.currentData == "Carbon Footprint" ? "CO2 Saved" : _tripProvider.currentData == "No of Ride" ? "No. of Rides"  : _tripProvider.currentData == "Mileage" ? "Mileage" :_tripProvider.currentData,
                 onPressed: (){
                   if(_tripProvider.currentData == _tripProvider.dataType.first){
                     _tripProvider.setCurrentData(_tripProvider.dataType.elementAt(1));

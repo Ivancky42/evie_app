@@ -190,6 +190,28 @@ stringToDouble(String target){
   return double.parse(target);
 }
 
+emptyFormatting(dynamic target) {
+  //Check if the target is a string
+  if (target is String) {
+    if (target == '0' || target == '0.00') {
+      return '-';
+    } else {
+      return target;
+    }
+  }
+
+  //Check if the target is an int or double
+  if (target is int || target is double) {
+    if (target == 0) {
+      return '-';
+    } else {
+      return target;
+    }
+  }
+
+  return '-';
+}
+
 /// Yesterday : calculateDifference(date) == -1.
 /// Today : calculateDifference(date) == 0.
 /// Tomorrow : calculateDifference(date) == 1

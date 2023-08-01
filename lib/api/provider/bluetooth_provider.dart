@@ -345,6 +345,8 @@ class BluetoothProvider extends ChangeNotifier {
 
         deviceConnectStream.add(DeviceConnectResult.disconnected);
         deviceConnectResult = DeviceConnectResult.disconnected;
+
+        print(deviceConnectResult);
         notifyListeners();
       }
     }

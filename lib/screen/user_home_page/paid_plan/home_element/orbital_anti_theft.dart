@@ -52,7 +52,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
   MapboxMap? mapboxMap;
   OnMapScrollListener? onMapScrollListener;
 
-  var currentAnnotationId;
+  var currentAnnotationIdList = [];
   var markers = <Marker>[];
   int _currentIndex = 0;
 
@@ -398,14 +398,17 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
   loadMarker() async {
     options.clear();
 
-    if(currentAnnotationId != null){
-      await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
+    if(currentAnnotationIdList.isNotEmpty){
+      ///Check if have this id
+      currentAnnotationIdList.forEach((element) async {
+        await mapboxMap?.annotations.removeAnnotationManager(element);
+      });
     }
 
     await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
 
       ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
-      currentAnnotationId = pointAnnotationManager;
+      currentAnnotationIdList.add(pointAnnotationManager);
 
       ///Add disconnected threat
       if(_locationProvider.locationModel!.isConnected == false){
