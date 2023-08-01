@@ -158,6 +158,12 @@ class _FreePlanState extends State<FreePlan> {
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     cableLockState = _bluetoothProvider.cableLockState;
 
+    int batteryPercentage = _bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected
+        ? int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")
+        : _bikeProvider.currentBikeModel?.batteryPercent ?? 0;
+
+    String estimatedDistance = getEstDistance(batteryPercentage);
+
     setButtonImage();
 
     LatLng currentLatLngFree;
@@ -764,16 +770,60 @@ class _FreePlanState extends State<FreePlan> {
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 mainAxisAlignment: MainAxisAlignment.end,
                                                 children: [
-                                                  SvgPicture.asset(
-                                                    "assets/icons/battery_not_available.svg",
-                                                    width: 36.w,
-                                                    height: 36.h,
+                                                  Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                    children: [
+                                                      Padding(
+                                                        padding: EdgeInsets.only(bottom: 4.h),
+                                                        child: SvgPicture.asset(
+                                                          getBatteryImage(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
+                                                          int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0") : _bikeProvider.currentBikeModel?.batteryPercent ?? 0),
+                                                          width: 30.w,
+                                                          height: 60.h,
+                                                        ),
+                                                      ),
+                                                      Column(
+                                                        mainAxisAlignment: MainAxisAlignment.end,
+                                                        children: [
+                                                          Padding(
+                                                            padding: EdgeInsets.only(left: 0.w),
+                                                            child: Row(
+                                                              children: [
+                                                                Text(
+                                                                  "${_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
+                                                                  int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0") :
+                                                                  _bikeProvider.currentBikeModel?.batteryPercent ?? 0}",
+                                                                  style: EvieTextStyles.batteryPercent.copyWith(height: 0.7),
+                                                                ),
+
+                                                                Text(
+                                                                  " %",
+                                                                  style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGray),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 0.h),
+                                                          Padding(
+                                                            padding: EdgeInsets.only(left: 8.w),
+                                                            child: Text(
+                                                              "$estimatedDistance",
+                                                              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
                                                   ),
-                                                  //Text("${int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")} %", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
-                                                  Text("- %", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
-                                                  Text("Est - km", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
+
+                                                  Padding(
+                                                    padding: EdgeInsets.only(bottom: 16.h, top: 12.h),
+                                                    child: Text(
+                                                      " 23 hours ago",
+                                                      style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),
+                                                    ),
                                                   ),
-                                                  SizedBox(height: 16.h,),
+
                                                 ],
                                               ),
                                             ),
