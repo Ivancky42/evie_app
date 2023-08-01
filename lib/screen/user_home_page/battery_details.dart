@@ -19,6 +19,7 @@ import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/location_provider.dart';
 import '../../../widgets/evie_radio_button.dart';
 import '../../../widgets/evie_switch.dart';
+import '../../animation/waved_curves_animation.dart';
 
 class BatteryDetails extends StatefulWidget {
 
@@ -40,6 +41,11 @@ class _BatteryDetailsState extends State<BatteryDetails> {
 
   PaginateRefreshedChangeListener refreshChangeListener = PaginateRefreshedChangeListener();
   int? snapshotLength;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +96,7 @@ class _BatteryDetailsState extends State<BatteryDetails> {
               //     "assets/buttons/down.svg",
               //   ),
               // ),
+
               Row(
                 mainAxisAlignment:
                 MainAxisAlignment.spaceBetween,
@@ -110,6 +117,15 @@ class _BatteryDetailsState extends State<BatteryDetails> {
                 thickness: 2,
               ),
 
+              Stack(
+                children: [
+                    //   Container(
+                    //   height: 500.h,
+                    //   width: double.infinity,
+                    //   child: WavedCurvesAnimation(),
+                    // ),
+                ],
+              ),
               Text("Model"),
               Text("Battery Life"),
               Text("Any Other Information"),

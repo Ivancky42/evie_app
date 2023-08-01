@@ -51,6 +51,7 @@ class _BatteryState extends State<Battery> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+
             SvgPicture.asset(
               getBatteryImage(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ? int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0") : _bikeProvider.currentBikeModel?.batteryPercent ?? 0),
               width: 36.w,
