@@ -1399,4 +1399,86 @@ showEvieActionableBarDialog(BuildContext context, BluetoothProvider bluetoothPro
   );
 }
 
+///to fully reset the bike
+showFullResetDialog (BuildContext context){
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Login Error",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Oops, the password you "
+            "entered is incorrect or you do not have an account yet. "
+            "Please double-check and try again",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        upContent: "Retry",
+        downContent: "Register Now",
+        onPressedUp: () {
+          SmartDialog.dismiss();
+        },
+        onPressedDown: () {
+          SmartDialog.dismiss();
+          changeToWelcomeScreen(context);
+        }),
+  );
+}
+
+///to unlink the bike
+showUnlinkBikeDialog (BuildContext context){
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Unlink Your Bike?",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Are you sure that you want to unlink your bike? "
+            "Your bike will be removed from the app, and its settings will be "
+            "forgotten until you sync your bike with the app again.",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        upContent: "Unlink Bike",
+        downContent: "Cancel",
+        onPressedUp: () {
+          SmartDialog.dismiss();
+        },
+        onPressedDown: () {
+          SmartDialog.dismiss();
+          //changeToWelcomeScreen(context);
+        }),
+  );
+}
+
+///connect bike to bluetooth before full reset
+showConnectBluetoothDialog (BuildContext context){
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Connect Your Bike",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Connect your bike and access "
+            "all the bike setting features smoothly.",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        upContent: "Connect Bike",
+        downContent: "Cancel",
+        onPressedUp: () {
+          SmartDialog.dismiss();
+        },
+        onPressedDown: () {
+          SmartDialog.dismiss();
+        }),
+  );
+}
+
 

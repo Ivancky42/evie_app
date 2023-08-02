@@ -771,7 +771,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                _settingProvider.changeSheetElement(SheetList.resetBike2);
+               // _settingProvider.changeSheetElement(SheetList.resetBike2);
               },
               child: Container(
                 height: 44.h,
@@ -783,7 +783,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                         Row(
                           children: [
                             Text(
-                              label!,
+                              "Reset",
                               style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                             ),
                           ],

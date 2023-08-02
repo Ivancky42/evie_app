@@ -56,6 +56,7 @@ class _BatteryState extends State<Battery> {
         crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+
               Row(
                  crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -90,6 +91,7 @@ class _BatteryState extends State<Battery> {
                         ),
                       ),
                       SizedBox(height: 0.h),
+
                       Padding(
                         padding: EdgeInsets.only(left: 8.w),
                         child: Text(
@@ -107,10 +109,8 @@ class _BatteryState extends State<Battery> {
               child: Text(
                 " 23 hours ago",
                 style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),
-              ),
-            ),
-
-          ],
+              ),),
+           ],
         ),
       ),
 

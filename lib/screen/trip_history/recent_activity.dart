@@ -46,11 +46,29 @@ class _RecentActivityState extends State<RecentActivity> {
   late TripProvider _tripProvider;
   late SettingProvider _settingProvider;
 
+  bool isNotEmptyData = true;
+
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _tripProvider = Provider.of<TripProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
+
+    // for (var i = 0; i < _tripProvider.currentTripHistoryLists.length; i++) {
+    //   if (_tripProvider.isFilterData(
+    //       _tripProvider.currentTripHistoryListDay,
+    //       _tripProvider.currentTripHistoryLists.values.elementAt(i)) == true) {
+    //
+    //     Future.delayed(Duration.zero, () {
+    //       isNotEmptyData = false;
+    //     });
+    //
+    //   }
+    // }
+    //
+    // print("hhhhh");
+    // print(isNotEmptyData);
+
 
     return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
