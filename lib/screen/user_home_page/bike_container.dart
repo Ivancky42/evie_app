@@ -72,18 +72,24 @@ class _BikeContainerState extends State<BikeContainer> {
         onTap: () async {
 
           /// if target pressed device imei != current device imei
-
           if(widget.bikeModel.deviceIMEI != _bikeProvider.currentBikeModel!.deviceIMEI){
             if( deviceConnectResult == DeviceConnectResult.connecting ||
                 deviceConnectResult == DeviceConnectResult.scanning ||
                 deviceConnectResult == DeviceConnectResult.connected ||
-                deviceConnectResult == DeviceConnectResult.partialConnected){
+                deviceConnectResult == DeviceConnectResult.partialConnected||
+                deviceConnectResult == DeviceConnectResult.disconnecting){
+              await _bluetoothProvider.stopScan();
+              await _bluetoothProvider.connectSubscription?.cancel();
               await _bluetoothProvider.disconnectDevice();
+              _bluetoothProvider.startScanTimer?.cancel();
+              _bluetoothProvider.deviceConnectStream.add(DeviceConnectResult.scanTimeout);
+              _bluetoothProvider.deviceConnectResult = DeviceConnectResult.scanTimeout;
+
               await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
               Navigator.pop(context);
             }else{
-              await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
-              Navigator.pop(context);
+               await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
+               Navigator.pop(context);
             }
           }
 
@@ -201,7 +207,6 @@ class _BikeContainerState extends State<BikeContainer> {
                 onPressed: () async {
                   if(!isSpecificDeviceConnected){
                     if(widget.bikeModel.deviceIMEI == _bikeProvider.currentBikeModel!.deviceIMEI){
-
                       checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
                       _notificationProvider.compareActionableBarTime();
                       Navigator.pop(context);

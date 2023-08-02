@@ -26,7 +26,8 @@ import '../../widgets/evie_oval.dart';
 
 class RecentActivity extends StatefulWidget{
   final TripFormat format;
-  const RecentActivity(this.format,{ Key? key }) : super(key: key);
+  final bool isDataEmpty;
+  const RecentActivity(this.format, this.isDataEmpty, { Key? key }) : super(key: key);
   @override
   _RecentActivityState createState() => _RecentActivityState();
 }
@@ -46,28 +47,12 @@ class _RecentActivityState extends State<RecentActivity> {
   late TripProvider _tripProvider;
   late SettingProvider _settingProvider;
 
-  bool isNotEmptyData = true;
 
   @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _tripProvider = Provider.of<TripProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
-
-    // for (var i = 0; i < _tripProvider.currentTripHistoryLists.length; i++) {
-    //   if (_tripProvider.isFilterData(
-    //       _tripProvider.currentTripHistoryListDay,
-    //       _tripProvider.currentTripHistoryLists.values.elementAt(i)) == true) {
-    //
-    //     Future.delayed(Duration.zero, () {
-    //       isNotEmptyData = false;
-    //     });
-    //
-    //   }
-    // }
-    //
-    // print("hhhhh");
-    // print(isNotEmptyData);
 
 
     return  Column(
@@ -84,12 +69,21 @@ class _RecentActivityState extends State<RecentActivity> {
           ),
         ),
 
+        Visibility(
+            visible: widget.isDataEmpty,
+            child: Padding(
+              padding: EdgeInsets.only(left: 16.w, top: 10.h),
+              child: Text("No Records",style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
+            )
+        ),
+
         ListView.separated(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           padding: EdgeInsets.zero,
           separatorBuilder: (context, index) {
-            return Divider(height: 1.h);
+            //return Divider(height: 1.h);
+            return const SizedBox.shrink();
           },
           itemCount: _tripProvider.currentTripHistoryLists.length,
           itemBuilder: (context, index) {

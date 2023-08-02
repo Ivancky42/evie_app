@@ -58,6 +58,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
   String? selectedCF;
 
   bool isFirstLoad = true;
+  bool isDataEmpty = true;
 
   @override
   void initState() {
@@ -96,8 +97,6 @@ class _TripHistoryDataState extends State<TripHistoryData> {
         selectedColor: EvieColors.primaryColor,
         unselectedColor: EvieColors.lightPrimaryColor,
      );
-
-
     super.initState();
   }
 
@@ -110,9 +109,9 @@ class _TripHistoryDataState extends State<TripHistoryData> {
     if(isFirstLoad){
       _tripProvider.changeSelectedIndex(-1, TripFormat.day);
       getData();
+      checkIsDataEmpty();
       isFirstLoad = false;
     }
-
 
     return SingleChildScrollView(
       physics:const BouncingScrollPhysics(),
@@ -135,16 +134,16 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                     children: [
                       Text(
                         ///Selected km
-                        selectedMileage != null ? ((stringToDouble(selectedMileage!))/1000).toStringAsFixed(2) :
-                        (_tripProvider.currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2), style: EvieTextStyles.display,),
+                        selectedMileage != null ? emptyFormatting(((stringToDouble(selectedMileage!))/1000).toStringAsFixed(2)) :
+                        emptyFormatting((_tripProvider.currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2)), style: EvieTextStyles.display,),
                       Text(" km", style: EvieTextStyles.body18,),
                     ],
                   ):
                   Row(
                     children: [
                       Text(
-                        selectedMileage != null ? _settingProvider.convertMeterToMilesInString(((stringToDouble(selectedMileage!))/1000).toStringAsFixed(2)) :
-                        _settingProvider.convertMeterToMilesInString(_tripProvider.currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())), style: EvieTextStyles.display,),
+                        selectedMileage != null ? emptyFormatting(_settingProvider.convertMeterToMilesInString(((stringToDouble(selectedMileage!))/1000).toStringAsFixed(2))) :
+                         emptyFormatting(_settingProvider.convertMeterToMilesInString(_tripProvider.currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()))), style: EvieTextStyles.display,),
                       Text(" miles", style: EvieTextStyles.body18,),
                     ],
                   ),
@@ -152,12 +151,12 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                 }
                 else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(1))...{
                   // Text(_bikeProvider.currentTripHistoryLists.length.toStringAsFixed(0), style: EvieTextStyles.display,),
-                  Text(_tripProvider.currentTripHistoryListDay.length.toStringAsFixed(0), style: EvieTextStyles.display,),
+                  Text(emptyFormatting(_tripProvider.currentTripHistoryListDay.length.toStringAsFixed(0)), style: EvieTextStyles.display,),
                   Text(" rides", style: EvieTextStyles.body18,),
                 }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(2))...{
                   Text(
-                    selectedCF != null ? thousandFormatting(stringToDouble(selectedCF!)) :
-                    thousandFormatting((_tripProvider.currentTripHistoryListDay.fold<int>(0, (prev, element) => prev + element.carbonPrint!))), style: EvieTextStyles.display,),
+                    selectedCF != null ? emptyFormatting(thousandFormatting(stringToDouble(selectedCF!))) :
+                     emptyFormatting(thousandFormatting((_tripProvider.currentTripHistoryListDay.fold<int>(0, (prev, element) => prev + element.carbonPrint!)))), style: EvieTextStyles.display,),
                   Text(" g", style: EvieTextStyles.body18,),
                 },
 
@@ -222,6 +221,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                           }
                         }
                       getData();
+                      checkIsDataEmpty();
                     },
                     child: SvgPicture.asset(
                       "assets/buttons/calendar.svg",
@@ -240,6 +240,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
               behavior: HitTestBehavior.translucent,
               onHorizontalDragEnd: (DragEndDetails details){
                 getData();
+                checkIsDataEmpty();
                 double velocity = details.velocity.pixelsPerSecond.dx;
                 if(widget.format == TripFormat.month){
                   if(velocity > 0){
@@ -289,95 +290,107 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                     }
                   }
                 }
-
               },
 
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  SfCartesianChart(
+                    onSelectionChanged: (SelectionArgs args) {
+                      var tappedData = args.pointIndex < chartData.length
+                          ? chartData[args.pointIndex]
+                          : null;
+                      if (tappedData != null) {
+                       // _tripProvider.changeSelectedIndex(tappedData.y);
 
-              child: SfCartesianChart(
-                onSelectionChanged: (SelectionArgs args) {
-                  var tappedData = args.pointIndex < chartData.length
-                      ? chartData[args.pointIndex]
-                      : null;
-                  if (tappedData != null) {
-                   // _tripProvider.changeSelectedIndex(tappedData.y);
+                        selectedMileageTemp = tappedData.y;
+                        selectedDateTemp = tappedData.x;
 
-                    selectedMileageTemp = tappedData.y;
-                    selectedDateTemp = tappedData.x;
+                        if(widget.format == _tripProvider.tripFormat && args.pointIndex == _tripProvider.selectedIndex){
+                          _tripProvider.changeSelectedIndex(-1, TripFormat.day);
+                          setState(() {
+                            selectedMileage = null;
+                            selectedCF = null;
+                          });
+                        }else{
+                          _tripProvider.changeSelectedIndex(args.pointIndex, widget.format);
+                        }
 
-                    if(widget.format == _tripProvider.tripFormat && args.pointIndex == _tripProvider.selectedIndex){
-                      _tripProvider.changeSelectedIndex(-1, TripFormat.day);
-                      setState(() {
-                        selectedMileage = null;
-                        selectedCF = null;
-                      });
-                    }else{
-                      _tripProvider.changeSelectedIndex(args.pointIndex, widget.format);
-                    }
+                        getData();
+                        checkIsDataEmpty();
 
-                    getData();
+                      }
+                    },
+                    // onSelectionChanged: (index){
+                    //   print(index.pointIndex);
+                    // },
+                    primaryXAxis: CategoryAxis(
+                        isVisible: true,
+                        // plotBands: <PlotBand>[
+                        //
+                        //   PlotBand(
+                        //       start: ,
+                        //       end: ,
+                        //       borderColor: EvieColors.primaryColor,
+                        //       borderWidth: 0.5.w,
+                        //       dashArray: const <double>[1,1]),
+                        // ]
+                      ),
+                    ///maximum, data.duration highest
+                    primaryYAxis: NumericAxis(
+                      //minimum: 0, maximum: 2500, interval: 300,
+                      opposedPosition: true,
+                    ),
 
-                  }
-                },
-                // onSelectionChanged: (index){
-                //   print(index.pointIndex);
-                // },
-                primaryXAxis: CategoryAxis(
-                    isVisible: true,
-                    // plotBands: <PlotBand>[
-                    //
-                    //   PlotBand(
-                    //       start: ,
-                    //       end: ,
-                    //       borderColor: EvieColors.primaryColor,
-                    //       borderWidth: 0.5.w,
-                    //       dashArray: const <double>[1,1]),
-                    // ]
-                  ),
-                ///maximum, data.duration highest
-                primaryYAxis: NumericAxis(
-                  //minimum: 0, maximum: 2500, interval: 300,
-                  opposedPosition: true,
-                ),
+                    ///ToolTip
+                    //tooltipBehavior: _tooltip,
+                    series: <ColumnSeries<ChartData, dynamic>>[
+                      ColumnSeries<ChartData, dynamic>(
 
-                ///ToolTip
-                //tooltipBehavior: _tooltip,
-                series: <ColumnSeries<ChartData, dynamic>>[
-                  ColumnSeries<ChartData, dynamic>(
+                        selectionBehavior: _selectionBehavior,
 
-                    selectionBehavior: _selectionBehavior,
+                        dataSource: chartData,
+                        xValueMapper: (ChartData data, _) =>
+                          widget.format == TripFormat.day ? "${data.x.hour.toString().padLeft(2,'0')}:${data.x.minute.toString().padLeft(2,'0')}" :
+                          widget.format == TripFormat.week ? weekdayName[data.x.weekday] :
+                          widget.format == TripFormat.month ? data.x.day :
+                          widget.format == TripFormat.year ? monthNameHalf[data.x.month] :
+                          data.x,
 
-                    dataSource: chartData,
-                    xValueMapper: (ChartData data, _) =>
-                      widget.format == TripFormat.day ? "${data.x.hour.toString().padLeft(2,'0')}:${data.x.minute.toString().padLeft(2,'0')}" :
-                      widget.format == TripFormat.week ? weekdayName[data.x.weekday] :
-                      widget.format == TripFormat.month ? data.x.day :
-                      widget.format == TripFormat.year ? monthNameHalf[data.x.month] :
-                      data.x,
+                        yValueMapper: (ChartData data, _) =>
+                          _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
+                          (data.y/1000):
+                          _settingProvider.convertMeterToMiles(data.y.toDouble()),
 
-                    yValueMapper: (ChartData data, _) =>
-                      _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
-                      (data.y/1000):
-                      _settingProvider.convertMeterToMiles(data.y.toDouble()),
+                        ///width of the column
+                        width: 0.8,
+                        ///Spacing between the column
+                        spacing: 0.2,
+                        name: chartData.toString(),
+                        color: EvieColors.primaryColor,
+                        borderRadius: const BorderRadius.only(
+                          topRight:  Radius.circular(5),
+                          topLeft: Radius.circular(5),
+                        ),
+                      ),
 
-                    ///width of the column
-                    width: 0.8,
-                    ///Spacing between the column
-                    spacing: 0.2,
-                    name: chartData.toString(),
-                    color: EvieColors.primaryColor,
-                    borderRadius: const BorderRadius.only(
-                      topRight:  Radius.circular(5),
-                      topLeft: Radius.circular(5),
+                    ],
+                    enableAxisAnimation: true,
+                    zoomPanBehavior: ZoomPanBehavior(
+                      enablePanning: false,
+                      enablePinching: false,
                     ),
                   ),
 
+                  Visibility(
+                      visible: isDataEmpty,
+                      child: Container(
+                        width: 75.w,
+                          color: EvieColors.grayishWhite,
+                          child: Center(
+                              child: Text("No Data",style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),))),
+                  ),
                 ],
-                enableAxisAnimation: true,
-                zoomPanBehavior: ZoomPanBehavior(
-                  enablePanning: false,
-                  enablePinching: false,
-                ),
-
               ),
             ),
           ),
@@ -385,7 +398,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           if(widget.format == TripFormat.year)...{
             YearStatus(pickedDate!),
           }else...{
-            RecentActivity(widget.format),
+            RecentActivity(widget.format, isDataEmpty),
           }
 
         ],),
@@ -577,6 +590,19 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
        }
         return;
+    }
+  }
+
+  checkIsDataEmpty(){
+    isDataEmpty = true;
+    for (var i = 0; i < _tripProvider.currentTripHistoryLists.length; i++) {
+      if (_tripProvider.isFilterData(
+          _tripProvider.currentTripHistoryListDay,
+          _tripProvider.currentTripHistoryLists.values.elementAt(i))) {
+
+        isDataEmpty = false;
+
+      }
     }
   }
 

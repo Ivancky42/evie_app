@@ -73,7 +73,7 @@ class _MapDetailsState extends State<MapDetails> {
   Position userPosition = Position(0, 0);
 
   var options = <PointAnnotationOptions>[];
-  var currentAnnotationId;
+  var currentAnnotationIdList = [];
 
   List<map_launcher.AvailableMap>? availableMaps;
   GeoPoint? selectedGeopoint;
@@ -410,19 +410,22 @@ class _MapDetailsState extends State<MapDetails> {
     //pointBounce(mapboxMap, _locationProvider, userPosition);
   }
 
-
   loadMarker() async {
+
     ///Marker
     options.clear();
-    if(currentAnnotationId != null){
+    if(currentAnnotationIdList.isNotEmpty){
       ///Check if have this id
-      await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationId);
+      currentAnnotationIdList.forEach((element) async {
+        await mapboxMap?.annotations.removeAnnotationManager(element);
+      });
     }
+
 
     await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
 
       ///using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
-      currentAnnotationId = pointAnnotationManager;
+      currentAnnotationIdList.add(pointAnnotationManager);
 
       if(_locationProvider.locationModel!.isConnected == false){
         final ByteData bytes = await rootBundle.load("assets/icons/marker_warning.png");
