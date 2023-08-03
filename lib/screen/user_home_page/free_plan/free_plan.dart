@@ -770,42 +770,49 @@ class _FreePlanState extends State<FreePlan> {
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 mainAxisAlignment: MainAxisAlignment.end,
                                                 children: [
+
                                                   Row(
                                                     crossAxisAlignment: CrossAxisAlignment.end,
                                                     children: [
                                                       Padding(
-                                                        padding: EdgeInsets.only(bottom: 4.h),
+                                                        padding: EdgeInsets.only(bottom: 4.h, right: 8.w),
                                                         child: SvgPicture.asset(
                                                           getBatteryImage(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
-                                                          int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0") : _bikeProvider.currentBikeModel?.batteryPercent ?? 0),
+                                                          int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")
+                                                              : _bikeProvider.currentBikeModel?.batteryPercent ?? 0),
                                                           width: 30.w,
                                                           height: 60.h,
                                                         ),
                                                       ),
                                                       Column(
                                                         mainAxisAlignment: MainAxisAlignment.end,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: [
-                                                          Padding(
-                                                            padding: EdgeInsets.only(left: 0.w),
-                                                            child: Row(
-                                                              children: [
-                                                                Text(
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.end,
+                                                            //mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              Padding(
+                                                                padding:EdgeInsets.only(left: 0.w),
+                                                                child: Text(
                                                                   "${_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
                                                                   int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0") :
                                                                   _bikeProvider.currentBikeModel?.batteryPercent ?? 0}",
                                                                   style: EvieTextStyles.batteryPercent.copyWith(height: 0.7),
                                                                 ),
-
-                                                                Text(
+                                                              ),
+                                                              Padding(
+                                                                padding: EdgeInsets.only(right: 15.w),
+                                                                child: Text(
                                                                   " %",
                                                                   style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGray),
                                                                 ),
-                                                              ],
-                                                            ),
+                                                              ),
+                                                            ],
                                                           ),
                                                           SizedBox(height: 0.h),
                                                           Padding(
-                                                            padding: EdgeInsets.only(left: 8.w),
+                                                            padding: EdgeInsets.only(left: 0.w, right: 15.w),
                                                             child: Text(
                                                               "$estimatedDistance",
                                                               style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
@@ -815,15 +822,12 @@ class _FreePlanState extends State<FreePlan> {
                                                       ),
                                                     ],
                                                   ),
-
                                                   Padding(
                                                     padding: EdgeInsets.only(bottom: 16.h, top: 12.h),
                                                     child: Text(
                                                       " 23 hours ago",
                                                       style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),
-                                                    ),
-                                                  ),
-
+                                                    ),),
                                                 ],
                                               ),
                                             ),
