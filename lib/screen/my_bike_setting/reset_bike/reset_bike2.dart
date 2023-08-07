@@ -59,68 +59,68 @@ class _ResetBike2State extends State<ResetBike2> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                GestureDetector(
-                  onTap: () {
-                    _settingProvider.changeSheetElement(SheetList.restoreBike);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(16.w, 36.5.h, 16.w, 2.0.h),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              "Reset Bike",
-                              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(width: 3.w),
-                            SvgPicture.asset(
-                              "assets/icons/bluetooth_disconnect.svg",
-                              height: 18.0,
-                              width: 18.0,
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0.w, 2.w, 16.w, 12.w),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Restore the bike to its original state while",
-                                      style: TextStyle(fontSize: 14.sp, color: EvieColors.darkGrayishCyan),
-                                    ),
-                                    Text(
-                                      "keeping it connected to your account",
-                                      style: TextStyle(fontSize: 14.sp, color: EvieColors.darkGrayishCyan),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 8.w),
-                                child: SvgPicture.asset(
-                                  "assets/buttons/next.svg",
-                                  height: 24.0,
-                                  width: 24.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-
-                Padding(
-                  padding: EdgeInsets.only(top: 12.h, bottom: 6.h),
-                  child: Divider(height: 1.h,color: EvieColors.darkWhite,),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     _settingProvider.changeSheetElement(SheetList.restoreBike);
+                //   },
+                //   child: Container(
+                //     padding: EdgeInsets.fromLTRB(16.w, 36.5.h, 16.w, 2.0.h),
+                //     child: Column(
+                //       children: [
+                //         Row(
+                //           children: [
+                //             Text(
+                //               "Reset Bike",
+                //               style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
+                //             ),
+                //             SizedBox(width: 3.w),
+                //             SvgPicture.asset(
+                //               "assets/icons/bluetooth_disconnect.svg",
+                //               height: 18.0,
+                //               width: 18.0,
+                //             ),
+                //           ],
+                //         ),
+                //         Padding(
+                //           padding: EdgeInsets.fromLTRB(0.w, 2.w, 16.w, 12.w),
+                //           child: Row(
+                //             children: [
+                //               Expanded(
+                //                 child: Column(
+                //                   crossAxisAlignment: CrossAxisAlignment.start,
+                //                   children: [
+                //                     Text(
+                //                       "Restore the bike to its original state while",
+                //                       style: TextStyle(fontSize: 14.sp, color: EvieColors.darkGrayishCyan),
+                //                     ),
+                //                     Text(
+                //                       "keeping it connected to your account",
+                //                       style: TextStyle(fontSize: 14.sp, color: EvieColors.darkGrayishCyan),
+                //                     ),
+                //                   ],
+                //                 ),
+                //               ),
+                //               Padding(
+                //                 padding: EdgeInsets.only(left: 8.w),
+                //                 child: SvgPicture.asset(
+                //                   "assets/buttons/next.svg",
+                //                   height: 24.0,
+                //                   width: 24.0,
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                //
+                //
+                // Padding(
+                //   padding: EdgeInsets.only(top: 12.h, bottom: 6.h),
+                //   child: Divider(height: 1.h,color: EvieColors.darkWhite,),
+                // ),
 
 
                 GestureDetector(
@@ -134,7 +134,7 @@ class _ResetBike2State extends State<ResetBike2> {
                         Row(
                           children: [
                             Text(
-                              "Forget Bike",
+                              "Unlink Bike",
                               style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
                             ),
                           ],
@@ -172,6 +172,7 @@ class _ResetBike2State extends State<ResetBike2> {
         GestureDetector(
           onTap: () {
             _settingProvider.changeSheetElement(SheetList.fullReset);
+            //showConnectBluetoothDialog (context);
           },
           child: Container(
             padding: EdgeInsets.fromLTRB(16.w, 6.h, 16.w, 2.0.h),

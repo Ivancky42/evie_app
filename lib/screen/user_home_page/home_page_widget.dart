@@ -205,15 +205,33 @@ Widget getFirestoreSecurityTextWidget(bool? isLocked, String status) {
 String getBatteryImage(int batteryPercent) {
 
   if (batteryPercent > 75 && batteryPercent <= 100) {
-    return "assets/icons/battery_full_black.svg";
+    return "assets/icons/battery_100.svg";
   } else if (batteryPercent > 50 && batteryPercent <= 75) {
-    return "assets/icons/battery_half_more_black.svg";
-  } else if (batteryPercent > 20 && batteryPercent <= 50) {
-    return "assets/icons/battery_half_less_black.svg";
-  } else if (batteryPercent >= 0 && batteryPercent <= 20) {
-    return "assets/icons/battery_low_black.svg";
+    return "assets/icons/battery_75.svg";
+  } else if (batteryPercent > 25 && batteryPercent <= 50) {
+    return "assets/icons/battery_50.svg";
+  } else if (batteryPercent > 5 && batteryPercent <= 25) {
+    return "assets/icons/battery_25.svg";
+  } else if (batteryPercent >= 0 && batteryPercent <= 5) {
+    return "assets/icons/battery_0.svg";
   } else {
     return "assets/icons/battery_not_available.svg";
+  }
+}
+
+String getEstDistance(int batteryPercent) {
+  if (batteryPercent > 75 && batteryPercent <= 100) {
+    return "Est 40km";
+  } else if (batteryPercent > 50 && batteryPercent <= 75) {
+    return "Est 30km";
+  } else if (batteryPercent > 25 && batteryPercent <= 50) {
+    return "Est 20km";
+  } else if (batteryPercent > 5 && batteryPercent <= 25) {
+    return "Est 10km";
+  } else if (batteryPercent >= 0 && batteryPercent <= 5) {
+    return "Est 0km";
+  } else {
+    return "unavailable";
   }
 }
 

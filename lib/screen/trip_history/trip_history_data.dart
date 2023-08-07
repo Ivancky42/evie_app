@@ -306,6 +306,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                         selectedMileageTemp = tappedData.y;
                         selectedDateTemp = tappedData.x;
 
+                        ///Press selected index
                         if(widget.format == _tripProvider.tripFormat && args.pointIndex == _tripProvider.selectedIndex){
                           _tripProvider.changeSelectedIndex(-1, TripFormat.day);
                           setState(() {
@@ -313,6 +314,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                             selectedCF = null;
                           });
                         }else{
+                          ///Press selected index
                           _tripProvider.changeSelectedIndex(args.pointIndex, widget.format);
                         }
 
@@ -418,14 +420,31 @@ class _TripHistoryDataState extends State<TripHistoryData> {
         chartData.clear();
         _tripProvider.currentTripHistoryListDay.clear();
 
+
+
         _tripProvider.currentTripHistoryLists.forEach((key, value) {
           ///Filter date
           if(calculateDateDifference(pickedDate!, value.startTime.toDate()) == 0){
             chartData.add(ChartData(value.startTime.toDate(), value.distance.toDouble()));
             _tripProvider.currentTripHistoryListDay.add(value);
+          }else{
           }
         });
 
+        if(chartData.isEmpty){
+          for(int i = 1; i <= 7; i ++){
+            switch(i){
+              case 1: chartData.add((ChartData(DateTime(pickedDate!.year, pickedDate!.month, pickedDate!.day, 08, 0), 0))); break;
+              case 2: chartData.add((ChartData(DateTime(pickedDate!.year, pickedDate!.month, pickedDate!.day, 10, 0), 0))); break;
+              case 3: chartData.add((ChartData(DateTime(pickedDate!.year, pickedDate!.month, pickedDate!.day, 12, 0), 0))); break;
+              case 4: chartData.add((ChartData(DateTime(pickedDate!.year, pickedDate!.month, pickedDate!.day, 14, 0, i), 0))); break;
+              case 5: chartData.add((ChartData(DateTime(pickedDate!.year, pickedDate!.month, pickedDate!.day, 16, 0), 0))); break;
+              case 6: chartData.add((ChartData(DateTime(pickedDate!.year, pickedDate!.month, pickedDate!.day, 18, 0), 0))); break;
+              case 7: chartData.add((ChartData(DateTime(pickedDate!.year, pickedDate!.month, pickedDate!.day, 20, 0), 0))); break;
+            }
+           // chartData.add((ChartData(DateTime(pickedDate!.month, pickedDate!.day, i), 0)));
+          }
+        }
 
         if(_tripProvider.selectedIndex != -1 && _tripProvider.tripFormat == TripFormat.day){
           setState(() {

@@ -40,6 +40,11 @@ class _BatteryState extends State<Battery> {
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
+    int batteryPercentage = _bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected
+        ? int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")
+        : _bikeProvider.currentBikeModel?.batteryPercent ?? 0;
+
+    String estimatedDistance = getEstDistance(batteryPercentage);
 
     return EvieCard(
       onPress: (){
@@ -48,23 +53,70 @@ class _BatteryState extends State<Battery> {
       title: "Battery",
       child: Expanded(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
 
-            SvgPicture.asset(
-              getBatteryImage(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ? int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0") : _bikeProvider.currentBikeModel?.batteryPercent ?? 0),
-              width: 36.w,
-              height: 36.h,
-            ),
-            Text("${_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ? int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0") : _bikeProvider.currentBikeModel?.batteryPercent ?? 0} %", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
-            Text("Est 0km", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
-            ),
-            SizedBox(height: 16.h,),
-          ],
+              Row(
+                 crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 4.h, right: 8.w),
+                    child: SvgPicture.asset(
+                      getBatteryImage(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
+                      int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")
+                          : _bikeProvider.currentBikeModel?.batteryPercent ?? 0),
+                      width: 30.w,
+                      height: 60.h,
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        //mainAxisSize: MainAxisSize.min,
+                          children: [
+                              Padding(
+                                padding:EdgeInsets.only(left: 0.w),
+                                child: Text(
+                                  "${_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
+                                  int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0") :
+                                  _bikeProvider.currentBikeModel?.batteryPercent ?? 0}",
+                                  style: EvieTextStyles.batteryPercent.copyWith(height: 0.7),
+                                ),
+                              ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 15.w),
+                              child: Text(
+                                " %",
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGray),
+                              ),
+                            ),
+                          ],
+                        ),
+                      SizedBox(height: 0.h),
+                      Padding(
+                          padding: EdgeInsets.only(left: 0.w, right: 15.w),
+                          child: Text(
+                            "$estimatedDistance",
+                            style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 16.h, top: 12.h),
+              child: Text(
+                " 23 hours ago",
+                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),
+              ),),
+           ],
         ),
       ),
-
     );
   }
 }

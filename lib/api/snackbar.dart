@@ -361,42 +361,42 @@ showUpgradePlanToast(context, SettingProvider settingProvider,[bool? isPop]){
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Container(
-              width: 330.w,
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(12.w,0.h,12.w,12.h),
+            child: Container(
+              width: double.infinity,
               child: Text(
                 "Limited access. Upgrade your plan to access this feature.",
                 style: EvieTextStyles.toast,
               ),
 
             ),
-            Container(
-              //width: 170.w,
-              alignment: Alignment.bottomRight,
-              child: GestureDetector(
-                onTap: () {
-                  if(isPop == true){
-                    settingProvider.changeSheetElement(SheetList.proPlan);
-                    showSheetNavigate(context);
-                  }else{
-                    settingProvider.changeSheetElement(SheetList.proPlan);
-                  }
-                },
-                child: Text(
-                  "UNLOCK FEATURE NOW",
-                  style: EvieTextStyles.body16.copyWith(
-                    color: EvieColors.strongPurple,
-                    fontWeight: FontWeight.w500,
-                  ),
+          ),
+          Container(
+            //width: 170.w,
+            alignment: Alignment.bottomRight,
+            child: GestureDetector(
+              onTap: () {
+                if(isPop == true){
+                  settingProvider.changeSheetElement(SheetList.proPlan);
+                  showSheetNavigate(context);
+                }else{
+                  settingProvider.changeSheetElement(SheetList.proPlan);
+                }
+              },
+              child: Text(
+                "UNLOCK FEATURE NOW",
+                style: EvieTextStyles.body16.copyWith(
+                  color: EvieColors.strongPurple,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       duration: const Duration(seconds: 2),
     ),

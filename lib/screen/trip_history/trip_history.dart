@@ -63,7 +63,7 @@ class _TripHistoryState extends State<TripHistory> {
                           padding: EdgeInsets.fromLTRB(16.w, 0.h, 0.w, 22.h),
                           child: Container(
                             child: Text(
-                              "Rides",
+                              "Ride History",
                               style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
                             ),
                           ),

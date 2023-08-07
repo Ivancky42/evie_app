@@ -36,7 +36,7 @@ class _ForgetBikeState extends State<ForgetBike>{
       },
       child: Scaffold(
               appBar: PageAppbar(
-                title: 'Forget Bike',
+                title: 'Unlink Bike',
                 onPressed:(){
                   _settingProvider.changeSheetElement(SheetList.resetBike2);
                 },
@@ -52,15 +52,32 @@ class _ForgetBikeState extends State<ForgetBike>{
                         Padding(
                           padding:EdgeInsets.fromLTRB(16.w, 32.5.h, 16.w, 2.h),
                           child: Text(
-                            "Farewell, [bike name]",
-                            style: EvieTextStyles.h2,
+                            "Farewell, [bike name] and [team name]",
+                            style: EvieTextStyles.h2.copyWith(height: 1.3),
                           ),
                         ),
 
                         Padding(
                           padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 12.h),
                           child:Text(
-                            "Ready to move on from this bike? No problem! By clicking this option, you're saying goodbye to this bike and all its connected settings. Have a great ride on your next adventure!",
+                            "Ready to remove this bike from your device? No problem!",
+                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
+                          child:Text(
+                            "Click this option to unlink your bike from the EVIE app. "
+                                "Don’t worry, your bike will remember its settings if you choose to return!",
+                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
+                          child:Text(
+                            "The team you’ve created will be removed from the app as well. ",
                             style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                           ),
                         ),
@@ -75,12 +92,13 @@ class _ForgetBikeState extends State<ForgetBike>{
                           width: double.infinity,
                           height: 48.h,
                           child: Text(
-                            "Forget Bike",
+                            "Unlink Bike",
                               style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                           ),
                           onPressed: () {
+                          showUnlinkBikeDialog (context);
                             //_settingProvider.changeSheetElement(SheetList.forgetCompleted);
-                            _settingProvider.changeSheetElement(SheetList.forgetIncomplete);
+                            //_settingProvider.changeSheetElement(SheetList.forgetIncomplete);
                           },
                         ),
                       ),

@@ -79,8 +79,8 @@ class _FullResetState extends State<FullReset>{
                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                           ),
                           onPressed: () {
-                            //_settingProvider.changeSheetElement(SheetList.fullCompleted);
-                            _settingProvider.changeSheetElement(SheetList.fullIncomplete);
+                            _settingProvider.changeSheetElement(SheetList.fullCompleted);
+                            //_settingProvider.changeSheetElement(SheetList.fullIncomplete);
                           },
                         ),
                       ),
