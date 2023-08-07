@@ -3,11 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +22,7 @@ import '../../../api/provider/location_provider.dart';
 import '../../../widgets/evie_radio_button.dart';
 import '../../../widgets/evie_switch.dart';
 import '../../animation/waved_curves_animation.dart';
+import '../../api/length.dart';
 
 class BatteryDetails extends StatefulWidget {
 
@@ -61,7 +64,7 @@ class _BatteryDetailsState extends State<BatteryDetails> {
           await showCupertinoDialog<void>(
               context: context,
               builder: (BuildContext context) => CupertinoAlertDialog(
-                title: const Text('Should Close?'),
+                title: const Text('Close Sheet?'),
                 actions: <Widget>[
                   CupertinoButton(
                     child: const Text('Yes'),
@@ -69,6 +72,7 @@ class _BatteryDetailsState extends State<BatteryDetails> {
                       shouldClose = true;
                       Navigator.of(context).pop();
                     },
+
                   ),
                   CupertinoButton(
                     child: const Text('No'),
@@ -119,16 +123,61 @@ class _BatteryDetailsState extends State<BatteryDetails> {
 
               Stack(
                 children: [
-                    //   Container(
-                    //   height: 500.h,
-                    //   width: double.infinity,
-                    //   child: WavedCurvesAnimation(),
-                    // ),
+                      Container(
+                      height: 220.h,
+                      width: double.infinity,
+                      child: WavedCurvesAnimation(),
+                    ),
+
+                  Container(
+                    height: EvieLength.battery_curved_bottom-30.h,
+                    child: Padding(
+                      padding: EdgeInsets.only(left:16.w, right: 16.w),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("90%", style: EvieTextStyles.batteryPercent.copyWith(color: EvieColors.lightBlack),),
+                          Text("Estimate 65km remaining", style: EvieTextStyles.body16,),
+                      ],
+                      ),
+                    ),
+                  )
                 ],
               ),
-              Text("Model"),
-              Text("Battery Life"),
-              Text("Any Other Information"),
+
+              Padding(
+                padding: EdgeInsets.only(left:16.w, right: 16.w),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Model", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),),
+                    Text("S1 A1C2-E345", style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),),
+
+                    Padding(
+                      padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+                      child: EvieDivider(),
+                    ),
+
+                    Text("Battery Life", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),),
+                    Text("Lorem Lpsum", style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),),
+
+                    Padding(
+                      padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+                      child: EvieDivider(),
+                    ),
+
+                    Text("Battery Capacity", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),),
+                    Text("1,234 Wh", style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),),
+
+                    Padding(
+                      padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+                      child: EvieDivider(),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
           height: 750.h,

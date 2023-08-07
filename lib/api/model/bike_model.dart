@@ -4,7 +4,9 @@ import 'package:evie_test/api/model/pedal_pals_model.dart';
 import 'package:evie_test/api/model/plan_model.dart';
 import 'package:evie_test/api/model/simcard_model.dart';
 import 'package:evie_test/api/model/trip_history_model.dart';
+import 'package:evie_test/screen/user_home_page/battery_details.dart';
 
+import 'battery_model.dart';
 import 'bike_plan_model.dart';
 import 'location_model.dart';
 
@@ -33,6 +35,7 @@ class BikeModel {
   SimSettingModel? simSetting;
   BikePlanModel? bikePlanModel;
   PlanModel? planModel;
+  BatteryModel? batteryModel;
   String? macAddr;
   int? networkSignal;
   String? protVersion;
@@ -43,6 +46,10 @@ class BikeModel {
   String? serialNumber;
   String? type;
   String? bikeIMG;
+
+  ///about bike mileage get from firestore
+  /// If it is (10) means 1km , (20) means 2km, 2 means 0.2km. and miles
+  num? mileage;
 
   BikeModel({
     required this.batteryPercent,
@@ -61,6 +68,7 @@ class BikeModel {
     this.pedalPalsModel,
     this.movementSetting,
     this.bikePlanModel,
+    this.batteryModel,
     this.simSetting,
     required this.macAddr,
     required this.networkSignal,
@@ -72,7 +80,7 @@ class BikeModel {
     this.serialNumber,
     this.type,
     this.bikeIMG,
-
+    this.mileage,
   });
 
   Map<String, dynamic> toJson() => {
@@ -102,14 +110,19 @@ class BikeModel {
       movementSetting: json['movementSetting'] != null ? MovementSettingModel.fromJson(json['movementSetting'] as Map<String, dynamic>) : null,
       simSetting:   json['simSetting'] != null ? SimSettingModel.fromJson(json['simSetting'] as Map<String, dynamic>) : null,
       bikePlanModel:   json['plans'] != null ? BikePlanModel.fromJson(json['plans'] as Map<String, dynamic>) : null,
+      batteryModel:   json['battery'] != null ? BatteryModel.fromJson(json['battery'] as Map<String, dynamic>) : null,
       macAddr: json['macAddr']?? '',
       networkSignal: json['networkSignal']?? 0,
       protVersion: json['protVersion']?? '',
       firmVer: json['firmVer']?? '',
       registered:    timestampFromJson(json['registered']),
-      serialNumber: json['serialNumber']?? '',
-      type: json['type']?? '',
-      bikeIMG: json['bikeIMG']??'',
+      serialNumber: json['serialNumber'] ?? '',
+      type: json['type'] ?? '',
+      bikeIMG: json['bikeIMG'] ??'',
+
+      ///about bike mileage get from firestore
+      /// If it is (10) means 1km , (20) means 2km, 2 means 0.2km. and miles
+      mileage: json['mileage'] ?? 0,
     );
   }
 

@@ -345,6 +345,7 @@ class _FeedsState extends State<Feeds> {
                                                                       children: [
                                                                         Lottie.asset(
                                                                             'assets/animations/add-bike.json',
+                                                                        repeat: true,
                                                                         height: 83.h,
                                                                         width: 198.h),
                                                                         Text("Accepting invitation and adding bike...", style:EvieTextStyles.body16.copyWith(color: EvieColors.darkGray),)

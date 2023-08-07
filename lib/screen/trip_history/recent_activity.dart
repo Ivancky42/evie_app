@@ -73,7 +73,7 @@ class _RecentActivityState extends State<RecentActivity> {
             visible: widget.isDataEmpty,
             child: Padding(
               padding: EdgeInsets.only(left: 16.w, top: 10.h),
-              child: Text("No Records",style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
+              child: Text("No records",style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
             )
         ),
 

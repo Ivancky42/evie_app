@@ -14,4 +14,6 @@ class EvieLength {
 
   static var sheet_expand = .92;
 
+  static var battery_curved_bottom = 200.h;
+
 }

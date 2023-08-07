@@ -1,3 +1,5 @@
+import 'package:evie_test/api/length.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/utils.dart';
@@ -22,7 +24,7 @@ class _MyAnimatedWavesCurves extends State<WavedCurvesAnimation> with SingleTick
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(duration: Duration(seconds: 4), vsync: this);
+    _controller = AnimationController(duration: Duration(seconds: 5), vsync: this);
     _controller.repeat();
     //we set animation duration, and repeat for infinity
 
@@ -36,8 +38,8 @@ class _MyAnimatedWavesCurves extends State<WavedCurvesAnimation> with SingleTick
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose(); //destory anmiation to free memory on last
+    super.dispose();
   }
 
 
@@ -47,8 +49,8 @@ class _MyAnimatedWavesCurves extends State<WavedCurvesAnimation> with SingleTick
       body: Container(
         child: Stack( //stack helps to overlaps widgets
             children: [
-
               Positioned( //helps to position widget where ever we want
+                //bottom: 0, // position at the bottom
                 top:0, //position at the top
                 right: animation.value, //value of right from animation controller
                 child: ClipPath(
@@ -56,25 +58,38 @@ class _MyAnimatedWavesCurves extends State<WavedCurvesAnimation> with SingleTick
                   child: Opacity(
                     opacity: 0.5,
                     child: Container(
-                      color: EvieColors.primaryColor,
-                      width: 900,
-                      height: 200,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [EvieColors.primaryColor,EvieColors.primaryColor.withOpacity(0.8), EvieColors.primaryColor.withOpacity(0.5),EvieColors.primaryColor.withOpacity(0.3), EvieColors.grayishWhite]
+                        ),
+                      ),
+
+                      width: 800.w,
+                      height: EvieLength.battery_curved_bottom,
                     ),
                   ),
                 ),
               ),
 
               Positioned( //helps to position widget where ever we want
-                top:0, //position at the bottom
+                top:0, //position at the top
                 left: animation.value, //value of left from animation controller
                 child: ClipPath(
                   clipper: MyWaveClipper(), //applying our custom clipper
                   child: Opacity(
                     opacity: 0.5,
                     child: Container(
-                      color: EvieColors.primaryColor,
-                      width: 900,
-                      height: 200,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [EvieColors.primaryColor,EvieColors.primaryColor.withOpacity(0.8), EvieColors.primaryColor.withOpacity(0.5),EvieColors.primaryColor.withOpacity(0.3), EvieColors.grayishWhite]
+                        ),
+                      ),
+                      width: 800.w,
+                      height: EvieLength.battery_curved_bottom,
                     ),
                   ),
                 ),
