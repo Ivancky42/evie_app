@@ -81,6 +81,7 @@ class _EVKeyState extends State<EVKey> {
                   ),
                 ),
 
+
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.zero,
@@ -88,7 +89,18 @@ class _EVKeyState extends State<EVKey> {
                       child: Container(
                         width: 200.w,
                         height: 228.84.h,
-                        child: Lottie.asset('assets/animations/RFIDCardRegister.json'),
+                        child: Lottie.asset(
+                          'assets/animations/RFIDCardRegister.json',
+                          // delegates: LottieDelegates(
+                          //   text: (initialText) => '**$initialText**',
+                          //   values: [
+                          //     ValueDelegate.color(
+                          //       const ['Rectangle Path 1', 'Rectangle 1', 'Path 1','Group 1',],
+                          //       value: Colors.red,
+                          //     ),
+                          //   ],
+                          // ),
+                      ),
                       ),
                     ),
                   ),

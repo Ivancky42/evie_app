@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import '../../../../api/colours.dart';
 import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
+import '../../../../api/function.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/sheet.dart';
 import '../../../../api/sheet_2.dart';
@@ -65,7 +66,7 @@ class _BatteryState extends State<Battery> {
                     child: SvgPicture.asset(
                       getBatteryImage(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
                       int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")
-                          : _bikeProvider.currentBikeModel?.batteryPercent ?? 0),
+                          : _bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0),
                       width: 30.w,
                       height: 60.h,
                     ),
@@ -83,7 +84,7 @@ class _BatteryState extends State<Battery> {
                                 child: Text(
                                   "${_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
                                   int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0") :
-                                  _bikeProvider.currentBikeModel?.batteryPercent ?? 0}",
+                                  _bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0}",
                                   style: EvieTextStyles.batteryPercent.copyWith(height: 0.7),
                                 ),
                               ),
@@ -111,7 +112,7 @@ class _BatteryState extends State<Battery> {
             Padding(
               padding: EdgeInsets.only(bottom: 16.h, top: 12.h),
               child: Text(
-                " 23 hours ago",
+                calculateTimeAgo(_bikeProvider.currentBikeModel?.batteryModel?.lastUpdated?.toDate() ?? DateTime.now()),
                 style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),
               ),),
            ],

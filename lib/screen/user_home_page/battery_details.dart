@@ -137,8 +137,8 @@ class _BatteryDetailsState extends State<BatteryDetails> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("90%", style: EvieTextStyles.batteryPercent.copyWith(color: EvieColors.lightBlack),),
-                          Text("Estimate 65km remaining", style: EvieTextStyles.body16,),
+                          Text("${_bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0}%", style: EvieTextStyles.batteryPercent.copyWith(color: EvieColors.lightBlack),),
+                          Text("Estimate -km remaining", style: EvieTextStyles.body16,),
                       ],
                       ),
                     ),
