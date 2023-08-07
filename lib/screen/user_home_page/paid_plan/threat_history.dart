@@ -76,7 +76,7 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                 padding:  EdgeInsets.only(left: 6.w, top: 0.h),
                 child: IconButton(
                     onPressed: (){
-                      Navigator.pop(context);
+                      Navigator.of(context, rootNavigator: true).pop();
                     },
                     icon:  SvgPicture.asset(
                       "assets/buttons/down_big.svg",
