@@ -56,7 +56,7 @@ class _BeforeYouStartState extends State<BeforeYouStart> {
                 padding: EdgeInsets.fromLTRB(16.w,4.h,16.w,0.h),
                 child: Container(
                   child:   Text(
-                    "1. Assemble your buke fully.",
+                    "1. Assemble your bike fully.",
                     style: EvieTextStyles.body18,
                   ),
                 ),

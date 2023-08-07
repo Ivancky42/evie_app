@@ -71,7 +71,6 @@ import 'model/bike_model.dart';
 import 'model/plan_model.dart';
 import 'model/price_model.dart';
 
-
 void changeToWelcomeScreen(BuildContext context) {
   Navigator.of(context).pushNamedAndRemoveUntil("/welcome", (route) => false);
 }

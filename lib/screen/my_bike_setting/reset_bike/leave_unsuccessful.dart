@@ -13,13 +13,13 @@ import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../widgets/evie_button.dart';
 
-class RestoreIncomplete extends StatefulWidget{
-  const RestoreIncomplete({Key?key}) : super(key:key);
+class LeaveUnsuccessful extends StatefulWidget{
+  const LeaveUnsuccessful({Key?key}) : super(key:key);
   @override
-  _RestoreIncompleteState createState() => _RestoreIncompleteState();
+  _LeaveUnsuccessfulState createState() => _LeaveUnsuccessfulState();
 }
 
-class _RestoreIncompleteState extends State<RestoreIncomplete>{
+class _LeaveUnsuccessfulState extends State<LeaveUnsuccessful>{
 
   late BikeProvider _bikeProvider;
   late SettingProvider _settingProvider;
@@ -38,19 +38,19 @@ class _RestoreIncompleteState extends State<RestoreIncomplete>{
             children: [
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 82.h, 16.w, 2.h),
-                child: Text("Reset Incomplete",
+                child: Text("Leave Team Unsuccessful",
                   style: EvieTextStyles.h2,
                 ),
               ),
 
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 66.h),
-                child: Text("Oops! It looks like there was an issue with resetting your bike. "
-                    "Please check out \"Get Help\" to reach out for assistance.",
+                child: Text("Unfortunately, we encountered an issue while trying "
+                    "to leave the bike-sharing team. Please check out \"Get Help\" to "
+                    "reach out for assistance.",
                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
                 ),
               ),
-
 
               Align(
                 alignment: Alignment.center,
@@ -66,7 +66,7 @@ class _RestoreIncompleteState extends State<RestoreIncomplete>{
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w,100.h,16.w, EvieLength.buttonButton_wordBottom),
+            padding: EdgeInsets.fromLTRB(16.w,145.26.h,16.w, EvieLength.buttonButton_wordBottom),
             child: EvieButton(
               width: double.infinity,
               height: 48.h,
@@ -75,7 +75,7 @@ class _RestoreIncompleteState extends State<RestoreIncomplete>{
                 style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
               ),
               onPressed: () {
-                _settingProvider.changeSheetElement(SheetList.restoreBike);
+                _settingProvider.changeSheetElement(SheetList.forgetBike);
               },
             ),
           ),
@@ -109,9 +109,9 @@ class _RestoreIncompleteState extends State<RestoreIncomplete>{
               height: 48.h,
               backgroundColor: EvieColors.grayishWhite,
               child: Text(
-                "Cancel Reset Bike",
+                "Cancel Leave Team",
                 style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor,
-                  decoration: TextDecoration.underline, // Add underline decoration
+                  decoration: TextDecoration.underline,
                 ),
               ),
               onPressed: () {

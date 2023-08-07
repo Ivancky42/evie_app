@@ -27,6 +27,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -1400,35 +1401,37 @@ showEvieActionableBarDialog(BuildContext context, BluetoothProvider bluetoothPro
 }
 
 ///to fully reset the bike
-showFullResetDialog (BuildContext context){
+showFullResetDialog (BuildContext context ,SettingProvider _settingProvider){
   SmartDialog.show(
     widget: EvieTwoButtonDialog(
-        title: Text("Login Error",
+        title: Text("Fully Reset Your Bike?",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
         ),
-        childContent: Text("Oops, the password you "
-            "entered is incorrect or you do not have an account yet. "
-            "Please double-check and try again",
+        childContent: Text("Are you sure that you want to start over? "
+            "Choosing this option will completely reset your current settings "
+            "for both your bike and the app.",
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
           "assets/images/people_search.svg",
         ),
-        upContent: "Retry",
-        downContent: "Register Now",
+        upContent: "Full Reset",
+        downContent: "Cancel",
         onPressedUp: () {
           SmartDialog.dismiss();
+          Navigator.of(context, rootNavigator: true).pop();
+          showBikeEraseSheet(context);
+          //_settingProvider.changeSheetElement(SheetList.fullCompleted);
         },
         onPressedDown: () {
           SmartDialog.dismiss();
-          changeToWelcomeScreen(context);
         }),
   );
 }
 
 ///to unlink the bike
-showUnlinkBikeDialog (BuildContext context){
+showUnlinkBikeDialog (BuildContext context, SettingProvider _settingProvider){
   SmartDialog.show(
     widget: EvieTwoButtonDialog(
         title: Text("Unlink Your Bike?",
@@ -1447,6 +1450,8 @@ showUnlinkBikeDialog (BuildContext context){
         downContent: "Cancel",
         onPressedUp: () {
           SmartDialog.dismiss();
+          Navigator.of(context, rootNavigator: true).pop();
+          showBikeEraseSheet(context);
         },
         onPressedDown: () {
           SmartDialog.dismiss();
@@ -1456,7 +1461,7 @@ showUnlinkBikeDialog (BuildContext context){
 }
 
 ///connect bike to bluetooth before full reset
-showConnectBluetoothDialog (BuildContext context){
+showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothProvider,BikeProvider _bikeProvider){
   SmartDialog.show(
     widget: EvieTwoButtonDialog(
         title: Text("Connect Your Bike",
@@ -1473,6 +1478,7 @@ showConnectBluetoothDialog (BuildContext context){
         upContent: "Connect Bike",
         downContent: "Cancel",
         onPressedUp: () {
+          checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
           SmartDialog.dismiss();
         },
         onPressedDown: () {

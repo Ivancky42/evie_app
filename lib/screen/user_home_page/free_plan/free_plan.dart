@@ -790,7 +790,7 @@ class _FreePlanState extends State<FreePlan> {
                                                         children: [
                                                           Row(
                                                             mainAxisAlignment: MainAxisAlignment.end,
-                                                            //mainAxisSize: MainAxisSize.min,
+
                                                             children: [
                                                               Padding(
                                                                 padding:EdgeInsets.only(left: 0.w),

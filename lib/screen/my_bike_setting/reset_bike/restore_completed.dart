@@ -45,7 +45,7 @@ class _RestoreCompletedState extends State<RestoreCompleted>{
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 80.h),
                 child: Text("Great news! Your bike has been successfully reset. Get ready to ride and experience all the fresh and revitalized settings. Have a fantastic ride!",
-                  style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                  style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
                 ),
               ),
 

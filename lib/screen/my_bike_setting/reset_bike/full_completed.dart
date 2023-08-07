@@ -39,7 +39,7 @@ class _FullCompletedState extends State<FullCompleted>{
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 82.h, 16.w, 2.h),
                 child: Text(
-                  "Bike reset completed!",
+                  "Full Reset Completed!!",
                   style: TextStyle(
                     fontSize: 26.sp,
                     color: EvieColors.mediumBlack,
@@ -50,8 +50,10 @@ class _FullCompletedState extends State<FullCompleted>{
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 300.h),
                 child: Text(
-                  "Great news! Your bike has been successfully reset. Get ready to ride and experience all the fresh and revitalized settings. Have a fantastic ride!",
-                  style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                  "Great news! Your bike has been successfully reset. "
+                      "Get ready for a revitalised ride with all-fresh settings."
+                      " Have a fantastic ride!",
+                  style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
                   ),
                 ),
             ],

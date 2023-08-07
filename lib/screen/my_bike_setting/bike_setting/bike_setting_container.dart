@@ -55,7 +55,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     
-    if(deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice){
+    if(deviceConnectResult == DeviceConnectResult.connected &&
+        _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice){
       Future.delayed(Duration.zero, () {
         if(pageNavigate != null){
           switch(pageNavigate){
@@ -771,7 +772,14 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-               // _settingProvider.changeSheetElement(SheetList.resetBike2);
+
+                if (_bikeProvider.isOwner == true){
+                  _settingProvider.changeSheetElement(SheetList.resetBike2);
+                } else{
+                  showLeaveTeamSheet(context);
+                  //_settingProvider.changeSheetElement(SheetList.resetBike2);
+                }
+
               },
               child: Container(
                 height: 44.h,
@@ -782,10 +790,18 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                       children: [
                         Row(
                           children: [
-                            Text(
-                              "Reset",
-                              style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-                            ),
+
+                            if (_bikeProvider.isOwner == true)...{
+                              Text(
+                                "Reset",
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                              ),
+                            } else...{
+                              Text(
+                                "Leave Team",
+                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                              ),
+                            }
                           ],
                         ),
                         SvgPicture.asset(

@@ -29,9 +29,11 @@ class _ForgetBikeState extends State<ForgetBike>{
     _bikeProvider = Provider.of<BikeProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
+
     return WillPopScope(
       onWillPop: () async {
         _settingProvider.changeSheetElement(SheetList.resetBike2);
+
         return false;
       },
       child: Scaffold(
@@ -50,35 +52,36 @@ class _ForgetBikeState extends State<ForgetBike>{
                       children: [
 
                         Padding(
-                          padding:EdgeInsets.fromLTRB(16.w, 32.5.h, 16.w, 2.h),
+                          padding: EdgeInsets.fromLTRB(16.w, 32.5.h, 16.w, 2.h),
                           child: Text(
-                            "Farewell, [bike name] and [team name]",
+                            "Farewell, ${_bikeProvider.currentBikeModel?.deviceName ?? ''} "
+                                "and ${_bikeProvider.currentBikeModel?.pedalPalsModel?.name ?? ''}",
                             style: EvieTextStyles.h2.copyWith(height: 1.3),
                           ),
                         ),
 
                         Padding(
-                          padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 12.h),
+                          padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 0.h),
                           child:Text(
-                            "Ready to remove this bike from your device? No problem!",
-                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                            "Ready to remove this bike from your device? No problem!\n",
+                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
                           ),
                         ),
 
                         Padding(
-                          padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
+                          padding: EdgeInsets.fromLTRB(16.w,0.h, 16.w, 0.h),
                           child:Text(
                             "Click this option to unlink your bike from the EVIE app. "
-                                "Don’t worry, your bike will remember its settings if you choose to return!",
-                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                                "Don’t worry, your bike will remember its settings if you choose to return!\n",
+                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
                           ),
                         ),
 
                         Padding(
-                          padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
+                          padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 4.h),
                           child:Text(
                             "The team you’ve created will be removed from the app as well. ",
-                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
                           ),
                         ),
                       ],
@@ -95,10 +98,10 @@ class _ForgetBikeState extends State<ForgetBike>{
                             "Unlink Bike",
                               style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                           ),
+
                           onPressed: () {
-                          showUnlinkBikeDialog (context);
-                            //_settingProvider.changeSheetElement(SheetList.forgetCompleted);
-                            //_settingProvider.changeSheetElement(SheetList.forgetIncomplete);
+                          showUnlinkBikeDialog (context, _settingProvider);
+
                           },
                         ),
                       ),

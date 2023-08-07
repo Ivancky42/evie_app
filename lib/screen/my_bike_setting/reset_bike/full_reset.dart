@@ -52,7 +52,7 @@ class _FullResetState extends State<FullReset>{
                         Padding(
                           padding:EdgeInsets.fromLTRB(16.w, 32.5.h, 16.w, 2.h),
                           child: Text(
-                            "Reset bike to original state",
+                            "Start Over?",
                             style: TextStyle(fontSize: 26.sp, color: EvieColors.mediumBlack, fontWeight: FontWeight.w500),
                           ),
                         ),
@@ -60,8 +60,11 @@ class _FullResetState extends State<FullReset>{
                         Padding(
                           padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 12.h),
                           child:Text(
-                            "Getting Your Bike Back to Square One. All connections will be reset to their original settings, but don't worry, your bike's info under \"About Bike\" will still be saved. Get ready for a revitalized ride!",
-                              style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                            "Get your bike and your app back to square one. "
+                                "All connections will be reset to their original settings, "
+                                "but don't worry, your bike's info under \"About Bike\" will still be saved."
+                          " Get ready to start your great adventure all over again!",
+                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
                           ),
                         ),
                       ],
@@ -79,7 +82,8 @@ class _FullResetState extends State<FullReset>{
                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                           ),
                           onPressed: () {
-                            _settingProvider.changeSheetElement(SheetList.fullCompleted);
+                            showFullResetDialog (context, _settingProvider);
+                            //_settingProvider.changeSheetElement(SheetList.fullCompleted);
                             //_settingProvider.changeSheetElement(SheetList.fullIncomplete);
                           },
                         ),

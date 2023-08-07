@@ -11,10 +11,14 @@ import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals_list.dart
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/user_not_found.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/bike_erase.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/forget_completed.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/full_completed.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/full_incomplete.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/full_reset.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/leave_successful.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/leave_team.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/leave_unsuccessful.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/reset_bike.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/reset_bike2.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/forget_bike.dart';
@@ -164,6 +168,19 @@ class _SheetNavigatorState extends State<SheetNavigator> {
       return FullCompleted();
     case SheetList.fullIncomplete:
       return FullIncomplete();
+
+    case SheetList.bikeErase:
+    return BikeErase();
+
+      case SheetList.leaveTeam:
+        return LeaveTeam();
+
+      case SheetList.leaveSuccessful:
+        return LeaveSuccessful();
+
+      case SheetList.leaveUnsuccessful:
+        return LeaveUnsuccessful();
+
 
 
       default:
