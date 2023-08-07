@@ -47,12 +47,13 @@ dependencies:
 
   provider: ^6.0.3
   cupertino_icons: ^1.0.2
-  firebase_core: ^1.20.0
-  firebase_auth: ^3.4.2
-  cloud_firestore: ^3.2.1
+  firebase_core: ^2.15.0
+  firebase_core_platform_interface: 4.5.1
+  firebase_auth: ^4.7.2
+  cloud_firestore: ^4.8.4
+  firebase_storage: ^11.0.1
   cached_network_image: ^3.2.1
   image_picker: ^0.8.5+3
-  firebase_storage: ^10.3.4
   shared_preferences: ^2.0.15
   google_sign_in: ^5.4.0
   sizer: ^2.0.15
@@ -69,9 +70,9 @@ dependencies:
   open_settings: ^2.0.2
   get: ^4.6.5
   flutter_local_notifications: ^9.1.5
-  firebase_messaging: ^13.0.2
+  firebase_messaging: ^14.6.5
   flutter_stripe: ^7.0.0
-  cloud_functions: ^3.3.8
+  cloud_functions: ^4.3.4
   dio: ^4.0.6
   webview_flutter: ^3.0.4
   connectivity_plus: ^2.3.7
@@ -97,7 +98,9 @@ dependencies:
   location: ^4.4.0
   page_transition: ^2.0.9
   flutter_compass: ^0.7.0
-  paginate_firestore: ^1.0.3+1
+  paginate_firestore:
+    git:
+      url: https://github.com/waqadArshad/paginate_firestore.git
   slider_button: ^2.0.0
   flutter_map: ^3.1.0
   flutter_slidable: ^2.0.0
@@ -128,7 +131,7 @@ dev_dependencies:
   flutter_native_splash: ^2.2.6
 
 dependency_overrides:
-  test_api: ^0.4.14
+  firebase_core_platform_interface: 4.8.0
   #mapbox_gl:
   #  git:
   #    url: https://github.com/flutter-mapbox-gl/maps.git

@@ -290,7 +290,7 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                                         return Theme(
                                           data: ThemeData(
                                             primaryColor: EvieColors.primaryColor, // set the primary color of the theme
-                                            accentColor: EvieColors.primaryColor, // set the accent color of the theme
+                                            //accentColor: EvieColors.primaryColor, // set the accent color of the theme
                                             colorScheme: ColorScheme.light(primary: EvieColors.primaryColor,), // set the color scheme
                                             textTheme: TextTheme(
                                               subtitle1: TextStyle(color: Colors.black), // set the text color of the top bar
@@ -359,7 +359,7 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                                         return Theme(
                                           data: ThemeData(
                                             primaryColor: EvieColors.primaryColor, // set the primary color of the theme
-                                            accentColor: EvieColors.primaryColor, // set the accent color of the theme
+                                            //accentColor: EvieColors.primaryColor, // set the accent color of the theme
                                             colorScheme: ColorScheme.light(primary: EvieColors.primaryColor,), // set the color scheme
                                             textTheme: TextTheme(
                                               subtitle1: TextStyle(color: Colors.black), // set the text color of the top bar
