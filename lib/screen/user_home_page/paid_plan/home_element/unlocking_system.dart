@@ -191,9 +191,11 @@ class _UnlockingSystemState extends State<UnlockingSystem> {
           width: 52.w,
           height: 50.h,
         );
-      }else if(_bluetoothProvider.isUnlocking){
-        buttonImage =  lottie.Lottie.asset('assets/animations/unlock_button.json', repeat: false);
-      } else if (cableLockState?.lockState == LockState.lock) {
+      }
+      else if(_bluetoothProvider.isUnlocking){
+        buttonImage =  lottie.Lottie.asset('assets/animations/unlock_button.json', repeat: true);
+      } 
+      else if (cableLockState?.lockState == LockState.lock) {
 
         buttonImage = SvgPicture.asset(
           "assets/buttons/lock_lock.svg",
@@ -202,10 +204,10 @@ class _UnlockingSystemState extends State<UnlockingSystem> {
       }
     }
     else if (cableLockState?.lockState == LockState.unknown) {
-      buttonImage =  lottie.Lottie.asset('assets/animations/loading_button.json');
+      buttonImage =  lottie.Lottie.asset('assets/animations/loading_button.json', repeat: false);
     }
     else if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning || deviceConnectResult == DeviceConnectResult.partialConnected) {
-      buttonImage =  lottie.Lottie.asset('assets/animations/loading_button.json');
+      buttonImage =  lottie.Lottie.asset('assets/animations/loading_button.json', repeat: false);
     }
     else if (deviceConnectResult == DeviceConnectResult.disconnected) {
       buttonImage = SvgPicture.asset(

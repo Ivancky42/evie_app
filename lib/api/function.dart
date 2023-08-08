@@ -547,6 +547,42 @@ getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bike
   }
 }
 
+getCurrentBikeStatusString2(BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
+  if (bikeProvider.currentBikeModel!.location?.isConnected == false) {
+    return "Connection Lost";
+  } else {
+    switch (bikeProvider.currentBikeModel!.location!.status) {
+      case 'safe':
+        {
+          if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
+            if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+              return "Unlocked";
+            } else {
+              return "Locked & Secured";
+            }
+          }
+          else {
+            if (bikeProvider.currentBikeModel!.isLocked == false) {
+              return "Unlocked";
+            } else {
+              return "Locked & Secured";
+            }
+          }
+        }
+      case 'warning':
+        return "Movement Detected";
+      case 'danger':
+        return "Under Threat";
+      case 'fall':
+        return "Fall Detected";
+      case 'crash':
+        return "Crash Alert";
+      default:
+        return "-";
+    }
+  }
+}
+
 getCurrentBikeStatusColour(bool isLocked, BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
 
   if (bikeProvider.userBikePlans.isNotEmpty) {

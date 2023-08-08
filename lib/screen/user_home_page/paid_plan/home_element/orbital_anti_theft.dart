@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/model/bike_model.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/api/sheet.dart';
@@ -171,15 +172,31 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SvgPicture.asset(getCurrentBikeStatusIcon(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),),
-                  Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
-                    style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray, height: 1.22),),
-
-                  Text(
-                    _locationProvider.currentPlaceMark?.name ?? 'Loading',
-                    style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack, height: 1.2),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
+                  Consumer2<BikeProvider, BluetoothProvider>(
+                    builder: (context, bikeProvider, bluetoothProvider, child) {
+                      return Text(getCurrentBikeStatusString2(bikeProvider, bluetoothProvider),
+                        style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray, height: 1.22),);
+                    },
                   ),
+                  // Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
+                  //   style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray, height: 1.22),),
+
+                  Consumer<LocationProvider>(
+                    builder: (context, locationProvider, child) {
+                      return Text(
+                        locationProvider.currentPlaceMark?.name ?? 'Loading',
+                        style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack, height: 1.2),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      );
+                    },
+                  ),
+                  // Text(
+                  //   _locationProvider.currentPlaceMark?.name ?? 'Loading',
+                  //   style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack, height: 1.2),
+                  //   overflow: TextOverflow.ellipsis,
+                  //   maxLines: 2,
+                  // ),
 
                   // selectedGeopoint != null ? FutureBuilder<dynamic>(
                   //     future: _locationProvider.returnPlaceMarks(selectedGeopoint!.latitude, selectedGeopoint!.longitude),

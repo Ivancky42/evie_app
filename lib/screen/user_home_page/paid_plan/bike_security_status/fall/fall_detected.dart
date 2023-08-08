@@ -145,22 +145,14 @@ class _FallDetectedState extends State<FallDetected> {
                               showUnlockingToast(context);
 
                               StreamSubscription?subscription;
-                              subscription = _bluetoothProvider.cableUnlock().listen(
-                                      (unlockResult) {
-                                    SmartDialog.dismiss(
-                                        status:
-                                        SmartStatus.loading);
-                                    subscription
-                                        ?.cancel();
-                                    if (unlockResult.result ==
-                                        CommandResult.success) {
-                              //        showToLockBikeInstructionToast(context);
-                                    } else {
-                                      SmartDialog.dismiss(
-                                          status: SmartStatus.loading);
-                                      subscription
-                                          ?.cancel();
-                              //        showToLockBikeInstructionToast(context);
+                              subscription = _bluetoothProvider.cableUnlock().listen((unlockResult) {
+                                    SmartDialog.dismiss(status: SmartStatus.loading);
+                                    subscription?.cancel();
+                                    if (unlockResult.result == CommandResult.success) {
+                                    }
+                                    else {
+                                      SmartDialog.dismiss(status: SmartStatus.loading);
+                                      subscription?.cancel();
                                     }
                                   }, onError: (error) {
                                 SmartDialog.dismiss(

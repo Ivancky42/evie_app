@@ -53,7 +53,7 @@ class _UserHomePageState extends State<UserHomePage> {
                 body: screen[currentIndex],
                 bottomNavigationBar: BottomAppBar(
                   color: EvieColors.dividerWhite,
-                  height:  Platform.isIOS ? 60.h : 60.h,
+                  height:  Platform.isIOS ? 50.h : 60.h,
                   child: SingleChildScrollView(
                     physics: NeverScrollableScrollPhysics(),
                     child: BottomNavigationBar(

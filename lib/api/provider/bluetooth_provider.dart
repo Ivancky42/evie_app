@@ -706,7 +706,7 @@ class BluetoothProvider extends ChangeNotifier {
       bool isConnected = sendCommand(bluetoothCommand.cableUnlock(requestComKeyResult!.communicationKey));
       if (isConnected) {
         return cableLockResult.stream
-            .timeout(const Duration(seconds: 6), onTimeout: (sink) {
+            .timeout(const Duration(seconds: 12), onTimeout: (sink) {
           sink.addError("Operation timeout");
           sink.close();
         });

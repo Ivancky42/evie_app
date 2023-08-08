@@ -132,55 +132,35 @@ class _BikeSafeState extends State<BikeSafe> {
                                 child:
                                 FloatingActionButton(
                                   elevation: 0,
-                                  backgroundColor: cableLockState?.lockState == LockState.lock
-                                      ?  EvieColors.primaryColor : EvieColors.softPurple,
-                                  onPressed: cableLockState
-                                      ?.lockState == LockState.lock
-                                      ? () {
+                                  backgroundColor: cableLockState?.lockState == LockState.lock ?  EvieColors.primaryColor : EvieColors.softPurple,
+                                  onPressed: cableLockState?.lockState == LockState.lock ? () {
                                     ///Check is connected
-
                                     _bluetoothProvider.setIsUnlocking(true);
                                     showUnlockingToast(context);
 
-                                    StreamSubscription?
-                                    subscription;
-                                    subscription = _bluetoothProvider
-                                        .cableUnlock()
-                                        .listen(
-                                            (unlockResult) {
-                                          SmartDialog.dismiss(
-                                              status:
-                                              SmartStatus.loading);
-                                          subscription
-                                              ?.cancel();
-                                          if (unlockResult.result ==
-                                              CommandResult.success) {
+                                    StreamSubscription? subscription;
+                                    subscription = _bluetoothProvider.cableUnlock().listen((unlockResult) {
+                                          SmartDialog.dismiss(status: SmartStatus.loading);
+                                          subscription?.cancel();
+                                          if (unlockResult.result == CommandResult.success) {
 
-                                          //  showToLockBikeInstructionToast(context);
-
-                                          } else {
-                                            SmartDialog.dismiss(
-                                                status: SmartStatus.loading);
+                                          }
+                                          else {
+                                            SmartDialog.dismiss(status: SmartStatus.loading);
                                             subscription?.cancel();
-                                          //  showToLockBikeInstructionToast(context);
                                           }
                                         }, onError: (error) {
-                                      SmartDialog.dismiss(
-                                          status:
-                                          SmartStatus.loading);
-                                      subscription
-                                          ?.cancel();
-                                      SmartDialog.show(
-                                          widget: EvieSingleButtonDialog(
-                                              title: "Error",
-                                              content: "Cannot unlock bike, please place the phone near the bike and try again.",
-                                              rightContent: "OK",
-                                              onPressedRight: () {
-                                                SmartDialog.dismiss();
-                                              }));
+                                            SmartDialog.dismiss(status: SmartStatus.loading);
+                                            subscription?.cancel();
+                                            SmartDialog.show(widget: EvieSingleButtonDialog(
+                                                title: "Error",
+                                                content: "Cannot unlock bike, please place the phone near the bike and try again.",
+                                                rightContent: "OK",
+                                                onPressedRight: () {
+                                                  SmartDialog.dismiss();
+                                                }));
                                     });
-                                  }
-                                      : (){
+                                  } : (){
                                     showToLockBikeInstructionToast(context);
                                   },
                                   //icon inside button

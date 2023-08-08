@@ -962,7 +962,7 @@ class BikeProvider extends ChangeNotifier {
       for (var key in bikeUserList.keys) {
         if (currentUserModel!.uid == key) {
           if (bikeUserList[key].role == "owner") {
-            isOwner = true;
+              isOwner = true;
             notifyListeners();
           } else {
             isOwner = false;
