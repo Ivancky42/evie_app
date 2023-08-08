@@ -48,8 +48,9 @@ class _FullIncompleteState extends State<FullIncomplete>{
 
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 66.h),
-                child: Text("Oops! It looks like there was an issue with resetting your bike. Please check out \"Get Help\" to reach out for assistance.",
-                    style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                child: Text("Oops! It looks like there was an issue with resetting your bike."
+                    " Please check out \"Get Help\" to reach out for assistance.",
+                  style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
                 ),
               ),
 

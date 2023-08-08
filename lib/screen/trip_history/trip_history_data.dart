@@ -56,6 +56,8 @@ class _TripHistoryDataState extends State<TripHistoryData> {
   String? selectedMileage;
   ///Selected carbon footprint
   String? selectedCF;
+  String? selectedRides;
+
 
   bool isFirstLoad = true;
   bool isDataEmpty = true;
@@ -65,12 +67,13 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
     pickedDate = DateTime(now.year, now.month, now.day);
 
-    selectedDate = widget.format ==
-        TripFormat.week ?
+    selectedDate = widget.format == TripFormat.day ?
+        "${weekdayNameFull[pickedDate!.weekday]}, ${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}"    :
+        widget.format == TripFormat.week ?
         "${monthsInYear[pickedDate!.month]} ${pickedDate!.subtract(Duration(days: 6)).day}-${pickedDate!.day}, ${pickedDate!.year}" :
         widget.format == TripFormat.month ?
-        "${monthsInYear[pickedDate!.month]}, ${pickedDate!.year}" :
-        "${monthsInYear[pickedDate!.month]} ${pickedDate!.day}, ${pickedDate!.year}";
+        "${monthsInYear[pickedDate!.month]} ${pickedDate!.year}" :
+        "Jan ${pickedDate!.year} - Dec ${pickedDate!.year}";
 
     _tooltip = TooltipBehavior(
         enable: true,
@@ -147,11 +150,11 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                       Text(" miles", style: EvieTextStyles.body18,),
                     ],
                   ),
-
                 }
                 else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(1))...{
                   // Text(_bikeProvider.currentTripHistoryLists.length.toStringAsFixed(0), style: EvieTextStyles.display,),
-                  Text(emptyFormatting(_tripProvider.currentTripHistoryListDay.length.toStringAsFixed(0)), style: EvieTextStyles.display,),
+                  Text(selectedRides != null ? emptyFormatting(thousandFormatting(stringToDouble(selectedRides!))) :
+                  emptyFormatting(_tripProvider.currentTripHistoryListDay.length.toStringAsFixed(0)), style: EvieTextStyles.display,),
                   Text(" rides", style: EvieTextStyles.body18,),
                 }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(2))...{
                   Text(
@@ -162,7 +165,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
                 SizedBox(width: 4.w,),
                 EvieOvalGray(
-                  buttonText: _tripProvider.currentData == "Carbon Footprint" ? "CO2 Saved" : _tripProvider.currentData == "No of Ride" ? "No. of Rides"  : _tripProvider.currentData == "Mileage" ? "Distance" :_tripProvider.currentData,
+                  buttonText: _tripProvider.currentData == "Carbon Footprint" ? "CO2 Saved" : _tripProvider.currentData == "No of Ride" ? "No. of Rides"  : _tripProvider.currentData == "Mileage" ? "Mileage" :_tripProvider.currentData,
                   onPressed: (){
                     if(_tripProvider.currentData == _tripProvider.dataType.first){
                       _tripProvider.setCurrentData(_tripProvider.dataType.elementAt(1));
@@ -181,6 +184,14 @@ class _TripHistoryDataState extends State<TripHistoryData> {
             child: Row(
               children: [
                 Text(
+                  selectedDateTemp != null ?
+                  widget.format == TripFormat.day?
+                  "${selectedDateTemp!.hour.toString().padLeft(2,'0')}:${selectedDateTemp!.minute.toString().padLeft(2,'0')} ${weekdayNameFull[selectedDateTemp!.weekday]}, ${monthsInYear[selectedDateTemp!.month]} ${selectedDateTemp!.day} ${selectedDateTemp!.year}"  :
+                  widget.format == TripFormat.week ?
+                  "${weekdayNameFull[selectedDateTemp!.weekday]}, ${monthsInYear[selectedDateTemp!.month]} ${selectedDateTemp!.day} ${selectedDateTemp!.year}" :
+                  widget.format == TripFormat.month ?
+                  "${weekdayNameFull[selectedDateTemp!.weekday]}, ${monthsInYear[selectedDateTemp!.month]} ${selectedDateTemp!.day} ${selectedDateTemp!.year}" :
+                  "${monthNameHalf[selectedDateTemp!.month]} ${selectedDateTemp!.year}" :
                   selectedDate,
                   style: const TextStyle(color: EvieColors.darkGrayishCyan),),
                 Expanded(
@@ -210,13 +221,28 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                             setState(() {
                               pickedDate = picked;
                               isFirst = true;
-                              selectedDate = "${monthsInYear[pickedDate!.month]} ${pickedDate!.subtract(Duration(days: 6)).day}-${pickedDate!.day} ${pickedDate!.year}";
+
+                              selectedDate = widget.format == TripFormat.day ?
+                              "${weekdayNameFull[pickedDate!.weekday]}, ${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}"  :
+                              widget.format == TripFormat.week ?
+                              "${monthsInYear[pickedDate!.month]} ${pickedDate!.subtract(Duration(days: 6)).day}-${pickedDate!.day} ${pickedDate!.year}" :
+                              widget.format == TripFormat.month ?
+                              "${monthsInYear[pickedDate!.month]} ${pickedDate!.year}" :
+                              "Jan ${pickedDate!.year} - Dec ${pickedDate!.year}";
                             });
                           }else{
                             setState(() {
                               pickedDate = picked;
                               isFirst = false;
-                              selectedDate = "${monthsInYear[pickedDate!.month]} ${pickedDate!.day}-${pickedDate!.add(Duration(days: 6)).day} ${pickedDate!.year}";
+
+                              selectedDate = widget.format == TripFormat.day ?
+                              "${weekdayNameFull[pickedDate!.weekday]}, ${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}"  :
+                              widget.format == TripFormat.week ?
+                              "${monthsInYear[pickedDate!.month]} ${pickedDate!.day}-${pickedDate!.add(Duration(days: 6)).day} ${pickedDate!.year}" :
+                              widget.format == TripFormat.month ?
+                              "${monthsInYear[pickedDate!.month]} ${pickedDate!.year}" :
+                              "Jan ${pickedDate!.year} - Dec ${pickedDate!.year}";
+
                             });
                           }
                         }
@@ -312,6 +338,8 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                           setState(() {
                             selectedMileage = null;
                             selectedCF = null;
+                            selectedRides = null;
+                            selectedDateTemp = null;
                           });
                         }else{
                           ///Press selected index
@@ -409,18 +437,18 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
   getData(){
 
-    selectedDate = widget.format == TripFormat.week ?
-    "${monthsInYear[pickedDate!.month]} ${pickedDate!.subtract(Duration(days: 6)).day}-${pickedDate!.day}, ${pickedDate!.year}" :
+    selectedDate = widget.format == TripFormat.day ?
+    "${weekdayNameFull[pickedDate!.weekday]}, ${monthsInYear[pickedDate!.month]} ${pickedDate!.day} ${pickedDate!.year}"  :
+    widget.format == TripFormat.week ?
+    "${monthsInYear[pickedDate!.month]} ${pickedDate!.subtract(Duration(days: 6)).day}-${pickedDate!.day} ${pickedDate!.year}" :
     widget.format == TripFormat.month ?
-    "${monthsInYear[pickedDate!.month]}, ${pickedDate!.year}" :
-    "${monthsInYear[pickedDate!.month]} ${pickedDate!.day}, ${pickedDate!.year}";
+    "${monthsInYear[pickedDate!.month]} ${pickedDate!.year}" :
+    "Jan ${pickedDate!.year} - Dec ${pickedDate!.year}";
 
     switch(widget.format){
       case TripFormat.day:
         chartData.clear();
         _tripProvider.currentTripHistoryListDay.clear();
-
-
 
         _tripProvider.currentTripHistoryLists.forEach((key, value) {
           ///Filter date
@@ -450,6 +478,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           setState(() {
             selectedMileage = _tripProvider.currentTripHistoryListDay.elementAt(_tripProvider.selectedIndex).distance.toString();
             selectedCF = _tripProvider.currentTripHistoryListDay.elementAt(_tripProvider.selectedIndex).carbonPrint.toString();
+            selectedRides = 1.toString();
           });
         }
 
@@ -500,6 +529,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
           double tempMileage = 0;
           double tempCF = 0;
+          double tempRides = 0;
 
           for (var i = 0; i< _tripProvider.currentTripHistoryListDay.length; i++) {
             if(selectedDateTemp?.year == _tripProvider.currentTripHistoryListDay.elementAt(i).startTime!.toDate().year &&
@@ -507,6 +537,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                 selectedDateTemp?.day == _tripProvider.currentTripHistoryListDay.elementAt(i).startTime!.toDate().day){
               tempMileage += _tripProvider.currentTripHistoryListDay.elementAt(i).distance!;
               tempCF += _tripProvider.currentTripHistoryListDay.elementAt(i).carbonPrint!;
+              tempRides += 1;
             }
           }
 
@@ -517,6 +548,9 @@ class _TripHistoryDataState extends State<TripHistoryData> {
             if(selectedMileageTemp != 0){
               selectedCF = tempCF.toString();
             }
+
+             selectedRides = tempRides.toString();
+
           });
 
         }
@@ -545,6 +579,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
           double tempMileage = 0;
           double tempCF = 0;
+          double tempRides = 0;
 
           for (var i = 0; i< _tripProvider.currentTripHistoryListDay.length; i++) {
             if(selectedDateTemp?.year == _tripProvider.currentTripHistoryListDay.elementAt(i).startTime!.toDate().year &&
@@ -552,6 +587,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                 selectedDateTemp?.day == _tripProvider.currentTripHistoryListDay.elementAt(i).startTime!.toDate().day){
               tempMileage += _tripProvider.currentTripHistoryListDay.elementAt(i).distance!;
               tempCF += _tripProvider.currentTripHistoryListDay.elementAt(i).carbonPrint!;
+              tempRides += 1;
             }
           }
 
@@ -562,6 +598,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
             if(selectedMileageTemp != 0){
               selectedCF = tempCF.toString();
             }
+            selectedRides = tempRides.toString();
           });
 
         }
@@ -589,12 +626,14 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
           double tempMileage = 0;
           double tempCF = 0;
+          double tempRides = 0;
 
           for (var i = 0; i< _tripProvider.currentTripHistoryListDay.length; i++) {
             if(selectedDateTemp?.year == _tripProvider.currentTripHistoryListDay.elementAt(i).startTime!.toDate().year &&
                 selectedDateTemp?.month == _tripProvider.currentTripHistoryListDay.elementAt(i).startTime!.toDate().month){
               tempMileage += _tripProvider.currentTripHistoryListDay.elementAt(i).distance!;
               tempCF += _tripProvider.currentTripHistoryListDay.elementAt(i).carbonPrint!;
+              tempRides += 1;
             }
           }
 
@@ -605,6 +644,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
             if(selectedMileageTemp != 0){
               selectedCF = tempCF.toString();
             }
+            selectedRides = tempRides.toString();
           });
 
        }

@@ -37,15 +37,17 @@ class _ForgetCompletedState extends State<ForgetCompleted>{
             children: [
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 82.h, 16.w, 2.h),
-                child: Text("Bike forgotten completed",
+                child: Text("Unlink Bike Completed!",
                   style: EvieTextStyles.h2,
                 ),
               ),
 
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 300.h),
-                child: Text("You've officially said goodbye to this bike. All its connected settings have been removed and it's ready for its next adventure. Have a great day ahead!",
-                  style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                child: Text("You've officially said goodbye to this bike. "
+                    "All its connected settings have been removed from the app "
+                    "and it's ready for its next adventure. Have a great day ahead!",
+                  style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
                 ),
               ),
             ],

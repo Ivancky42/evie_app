@@ -336,6 +336,8 @@ class _BikeSettingState extends State<BikeSetting> {
                             ],
                           )
                         ),
+
+                        ///device name
                         Padding(
                           padding: EdgeInsets.only(left: 6.w),
                           child: Text(
@@ -345,6 +347,8 @@ class _BikeSettingState extends State<BikeSetting> {
                             maxLines: 1,
                           ),
                         ),
+
+                        ///purple batch
                         Visibility(
                           visible: _bikeProvider.isPlanSubscript ?? false,
                           child: SvgPicture.asset(

@@ -52,6 +52,11 @@ enum SheetList{
 
   fullCompleted,
   fullIncomplete,
+
+  bikeErase,
+  leaveTeam,
+  leaveSuccessful,
+  leaveUnsuccessful,
 }
 
 enum BikeSettingList{

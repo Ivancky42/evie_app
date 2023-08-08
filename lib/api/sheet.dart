@@ -1,6 +1,7 @@
 
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals_list.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/bike_erase.dart';
 import 'package:evie_test/screen/trip_history/trip_history.dart';
 import 'package:evie_test/screen/user_home_page/battery_details.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/threat_history.dart';
@@ -11,6 +12,9 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import '../screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
 import '../screen/my_bike_setting/pedal_pals/pedal_pals.dart';
 import '../screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
+import '../screen/my_bike_setting/reset_bike/leave_successful.dart';
+import '../screen/my_bike_setting/reset_bike/leave_team.dart';
+import '../screen/my_bike_setting/reset_bike/leave_unsuccessful.dart';
 import '../screen/my_bike_setting/sheet_navigator.dart';
 import '../screen/my_bike_setting/subscription/current_plan.dart';
 import '../screen/my_bike_setting/subscription/essential_plan/essential_plan.dart';
@@ -26,6 +30,24 @@ void showSheetNavigate(BuildContext context, [String? source, String? strings]) 
 void showTripHistorySheet(BuildContext context) {
   showCupertinoSheet(context, const TripHistory());
 }
+
+void showBikeEraseSheet(BuildContext context) {
+  showCupertinoSheet(context, const BikeErase());
+}
+
+void showLeaveTeamSheet(BuildContext context) {
+  showCupertinoSheet(context, const LeaveTeam());
+}
+
+void showLeaveSuccessfulSheet(BuildContext context) {
+  showCupertinoSheet(context, const LeaveSuccessful());
+}
+
+void showLeaveUnsuccessfulSheet(BuildContext context) {
+  showCupertinoSheet(context, const LeaveUnsuccessful());
+}
+
+
 
 void showPedalPalsSheet(BuildContext context) {
   showCupertinoSheet(context, const PedalPals());

@@ -160,7 +160,7 @@ class _FreePlanState extends State<FreePlan> {
 
     int batteryPercentage = _bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected
         ? int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")
-        : _bikeProvider.currentBikeModel?.batteryPercent ?? 0;
+        : _bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0;
 
     String estimatedDistance = getEstDistance(batteryPercentage);
 
@@ -790,7 +790,7 @@ class _FreePlanState extends State<FreePlan> {
                                                         children: [
                                                           Row(
                                                             mainAxisAlignment: MainAxisAlignment.end,
-                                                            //mainAxisSize: MainAxisSize.min,
+
                                                             children: [
                                                               Padding(
                                                                 padding:EdgeInsets.only(left: 0.w),

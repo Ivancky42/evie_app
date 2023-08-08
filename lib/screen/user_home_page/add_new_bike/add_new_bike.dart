@@ -222,7 +222,9 @@ class _AddNewBikeState extends State<AddNewBike> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Center(
-                                              child: Lottie.asset('assets/animations/add-bike.json'),
+                                              child: Lottie.asset(
+                                                'assets/animations/add-bike.json',
+                                              ),
                                           ),
 
                                           Padding(

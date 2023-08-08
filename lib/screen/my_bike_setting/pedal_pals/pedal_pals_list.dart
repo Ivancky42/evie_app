@@ -138,7 +138,8 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                             title: "Success",
                                             content: "Team name uploaded",
                                             rightContent: "OK",
-                                            onPressedRight: (){SmartDialog.dismiss();}))
+                                            onPressedRight: (){
+                                              SmartDialog.dismiss();}))
                                             :
                                         SmartDialog.show(widget: EvieSingleButtonDialog(
                                             title: "Error",

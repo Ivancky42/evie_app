@@ -88,7 +88,7 @@ class _YearStatusState extends State<YearStatus> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Distance",
+                  "Mileage",
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
                 Text(

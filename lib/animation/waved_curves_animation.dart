@@ -66,7 +66,7 @@ class _MyAnimatedWavesCurves extends State<WavedCurvesAnimation> with SingleTick
                         ),
                       ),
 
-                      width: 800.w,
+                      width: 900.w,
                       height: EvieLength.battery_curved_bottom,
                     ),
                   ),
@@ -88,7 +88,7 @@ class _MyAnimatedWavesCurves extends State<WavedCurvesAnimation> with SingleTick
                             colors: [EvieColors.primaryColor,EvieColors.primaryColor.withOpacity(0.8), EvieColors.primaryColor.withOpacity(0.5),EvieColors.primaryColor.withOpacity(0.3), EvieColors.grayishWhite]
                         ),
                       ),
-                      width: 800.w,
+                      width: 900.w,
                       height: EvieLength.battery_curved_bottom,
                     ),
                   ),
@@ -112,6 +112,7 @@ class MyWaveClipper extends CustomClipper<Path> {
 
     //see my previous post to understand about Bezier Curve waves
     // https://www.hellohpc.com/flutter-how-to-make-bezier-curve-waves-using-custom-clippath/
+
 
     for (int i = 0; i < 10; i++) {
       if (i % 2 == 0) {

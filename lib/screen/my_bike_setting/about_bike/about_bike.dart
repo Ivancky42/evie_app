@@ -120,9 +120,12 @@ class _AboutBikeState extends State<AboutBike> {
                   padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
                   child:TextColumn(
                       title: "Total Distance",
+
+                    ///Use bikeModel mileage
+                    ///If it is (10) means 1km , (20) means 2km, 2 means 0.2km. and miles
                       body: _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
-                      "${(_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2)} km":
-                      "${_settingProvider.convertMeterToMilesInString(_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()))} miles",
+                      "${((_bikeProvider.currentBikeModel?.mileage ?? 0)/10).toStringAsFixed(2)} km":
+                      "${_settingProvider.convertMeterToMilesInString((_bikeProvider.currentBikeModel?.mileage ?? 0)/10)} miles",
                 ),
                 ),
                 const AccountPageDivider(),

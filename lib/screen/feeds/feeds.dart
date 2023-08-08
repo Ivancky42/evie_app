@@ -360,13 +360,15 @@ class _FeedsState extends State<Feeds> {
                                                                 .listen((uploadStatus) async {
                                                               if(uploadStatus == UploadFirestoreResult.success){
                                                                 SmartDialog.dismiss();
-                                                                _notificationProvider.updateUserNotificationSharedBikeStatus(_notificationProvider.notificationList.keys.elementAt(index));
+                                                                _notificationProvider.updateUserNotificationSharedBikeStatus(
+                                                                    _notificationProvider.notificationList.keys.elementAt(index));
 
                                                                 showBikeAddSuccessfulToast(context);
 
                                                                 changeToUserHomePageScreen(context);
                                                                 for (var element in _bikeProvider.userBikeNotificationList) {
-                                                                  await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}$element");
+                                                                  await _notificationProvider.subscribeToTopic(
+                                                                      "${_bikeProvider.currentBikeModel!.deviceIMEI}$element");
                                                                 }
 
                                                                 currentSubscription?.cancel();

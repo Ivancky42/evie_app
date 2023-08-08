@@ -54,7 +54,8 @@ class _UnlockingSystemState extends State<UnlockingSystem> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if(deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr)...{
+          if(deviceConnectResult == DeviceConnectResult.connected &&
+              _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr)...{
 
             SizedBox(
               height: 96.h,
@@ -177,7 +178,8 @@ class _UnlockingSystemState extends State<UnlockingSystem> {
 
 
   void setButtonImage() {
-    if (deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr) {
+    if (deviceConnectResult == DeviceConnectResult.connected &&
+        _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr) {
       if (cableLockState?.lockState == LockState.unlock) {
         if(_bluetoothProvider.isUnlocking == true){
           Future.delayed(Duration.zero, () {

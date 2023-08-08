@@ -1,3 +1,5 @@
+
+
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
@@ -10,6 +12,7 @@ import 'package:evie_test/screen/my_account/edit_profile.dart';
 import 'package:evie_test/screen/my_account/enter_new_password.dart';
 import 'package:evie_test/screen/my_account/verify_password.dart';
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_sensitivity.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/bike_erase.dart';
 import 'package:evie_test/screen/onboarding_addNewBike/before_you_start.dart';
 import 'package:evie_test/screen/signup_method.dart';
 import 'package:evie_test/screen/signup_password.dart';
