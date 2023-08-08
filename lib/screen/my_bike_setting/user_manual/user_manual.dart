@@ -16,7 +16,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:wakelock/wakelock.dart';
 
 import '../../../api/colours.dart';
 import '../../../api/enumerate.dart';
