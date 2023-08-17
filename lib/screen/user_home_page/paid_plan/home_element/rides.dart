@@ -1,19 +1,12 @@
-import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../../../../api/colours.dart';
-import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
-import '../../../../api/model/trip_history_model.dart';
-import '../../../../api/provider/bike_provider.dart';
-import '../../../../api/provider/setting_provider.dart';
-import '../../../../api/provider/trip_provider.dart';
+import '../../../../api/provider/ride_provider.dart';
 import '../../../../api/sheet.dart';
-import '../../../../api/sheet_2.dart';
 import '../../../../widgets/evie_card.dart';
 import '../../../../widgets/evie_oval.dart';
 
@@ -30,20 +23,12 @@ class Rides extends StatefulWidget {
 
 class _RidesState extends State<Rides> {
 
-  late BikeProvider _bikeProvider;
-  late TripProvider _tripProvider;
-  late SettingProvider _settingProvider;
-
-  late List<TripHistoryModel> currentTripHistoryListDay = [];
-  late List<ChartData> chartData = [];
-  DateTime now = DateTime.now();
-  DateTime? pickedDate;
+  late RideProvider _rideProvider;
 
   @override
   void initState() {
     super.initState();
-
-    pickedDate = DateTime(now.year, now.month, now.day);
+    _rideProvider = context.read<RideProvider>();
   }
 
 
@@ -54,13 +39,7 @@ class _RidesState extends State<Rides> {
 
   @override
   Widget build(BuildContext context) {
-
-    _bikeProvider = Provider.of<BikeProvider>(context);
-    _tripProvider = Provider.of<TripProvider>(context);
-    _settingProvider = Provider.of<SettingProvider>(context);
-
-    getTripHistoryData(_bikeProvider, _tripProvider);
-
+    _rideProvider = Provider.of<RideProvider>(context);
     return EvieCard(
       title: "Rides",
       child: Expanded(
@@ -71,14 +50,16 @@ class _RidesState extends State<Rides> {
             Padding(
               padding: EdgeInsets.only(top:12.h),
               child: EvieOvalGray(
-                buttonText: _tripProvider.currentData == "Carbon Footprint" ? "CO2 Saved" : _tripProvider.currentData == "No of Ride" ? "No. of Rides"  : _tripProvider.currentData == "Mileage" ? "Mileage" :_tripProvider.currentData,
-                onPressed: (){
-                  if(_tripProvider.currentData == _tripProvider.dataType.first){
-                    _tripProvider.setCurrentData(_tripProvider.dataType.elementAt(1));
-                  }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(1)){
-                    _tripProvider.setCurrentData(_tripProvider.dataType.last);
-                  }else if(_tripProvider.currentData == _tripProvider.dataType.last){
-                    _tripProvider.setCurrentData(_tripProvider.dataType.first);
+                buttonText: _rideProvider.weekCardDataTypeString!,
+                onPressed: () {
+                  if(_rideProvider.weekCardDateType == RideDataType.mileage){
+                    _rideProvider.setWeekData(RideDataType.noOfRide);
+                  }
+                  else if(_rideProvider.weekCardDateType == RideDataType.noOfRide){
+                    _rideProvider.setWeekData(RideDataType.carbonFootprint);
+                  }
+                  else if(_rideProvider.weekCardDateType == RideDataType.carbonFootprint){
+                    _rideProvider.setWeekData(RideDataType.mileage);
                   }
                 },),
             ),
@@ -87,36 +68,12 @@ class _RidesState extends State<Rides> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-
-                  if(_tripProvider.currentData == _tripProvider.dataType.elementAt(0))...{
-                    _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
-                    Row(
-                      children: [
-                        Text("${(currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2)}", style: EvieTextStyles.display,),
-                        Text(" km", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray,)),
-                      ],
-                    ) :
-                    Row(
-                      children: [
-                        Text("${_settingProvider.convertMeterToMilesInString(currentTripHistoryListDay.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()))}", style: EvieTextStyles.display,),
-                        Text(" miles", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
-                      ],
-                    ),
-                  }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(1))...{
-                    Row(
-                      children: [
-                        Text("${currentTripHistoryListDay.length.toStringAsFixed(0)}", style: EvieTextStyles.display,),
-                        Text(" rides ", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
-                      ],
-                    ),
-                  }else if(_tripProvider.currentData == _tripProvider.dataType.elementAt(2))...{
-                    Row(
-                      children: [
-                        Text("${thousandFormatting((currentTripHistoryListDay.fold<int>(0, (prev, element) => prev + element.carbonPrint!)))}", style: EvieTextStyles.display,),
-                        Text(" g", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
-                      ],
-                    ),
-                  },
+                  Row(
+                    children: [
+                      Text(_rideProvider.weekCardData ?? '-', style: EvieTextStyles.display,),
+                      Text(_rideProvider.weekCardDataUnit ?? '', style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray,)),
+                    ],
+                  ),
                   Text("this week", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray,height: 1.2),),
                   SizedBox(height: 16.h,),
                 ],
@@ -129,29 +86,6 @@ class _RidesState extends State<Rides> {
         showTripHistorySheet(context);
       },
     );
-  }
-
-  getTripHistoryData(BikeProvider bikeProvider, TripProvider tripProvider){
-
-    chartData.clear();
-    currentTripHistoryListDay.clear();
-    // value.startTime.toDate().isBefore(pickedDate!.add(Duration(days: 7)
-
-    for(int i = 0; i < 7; i ++){
-      chartData.add((ChartData(pickedDate!.subtract(Duration(days: i)), 0)));
-    }
-
-    chartData = chartData.reversed.toList();
-
-    tripProvider.currentTripHistoryLists.forEach((key, value) {
-      if(value.startTime.toDate().isBefore(pickedDate!.add(const Duration(days: 1))) && value.startTime.toDate().isAfter(pickedDate!.subtract(const Duration(days: 6)))){
-        ChartData newData = chartData.firstWhere((data) => data.x.day == value.startTime.toDate().day);
-        newData.y = newData.y + value.distance.toDouble();
-        currentTripHistoryListDay.add(value);
-      }
-    });
-
-
   }
 }
 

@@ -1,0 +1,428 @@
+import 'package:evie_test/api/colours.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
+import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/screen/ride/recent_activity.dart';
+import 'package:evie_test/screen/ride/year_status.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/svg.dart';
+import '../../api/enumerate.dart';
+import '../../api/fonts.dart';
+import '../../api/function.dart';
+import '../../api/provider/ride_provider.dart';
+import '../../widgets/evie_button.dart';
+import '../../widgets/evie_oval.dart';
+
+
+class RideHistoryData2 extends StatefulWidget{
+  final RideFormat format;
+  const RideHistoryData2(this.format,{ Key? key }) : super(key: key);
+  @override
+  _RideHistoryData2State createState() => _RideHistoryData2State();
+}
+
+class _RideHistoryData2State extends State<RideHistoryData2> {
+
+  DateTime now = DateTime.now();
+  late RideProvider _rideProvider;
+  late SettingProvider _settingProvider;
+  bool isFirst = true;
+  double? selectedMileageTemp;
+  DateTime? selectedDateTemp;
+  String? selectedMileage;
+  ///Selected carbon footprint
+  String? selectedCF;
+  String? selectedRides;
+  bool isFirstLoad = true;
+  bool isDataEmpty = true;
+
+  late String selectedDate;
+  DateTime? pickedDate;
+  bool _isLoading = true; // Add a loading indicator state
+
+
+  final List<String> xLabels = List.generate(12, (index) {
+    // Generate labels for 24 hours
+    return '${index.toString().padLeft(2, '0')}:00';
+  });
+
+  @override
+  void initState() {
+    super.initState();
+    _rideProvider = context.read<RideProvider>();
+    _loadTripHistory();
+  }
+
+  // Define an async function to load trip history
+  Future<void> _loadTripHistory() async {
+    try {
+      pickedDate = DateTime.now();
+      filterDateByRideFormat(pickedDate!);
+      await _rideProvider.getTripHistory();
+
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (widget.format == RideFormat.day) {
+          await _rideProvider.getDayRideHistory(DateTime.now());
+          await _rideProvider.setRideData(RideDataType.mileage, widget.format, pickedDate!);
+        }
+        else if (widget.format == RideFormat.week) {
+          await _rideProvider.getWeekRideHistory(DateTime.now());
+          await _rideProvider.setRideData(RideDataType.mileage, widget.format, pickedDate!);
+        }
+        else if (widget.format == RideFormat.month) {
+          await _rideProvider.getMonthRideHistory(DateTime.now());
+          await _rideProvider.setRideData(RideDataType.mileage, widget.format, pickedDate!);
+        }
+        else if (widget.format == RideFormat.year) {
+          await _rideProvider.getYearRideHistory(DateTime.now().year);
+          await _rideProvider.setRideData(RideDataType.mileage, widget.format, pickedDate!);
+        }
+      });
+      await _rideProvider.getChartData(widget.format, pickedDate!);
+    } catch (error) {
+      // Handle error if needed
+      print('Error loading trip history: $error');
+    } finally {
+      setState(() {
+        _isLoading = false; // Set loading state to false when done
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _rideProvider = Provider.of<RideProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
+
+    return _isLoading ? Center(child: CircularProgressIndicator(color: EvieColors.primaryColor,),)
+        : SingleChildScrollView(
+      physics:const BouncingScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 16.w, right: 16.w),
+            child: Text("TOTAL", style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan),),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 16.w, right: 16.w),
+            child: Row(
+              children: [
+                Row(
+                  children: [
+                    Text(_rideProvider.rideDataString, style: EvieTextStyles.display,),
+                    Text(_rideProvider.rideDataUnit, style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray,)),
+                  ],
+                ),
+
+                SizedBox(width: 4.w,),
+
+                EvieOvalGray(
+                  buttonText: _rideProvider.rideDataTypeString,
+                  onPressed: (){
+                    if(_rideProvider.rideDataType == RideDataType.mileage){
+                      _rideProvider.setRideData(RideDataType.noOfRide, widget.format, pickedDate!);
+                    }
+                    else if(_rideProvider.rideDataType == RideDataType.noOfRide){
+                      _rideProvider.setRideData(RideDataType.carbonFootprint, widget.format, pickedDate!);
+                    }
+                    else if(_rideProvider.rideDataType == RideDataType.carbonFootprint){
+                      _rideProvider.setRideData(RideDataType.mileage, widget.format, pickedDate!);
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 16.w, right: 16.w),
+            child: Row(
+              children: [
+                Text(
+                  selectedDateTemp != null ?
+                  widget.format == RideFormat.day?
+                  "${selectedDateTemp!.hour.toString().padLeft(2,'0')}:${selectedDateTemp!.minute.toString().padLeft(2,'0')} ${weekdayNameFull[selectedDateTemp!.weekday]}, ${monthsInYear[selectedDateTemp!.month]} ${selectedDateTemp!.day} ${selectedDateTemp!.year}"  :
+                  widget.format == RideFormat.week ?
+                  "${weekdayNameFull[selectedDateTemp!.weekday]}, ${monthsInYear[selectedDateTemp!.month]} ${selectedDateTemp!.day} ${selectedDateTemp!.year}" :
+                  widget.format == RideFormat.month ?
+                  "${weekdayNameFull[selectedDateTemp!.weekday]}, ${monthsInYear[selectedDateTemp!.month]} ${selectedDateTemp!.day} ${selectedDateTemp!.year}" :
+                  "${monthNameHalf[selectedDateTemp!.month]} ${selectedDateTemp!.year}" :
+                  selectedDate,
+                  style: const TextStyle(color: EvieColors.darkGrayishCyan),),
+                Expanded(
+                  child:  EvieButton_PickDate(
+                    showColour: false,
+                    width: 155.w,
+                    onPressed: () async {
+                      if (widget.format == RideFormat.day || widget.format == RideFormat.week ) {
+                        DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: pickedDate!,
+                          firstDate: DateTime(pickedDate!.year - 2),
+                          lastDate: DateTime.now(),
+                          builder: (context, child) {
+                            return Theme(data: Theme.of(context).copyWith(
+                              colorScheme: const ColorScheme.light(
+                                primary: EvieColors.primaryColor,
+                              ),), child: child!);
+                          },
+                        );
+                        filterDateByRideFormat(picked ?? pickedDate!);
+                        _rideProvider.getChartData(widget.format, pickedDate!);
+                      }
+                      else if (widget.format == RideFormat.month) {
+                        DateTime? picked = await showMonthPicker(
+                            context: context,
+                            initialDate: pickedDate!,
+                            selectedMonthBackgroundColor: EvieColors.primaryColor,
+                            headerColor: EvieColors.primaryColor,
+                            unselectedMonthTextColor: EvieColors.primaryColor,
+                            yearFirst: false,
+                            selectYearOnly: false,
+                            confirmWidget: Text(
+                              'OK',
+                              style: TextStyle(
+                                  color: EvieColors.primaryColor
+                              ),
+                            ),
+                            cancelWidget: Text(
+                              'Cancel',
+                              style: TextStyle(
+                                color: EvieColors.primaryColor,
+                              ),
+                            )
+                        );
+                        filterDateByRideFormat(picked ?? pickedDate!);
+                        _rideProvider.getChartData(widget.format, pickedDate!);
+                      }
+                      else if (widget.format == RideFormat.year) {
+                        DateTime? picked = await showMonthPicker(
+                            context: context,
+                            initialDate: pickedDate!,
+                            selectedMonthBackgroundColor: EvieColors.primaryColor,
+                            headerColor: EvieColors.primaryColor,
+                            unselectedMonthTextColor: EvieColors.primaryColor,
+                            yearFirst: true,
+                            selectYearOnly: true,
+                            confirmWidget: Text(
+                              'OK',
+                              style: TextStyle(
+                                  color: EvieColors.primaryColor
+                              ),
+                            ),
+                            cancelWidget: Text(
+                              'Cancel',
+                              style: TextStyle(
+                                color: EvieColors.primaryColor,
+                              ),
+                            )
+                        );
+
+                        filterDateByRideFormat(picked ?? pickedDate!);
+                        _rideProvider.getChartData(widget.format, pickedDate!);
+                      }
+                    },
+                    child: SvgPicture.asset(
+                      "assets/buttons/calendar.svg",
+                      height: 24.h,
+                      width: 24.w,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Padding(
+            padding: EdgeInsets.only(left: 8.w, right: 8.w),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SfCartesianChart(
+                  primaryXAxis: CategoryAxis(
+                    isVisible: true,
+                  ),
+                  ///maximum, data.duration highest
+                  primaryYAxis: NumericAxis(
+                    //minimum: 0, maximum: 2500, interval: 300,
+                    numberFormat: NumberFormat('#,##0'),
+                    opposedPosition: true,
+                  ),
+                  series: RideFormat.day == widget.format ?
+                  <ColumnSeries<DayTimeChartData, dynamic>>[
+                    ColumnSeries<DayTimeChartData, dynamic>(
+                      dataSource: _rideProvider.dayTimeChartData,
+                      xValueMapper: (DayTimeChartData data, _) =>
+                      dayTimeName[DateFormat('h a').format(data.x)],
+                      yValueMapper: (DayTimeChartData data, _) =>
+                      _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
+                      (data.y/1000):
+                      _settingProvider.convertMeterToMiles(data.y.toDouble()),
+                      ///width of the column
+                      width: 0.8,
+                      ///Spacing between the column
+                      spacing: 0.2,
+                      name: _rideProvider.dayTimeChartData.toString(),
+                      color: EvieColors.primaryColor,
+                      borderRadius: const BorderRadius.only(
+                        topRight:  Radius.circular(5),
+                        topLeft: Radius.circular(5),
+                      ),
+                    ),
+                  ] :
+                  <ColumnSeries<ChartData, dynamic>>[
+                    ColumnSeries<ChartData, dynamic>(
+                      dataSource: _rideProvider.chartData,
+                      xValueMapper: (ChartData data, _) =>
+                      //widget.format == RideFormat.day ? "${data.x.hour.toString().padLeft(2,'0')}:${data.x.minute.toString().padLeft(2,'0')}" :
+                      widget.format == RideFormat.day ? dayTimeName[DateFormat('h a').format(data.x)] :
+                      widget.format == RideFormat.week ? weekdayName[data.x.weekday] :
+                      widget.format == RideFormat.month ? data.x.day :
+                      widget.format == RideFormat.year ? monthNameHalf[data.x.month] :
+                      data.x,
+                      yValueMapper: (ChartData data, _) =>
+                      _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
+                      (data.y/1000):
+                      _settingProvider.convertMeterToMiles(data.y.toDouble()),
+
+                      ///width of the column
+                      width: 0.8,
+                      ///Spacing between the column
+                      spacing: 0.2,
+                      name: _rideProvider.chartData.toString(),
+                      color: EvieColors.primaryColor,
+                      borderRadius: const BorderRadius.only(
+                        topRight:  Radius.circular(5),
+                        topLeft: Radius.circular(5),
+                      ),
+                    ),
+                  ],
+                  enableAxisAnimation: true,
+                  trackballBehavior:
+                  RideFormat.day == widget.format ?
+                  TrackballBehavior(
+                    enable: true,
+                    activationMode: ActivationMode.singleTap,
+                    shouldAlwaysShow: true,
+                    tooltipSettings: InteractiveTooltip(
+                      // color: Colors.black87,
+                      // connectorLineColor: Colors.black87,
+                      // borderColor: Colors.black87,
+                      decimalPlaces: 2,
+                      canShowMarker: false,
+                      format: 'point.x : point.y' + _rideProvider.rideDataUnit,
+                    ),
+                    // builder: (BuildContext context, TrackballDetails trackballDetails) {
+                    //   return Container(
+                    //       decoration: BoxDecoration(
+                    //           color: Colors.black87,
+                    //           borderRadius: BorderRadius.all(Radius.circular(3.0)),
+                    //       ),
+                    //       child: Padding(
+                    //         padding: EdgeInsets.all(6),
+                    //         child: Text(
+                    //           '${trackballDetails.point?.x!} - ${trackballDetails.point?.xValue >= 12 ? trackballDetails.point?.xValue - 11 : trackballDetails.point?.xValue + 1}${trackballDetails.point?.x.substring(trackballDetails.point?.x.length - 2)} : ${trackballDetails.point?.y}' + _rideProvider.rideDataUnit,
+                    //           //'${trackballDetails.point?.x!} - ${trackballDetails.point?.xValue! + 1}${trackballDetails.point?.x.substring(trackballDetails.point?.x.length - 2)} : ${trackballDetails.point?.y}' + _rideProvider.rideDataUnit,
+                    //           style: TextStyle(
+                    //               fontFamily: 'Roboto',
+                    //               fontStyle: FontStyle.normal,
+                    //               fontWeight: FontWeight.normal,
+                    //               fontSize: 12,
+                    //               color: Colors.white
+                    //           ),
+                    //         ),
+                    //       ),
+                    //   );
+                    // }
+                  )
+                      : TrackballBehavior(
+                    shouldAlwaysShow: true,
+                    enable: true,
+                    activationMode: ActivationMode.singleTap,
+                    tooltipSettings: InteractiveTooltip(
+                      format: 'point.x : point.y' + _rideProvider.rideDataUnit,
+                      decimalPlaces: 2,
+                      canShowMarker: false,
+                    ),
+                  ),
+                ),
+
+                RideFormat.day == widget.format ?
+                Visibility(
+                  visible: _rideProvider.dayTimeChartData.isEmpty ? true : false,
+                  child: Container(
+                      width: 75.w,
+                      color: EvieColors.grayishWhite,
+                      child: Center(
+                          child: Text("No Data",style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),))),
+                ) :
+                Visibility(
+                  visible: _rideProvider.chartData.isEmpty ? true : false,
+                  child: Container(
+                      width: 75.w,
+                      color: EvieColors.grayishWhite,
+                      child: Center(
+                          child: Text("No Data",style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),))),
+                ),
+              ],
+            ),
+          ),
+
+          if(widget.format == RideFormat.year)...{
+            YearStatus(pickedDate!),
+          }
+          else...{
+            RideFormat.day == widget.format ?
+            RecentActivity(widget.format, _rideProvider.dayTimeChartData.isEmpty ? true : false) :
+            RecentActivity(widget.format,_rideProvider.chartData.isEmpty ? true : false )
+          }
+        ],
+      ),
+    );
+  }
+
+  void filterDateByRideFormat(DateTime picked) {
+    setState(() {
+      pickedDate = picked;
+      selectedDate = widget.format == RideFormat.day ?
+      formatDay(picked) :
+      widget.format == RideFormat.week ?
+      formatWeek(picked):
+      widget.format == RideFormat.month ?
+      "${monthsInYear[picked.month]} ${picked.year}" :
+      "Jan ${picked.year} - Dec ${picked.year}";
+    });
+  }
+
+  String formatDay(DateTime date) {
+    return "${weekdayNameFull[date!.weekday]}, ${monthsInYear[date!.month]} ${date!.day} ${date!.year}";
+  }
+
+  String formatWeek(DateTime date) {
+    DateTime monday = date.subtract(Duration(days: date.weekday - 1));
+    DateTime sunday = date.add(Duration(days: DateTime.daysPerWeek - date.weekday));
+
+    String formattedWeek = DateFormat('MMM d').format(monday) +
+        '-' +
+        DateFormat('MMM d, yyyy').format(sunday);
+
+    return formattedWeek;
+  }
+
+  checkIsDataEmpty(){
+    isDataEmpty = true;
+    for (var i = 0; i < _rideProvider.currentTripHistoryLists.length; i++) {
+      if (_rideProvider.isFilterData(
+          _rideProvider.currentTripHistoryListDay,
+          _rideProvider.currentTripHistoryLists.values.elementAt(i))) {
+        isDataEmpty = false;
+      }
+    }
+  }
+
+}
+

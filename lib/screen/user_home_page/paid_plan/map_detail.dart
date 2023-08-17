@@ -155,7 +155,7 @@ class _MapDetailsState extends State<MapDetails> {
                   Padding(
                     padding: EdgeInsets.only(left: 17.w, top: 0.h, bottom: 0.h),
                     child: Text(
-                      "Orbital Anti-Theft",
+                      "Orbital Anti-Theft 2",
                       style: EvieTextStyles.h1,
                     ),
                   ),

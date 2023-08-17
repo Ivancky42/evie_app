@@ -37,7 +37,6 @@ class UserManual extends StatefulWidget {
 
 class _UserManualState extends State<UserManual> {
 
-  late TripProvider _tripProvider;
   late BikeProvider _bikeProvider;
   late SettingProvider _settingProvider;
 
@@ -52,7 +51,6 @@ class _UserManualState extends State<UserManual> {
 
   @override
   Widget build(BuildContext context) {
-    _tripProvider = Provider.of<TripProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
@@ -114,15 +112,15 @@ class _UserManualState extends State<UserManual> {
                       body: _bikeProvider.currentBikeModel?.deviceIMEI ?? ""),
                 ),
                 const AccountPageDivider(),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
-                  child:TextColumn(
-                    title: "Total Mileage",
-                    body: _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
-                    "${(_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2)} km":
-                    "${_settingProvider.convertMeterToMilesInString(_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()))} miles",
-                  ),
-                ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
+                //   child:TextColumn(
+                //     title: "Total Mileage",
+                //     body: _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
+                //     "${(_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.distance!.toDouble())/1000).toStringAsFixed(2)} km":
+                //     "${_settingProvider.convertMeterToMilesInString(_tripProvider.currentTripHistoryLists.values.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()))} miles",
+                //   ),
+                // ),
                 const AccountPageDivider(),
               ],
             ),

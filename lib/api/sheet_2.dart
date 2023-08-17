@@ -1,7 +1,7 @@
 //
 // import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting.dart';
 // import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals_list.dart';
-// import 'package:evie_test/screen/trip_history/trip_history.dart';
+// import 'package:evie_test/screen/trip_history/ride_history.dart';
 // import 'package:evie_test/screen/user_home_page/battery_details.dart';
 // import 'package:evie_test/screen/user_home_page/paid_plan/threat_history.dart';
 // import 'package:evie_test/widgets/evie_bottom_sheet.dart';
@@ -16,7 +16,7 @@
 // import '../screen/my_bike_setting/subscription/current_plan.dart';
 // import '../screen/my_bike_setting/subscription/essential_plan/essential_plan.dart';
 // import '../screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
-// import '../screen/trip_history/ride_history.dart';
+// import '../screen/trip_history/ride_detail.dart';
 // import '../screen/user_home_page/paid_plan/map_details2.dart';
 // import 'model/trip_history_model.dart';
 //
