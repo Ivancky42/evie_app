@@ -37,7 +37,6 @@ class AboutBike extends StatefulWidget {
 
 class _AboutBikeState extends State<AboutBike> {
 
-  late TripProvider _tripProvider;
   late BikeProvider _bikeProvider;
   late SettingProvider _settingProvider;
 
@@ -53,7 +52,6 @@ class _AboutBikeState extends State<AboutBike> {
 
   @override
   Widget build(BuildContext context) {
-    _tripProvider = Provider.of<TripProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 

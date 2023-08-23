@@ -62,6 +62,8 @@ class _TripHistoryDataState extends State<TripHistoryData> {
   bool isFirstLoad = true;
   bool isDataEmpty = true;
 
+  TrackballBehavior? _trackballBehavior;
+
   @override
   void initState() {
 
@@ -95,11 +97,16 @@ class _TripHistoryDataState extends State<TripHistoryData> {
           );
         });
 
-      _selectionBehavior = SelectionBehavior(
+     //  _selectionBehavior = SelectionBehavior(
+     //    enable: true,
+     //    selectedColor: EvieColors.primaryColor,
+     //    unselectedColor: EvieColors.lightPrimaryColor,
+     // );
+
+    _trackballBehavior = TrackballBehavior(
         enable: true,
-        selectedColor: EvieColors.primaryColor,
-        unselectedColor: EvieColors.lightPrimaryColor,
-     );
+        activationMode: ActivationMode.singleTap,
+        tooltipSettings: const InteractiveTooltip(format: 'point.x : point.y'));
     super.initState();
   }
 
@@ -377,7 +384,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                     series: <ColumnSeries<ChartData, dynamic>>[
                       ColumnSeries<ChartData, dynamic>(
 
-                        selectionBehavior: _selectionBehavior,
+                        //selectionBehavior: _selectionBehavior,
 
                         dataSource: chartData,
                         xValueMapper: (ChartData data, _) =>
@@ -410,6 +417,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
                       enablePanning: false,
                       enablePinching: false,
                     ),
+                    trackballBehavior: _trackballBehavior,
                   ),
 
                   Visibility(

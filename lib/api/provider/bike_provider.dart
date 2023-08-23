@@ -7,6 +7,7 @@ import 'package:evie_test/api/model/notification_setting_model.dart';
 import 'package:evie_test/api/model/trip_history_model.dart';
 import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
+import 'package:evie_test/api/provider/ride_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/provider/trip_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -878,6 +879,7 @@ class BikeProvider extends ChangeNotifier {
 
             notifyListeners();
 
+              print('HELLOOOOOOOOOO: ' + deviceIMEI);
               getOwnerUid(deviceIMEI, obj['ownerUid'] );
 
 
@@ -1571,7 +1573,7 @@ class BikeProvider extends ChangeNotifier {
       }
     });
 
-    TripProvider().clear();
+    RideProvider().clear();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('currentBikeName');

@@ -47,6 +47,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
   late SettingProvider _settingProvider;
 
   GeoPoint? selectedGeopoint;
+  String? locationStatus;
+  bool? isConnected;
   DeviceConnectResult? deviceConnectResult;
 
   var options = <PointAnnotationOptions>[];
@@ -56,15 +58,20 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
   var currentAnnotationIdList = [];
   var markers = <Marker>[];
   int _currentIndex = 0;
+  List<PointAnnotation>? pointAnnotation;
 
   @override
   void initState() {
     super.initState();
-    _locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    // _locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    Future.delayed(Duration.zero).then((value) {
+      _locationProvider = Provider.of<LocationProvider>(context, listen: false);
+      _locationProvider.setDefaultSelectedGeopoint();
+    });
   }
 
   @override
-  void dispose() {
+  Future<void> dispose() async {
     super.dispose();
   }
 
@@ -74,7 +81,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     ///Disable scaleBar on top left corner
     await this.mapboxMap?.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
 
-   mapCreatedAnimateBounce();
+    mapCreatedAnimateBounce();
   }
 
   @override
@@ -86,8 +93,6 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     _settingProvider = Provider.of<SettingProvider>(context);
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     locationListener();
-
-
 
     List<Widget> _widgets = [
       Row(
@@ -439,9 +444,31 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     return _locationProvider.locationModel;
   }
 
-  loadMarker() async {
-    options.clear();
+  void locationListener() {
+    if (isConnected != _locationProvider.locationModel?.isConnected || locationStatus != _locationProvider.locationModel?.status) {
+      selectedGeopoint = _locationProvider.locationModel?.geopoint;
+      locationStatus = _locationProvider.locationModel?.status;
+      isConnected = _locationProvider.locationModel?.isConnected;
+      mapCreatedAnimateBounce();
+    }
+    else {
+      if (selectedGeopoint != _locationProvider.locationModel?.geopoint) {
+        selectedGeopoint = _locationProvider.locationModel?.geopoint;
+        locationStatus = _locationProvider.locationModel?.status;
+        isConnected = _locationProvider.locationModel?.isConnected;
+        mapCreatedAnimateBounce();
+      }
+    }
+    // selectedGeopoint = _locationProvider.locationModel?.geopoint;
+    // locationStatus = _locationProvider.locationModel?.status;
+    // isConnected = _locationProvider.locationModel?.isConnected;
+    //
+    // mapCreatedAnimateBounce();
+  }
 
+  loadMarker() async {
+    ///Marker
+    options.clear();
     if(currentAnnotationIdList.isNotEmpty){
       ///Check if have this id
       currentAnnotationIdList.forEach((element) async {
@@ -459,48 +486,49 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
         final ByteData bytes = await rootBundle.load("assets/icons/marker_warning.png");
         final Uint8List list = bytes.buffer.asUint8List();
 
-        options.add(PointAnnotationOptions(
-          geometry: Point(
-              coordinates: Position(
-                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                  _locationProvider.locationModel?.geopoint.latitude ?? 0))
-              .toJson(),
-          image: list,
-          iconSize: 1.5.h,
-        ));
+        options.add(
+            PointAnnotationOptions(
+                geometry: Point(
+                    coordinates: Position(
+                        _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                        _locationProvider.locationModel?.geopoint.latitude ?? 0
+                    )).toJson(),
+                iconSize: 1.5.h,
+                image: list)
+            );
 
         ///Add danger threat
-      }else if (_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger") {
+      }
+      else if (_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger") {
 
         final ByteData bytes = await rootBundle.load("assets/icons/marker_danger.png");
         final Uint8List list = bytes.buffer.asUint8List();
 
-        ///First marker
         options.add(
             PointAnnotationOptions(
-              geometry: Point(
-                  coordinates: Position(
-                    _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                    _locationProvider.locationModel?.geopoint.latitude ?? 0,
-                  )).toJson(),
-              image: list,
-              iconSize: 1.5.h,
-            )
-        );
+                geometry: Point(
+                    coordinates: Position(
+                        _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                        _locationProvider.locationModel?.geopoint.latitude ?? 0
+                    )).toJson(),
+                iconSize: 1.5.h,
+                image: list));
 
-      } else {
+      }
+      else {
         final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? "safe"));
         final Uint8List list = bytes.buffer.asUint8List();
 
-        options.add(PointAnnotationOptions(
-          geometry: Point(
-              coordinates: Position(
-                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                  _locationProvider.locationModel?.geopoint.latitude ?? 0))
-              .toJson(),
-          image: list,
-          iconSize: 1.5.h,
-        ));
+        options.add(
+            PointAnnotationOptions(
+                geometry: Point(
+                    coordinates: Position(
+                        _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                        _locationProvider.locationModel?.geopoint.latitude ?? 0
+                    )).toJson(),
+                iconSize: 1.5.h,
+                image: list)
+        );
       }
 
       pointAnnotationManager.setIconAllowOverlap(false);
@@ -509,16 +537,18 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     });
   }
 
-  void locationListener() {
-    if (selectedGeopoint != _locationProvider.locationModel?.geopoint) {
-      selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-      if (mapboxMap != null) {
-        animateBounce();
-      }
-    }
-    loadMarker();
-    // loadImage(currentDangerStatus);
-  }
+  
+  // void locationListener() {
+  //   if (selectedGeopoint != _locationProvider.locationModel?.geopoint) {
+  //     selectedGeopoint  = _locationProvider.locationModel?.geopoint;
+  //     if (mapboxMap != null) {
+  //       animateBounce();
+  //     }
+  //   }
+  //   loadMarker();
+  //   // loadImage(currentDangerStatus);
+  // }
+
 
   void mapCreatedAnimateBounce() {
     selectedGeopoint  = _locationProvider.locationModel?.geopoint;

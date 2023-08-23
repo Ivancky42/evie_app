@@ -2,6 +2,7 @@
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals_list.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/bike_erase.dart';
+import 'package:evie_test/screen/ride/ride_detail.dart';
 import 'package:evie_test/screen/trip_history/trip_history.dart';
 import 'package:evie_test/screen/user_home_page/battery_details.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/threat_history.dart';
@@ -19,7 +20,7 @@ import '../screen/my_bike_setting/sheet_navigator.dart';
 import '../screen/my_bike_setting/subscription/current_plan.dart';
 import '../screen/my_bike_setting/subscription/essential_plan/essential_plan.dart';
 import '../screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
-import '../screen/trip_history/ride_history.dart';
+import '../screen/ride/ride_history.dart';
 import '../screen/user_home_page/paid_plan/map_detail.dart';
 import 'model/trip_history_model.dart';
 
@@ -28,7 +29,7 @@ void showSheetNavigate(BuildContext context, [String? source, String? strings]) 
 }
 
 void showTripHistorySheet(BuildContext context) {
-  showCupertinoSheet(context, const TripHistory());
+  showCupertinoSheet(context, const RideHistory());
 }
 
 void showBikeEraseSheet(BuildContext context) {
@@ -101,7 +102,7 @@ void showMapDetailsSheet(BuildContext context) {
 }
 
 void showRideHistorySheet(BuildContext context, String tripId, TripHistoryModel currentTripHistoryList) {
-  showCupertinoSheet(context, RideHistory(tripId, currentTripHistoryList));
+  showCupertinoSheet(context, RideDetail(tripId, currentTripHistoryList));
 }
 
 void showCupertinoSheet(BuildContext context, Widget widget) {
