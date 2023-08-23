@@ -548,7 +548,35 @@ showEVRemovedToast(context, String keyName) {
   );
 }
 
-
+showScanTimeOut(context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
+            SizedBox(width: 4.w,),
+            Container(
+              width: 300.w,
+              child: Text(
+                "Fail to connect your bike. Please stay close to your bike and connect again.",
+                style: EvieTextStyles.toast,
+              ),
+            )
+          ],
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
 
 hideCurrentSnackBar(ScaffoldMessengerState _navigator) {
   Future.delayed(Duration.zero).then((value) {

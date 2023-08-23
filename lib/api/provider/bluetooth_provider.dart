@@ -13,6 +13,7 @@ import '../../bluetooth/modelResult.dart';
 
 import '../../widgets/evie_single_button_dialog.dart';
 import '../dialog.dart';
+import '../enumerate.dart';
 import '../model/bike_model.dart';
 import 'bike_provider.dart';
 import 'firmware_provider.dart';
@@ -1225,20 +1226,44 @@ class BluetoothProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  final bool _isScanning = false;
-  final _ble = FlutterReactiveBle();
+  StreamController<BLEScanResult> scanResultStream = StreamController.broadcast();
   StreamSubscription? bleScanSub;
-
-  double deviceRssi = 0;
+  BLEScanResult? scanResult;
+  int deviceRssi = 0;
   double deviceRssiProgress = 0.0;
 
-    startScanRSSI() {
-    bleScanSub?.cancel();
+
+    Stream<BLEScanResult> startScanRSSI() {
+
+      bleScanSub?.cancel();
+
+      startScanTimer?.cancel();
+      scanResultStream.add(BLEScanResult.scanning);
+      scanResult = BLEScanResult.scanning;
+
+      startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+
+        print("Scan Timer: " + timer.tick.toString() + "s");
+
+
+        if (timer.tick == 10) {
+          scanResultStream.add(BLEScanResult.scanTimeout);
+          scanResult = BLEScanResult.scanTimeout;
+
+          notifyListeners();
+          bleScanSub?.cancel();
+          timer.cancel();
+        }
+      });
+
     bleScanSub = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((discoveredDevice) async {
 
       if (discoveredDevice.name == currentBikeModel?.bleName) {
 
-        deviceRssi = discoveredDevice.rssi.toDouble();
+        scanResultStream.add(BLEScanResult.deviceFound);
+        scanResult = BLEScanResult.deviceFound;
+
+        deviceRssi = discoveredDevice.rssi.abs();
 
         if(deviceRssi.abs() > 0 && deviceRssi.abs() < 100){
           deviceRssiProgress = 1.0 - (deviceRssi.abs() / 100.0);
@@ -1252,6 +1277,14 @@ class BluetoothProvider extends ChangeNotifier {
     }, onError: (error) {
       bleScanSub?.cancel();
     });
+
+      return scanResultStream.stream;
+  }
+
+  void stopScanTimer() {
+    startScanTimer?.cancel();
+    bleScanSub?.cancel();
+    notifyListeners();
   }
 
 }

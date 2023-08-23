@@ -78,7 +78,7 @@ class _BikeDangerState extends State<BikeDanger> {
       // }
       if (_bluetoothProvider.currentBikeModel != null) {
         isLoaded = true;
-        bleScanSub = _bluetoothProvider.startScanRSSI();
+        //bleScanSub = _bluetoothProvider.startScanRSSI();
       }
     }
 

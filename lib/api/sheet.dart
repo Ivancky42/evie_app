@@ -54,7 +54,7 @@ void showPedalPalsSheet(BuildContext context) {
 }
 
 void showBikeSettingSheet(BuildContext context, [String? source]) {
-  showCupertinoSheet(context, BikeSetting(source ?? 'Home'));
+  showCupertinoSheet(context, BikeSetting(source: source ?? 'Home'));
 }
 
 void showBikeStatusAlertSheet(BuildContext context) {

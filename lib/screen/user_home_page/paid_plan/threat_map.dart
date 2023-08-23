@@ -37,6 +37,7 @@ import 'package:latlong2/latlong.dart';
 import 'home_element/battery.dart';
 import 'home_element/location.dart';
 import 'home_element/status.dart';
+import 'home_element/threat_unlocking_system.dart';
 
 
 class ThreatMap extends StatefulWidget {
@@ -120,6 +121,7 @@ class _ThreatMapState extends State<ThreatMap> {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
+    _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     return Container(
       decoration: const BoxDecoration(
@@ -315,7 +317,7 @@ class _ThreatMapState extends State<ThreatMap> {
                                 aspectRatio: 1,
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(6, 2, 16, 8),
-                                  child: UnlockingSystem(),
+                                  child: ThreatUnlockingSystem(page: 'map'),
                                 ),
                               ),
                             ),

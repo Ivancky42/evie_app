@@ -31,8 +31,8 @@ import 'package:lottie/lottie.dart' as lottie;
 
 
 class BikeSetting extends StatefulWidget {
-  final String? source;
-  const BikeSetting(this.source, {Key? key}) : super(key: key);
+  String? source;
+  BikeSetting({this.source, Key? key}) : super(key: key);
 
   @override
   _BikeSettingState createState() => _BikeSettingState();

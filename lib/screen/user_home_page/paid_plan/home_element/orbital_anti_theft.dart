@@ -9,7 +9,7 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -158,7 +158,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                     );
                   } else {
                     return const Center(
-                      child: CircularProgressIndicator(),
+                      child: material.CircularProgressIndicator(),
                     );
                   }
                 }),
@@ -246,11 +246,11 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
           if(_bikeProvider.threatFilterArray.contains(data!['type'])) {
             return Column(
               children: [
-                ListTile(
+                material.ListTile(
                     minLeadingWidth : 10,
                     minVerticalPadding: 10,
                     horizontalTitleGap: 10,
-                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                    visualDensity: material.VisualDensity(horizontal: 0, vertical: -4),
                     leading: data == null ? const Text('Error')
                         : SvgPicture.asset(
                       getSecurityIconWidget(data['type']),
@@ -290,7 +290,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                       style: EvieTextStyles.body12,)
 
                 ),
-                const Divider(height: 1),
+                const material.Divider(height: 1),
               ],
             );
           }else{
@@ -353,54 +353,81 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
         width: double.infinity,
         title: "Orbital Anti-theft",
         child: Expanded(
-          child: Column(
+          child: Stack(
             children: [
-              Expanded(
-                child: CarouselSlider(
-                  items: _widgets,
-                  options: CarouselOptions(
-                    padEnds: false,
+              Column(
+                children: [
 
-                    height: double.infinity,
-                    //height: 323.h,
-                    autoPlay: false,
-                    enlargeCenterPage: true,
-                    enableInfiniteScroll: false,
-                    aspectRatio: 16/9,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        _currentIndex = index;
-                      });
-                    },
-                    viewportFraction: 1.0,
+                  Expanded(
+                    child: CarouselSlider(
+                      items: _widgets,
+                      options: CarouselOptions(
+                        padEnds: false,
+
+                        height: double.infinity,
+                        //height: 323.h,
+                        autoPlay: false,
+                        enlargeCenterPage: true,
+                        enableInfiniteScroll: false,
+                        aspectRatio: 16/9,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _currentIndex = index;
+                          });
+                        },
+                        viewportFraction: 1.0,
+                      ),
+                    ),
+                  ),
+
+
+                  Padding(
+                    padding: EdgeInsets.only(top: 9.h, bottom: 9.h, right:25.w),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: _widgets.map((item) {
+                        int index = _widgets.indexOf(item);
+                        bool isCurrentIndex = _currentIndex == index;
+                      //  double horizontalMargin = index == 0 ? 0.0 : 6.0;
+                        double horizontalMargin = index == 0 ? 6.0 : 0.0;
+
+                        return Container(
+                          width: 6.w,
+                          height: 6.h,
+                          margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: horizontalMargin),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: isCurrentIndex ? EvieColors.primaryColor : EvieColors.progressBarGrey,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+
+                ],
+              ),
+
+              material.Transform.translate(
+                offset: Offset(0, -20.h),
+                child: Padding(
+                  padding: EdgeInsets.only(right:25.w),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: material.Visibility(
+                        visible: _bikeProvider.currentBikeModel?.location?.status == "danger",
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: (){
+                            ///Clicked disable danger status
+                          },
+                          child: SvgPicture.asset(
+                            "assets/buttons/dot.svg",
+                          ),
+                        )
+                    ),
                   ),
                 ),
               ),
-
-
-              Padding(
-                padding: EdgeInsets.only(top: 9.h, bottom: 9.h, right:25.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: _widgets.map((item) {
-                    int index = _widgets.indexOf(item);
-                    bool isCurrentIndex = _currentIndex == index;
-                  //  double horizontalMargin = index == 0 ? 0.0 : 6.0;
-                    double horizontalMargin = index == 0 ? 6.0 : 0.0;
-
-                    return Container(
-                      width: 6.w,
-                      height: 6.h,
-                      margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: horizontalMargin),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: isCurrentIndex ? EvieColors.primaryColor : EvieColors.progressBarGrey,
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-
             ],
           ),
         ),
@@ -489,6 +516,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
         animateBounce();
       }
     }
+    loadMarker();
     // loadImage(currentDangerStatus);
   }
 

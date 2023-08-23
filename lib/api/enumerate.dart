@@ -86,3 +86,19 @@ enum ActionableBarItem{
   none,
   registerEVKey,
 }
+
+enum BikeStatus{
+  unknown,
+  safe,
+  warning,
+  connectionLost,
+  danger
+}
+
+enum BLEScanResult{
+  unknown,
+  scanning,
+  deviceFound,
+  noDeviceFound,
+  scanTimeout,
+}

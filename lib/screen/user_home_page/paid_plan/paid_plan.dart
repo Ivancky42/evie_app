@@ -6,6 +6,7 @@ import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/home_element/threat_unlocking_system.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
 import 'package:evie_test/widgets/actionable_bar.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart' as lottie;
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
@@ -20,10 +22,14 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import '../../../api/colours.dart';
 import '../../../api/fonts.dart';
+import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/notification_provider.dart';
+import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
+import '../../../widgets/evie_single_button_dialog.dart';
+import '../../../widgets/evie_slider_button.dart';
 import '../switch_bike.dart';
 import 'package:location/location.dart';
 import 'home_element/actionable_bar.dart';
@@ -320,7 +326,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                     aspectRatio: 1,
                                     child: Padding(
                                       padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 20.h),
-                                      child: UnlockingSystem(),
+                                      child: _bikeProvider.currentBikeModel?.location?.status == "danger" ? ThreatUnlockingSystem(page: 'home') : UnlockingSystem(),
                                     ),
                                   )
                               ),
@@ -392,7 +398,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                       aspectRatio: 1,
                                       child: Padding(
                                         padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 20.h),
-                                        child: UnlockingSystem(),
+                                        child: _bikeProvider.currentBikeModel?.location?.status == "danger" ? ThreatUnlockingSystem(page: 'home') : UnlockingSystem(),
                                       ),
                                     )
                                 ),

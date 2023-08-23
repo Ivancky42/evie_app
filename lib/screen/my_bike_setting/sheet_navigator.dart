@@ -86,7 +86,7 @@ class _SheetNavigatorState extends State<SheetNavigator> {
         return ThreatHistory();
 
       case SheetList.bikeSetting:
-        return BikeSetting(widget.source);
+        return BikeSetting(source: widget.source);
 
       case SheetList.evKey:
         return EVKey();

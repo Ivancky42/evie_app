@@ -14,7 +14,9 @@ import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sheet.dart';
 import 'package:evie_test/api/sheet_2.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/api/snackbar.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/threat_bike_recovered.dart';
 import 'package:evie_test/test/widget_test.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import 'package:evie_test/widgets/evie_radio_button.dart';
@@ -22,19 +24,23 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
 import '../screen/my_bike_setting/my_bike_function.dart';
 import '../widgets/evie_checkbox.dart';
 import '../widgets/evie_divider.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
+import '../widgets/evie_slider_button.dart';
 import '../widgets/evie_switch.dart';
 import '../widgets/evie_textform.dart';
 import 'colours.dart';
@@ -1487,3 +1493,483 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
 }
 
 
+showScanTimeout(BuildContext context) {
+  SmartDialog.show(
+    widget: EvieOneButtonDialog(
+      title: "Bluetooth Scan Timeout",
+      content: "Scan Timeout, please try again",
+      middleContent: "OK",
+      onPressedMiddle: () {
+        SmartDialog.dismiss();
+      },
+    ),
+  );
+}
+
+showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _bluetoothProvider,BikeProvider _bikeProvider){
+
+  Widget? buttonImage = Text(
+    'Connect Bike',
+    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+  );
+
+  SmartDialog.show(
+    keepSingle: true,
+    clickBgDismissTemp: false,
+    backDismiss: false,
+    widget:  Consumer<BluetoothProvider>(
+      builder: (context, bluetoothProvider, child) {
+
+        final valueOfRSSI = bluetoothProvider.deviceRssi;
+
+      return StatefulBuilder(
+        builder: (context, setState) {
+
+
+          ///Open slide to unlock dialog
+          if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected &&
+              _bluetoothProvider.currentConnectedDevice ==
+                  _bikeProvider.currentBikeModel?.macAddr){
+            SmartDialog.dismiss();
+            _bluetoothProvider.bleScanSub?.cancel();
+            _bluetoothProvider.deviceRssi = 0;
+
+            Future.delayed(Duration.zero).then((value) {
+              showSlideToUnlock(context, setState, _bluetoothProvider,_bikeProvider);
+            });
+          }
+
+          ///Set button image
+            if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected &&
+                _bluetoothProvider.currentConnectedDevice ==
+                    _bikeProvider.currentBikeModel?.macAddr) {
+              buttonImage = SvgPicture.asset(
+                "assets/buttons/ble_button_connect.svg",
+                width: 52.w,
+                height: 50.h,
+              );
+            }  else if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
+                _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
+                _bluetoothProvider.deviceConnectResult == DeviceConnectResult.partialConnected) {
+              buttonImage =
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Lottie.asset(
+                        'assets/animations/loading_button.json',
+                        width: 45.w,
+                        height: 50.h,
+                      ),
+                      Text('Connecting Bike', style: EvieTextStyles.body18,)
+                    ],
+                  );
+            }
+            else if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.disconnected) {
+              buttonImage = Text('Connect Bike', style: EvieTextStyles.body18,);
+            }
+            else {
+              buttonImage = Text('Connect Bike', style: EvieTextStyles.body18,);
+            }
+
+          if(valueOfRSSI == 0){
+            if(_bluetoothProvider.scanResult == BLEScanResult.scanTimeout){
+              return WillPopScope(
+                onWillPop: () async {
+                  return false;
+                },
+                child: EvieTwoButtonDialog(
+                  havePic: false,
+                  childContent: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 32.h,
+                      ),
+                      Text("No Bike Found", style: EvieTextStyles.h2.copyWith(
+                          color: EvieColors.mediumBlack)),
+
+                      Padding(
+                        padding: EdgeInsets.only(top: 25.h, bottom: 25.h),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              "assets/icons/no_bike.svg",
+                            ),
+
+                            Positioned(
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: EvieColors.grayishWhite,
+                                  ),
+                                  height: 48.h,
+                                  width: 48.w,
+                                )
+                            ),
+
+
+
+                            // Consumer<BluetoothProvider>(
+                            //   builder: (context, dialogModel, child) {
+                            //     return Text(
+                            //       _bluetoothProvider.deviceRssi.toString(),
+                            //     );
+                            //       }
+                            //     ),
+
+                          ],
+                        ),
+                      ),
+
+                      Center(
+                        child:
+                        Text(
+                            "You're still too far away from your bike."
+                                " Try getting closer to your bike location before scanning again.",
+                          style: EvieTextStyles.body18.copyWith(
+                              color: EvieColors.lightBlack),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 18.h,
+                      ),
+
+                    ],
+                  ),
+
+                  customButtonUp: EvieButton(
+                      width: double.infinity,
+                      height: 48.h,
+                      child: Text("Scan Again", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),),
+                      onPressed: (){
+                        _bluetoothProvider.checkBLEStatus().listen((event) {
+                          if(event == BleStatus.ready){
+                            showThreatConnectBikeDialog(context, setState, _bluetoothProvider,_bikeProvider);
+
+                            StreamSubscription? stream;
+                            stream = _bluetoothProvider.startScanRSSI().listen((bLEScanResult) {
+
+                              // if(bLEScanResult == BLEScanResult.scanTimeout){
+                              //   SmartDialog.dismiss();
+                              //   SmartDialog.dismiss();
+                              //
+                              //   stream?.cancel();
+                              // }
+                            });
+                          }else if(event == BleStatus.poweredOff || event == BleStatus.unauthorized){
+                            showBluetoothNotTurnOn();
+                          }
+                        });
+                      }
+                  ),
+
+                  downContent: "Close",
+                  onPressedDown: () {
+                    SmartDialog.dismiss();
+                  },
+                ),
+              );
+            }else{
+              return WillPopScope(
+                onWillPop: () async {
+                  return false;
+                },
+                child: EvieOneButtonDialog(
+                  havePic: false,
+                  // childContent: Text("Connect your bike and access "
+                  //     "all the bike setting features smoothly.",
+                  //   textAlign: TextAlign.center,
+                  //   style: EvieTextStyles.body18,),
+                  widget: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 32.h,
+                      ),
+                      Text("Scanning Your Bike.", style: EvieTextStyles.h2.copyWith(
+                          color: EvieColors.mediumBlack)),
+
+                      Padding(
+                        padding: EdgeInsets.only(top: 25.h, bottom: 25.h),
+                        child: SvgPicture.asset(
+                          "assets/icons/scanning_bike.svg",
+                        ),
+                      ),
+
+                      Center(
+                        child:
+                        Text(
+                          "Hold tight, we're searching for your bike within a 10m range.",
+                          style: EvieTextStyles.body18.copyWith(
+                              color: EvieColors.lightBlack),
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 140.h,
+                      ),
+
+                    ],
+                  ),
+                  middleContent: "Stop Scan",
+                  onPressedMiddle: () {
+                    _bluetoothProvider.bleScanSub?.cancel();
+                    _bluetoothProvider.deviceRssi = 0;
+                    SmartDialog.dismiss();
+                  },
+                ),
+              );
+            }
+          }else{
+
+              return WillPopScope(
+                onWillPop: () async {
+                  return false;
+                },
+                child: EvieTwoButtonDialog(
+                  havePic: false,
+                  childContent: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 32.h,
+                      ),
+                      Text("Your Bike Is Nearby!", style: EvieTextStyles.h2.copyWith(
+                          color: EvieColors.mediumBlack)),
+
+                      Padding(
+                        padding: EdgeInsets.only(top: 25.h, bottom: 25.h),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              "assets/icons/rssi_middle.svg",
+                            ),
+
+                            Positioned(
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: EvieColors.grayishWhite,
+                                  ),
+                                  height: 55.h,
+                                  width: 55.w,
+                                )
+                            ),
+
+
+                            Positioned(
+                              child: Text(
+                                valueOfRSSI.toString(), style: EvieTextStyles.batteryPercent.copyWith(color: EvieColors.darkGrayishCyan),
+                              ),
+                            ),
+
+                            // Consumer<BluetoothProvider>(
+                            //   builder: (context, dialogModel, child) {
+                            //     return Text(
+                            //       _bluetoothProvider.deviceRssi.toString(),
+                            //     );
+                            //       }
+                            //     ),
+
+                          ],
+                        ),
+                      ),
+
+                      Center(
+                        child:
+                        Text(
+                          "The number indicates your proximity to the bike. Lower numbers are closer while higher numbers are further. "
+                              "Do note that continuous scanning will drain your battery.",
+                          style: EvieTextStyles.body18.copyWith(
+                              color: EvieColors.lightBlack),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 18.h,
+                      ),
+
+                    ],
+                  ),
+
+                  customButtonUp: EvieButton(
+                      width: double.infinity,
+                      height: 48.h,
+                      child: buttonImage!,
+                      onPressed: (){
+                        if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected &&
+                            _bluetoothProvider.currentConnectedDevice ==
+                                _bikeProvider.currentBikeModel?.macAddr){
+
+                        }else{
+                          _bluetoothProvider.bleScanSub?.cancel();
+                          _bluetoothProvider.startScanAndConnect();
+                        }
+                      }
+                  ),
+
+                  downContent: "Stop Scan",
+                  onPressedDown: () {
+
+
+                    _bluetoothProvider.stopScanTimer();
+                    _bluetoothProvider.scanResult = BLEScanResult.unknown;
+
+                    _bluetoothProvider.bleScanSub?.cancel();
+                    _bluetoothProvider.deviceRssi = 0;
+                    SmartDialog.dismiss();
+                  },
+                ),
+              );
+
+          }
+        }
+        );},
+    )
+  )
+  ;}
+
+
+showSlideToUnlock(context, setState, BluetoothProvider _bluetoothProvider, BikeProvider _bikeProvider){
+  SmartDialog.show(
+      backDismiss: false,
+      clickBgDismissTemp: false,
+      widget:
+      ///Consumer<BluetoothProvider>(
+       /// builder: (context, bluetoothProvider, child) {
+
+      ///    return StatefulBuilder(
+      ///        builder: (context, setState) {
+
+             ///     return
+                    WillPopScope(
+                    onWillPop: () async {
+                      return false;
+                    },
+                    child: EvieOneButtonDialog(
+                      havePic: false,
+                      // childContent: Text("Connect your bike and access "
+                      //     "all the bike setting features smoothly.",
+                      //   textAlign: TextAlign.center,
+                      //   style: EvieTextStyles.body18,),
+                      widget: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 32.h,
+                          ),
+                          Text("Slide to Unlock", style: EvieTextStyles.h2.copyWith(
+                              color: EvieColors.mediumBlack)),
+
+                          Padding(
+                            padding: EdgeInsets.only(top: 25.h, bottom: 25.h),
+                            child: Container(
+                              height: 120.h,
+                              width: 120.w,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: EvieColors.primaryColor,
+                              ),
+                              child: SvgPicture.asset(
+                                "assets/buttons/lock_lock.svg",
+                                  width: 48.w,
+                                  height: 48.h,
+                                  fit: BoxFit.scaleDown
+                              ),
+                            ),
+                          ),
+
+                          Center(
+                            child: Text(
+                              "Slide to unlock your bike. "
+                                  "By unlocking your bike, your bike status will return back to secure status.",
+                              style: EvieTextStyles.body18.copyWith(
+                                  color: EvieColors.lightBlack),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: 38.h,
+                          ),
+
+                          EvieSliderButton(
+                            dismissible: true,
+                            action:() {
+                              _bluetoothProvider.setIsUnlocking(true);
+                              //showUnlockingToast(context);
+
+                              StreamSubscription? subscription;
+
+                              subscription = _bluetoothProvider.cableUnlock().listen((unlockResult) {
+
+                                    if (unlockResult.result == CommandResult.success) {
+                                      SmartDialog.dismiss();
+                                      ///Change to page
+
+                                        changeToThreatBikeRecovered(context);
+
+                                        showToLockBikeInstructionToast(context);
+                                        subscription?.cancel();
+
+                                    } else {
+
+                                      SmartDialog.dismiss();
+                                      ///Change to page
+
+                                        changeToThreatBikeRecovered(context);
+
+                                        showToLockBikeInstructionToast(context);
+                                        subscription?.cancel();
+
+                                      // print("failes");
+                                      // SmartDialog.dismiss();
+                                      // subscription?.cancel();
+                                      // //  showToLockBikeInstructionToast(context);
+                                    }
+                                  }, onError: (error) {
+                                SmartDialog.dismiss();
+                                subscription?.cancel();
+                                SmartDialog.show(
+                                    widget: EvieSingleButtonDialog(
+                                        title: "Error",
+                                        content: "Cannot unlock bike, please place the phone near the bike and try again.",
+                                        rightContent: "OK",
+                                        onPressedRight: () {
+                                          SmartDialog.dismiss();
+                                        }));
+                              });
+
+                            },
+                            text: 'Unlock My Bike',
+                          )
+
+                        ],
+                      ),
+                      middleContent: "Exit",
+                      onPressedMiddle: () {
+                        _bluetoothProvider.bleScanSub?.cancel();
+                        _bluetoothProvider.deviceRssi = 0;
+                        SmartDialog.dismiss();
+                      },
+                    ),
+                  )
+
+      ///        }
+      ///    );
+
+      ///    },
+    ///  )
+  );
+}

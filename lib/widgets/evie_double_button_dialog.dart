@@ -407,24 +407,30 @@ class EvieDoubleButtonDialogFilter extends StatelessWidget{
 ///Double button dialog
 ///V MADE IT
 class EvieTwoButtonDialog extends StatelessWidget{
-  final Widget title;
+  final Widget? title;
+  final bool? havePic;
   final Widget childContent;
   final SvgPicture? svgpicture;
-  final String upContent;
-  final String downContent;
-  final VoidCallback onPressedDown;
-  final VoidCallback onPressedUp;
+  final String? upContent;
+  final String? downContent;
+  final VoidCallback? onPressedDown;
+  final VoidCallback? onPressedUp;
+  final Widget? customButtonUp;
+  final Widget? customButtonDown;
 
 
   const EvieTwoButtonDialog({
     Key? key,
-    required this.title,
+    this.title,
+    this.havePic,
     required this.childContent,
-    required this.svgpicture,
-    required this.upContent,
-    required this.downContent,
-    required this.onPressedDown,
-    required this.onPressedUp
+    this.svgpicture,
+    this.upContent,
+    this.downContent,
+    this.onPressedDown,
+    this.onPressedUp,
+    this.customButtonUp,
+    this.customButtonDown,
 
   }) : super(key: key);
 
@@ -452,7 +458,7 @@ class EvieTwoButtonDialog extends StatelessWidget{
             children: [
 
               Center(
-                child: svgpicture == null? Container(
+                child: havePic == false ? Container() : svgpicture == null? Container(
                   alignment: Alignment.center,
                   child: Padding(
                     padding: EdgeInsets.only(top: 32.h),
@@ -464,7 +470,6 @@ class EvieTwoButtonDialog extends StatelessWidget{
                   ),
                 ): svgpicture!,
               ),
-
 
               Container(
                 width: 325.w,
@@ -485,14 +490,14 @@ class EvieTwoButtonDialog extends StatelessWidget{
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Flexible(
-                      child:
-                      Padding(
+
+                      child: Padding(
                         padding: EdgeInsets.only(bottom: 4.h),
-                        child: EvieButton(
+                        child: customButtonUp ?? EvieButton(
                             width: double.infinity,
                             height: 48.h,
                             child: Text(
-                              upContent,
+                              upContent ?? '',
                               style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                             ),
                             onPressed: onPressedUp
@@ -504,11 +509,11 @@ class EvieTwoButtonDialog extends StatelessWidget{
                     Flexible(
                       child:  Padding(
                         padding: EdgeInsets.only(top: 4.h),
-                        child: EvieButton_ReversedColor(
+                        child: customButtonDown ?? EvieButton_ReversedColor(
                           width: double.infinity,
                           height: 48.h,
                           child: Text(
-                            downContent,
+                            downContent ?? '',
                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
                           ),
                           onPressed: onPressedDown,

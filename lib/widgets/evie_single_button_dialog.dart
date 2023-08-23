@@ -164,8 +164,9 @@ class EvieSingleButtonDialogCupertino extends StatelessWidget{
 ///Single button dialog
 ///V made it
 class EvieOneButtonDialog extends StatelessWidget{
-   final String title;
+   final String? title;
   final String? content;
+  final bool? havePic;
   final SvgPicture? svgpicture;
   final Widget? widget;
   final String middleContent;
@@ -173,10 +174,11 @@ class EvieOneButtonDialog extends StatelessWidget{
 
   const EvieOneButtonDialog({
     Key? key,
-    required this.title,
+    this.title,
     this.content,
     this.widget,
     this.svgpicture,
+    this.havePic,
     required this.middleContent,
     required this.onPressedMiddle
   }) : super(key: key);
@@ -203,7 +205,7 @@ class EvieOneButtonDialog extends StatelessWidget{
             children: [
 
               Center(
-                child: svgpicture == null? Container(
+                child: havePic == false ? Container() : svgpicture == null? Container(
                   alignment: Alignment.center,
                   child: Padding(
                     padding: EdgeInsets.only(top: 32.h),
@@ -216,25 +218,25 @@ class EvieOneButtonDialog extends StatelessWidget{
                 ): svgpicture!,
               ),
 
-              Container(
+              title != null ?  Container(
                 width: 325.w,
                 child: Padding(
                   padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
-                  child: Text(title,
+                  child: Text(title!,
                     style:EvieTextStyles.h2,
                     textAlign: TextAlign.center,
                   ),
                 ),
-              ),
+              ) : SizedBox.shrink(),
 
-              content != null? Container(
+              content != null ? Container(
                 width: 326.w,
                 child: Text(
                   content ?? "" ,
                   textAlign: TextAlign.center,
                   style: EvieTextStyles.body18,
                 ),
-              ) : Container(),
+              ) : SizedBox.shrink(),
 
               widget != null ? widget! : SizedBox(),
 
