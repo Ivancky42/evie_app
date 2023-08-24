@@ -13,6 +13,7 @@ class EvieSwitch extends StatelessWidget {
   final String text;
   final bool value;
   final Color thumbColor;
+  final Color? activeColor;
 
   const EvieSwitch({
     Key? key,
@@ -21,6 +22,7 @@ class EvieSwitch extends StatelessWidget {
     required this.text,
     required this.value,
     required this.thumbColor,
+    this.activeColor,
   }) : super(key: key);
 
   @override
@@ -51,7 +53,7 @@ class EvieSwitch extends StatelessWidget {
       padding: EdgeInsets.only(left: 8.w),
       child: CupertinoSwitch(
       value: value,
-      activeColor:  const Color(0xff6A51CA),
+      activeColor:  activeColor ?? EvieColors.primaryColor,
       thumbColor: thumbColor,
       trackColor: const Color(0xff6A51CA).withOpacity(0.5),
       onChanged: onChanged,

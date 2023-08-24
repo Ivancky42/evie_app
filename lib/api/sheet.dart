@@ -22,6 +22,7 @@ import '../screen/my_bike_setting/subscription/essential_plan/essential_plan.dar
 import '../screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
 import '../screen/ride/ride_history.dart';
 import '../screen/user_home_page/paid_plan/map_detail.dart';
+import 'enumerate.dart';
 import 'model/trip_history_model.dart';
 
 void showSheetNavigate(BuildContext context, [String? source, String? strings]) {
@@ -121,3 +122,19 @@ void showCupertinoSheet(BuildContext context, Widget widget) {
   );
 }
 
+
+void showActionListSheet(BuildContext context, List<ActionList> action) {
+  // Navigator.of(context).push(
+  //   CupertinoSheetRoute<void>(
+  //     builder: (BuildContext context) => EvieBottomSheet(widget: widget,),
+  //   ),
+  // );
+  showCupertinoModalBottomSheet(
+    expand: false,
+    useRootNavigator: true,
+    ///enableDrag: false,
+    ///isDismissible: false,
+    context: context,
+    builder: (context) => Wrap(children: [EvieBottomSheetAction(lists: action)]),
+  );
+}

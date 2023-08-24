@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -19,6 +20,7 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 import '../../../../api/colours.dart';
+import '../../../../api/dialog.dart';
 import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
 import '../../../../api/function.dart';
@@ -413,22 +415,24 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
               ),
 
               material.Transform.translate(
-                offset: Offset(0, -20.h),
+                offset: Offset(0, -30.h),
                 child: Padding(
-                  padding: EdgeInsets.only(right:25.w),
+                  padding: EdgeInsets.only(right:20.w),
                   child: Align(
                     alignment: Alignment.topRight,
                     child: material.Visibility(
                         visible: _bikeProvider.currentBikeModel?.location?.status == "danger",
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onTap: (){
-                            ///Clicked disable danger status
-                          },
-                          child: SvgPicture.asset(
+                        child: IconButton(
+                          iconSize: 42.h,
+                          icon: SvgPicture.asset(
                             "assets/buttons/dot.svg",
+                            height: 42.h,
+                            width: 24.w,
                           ),
-                        )
+                          onPressed: () {
+                            showActionListSheet(context, [ActionList.deactivateTheftAlert]);
+                          },
+                        ),
                     ),
                   ),
                 ),
@@ -537,7 +541,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     });
   }
 
-  
+
   // void locationListener() {
   //   if (selectedGeopoint != _locationProvider.locationModel?.geopoint) {
   //     selectedGeopoint  = _locationProvider.locationModel?.geopoint;

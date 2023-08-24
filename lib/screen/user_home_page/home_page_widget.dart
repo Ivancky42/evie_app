@@ -212,10 +212,10 @@ String getBatteryImage(int batteryPercent) {
     return "assets/icons/battery_50.svg";
   } else if (batteryPercent > 5 && batteryPercent <= 25) {
     return "assets/icons/battery_25.svg";
-  } else if (batteryPercent >= 0 && batteryPercent <= 5) {
+  } else if (batteryPercent > 0 && batteryPercent <= 5) {
     return "assets/icons/battery_0.svg";
   } else {
-    return "assets/icons/battery_not_available.svg";
+    return "assets/icons/battery_?.svg";
   }
 }
 
@@ -228,10 +228,10 @@ String getEstDistance(int batteryPercent) {
     return "Est 20km";
   } else if (batteryPercent > 5 && batteryPercent <= 25) {
     return "Est 10km";
-  } else if (batteryPercent >= 0 && batteryPercent <= 5) {
+  } else if (batteryPercent > 0 && batteryPercent <= 5) {
     return "Est 0km";
   } else {
-    return "unavailable";
+    return "Est - km";
   }
 }
 

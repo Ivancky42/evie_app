@@ -181,8 +181,6 @@ class _SheetNavigatorState extends State<SheetNavigator> {
       case SheetList.leaveUnsuccessful:
         return LeaveUnsuccessful();
 
-
-
       default:
         break;
     }

@@ -419,29 +419,119 @@ class _FreePlanState extends State<FreePlan> {
                                      padding: EdgeInsets.only(left: 19.w, right: 8.w, bottom: 8.h),
                                      child: EvieCard(
                                        onPress: (){
-                                         SnackBar.showUpgradePlanToast(context, _settingProvider, true);
+                                         // showBatteryDetailsSheet(context);
                                        },
-                                       ///Listen to bluetooth provider data
                                        title: "Battery",
                                        child: Expanded(
-                                         child: Column(
-                                           crossAxisAlignment: CrossAxisAlignment.start,
-                                           mainAxisAlignment: MainAxisAlignment.end,
+                                         child: Stack(
                                            children: [
-                                             SvgPicture.asset(
-                                               "assets/icons/battery_not_available.svg",
-                                               width: 36.w,
-                                               height: 36.h,
+                                             Column(
+                                               crossAxisAlignment: CrossAxisAlignment.start,
+                                               mainAxisAlignment: MainAxisAlignment.end,
+                                               children: [
+                                                 Row(
+                                                   crossAxisAlignment: CrossAxisAlignment.end,
+                                                   children: [
+                                                     Padding(
+                                                       padding: EdgeInsets.only(bottom: 4.h, right: 8.w),
+                                                       child: SvgPicture.asset(
+                                                         getBatteryImage(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
+                                                         int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")
+                                                             : _bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0),
+                                                         width: 30.w,
+                                                         height: 60.h,
+                                                       ),
+                                                     ),
+                                                     Column(
+                                                       mainAxisAlignment: MainAxisAlignment.end,
+                                                       crossAxisAlignment: CrossAxisAlignment.start,
+                                                       children: [
+                                                         Row(
+                                                           mainAxisAlignment: MainAxisAlignment.end,
+
+                                                           children: [
+                                                             Padding(
+                                                               padding:EdgeInsets.only(left: 0.w),
+                                                               child: Text(
+                                                                 _bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
+                                                                 "${int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "-")}" :
+                                                                 "${_bikeProvider.currentBikeModel?.batteryModel?.percentage ?? "-"}",
+
+                                                                 style: EvieTextStyles.batteryPercent.copyWith(height: 0.7),
+                                                               ),
+                                                             ),
+                                                             Padding(
+                                                               padding: EdgeInsets.only(right: 15.w),
+                                                               child: Text(
+                                                                 " %",
+                                                                 style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGray),
+                                                               ),
+                                                             ),
+                                                           ],
+                                                         ),
+                                                         SizedBox(height: 0.h),
+                                                         Padding(
+                                                           padding: EdgeInsets.only(left: 0.w, right: 15.w),
+                                                           child: Text(
+                                                             "$estimatedDistance",
+                                                             style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
+                                                           ),
+                                                         ),
+                                                       ],
+                                                     ),
+                                                   ],
+                                                 ),
+                                                 Padding(
+                                                   padding: EdgeInsets.only(bottom: 16.h, top: 12.h),
+                                                   child: Text(
+                                                       _bikeProvider.currentBikeModel?.batteryModel?.lastUpdated != null ?
+                                                       calculateTimeAgo(_bikeProvider.currentBikeModel?.batteryModel?.lastUpdated?.toDate() ?? DateTime.now())
+                                                     : "- ago",
+                                                     style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),
+                                                   ),),
+                                               ],
                                              ),
-                                             //Text("${int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")} %", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
-                                             Text("- %", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
-                                             Text("Est - km", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
+
+
+                                             Transform.translate(
+                                               offset: Offset(100.w, -40.h),
+                                               child: IconButton(
+
+                                                   onPressed: (){
+
+                                                   },
+                                                   icon: SvgPicture.asset("assets/buttons/info_grey.svg",)),
                                              ),
-                                             SizedBox(height: 16.h,),
                                            ],
                                          ),
                                        ),
-                                     )
+                                     ),
+
+                                     // child: EvieCard(
+                                     //   onPress: (){
+                                     //     SnackBar.showUpgradePlanToast(context, _settingProvider, true);
+                                     //   },
+                                     //   ///Listen to bluetooth provider data
+                                     //   title: "Battery",
+                                     //   child: Expanded(
+                                     //     child: Column(
+                                     //       crossAxisAlignment: CrossAxisAlignment.start,
+                                     //       mainAxisAlignment: MainAxisAlignment.end,
+                                     //       children: [
+                                     //         SvgPicture.asset(
+                                     //           "assets/icons/battery_not_available.svg",
+                                     //           width: 36.w,
+                                     //           height: 36.h,
+                                     //         ),
+                                     //         //Text("${int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")} %", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
+                                     //         Text("- %", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
+                                     //         Text("Est - km", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
+                                     //         ),
+                                     //         SizedBox(height: 16.h,),
+                                     //       ],
+                                     //     ),
+                                     //   ),
+                                     // )
                                  ),),
                                ),
 

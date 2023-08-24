@@ -464,6 +464,33 @@ showOnlyForProToast(context) {
   );
 }
 
+showAccNoPermissionToast(context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Container(
+              width: 300.w,
+              child: Text(
+                "Your account doesn't have the permission to control this setting.",
+                style: EvieTextStyles.toast,
+              ),
+            )
+          ],
+        ),
+      ),
+      duration: const Duration(seconds: 5),
+    ),
+  );
+}
 
 showResentEmailFailedToast(context) {
   ScaffoldMessenger.of(context).showSnackBar(

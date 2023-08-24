@@ -788,6 +788,29 @@ class BikeProvider extends ChangeNotifier {
     return firestoreStatusListener.stream;
   }
 
+  updateBikeStatus(String status) async {
+    bool result;
+
+    try {
+
+      await FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI)
+          .set({
+        "location" : {
+          'status' : status,
+          'updated' : Timestamp.now(),
+        },
+      }, SetOptions(merge: true));
+
+      result = true;
+    } catch (e) {
+      debugPrint(e.toString());
+      result = false;
+    }
+    return result;
+  }
+
   getBikeUserList() async {
     bikeUserList.clear();
     bikeUserDetails.clear();
@@ -879,7 +902,6 @@ class BikeProvider extends ChangeNotifier {
 
             notifyListeners();
 
-              print('HELLOOOOOOOOOO: ' + deviceIMEI);
               getOwnerUid(deviceIMEI, obj['ownerUid'] );
 
 
@@ -1456,7 +1478,7 @@ class BikeProvider extends ChangeNotifier {
   }
 
    getThreatHistoryQuery() {
-    return FirebaseFirestore.instance.collection("bikes")
+    return FirebaseFirestore.instance.collection(bikesCollection)
         .doc(currentBikeModel!.deviceIMEI!)
         .collection("events")
         //.where('type', whereIn: ['lock'])

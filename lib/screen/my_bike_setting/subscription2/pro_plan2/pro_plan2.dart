@@ -124,7 +124,7 @@ class _ProPlan2State extends State<ProPlan2> {
                 ),
 
                 Visibility(
-                  visible: !_bikeProvider.isPlanSubscript!,
+                  visible: !_bikeProvider.isPlanSubscript! && _bikeProvider.isOwner == true,
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
@@ -133,7 +133,7 @@ class _ProPlan2State extends State<ProPlan2> {
                         width: double.infinity,
                         height: 48.h,
                         child: Text(
-                            "Unlock Plan",
+                            "Upgrade Now",
                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                         ),
                         onPressed: () {

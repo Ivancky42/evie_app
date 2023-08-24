@@ -82,7 +82,7 @@ class _EVKeyListState extends State<EVKeyList> {
                    if(_bikeProvider.rfidList.length > 0) {
                      return Slidable(
                        key: UniqueKey(),
-                       endActionPane:  ActionPane(
+                       endActionPane:  _bikeProvider.isOwner == true ? ActionPane(
                          extentRatio: 0.2,
                          motion: const StretchMotion(),
                          children: [
@@ -97,7 +97,7 @@ class _EVKeyListState extends State<EVKeyList> {
 
                            ),
                          ],
-                       ),
+                       ) : null,
                      child: ListTile(
                        contentPadding: EdgeInsets.zero,
                        leading: Padding(
@@ -271,8 +271,7 @@ class _EVKeyListState extends State<EVKeyList> {
                 : Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 127.84.h, 16.w,
-                          EvieLength.buttonWord_ButtonBottom),
+                      padding: EdgeInsets.fromLTRB(16.w, 127.84.h, 16.w, _bikeProvider.isOwner == true ? EvieLength.buttonWord_ButtonBottom : 48.h),
                       child: EvieButton(
                         width: double.infinity,
                         height: 48.h,
@@ -318,31 +317,34 @@ class _EVKeyListState extends State<EVKeyList> {
                       ),
                     ),
                   )
-                : Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 48.h),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: EvieButton_ReversedColor(
+                : Visibility(
+                  visible: _bikeProvider.isOwner == true,
+                  child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 48.h),
+                        child: SizedBox(
                           width: double.infinity,
-                          height: 48.h,
-                          child: Text(
-                            "Remove All EV-Key",
-                            style: TextStyle(
-                                color: EvieColors.primaryColor,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w700),
+                          child: EvieButton_ReversedColor(
+                            width: double.infinity,
+                            height: 48.h,
+                            child: Text(
+                              "Remove All EV-Key",
+                              style: TextStyle(
+                                  color: EvieColors.primaryColor,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            onPressed: () {
+                              // setState(() {
+                              //   isManageList = true;
+                              // });
+                            },
                           ),
-                          onPressed: () {
-                            // setState(() {
-                            //   isManageList = true;
-                            // });
-                          },
                         ),
                       ),
                     ),
-                  ),
+                ),
           ],
         ),
       ),

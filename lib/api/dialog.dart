@@ -1155,6 +1155,33 @@ showErrorLoginDialog (BuildContext context){
   );
 }
 
+showDeactivateTheftDialog (BuildContext context, BikeProvider _bikeProvider){
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Deactivate Theft Alert?",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Are you sure that this is a false alarm? "
+            "By turning off Theft Attempt mode, your app will revert to its default state until it is triggered again.",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        upContent: "Cancel",
+        downContent: "Confirm Deactivate",
+        onPressedUp: () {
+          SmartDialog.dismiss();
+        },
+        onPressedDown: () {
+          _bikeProvider.updateBikeStatus('safe');
+          SmartDialog.dismiss();
+        }),
+  );
+}
+
+
 ///User not found
 showEvieNotFoundDialog (BuildContext context){
   SmartDialog.show(
@@ -1843,6 +1870,7 @@ showSlideToUnlock(context, setState, BluetoothProvider _bluetoothProvider, BikeP
   SmartDialog.show(
       backDismiss: false,
       clickBgDismissTemp: false,
+      keepSingle: true,
       widget:
       ///Consumer<BluetoothProvider>(
        /// builder: (context, bluetoothProvider, child) {
@@ -1938,17 +1966,19 @@ showSlideToUnlock(context, setState, BluetoothProvider _bluetoothProvider, BikeP
                                       // subscription?.cancel();
                                       // //  showToLockBikeInstructionToast(context);
                                     }
-                                  }, onError: (error) {
-                                SmartDialog.dismiss();
-                                subscription?.cancel();
-                                SmartDialog.show(
-                                    widget: EvieSingleButtonDialog(
-                                        title: "Error",
-                                        content: "Cannot unlock bike, please place the phone near the bike and try again.",
-                                        rightContent: "OK",
-                                        onPressedRight: () {
-                                          SmartDialog.dismiss();
-                                        }));
+                                  },
+
+                                  onError: (error) {
+                                // SmartDialog.dismiss();
+                                // subscription?.cancel();
+                                // SmartDialog.show(
+                                //     widget: EvieSingleButtonDialog(
+                                //         title: "Error",
+                                //         content: "Cannot unlock bike, please place the phone near the bike and try again.",
+                                //         rightContent: "OK",
+                                //         onPressedRight: () {
+                                //           SmartDialog.dismiss();
+                                //         }));
                               });
 
                             },
@@ -1964,12 +1994,12 @@ showSlideToUnlock(context, setState, BluetoothProvider _bluetoothProvider, BikeP
                         SmartDialog.dismiss();
                       },
                     ),
-                  )
+          ///        )
 
       ///        }
       ///    );
 
       ///    },
-    ///  )
+     )
   );
 }

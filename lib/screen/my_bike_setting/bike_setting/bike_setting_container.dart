@@ -125,15 +125,18 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                           )
                         ],
                       ),
-                      IconButton(
-                        onPressed: (){
-                          showEditBikeNameDialog(_formKey, _bikeNameController, _bikeProvider);
-                        },
-                        icon:   SvgPicture.asset(
-                          "assets/buttons/pen_edit.svg",
-                          height:20.h,
-                          width:20.w,
-                        ),),
+                      Visibility(
+                        visible: _bikeProvider.isOwner == true,
+                        child: IconButton(
+                          onPressed: (){
+                            showEditBikeNameDialog(_formKey, _bikeNameController, _bikeProvider);
+                          },
+                          icon:   SvgPicture.asset(
+                            "assets/buttons/pen_edit.svg",
+                            height:20.h,
+                            width:20.w,
+                          ),),
+                      ),
                     ],
                   ),
                 ),
@@ -223,21 +226,27 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                if (deviceConnectResult == null
-                    || deviceConnectResult == DeviceConnectResult.disconnected
-                    || deviceConnectResult == DeviceConnectResult.scanTimeout
-                    || deviceConnectResult == DeviceConnectResult.connectError
-                    || deviceConnectResult == DeviceConnectResult.scanError
-                    || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
-                ) {
-                  setState(() {
-                    pageNavigate = label;
-                  });
-                  showConnectDialog(_bluetoothProvider, _bikeProvider);
+
+                if(_bikeProvider.isOwner == true){
+                  if (deviceConnectResult == null
+                      || deviceConnectResult == DeviceConnectResult.disconnected
+                      || deviceConnectResult == DeviceConnectResult.scanTimeout
+                      || deviceConnectResult == DeviceConnectResult.connectError
+                      || deviceConnectResult == DeviceConnectResult.scanError
+                      || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
+                  ) {
+                    setState(() {
+                      pageNavigate = label;
+                    });
+                    showConnectDialog(_bluetoothProvider, _bikeProvider);
+                  }
+                  else if (deviceConnectResult == DeviceConnectResult.connected) {
+                    _settingProvider.changeSheetElement(SheetList.motionSensitivity);
+                  }
+                }else{
+                  showAccNoPermissionToast(context);
                 }
-                else if (deviceConnectResult == DeviceConnectResult.connected) {
-                  _settingProvider.changeSheetElement(SheetList.motionSensitivity);
-                }
+
               },
               child: Container(
                 height: 62.h,
@@ -421,7 +430,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                             Row(
                               children: [
                                 Text(
-                                  _bikeProvider.bikeUserList.length == 1 ? "No Sharing Pal" :
+                                  _bikeProvider.bikeUserList.length == 1 ? "None Shared" :
                                   "${_bikeProvider.bikeUserList.length} Sharing Pal",
                                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                                 ),
@@ -455,17 +464,24 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                if (checkFunctionByRole()) {
-                  _settingProvider.changeSheetElement(SheetList.orbitalAntiThefts);
-                }
-                else {
+
                   if (getOpacityByRole() == 0.3) {
                     showUpgradePlanToast(context, _settingProvider);
+                  }else{
+                    _settingProvider.changeSheetElement(SheetList.orbitalAntiThefts);
                   }
-                  else {
-                    showControlAdmissionToast(context);
-                  }
-                }
+
+                // if (checkFunctionByRole()) {
+                //   _settingProvider.changeSheetElement(SheetList.orbitalAntiThefts);
+                // }
+                // else {
+                //   if (getOpacityByRole() == 0.3) {
+                //     showUpgradePlanToast(context, _settingProvider);
+                //   }
+                //   // else {
+                //   //   showControlAdmissionToast(context);
+                //   // }
+                // }
               },
               child: Opacity(
                 opacity: getOpacityByRole(),
@@ -479,7 +495,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                           Row(
                             children: [
                               Text(
-                                'Orbital Anti-theft',
+                                'Anti-Theft Alert',
                                 style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                               ),
                               SizedBox(width: 8.17.w,),
@@ -650,21 +666,26 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
-                  if (deviceConnectResult == null
-                      || deviceConnectResult == DeviceConnectResult.disconnected
-                      || deviceConnectResult == DeviceConnectResult.scanTimeout
-                      || deviceConnectResult == DeviceConnectResult.connectError
-                      || deviceConnectResult == DeviceConnectResult.scanError
-                      || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
-                  ) {
-                    setState(() {
-                      pageNavigate = label;
-                    });
-                    showConnectDialog(_bluetoothProvider, _bikeProvider);
+                  if(_bikeProvider.isOwner == true){
+                    if (deviceConnectResult == null
+                        || deviceConnectResult == DeviceConnectResult.disconnected
+                        || deviceConnectResult == DeviceConnectResult.scanTimeout
+                        || deviceConnectResult == DeviceConnectResult.connectError
+                        || deviceConnectResult == DeviceConnectResult.scanError
+                        || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
+                    ) {
+                      setState(() {
+                        pageNavigate = label;
+                      });
+                      showConnectDialog(_bluetoothProvider, _bikeProvider);
+                    }
+                    else if (deviceConnectResult == DeviceConnectResult.connected) {
+                      _settingProvider.changeSheetElement(SheetList.firmwareInformation);
+                    }
+                  }else{
+                    showAccNoPermissionToast(context);
                   }
-                  else if (deviceConnectResult == DeviceConnectResult.connected) {
-                    _settingProvider.changeSheetElement(SheetList.firmwareInformation);
-                  }
+
                 },
                 child: Container(
                   height: 62.h,

@@ -57,7 +57,15 @@ enum SheetList{
   leaveTeam,
   leaveSuccessful,
   leaveUnsuccessful,
+
 }
+
+///List of Action
+enum ActionList{
+  deactivateTheftAlert,
+
+}
+
 
 enum BikeSettingList{
   bikeSetting,

@@ -75,14 +75,9 @@ class _ThreatUnlockingSystemState extends State<ThreatUnlockingSystem> {
             alignment: Alignment.topRight,
             child: Padding(
               padding: EdgeInsets.only(right:8.w, top: 8.h),
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: (){
-                  ///Clicked disable danger status
-                },
-                child: SvgPicture.asset(
-                  "assets/buttons/info_grey.svg",
-                ),
+              child: SvgPicture.asset(
+                "assets/buttons/info_grey.svg",
+
               ),
             ),
           ),

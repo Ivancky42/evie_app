@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/bluetooth/command.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -44,6 +45,8 @@ class BluetoothProvider extends ChangeNotifier {
   static Uuid writeUUID =
   Uuid.parse(dotenv.env['BLE_WRITE_UUID'] ?? 'UUID not found');
   String? mainBatteryLevel = "Unknown";
+
+  String bikesCollection = dotenv.env['DB_COLLECTION_BIKES'] ?? 'DB not found';
 
   StreamSubscription? scanSubscription;
   StreamSubscription? connectSubscription;
@@ -856,6 +859,11 @@ class BluetoothProvider extends ChangeNotifier {
           break;
         case BluetoothCommand.requestBikeInfo:
           bikeInfoResult = BikeInfoResult(decodedData);
+
+          if(num.parse(bikeInfoResult?.batteryLevel ?? "0") != (currentBikeModel?.batteryModel?.percentage ?? "0")){
+            updateBattery(num.parse(bikeInfoResult?.batteryLevel ?? "0"));
+          }
+
           notifyListeners();
           break;
         case BluetoothCommand.changeMovementSettingCmd:
@@ -1285,6 +1293,27 @@ class BluetoothProvider extends ChangeNotifier {
     startScanTimer?.cancel();
     bleScanSub?.cancel();
     notifyListeners();
+  }
+
+  Future updateBattery(num batteryLevel) async {
+    bool result;
+    try {
+      await FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI)
+          .set({
+        "battery" : {
+          'percentage' : batteryLevel,
+          'lastUpdated' : Timestamp.now(),
+        },
+      }, SetOptions(merge: true));
+
+      result = true;
+    } catch (e) {
+      debugPrint(e.toString());
+      result = false;
+    }
+    return result;
   }
 
 }
