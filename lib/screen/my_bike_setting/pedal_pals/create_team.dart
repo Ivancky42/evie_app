@@ -42,8 +42,8 @@ class _CreateTeamState extends State<CreateTeam> {
 
     return WillPopScope(
       onWillPop: () async {
-       _settingProvider.changeSheetElement(SheetList.bikeSetting);
-        return false;
+      //_settingProvider.changeSheetElement(SheetList.bikeSetting);
+        return true;
       },
       child: Scaffold(
 

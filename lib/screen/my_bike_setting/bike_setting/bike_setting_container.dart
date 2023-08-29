@@ -666,26 +666,26 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
-                  if(_bikeProvider.isOwner == true){
-                    if (deviceConnectResult == null
-                        || deviceConnectResult == DeviceConnectResult.disconnected
-                        || deviceConnectResult == DeviceConnectResult.scanTimeout
-                        || deviceConnectResult == DeviceConnectResult.connectError
-                        || deviceConnectResult == DeviceConnectResult.scanError
-                        || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
-                    ) {
-                      setState(() {
-                        pageNavigate = label;
-                      });
-                      showConnectDialog(_bluetoothProvider, _bikeProvider);
-                    }
-                    else if (deviceConnectResult == DeviceConnectResult.connected) {
-                      _settingProvider.changeSheetElement(SheetList.firmwareInformation);
-                    }
-                  }else{
-                    showAccNoPermissionToast(context);
-                  }
-
+                  // if(_bikeProvider.isOwner == true){
+                  //   if (deviceConnectResult == null
+                  //       || deviceConnectResult == DeviceConnectResult.disconnected
+                  //       || deviceConnectResult == DeviceConnectResult.scanTimeout
+                  //       || deviceConnectResult == DeviceConnectResult.connectError
+                  //       || deviceConnectResult == DeviceConnectResult.scanError
+                  //       || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
+                  //   ) {
+                  //     setState(() {
+                  //       pageNavigate = label;
+                  //     });
+                  //     showConnectDialog(_bluetoothProvider, _bikeProvider);
+                  //   }
+                  //   else if (deviceConnectResult == DeviceConnectResult.connected) {
+                  //     _settingProvider.changeSheetElement(SheetList.firmwareInformation);
+                  //   }
+                  // }else{
+                  //   showAccNoPermissionToast(context);
+                  // }
+                  _settingProvider.changeSheetElement(SheetList.firmwareInformation);
                 },
                 child: Container(
                   height: 62.h,

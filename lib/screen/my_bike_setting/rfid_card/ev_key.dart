@@ -47,8 +47,8 @@ class _EVKeyState extends State<EVKey> {
 
     return WillPopScope(
       onWillPop: () async {
-        _settingProvider.changeSheetElement(SheetList.bikeSetting);
-        return false;
+        //_settingProvider.changeSheetElement(SheetList.bikeSetting);
+        return true;
       },
       child: Scaffold(
         appBar: PageAppbar(

@@ -56,8 +56,8 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
 
     return WillPopScope(
       onWillPop: () async {
-        _settingProvider.changeSheetElement(SheetList.bikeSetting);
-        return false;
+        //_settingProvider.changeSheetElement(SheetList.bikeSetting);
+        return true;
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,

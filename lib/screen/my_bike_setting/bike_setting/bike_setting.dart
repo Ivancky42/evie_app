@@ -7,6 +7,7 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_setting/switch_bike_image.dart';
 
 import 'package:evie_test/widgets/custom_search_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -15,6 +16,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import '../../../api/backend/debouncer.dart';
 import '../../../api/colours.dart';
+import '../../../api/dialog.dart';
 import '../../../api/fonts.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
@@ -22,6 +24,7 @@ import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
+import '../../../widgets/evie_double_button_dialog.dart';
 import '../../my_account/switch_profile_image.dart';
 import '../my_bike_function.dart';
 import 'bike_setting_container.dart';
@@ -129,20 +132,30 @@ class _BikeSettingState extends State<BikeSetting> {
     }
 
     return WillPopScope(
-        onWillPop: () async {
+      onWillPop: () async {
+        return true;
 
-          if(widget.source == 'MyGarage'){
-            changeToMyGarageScreen(context);
-          }else if(widget.source == 'SwitchBike'){
-            changeToUserHomePageScreen(context);
-          }else if(widget.source == 'Home'){
-            changeToUserHomePageScreen(context);
-          }else{
-            changeToUserHomePageScreen(context);
-          }
-
-      return false;
-    },
+        ///Choose to close
+        // bool shouldClose = true;
+        // await showDialog<void>(
+        //     context: context,
+        //     builder: (BuildContext context) =>
+        //         EvieDoubleButtonDialog(
+        //             title: "Close this sheet?",
+        //             childContent: Text("Are you sure you want to close this sheet?",
+        //                           style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),),
+        //             leftContent: "No",
+        //             rightContent: "Yes",
+        //             onPressedLeft: () {
+        //               shouldClose = false;
+        //               Navigator.of(context).pop();
+        //             },
+        //             onPressedRight: () {
+        //               shouldClose = true;
+        //               Navigator.of(context).pop();
+        //             }));
+        // return shouldClose;
+      },
 
       child: Scaffold(
           appBar: PageAppbar(

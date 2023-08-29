@@ -1,4 +1,5 @@
 import 'package:evie_test/api/backend/sim_api_caller.dart';
+import 'package:evie_test/api/navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../api/backend/stripe_api_caller.dart';
+import '../api/dialog.dart';
 import '../api/model/bike_model.dart';
 import '../api/model/plan_model.dart';
 import '../api/model/price_model.dart';
@@ -57,8 +59,10 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
 
         navigationDelegate: (NavigationRequest request) {
           if (request.url.startsWith('https://evie-126a6.web.app/success.html')) {
-            SmartDialog.show(widget:
-            EvieSingleButtonDialog(title: 'Successfully subscribed', content: 'Plan Already subscribed.', rightContent: 'View Plan', onPressedRight: () {SmartDialog.dismiss();},));
+            changeToUserHomePageScreen(context);
+            showWelcomeToEVClub(context);
+            // SmartDialog.show(widget:
+            // EvieSingleButtonDialog(title: 'Successfully subscribed', content: 'Plan subscribed.', rightContent: 'View Plan', onPressedRight: () {SmartDialog.dismiss();},));
           } else if (request.url.startsWith('https://evie-126a6.web.app/cancel.html')) {
             SmartDialog.show(widget:
             EvieSingleButtonDialog(title: 'Operation failed', content: 'User cancelled the action', rightContent: 'BACK', onPressedRight: () {SmartDialog.dismiss();},));

@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
+import '../../../../api/function.dart';
 import '../../../../api/length.dart';
 import '../../../../api/model/plan_model.dart';
 import '../../../../api/navigator.dart';
@@ -42,8 +43,8 @@ class _ProPlanState extends State<ProPlan> {
     print(_bikeProvider.isPlanSubscript);
     return WillPopScope(
       onWillPop: () async {
-        _settingProvider.changeSheetElement(SheetList.currentPlan);
-        return false;
+        //_settingProvider.changeSheetElement(SheetList.currentPlan);
+        return true;
       },
 
     child: Scaffold(
@@ -158,7 +159,9 @@ class _ProPlanState extends State<ProPlan> {
                 ),
               ),
               Visibility(
-                visible: _bikeProvider.isPlanSubscript! == false,
+                visible: _bikeProvider.isPlanSubscript! == false ||
+                    (calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.periodEnd!.toDate()) >= 0 &&
+                    calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.periodEnd!.toDate()) <= 30),
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
@@ -166,7 +169,10 @@ class _ProPlanState extends State<ProPlan> {
                     child:  EvieButton(
                       width: double.infinity,
                       height: 48.h,
-                      child: Text(_bikeProvider.isPlanSubscript == false ? "Upgrade Plan" : "See Plan Detail",
+                      child: Text(_bikeProvider.isPlanSubscript == false  ? "Upgrade Plan" :
+                          (calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.periodEnd!.toDate()) >= 0 &&
+                        calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.periodEnd!.toDate()) <= 30) ? "Renew Now" :
+                          "See Plan Detail",
                         style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                       ),
                       onPressed: () {

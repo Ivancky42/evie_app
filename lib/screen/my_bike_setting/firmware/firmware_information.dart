@@ -12,6 +12,7 @@ import 'package:evie_test/screen/user_home_page/paid_plan/home_element/setting.d
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/text_column.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -80,13 +81,34 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
 
 
     return WillPopScope(
+
+      ///Only pop up dialog when updating
       onWillPop: () async {
         if(_firmwareProvider.isUpdating == true){
-          showFirmwareUpdateQuit(context, stream);
+          bool shouldClose = true;
+          await showDialog<void>(
+              context: context,
+              builder: (BuildContext context) =>
+                  EvieDoubleButtonDialog(
+                      title: "Close this sheet?",
+                      childContent: Text("Are you sure you want to close this sheet? This will end the upgrade.",
+                        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),),
+                      leftContent: "No",
+                      rightContent: "Yes",
+                      onPressedLeft: () {
+                        shouldClose = false;
+                        Navigator.of(context).pop();
+                      },
+                      onPressedRight: () {
+                        _bluetoothProvider.firmwareUpgradeListener.onCancel;
+                        shouldClose = true;
+                        Navigator.of(context).pop();
+                      }));
+          return shouldClose;
         }else{
-         _settingProvider.changeSheetElement(SheetList.bikeSetting);
+         //_settingProvider.changeSheetElement(SheetList.bikeSetting);
+         return true;
         }
-        return false;
       },
       child: Scaffold(
         appBar: PageAppbar(

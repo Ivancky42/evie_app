@@ -57,9 +57,9 @@ class _UserManualState extends State<UserManual> {
     return WillPopScope(
       onWillPop: () async {
 
-        _settingProvider.changeSheetElement(SheetList.bikeSetting);
+        //_settingProvider.changeSheetElement(SheetList.bikeSetting);
 
-        return false;
+        return true;
       },
       child: Scaffold(
         appBar: PageAppbar(

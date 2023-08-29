@@ -31,8 +31,8 @@ class RestoreBike extends StatefulWidget{
 
       return WillPopScope(
       onWillPop: () async {
-         _settingProvider.changeSheetElement(SheetList.resetBike2);
-         return false;
+        // _settingProvider.changeSheetElement(SheetList.resetBike2);
+         return true;
       },
       child: Scaffold(
          appBar: PageAppbar(

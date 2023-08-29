@@ -45,7 +45,6 @@ import '../screen/my_bike_setting/rfid_card/ev_add_failed.dart';
 import '../screen/my_bike_setting/rfid_card/ev_key.dart';
 import '../screen/my_bike_setting/rfid_card/ev_key_list.dart';
 import '../screen/my_bike_setting/sos_center/sos_center.dart';
-import '../screen/my_bike_setting/subscription/current_plan.dart';
 
 import '../screen/onboarding_addNewBike/bike_connect_failed.dart';
 import '../screen/onboarding_addNewBike/bike_connect_success.dart';
@@ -463,15 +462,15 @@ void changeToSOSCenterScreen(BuildContext context) {
   );
 }
 
-void changeToCurrentPlanScreen(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const CurrentPlan(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
+// void changeToCurrentPlanScreen(BuildContext context) {
+//   Navigator.pushReplacement(context,
+//     PageTransition(
+//       type: PageTransitionType.rightToLeft,
+//       child: const CurrentPlan(),
+//       duration: const Duration(milliseconds: 300),
+//     ),
+//   );
+// }
 
 
 

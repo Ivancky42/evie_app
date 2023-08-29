@@ -47,8 +47,8 @@ class _ResetBike2State extends State<ResetBike2> {
 
     return WillPopScope(
       onWillPop: () async {
-        _settingProvider.changeSheetElement(SheetList.bikeSetting);
-        return false;
+       // _settingProvider.changeSheetElement(SheetList.bikeSetting);
+        return true;
       },
       child: Scaffold(
         appBar: PageAppbar(

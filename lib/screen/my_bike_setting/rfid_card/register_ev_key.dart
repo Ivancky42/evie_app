@@ -52,14 +52,14 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
 
     return WillPopScope(
       onWillPop: () async {
-        addRFIDStream.cancel();
-        if(_bikeProvider.rfidList.length >0){
-          _settingProvider.changeSheetElement(SheetList.evKeyList);
-        }else{
-          _settingProvider.changeSheetElement(SheetList.bikeSetting);
-        }
+        // addRFIDStream.cancel();
+        // if(_bikeProvider.rfidList.length >0){
+        //   _settingProvider.changeSheetElement(SheetList.evKeyList);
+        // }else{
+        //   _settingProvider.changeSheetElement(SheetList.bikeSetting);
+        // }
 
-        return false;
+        return true;
       },
       child: Scaffold(
         appBar: PageAppbar(

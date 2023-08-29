@@ -64,8 +64,8 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
 
     return WillPopScope(
       onWillPop: () async {
-        _settingProvider.changeSheetElement(SheetList.motionSensitivity);
-        return false;
+        //_settingProvider.changeSheetElement(SheetList.motionSensitivity);
+        return true;
       },
       child: Scaffold(
         appBar: PageAppbar(

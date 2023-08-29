@@ -61,6 +61,10 @@ showQuitApp(){
           }));
 }
 
+showCloseSheet(){
+
+}
+
 showResentEmailSuccess(CurrentUserProvider currentUserProvider){
   SmartDialog.show(
       widget: EvieSingleButtonDialog(
@@ -552,7 +556,9 @@ showFirmwareUpdateQuit(context, StreamSubscription? stream){
           leftContent: "Cancel Update",
           rightContent: "Stay Updating",
           onPressedLeft: (){
+            SystemNavigator.pop();
             SmartDialog.dismiss();
+
             showBikeSettingSheet(context);
             stream?.cancel();
           },
@@ -1460,6 +1466,21 @@ showFullResetDialog (BuildContext context ,SettingProvider _settingProvider){
           SmartDialog.dismiss();
         }),
   );
+}
+
+showWelcomeToEVClub (BuildContext context){
+  /// icon not yet altered
+  SmartDialog.show(
+      widget: EvieOneButtonDialog(
+          title: "Welcome to the EV+ Club!",
+          content: "Are you ready for an adventure? "
+              "Perks of having an EV+ subscription include having access rto exclusive features such as "
+              "GPS Tracking, Theft Detection, Ride History and more!",
+          middleContent: "Let's Go!",
+          onPressedMiddle: (){
+            SmartDialog.dismiss();
+          }));
+
 }
 
 ///to unlink the bike

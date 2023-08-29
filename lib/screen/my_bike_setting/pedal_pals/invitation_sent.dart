@@ -32,7 +32,7 @@ class _InvitationSentState extends State<InvitationSent> {
 
     return WillPopScope(
         onWillPop: () async {
-          return false;
+          return true;
         },
 
         child: Scaffold(

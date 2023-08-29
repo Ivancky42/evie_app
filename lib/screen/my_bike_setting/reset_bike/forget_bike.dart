@@ -32,9 +32,9 @@ class _ForgetBikeState extends State<ForgetBike>{
 
     return WillPopScope(
       onWillPop: () async {
-        _settingProvider.changeSheetElement(SheetList.resetBike2);
+        //_settingProvider.changeSheetElement(SheetList.resetBike2);
 
-        return false;
+        return true;
       },
       child: Scaffold(
               appBar: PageAppbar(

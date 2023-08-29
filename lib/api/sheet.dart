@@ -18,7 +18,6 @@ import '../screen/my_bike_setting/reset_bike/leave_team.dart';
 import '../screen/my_bike_setting/reset_bike/leave_unsuccessful.dart';
 import '../screen/my_bike_setting/sheet_navigator.dart';
 import '../screen/my_bike_setting/subscription/current_plan.dart';
-import '../screen/my_bike_setting/subscription/essential_plan/essential_plan.dart';
 import '../screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
 import '../screen/ride/ride_history.dart';
 import '../screen/user_home_page/paid_plan/map_detail.dart';
@@ -63,17 +62,17 @@ void showBikeStatusAlertSheet(BuildContext context) {
   showCupertinoSheet(context, const BikeStatusAlert());
 }
 
-void showCurrentPlanSheet(BuildContext context) {
-  showCupertinoSheet(context, const CurrentPlan());
-}
+// void showCurrentPlanSheet(BuildContext context) {
+//   showCupertinoSheet(context, const CurrentPlan());
+// }
 
 void showProPlanSheet(BuildContext context) {
   showCupertinoSheet(context, const ProPlan());
 }
 
-void showEssentialPlanSheet(BuildContext context) {
-  showCupertinoSheet(context, const EssentialPlan());
-}
+// void showEssentialPlanSheet(BuildContext context) {
+//   showCupertinoSheet(context, const EssentialPlan());
+// }
 
 void showShareBikeUserListSheet(BuildContext context) {
   showCupertinoSheet(context, const PedalPalsList());
@@ -122,7 +121,6 @@ void showCupertinoSheet(BuildContext context, Widget widget) {
   );
 }
 
-
 void showActionListSheet(BuildContext context, List<ActionList> action) {
   // Navigator.of(context).push(
   //   CupertinoSheetRoute<void>(
@@ -135,6 +133,10 @@ void showActionListSheet(BuildContext context, List<ActionList> action) {
     ///enableDrag: false,
     ///isDismissible: false,
     context: context,
-    builder: (context) => Wrap(children: [EvieBottomSheetAction(lists: action)]),
+    builder: (context) => Wrap(
+        children: [
+          EvieBottomSheetAction(lists: action)
+        ]
+    ),
   );
 }

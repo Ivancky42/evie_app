@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/bluetooth/modelResult.dart';
+import 'package:evie_test/screen/my_account/my_account_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -14,17 +17,12 @@ import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/function.dart';
 import '../../../api/length.dart';
-import '../../../api/model/plan_model.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
-import '../../../api/provider/plan_provider.dart';
-import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_divider.dart';
-
-
 
 class CurrentPlan extends StatefulWidget {
   const CurrentPlan({Key? key}) : super(key: key);
@@ -36,7 +34,6 @@ class CurrentPlan extends StatefulWidget {
 class _CurrentPlanState extends State<CurrentPlan> {
 
   late BikeProvider _bikeProvider;
-  late PlanProvider _planProvider;
   late BluetoothProvider _bluetoothProvider;
   late SettingProvider _settingProvider;
 
@@ -44,16 +41,15 @@ class _CurrentPlanState extends State<CurrentPlan> {
   Widget build(BuildContext context) {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
-    _planProvider = Provider.of<PlanProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
-        _settingProvider.changeSheetElement(SheetList.bikeSetting);
-        return false;
+       // _settingProvider.changeSheetElement(SheetList.bikeSetting);
+        return true;
       },
-    child: Scaffold(
+      child: Scaffold(
         appBar: PageAppbar(
           title: 'EV+ Subscription',
           onPressed: () {
@@ -69,39 +65,47 @@ class _CurrentPlanState extends State<CurrentPlan> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top:24.h),
+                    padding: EdgeInsets.only(top:28.h),
                     child: Text("Current Plan", style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),),
                   ),
-
-                  Text(_bikeProvider.isPlanSubscript == false ? "No Subscription" : "EV-Secure", style: EvieTextStyles.headline.copyWith(color: EvieColors.lightBlack)),
+                 Text(_bikeProvider.isPlanSubscript == false ? "No Subscription" : "EV-Secure", style: EvieTextStyles.headline.copyWith(color: EvieColors.lightBlack)),
                   Text(_bikeProvider.isPlanSubscript == false ?"" : "${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodStart?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().year} - "
-                                                                            "${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}",
-                  style: EvieTextStyles.body18.copyWith(color:EvieColors.darkGrayishCyan)),
+                        "${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}",
+                        style: EvieTextStyles.body18.copyWith(color:EvieColors.darkGrayishCyan)),
+                  SizedBox(height:11.h,),
 
-                  Container(
-                    child: _bikeProvider.isPlanSubscript == false ? Text("") : Column(
+                  Visibility(
+                    visible: _bikeProvider.isPlanSubscript == true,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 21.h),
-                          child: Text(
-                            "Status",
-                            style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
-                          ),
+                        Text(
+                          _bikeProvider.isPlanSubscript == false ? "" : "Status",
+                          style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 4.h),
-                          child: Text(
-                            "Active",
-                            style: EvieTextStyles.body16.copyWith(color: EvieColors.green),
-                          ),
+                        
+                        ///Add expiring soon condition statement
+                        Row(
+                          children: [
+                            Text(
+                              _bikeProvider.isPlanSubscript == false ? "" : "Active",
+                              style: EvieTextStyles.body16.copyWith(color: EvieColors.green),
+                            ),
+
+                            Visibility(
+                              visible: calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.periodEnd!.toDate()) >= 0 &&
+                                calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.periodEnd!.toDate()) <= 30,
+                              child: Text(
+                              "(Expiring in ${calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.periodEnd!.toDate())} Days)",
+                              style: EvieTextStyles.body16.copyWith(color: EvieColors.green),
+                            ),)
+                          ],
                         ),
-                        SizedBox(height: 10.h),
                       ],
                     ),
                   ),
 
-
-        const EvieDivider(),
+                  const EvieDivider(),
 
                   _bikeProvider.currentBikePlanModel != null ?
                   Visibility(
@@ -128,7 +132,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
                         Text("Expired",        style: EvieTextStyles.body16.copyWith(color: EvieColors.lightRed)),
                         SizedBox(height: 10.h,),
 
-                       const EvieDivider(),
+                        const EvieDivider(),
 
                       ],
                     ),
@@ -148,25 +152,14 @@ class _CurrentPlanState extends State<CurrentPlan> {
                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                   ),
                   onPressed: () {
-                    if (_bikeProvider.isPlanSubscript == false) {
-                      String key = _planProvider.availablePlanList.keys.elementAt(0);
-                      PlanModel planModel = _planProvider.availablePlanList[key];
-
-                      _planProvider.getPrice(planModel).then((priceModel) {
-                        _planProvider.purchasePlan(_bikeProvider.currentBikeModel!.deviceIMEI!, planModel.id!, priceModel.id).then((value) {
-                          changeToStripeCheckoutScreen(context, value, _bikeProvider.currentBikeModel!, planModel, priceModel);
-                        });
-                      });
-                    } else {
-                      _settingProvider.changeSheetElement(SheetList.proPlan);
-                    }
-                  }
+                    _settingProvider.changeSheetElement(SheetList.proPlan);
+                    //changeToProPlanScreen(context);
+                  },
                 ),
               ),
             ),
           ],
-        ),
-    ),
+        ),),
     );
   }
 }

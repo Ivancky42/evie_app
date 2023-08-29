@@ -33,7 +33,7 @@ class _BikeEraseState extends State<BikeErase>{
 
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        return true;
       },
       child: Scaffold(
         body: Container(
@@ -45,7 +45,7 @@ class _BikeEraseState extends State<BikeErase>{
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               //Lottie.asset('assets/animations/account-verify.json'),
-              Lottie.asset('assets/animations/forget-bike-loading.json',
+              Lottie.asset('assets/animations/erase_bike.json',
 
                 height: 157.64.h,
                 width: 279.49.w,

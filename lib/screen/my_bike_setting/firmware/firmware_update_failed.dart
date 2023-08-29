@@ -35,7 +35,7 @@ class _FirmwareUpdateFailedState extends State<FirmwareUpdateFailed> {
 
     return WillPopScope(
         onWillPop: () async {
-          return false;
+          return true;
         },
 
         child: Scaffold(

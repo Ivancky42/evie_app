@@ -10,6 +10,7 @@ import '../../api/navigator.dart';
 import '../../api/provider/bike_provider.dart';
 import '../api/enumerate.dart';
 import '../api/provider/setting_provider.dart';
+import 'evie_double_button_dialog.dart';
 
 class EvieBottomSheet extends StatefulWidget {
   final Widget? widget;
@@ -29,19 +30,43 @@ class _EvieBottomSheet extends State<EvieBottomSheet> {
     _settingProvider = Provider.of<SettingProvider>(context);
 
     return Material(
-      child: Navigator(
-        onGenerateRoute: (_) => MaterialPageRoute<void>(
-          builder: (BuildContext newContext) =>
-              GestureDetector(
+      /// child: Navigator(
+      ///  onGenerateRoute: (_) => MaterialPageRoute<void>(
+      ///    builder: (BuildContext newContext) =>
+              child: GestureDetector(
                 ///To prevent sheet drag dismiss
                 // onVerticalDragStart: (details) {
                 //
                 // },
-                child: WillPopScope(
-                  onWillPop: () async {
-
-                    return false;
-                  },
+             ///  child: WillPopScope(
+                 ///Place will pop scope on every individual page.
+             ///     onWillPop: () async {
+              ///      return false;
+                    // bool shouldClose = true;
+                    // await showCupertinoDialog<void>(
+                    //     context: context,
+                    //     builder: (BuildContext context) => CupertinoAlertDialog(
+                    //       title: const Text('Close Sheet?'),
+                    //       actions: <Widget>[
+                    //         CupertinoButton(
+                    //           child: const Text('Yes'),
+                    //           onPressed: () {
+                    //             shouldClose = true;
+                    //             Navigator.of(context).pop();
+                    //           },
+                    //
+                    //         ),
+                    //         CupertinoButton(
+                    //           child: const Text('No'),
+                    //           onPressed: () {
+                    //             shouldClose = false;
+                    //             Navigator.of(context).pop();
+                    //           },
+                    //         ),
+                    //       ],
+                    //     ));
+                    // return shouldClose;
+              ///    },
                   child: CupertinoPageScaffold(
                     child: Padding(
                         padding: EdgeInsets.only(top: 0.h),
@@ -76,10 +101,10 @@ class _EvieBottomSheet extends State<EvieBottomSheet> {
                         )
                     ),
                   ),
-                ),
-              ),
-        ),
-      ),
+          ///      ),
+      ///        ),
+      ///   ),
+       ),
     );
   }
 
@@ -149,28 +174,23 @@ class _EvieBottomSheetAction extends State<EvieBottomSheetAction> {
         child: WillPopScope(
           onWillPop: () async {
             bool shouldClose = true;
-            await showCupertinoDialog<void>(
+            await showDialog<void>(
                 context: context,
-                builder: (BuildContext context) => CupertinoAlertDialog(
-                  title: const Text('Close Sheet?'),
-                  actions: <Widget>[
-                    CupertinoButton(
-                      child: const Text('Yes'),
-                      onPressed: () {
-                        shouldClose = true;
-                        Navigator.of(context).pop();
-                      },
-
-                    ),
-                    CupertinoButton(
-                      child: const Text('No'),
-                      onPressed: () {
-                        shouldClose = false;
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ));
+                builder: (BuildContext context) =>
+                    EvieDoubleButtonDialog(
+                        title: "Close this sheet?",
+                        childContent: Text("Are you sure you want to close this sheet?",
+                          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),),
+                        leftContent: "No",
+                        rightContent: "Yes",
+                        onPressedLeft: () {
+                          shouldClose = false;
+                          Navigator.of(context).pop();
+                        },
+                        onPressedRight: () {
+                          shouldClose = true;
+                          Navigator.of(context).pop();
+                        }));
             return shouldClose;
           },
                   child: CupertinoPageScaffold(

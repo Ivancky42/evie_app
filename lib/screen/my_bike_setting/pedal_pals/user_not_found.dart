@@ -33,7 +33,7 @@ class _UserNotFoundState extends State<UserNotFound> {
 
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        return true;
       },
 
       child: Scaffold(
