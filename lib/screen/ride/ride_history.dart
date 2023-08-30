@@ -26,7 +26,7 @@ class _RideHistoryState extends State<RideHistory> {
 
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        return true;
       },
       child: Scaffold(
         body: Container(

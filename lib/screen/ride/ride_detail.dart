@@ -92,8 +92,7 @@ class _RideDetailState extends State<RideDetail> {
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context);
-        return false;
+        return true;
       },
 
       child: Scaffold(
