@@ -127,7 +127,9 @@ void showActionListSheet(BuildContext context, List<ActionList> action) {
   //     builder: (BuildContext context) => EvieBottomSheet(widget: widget,),
   //   ),
   // );
+
   showCupertinoModalBottomSheet(
+
     expand: false,
     useRootNavigator: true,
     ///enableDrag: false,

@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import '../api/colours.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../api/provider/bike_provider.dart';
 import 'evie_button.dart';
 
 
@@ -236,11 +237,11 @@ class EvieOneButtonDialog extends StatelessWidget{
                   textAlign: TextAlign.center,
                   style: EvieTextStyles.body18,
                 ),
-              ) : SizedBox.shrink(),
+              ) : const SizedBox.shrink(),
 
-              widget != null ? widget! : SizedBox(),
+              widget != null ? widget! : const SizedBox.shrink(),
 
-              Padding(
+             Padding(
                 padding: EdgeInsets.only(top: 37.h, bottom: 16.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -259,7 +260,7 @@ class EvieOneButtonDialog extends StatelessWidget{
                     ),
                   ],
                 ),
-              )
+             ),
             ],
           ),
         )
@@ -277,6 +278,7 @@ class Evie2IconOneButtonDialog extends StatelessWidget{
   final SvgPicture? svgpicture;
   final String middleContent;
   final VoidCallback onPressedMiddle;
+  final BikeProvider bikeProvider;
 
   const Evie2IconOneButtonDialog({
     Key? key,
@@ -287,7 +289,9 @@ class Evie2IconOneButtonDialog extends StatelessWidget{
     required this.content2,
     this.svgpicture,
     required this.middleContent,
-    required this.onPressedMiddle
+    required this.onPressedMiddle,
+    required this.bikeProvider,
+
   }) : super(key: key);
 
   @override
@@ -423,6 +427,57 @@ class Evie2IconOneButtonDialog extends StatelessWidget{
                       ),
                     ],
                   ),
+              ),
+
+              Visibility(
+                visible: bikeProvider.isPlanSubscript ?? false,
+                child: Container(
+                  width: 326.w,
+
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/icons/bar_chart.svg",
+                        height: 36.h,
+                        width: 36.w,
+                      ),
+
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                 "Ride History",
+                                  style: EvieTextStyles.miniTitle,
+                                ),
+
+                                SizedBox(
+                                  width: 4.w,
+                                ),
+
+                                SvgPicture.asset(
+                                  "assets/icons/batch_tick.svg",
+                                ),
+                              ],
+                            ),
+
+                            Text(
+                              "Explore your journey through time with Ride History. "
+                                  "An immersive experience that unveils your past adventures.",
+                              textAlign: TextAlign.left,
+                              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
 
               Padding(

@@ -422,17 +422,39 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                     alignment: Alignment.topRight,
                     child: material.Visibility(
                         visible: _bikeProvider.currentBikeModel?.location?.status == "danger",
-                        child: IconButton(
-                          iconSize: 42.h,
-                          icon: SvgPicture.asset(
-                            "assets/buttons/dot.svg",
-                            height: 42.h,
-                            width: 24.w,
-                          ),
-                          onPressed: () {
-                            showActionListSheet(context, [ActionList.deactivateTheftAlert]);
-                          },
-                        ),
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: IconButton(
+                                iconSize: 42.h,
+                                icon: SvgPicture.asset(
+                                  "assets/buttons/dot.svg",
+                                ),
+                                onPressed: () {
+                                  showActionListSheet(context, [ActionList.deactivateTheftAlert]);
+                                },
+                              ),
+                            ),
+
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: Container(
+                                color: Colors.transparent,
+                                width: 80.w,
+                                height: 60.h,
+                                child: GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  onTap: (){
+                                    showActionListSheet(context, [ActionList.deactivateTheftAlert]);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+
+
                     ),
                   ),
                 ),

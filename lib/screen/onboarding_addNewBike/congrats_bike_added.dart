@@ -15,6 +15,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
+import '../../api/dialog.dart';
 import '../../api/fonts.dart';
 import '../../api/navigator.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -37,11 +38,13 @@ class _CongratsBikeAddedState extends State<CongratsBikeAdded> {
 
   late AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
+  late BluetoothProvider _bluetoothProvider;
 
   @override
   Widget build(BuildContext context) {
     _authProvider = Provider.of<AuthProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -104,6 +107,9 @@ class _CongratsBikeAddedState extends State<CongratsBikeAdded> {
 
                         _authProvider.setIsFirstLogin(false);
                         _bikeProvider.setIsAddBike(false);
+
+                        ///show sync
+                        showSyncRideThrive(context, _bluetoothProvider, _bikeProvider);
 
                         changeToUserHomePageScreen(context);
                       },

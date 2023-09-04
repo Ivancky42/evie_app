@@ -95,28 +95,51 @@ class _ThreatUnlockingSystemState extends State<ThreatUnlockingSystem> {
                         EvieColors.primaryColor,
                         onPressed: () {
                           if(widget.page == "home"){
+
                             changeToThreatMap(context);
+
+                            Future.delayed(const Duration(seconds: 1), () {
+                              _bluetoothProvider.checkBLEStatus().listen((event) {
+                                if(event == BleStatus.ready){
+                                  showThreatConnectBikeDialog(context, setState, _bluetoothProvider,_bikeProvider);
+
+                                  StreamSubscription? stream;
+                                  stream = _bluetoothProvider.startScanRSSI().listen((bLEScanResult) {
+
+                                    // if(bLEScanResult == BLEScanResult.scanTimeout){
+                                    //   SmartDialog.dismiss();
+                                    //   SmartDialog.dismiss();
+                                    //
+                                    //   stream?.cancel();
+                                    // }
+                                  });
+                                }else if(event == BleStatus.poweredOff || event == BleStatus.unauthorized){
+                                  showBluetoothNotTurnOn();
+                                }
+                              });
+                            });
+
+                          }else{
+                            _bluetoothProvider.checkBLEStatus().listen((event) {
+                              if(event == BleStatus.ready){
+                                showThreatConnectBikeDialog(context, setState, _bluetoothProvider,_bikeProvider);
+
+                                StreamSubscription? stream;
+                                stream = _bluetoothProvider.startScanRSSI().listen((bLEScanResult) {
+
+                                  // if(bLEScanResult == BLEScanResult.scanTimeout){
+                                  //   SmartDialog.dismiss();
+                                  //   SmartDialog.dismiss();
+                                  //
+                                  //   stream?.cancel();
+                                  // }
+                                });
+                              }else if(event == BleStatus.poweredOff || event == BleStatus.unauthorized){
+                                showBluetoothNotTurnOn();
+                              }
+                            });
                           }
 
-
-                          _bluetoothProvider.checkBLEStatus().listen((event) {
-                            if(event == BleStatus.ready){
-                              showThreatConnectBikeDialog(context, setState, _bluetoothProvider,_bikeProvider);
-
-                              StreamSubscription? stream;
-                              stream = _bluetoothProvider.startScanRSSI().listen((bLEScanResult) {
-
-                                // if(bLEScanResult == BLEScanResult.scanTimeout){
-                                //   SmartDialog.dismiss();
-                                //   SmartDialog.dismiss();
-                                //
-                                //   stream?.cancel();
-                                // }
-                              });
-                            }else if(event == BleStatus.poweredOff || event == BleStatus.unauthorized){
-                              showBluetoothNotTurnOn();
-                            }
-                          });
                         },
                         //icon inside button
                         child: SvgPicture.asset(
@@ -140,6 +163,26 @@ class _ThreatUnlockingSystemState extends State<ThreatUnlockingSystem> {
     );
   }
 
+  runBLEConnect(){
+      _bluetoothProvider.checkBLEStatus().listen((event) {
+        if(event == BleStatus.ready){
+          showThreatConnectBikeDialog(context, setState, _bluetoothProvider,_bikeProvider);
+
+          StreamSubscription? stream;
+          stream = _bluetoothProvider.startScanRSSI().listen((bLEScanResult) {
+
+            // if(bLEScanResult == BLEScanResult.scanTimeout){
+            //   SmartDialog.dismiss();
+            //   SmartDialog.dismiss();
+            //
+            //   stream?.cancel();
+            // }
+          });
+        }else if(event == BleStatus.poweredOff || event == BleStatus.unauthorized){
+          showBluetoothNotTurnOn();
+        }
+      });
+  }
 }
 
 

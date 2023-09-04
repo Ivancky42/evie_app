@@ -462,6 +462,14 @@ class BluetoothProvider extends ChangeNotifier {
       //return PermissionStatus.granted;
       var bleScanStatus = await Permission.bluetoothScan.request();
 
+
+      ///Location permission is required to use bluetooth
+      if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
+
+      }else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
+        showLocationServiceDisable();
+      }
+
       if (bleScanStatus.isDenied){
         return PermissionStatus.denied;
       }

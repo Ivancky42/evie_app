@@ -58,6 +58,9 @@ enum SheetList{
   leaveSuccessful,
   leaveUnsuccessful,
 
+  rideHistory,
+  rideDetails,
+  batteryDetails,
 }
 
 ///List of Action

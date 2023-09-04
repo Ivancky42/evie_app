@@ -2,6 +2,7 @@ import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/account/account_model.dart';
@@ -32,6 +33,7 @@ class _AccountContainerState extends State<AccountContainer> {
   late BikeProvider _bikeProvider;
   late AuthProvider _authProvider;
   late SettingProvider _settingProvider;
+  late BluetoothProvider _bluetoothProvider;
 
   DeviceConnectResult? deviceConnectResult;
   String? label;
@@ -49,6 +51,7 @@ class _AccountContainerState extends State<AccountContainer> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
+    _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     switch(label) {
       case "Personal Information":

@@ -141,7 +141,8 @@ class _EVKeyState extends State<EVKey> {
                             || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
                             ) {
                             _settingProvider.changeSheetElement(SheetList.registerEvKey);
-                            showConnectDialog(_bluetoothProvider, _bikeProvider);
+                            showConnectBluetoothDialog(context, _bluetoothProvider, _bikeProvider);
+                            //showConnectDialog(_bluetoothProvider, _bikeProvider);
                               }
                               else if (deviceConnectResult == DeviceConnectResult.connected) {
                           _settingProvider.changeSheetElement(SheetList.registerEvKey);
