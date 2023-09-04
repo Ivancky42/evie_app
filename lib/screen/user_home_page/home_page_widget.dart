@@ -220,19 +220,26 @@ String getBatteryImage(int batteryPercent) {
 }
 
 String getEstDistance(int batteryPercent) {
-  if (batteryPercent > 75 && batteryPercent <= 100) {
-    return "Est 40km";
-  } else if (batteryPercent > 50 && batteryPercent <= 75) {
-    return "Est 30km";
-  } else if (batteryPercent > 25 && batteryPercent <= 50) {
-    return "Est 20km";
-  } else if (batteryPercent > 5 && batteryPercent <= 25) {
-    return "Est 10km";
-  } else if (batteryPercent >= 0 && batteryPercent <= 5) {
-    return "Est 0km";
-  } else {
+  
+  if(batteryPercent == 0){
     return "Est - km";
+  }else{
+    return "${(0.7 * batteryPercent).toStringAsFixed(2)}km";
   }
+
+  // if (batteryPercent > 75 && batteryPercent <= 100) {
+  //   return "Est 40km";
+  // } else if (batteryPercent > 50 && batteryPercent <= 75) {
+  //   return "Est 30km";
+  // } else if (batteryPercent > 25 && batteryPercent <= 50) {
+  //   return "Est 20km";
+  // } else if (batteryPercent > 5 && batteryPercent <= 25) {
+  //   return "Est 10km";
+  // } else if (batteryPercent >= 0 && batteryPercent <= 5) {
+  //   return "Est 0km";
+  // } else {
+  //   return "Est - km";
+  // }
 }
 
 String getBatteryImageFromBLE(String? batteryPercentage) {

@@ -23,6 +23,7 @@ import '../../../widgets/evie_radio_button.dart';
 import '../../../widgets/evie_switch.dart';
 import '../../animation/waved_curves_animation.dart';
 import '../../api/length.dart';
+import 'home_page_widget.dart';
 
 class BatteryDetails extends StatefulWidget {
 
@@ -134,7 +135,7 @@ class _BatteryDetailsState extends State<BatteryDetails> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text("${_bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0}%", style: EvieTextStyles.batteryPercent.copyWith(color: EvieColors.lightBlack),),
-                          Text("Estimate -km remaining", style: EvieTextStyles.body16,),
+                          Text("Estimate ${getEstDistance(_bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0)} remaining", style: EvieTextStyles.body16,),
                       ],
                       ),
                     ),
@@ -156,16 +157,9 @@ class _BatteryDetailsState extends State<BatteryDetails> {
                       child: EvieDivider(),
                     ),
 
-                    Text("Battery Life", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),),
-                    Text("Lorem Lpsum", style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),),
-
-                    Padding(
-                      padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
-                      child: EvieDivider(),
-                    ),
 
                     Text("Battery Capacity", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),),
-                    Text("1,234 Wh", style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),),
+                    Text("365 Wh", style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),),
 
                     Padding(
                       padding: EdgeInsets.only(top: 10.h, bottom: 10.h),

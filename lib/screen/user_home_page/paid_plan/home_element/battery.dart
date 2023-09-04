@@ -43,7 +43,7 @@ class _BatteryState extends State<Battery> {
 
     int batteryPercentage = _bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected
         ? int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")
-        : _bikeProvider.currentBikeModel?.batteryPercent ?? 0;
+        : _bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0;
 
     String estimatedDistance = getEstDistance(batteryPercentage);
 
