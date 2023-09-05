@@ -75,7 +75,7 @@ class _ForgetIncompleteState extends State<ForgetIncomplete>{
                 style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
               ),
               onPressed: () {
-                _settingProvider.changeSheetElement(SheetList.forgetBike);
+                _settingProvider.changeSheetElement(SheetList.unlinkBike);
               },
             ),
           ),

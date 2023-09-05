@@ -207,10 +207,10 @@ class _AddNewBikeState extends State<AddNewBike> {
                               //),
 
                               Padding(
-                                padding: EdgeInsets.only(top: 16.h),
+                                padding: EdgeInsets.only(top: 16.h, left: 8.w, right: 8.w, bottom: 16.h),
                                 child: Container(
-                                  width: 357,
-                                  height: 608,
+                                  width: 357.w,
+                                  height: 620.h,
                                   decoration: BoxDecoration(
                                     color: EvieColors.primaryColor,
                                     borderRadius: BorderRadius.circular(10),

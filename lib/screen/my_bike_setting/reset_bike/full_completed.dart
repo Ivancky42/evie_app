@@ -8,6 +8,7 @@ import '../../../api/dialog.dart';
 import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
+import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../widgets/evie_button.dart';
 
@@ -71,7 +72,8 @@ class _FullCompletedState extends State<FullCompleted>{
                 style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
               ),
               onPressed: () {
-                showResetBike(context, _bikeProvider); //CHANGE
+                Navigator.of(context, rootNavigator: true).pop();
+                changeToBeforeYouStart(context);
               },
             ),
           ),
@@ -89,8 +91,16 @@ class _FullCompletedState extends State<FullCompleted>{
                 "Done",
                 style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
               ),
-              onPressed: () {
-                showResetBike(context, _bikeProvider); //CHANGE
+              onPressed: () async {
+                Navigator.of(context, rootNavigator: true).pop();
+
+                if(_bikeProvider.userBikePlans.length != 0){
+                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikePlans.keys.first);
+                }else{
+                  await _bikeProvider.changeSharedPreference('currentBikeImei', '');
+                }
+
+                changeToUserHomePageScreen(context);
               },
             ),
           ),

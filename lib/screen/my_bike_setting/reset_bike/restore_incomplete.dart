@@ -75,7 +75,7 @@ class _RestoreIncompleteState extends State<RestoreIncomplete>{
                 style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
               ),
               onPressed: () {
-                _settingProvider.changeSheetElement(SheetList.restoreBike);
+                // _settingProvider.changeSheetElement(SheetList.restoreBike);
               },
             ),
           ),

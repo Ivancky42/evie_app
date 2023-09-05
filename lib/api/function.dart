@@ -240,6 +240,17 @@ String thousandFormatting(num numbers){
   return formatter.format(numbers);
 }
 
+calculateCarbonFP(dynamic carbonFP){
+
+  /// Carbon footprint saved = 180g / km
+  if(carbonFP == num || carbonFP == int || carbonFP == double){
+    return 180/carbonFP;
+  }else{
+    return carbonFP;
+  }
+
+}
+
 const Map<String, String> dayTimeName = {"12 AM": "12AM", "1 AM": "1AM", "2 AM": "2AM", "3 AM": "3AM", "4 AM": "4AM", "5 AM": "5AM", "6 AM": "6AM", "7 AM": "7AM", "8 AM":"8AM", "9 AM":"9AM", "10 AM":"10AM", "11 AM": "11AM", "12 PM": "12PM", "1 PM": "1PM", "2 PM": "2PM", "3 PM": "3PM", "4 PM": "4PM", "5 PM": "5PM", "6 PM": "6PM", "7 PM": "7PM", "8 PM": "8PM", "9 PM": "9PM", "10 PM": "10PM", "11 PM":"11PM"};
 //const Map<int, String> dayTimeName = {1: "12AM", 2: "1AM", 3: "2AM", 4: "3AM", 5: "4AM", 6: "5AM", 7: "6AM", 8: "7AM", 9:"8AM", 10:"9AM", 11:"10AM", 12: "11AM", 13: "12PM", 14: "1PM", 15: "2PM", 16: "3PM", 17: "4PM", 18: "5PM", 19: "6PM", 20: "7PM", 21: "8PM", 22: "9PM", 23: "10PM", 24:"11PM"};
 

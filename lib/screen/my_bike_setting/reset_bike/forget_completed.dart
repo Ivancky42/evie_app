@@ -1,4 +1,5 @@
 import 'package:evie_test/api/fonts.dart';
+import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +67,8 @@ class _ForgetCompletedState extends State<ForgetCompleted>{
                   style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
               ),
               onPressed: () {
-                showResetBike(context, _bikeProvider); //CHANGE
+                Navigator.of(context, rootNavigator: true).pop();
+                changeToBeforeYouStart(context);
               },
             ),
           ),
@@ -84,8 +86,17 @@ class _ForgetCompletedState extends State<ForgetCompleted>{
                 "Done",
                 style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
               ),
-              onPressed: () {
-                showResetBike(context, _bikeProvider); //CHANGE
+              onPressed: () async {
+                Navigator.of(context, rootNavigator: true).pop();
+
+                if(_bikeProvider.userBikePlans.length != 0){
+                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikePlans.keys.first);
+                }else{
+                  await _bikeProvider.changeSharedPreference('currentBikeImei', '');
+                }
+
+
+                changeToUserHomePageScreen(context);
               },
             ),
           ),

@@ -15,16 +15,52 @@ import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../widgets/evie_button.dart';
 
-class BikeErase extends StatefulWidget{
-  const BikeErase({Key?key}) : super(key:key);
+class BikeEraseUnlink extends StatefulWidget{
+  const BikeEraseUnlink({Key?key}) : super(key:key);
   @override
-  _BikeEraseState createState() => _BikeEraseState();
+  _BikeEraseUnlinkState createState() => _BikeEraseUnlinkState();
 }
 
-class _BikeEraseState extends State<BikeErase>{
+class _BikeEraseUnlinkState extends State<BikeEraseUnlink>{
 
   late BikeProvider _bikeProvider;
   late SettingProvider _settingProvider;
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      ///Listen provider data in init state
+      //_bikeProvider = Provider.of<BikeProvider>(context, listen: false);
+      _bikeProvider = context.read<BikeProvider>();
+
+      _bikeProvider.unlinkBikeNew().listen((event) {
+        switch(event){
+          case UploadFirestoreResult.uploading:
+            // TODO: Handle this case.
+            break;
+          case UploadFirestoreResult.failed:
+            showFailed();
+            break;
+          case UploadFirestoreResult.partiallySuccess:
+            // TODO: Handle this case.
+            break;
+          case UploadFirestoreResult.success:
+            _settingProvider.changeSheetElement(SheetList.forgetCompleted);
+            break;
+        }
+      });
+
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +69,8 @@ class _BikeEraseState extends State<BikeErase>{
 
     return WillPopScope(
       onWillPop: () async {
-        return true;
+        bool? exitApp = await showCannotClose() as bool?;
+        return exitApp ?? false;
       },
       child: Scaffold(
         body: Container(

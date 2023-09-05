@@ -62,6 +62,18 @@ showQuitApp(){
           }));
 }
 
+showCannotClose(){
+  SmartDialog.show(
+      widget: EvieSingleButtonDialog(
+          title: "This page cannot be close",
+          content: "This page cannot be close",
+          rightContent: "Ok",
+          onPressedRight: () {
+            SmartDialog.dismiss();
+            // SystemNavigator.pop();
+          }));
+}
+
 showCloseSheet(){
 
 }
@@ -167,7 +179,8 @@ showAddBikeNameSuccess(context, BikeProvider bikeProvider, bikeNameController){
               bikeProvider.setIsAddBike(false);
               changeToCongratsBikeAdded(context, bikeNameController);
             }else{
-              changeToTurnOnNotificationsScreen(context);
+              // changeToTurnOnNotificationsScreen(context);
+              changeToCongratsBikeAdded(context, bikeNameController);
             }
           }
           ));
@@ -1720,9 +1733,9 @@ showFullResetDialog (BuildContext context ,SettingProvider _settingProvider){
         downContent: "Cancel",
         onPressedUp: () {
           SmartDialog.dismiss();
-          Navigator.of(context, rootNavigator: true).pop();
-          showBikeEraseSheet(context);
-          //_settingProvider.changeSheetElement(SheetList.fullCompleted);
+          // Navigator.of(context, rootNavigator: true).pop();
+          // showBikeEraseSheet(context);
+          _settingProvider.changeSheetElement(SheetList.bikeEraseReset);
         },
         onPressedDown: () {
           SmartDialog.dismiss();
@@ -1765,8 +1778,9 @@ showUnlinkBikeDialog (BuildContext context, SettingProvider _settingProvider){
         downContent: "Cancel",
         onPressedUp: () {
           SmartDialog.dismiss();
-          Navigator.of(context, rootNavigator: true).pop();
-          showBikeEraseSheet(context);
+          // Navigator.of(context, rootNavigator: true).pop();
+          // showBikeEraseSheet(context);
+          _settingProvider.changeSheetElement(SheetList.bikeEraseUnlink);
         },
         onPressedDown: () {
           SmartDialog.dismiss();

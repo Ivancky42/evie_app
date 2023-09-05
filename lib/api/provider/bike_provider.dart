@@ -40,6 +40,7 @@ enum SwitchBikeResult {
 }
 
 enum UploadFirestoreResult {
+  uploading,
   failed,
   partiallySuccess,
   success,
@@ -385,6 +386,11 @@ class BikeProvider extends ChangeNotifier {
     await getBike(deviceIMEI);
   }
 
+  changeSharedPreference(dynamic pref, dynamic target) async {
+    SharedPreferences prefs = await _prefs;
+
+    await prefs.setString(pref, target);
+  }
   /// ****************************************** ///
   /// Notification Setting
   /// ****************************************** ///
@@ -1259,6 +1265,82 @@ class BikeProvider extends ChangeNotifier {
       debugPrint(e.toString());
       return false;
     }
+  }
+
+
+  Stream<UploadFirestoreResult> unlinkBikeNew(){
+
+    firestoreStatusListener.add(UploadFirestoreResult.uploading);
+
+    try {
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI!)
+          .set({
+        'justUnlinkBike': true,
+      }, SetOptions(merge: true));
+    } catch (e) {
+      debugPrint(e.toString());
+      firestoreStatusListener.add(UploadFirestoreResult.failed);
+    }
+
+    currentSubscription = FirebaseFirestore.instance
+        .collection(bikesCollection)
+        .doc(currentBikeModel!.deviceIMEI!)
+        .snapshots()
+        .listen((event) async {
+      Map<String, dynamic>? obj = event.data();
+
+      if(event['justUnlinkBike'] == false){
+         currentSubscription?.cancel();
+         firestoreStatusListener.add(UploadFirestoreResult.success);
+
+         ///change bike to first one
+      }else{
+        firestoreStatusListener.add(UploadFirestoreResult.partiallySuccess);
+      }
+    });
+
+    return firestoreStatusListener.stream;
+  }
+
+
+  Stream<UploadFirestoreResult> resetBikeNew(){
+
+    firestoreStatusListener.add(UploadFirestoreResult.uploading);
+
+    try {
+      FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI!)
+          .set({
+        'justFactoryReset': true,
+      }, SetOptions(merge: true));
+    } catch (e) {
+      debugPrint(e.toString());
+      firestoreStatusListener.add(UploadFirestoreResult.failed);
+    }
+
+
+    currentSubscription = FirebaseFirestore.instance
+        .collection(bikesCollection)
+        .doc(currentBikeModel!.deviceIMEI!)
+        .snapshots()
+        .listen((event) async {
+      Map<String, dynamic>? obj = event.data();
+
+      if(event['justFactoryReset'] == false){
+         currentSubscription?.cancel();
+        firestoreStatusListener.add(UploadFirestoreResult.success);
+
+        ///change bike to first one
+      }else{
+        firestoreStatusListener.add(UploadFirestoreResult.partiallySuccess);
+      }
+    });
+
+    return firestoreStatusListener.stream;
+
   }
 
   /// ****************************************** ///
