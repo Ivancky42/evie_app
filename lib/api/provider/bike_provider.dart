@@ -495,29 +495,6 @@ class BikeProvider extends ChangeNotifier {
     bool result;
 
     try {
-
-      ///Function to add userID
-      // final ubsnapshot = await FirebaseFirestore.instance
-      //     .collection(bikesCollection)
-      //     .doc(currentBikeModel!.deviceIMEI)
-      //     .collection(usersCollection)
-      //     .get();
-      //
-      // List<int> aList = [];
-      // int? userId;
-      //
-      // for (var element in ubsnapshot.docs) {
-      //   aList.add(element.data()["userId"]);
-      // }
-      //
-      // aList = aList..sort();
-      //
-      // for (var i = 4; i > 0; i--) {
-      //   if (!aList.contains(i)) {
-      //     userId = i;
-      //   }
-      // }
-
       //Update
       await FirebaseFirestore.instance
           .collection(bikesCollection)
@@ -527,6 +504,7 @@ class BikeProvider extends ChangeNotifier {
           .set({
         'created': Timestamp.now(),
         'uid': userModel.uid,
+        'userName': userModel.name,
         'userEmail': userModel.email,
         'role': 'user',
         'status': 'pending',
