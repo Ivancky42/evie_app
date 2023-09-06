@@ -40,9 +40,10 @@ enum SheetList{
   resetBike,
   resetBike2,
 
-  restoreBike,
-  forgetBike,
+  unlinkBike,
+  bikeEraseUnlink,
   fullReset,
+  bikeEraseReset,
 
   restoreCompleted,
   restoreIncomplete,
@@ -53,7 +54,6 @@ enum SheetList{
   fullCompleted,
   fullIncomplete,
 
-  bikeErase,
   leaveTeam,
   leaveSuccessful,
   leaveUnsuccessful,

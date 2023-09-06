@@ -75,7 +75,7 @@ class _LeaveUnsuccessfulState extends State<LeaveUnsuccessful>{
                 style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
               ),
               onPressed: () {
-                _settingProvider.changeSheetElement(SheetList.forgetBike);
+                _settingProvider.changeSheetElement(SheetList.unlinkBike);
               },
             ),
           ),

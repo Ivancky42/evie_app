@@ -1,7 +1,7 @@
 
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals_list.dart';
-import 'package:evie_test/screen/my_bike_setting/reset_bike/bike_erase.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/bike_erase_unlink.dart';
 import 'package:evie_test/screen/ride/ride_detail.dart';
 import 'package:evie_test/screen/trip_history/trip_history.dart';
 import 'package:evie_test/screen/user_home_page/battery_details.dart';
@@ -33,7 +33,7 @@ void showTripHistorySheet(BuildContext context) {
 }
 
 void showBikeEraseSheet(BuildContext context) {
-  showCupertinoSheet(context, const BikeErase());
+  showCupertinoSheet(context, const BikeEraseUnlink());
 }
 
 void showLeaveTeamSheet(BuildContext context) {

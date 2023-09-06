@@ -220,7 +220,7 @@ String getBatteryImage(int batteryPercent) {
 }
 
 String getEstDistance(int batteryPercent) {
-  
+
   if(batteryPercent == 0){
     return "Est - km";
   }else{

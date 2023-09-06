@@ -13,13 +13,13 @@ import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../widgets/evie_button.dart';
 
-class ForgetBike extends StatefulWidget{
-  const ForgetBike({Key?key}) : super(key:key);
+class UnlinkBike extends StatefulWidget{
+  const UnlinkBike({Key?key}) : super(key:key);
   @override
-  _ForgetBikeState createState() => _ForgetBikeState();
+  _UnlinkBikeState createState() => _UnlinkBikeState();
 }
 
-class _ForgetBikeState extends State<ForgetBike>{
+class _UnlinkBikeState extends State<UnlinkBike>{
 
   late BikeProvider _bikeProvider;
   late SettingProvider _settingProvider;
@@ -54,8 +54,10 @@ class _ForgetBikeState extends State<ForgetBike>{
                         Padding(
                           padding: EdgeInsets.fromLTRB(16.w, 32.5.h, 16.w, 2.h),
                           child: Text(
+                            _bikeProvider.currentBikeModel?.pedalPalsModel != null ?
                             "Farewell, ${_bikeProvider.currentBikeModel?.deviceName ?? ''} "
-                                "and ${_bikeProvider.currentBikeModel?.pedalPalsModel?.name ?? ''}",
+                                "and ${_bikeProvider.currentBikeModel?.pedalPalsModel?.name ?? ''}" :
+                            "Farewell, ${_bikeProvider.currentBikeModel?.deviceName ?? ''}",
                             style: EvieTextStyles.h2.copyWith(height: 1.3),
                           ),
                         ),
@@ -100,6 +102,7 @@ class _ForgetBikeState extends State<ForgetBike>{
                           ),
 
                           onPressed: () {
+
                           showUnlinkBikeDialog (context, _settingProvider);
 
                           },

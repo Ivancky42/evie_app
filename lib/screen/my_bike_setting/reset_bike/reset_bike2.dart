@@ -66,7 +66,7 @@ class _ResetBike2State extends State<ResetBike2> {
 
                 GestureDetector(
                   onTap: () {
-                    _settingProvider.changeSheetElement(SheetList.forgetBike);
+                    _settingProvider.changeSheetElement(SheetList.unlinkBike);
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(16.w, 6.h, 16.w, 2.h),
@@ -116,6 +116,7 @@ class _ResetBike2State extends State<ResetBike2> {
             if (deviceConnectResult == DeviceConnectResult.connected &&
                 _bluetoothProvider.currentConnectedDevice ==
                     _bikeProvider.currentBikeModel?.macAddr){
+
             _settingProvider.changeSheetElement(SheetList.fullReset);
             } else {
               showConnectBluetoothDialog (context, _bluetoothProvider, _bikeProvider);
