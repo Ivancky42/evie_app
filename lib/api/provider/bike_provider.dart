@@ -637,14 +637,14 @@ class BikeProvider extends ChangeNotifier {
       }, SetOptions(merge: true));
 
       ///Update user notification id status == removed
-      FirebaseFirestore.instance
-          .collection(usersCollection)
-          .doc(targetUID)
-          .collection(notificationsCollection)
-          .doc(notificationId)
-          .set({
-        'status': 'removed',
-      }, SetOptions(merge: true));
+      // FirebaseFirestore.instance
+      //     .collection(usersCollection)
+      //     .doc(targetUID)
+      //     .collection(notificationsCollection)
+      //     .doc(notificationId)
+      //     .set({
+      //   'status': 'removed',
+      // }, SetOptions(merge: true));
 
     } catch (e) {
       currentSubscription?.cancel();
@@ -683,15 +683,15 @@ class BikeProvider extends ChangeNotifier {
         'justInvited': true,
       }, SetOptions(merge: true));
 
-      ///Update user notification id status == removed
-      FirebaseFirestore.instance
-          .collection(usersCollection)
-          .doc(targetUID)
-          .collection(notificationsCollection)
-          .doc(notificationId)
-          .set({
-        'status': 'leave',
-      }, SetOptions(merge: true));
+      // ///Update user notification id status == removed
+      // FirebaseFirestore.instance
+      //     .collection(usersCollection)
+      //     .doc(targetUID)
+      //     .collection(notificationsCollection)
+      //     .doc(notificationId)
+      //     .set({
+      //   'status': 'leave',
+      // }, SetOptions(merge: true));
 
     } catch (e) {
       currentSubscription?.cancel();
