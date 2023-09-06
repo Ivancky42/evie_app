@@ -239,7 +239,7 @@ class _FeedsState extends State<Feeds> {
                                 SlidableAction(
                                   spacing:10,
                                   onPressed: (context) async{
-                                    if(_notificationProvider.notificationList.values.elementAt(index).status == "pending"){
+                                    if(_notificationProvider.notificationList.values.elementAt(index).status == "userPending"){
                                       decline(index);
                                     }else {
                                       var result = await _notificationProvider.deleteNotification(
@@ -309,7 +309,7 @@ class _FeedsState extends State<Feeds> {
 
                                             Visibility(
                                               ///type == shareBike, status == pending
-                                              visible: _notificationProvider.notificationList.values.elementAt(index).status == "pending",
+                                              visible: _notificationProvider.notificationList.values.elementAt(index).status == "userPending",
                                               child: Row(
                                                 children: [
                                                   Align(
