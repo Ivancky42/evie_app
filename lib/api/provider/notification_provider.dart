@@ -215,11 +215,7 @@ class NotificationProvider extends ChangeNotifier {
           .doc(currentUserModel!.uid)
           .collection(notificationsCollection)
           .doc(targetNotifyId)
-          .set({
-        'title': 'Join Team Successful',
-        'body': 'You have successfully join team.',
-        'status': 'shared',
-      }, SetOptions(merge: true));
+          .delete();
       result = true;
     } catch (e) {
       debugPrint(e.toString());
