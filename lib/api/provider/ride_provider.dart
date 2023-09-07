@@ -79,8 +79,6 @@ class RideProvider extends ChangeNotifier {
         this.currentBikeModel = currentBikeModel;
         this.measurementSetting = measurementSetting;
         await getTripHistory();
-        await getWeekRideHistory(DateTime.now());
-        setWeekData(rideDataType);
       }
     }
   }
@@ -108,26 +106,54 @@ class RideProvider extends ChangeNotifier {
 
   ///Get data once when load page into trip history data
   getTripHistory() async {
+    tripHistorySubscription?.cancel();
     if(currentBikeModel != null){
       currentTripHistoryLists.clear();
-      await FirebaseFirestore.instance
+      tripHistorySubscription = await FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(currentBikeModel!.deviceIMEI)
           .collection(tripHistoryCollection)
           .orderBy("startTime", descending: true)
-          .get().then((value) {
-        if(value.docs.isNotEmpty){
-          for (var element in value.docs) {
-            Map<String, dynamic>? obj = element.data();
-            currentTripHistoryLists.putIfAbsent(element.id, () => TripHistoryModel.fromJson(obj));
+          .snapshots()
+          .listen((snapshot) async{
+
+        if (snapshot.docs.isNotEmpty) {
+          for (var docChange in snapshot.docChanges) {
+            switch (docChange.type) {
+            ///element.type
+              case DocumentChangeType.added:
+                Map<String, dynamic>? obj = docChange.doc.data();
+                if (obj != null) {
+                  if (obj['endTime'] != null) {
+                    currentTripHistoryLists.putIfAbsent(docChange.doc.id, () => TripHistoryModel.fromJson(obj!));
+                    notifyListeners();
+                  }
+                }
+                break;
+              case DocumentChangeType.removed:
+                currentTripHistoryLists.removeWhere((key, value) => key == docChange.doc.id);
+                notifyListeners();
+                break;
+              case DocumentChangeType.modified:
+                Map<String, dynamic>? obj = docChange.doc.data();
+                if (obj != null) {
+                  if (obj['endTime'] != null) {
+                    currentTripHistoryLists.update(
+                        docChange.doc.id, (value) =>
+                        TripHistoryModel.fromJson(obj!));
+                    notifyListeners();
+                  }
+                }
+                break;
+            }
           }
-        }else{
-          currentTripHistoryLists.clear();
         }
-        notifyListeners();
+        await getWeekRideHistory(DateTime.now());
+        setWeekData(rideDataType);
       });
     }
   }
+
 
   /// *********************************
   /// *** Homepage Ride Card (Week) ***

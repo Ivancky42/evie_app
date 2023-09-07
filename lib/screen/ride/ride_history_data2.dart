@@ -54,7 +54,7 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
   void initState() {
     super.initState();
     _rideProvider = context.read<RideProvider>();
-    _loadTripHistory();
+    Future.delayed(Duration.zero).then((value) => _loadTripHistory());
   }
 
   // Define an async function to load trip history
@@ -62,7 +62,7 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
     try {
       pickedDate = DateTime.now();
       filterDateByRideFormat(pickedDate!);
-      await _rideProvider.getTripHistory();
+      //await _rideProvider.getTripHistory();
 
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (widget.format == RideFormat.day) {
