@@ -2138,9 +2138,6 @@ showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _b
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        height: 32.h,
-                      ),
                       Text("Your Bike Is Nearby!", style: EvieTextStyles.h2.copyWith(
                           color: EvieColors.mediumBlack)),
 
