@@ -400,7 +400,8 @@ class _AccountContainerState extends State<AccountContainer> {
                     "Revoke Account",
                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                   ),
-                  onPressed: () {
+                  onPressed: ()  {
+
 
                   },
                   style: ElevatedButton.styleFrom(

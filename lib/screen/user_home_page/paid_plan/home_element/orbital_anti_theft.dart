@@ -436,13 +436,13 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                                 },
                               ),
                             ),
-
+                            
                             Align(
                               alignment: Alignment.topRight,
                               child: Container(
                                 color: Colors.transparent,
-                                width: 80.w,
-                                height: 60.h,
+                                width: 120.w,
+                                height: 100.h,
                                 child: GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: (){

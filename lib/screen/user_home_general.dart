@@ -292,18 +292,22 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   }
 
   Widget _buildChild(LinkedHashMap userBikeList) {
-    if (_bikeProvider.isReadBike && _bikeProvider.currentBikeModel == null && !userBikeList.isNotEmpty) {
+
+
+    if (_bikeProvider.isReadBike &&
+        //_bikeProvider.currentBikeModel == null ||
+        !userBikeList.isNotEmpty) {
       return const AddNewBike();
     } else {
-        if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == true) {
+
+        if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == true && _bikeProvider.userBikeList.length != 0) {
           return const PaidPlan();
 
-        } else if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == false) {
+        } else if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == false && _bikeProvider.userBikeList.length != 0) {
           return const FreePlan();
         }else{
-
           ///For not become unlimited Circular
-           //if(_bikeProvider.userBikeList.isNotEmpty) _bikeProvider.controlBikeList("first");
+           //if(_bikeProvider.userBikeList.isNotEmpty) _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeList.keys.first);
           return const Center(child: CircularProgressIndicator());
         }
     }

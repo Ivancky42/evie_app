@@ -192,6 +192,12 @@ class BikeProvider extends ChangeNotifier {
                 userBikeDetails.removeWhere((key, value) => key == docChange.doc.id);
                 NotificationProvider().unsubscribeFromTopic(docChange.doc.id);
 
+                if(userBikePlans.length != 0){
+                  changeBikeUsingIMEI(userBikePlans.keys.first);
+                }else{
+                  changeSharedPreference('currentBikeImei', '');
+                }
+
                 notifyListeners();
                 break;
               case DocumentChangeType.modified:
@@ -232,11 +238,18 @@ class BikeProvider extends ChangeNotifier {
             currentBikeIMEI = userBikeList.keys.first.toString();
           }
 
-
           if (currentBikeIMEI != "") {
             getBike(currentBikeIMEI);
           }
+
         } else {
+
+          if(userBikePlans.length != 0){
+            changeBikeUsingIMEI(userBikePlans.keys.first);
+          }else{
+            changeSharedPreference('currentBikeImei', '');
+          }
+
           userBikeList.clear();
           currentBikeModel = null;
           notifyListeners();
@@ -271,6 +284,7 @@ class BikeProvider extends ChangeNotifier {
             .doc(imei)
             .snapshots()
             .listen((event) {
+
           try {
             Map<String, dynamic>? obj = event.data();
             if (obj != null) {
@@ -285,6 +299,7 @@ class BikeProvider extends ChangeNotifier {
 
               notifyListeners();
             } else {
+
               currentBikeModel = null;
             }
           } on Exception catch (exception) {

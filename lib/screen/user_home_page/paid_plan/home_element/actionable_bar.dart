@@ -75,23 +75,23 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
           text: 'Add EV-Key to unlock your bike without app assistance.',
           backgroundColor: EvieColors.primaryColor,
           onTap: () {
-            showConnectBluetoothDialog(context, _bluetoothProvider, _bikeProvider);
-            // if (deviceConnectResult == null
-            //     || deviceConnectResult == DeviceConnectResult.disconnected
-            //     || deviceConnectResult == DeviceConnectResult.scanTimeout
-            //     || deviceConnectResult == DeviceConnectResult.connectError
-            //     || deviceConnectResult == DeviceConnectResult.scanError
-            //     || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
-            // ) {
-            //   setState(() {
-            //     pageNavigate = 'registerEVKey';
-            //   });
-            //   showEvieActionableBarDialog(context, _bluetoothProvider, _bikeProvider);
-            // }
-            // else if (deviceConnectResult == DeviceConnectResult.connected) {
-            //     _settingProvider.changeSheetElement(SheetList.evKey);
-            //     showSheetNavigate(context);
-            // }
+            if (deviceConnectResult == null
+                || deviceConnectResult == DeviceConnectResult.disconnected
+                || deviceConnectResult == DeviceConnectResult.scanTimeout
+                || deviceConnectResult == DeviceConnectResult.connectError
+                || deviceConnectResult == DeviceConnectResult.scanError
+                || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
+            ) {
+              setState(() {
+                pageNavigate = 'registerEVKey';
+              });
+              showConnectBluetoothDialog(context, _bluetoothProvider, _bikeProvider);
+             // showEvieActionableBarDialog(context, _bluetoothProvider, _bikeProvider);
+            }
+            else if (deviceConnectResult == DeviceConnectResult.connected) {
+                _settingProvider.changeSheetElement(SheetList.evKey);
+                showSheetNavigate(context);
+            }
           },
         );
     }

@@ -62,6 +62,8 @@ class _UnlockingSystemState extends State<UnlockingSystem> {
               width: 96.w,
               child:
               FloatingActionButton(
+                isExtended: false,
+                autofocus: false,
                 elevation: 0,
                 backgroundColor: cableLockState?.lockState == LockState.lock
                     ?  EvieColors.primaryColor : EvieColors.softPurple,
