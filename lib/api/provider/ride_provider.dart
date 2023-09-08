@@ -124,7 +124,10 @@ class RideProvider extends ChangeNotifier {
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
                 if (obj != null) {
-                  if (obj['endTime'] != null) {
+                  if (obj['endTime'] == null || obj['startTime'] == null) {
+
+                  }
+                  else {
                     currentTripHistoryLists.putIfAbsent(docChange.doc.id, () => TripHistoryModel.fromJson(obj!));
                     notifyListeners();
                   }
@@ -137,7 +140,10 @@ class RideProvider extends ChangeNotifier {
               case DocumentChangeType.modified:
                 Map<String, dynamic>? obj = docChange.doc.data();
                 if (obj != null) {
-                  if (obj['endTime'] != null) {
+                  if (obj['endTime'] == null || obj['startTime'] == null) {
+
+                  }
+                  else {
                     currentTripHistoryLists.update(
                         docChange.doc.id, (value) =>
                         TripHistoryModel.fromJson(obj!));
