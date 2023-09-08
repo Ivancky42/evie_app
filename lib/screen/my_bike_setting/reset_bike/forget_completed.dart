@@ -66,7 +66,13 @@ class _ForgetCompletedState extends State<ForgetCompleted>{
                   "Add Bike",
                   style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
               ),
-              onPressed: () {
+              onPressed: () async {
+                if(_bikeProvider.userBikePlans.length != 0){
+                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikePlans.keys.first);
+                }else{
+                  await _bikeProvider.changeSharedPreference('currentBikeImei', '');
+                }
+
                 Navigator.of(context, rootNavigator: true).pop();
                 changeToBeforeYouStart(context);
               },

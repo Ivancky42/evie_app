@@ -1878,11 +1878,18 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                     ),
 
                     downContent: "Cancel",
-                    onPressedDown: () {
+                    onPressedDown: () async {
                       if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
                           _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
                           _bluetoothProvider.deviceConnectResult == DeviceConnectResult.partialConnected) {
+
+                        await _bluetoothProvider.stopScan();
+                        await _bluetoothProvider.disconnectDevice();
                         _bluetoothProvider.bleScanSub?.cancel();
+                        _bluetoothProvider.startScanTimer?.cancel();
+                        _bluetoothProvider.scanResultStream.add(BLEScanResult.unknown);
+                        _bluetoothProvider.scanResult = BLEScanResult.unknown;
+
                       }
                       SmartDialog.dismiss();
                     });
@@ -1982,64 +1989,67 @@ showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _b
                 },
                 child: EvieTwoButtonDialog(
                   havePic: false,
-                  childContent: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
+                  childContent: Padding(
+                    padding: EdgeInsets.only(left:20.w),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
 
-                      Text("No Bike Found.", style: EvieTextStyles.h2.copyWith(
-                          color: EvieColors.mediumBlack)),
+                        Text("No Bike Found.", style: EvieTextStyles.h2.copyWith(
+                            color: EvieColors.mediumBlack)),
 
-                      Padding(
-                        padding: EdgeInsets.only(top: 25.h, bottom: 25.h),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              "assets/icons/no_bike.svg",
-                            ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 25.h, bottom: 25.h),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                "assets/icons/no_bike.svg",
+                              ),
 
-                            Positioned(
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: EvieColors.grayishWhite,
-                                  ),
-                                  height: 48.h,
-                                  width: 48.w,
-                                )
-                            ),
+                              Positioned(
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: EvieColors.grayishWhite,
+                                    ),
+                                    height: 48.h,
+                                    width: 48.w,
+                                  )
+                              ),
 
 
 
-                            // Consumer<BluetoothProvider>(
-                            //   builder: (context, dialogModel, child) {
-                            //     return Text(
-                            //       _bluetoothProvider.deviceRssi.toString(),
-                            //     );
-                            //       }
-                            //     ),
+                              // Consumer<BluetoothProvider>(
+                              //   builder: (context, dialogModel, child) {
+                              //     return Text(
+                              //       _bluetoothProvider.deviceRssi.toString(),
+                              //     );
+                              //       }
+                              //     ),
 
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
 
-                      Center(
-                        child:
-                        Text(
-                            "You're still too far away from your bike."
-                                " Try getting closer to your bike location before scanning again.",
-                          style: EvieTextStyles.body18.copyWith(
-                              color: EvieColors.lightBlack),
-                          textAlign: TextAlign.center,
+                        Center(
+                          child:
+                          Text(
+                              "You're still too far away from your bike."
+                                  " Try getting closer to your bike location before scanning again.",
+                            style: EvieTextStyles.body18.copyWith(
+                                color: EvieColors.lightBlack),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
 
-                      SizedBox(
-                        height: 18.h,
-                      ),
+                        SizedBox(
+                          height: 18.h,
+                        ),
 
-                    ],
+                      ],
+                    ),
                   ),
 
                   customButtonUp: EvieButton(
@@ -2134,68 +2144,71 @@ showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _b
                 },
                 child: EvieTwoButtonDialog(
                   havePic: false,
-                  childContent: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text("Your Bike Is Nearby!", style: EvieTextStyles.h2.copyWith(
-                          color: EvieColors.mediumBlack)),
+                  childContent: Padding(
+                    padding: EdgeInsets.only(left:20.w),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("Your Bike Is Nearby!", style: EvieTextStyles.h2.copyWith(
+                            color: EvieColors.mediumBlack)),
 
-                      Padding(
-                        padding: EdgeInsets.only(top: 25.h, bottom: 25.h),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              "assets/icons/rssi_middle.svg",
-                            ),
-
-                            Positioned(
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: EvieColors.grayishWhite,
-                                  ),
-                                  height: 55.h,
-                                  width: 55.w,
-                                )
-                            ),
-
-
-                            Positioned(
-                              child: Text(
-                                valueOfRSSI.toString(), style: EvieTextStyles.batteryPercent.copyWith(color: EvieColors.darkGrayishCyan),
+                        Padding(
+                          padding: EdgeInsets.only(top: 25.h, bottom: 25.h),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                "assets/icons/rssi_middle.svg",
                               ),
-                            ),
 
-                            // Consumer<BluetoothProvider>(
-                            //   builder: (context, dialogModel, child) {
-                            //     return Text(
-                            //       _bluetoothProvider.deviceRssi.toString(),
-                            //     );
-                            //       }
-                            //     ),
+                              Positioned(
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: EvieColors.grayishWhite,
+                                    ),
+                                    height: 55.h,
+                                    width: 55.w,
+                                  )
+                              ),
 
-                          ],
+
+                              Positioned(
+                                child: Text(
+                                  valueOfRSSI.toString(), style: EvieTextStyles.batteryPercent.copyWith(color: EvieColors.darkGrayishCyan),
+                                ),
+                              ),
+
+                              // Consumer<BluetoothProvider>(
+                              //   builder: (context, dialogModel, child) {
+                              //     return Text(
+                              //       _bluetoothProvider.deviceRssi.toString(),
+                              //     );
+                              //       }
+                              //     ),
+
+                            ],
+                          ),
                         ),
-                      ),
 
-                      Center(
-                        child:
-                        Text(
-                          "The number indicates your proximity to the bike. Lower numbers are closer while higher numbers are further. "
-                              "Do note that continuous scanning will drain your battery.",
-                          style: EvieTextStyles.body18.copyWith(
-                              color: EvieColors.lightBlack),
-                          textAlign: TextAlign.center,
+                        Center(
+                          child:
+                          Text(
+                            "The number indicates your proximity to the bike. Lower numbers are closer while higher numbers are further. "
+                                "Do note that continuous scanning will drain your battery.",
+                            style: EvieTextStyles.body18.copyWith(
+                                color: EvieColors.lightBlack),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
 
-                      SizedBox(
-                        height: 18.h,
-                      ),
+                        SizedBox(
+                          height: 18.h,
+                        ),
 
-                    ],
+                      ],
+                    ),
                   ),
 
                   customButtonUp: EvieButton(

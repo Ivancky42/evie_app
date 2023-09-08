@@ -132,7 +132,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                             children: [
                           SingleChildScrollView(
                             child: Container(
-                              height: 73.33.h,
+                              height: 77.77.h,
                               color:  EvieColors.lightBlack,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

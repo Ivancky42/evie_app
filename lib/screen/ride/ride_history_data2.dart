@@ -377,8 +377,12 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
           }
           else...{
             RideFormat.day == widget.format ?
-            RecentActivity(widget.format, _rideProvider.dayTimeChartData.isEmpty ? true : false) :
-            RecentActivity(widget.format,_rideProvider.chartData.isEmpty ? true : false )
+           // RecentActivity(widget.format, _rideProvider.dayTimeChartData.isEmpty ? true : false) :
+            // RecentActivity(widget.format,_rideProvider.chartData.isEmpty ? true : false )
+
+            /// ΣY = 0
+            RecentActivity(widget.format, _rideProvider.dayTimeChartData.fold<double>(0, (prev, element) => prev + element.y!.toDouble()) == 0 ? true : false) :
+            RecentActivity(widget.format,_rideProvider.chartData.fold<double>(0, (prev, element) => prev + element.y!.toDouble()) == 0 ? true : false )
           }
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import '../../api/navigator.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../api/provider/location_provider.dart';
 import '../../api/provider/notification_provider.dart';
+import '../../api/provider/setting_provider.dart';
 import '../../bluetooth/modelResult.dart';
 import '../../widgets/actionable_bar.dart';
 import '../../widgets/evie_button.dart';
@@ -219,13 +221,22 @@ String getBatteryImage(int batteryPercent) {
   }
 }
 
-String getEstDistance(int batteryPercent) {
+String getEstDistance(int batteryPercent, SettingProvider settingProvider) {
 
-  if(batteryPercent == 0){
-    return "Est - km";
+  if(settingProvider.currentMeasurementSetting == MeasurementSetting.imperialSystem){
+    if(batteryPercent == 0){
+      return "Est - miles";
+    }else{
+      return "${settingProvider.convertMeterToMiles((0.7 * batteryPercent)*1000).toStringAsFixed(0)}miles";
+    }
   }else{
-    return "${(0.7 * batteryPercent).toStringAsFixed(2)}km";
+    if(batteryPercent == 0){
+      return "Est - km";
+    }else{
+      return "${(0.7 * batteryPercent).toStringAsFixed(0)}km";
+    }
   }
+
 
   // if (batteryPercent > 75 && batteryPercent <= 100) {
   //   return "Est 40km";

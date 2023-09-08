@@ -111,6 +111,7 @@ class _RecentActivityState extends State<RecentActivity> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+
                               Text(
                                 calculateDateAgo(tripList[index].startTime!.toDate(), tripList[index].endTime!.toDate()),
 

@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
@@ -41,7 +42,7 @@ class _BatteryDetailsState extends State<BatteryDetails> {
 
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
-  late LocationProvider _locationProvider;
+  late SettingProvider _settingProvider;
 
   PaginateRefreshedChangeListener refreshChangeListener = PaginateRefreshedChangeListener();
   int? snapshotLength;
@@ -56,7 +57,7 @@ class _BatteryDetailsState extends State<BatteryDetails> {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
-    _locationProvider = Provider.of<LocationProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return Material(
       child: WillPopScope(
@@ -135,7 +136,7 @@ class _BatteryDetailsState extends State<BatteryDetails> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text("${_bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0}%", style: EvieTextStyles.batteryPercent.copyWith(color: EvieColors.lightBlack),),
-                          Text("Estimate ${getEstDistance(_bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0)} remaining", style: EvieTextStyles.body16,),
+                          Text("Estimate ${getEstDistance(_bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0, _settingProvider)} remaining", style: EvieTextStyles.body16,),
                       ],
                       ),
                     ),

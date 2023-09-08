@@ -162,7 +162,7 @@ class _FreePlanState extends State<FreePlan> {
         ? int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")
         : _bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0;
 
-    String estimatedDistance = getEstDistance(batteryPercentage);
+    String estimatedDistance = getEstDistance(batteryPercentage, _settingProvider);
 
     setButtonImage();
 

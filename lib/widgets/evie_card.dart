@@ -30,7 +30,7 @@ class EvieCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      behavior: HitTestBehavior.translucent,
+      behavior: HitTestBehavior.opaque,
       onTap: onPress,
       child: Container(
         width: width ?? 168.w,
