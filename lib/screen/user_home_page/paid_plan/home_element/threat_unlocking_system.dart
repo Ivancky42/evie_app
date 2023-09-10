@@ -89,10 +89,15 @@ class _ThreatUnlockingSystemState extends State<ThreatUnlockingSystem> {
                   SizedBox(
                       height: 96.h,
                       width: 96.w,
-                      child: FloatingActionButton(
-                        elevation: 0,
-                        backgroundColor:
-                        EvieColors.primaryColor,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(EvieColors.primaryColor),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50.w), // Adjust the border radius as needed
+                            ),
+                          ),
+                        ),
                         onPressed: () {
                           if(widget.page == "home"){
 
@@ -163,26 +168,6 @@ class _ThreatUnlockingSystemState extends State<ThreatUnlockingSystem> {
     );
   }
 
-  runBLEConnect(){
-      _bluetoothProvider.checkBLEStatus().listen((event) {
-        if(event == BleStatus.ready){
-          showThreatConnectBikeDialog(context, setState, _bluetoothProvider,_bikeProvider);
-
-          StreamSubscription? stream;
-          stream = _bluetoothProvider.startScanRSSI().listen((bLEScanResult) {
-
-            // if(bLEScanResult == BLEScanResult.scanTimeout){
-            //   SmartDialog.dismiss();
-            //   SmartDialog.dismiss();
-            //
-            //   stream?.cancel();
-            // }
-          });
-        }else if(event == BleStatus.poweredOff || event == BleStatus.unauthorized){
-          showBluetoothNotTurnOn();
-        }
-      });
-  }
 }
 
 

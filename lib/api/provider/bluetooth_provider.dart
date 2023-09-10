@@ -1257,18 +1257,24 @@ class BluetoothProvider extends ChangeNotifier {
       scanResultStream.add(BLEScanResult.scanning);
       scanResult = BLEScanResult.scanning;
 
-      startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
 
         print("Scan Timer: " + timer.tick.toString() + "s");
 
 
         if (timer.tick == 10) {
+          await stopScan();
+          await disconnectDevice();
+          startScanTimer?.cancel();
+          scanResultStream.add(BLEScanResult.unknown);
+          scanResult = BLEScanResult.unknown;
+
           scanResultStream.add(BLEScanResult.scanTimeout);
           scanResult = BLEScanResult.scanTimeout;
 
-          notifyListeners();
           bleScanSub?.cancel();
           timer.cancel();
+          notifyListeners();
         }
       });
 

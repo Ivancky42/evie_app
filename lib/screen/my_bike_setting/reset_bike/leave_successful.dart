@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../../api/colours.dart';
 import '../../../api/dialog.dart';
+import '../../../api/enumerate.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
@@ -67,7 +68,15 @@ class _LeaveSuccessfulState extends State<LeaveSuccessful>{
                   "Add Bike",
                   style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
               ),
-              onPressed: () {
+              onPressed: () async {
+
+                if(_bikeProvider.userBikePlans.length != 0){
+                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikePlans.keys.first);
+                }else{
+                  await _bikeProvider.changeSharedPreference('currentBikeImei', '');
+                }
+
+                Navigator.of(context, rootNavigator: true).pop();
                 changeToBeforeYouStart(context);
               },
             ),
@@ -86,8 +95,16 @@ class _LeaveSuccessfulState extends State<LeaveSuccessful>{
                 "Done",
                 style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
               ),
-              onPressed: () {
-                showResetBike(context, _bikeProvider); //CHANGE
+              onPressed: () async {
+
+                if(_bikeProvider.userBikePlans.length != 0){
+                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikePlans.keys.first);
+                }else{
+                  await _bikeProvider.changeSharedPreference('currentBikeImei', '');
+                }
+
+                Navigator.of(context, rootNavigator: true).pop();
+                changeToUserHomePageScreen(context);
               },
             ),
           ),

@@ -241,10 +241,16 @@ class _BikeDangerState extends State<BikeDanger> {
                               height: 96.h,
                               width: 96.w,
                               child:
-                              FloatingActionButton(
-                                elevation: 0,
-                                backgroundColor:
-                                EvieColors.primaryColor,
+
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(EvieColors.primaryColor),
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50.w), // Adjust the border radius as needed
+                                    ),
+                                  ),
+                                ),
                                 onPressed: deviceConnectResult == DeviceConnectResult.connected ? () {
                                   ///Check is connected
 

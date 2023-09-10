@@ -130,10 +130,17 @@ class _BikeSafeState extends State<BikeSafe> {
                                 height: 96.h,
                                 width: 96.w,
                                 child:
-                                FloatingActionButton(
-                                  elevation: 0,
-                                  backgroundColor: cableLockState?.lockState == LockState.lock ?  EvieColors.primaryColor : EvieColors.softPurple,
-                                  onPressed: cableLockState?.lockState == LockState.lock ? () {
+                                ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(cableLockState
+                                        ?.lockState == LockState.lock ? EvieColors.primaryColor : EvieColors.softPurple,),
+                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(50.w), // Adjust the border radius as needed
+                                      ),
+                                    ),
+                                  ),
+                                onPressed: cableLockState?.lockState == LockState.lock ? () {
                                     ///Check is connected
                                     _bluetoothProvider.setIsUnlocking(true);
                                     showUnlockingToast(context);
@@ -191,20 +198,24 @@ class _BikeSafeState extends State<BikeSafe> {
                               }   else...{
 
                                 SizedBox(
-                                    height: 96.h,
-                                    width: 96.w,
-                                    child:
-                                    FloatingActionButton(
-                                      elevation: 0,
-                                      backgroundColor:
-                                      EvieColors.primaryColor,
-                                      onPressed: () {
-                                        checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
-                                      },
-                                      //icon inside button
-                                      child:
-                                      widget.connectImage,
-                                    )),
+                                  height: 96.h, // Assuming you want fixed height and width
+                                  width: 96.w,
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(EvieColors.primaryColor),
+                                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(50.w), // Adjust the border radius as needed
+                                        ),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
+                                    },
+                                    child: widget.connectImage, // Replace with your button text or icon
+                                  ),
+                                ),
+
                                 SizedBox(
                                   height: 12.h,
                                 ),
