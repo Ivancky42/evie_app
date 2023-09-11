@@ -800,7 +800,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 if (_bikeProvider.isOwner == true){
                   _settingProvider.changeSheetElement(SheetList.resetBike2);
                 } else{
-                  showLeaveTeamSheet(context);
+                  _settingProvider.changeSheetElement(SheetList.leaveTeam);
                   //_settingProvider.changeSheetElement(SheetList.resetBike2);
                 }
 

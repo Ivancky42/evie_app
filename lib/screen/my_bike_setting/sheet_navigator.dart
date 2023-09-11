@@ -11,6 +11,7 @@ import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals_list.dart
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/pedal_pals.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
 import 'package:evie_test/screen/my_bike_setting/pedal_pals/user_not_found.dart';
+import 'package:evie_test/screen/my_bike_setting/reset_bike/bike_erase_leave.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/bike_erase_reset.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/bike_erase_unlink.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/forget_completed.dart';
@@ -172,6 +173,9 @@ class _SheetNavigatorState extends State<SheetNavigator> {
 
       case SheetList.leaveTeam:
         return LeaveTeam();
+
+      case SheetList.bikeEraseLeave:
+        return BikeEraseLeave();
 
       case SheetList.leaveSuccessful:
         return LeaveSuccessful();

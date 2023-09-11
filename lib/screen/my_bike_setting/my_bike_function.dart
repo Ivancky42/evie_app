@@ -93,7 +93,7 @@ checkBLEPermissionAndAction(BluetoothProvider _bluetoothProvider, DeviceConnectR
 handleConnection(connectStream, bluetoothProvider) async {
   await bluetoothProvider.disconnectDevice();
   await bluetoothProvider.stopScan();
-  connectStream = bluetoothProvider.startScanAndConnect().listen((deviceConnectResult) {
+  connectStream = bluetoothProvider.startScasnAndConnect().listen((deviceConnectResult) {
     switch(deviceConnectResult){
       case DeviceConnectResult.scanning:
       // TODO: Handle this case.

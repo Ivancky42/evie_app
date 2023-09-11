@@ -81,10 +81,12 @@ class _LeaveTeamState extends State<LeaveTeam>{
                           style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                         ),
                         onPressed: () {
-                          Navigator.of(context, rootNavigator: true).pop();
-                          //showBikeEraseSheet(context);
-                          //showLeaveSuccessfulSheet(context);
-                          showLeaveUnsuccessfulSheet(context);
+
+                          _settingProvider.changeSheetElement(SheetList.bikeEraseLeave);
+
+
+                          // Navigator.of(context, rootNavigator: true).pop();
+                          // showLeaveUnsuccessfulSheet(context);
                         },
                       ),
                     ),

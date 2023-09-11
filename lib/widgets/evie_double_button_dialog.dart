@@ -453,7 +453,7 @@ class EvieTwoButtonDialog extends StatelessWidget{
           ),
 
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
 
@@ -480,7 +480,6 @@ class EvieTwoButtonDialog extends StatelessWidget{
               ),
 
               Container(
-                  width: 326.w,
                   child: childContent),
 
               Padding(

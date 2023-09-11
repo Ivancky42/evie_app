@@ -139,10 +139,16 @@ class _BikeWarningState extends State<BikeWarning> {
                                 height: 96.h,
                                 width: 96.w,
                                 child:
-                                FloatingActionButton(
-                                  elevation: 0,
-                                  backgroundColor: cableLockState
-                                      ?.lockState == LockState.lock ? EvieColors.primaryColor : EvieColors.softPurple,
+                                ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(cableLockState
+                                        ?.lockState == LockState.lock ? EvieColors.primaryColor : EvieColors.softPurple,),
+                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(50.w), // Adjust the border radius as needed
+                                      ),
+                                    ),
+                                  ),
                                   onPressed: cableLockState
                                       ?.lockState ==
                                       LockState
@@ -223,10 +229,15 @@ class _BikeWarningState extends State<BikeWarning> {
                                     height: 96.h,
                                     width: 96.w,
                                     child:
-                                    FloatingActionButton(
-                                      elevation: 0,
-                                      backgroundColor:
-                                      EvieColors.primaryColor,
+                                    ElevatedButton(
+                                      style: ButtonStyle(
+                                        backgroundColor: MaterialStateProperty.all(EvieColors.primaryColor),
+                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(50.w), // Adjust the border radius as needed
+                                          ),
+                                        ),
+                                      ),
                                       onPressed: () {
                                         checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
                                       },

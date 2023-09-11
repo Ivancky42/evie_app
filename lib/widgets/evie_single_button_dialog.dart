@@ -202,6 +202,7 @@ class EvieOneButtonDialog extends StatelessWidget{
           ),
 
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
 
