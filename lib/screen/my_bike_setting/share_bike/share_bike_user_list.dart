@@ -180,7 +180,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                                 Container()
                           //            ShareBikeDelete(bikeProvider: _bikeProvider, index: index,)
                                 : isOwner == false && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
-                                      ShareBikeLeave(bikeProvider: _bikeProvider, index: index,)
+                                      ShareBikeLeave(bikeProvider: _bikeProvider, settingProvider: _settingProvider, index: index,)
                                 : _bikeProvider.bikeUserList.values.elementAt(index).status == "pending" ?
                             SvgPicture.asset(
                               "assets/icons/pending_tag.svg",

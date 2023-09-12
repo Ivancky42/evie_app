@@ -13,7 +13,7 @@ class EvieSliderButton extends StatelessWidget {
   final String text;
   final bool? dismissible;
   final bool? disable;
-
+  final Color? backgroundColor;
 
   const EvieSliderButton({
     Key? key,
@@ -22,6 +22,7 @@ class EvieSliderButton extends StatelessWidget {
     required this.text,
     this.dismissible,
     this.disable,
+    this.backgroundColor,
 
   }) : super(key: key);
 
@@ -33,6 +34,7 @@ class EvieSliderButton extends StatelessWidget {
       disable: disable ?? false,
       action: action,
       width: 300.w,
+      backgroundColor: backgroundColor ?? const Color(0xffe0e0e0),
       label: Text(
         text,
         style: TextStyle(

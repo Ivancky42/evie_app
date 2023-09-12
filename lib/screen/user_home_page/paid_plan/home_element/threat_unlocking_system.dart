@@ -101,39 +101,17 @@ class _ThreatUnlockingSystemState extends State<ThreatUnlockingSystem> {
                         onPressed: () {
                           if(widget.page == "home"){
 
-                            changeToThreatMap(context);
-
-                            Future.delayed(const Duration(seconds: 1), () {
-                              _bluetoothProvider.checkBLEStatus().listen((event) {
-                                if(event == BleStatus.ready){
-                                  showThreatConnectBikeDialog(context, setState, _bluetoothProvider,_bikeProvider);
-
-                                  StreamSubscription? stream;
-                                  stream = _bluetoothProvider.startScanRSSI().listen((bLEScanResult) {
-
-                                    // if(bLEScanResult == BLEScanResult.scanTimeout){
-                                    //   SmartDialog.dismiss();
-                                    //   SmartDialog.dismiss();
-                                    //
-                                    //   stream?.cancel();
-                                    // }
-                                  });
-                                }else if(event == BleStatus.poweredOff || event == BleStatus.unauthorized){
-                                  showBluetoothNotTurnOn();
-                                }
-                              });
-                            });
+                            ///Context is parent ancestor when call show threat connect bike dialog here, move to threat map instead.
+                            changeToThreatMap(context, true);
 
                           }else{
+
                             _bluetoothProvider.checkBLEStatus().listen((event) {
                               if(event == BleStatus.ready){
                                 showThreatConnectBikeDialog(context, setState, _bluetoothProvider,_bikeProvider);
 
-                                StreamSubscription? stream;
-                                stream = _bluetoothProvider.startScanRSSI().listen((bLEScanResult) {
-
+                                _bluetoothProvider.startScanRSSI().listen((bLEScanResult) {
                                   // if(bLEScanResult == BLEScanResult.scanTimeout){
-                                  //   SmartDialog.dismiss();
                                   //   SmartDialog.dismiss();
                                   //
                                   //   stream?.cancel();

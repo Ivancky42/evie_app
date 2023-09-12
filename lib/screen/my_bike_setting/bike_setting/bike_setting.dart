@@ -498,6 +498,7 @@ class _BikeSettingState extends State<BikeSetting> {
             children: [
               lottie.Lottie.asset(
                 'assets/animations/loading_button.json',
+                repeat: true,
                 width: 45.w,
                 height: 50.h,
               ),

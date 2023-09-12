@@ -6,6 +6,7 @@ import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +22,7 @@ import 'package:provider/provider.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
 import 'colours.dart';
+import 'enumerate.dart';
 import 'model/bike_model.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -269,11 +271,13 @@ const Map<int, String> monthNameHalf = {1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 
 class ShareBikeLeave extends StatefulWidget {
 
   final BikeProvider bikeProvider;
+  final SettingProvider settingProvider;
   final int index;
 
   const ShareBikeLeave({
     Key? key,
     required this.bikeProvider,
+    required this.settingProvider,
     required this.index,
 
   }) : super(key: key);
@@ -301,46 +305,52 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
               color: EvieColors.primaryColor),
         ),
         onPressed: (){
-          SmartDialog.show(
-              widget: EvieDoubleButtonDialog(
-                title: "Are you sure you want to leave",
-                childContent: Text('Are you sure you want to leave'),
-                leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
-                rightContent: "Yes",
-                onPressedRight: () async {
-                  SmartDialog.dismiss();
-                  SmartDialog.showLoading();
-                  StreamSubscription? currentSubscription;
 
-                  currentSubscription = widget.bikeProvider.leaveSharedBike(
-                      widget.bikeProvider.bikeUserList.values.elementAt(widget.index).uid,
-                      widget.bikeProvider.bikeUserList.values.elementAt(widget.index).notificationId!).listen((uploadStatus) {
-
-                    if(uploadStatus == UploadFirestoreResult.success){
-                      SmartDialog.dismiss(status: SmartStatus.loading);
-                      SmartDialog.show(
-                          keepSingle: true,
-                          widget: EvieSingleButtonDialog(
-                              title: "Success",
-                              content: "You leave",
-                              rightContent: "Close",
-                              onPressedRight: () => SmartDialog.dismiss()
-                          ));
-                      currentSubscription?.cancel();
-                    } else if(uploadStatus == UploadFirestoreResult.failed) {
-                      SmartDialog.dismiss();
-                      SmartDialog.show(
-                          widget: EvieSingleButtonDialog(
-                              title: "Not success",
-                              content: "Try again",
-                              rightContent: "Close",
-                              onPressedRight: ()=>SmartDialog.dismiss()
-                          ));
-                    }else{};
-                  },
-                  );
-                },
-              ));
+          ///Change sheet instead of showing dialog
+          widget.settingProvider.changeSheetElement(SheetList.leaveTeam);
+          // SmartDialog.show(
+          //     widget: EvieDoubleButtonDialog(
+          //       title: "Are you sure you want to leave",
+          //       childContent: Text('Are you sure you want to leave'),
+          //       leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
+          //       rightContent: "Yes",
+          //       onPressedRight: () async {
+          //         SmartDialog.dismiss();
+          //         SmartDialog.showLoading();
+          //         StreamSubscription? currentSubscription;
+          //
+          //         currentSubscription = widget.bikeProvider.leaveSharedBike(
+          //             widget.bikeProvider.bikeUserList.values.elementAt(widget.index).uid,
+          //             widget.bikeProvider.bikeUserList.values.elementAt(widget.index).notificationId!).listen((uploadStatus) {
+          //
+          //           if(uploadStatus == UploadFirestoreResult.success){
+          //             SmartDialog.dismiss(status: SmartStatus.loading);
+          //             SmartDialog.show(
+          //                 keepSingle: true,
+          //                 widget: EvieSingleButtonDialog(
+          //                     title: "Success",
+          //                     content: "You leave",
+          //                     rightContent: "Close",
+          //                     onPressedRight: () {
+          //                       SmartDialog.dismiss();
+          //                       Navigator.of(context, rootNavigator: true).pop();
+          //                     }
+          //                 ));
+          //             currentSubscription?.cancel();
+          //           } else if(uploadStatus == UploadFirestoreResult.failed) {
+          //             SmartDialog.dismiss();
+          //             SmartDialog.show(
+          //                 widget: EvieSingleButtonDialog(
+          //                     title: "Not success",
+          //                     content: "Try again",
+          //                     rightContent: "Close",
+          //                     onPressedRight: ()=>SmartDialog.dismiss()
+          //                 ));
+          //           }else{};
+          //         },
+          //         );
+          //       },
+          //     ));
         },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(

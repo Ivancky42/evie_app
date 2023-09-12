@@ -1279,11 +1279,11 @@ class _FreePlanState extends State<FreePlan> {
     }
     else if (cableLockState?.lockState == LockState.unknown) {
 
-      buttonImage =  lottie.Lottie.asset('assets/animations/loading_button.json');
+      buttonImage =  lottie.Lottie.asset('assets/animations/loading_button.json', repeat: true);
     }
     else if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning || deviceConnectResult == DeviceConnectResult.partialConnected) {
 
-      buttonImage =  lottie.Lottie.asset('assets/animations/loading_button.json');
+      buttonImage =  lottie.Lottie.asset('assets/animations/loading_button.json', repeat: true);
     }
     else if (deviceConnectResult == DeviceConnectResult.disconnected) {
       buttonImage = SvgPicture.asset(

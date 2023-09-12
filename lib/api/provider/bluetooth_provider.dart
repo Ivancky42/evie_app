@@ -1261,7 +1261,6 @@ class BluetoothProvider extends ChangeNotifier {
 
         print("Scan Timer: " + timer.tick.toString() + "s");
 
-
         if (timer.tick == 10) {
           await stopScan();
           await disconnectDevice();
@@ -1271,6 +1270,7 @@ class BluetoothProvider extends ChangeNotifier {
 
           scanResultStream.add(BLEScanResult.scanTimeout);
           scanResult = BLEScanResult.scanTimeout;
+          bleStatusSubscription?.cancel();
 
           bleScanSub?.cancel();
           timer.cancel();

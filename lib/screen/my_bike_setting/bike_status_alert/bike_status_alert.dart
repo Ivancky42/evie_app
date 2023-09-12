@@ -208,28 +208,22 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
                     padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
                     child: EvieSwitch(
                       activeColor: _bikeProvider.isOwner == true ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
-                      title: "Lock Reminder",
-                      text: "Lock Reminder will be sent when your bike is left unlock for more than 10minutes",
-                      value:  currentNotificationSettings?.notificationSettings?.lock ?? false,
+                      title: "Fall Detection",
+                      text: "Fall Detection Alert will be trigger when bike fall without rider.",
+                      value:  currentNotificationSettings?.notificationSettings?.fallDetect ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {
                         if(_bikeProvider.isOwner == true) {
                           SmartDialog.showLoading();
-                          var result = await _bikeProvider
-                              .updateFirestoreNotification("lock", value!);
+                          var result = await _bikeProvider.updateFirestoreNotification("fallDetect", value!);
                           if (result == true) {
                             SmartDialog.dismiss();
-                            switch (value) {
+                            switch(value){
                               case true:
-                                await _notificationProvider.subscribeToTopic(
-                                    "${_bikeProvider.currentBikeModel!
-                                        .deviceIMEI}~lock-reminder");
+                                await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~fall-detect");
                                 break;
                               case false:
-                                await _notificationProvider
-                                    .unsubscribeFromTopic(
-                                    "${_bikeProvider.currentBikeModel!
-                                        .deviceIMEI}~lock-reminder");
+                                await _notificationProvider.unsubscribeFromTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~fall-detect");
                                 break;
                             }
                           } else {

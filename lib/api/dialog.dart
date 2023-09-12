@@ -1830,6 +1830,7 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                             'assets/animations/loading_button.json',
                             width: 45.w,
                             height: 50.h,
+                              repeat: true
                           ),
                           Text('Connecting Bike', style: EvieTextStyles.body18,)
                         ],
@@ -1883,13 +1884,7 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                           _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
                           _bluetoothProvider.deviceConnectResult == DeviceConnectResult.partialConnected) {
 
-                        await _bluetoothProvider.stopScan();
-                        await _bluetoothProvider.disconnectDevice();
-                        _bluetoothProvider.bleScanSub?.cancel();
-                        _bluetoothProvider.startScanTimer?.cancel();
-                        _bluetoothProvider.scanResultStream.add(BLEScanResult.unknown);
-                        _bluetoothProvider.scanResult = BLEScanResult.unknown;
-
+                        showDontConnectBike(context, _bikeProvider, _bluetoothProvider);
                       }
                       SmartDialog.dismiss();
                     });
@@ -1927,12 +1922,12 @@ showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _b
     clickBgDismissTemp: false,
     backDismiss: false,
     widget:  Consumer<BluetoothProvider>(
-      builder: (context, bluetoothProvider, child) {
+      builder: (consumerContext, bluetoothProvider, child) {
 
         final valueOfRSSI = bluetoothProvider.deviceRssi;
 
       return StatefulBuilder(
-        builder: (context, setState) {
+        builder: (statefulContext, setState) {
 
 
           ///Open slide to unlock dialog
@@ -1969,6 +1964,7 @@ showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _b
                         'assets/animations/loading_button.json',
                         width: 45.w,
                         height: 50.h,
+                          repeat: true
                       ),
                       Text('Connecting Bike', style: EvieTextStyles.body18,)
                     ],
@@ -2045,7 +2041,6 @@ showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _b
                       SizedBox(
                         height: 18.h,
                       ),
-
                     ],
                   ),
 
@@ -2126,15 +2121,7 @@ showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _b
                   ),
                   middleContent: "Stop Scan",
                   onPressedMiddle: () async {
-                    await _bluetoothProvider.stopScan();
-                    await _bluetoothProvider.disconnectDevice();
-                    _bluetoothProvider.startScanTimer?.cancel();
-                    _bluetoothProvider.scanResultStream.add(BLEScanResult.unknown);
-                    _bluetoothProvider.scanResult = BLEScanResult.unknown;
-
-                    _bluetoothProvider.bleScanSub?.cancel();
-                    _bluetoothProvider.deviceRssi = 0;
-                    SmartDialog.dismiss();
+                    showDontConnectBike(context, _bikeProvider, _bluetoothProvider);
                   },
                 ),
               );
@@ -2176,7 +2163,16 @@ showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _b
 
 
                             Positioned(
-                              child: Text(
+                              child: _bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
+                                  _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
+                                  _bluetoothProvider.deviceConnectResult == DeviceConnectResult.partialConnected ?
+                              Lottie.asset(
+                                'assets/animations/loading_button.json',
+                                width: 45.w,
+                                height: 50.h,
+                                repeat: true,
+                              ) :
+                              Text(
                                 valueOfRSSI.toString(), style: EvieTextStyles.batteryPercent.copyWith(color: EvieColors.darkGrayishCyan),
                               ),
                             ),
@@ -2229,20 +2225,7 @@ showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _b
 
                   downContent: "Stop Scan",
                   onPressedDown: () async {
-
-                    await _bluetoothProvider.stopScan();
-                    await _bluetoothProvider.disconnectDevice();
-                    _bluetoothProvider.bleScanSub?.cancel();
-                    _bluetoothProvider.startScanTimer?.cancel();
-                    _bluetoothProvider.scanResultStream.add(BLEScanResult.unknown);
-                    _bluetoothProvider.scanResult = BLEScanResult.unknown;
-
-                    _bluetoothProvider.stopScanTimer();
-                    _bluetoothProvider.scanResult = BLEScanResult.unknown;
-
-                    _bluetoothProvider.bleScanSub?.cancel();
-                    _bluetoothProvider.deviceRssi = 0;
-                    SmartDialog.dismiss();
+                    showDontConnectBike(context, _bikeProvider, _bluetoothProvider);
                   },
                 ),
               );
@@ -2322,6 +2305,7 @@ showSlideToUnlock(context, setState, BluetoothProvider _bluetoothProvider, BikeP
                           ),
 
                           EvieSliderButton(
+                            backgroundColor: EvieColors.pastelPurple,
                             dismissible: true,
                             action:() {
                               _bluetoothProvider.setIsUnlocking(true);
@@ -2377,18 +2361,17 @@ showSlideToUnlock(context, setState, BluetoothProvider _bluetoothProvider, BikeP
                         ],
                       ),
 
-                      middleContent: "Exit",
-                      onPressedMiddle: () async {
-                        await _bluetoothProvider.stopScan();
-                        await _bluetoothProvider.disconnectDevice();
-                        _bluetoothProvider.startScanTimer?.cancel();
-                        _bluetoothProvider.scanResultStream.add(BLEScanResult.unknown);
-                        _bluetoothProvider.scanResult = BLEScanResult.unknown;
+                     customButton: EvieButton_ReversedColor(
+                          width: double.infinity,
+                          height: 48.h,
+                          child: Text( "Exit",
+                            style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
+                          ),
+                          onPressed: ()async {
+                            showNoLockExit(context, _bikeProvider, _bluetoothProvider);
+                          },
+                      ),
 
-                        _bluetoothProvider.bleScanSub?.cancel();
-                        _bluetoothProvider.deviceRssi = 0;
-                        SmartDialog.dismiss();
-                      },
                     ),
           ///        )
 
@@ -2397,5 +2380,84 @@ showSlideToUnlock(context, setState, BluetoothProvider _bluetoothProvider, BikeP
 
       ///    },
      )
+  );
+}
+
+showDontConnectBike (BuildContext context ,BikeProvider _bikeProvider,  BluetoothProvider _bluetoothProvider){
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Don't Connect Bike?",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("We're still trying to connect your bike. "
+            "Are you sure that you want to stop the connection process?",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        upContent: "Stop Connecting",
+        downContent: "Cancel",
+        onPressedUp: () async {
+          await _bluetoothProvider.stopScan();
+          await _bluetoothProvider.disconnectDevice();
+          _bluetoothProvider.bleScanSub?.cancel();
+          _bluetoothProvider.startScanTimer?.cancel();
+          _bluetoothProvider.scanResultStream.add(BLEScanResult.unknown);
+          _bluetoothProvider.scanResult = BLEScanResult.unknown;
+
+          _bluetoothProvider.stopScanTimer();
+
+          _bluetoothProvider.bleStatusSubscription?.cancel();
+          _bluetoothProvider.bleScanSub?.cancel();
+          _bluetoothProvider.deviceRssi = 0;
+          SmartDialog.dismiss();
+          SmartDialog.dismiss();
+        },
+        onPressedDown: () {
+          SmartDialog.dismiss();
+          SmartDialog.dismiss();
+        }),
+  );
+}
+
+
+showNoLockExit (BuildContext context ,BikeProvider _bikeProvider,  BluetoothProvider _bluetoothProvider){
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Exit....?",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Are you sure that you want to keep this bike locked? "
+            "The bike will only revert to its secure state once you unlock it.",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        upContent: "Stop Connecting",
+        downContent: "Cancel",
+        onPressedUp: () async {
+          await _bluetoothProvider.stopScan();
+          await _bluetoothProvider.disconnectDevice();
+          _bluetoothProvider.bleScanSub?.cancel();
+          _bluetoothProvider.startScanTimer?.cancel();
+          _bluetoothProvider.scanResultStream.add(BLEScanResult.unknown);
+          _bluetoothProvider.scanResult = BLEScanResult.unknown;
+
+          _bluetoothProvider.stopScanTimer();
+
+          _bluetoothProvider.bleStatusSubscription?.cancel();
+          _bluetoothProvider.bleScanSub?.cancel();
+          _bluetoothProvider.deviceRssi = 0;
+          SmartDialog.dismiss();
+          SmartDialog.dismiss();
+        },
+        onPressedDown: () {
+          SmartDialog.dismiss();
+          SmartDialog.dismiss();
+        }),
   );
 }

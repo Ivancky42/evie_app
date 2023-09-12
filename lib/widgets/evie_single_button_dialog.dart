@@ -170,8 +170,9 @@ class EvieOneButtonDialog extends StatelessWidget{
   final bool? havePic;
   final SvgPicture? svgpicture;
   final Widget? widget;
-  final String middleContent;
-  final VoidCallback onPressedMiddle;
+  final String? middleContent;
+  final VoidCallback? onPressedMiddle;
+  final Widget? customButton;
 
   const EvieOneButtonDialog({
     Key? key,
@@ -180,8 +181,9 @@ class EvieOneButtonDialog extends StatelessWidget{
     this.widget,
     this.svgpicture,
     this.havePic,
-    required this.middleContent,
-    required this.onPressedMiddle
+    this.middleContent,
+    this.onPressedMiddle,
+    this.customButton,
   }) : super(key: key);
 
   @override
@@ -249,11 +251,11 @@ class EvieOneButtonDialog extends StatelessWidget{
                   children: [
                     Expanded(
                       child:
-                      EvieButton(
+                      customButton ?? EvieButton(
                           width: double.infinity,
                           height: 48.h,
                           child: Text(
-                            middleContent,
+                            middleContent ?? "Ok",
                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                           ),
                           onPressed: onPressedMiddle

@@ -337,7 +337,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
               _settingProvider.changeSheetElement(SheetList.mapDetails);
               showSheetNavigate(context);
             }else if(_bikeProvider.currentBikeModel?.location?.status == "danger") {
-            changeToThreatMap(context);
+            changeToThreatMap(context, false);
             }else{
               _settingProvider.changeSheetElement(SheetList.mapDetails);
               showSheetNavigate(context);
@@ -356,6 +356,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
             }
           }
         },
+
         height: double.infinity,
         width: double.infinity,
         title: "Orbital Anti-theft",
@@ -437,17 +438,26 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                               ),
                             ),
                             
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Container(
-                                color: Colors.transparent,
-                                width: 120.w,
-                                height: 100.h,
-                                child: GestureDetector(
-                                  behavior: HitTestBehavior.translucent,
-                                  onTap: (){
-                                    showActionListSheet(context, [ActionList.deactivateTheftAlert]);
-                                  },
+                            GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: (){
+                                showActionListSheet(context, [ActionList.deactivateTheftAlert]);
+                              },
+                              child: Align(
+                                alignment: Alignment.topRight,
+                                child: material.Transform.translate(
+                                  offset: Offset(20.w, -20.h),
+                                  child: Container(
+                                    color: Colors.transparent,
+                                    width: 150.w,
+                                    height: 120.h,
+                                    // child: GestureDetector(
+                                    //   behavior: HitTestBehavior.translucent,
+                                    //   onTap: (){
+                                    //     showActionListSheet(context, [ActionList.deactivateTheftAlert]);
+                                    //   },
+                                    // ),
+                                  ),
                                 ),
                               ),
                             ),

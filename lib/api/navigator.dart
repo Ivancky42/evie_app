@@ -625,11 +625,11 @@ void changeToShareBikeUserListScreen(BuildContext context) {
   );
 }
 
-void changeToThreatMap(BuildContext context, [PageTransitionType? pageTransitionType]) {
+void changeToThreatMap(BuildContext context, isTriggerConnect, [PageTransitionType? pageTransitionType]) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: pageTransitionType ?? PageTransitionType.bottomToTop,
-      child: ThreatMap(),
+      child: ThreatMap(isTriggerConnect),
       duration: const Duration(milliseconds: 300),
     ),
   );

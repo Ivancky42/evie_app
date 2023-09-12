@@ -219,7 +219,7 @@ class _UnlockingSystemState extends State<UnlockingSystem> {
       buttonImage =  lottie.Lottie.asset('assets/animations/loading_button.json', repeat: false);
     }
     else if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning || deviceConnectResult == DeviceConnectResult.partialConnected) {
-      buttonImage =  lottie.Lottie.asset('assets/animations/loading_button.json', repeat: false);
+      buttonImage =  lottie.Lottie.asset('assets/animations/loading_button.json', repeat: true);
     }
     else if (deviceConnectResult == DeviceConnectResult.disconnected) {
       buttonImage = SvgPicture.asset(

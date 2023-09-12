@@ -12,6 +12,7 @@ import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
 import 'package:image/image.dart' as IMG;
 import 'package:flutter/gestures.dart';
@@ -41,8 +42,8 @@ import 'home_element/threat_unlocking_system.dart';
 
 
 class ThreatMap extends StatefulWidget {
-
-  const ThreatMap({Key? key,}) : super(key: key);
+  final bool? triggerConnect;
+  const ThreatMap(this.triggerConnect, {Key? key}) : super(key: key);
 
   @override
   State<ThreatMap> createState() => _ThreatMapState();
@@ -60,6 +61,7 @@ class _ThreatMapState extends State<ThreatMap> {
   bool isFirstLoadUserLocation = true;
   bool isFirstLoadMarker = true;
   bool isMapListShowing = false;
+  bool alreadyTriggerConnect = false;
 
   int? snapshotLength;
 
@@ -85,6 +87,31 @@ class _ThreatMapState extends State<ThreatMap> {
       _locationProvider.setDefaultSelectedGeopoint();
       initLocationService();
     });
+
+    if(widget.triggerConnect == true && alreadyTriggerConnect == false) {
+      alreadyTriggerConnect = true;
+      _bluetoothProvider = Provider.of<BluetoothProvider>(context, listen: false);
+
+      Future.delayed(const Duration(seconds: 1), () {
+        _bluetoothProvider.checkBLEStatus().listen((event) {
+          if(event == BleStatus.ready){
+            showThreatConnectBikeDialog(context, setState, _bluetoothProvider,_bikeProvider);
+
+            _bluetoothProvider.startScanRSSI().listen((bLEScanResult) {
+
+              // if(bLEScanResult == BLEScanResult.scanTimeout){
+              //   SmartDialog.dismiss();
+              //   SmartDialog.dismiss();
+              //
+              //   stream?.cancel();
+              // }
+            });
+          }else if(event == BleStatus.poweredOff || event == BleStatus.unauthorized){
+            showBluetoothNotTurnOn();
+          }
+        });
+      });
+    }
   }
 
   @override
@@ -345,6 +372,7 @@ class _ThreatMapState extends State<ThreatMap> {
     ///Clear Marker
     options.clear();
 
+
     ///Check if have this manager
     if(currentAnnotationManager != null){
       await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager as BaseAnnotationManager);
@@ -376,32 +404,32 @@ class _ThreatMapState extends State<ThreatMap> {
             pins[i],
             _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint.longitude ?? 0,
             _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint.latitude ?? 0);
-          // options.add(
-          //   PointAnnotationOptions(
-          //     geometry: Point(
-          //         coordinates: Position(
-          //           _bikeProvider.threatRoutesLists.values
-          //               .elementAt(i)
-          //               .geopoint
-          //               .longitude ?? 0,
-          //
-          //           _bikeProvider.threatRoutesLists.values
-          //               .elementAt(i)
-          //               .geopoint
-          //               .latitude ?? 0,
-          //         )).toJson(),
-          //     image: pins[i],
-          //     iconSize: Platform.isIOS ? 2.5.h : 3.0.h,
-          //     // textField: "Text",
-          //     // textOffset: [0.0, 3],
-          //     // textColor: Colors.black.value,
-          //   ),);
+          options.add(
+            PointAnnotationOptions(
+              geometry: Point(
+                  coordinates: Position(
+                    _bikeProvider.threatRoutesLists.values
+                        .elementAt(i)
+                        .geopoint
+                        .longitude ?? 0,
+
+                    _bikeProvider.threatRoutesLists.values
+                        .elementAt(i)
+                        .geopoint
+                        .latitude ?? 0,
+                  )).toJson(),
+              image: pins[i],
+              iconSize: Platform.isIOS ? 2.5.h : 3.0.h,
+              // textField: "Text",
+              // textOffset: [0.0, 3],
+              // textColor: Colors.black.value,
+            ),);
 
         currentAnnotationManager?.setIconAllowOverlap(false);
 
-        // currentAnnotationManager.createMulti(options);
-        //OnPointAnnotationClickListener listener = MyPointAnnotationClickListener(_locationProvider);
-        //pointAnnotationManager.addOnPointAnnotationClickListener(listener);
+        currentAnnotationManager?.createMulti(options);
+        OnPointAnnotationClickListener listener = MyPointAnnotationClickListener(_locationProvider);
+        pointAnnotationManager.addOnPointAnnotationClickListener(listener);
       }
     });
 

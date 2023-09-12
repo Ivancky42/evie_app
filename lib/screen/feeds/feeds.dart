@@ -245,7 +245,7 @@ class _FeedsState extends State<Feeds> {
                                       var result = await _notificationProvider.deleteNotification(
                                           _notificationProvider.notificationList.keys.elementAt(index));
                                       if (result) {
-                                        showDeleteNotificationSuccess();
+                                        //showDeleteNotificationSuccess();
                                       } else {
                                         showDeleteNotificationFailed();
                                       }
@@ -343,11 +343,18 @@ class _FeedsState extends State<Feeds> {
                                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                                       crossAxisAlignment: CrossAxisAlignment.center,
                                                                       children: [
-                                                                        Lottie.asset(
-                                                                            'assets/animations/add-bike.json',
-                                                                        repeat: true,
-                                                                        height: 83.h,
-                                                                        width: 198.h),
+                                                                        Container(
+                                                                        height: 157.h,
+                                                                        width: 279.h,
+                                                                          child: Lottie.asset(
+                                                                              'assets/animations/add-bike.json',
+                                                                          repeat: true,
+                                                                            height: 157.h,
+                                                                            width: 279.h,
+                                                                              fit: BoxFit.cover
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(height: 60.h,),
                                                                         Text("Accepting invitation and adding bike...", style:EvieTextStyles.body16.copyWith(color: EvieColors.darkGray),)
                                                                       ],
                                                                     )
