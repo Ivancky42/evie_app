@@ -329,151 +329,145 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
           ),
         ],
       ),
-      child: EvieCard(
-        onPress: (){
-          ///Location
-          if(_currentIndex == 0){
-            _locationProvider.locations();
-            if(_locationProvider.locationModel?.isConnected == false){
-              _settingProvider.changeSheetElement(SheetList.mapDetails);
-              showSheetNavigate(context);
-            }else if(_bikeProvider.currentBikeModel?.location?.status == "danger") {
-            changeToThreatMap(context, false);
-            }else{
-              _settingProvider.changeSheetElement(SheetList.mapDetails);
-              showSheetNavigate(context);
-            }
-          }else{
-            if(_locationProvider.locationModel?.isConnected == false){
-              _locationProvider.locations();
-              _settingProvider.changeSheetElement(SheetList.threatHistory);
-              showSheetNavigate(context);
-            }else if(_bikeProvider.currentBikeModel?.location?.status == "danger"){
-              _locationProvider.locations();
-              changeToThreatTimeLine(context);
-            }else {
-              _settingProvider.changeSheetElement(SheetList.threatHistory);
-              showSheetNavigate(context);
-            }
-          }
-        },
+      child: Stack(
+        children: [
+          EvieCard(
+            onPress: (){
+              ///Location
+              if(_currentIndex == 0){
+                _locationProvider.locations();
+                if(_locationProvider.locationModel?.isConnected == false){
+                  _settingProvider.changeSheetElement(SheetList.mapDetails);
+                  showSheetNavigate(context);
+                }else if(_bikeProvider.currentBikeModel?.location?.status == "danger") {
+                  changeToThreatMap(context, false);
+                }else{
+                  _settingProvider.changeSheetElement(SheetList.mapDetails);
+                  showSheetNavigate(context);
+                }
+              }else{
+                if(_locationProvider.locationModel?.isConnected == false){
+                  _locationProvider.locations();
+                  _settingProvider.changeSheetElement(SheetList.threatHistory);
+                  showSheetNavigate(context);
+                }else if(_bikeProvider.currentBikeModel?.location?.status == "danger"){
+                  _locationProvider.locations();
+                  changeToThreatTimeLine(context);
+                }else {
+                  _settingProvider.changeSheetElement(SheetList.threatHistory);
+                  showSheetNavigate(context);
+                }
+              }
+            },
 
-        height: double.infinity,
-        width: double.infinity,
-        title: "Orbital Anti-theft",
-        child: Expanded(
-          child: Stack(
-            children: [
-              Column(
+            height: double.infinity,
+            width: double.infinity,
+            title: "Orbital Anti-theft",
+            child: Expanded(
+              child: Stack(
                 children: [
+                  Column(
+                    children: [
 
-                  Expanded(
-                    child: CarouselSlider(
-                      items: _widgets,
-                      options: CarouselOptions(
-                        padEnds: false,
+                      Expanded(
+                        child: CarouselSlider(
+                          items: _widgets,
+                          options: CarouselOptions(
+                            padEnds: false,
 
-                        height: double.infinity,
-                        //height: 323.h,
-                        autoPlay: false,
-                        enlargeCenterPage: true,
-                        enableInfiniteScroll: false,
-                        aspectRatio: 16/9,
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            _currentIndex = index;
-                          });
-                        },
-                        viewportFraction: 1.0,
+                            height: double.infinity,
+                            //height: 323.h,
+                            autoPlay: false,
+                            enlargeCenterPage: true,
+                            enableInfiniteScroll: false,
+                            aspectRatio: 16/9,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                _currentIndex = index;
+                              });
+                            },
+                            viewportFraction: 1.0,
+                          ),
+                        ),
+                      ),
+
+
+                      Padding(
+                        padding: EdgeInsets.only(top: 9.h, bottom: 9.h, right:25.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: _widgets.map((item) {
+                            int index = _widgets.indexOf(item);
+                            bool isCurrentIndex = _currentIndex == index;
+                            //  double horizontalMargin = index == 0 ? 0.0 : 6.0;
+                            double horizontalMargin = index == 0 ? 6.0 : 0.0;
+
+                            return Container(
+                              width: 6.w,
+                              height: 6.h,
+                              margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: horizontalMargin),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: isCurrentIndex ? EvieColors.primaryColor : EvieColors.progressBarGrey,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+
+                    ],
+                  ),
+
+                  material.Transform.translate(
+                    offset: Offset(0, -30.h),
+                    child: Padding(
+                      padding: EdgeInsets.only(right:20.w),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: material.Visibility(
+                            visible: _bikeProvider.currentBikeModel?.location?.status == "danger",
+                            child: Stack(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: IconButton(
+                                    iconSize: 42.h,
+                                    icon: SvgPicture.asset(
+                                      "assets/buttons/dot.svg",
+                                    ),
+                                    onPressed: () {
+                                      showActionListSheet(context, [ActionList.deactivateTheftAlert]);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            )
+
+
+                        ),
                       ),
                     ),
                   ),
-
-
-                  Padding(
-                    padding: EdgeInsets.only(top: 9.h, bottom: 9.h, right:25.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: _widgets.map((item) {
-                        int index = _widgets.indexOf(item);
-                        bool isCurrentIndex = _currentIndex == index;
-                      //  double horizontalMargin = index == 0 ? 0.0 : 6.0;
-                        double horizontalMargin = index == 0 ? 6.0 : 0.0;
-
-                        return Container(
-                          width: 6.w,
-                          height: 6.h,
-                          margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: horizontalMargin),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: isCurrentIndex ? EvieColors.primaryColor : EvieColors.progressBarGrey,
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-
                 ],
               ),
-
-              material.Transform.translate(
-                offset: Offset(0, -30.h),
-                child: Padding(
-                  padding: EdgeInsets.only(right:20.w),
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: material.Visibility(
-                        visible: _bikeProvider.currentBikeModel?.location?.status == "danger",
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: IconButton(
-                                iconSize: 42.h,
-                                icon: SvgPicture.asset(
-                                  "assets/buttons/dot.svg",
-                                ),
-                                onPressed: () {
-                                  showActionListSheet(context, [ActionList.deactivateTheftAlert]);
-                                },
-                              ),
-                            ),
-                            
-                            GestureDetector(
-                              // behavior: HitTestBehavior.translucent,
-                              onTap: (){
-                                showActionListSheet(context, [ActionList.deactivateTheftAlert]);
-                              },
-                              child: Align(
-                                alignment: Alignment.topRight,
-                                child: material.Transform.translate(
-                                  offset: Offset(20.w, -20.h),
-                                  child: Container(
-                                    color: EvieColors.transparent,
-                                    width: 150.w,
-                                    height: 120.h,
-                                    // child: GestureDetector(
-                                    //   behavior: HitTestBehavior.translucent,
-                                    //   onTap: (){
-                                    //     showActionListSheet(context, [ActionList.deactivateTheftAlert]);
-                                    //   },
-                                    // ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-
-
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+          _bikeProvider.currentBikeModel?.location?.status == "danger" ?
+          GestureDetector(
+            onTap: (){
+              showActionListSheet(context, [ActionList.deactivateTheftAlert]);
+            },
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                color: EvieColors.transparent,
+                width: 120.w,
+                height: 90.h,
+              ),
+            ),
+          ) : Container(),
+        ],
+      )
     );
   }
 
