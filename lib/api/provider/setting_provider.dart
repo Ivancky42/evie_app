@@ -79,6 +79,13 @@ class SettingProvider with ChangeNotifier {
     return milesData.toStringAsFixed(2);
   }
 
+  convertKiloMeterToMilesInString(double? meterDate){
+    double milesData = 0;
+    milesData = (meterDate ?? 0) * 0.621371;
+
+    return milesData.toStringAsFixed(2);
+  }
+
 
   ///Theme
   bool isDarkMode(context){

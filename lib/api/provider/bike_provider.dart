@@ -898,9 +898,9 @@ class BikeProvider extends ChangeNotifier {
 
             notifyListeners();
 
-              getOwnerUid(deviceIMEI, obj['ownerUid'] );
-
-
+            if (obj['ownerUid'] != null) {
+              getOwnerUid(deviceIMEI, obj['ownerUid']);
+            }
           } else if (obj == null) {
             userBikeDetails.removeWhere((key, value) => key == obj?.keys);
             notifyListeners();

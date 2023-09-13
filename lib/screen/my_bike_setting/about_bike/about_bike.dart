@@ -122,8 +122,8 @@ class _AboutBikeState extends State<AboutBike> {
                     ///Use bikeModel mileage
                     ///If it is (10) means 1km , (20) means 2km, 2 means 0.2km. and miles
                       body: _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
-                      "${((_bikeProvider.currentBikeModel?.mileage ?? 0)/10).toStringAsFixed(2)} km":
-                      "${_settingProvider.convertMeterToMilesInString((_bikeProvider.currentBikeModel?.mileage ?? 0)/10)} miles",
+                      "${(_bikeProvider.currentBikeModel?.mileage ?? 0)} km":
+                      "${_settingProvider.convertKiloMeterToMilesInString(_bikeProvider.currentBikeModel?.mileage != null ? _bikeProvider.currentBikeModel?.mileage!.toDouble() : 0)} miles",
                 ),
                 ),
                 const AccountPageDivider(),

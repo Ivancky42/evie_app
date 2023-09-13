@@ -49,7 +49,7 @@ class BikeModel {
 
   ///about bike mileage get from firestore
   /// If it is (10) means 1km , (20) means 2km, 2 means 0.2km. and miles
-  num? mileage;
+  int? mileage;
 
   BikeModel({
     required this.batteryPercent,

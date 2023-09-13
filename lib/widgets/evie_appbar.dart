@@ -50,14 +50,17 @@ class PageAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return enable == null || enable == true ? AppBar(
-      leading: IconButton(
-        icon: SvgPicture.asset("assets/buttons/back_big.svg"),
-        onPressed: onPressed,
-      ),
-      centerTitle: true,
-      title: Text(
-        title, style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),
+    return enable == null || enable == true ? Padding(
+      padding: EdgeInsets.only(top: 6),
+      child: AppBar(
+        leading: IconButton(
+          icon: SvgPicture.asset("assets/buttons/back_big.svg"),
+          onPressed: onPressed,
+        ),
+        centerTitle: true,
+        title: Text(
+          title, style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),
+        ),
       ),
     ) : Container();
   }
