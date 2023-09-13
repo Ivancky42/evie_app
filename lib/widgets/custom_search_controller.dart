@@ -31,7 +31,7 @@ class CustomSearchController extends StatelessWidget {
             contentPadding: EdgeInsets.zero,
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: Colors.transparent)),
+                borderSide: const BorderSide(color: EvieColors.transparent)),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(color: EvieColors.primaryColor)),

@@ -196,7 +196,7 @@ class _BikeContainerState extends State<BikeContainer> {
                   //         borderRadius: BorderRadius.circular(20.0),
                   //         side:  BorderSide(color: EvieColors.primaryColor, width: 1.0.w)),
                   //     elevation: 0.0,
-                  //     backgroundColor: Colors.transparent,
+                  //     backgroundColor: EvieColors.transparent,
                   //
                   //   ),
                   // ),

@@ -218,7 +218,7 @@ class EvieButton_PickDate extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.w)),
                 elevation: 0.0,
-                backgroundColor: showColour == true ? EvieColors.lightGrayishCyan : Colors.transparent,
+                backgroundColor: showColour == true ? EvieColors.lightGrayishCyan : EvieColors.transparent,
               ),
             ),
 

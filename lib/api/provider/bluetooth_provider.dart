@@ -1248,8 +1248,11 @@ class BluetoothProvider extends ChangeNotifier {
   int deviceRssi = 0;
   double deviceRssiProgress = 0.0;
 
+  bool shouldStopTimer = true;
 
     Stream<BLEScanResult> startScanRSSI() {
+
+      shouldStopTimer = true;
 
       bleScanSub?.cancel();
 
@@ -1261,7 +1264,7 @@ class BluetoothProvider extends ChangeNotifier {
 
         print("Scan Timer: " + timer.tick.toString() + "s");
 
-        if (timer.tick == 10) {
+        if (timer.tick == 10 && shouldStopTimer) {
           await stopScan();
           await disconnectDevice();
           startScanTimer?.cancel();
@@ -1281,6 +1284,8 @@ class BluetoothProvider extends ChangeNotifier {
     bleScanSub = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((discoveredDevice) async {
 
       if (discoveredDevice.name == currentBikeModel?.bleName) {
+
+        shouldStopTimer = false;
 
         scanResultStream.add(BLEScanResult.deviceFound);
         scanResult = BLEScanResult.deviceFound;

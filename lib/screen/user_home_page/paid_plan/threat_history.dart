@@ -146,7 +146,7 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                               borderRadius: BorderRadius.circular(20.0),
                               side:  BorderSide(color: EvieColors.darkGray, width: 1.0.w)),
                           elevation: 0.0,
-                          backgroundColor: Colors.transparent,
+                          backgroundColor: EvieColors.transparent,
 
                         ),
                       ),
@@ -195,9 +195,9 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
-                            side:  _bikeProvider.threatFilterArray.length == 4 ? BorderSide(color: EvieColors.darkGray, width: 1.0.w) : BorderSide(color: Colors.transparent,width: 0)),
+                            side:  _bikeProvider.threatFilterArray.length == 4 ? BorderSide(color: EvieColors.darkGray, width: 1.0.w) : BorderSide(color: EvieColors.transparent,width: 0)),
                         elevation: 0.0,
-                        backgroundColor: _bikeProvider.threatFilterArray.length == 4 ? Colors.transparent : EvieColors.lightGrayish,
+                        backgroundColor: _bikeProvider.threatFilterArray.length == 4 ? EvieColors.transparent : EvieColors.lightGrayish,
 
                       ),
                     ),
@@ -231,9 +231,9 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
-                            side:  _bikeProvider.threatFilterDate == ThreatFilterDate.all ? BorderSide(color: EvieColors.darkGray, width: 1.0.w) : BorderSide(color: Colors.transparent,width: 0)),
+                            side:  _bikeProvider.threatFilterDate == ThreatFilterDate.all ? BorderSide(color: EvieColors.darkGray, width: 1.0.w) : BorderSide(color: EvieColors.transparent,width: 0)),
                         elevation: 0.0,
-                        backgroundColor: _bikeProvider.threatFilterDate == ThreatFilterDate.all ? Colors.transparent : EvieColors.lightGrayish,
+                        backgroundColor: _bikeProvider.threatFilterDate == ThreatFilterDate.all ? EvieColors.transparent : EvieColors.lightGrayish,
 
                       ),
                     ),
@@ -565,7 +565,7 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                 //               borderRadius: BorderRadius.circular(10.0),
                 //               side:  BorderSide(color: Color(0xff7A7A79), width: 1.5.w)),
                 //           elevation: 0.0,
-                //           backgroundColor: Colors.transparent,
+                //           backgroundColor: EvieColors.transparent,
                 //
                 //         ),
                 //       ),

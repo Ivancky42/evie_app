@@ -384,7 +384,7 @@ class _AccountContainerState extends State<AccountContainer> {
                         borderRadius: BorderRadius.circular(10.0),
                         side:  BorderSide(color: EvieColors.darkGrayish, width: 1.5.w)),
                     elevation: 0.0,
-                    backgroundColor: Colors.transparent,
+                    backgroundColor: EvieColors.transparent,
                   ),
                 ),
               ),
@@ -409,7 +409,7 @@ class _AccountContainerState extends State<AccountContainer> {
                         borderRadius: BorderRadius.circular(10.0),
                         side:  BorderSide(color: EvieColors.darkGrayish, width: 1.5.w)),
                     elevation: 0.0,
-                    backgroundColor: Colors.transparent,
+                    backgroundColor: EvieColors.transparent,
 
                   ),
                 ),

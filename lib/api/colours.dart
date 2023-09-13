@@ -1,6 +1,7 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 class EvieColors {
+  static const transparent = Colors.transparent;
   static const primaryColor = Color(0xFF6A51CA);
   static const strongPurple = Color(0xFF836ED3);
   static const lightPrimaryColor = Color(0xFF9C8BDC);
@@ -19,6 +20,7 @@ class EvieColors {
   static const successGreen = Color(0xff1BCC73);
   static const green = Color(0xff05A454);
   static const white = Color(0xffFFFFFF);
+  static const lightWhite = Color(0xffE6E2F6);
   static const thumbColorTrue = Color(0xffFAFAFA);
   static const lightGrayishCyan = Color(0xffDFE0E0);
   //static const grayishWhite = Color(0xFFECEDEB);

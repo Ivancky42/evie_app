@@ -53,12 +53,12 @@ class _HomePageWidget_StatusBarState extends State<HomePageWidget_StatusBar> {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
 
-    Color dangerColor = Colors.transparent;
+    Color dangerColor = EvieColors.transparent;
     Color fontColor = Color(0xff383838);
     String alertImage = "assets/buttons/location_pin.svg";
 
     if(widget.currentDangerState == "safe"){
-      dangerColor = Colors.transparent;
+      dangerColor = EvieColors.transparent;
       fontColor = Color(0xff383838);
       alertImage = "assets/buttons/location_pin.svg";
     } else if(widget.currentDangerState == "warning" || widget.currentDangerState == "fall"){
@@ -70,7 +70,7 @@ class _HomePageWidget_StatusBarState extends State<HomePageWidget_StatusBar> {
       fontColor = Color(0xffECEDEB);
        alertImage = "assets/buttons/alert.svg";
     }else{
-      dangerColor = Colors.transparent;
+      dangerColor = EvieColors.transparent;
       fontColor = Color(0xff383838);
      alertImage = "assets/buttons/location_pin.svg";
     }

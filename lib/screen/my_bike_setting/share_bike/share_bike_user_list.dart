@@ -195,8 +195,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
               ],
             ),
 
-
-
+            
             ///Bottom page button
             isManageList ? Visibility(
               visible: isOwner,

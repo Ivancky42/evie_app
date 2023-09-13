@@ -62,6 +62,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
   int _currentIndex = 0;
   List<PointAnnotation>? pointAnnotation;
 
+
   @override
   void initState() {
     super.initState();
@@ -439,7 +440,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                             ),
                             
                             GestureDetector(
-                              behavior: HitTestBehavior.translucent,
+                              // behavior: HitTestBehavior.translucent,
                               onTap: (){
                                 showActionListSheet(context, [ActionList.deactivateTheftAlert]);
                               },
@@ -448,7 +449,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                                 child: material.Transform.translate(
                                   offset: Offset(20.w, -20.h),
                                   child: Container(
-                                    color: Colors.transparent,
+                                    color: EvieColors.transparent,
                                     width: 150.w,
                                     height: 120.h,
                                     // child: GestureDetector(

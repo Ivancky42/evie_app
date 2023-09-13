@@ -71,7 +71,7 @@ class _EvieBottomSheet extends State<EvieBottomSheet> {
                     child: Padding(
                         padding: EdgeInsets.only(top: 0.h),
                         child: CupertinoPageScaffold(
-                          backgroundColor: Colors.transparent,
+                          backgroundColor: EvieColors.transparent,
                           resizeToAvoidBottomInset: false,
                           child:  Container(
                             decoration: const BoxDecoration(
@@ -198,7 +198,7 @@ class _EvieBottomSheetAction extends State<EvieBottomSheetAction> {
                     child: Padding(
                         padding: EdgeInsets.only(top: 0.h, bottom:64.h),
                         child: CupertinoPageScaffold(
-                          backgroundColor: Colors.transparent,
+                          backgroundColor: EvieColors.transparent,
                           resizeToAvoidBottomInset: false,
                           child:  Container(
                             decoration: const BoxDecoration(

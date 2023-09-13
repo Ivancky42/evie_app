@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../api/colours.dart';
+
 class AppTheme{
 
   AppTheme._();
@@ -34,7 +36,7 @@ class AppTheme{
 
     //Default App bar theme setting
     appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.transparent, elevation: 0.0,
+      backgroundColor: EvieColors.transparent, elevation: 0.0,
       foregroundColor: Colors.black,
       iconTheme: IconThemeData(color: Colors.black),
     ),
@@ -47,14 +49,14 @@ class AppTheme{
     //Bottom navigation bar theme setting
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: Colors.transparent, elevation: 0.0,
+      backgroundColor: EvieColors.transparent, elevation: 0.0,
       selectedItemColor: Colors.blueAccent,
       unselectedItemColor: Colors.grey,
     ),
 
     //Bottom drawer
     bottomSheetTheme: const BottomSheetThemeData(
-      backgroundColor: Colors.transparent,
+      backgroundColor: EvieColors.transparent,
     ),
 
       dialogTheme: DialogTheme(
@@ -95,20 +97,20 @@ class AppTheme{
 
     //Default App bar theme setting
     appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.transparent, elevation: 0.0,
+      backgroundColor: EvieColors.transparent, elevation: 0.0,
       foregroundColor: Colors.white,
       iconTheme: IconThemeData(color: Colors.white),
     ),
 
     //Bottom app bar colours
     bottomAppBarTheme: const BottomAppBarTheme(
-      color: Colors.transparent,
+      color: EvieColors.transparent,
     ),
 
     //Bottom navigation bar theme setting
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: Colors.transparent, elevation: 0.0,
+      backgroundColor: EvieColors.transparent, elevation: 0.0,
       selectedItemColor: Colors.blueAccent,
       unselectedItemColor: Colors.grey,
     ),

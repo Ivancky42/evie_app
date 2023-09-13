@@ -524,7 +524,7 @@
 //                                                                   0xff7A7A79))),
 //                                                       elevation: 0.0,
 //                                                       backgroundColor:
-//                                                           Colors.transparent,
+//                                                           EvieColors.transparent,
 //                                                       padding: const EdgeInsets
 //                                                               .symmetric(
 //                                                           horizontal: 40,
@@ -556,7 +556,7 @@
 //                                                                   0xff6A51CA))),
 //                                                       elevation: 0.0,
 //                                                       backgroundColor:
-//                                                           Colors.transparent,
+//                                                           EvieColors.transparent,
 //                                                       padding: const EdgeInsets
 //                                                               .symmetric(
 //                                                           horizontal: 40,
@@ -793,7 +793,7 @@
 //                                                                   0xff7A7A79))),
 //                                                       elevation: 0.0,
 //                                                       backgroundColor:
-//                                                           Colors.transparent,
+//                                                           EvieColors.transparent,
 //                                                       padding: const EdgeInsets
 //                                                               .symmetric(
 //                                                           horizontal: 40,
@@ -825,7 +825,7 @@
 //                                                                   0xff6A51CA))),
 //                                                       elevation: 0.0,
 //                                                       backgroundColor:
-//                                                           Colors.transparent,
+//                                                           EvieColors.transparent,
 //                                                       padding: const EdgeInsets
 //                                                               .symmetric(
 //                                                           horizontal: 40,

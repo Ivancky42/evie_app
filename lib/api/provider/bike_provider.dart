@@ -324,7 +324,11 @@ class BikeProvider extends ChangeNotifier {
         .doc(ownerUid)
         .get();
 
-    userBikeDetails[deviceIMEI].ownerName = snapshot['name'];
+    if(snapshot.exists){
+      userBikeDetails[deviceIMEI].ownerName = snapshot['name'];
+    }else{
+      userBikeDetails[deviceIMEI].ownerName = 'User';
+    }
     notifyListeners();
   }
 

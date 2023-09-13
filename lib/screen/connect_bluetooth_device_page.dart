@@ -109,7 +109,7 @@
 //   showDeviceList() {
 //     showModalBottomSheet(
 //         context: context,
-//         backgroundColor: Colors.transparent,
+//         backgroundColor: EvieColors.transparent,
 //         builder: (BuildContext context) {
 //
 //           ///Delete list item where the name is NA

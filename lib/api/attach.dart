@@ -33,7 +33,7 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
   SmartDialog.show(
       backDismiss: false,
       keepSingle: true,
-      // maskColorTemp: Colors.transparent,
+      // maskColorTemp: EvieColors.transparent,
       // targetContext: context,
       // target: Offset(120, 200),
 
@@ -187,7 +187,7 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
   SmartDialog.show(
       useSystem: true,
       backDismiss: false,
-      // maskColorTemp: Colors.transparent,
+      // maskColorTemp: EvieColors.transparent,
       // targetContext: context,
       // target: Offset(120, 200),
 

@@ -26,15 +26,15 @@ class NotificationModel {
 
   factory NotificationModel.fromJson(Map json, String notificationId) {
     return NotificationModel(
-      notificationId:notificationId,
-      body:          json['body']?? '',
-      deviceIMEI:    json['deviceIMEI']?? '',
-      status:        json['status']?? '',
-      title:         json['title']?? '',
-      type:          json['type']?? '',
-      isRead:        json['isRead']?? false,
-      created:       timestampFromJson(json['created'] as Timestamp?),
-      updated:       timestampFromJson(json['updated'] as Timestamp?),
+      notificationId: notificationId,
+      body:           json['body']?? '',
+      deviceIMEI:      json['deviceIMEI']?? '',
+      status:         json['status']?? '',
+      title:          json['title']?? '',
+      type:           json['type']?? '',
+      isRead:         json['isRead']?? false,
+      created:        timestampFromJson(json['created'] as Timestamp?),
+      updated:        timestampFromJson(json['updated'] as Timestamp?),
     );
   }
 

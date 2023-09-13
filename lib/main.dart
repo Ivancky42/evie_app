@@ -41,6 +41,7 @@ import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:upgrader/upgrader.dart';
 
+import 'api/colours.dart';
 import 'api/model/user_model.dart';
 import 'api/provider/auth_provider.dart';
 import 'api/provider/bike_provider.dart';
@@ -236,7 +237,7 @@ class MyApp extends StatelessWidget {
 
         value: const SystemUiOverlayStyle(
           statusBarIconBrightness: Brightness.light,
-          statusBarColor: Colors.transparent,
+          statusBarColor: EvieColors.transparent,
         ),
 
         child: MaterialApp(

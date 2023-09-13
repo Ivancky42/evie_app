@@ -1212,7 +1212,7 @@ class _FreePlanState extends State<FreePlan> {
           shape: CircleBorder(),
           clipBehavior: Clip.antiAlias,
           elevation: 0.0,
-          color: Colors.transparent,
+          color: EvieColors.transparent,
           child: Container(
             child: Transform.rotate(
               //   angle: (direction * (math.pi / 180) * -1),

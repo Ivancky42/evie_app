@@ -183,7 +183,7 @@ class _RecentActivityState extends State<RecentActivity> {
         //               borderRadius: BorderRadius.circular(10.0),
         //               side:  BorderSide(color: Color(0xff7A7A79), width: 1.5.w)),
         //           elevation: 0.0,
-        //           backgroundColor: Colors.transparent,
+        //           backgroundColor: EvieColors.transparent,
         //
         //         ),
         //       ),

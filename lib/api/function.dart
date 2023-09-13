@@ -619,14 +619,14 @@ getCurrentBikeStatusColour(bool isLocked, BikeModel bikeModel, BikeProvider bike
                   .periodEnd
                   .toDate());
           if (result < 0) {
-            return Colors.transparent;
+            return EvieColors.transparent;
           } else {
             if (bikeModel.location?.isConnected == false) {
               return EvieColors.orange;
             } else {
               switch (bikeModel.location!.status) {
                 case 'safe':
-                  return Colors.transparent;
+                  return EvieColors.transparent;
                 case 'warning':
                   return EvieColors.orange;
                 case 'danger':
@@ -636,17 +636,17 @@ getCurrentBikeStatusColour(bool isLocked, BikeModel bikeModel, BikeProvider bike
                 case 'crash':
                   return EvieColors.darkRed;
                 default:
-                  return Colors.transparent;
+                  return EvieColors.transparent;
               }
             }
           }
         }else{
-          return Colors.transparent;
+          return EvieColors.transparent;
         }
       }
     }
   }else{
-    return Colors.transparent;
+    return EvieColors.transparent;
   }
 }
 
@@ -870,7 +870,7 @@ returnBorderColour(LocationProvider locationProvider){
     );
   }else{
     return Border.all(
-      color: Colors.transparent,
+      color: EvieColors.transparent,
       width: 2.8.w,
     );
   }

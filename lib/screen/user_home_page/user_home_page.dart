@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../api/colours.dart';
 import '../../test/test.dart';
 import '../feeds/feeds.dart';
+import '../feeds/feeds2.dart';
 import '../my_account/account/my_account.dart';
 import '../../abandon/user_notification.dart';
 
@@ -35,7 +36,7 @@ class _UserHomePageState extends State<UserHomePage> {
   ///Body Screen navigation by bottom navigation bar
   final screen = [
     const UserHomeGeneral(),
-    const Feeds(),
+    const Feeds2(),
     //Test(),
     const MyAccount(),
   ];
@@ -44,7 +45,7 @@ class _UserHomePageState extends State<UserHomePage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      //backgroundColor: Colors.transparent,
+      //backgroundColor: EvieColors.transparent,
       body: Builder(
         builder: (context) =>
             CupertinoPageScaffold(
