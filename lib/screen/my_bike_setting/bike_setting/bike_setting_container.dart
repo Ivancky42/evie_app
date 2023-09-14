@@ -761,7 +761,10 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                _settingProvider.changeSheetElement(SheetList.userManual);
+                //_settingProvider.changeSheetElement(SheetList.userManual);
+                const url = 'https://eviebikes.com/pages/downloads';
+                final Uri _url = Uri.parse(url);
+                launch(_url);
               },
               child: Container(
                 height: 44.h,

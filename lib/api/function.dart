@@ -18,6 +18,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
@@ -875,6 +876,12 @@ returnBorderColour(LocationProvider locationProvider){
     );
   }
 
+}
+
+Future<void> launch(Uri _url) async {
+  if (!await launchUrl(_url)) {
+    throw Exception('Could not launch $_url');
+  }
 }
 
 

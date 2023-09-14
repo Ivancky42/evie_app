@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../api/enumerate.dart';
+import '../../../api/function.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../bluetooth/modelResult.dart';
@@ -242,7 +243,9 @@ class _AccountContainerState extends State<AccountContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-
+                const url = 'https://support.eviebikes.com/en-US';
+                final Uri _url = Uri.parse(url);
+                launch(_url);
               },
               child: Container(
                 height: 44.h,
@@ -276,7 +279,9 @@ class _AccountContainerState extends State<AccountContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-
+                const url = 'https://eviebikes.com/policies/privacy-policy';
+                final Uri _url = Uri.parse(url);
+                launch(_url);
               },
               child: Container(
                 height: 44.h,
@@ -310,7 +315,9 @@ class _AccountContainerState extends State<AccountContainer> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-
+                const url = 'https://eviebikes.com/policies/terms-of-service';
+                final Uri _url = Uri.parse(url);
+                launch(_url);
               },
               child: Container(
                 height: 44.h,

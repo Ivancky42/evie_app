@@ -19,6 +19,7 @@ import 'package:evie_test/api/provider/current_user_provider.dart';
 
 import '../../../api/colours.dart';
 import '../../../api/enumerate.dart';
+import '../../../api/function.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bluetooth_provider.dart';
@@ -56,18 +57,13 @@ class _UserManualState extends State<UserManual> {
 
     return WillPopScope(
       onWillPop: () async {
-
-        //_settingProvider.changeSheetElement(SheetList.bikeSetting);
-
         return true;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'User Manual',
           onPressed: () {
-
             _settingProvider.changeSheetElement(SheetList.bikeSetting);
-
           },
         ),
         body: Stack(
