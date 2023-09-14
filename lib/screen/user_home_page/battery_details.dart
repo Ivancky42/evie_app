@@ -151,7 +151,7 @@ class _BatteryDetailsState extends State<BatteryDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Model", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),),
-                    Text("S1 A1C2-E345", style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),),
+                    Text(_bikeProvider.currentBikeModel?.batteryModel?.model ?? '-', style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),),
 
                     Padding(
                       padding: EdgeInsets.only(top: 10.h, bottom: 10.h),

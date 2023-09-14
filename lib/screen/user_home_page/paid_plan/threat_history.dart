@@ -287,12 +287,12 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                                             : data["address"] != null
                                             ? Text(data["address"], style: EvieTextStyles.body18,)
                                             : FutureBuilder<dynamic>(
-                                            future: _locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
+                                            future: _locationProvider.returnPlaceMarksString(data["geopoint"].latitude, data["geopoint"].longitude),
                                             builder: (context, snapshot) {
                                               if (snapshot.hasData) {
-                                                _bikeProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
+                                                _bikeProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.toString());
                                                 return Text(
-                                                  snapshot.data.name.toString(),
+                                                  snapshot.data.toString(),
                                                   style:  EvieTextStyles.body18,
                                                 );
                                               }else{
@@ -325,12 +325,12 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                                               : data["address"] != null
                                               ? Text(data["address"], style: EvieTextStyles.body18,)
                                               : FutureBuilder<dynamic>(
-                                              future: _locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
+                                              future: _locationProvider.returnPlaceMarksString(data["geopoint"].latitude, data["geopoint"].longitude),
                                               builder: (context, snapshot) {
                                                 if (snapshot.hasData) {
-                                                  _bikeProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
+                                                  _bikeProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.toString());
                                                   return Text(
-                                                    snapshot.data.name.toString(),
+                                                    snapshot.data.toString(),
                                                     style:  EvieTextStyles.body18,
                                                   );
                                                 }else{
@@ -365,12 +365,12 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                                               : data["address"] != null
                                               ? Text(data["address"], style:  EvieTextStyles.body18,)
                                               : FutureBuilder<dynamic>(
-                                              future: _locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
+                                              future: _locationProvider.returnPlaceMarksString(data["geopoint"].latitude, data["geopoint"].longitude),
                                               builder: (context, snapshot) {
                                                 if (snapshot.hasData) {
-                                                  _bikeProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
+                                                  _bikeProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.toString());
                                                   return Text(
-                                                    snapshot.data.name.toString(),
+                                                    snapshot.data.toString(),
                                                     style:  EvieTextStyles.body18,
                                                   );
                                                 }else{
@@ -405,12 +405,12 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                                               : data["address"] != null
                                               ? Text(data["address"], style:  EvieTextStyles.body18,)
                                               : FutureBuilder<dynamic>(
-                                              future: _locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
+                                              future: _locationProvider.returnPlaceMarksString(data["geopoint"].latitude, data["geopoint"].longitude),
                                               builder: (context, snapshot) {
                                                 if (snapshot.hasData) {
-                                                  _bikeProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
+                                                  _bikeProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.toString());
                                                   return Text(
-                                                    snapshot.data.name.toString(),
+                                                    snapshot.data.toString(),
                                                     style:  EvieTextStyles.body18,
                                                   );
                                                 }else{
@@ -446,12 +446,12 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                                               : data["address"] != null
                                               ? Text(data["address"], style:  EvieTextStyles.body18,)
                                               : FutureBuilder<dynamic>(
-                                              future: _locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
+                                              future: _locationProvider.returnPlaceMarksString(data["geopoint"].latitude, data["geopoint"].longitude),
                                               builder: (context, snapshot) {
                                                 if (snapshot.hasData) {
-                                                  _bikeProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
+                                                  _bikeProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.toString());
                                                   return Text(
-                                                    snapshot.data.name.toString(),
+                                                    snapshot.data.toString(),
                                                     style:  EvieTextStyles.body18,
                                                   );
                                                 }else{
@@ -485,12 +485,12 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                                                data["address"] != null ?
                                                Text(data["address"], style:  EvieTextStyles.body18,) :
                                                FutureBuilder<dynamic>(
-                                                 future: _locationProvider.returnPlaceMarks(data["geopoint"].latitude, data["geopoint"].longitude),
+                                                 future: _locationProvider.returnPlaceMarksString(data["geopoint"].latitude, data["geopoint"].longitude),
                                                  builder: (context, snapshot) {
                                                     if (snapshot.hasData) {
-                                                      _bikeProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.name.toString());
+                                                      _bikeProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, documentSnapshots[index].id,  snapshot.data.toString());
                                                       return Text(
-                                                       snapshot.data.name.toString(),
+                                                       snapshot.data.toString(),
                                                        style: EvieTextStyles.body18,
                                                      );
                                                    }else{

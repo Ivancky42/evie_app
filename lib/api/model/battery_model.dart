@@ -3,10 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class BatteryModel {
   int? percentage;
   Timestamp? lastUpdated;
+  String? model;
 
   BatteryModel({
     this.percentage,
     this.lastUpdated,
+    this.model,
   });
 
   Map<String, dynamic> toJson() =>
@@ -15,6 +17,7 @@ class BatteryModel {
   factory BatteryModel.fromJson(Map json) {
     return BatteryModel(
       percentage: json['percentage'] ?? null,
+      model: json['model'] ?? null,
       lastUpdated: timestampFromJson(json['lastUpdated']),
     );
   }

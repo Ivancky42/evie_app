@@ -316,28 +316,6 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                       canShowMarker: false,
                       format: 'point.x : point.y' + _rideProvider.rideDataUnit,
                     ),
-                    // builder: (BuildContext context, TrackballDetails trackballDetails) {
-                    //   return Container(
-                    //       decoration: BoxDecoration(
-                    //           color: Colors.black87,
-                    //           borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                    //       ),
-                    //       child: Padding(
-                    //         padding: EdgeInsets.all(6),
-                    //         child: Text(
-                    //           '${trackballDetails.point?.x!} - ${trackballDetails.point?.xValue >= 12 ? trackballDetails.point?.xValue - 11 : trackballDetails.point?.xValue + 1}${trackballDetails.point?.x.substring(trackballDetails.point?.x.length - 2)} : ${trackballDetails.point?.y}' + _rideProvider.rideDataUnit,
-                    //           //'${trackballDetails.point?.x!} - ${trackballDetails.point?.xValue! + 1}${trackballDetails.point?.x.substring(trackballDetails.point?.x.length - 2)} : ${trackballDetails.point?.y}' + _rideProvider.rideDataUnit,
-                    //           style: TextStyle(
-                    //               fontFamily: 'Roboto',
-                    //               fontStyle: FontStyle.normal,
-                    //               fontWeight: FontWeight.normal,
-                    //               fontSize: 12,
-                    //               color: Colors.white
-                    //           ),
-                    //         ),
-                    //       ),
-                    //   );
-                    // }
                   )
                       : TrackballBehavior(
                     shouldAlwaysShow: true,
@@ -353,12 +331,47 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
 
                 RideFormat.day == widget.format ?
                 Visibility(
-                  visible: _rideProvider.dayTimeChartData.isEmpty ? true : false,
+                  visible: _rideProvider.dayRideHistoryList.isEmpty ? true : false,
                   child: Container(
+                      margin: EdgeInsets.only(bottom: 24.h),
                       width: 75.w,
                       color: EvieColors.grayishWhite,
+                      //color: EvieColors.red,
                       child: Center(
-                          child: Text("No Data",style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),))),
+                          child: Text("No Data",style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan, fontWeight: FontWeight.w400),))),
+                ) :
+                RideFormat.week == widget.format ?
+                Visibility(
+                  visible: _rideProvider.weekRideHistoryList.isEmpty ? true : false,
+                  child: Container(
+                      margin: EdgeInsets.only(bottom: 24.h),
+                      width: 75.w,
+                      color: EvieColors.grayishWhite,
+                      //color: EvieColors.red,
+                      child: Center(
+                          child: Text("No Data",style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan, fontWeight: FontWeight.w400),))),
+                ) :
+                RideFormat.month == widget.format ?
+                Visibility(
+                  visible: _rideProvider.monthRideHistoryList.isEmpty ? true : false,
+                  child: Container(
+                      margin: EdgeInsets.only(bottom: 24.h),
+                      width: 75.w,
+                      color: EvieColors.grayishWhite,
+                      //color: EvieColors.red,
+                      child: Center(
+                          child: Text("No Data",style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan, fontWeight: FontWeight.w400),))),
+                ) :
+                RideFormat.year == widget.format ?
+                Visibility(
+                  visible: _rideProvider.yearRideHistoryList.isEmpty ? true : false,
+                  child: Container(
+                      margin: EdgeInsets.only(bottom: 24.h),
+                      width: 75.w,
+                      color: EvieColors.grayishWhite,
+                      //color: EvieColors.red,
+                      child: Center(
+                          child: Text("No Data",style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan, fontWeight: FontWeight.w400),))),
                 ) :
                 Visibility(
                   visible: _rideProvider.chartData.isEmpty ? true : false,

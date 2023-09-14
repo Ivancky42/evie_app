@@ -269,7 +269,7 @@ class _RideDetailState extends State<RideDetail> {
               .toJson(),
           image: list,
           iconSize: 2.h,
-           textField: widget.currentTripHistoryList.startAddress ?? "loading",
+           textField: startAddress ?? "loading",
            textOffset: [0.0, 2],
            textColor: Colors.black.value,
         ));
@@ -282,7 +282,7 @@ class _RideDetailState extends State<RideDetail> {
             .toJson(),
         image: list2,
         iconSize:  2.h,
-        textField: widget.currentTripHistoryList.endAddress ?? "loading",
+        textField: endAddress ?? "loading",
         textOffset: [0.0, 2],
         textColor: Colors.black.value,
       ));
@@ -309,14 +309,15 @@ class _RideDetailState extends State<RideDetail> {
         setState(() {
           startAddress = widget.currentTripHistoryList.startAddress;
         });
-      }else{
-        final snapshot = await _locationProvider.returnPlaceMarks(trip!.latitude, trip!.longitude);
-
+      }
+      else{
+        final snapshot = await _locationProvider.returnPlaceMarksString(trip!.latitude, trip!.longitude);
         if(snapshot != null){
-          _rideProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, tripId, "startAddress",  snapshot.name.toString());
+          _rideProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, tripId, "startAddress",  snapshot.toString());
           setState(() {
-            startAddress = snapshot.name.toString();
+            startAddress = snapshot.toString();
           });
+          await loadMarkerNew();
         }
       }
     }else{
@@ -326,13 +327,14 @@ class _RideDetailState extends State<RideDetail> {
         });
 
       }else{
-        final snapshot = await _locationProvider.returnPlaceMarks(trip!.latitude, trip!.longitude);
+        final snapshot = await _locationProvider.returnPlaceMarksString(trip!.latitude, trip!.longitude);
 
         if(snapshot != null){
-          _rideProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, tripId, "endAddress",  snapshot.name.toString());
+          _rideProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, tripId, "endAddress",  snapshot.toString());
           setState(() {
-            endAddress = snapshot.name.toString();
+            endAddress = snapshot.toString();
           });
+          await loadMarkerNew();
         }
       }
     }

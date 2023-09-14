@@ -79,11 +79,11 @@ class _LocationState extends State<Location> {
 
 
             selectedGeopoint != null ? FutureBuilder<dynamic>(
-                future: _locationProvider.returnPlaceMarks(selectedGeopoint!.latitude, selectedGeopoint!.longitude),
+                future: _locationProvider.returnPlaceMarksString(selectedGeopoint!.latitude, selectedGeopoint!.longitude),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Text(
-                      snapshot.data.name.toString(),
+                      snapshot.data.toString(),
                       style: EvieTextStyles.headlineB.copyWith( color: EvieColors.mediumLightBlack, height:1.2),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
@@ -96,7 +96,7 @@ class _LocationState extends State<Location> {
                   }
                 }
             )
-                : Text(_locationProvider.currentPlaceMark?.name ?? "Not available",
+                : Text(_locationProvider.currentPlaceMarkString ?? "Not available",
               style: EvieTextStyles.headlineB.copyWith( color: EvieColors.mediumLightBlack),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,

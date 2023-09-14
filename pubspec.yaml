@@ -68,7 +68,7 @@ dependencies:
   sign_in_with_apple: ^4.1.0
   crypto: ^3.0.1
   geolocator: ^9.0.2
-  geocoding: ^2.0.5
+  geocoding: ^2.1.0
   animated_text_kit: ^4.2.2
   upgrader: ^8.1.0
   wakelock_plus: ^1.1.1

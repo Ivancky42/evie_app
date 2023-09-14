@@ -151,7 +151,7 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
                                     : _bikeProvider.threatRoutesLists.values.elementAt(index).address != null && _bikeProvider.threatRoutesLists.values.elementAt(index).address != 'null'
                                     ? Text(_bikeProvider.threatRoutesLists.values.elementAt(index).address, style: EvieTextStyles.body18,)
                                     :  FutureBuilder<dynamic>(
-                                    future: _locationProvider.returnPlaceMarks(
+                                    future: _locationProvider.returnPlaceMarksString(
                                         _bikeProvider.threatRoutesLists.values.elementAt(index).geopoint.latitude,
                                         _bikeProvider.threatRoutesLists.values.elementAt(index).geopoint.longitude
                                     ),
@@ -160,9 +160,9 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
                                             _bikeProvider.uploadThreatRoutesAddressToFirestore(
                                             _bikeProvider.currentBikeModel!.location!.eventId!,
                                             _bikeProvider.threatRoutesLists.keys.elementAt(index),
-                                            snapshot.data.name.toString());
+                                            snapshot.data.toString());
                                         return Text(
-                                          snapshot.data.name.toString(),
+                                          snapshot.data.toString(),
                                           style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
                                         );
                                       }else{

@@ -192,7 +192,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                   Consumer<LocationProvider>(
                     builder: (context, locationProvider, child) {
                       return Text(
-                        locationProvider.currentPlaceMark?.name ?? 'Loading',
+                        locationProvider.currentPlaceMarkString ?? 'Loading',
                         style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack, height: 1.2),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
@@ -269,18 +269,14 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                         : data["address"] != null
                         ? Text(data["address"], style: EvieTextStyles.body18,)
                         : FutureBuilder<dynamic>(
-                        future: _locationProvider.returnPlaceMarks(
-                            data["geopoint"].latitude,
-                            data["geopoint"].longitude),
+                        future: _locationProvider.returnPlaceMarksString(data["geopoint"].latitude, data["geopoint"].longitude),
                         builder: (context, snapshot) {
-
                           if (snapshot.hasData) {
                             _bikeProvider.uploadPlaceMarkAddressToFirestore(
                                 _bikeProvider.currentBikeModel!.deviceIMEI!,
-                                documentSnapshots[index].id, snapshot.data
-                                .name.toString());
+                                documentSnapshots[index].id, snapshot.data.toString());
                             return Text(
-                              snapshot.data.name.toString(),
+                              snapshot.data.toString(),
                               style: EvieTextStyles.body18,
                             );
                           } else {

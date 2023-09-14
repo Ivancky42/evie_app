@@ -83,17 +83,22 @@ showConnectedToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            SvgPicture.asset("assets/icons/check.svg"),
-            SizedBox(width: 4.w,),
-            Text(
-              "Bike Connected.",
-              style: EvieTextStyles.toast,
-            ),
-          ],
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SvgPicture.asset("assets/icons/check.svg"),
+              SizedBox(width: 4.w,),
+              Text(
+                "Bike Connected.",
+                style: EvieTextStyles.toast,
+              ),
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 2),
@@ -108,17 +113,22 @@ showConnectingToast(context) {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10))
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            SvgPicture.asset("assets/icons/loading.svg"),
-            SizedBox(width: 4.w,),
-            Text(
-              "Connecting bike.",
-              style: EvieTextStyles.toast,
-            ),
-          ],
+      content:  GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child:SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SvgPicture.asset("assets/icons/loading.svg"),
+              SizedBox(width: 4.w,),
+              Text(
+                "Connecting bike.",
+                style: EvieTextStyles.toast,
+              ),
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 30),
@@ -137,20 +147,25 @@ showScanTimeoutToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
-            SizedBox(width: 4.w,),
-            Container(
-              width: 300.w,
-              child: Text(
-                "Fail to connect your bike. Please stay close to your bike and connect again.",
-                style: EvieTextStyles.toast,
-              ),
-            )
-          ],
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child:SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
+              SizedBox(width: 4.w,),
+              Container(
+                width: 300.w,
+                child: Text(
+                  "Fail to connect your bike. Please stay close to your bike and connect again.",
+                  style: EvieTextStyles.toast,
+                ),
+              )
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 2),
@@ -167,20 +182,25 @@ showScanErrorToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
-            SizedBox(width: 4.w,),
-            Container(
-              width: 300.w,
-              child: Text(
-                "Scan Error. Please re-enabled your bluetooth.",
-                style: EvieTextStyles.toast,
-              ),
-            )
-          ],
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child:SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
+              SizedBox(width: 4.w,),
+              Container(
+                width: 300.w,
+                child: Text(
+                  "Scan Error. Please re-enabled your bluetooth.",
+                  style: EvieTextStyles.toast,
+                ),
+              )
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 2),
@@ -197,20 +217,25 @@ showConnectErrorToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
-            SizedBox(width: 4.w,),
-            Container(
-              width: 300.w,
-              child: Text(
-                "Connect Error. Please try again.",
-                style: EvieTextStyles.toast,
-              ),
-            )
-          ],
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child:SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
+              SizedBox(width: 4.w,),
+              Container(
+                width: 300.w,
+                child: Text(
+                  "Connect Error. Please try again.",
+                  style: EvieTextStyles.toast,
+                ),
+              )
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 2),
@@ -227,20 +252,25 @@ showDisconnectedToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
-            SizedBox(width: 4.w,),
-            Container(
-              width: 300.w,
-              child: Text(
-                "Bike Disconnected.",
-                style: EvieTextStyles.toast,
-              ),
-            )
-          ],
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
+              SizedBox(width: 4.w,),
+              Container(
+                width: 300.w,
+                child: Text(
+                  "Bike Disconnected.",
+                  style: EvieTextStyles.toast,
+                ),
+              )
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 2),
@@ -258,18 +288,23 @@ showUnlockingToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            Container(
-              width: 300.w,
-              child: Text(
-                "Unlocking...",
-                style: EvieTextStyles.toast,
-              ),
-            )
-          ],
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Container(
+                width: 300.w,
+                child: Text(
+                  "Unlocking...",
+                  style: EvieTextStyles.toast,
+                ),
+              )
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 2),
@@ -286,18 +321,23 @@ showToLockBikeInstructionToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            Container(
-              width: 300.w,
-              child: Text(
-                "Bike is unlocked. To lock bike, pull the lock handle on the bike.",
-                style: EvieTextStyles.toast,
-              ),
-            )
-          ],
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Container(
+                width: 300.w,
+                child: Text(
+                  "Bike is unlocked. To lock bike, pull the lock handle on the bike.",
+                  style: EvieTextStyles.toast,
+                ),
+              )
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 5),
@@ -361,42 +401,47 @@ showUpgradePlanToast(context, SettingProvider settingProvider,[bool? isPop]){
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(12.w,0.h,12.w,12.h),
-            child: Container(
-              width: double.infinity,
-              child: Text(
-                "Limited access. Upgrade your plan to access this feature.",
-                style: EvieTextStyles.toast,
-              ),
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(12.w,0.h,12.w,12.h),
+              child: Container(
+                width: double.infinity,
+                child: Text(
+                  "Limited access. Upgrade your plan to access this feature.",
+                  style: EvieTextStyles.toast,
+                ),
 
+              ),
             ),
-          ),
-          Container(
-            //width: 170.w,
-            alignment: Alignment.bottomRight,
-            child: GestureDetector(
-              onTap: () {
-                if(isPop == true){
-                  settingProvider.changeSheetElement(SheetList.proPlan);
-                  showSheetNavigate(context);
-                }else{
-                  settingProvider.changeSheetElement(SheetList.proPlan);
-                }
-              },
-              child: Text(
-                "UNLOCK FEATURE NOW",
-                style: EvieTextStyles.body16.copyWith(
-                  color: EvieColors.strongPurple,
-                  fontWeight: FontWeight.w500,
+            Container(
+              //width: 170.w,
+              alignment: Alignment.bottomRight,
+              child: GestureDetector(
+                onTap: () {
+                  if(isPop == true){
+                    settingProvider.changeSheetElement(SheetList.proPlan);
+                    showSheetNavigate(context);
+                  }else{
+                    settingProvider.changeSheetElement(SheetList.proPlan);
+                  }
+                },
+                child: Text(
+                  "UNLOCK FEATURE NOW",
+                  style: EvieTextStyles.body16.copyWith(
+                    color: EvieColors.strongPurple,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       duration: const Duration(seconds: 2),
     ),
@@ -415,18 +460,23 @@ showControlAdmissionToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Column(
-          children: [
-            Container(
-              width: 300.w,
-              child: Text(
-                "Limited access. Upgrade your plan to access this feature.",
-                style: EvieTextStyles.toast,
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Column(
+            children: [
+              Container(
+                width: 300.w,
+                child: Text(
+                  "Limited access. Upgrade your plan to access this feature.",
+                  style: EvieTextStyles.toast,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 2),
@@ -443,20 +493,25 @@ showOnlyForProToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
-            SizedBox(width: 4.w,),
-            Container(
-              width: 300.w,
-              child: Text(
-                "This feature only available for pro plan user. You can upgrade your plan in setting page.",
-                style: EvieTextStyles.toast,
-              ),
-            )
-          ],
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
+              SizedBox(width: 4.w,),
+              Container(
+                width: 300.w,
+                child: Text(
+                  "This feature only available for pro plan user. You can upgrade your plan in setting page.",
+                  style: EvieTextStyles.toast,
+                ),
+              )
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 5),
@@ -473,18 +528,23 @@ showAccNoPermissionToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            Container(
-              width: 300.w,
-              child: Text(
-                "Your account doesn't have the permission to control this setting.",
-                style: EvieTextStyles.toast,
-              ),
-            )
-          ],
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Container(
+                width: 300.w,
+                child: Text(
+                  "Your account doesn't have the permission to control this setting.",
+                  style: EvieTextStyles.toast,
+                ),
+              )
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 5),
@@ -501,18 +561,23 @@ showResentEmailFailedToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            Container(
-              width: 300.w,
-              child: Text(
-                "You may request to resend email in another 30 seconds.",
-                style: EvieTextStyles.toast,
-              ),
-            )
-          ],
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Container(
+                width: 300.w,
+                child: Text(
+                  "You may request to resend email in another 30 seconds.",
+                  style: EvieTextStyles.toast,
+                ),
+              )
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 2),
@@ -529,17 +594,22 @@ showBikeAddSuccessfulToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            SvgPicture.asset("assets/icons/check.svg"),
-            SizedBox(width: 4.w,),
-            Text(
-              "'Bike added successfully!'",
-              style: EvieTextStyles.toast,
-            ),
-          ],
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SvgPicture.asset("assets/icons/check.svg"),
+              SizedBox(width: 4.w,),
+              Text(
+                "'Bike added successfully!'",
+                style: EvieTextStyles.toast,
+              ),
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 3),
@@ -556,18 +626,23 @@ showEVRemovedToast(context, String keyName) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            Container(
-              width: 300.w,
-              child: Text(
-                "${keyName} have been removed from your EV-Key list.",
-                style: EvieTextStyles.toast,
-              ),
-            )
-          ],
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Container(
+                width: 300.w,
+                child: Text(
+                  "${keyName} have been removed from your EV-Key list.",
+                  style: EvieTextStyles.toast,
+                ),
+              )
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 5),
@@ -584,20 +659,25 @@ showScanTimeOut(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
-            SizedBox(width: 4.w,),
-            Container(
-              width: 300.w,
-              child: Text(
-                "Fail to connect your bike. Please stay close to your bike and connect again.",
-                style: EvieTextStyles.toast,
-              ),
-            )
-          ],
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
+              SizedBox(width: 4.w,),
+              Container(
+                width: 300.w,
+                child: Text(
+                  "Fail to connect your bike. Please stay close to your bike and connect again.",
+                  style: EvieTextStyles.toast,
+                ),
+              )
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 2),

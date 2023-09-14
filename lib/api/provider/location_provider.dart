@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,7 @@ class LocationProvider extends ChangeNotifier {
   LocationModel? locationModel;
   //UserLocation? userPosition;
   Placemark? currentPlaceMark;
+  String? currentPlaceMarkString;
   PointAnnotation? selectedPointAnnotation;
   GeoPoint? selectedAnnotationGeopoint;
 
@@ -140,26 +142,43 @@ class LocationProvider extends ChangeNotifier {
 
     Placemark? holder;
     currentPlaceMark = null;
+    currentPlaceMarkString = null;
 
     try {
-      List<Placemark> placeMarks = await placemarkFromCoordinates(
-          latitude, longitude, localeIdentifier: "en");
+      List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude, localeIdentifier: "en");
 
       if (placeMarks.isNotEmpty) {
-        for (var element in placeMarks) {
-          holder = element;
-          break; // Exit the loop once a address is found
-        }
+        if (Platform.isAndroid) {
+          //holder = placeMarks[3];
 
-        currentPlaceMark = Placemark(
-          name : holder?.name?.replaceAll("NO HOUSE NUMBER, ", ""),
-        );
-      } else {
+          holder = placeMarks[0];
+          currentPlaceMark = Placemark(
+            name : holder?.name?.replaceAll("NO HOUSE NUMBER, ", ""),
+          );
+
+          currentPlaceMarkString = (holder.name!.replaceAll("NO HOUSE NUMBER, ", "").toString() == "" ? holder.name.toString() : holder.name.toString() + ', ') + holder.thoroughfare.toString();
+        }
+        else {
+          for (var element in placeMarks) {
+            holder = element;
+            break; // Exit the loop once a address is found
+          }
+
+          currentPlaceMark = Placemark(
+            name : holder?.name?.replaceAll("NO HOUSE NUMBER, ", ""),
+          );
+
+          currentPlaceMarkString = holder?.name?.replaceAll("NO HOUSE NUMBER, ", "");
+        }
+      }
+      else {
         currentPlaceMark = null;
+        currentPlaceMarkString = null;
       }
     }catch(error){
       debugPrint(error.toString());
       currentPlaceMark = null;
+      currentPlaceMarkString = null;
     }
 
     notifyListeners();
@@ -170,25 +189,69 @@ class LocationProvider extends ChangeNotifier {
     Placemark? placeMarkRenamed;
 
     try {
-      List<Placemark> placeMarks = await placemarkFromCoordinates(
-          latitude, longitude, localeIdentifier: "en");
+      List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude, localeIdentifier: "en");
+
       if (placeMarks.isNotEmpty) {
-        //placeMark = placeMarks[0];
-        for (var element in placeMarks) {
-          placeMark = element;
-          break; // Exit the loop once a address is found
+        if (Platform.isAndroid) {
+          placeMark = placeMarks[0];
+
+          placeMarkRenamed = Placemark(
+            name : placeMark?.name?.replaceAll("NO HOUSE NUMBER, ", ""),
+            thoroughfare: placeMark?.thoroughfare,
+          );
         }
-      } else {
-        placeMark = null;
+        else {
+          for (var element in placeMarks) {
+            placeMark = element;
+            break; // Exit the loop once a address is found
+          }
+
+          placeMarkRenamed = Placemark(
+            name : placeMark?.name?.replaceAll("NO HOUSE NUMBER, ", ""),
+          );
+        }
       }
-    }catch(error){
+      else {
+        placeMarkRenamed = null;
+      }
+    }
+    catch(error){
       debugPrint(error.toString());
       placeMark = null;
     }
 
-    placeMarkRenamed = Placemark(
-      name : placeMark?.name?.replaceAll("NO HOUSE NUMBER, ", ""),
-    );
+    return placeMarkRenamed;
+  }
+
+  Future<String?> returnPlaceMarksString(double latitude, double longitude) async {
+    Placemark? placeMark;
+    String? placeMarkRenamed;
+
+    try {
+      List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude, localeIdentifier: "en");
+
+      if (placeMarks.isNotEmpty) {
+        if (Platform.isAndroid) {
+          placeMark = placeMarks[0];
+          placeMarkRenamed = (placeMark.name!.replaceAll("NO HOUSE NUMBER, ", "").toString() == "" ? placeMark.name.toString() : placeMark.name.toString() + ', ') + placeMark.thoroughfare.toString();
+        }
+        else {
+          for (var element in placeMarks) {
+            placeMark = element;
+            break; // Exit the loop once a address is found
+          }
+
+          placeMarkRenamed = placeMark?.name!.replaceAll("NO HOUSE NUMBER, ", "");
+        }
+      }
+      else {
+        placeMarkRenamed = null;
+      }
+    }
+    catch(error){
+      debugPrint(error.toString());
+      placeMark = null;
+    }
 
     return placeMarkRenamed;
   }
