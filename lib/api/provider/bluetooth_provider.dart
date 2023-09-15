@@ -241,7 +241,6 @@ class BluetoothProvider extends ChangeNotifier {
           deviceConnectStream.add(DeviceConnectResult.scanning);
           notifyListeners();
         }
-
         if (device.name == currentBikeModel?.bleName) {
           print("Connecting.... cancelling timer");
           startScanTimer?.cancel();
@@ -282,11 +281,13 @@ class BluetoothProvider extends ChangeNotifier {
           deviceConnectStream.add(DeviceConnectResult.partialConnected);
           deviceConnectResult = DeviceConnectResult.partialConnected;
           currentConnectedDevice = currentBikeModel?.macAddr;
+          Future.delayed(Duration(seconds: 8), () {
+            if (deviceConnectResult == DeviceConnectResult.partialConnected) {
+              disconnectDevice();
+            }
+          });
           notifyListeners();
           discoverServices(currentBikeModel!.bleKey!);
-
-
-
           break;
         case DeviceConnectionState.disconnecting:
           deviceConnectStream.add(DeviceConnectResult.disconnecting);
@@ -840,9 +841,6 @@ class BluetoothProvider extends ChangeNotifier {
           chgBleNameResultListener.add(ChangeBleNameResult(decodedData));
           break;
         case BluetoothCommand.externalCableLock:
-          deviceConnectStream.add(DeviceConnectResult.connected);
-          deviceConnectResult = DeviceConnectResult.connected;
-
           if (cableLockState == null) {
             cableLockResult.add(CableLockResult(decodedData));
             cableLockState = CableLockResult(decodedData);
@@ -863,6 +861,9 @@ class BluetoothProvider extends ChangeNotifier {
           if(iotInfoModel != null && iotInfoModel?.firmwareVer != null){
             checkIsCurrentVersion(iotInfoModel!.firmwareVer!);
           }
+
+          deviceConnectStream.add(DeviceConnectResult.connected);
+          deviceConnectResult = DeviceConnectResult.connected;
 
           notifyListeners();
           break;
