@@ -85,7 +85,7 @@ showConnectedToast(context) {
       ),
       content: GestureDetector(
         onTap: () {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
         },
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,

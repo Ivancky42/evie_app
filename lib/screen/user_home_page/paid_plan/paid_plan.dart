@@ -49,11 +49,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
-  late SettingProvider _settingProvider;
-
   bool isActionBarAppear = false;
-
-  CableLockResult? cableLockState;
   DeviceConnectResult? deviceConnectResult;
 
   @override
@@ -73,10 +69,8 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
-    _settingProvider = Provider.of<SettingProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
-    cableLockState = _bluetoothProvider.cableLockState;
 
     return WillPopScope(
       onWillPop: () async {

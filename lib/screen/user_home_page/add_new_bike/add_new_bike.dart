@@ -53,8 +53,6 @@ class _AddNewBikeState extends State<AddNewBike> {
 
 
   DeviceConnectResult? deviceConnectResult;
-  CableLockResult? cableLockState;
-
   SvgPicture? connectImage;
   SvgPicture? lockImage;
 
@@ -106,7 +104,6 @@ class _AddNewBikeState extends State<AddNewBike> {
     _notificationProvider = Provider.of<NotificationProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
-    cableLockState = _bluetoothProvider.cableLockState;
 
 
     return WillPopScope(

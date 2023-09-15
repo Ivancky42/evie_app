@@ -514,6 +514,14 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, Bluetoo
   }
 }
 
+getCurrentBikeStatusIcon2(LockState? lockState) {
+  if (lockState == LockState.unlock) {
+    return "assets/buttons/bike_security_unlock.svg";
+  } else {
+    return "assets/buttons/bike_security_lock_and_secure_black.svg";
+  }
+}
+
 getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
 
   if (bikeProvider.userBikePlans.isNotEmpty) {
@@ -575,21 +583,24 @@ getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bike
 getCurrentBikeStatusString2(BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
   if (bikeProvider.currentBikeModel!.location?.isConnected == false) {
     return "Connection Lost";
-  } else {
+  }
+  else {
     switch (bikeProvider.currentBikeModel!.location!.status) {
       case 'safe':
         {
           if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
             if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
               return "Unlocked";
-            } else {
+            }
+            else {
               return "Locked & Secured";
             }
           }
           else {
             if (bikeProvider.currentBikeModel!.isLocked == false) {
               return "Unlocked";
-            } else {
+            }
+            else {
               return "Locked & Secured";
             }
           }
@@ -605,6 +616,76 @@ getCurrentBikeStatusString2(BikeProvider bikeProvider, BluetoothProvider bluetoo
       default:
         return "-";
     }
+  }
+}
+
+getCurrentBikeStatusString3(BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
+  if (bikeProvider.currentBikeModel!.location?.isConnected == false) {
+    return "Connection Lost";
+  }
+  else {
+    if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
+      ///Bike connected with bluetooth
+      switch (bikeProvider.currentBikeModel!.location!.status) {
+        case 'safe':
+          if (bluetoothProvider.cableLockState?.lockState == LockState.unlock && bikeProvider.currentBikeModel?.isLocked == false) {
+            return "Unlocked";
+          }
+          else if (bluetoothProvider.cableLockState?.lockState == LockState.lock && bikeProvider.currentBikeModel?.isLocked == true) {
+            return "Locked & Secured";
+          }
+          else {
+            if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+              return "Unlocked";
+            }
+            else {
+              return "Locked & Secured";
+            }
+            //return 'Loading';
+          }
+        case 'warning':
+          return "Movement Detected";
+        case 'danger':
+          return "Under Threat";
+        case 'fall':
+          return "Fall Detected";
+        case 'crash':
+          return "Crash Alert";
+        default:
+          return "-";
+      }
+    }
+    else {
+      ///Bike not connect with bluetooth
+      switch (bikeProvider.currentBikeModel!.location!.status) {
+        case 'safe':
+          if (bikeProvider.currentBikeModel!.isLocked == false) {
+            return "Unlocked";
+          }
+          else {
+            return "Locked & Secured";
+          }
+        case 'warning':
+          return "Movement Detected";
+        case 'danger':
+          return "Under Threat";
+        case 'fall':
+          return "Fall Detected";
+        case 'crash':
+          return "Crash Alert";
+        default:
+          return "-";
+      }
+    }
+  }
+}
+
+getCurrentBikeStatusString4(LockState? lockState) {
+  if (lockState == LockState.unlock) {
+    return "Unlocked";
+  }
+  else if (lockState == LockState.lock){
+    return "Locked & Secured";
   }
 }
 

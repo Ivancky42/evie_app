@@ -840,10 +840,23 @@ class BluetoothProvider extends ChangeNotifier {
           chgBleNameResultListener.add(ChangeBleNameResult(decodedData));
           break;
         case BluetoothCommand.externalCableLock:
-          cableLockResult.add(CableLockResult(decodedData));
-          cableLockState = CableLockResult(decodedData);
           deviceConnectStream.add(DeviceConnectResult.connected);
           deviceConnectResult = DeviceConnectResult.connected;
+
+          if (cableLockState == null) {
+            cableLockResult.add(CableLockResult(decodedData));
+            cableLockState = CableLockResult(decodedData);
+          }
+          else {
+            var tempCableLockResult = CableLockResult(decodedData);
+            if (cableLockState?.lockState == tempCableLockResult.lockState) {
+
+            }
+            else {
+              cableLockResult.add(CableLockResult(decodedData));
+              cableLockState = CableLockResult(decodedData);
+            }
+          }
 
 
           ///Compare bluetooth firmware version and firestore bike firmware version

@@ -47,7 +47,6 @@ class _BikeSettingState extends State<BikeSetting> {
   late BluetoothProvider _bluetoothProvider;
 
   DeviceConnectResult? deviceConnectResult;
-  CableLockResult? cableLockState;
   StreamController? connectStream;
 
   Widget? buttonImage;
@@ -111,7 +110,6 @@ class _BikeSettingState extends State<BikeSetting> {
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
-    cableLockState = _bluetoothProvider.cableLockState;
 
     setButtonImage();
 

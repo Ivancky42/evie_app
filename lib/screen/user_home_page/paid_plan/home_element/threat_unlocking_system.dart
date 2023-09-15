@@ -40,7 +40,6 @@ class _ThreatUnlockingSystemState extends State<ThreatUnlockingSystem> {
   late BluetoothProvider _bluetoothProvider;
 
   DeviceConnectResult? deviceConnectResult;
-  CableLockResult? cableLockState;
 
   Widget? buttonImage;
 
@@ -62,7 +61,6 @@ class _ThreatUnlockingSystemState extends State<ThreatUnlockingSystem> {
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
-    cableLockState = _bluetoothProvider.cableLockState;
 
     return EvieCard(
       child: Column(

@@ -179,11 +179,73 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SvgPicture.asset(getCurrentBikeStatusIcon(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),),
-                  Consumer2<BikeProvider, BluetoothProvider>(
+                  //SvgPicture.asset(getCurrentBikeStatusIcon(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),),
+                    _bikeProvider.currentBikeModel?.location?.status == 'safe' && _bikeProvider.currentBikeModel?.location?.isConnected == true ?
+                    _bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
+                    Selector<BluetoothProvider, LockState?>(
+                      selector: (context, bluetoothProvider) => bluetoothProvider.cableLockState?.lockState,
+                      builder: (context, lockState, child) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SvgPicture.asset(getCurrentBikeStatusIcon2(lockState)),
+                            Text(
+                              getCurrentBikeStatusString4(lockState),
+                              style: EvieTextStyles.headlineB.copyWith(
+                                color: EvieColors.darkGray,
+                                height: 1.22,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ) :
+                    // Consumer<BluetoothProvider>(
+                    //   builder: (context, bluetoothProvider, child) {
+                    //     return Column(
+                    //       mainAxisAlignment: MainAxisAlignment.end,
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         SvgPicture.asset(getCurrentBikeStatusIcon2(_bluetoothProvider.cableLockState),),
+                    //         Text(getCurrentBikeStatusString4(_bluetoothProvider.cableLockState),
+                    //           style: EvieTextStyles.headlineB.copyWith(
+                    //               color: EvieColors.darkGray, height: 1.22),),
+                    //       ],
+                    //     );
+                    //   }
+                    // ) :
+                    Consumer2<BikeProvider, BluetoothProvider>(
+                      builder: (context, bikeProvider, bluetoothProvider, child) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SvgPicture.asset(getCurrentBikeStatusIcon(bikeProvider.currentBikeModel!, bikeProvider, bluetoothProvider),),
+                            Text(getCurrentBikeStatusString3(
+                                bikeProvider, bluetoothProvider),
+                              style: EvieTextStyles.headlineB.copyWith(
+                                  color: EvieColors.darkGray, height: 1.22),),
+                          ],
+                        );
+                      },
+                    ) :
+                    Consumer2<BikeProvider, BluetoothProvider>(
                     builder: (context, bikeProvider, bluetoothProvider, child) {
-                      return Text(getCurrentBikeStatusString2(bikeProvider, bluetoothProvider),
-                        style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray, height: 1.22),);
+                      // return Text(getCurrentBikeStatusString2(bikeProvider, bluetoothProvider),
+                      //   style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray, height: 1.22),);
+
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SvgPicture.asset(getCurrentBikeStatusIcon(bikeProvider.currentBikeModel!, bikeProvider, bluetoothProvider),),
+                          Text(getCurrentBikeStatusString3(
+                              bikeProvider, bluetoothProvider),
+                            style: EvieTextStyles.headlineB.copyWith(
+                                color: EvieColors.darkGray, height: 1.22),),
+                        ],
+                      );
                     },
                   ),
                   // Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
