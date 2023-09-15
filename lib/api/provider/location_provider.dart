@@ -46,8 +46,11 @@ class LocationProvider extends ChangeNotifier {
 
     if (locationModel != null) {
       if (this.locationModel != locationModel) {
+        if (this.locationModel?.geopoint != locationModel.geopoint) {
+          getPlaceMarks(locationModel.geopoint.latitude,
+              locationModel.geopoint.longitude);
+        }
         this.locationModel = locationModel;
-        getPlaceMarks(locationModel.geopoint.latitude, locationModel.geopoint.longitude);
       }
     }
 

@@ -251,10 +251,22 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                   // Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
                   //   style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray, height: 1.22),),
 
-                  Consumer<LocationProvider>(
-                    builder: (context, locationProvider, child) {
+                  // Consumer<LocationProvider>(
+                  //   builder: (context, locationProvider, child) {
+                  //     return Text(
+                  //       locationProvider.currentPlaceMarkString ?? 'Loading',
+                  //       style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack, height: 1.2),
+                  //       overflow: TextOverflow.ellipsis,
+                  //       maxLines: 2,
+                  //     );
+                  //   },
+                  // ),
+
+                  Selector<LocationProvider, String?>(
+                    selector: (context, locationProvider) => _locationProvider.currentPlaceMarkString,
+                    builder: (context, currentPlaceMarkString, child) {
                       return Text(
-                        locationProvider.currentPlaceMarkString ?? 'Loading',
+                        currentPlaceMarkString ?? 'Loading',
                         style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack, height: 1.2),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
