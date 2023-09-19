@@ -15,7 +15,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as url;
 
 import '../../../api/enumerate.dart';
 import '../../../api/function.dart';
@@ -23,6 +23,7 @@ import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/notification_provider.dart';
 import '../../../bluetooth/modelResult.dart';
+import '../../../main.dart';
 
 class AccountContainer extends StatefulWidget {
   final AccountModel accountModel;
@@ -412,7 +413,6 @@ class _AccountContainerState extends State<AccountContainer> {
                   ),
                   onPressed: ()  async {
 
-                    _notificationProvider.showNotification(FlutterLocalNotificationsPlugin(), 'EV -Key added', 'someone added');
                   },
 
                   style: ElevatedButton.styleFrom(

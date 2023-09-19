@@ -134,8 +134,8 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    DarwinInitializationSettings initializationSettingsIOS =
-    DarwinInitializationSettings(
+    IOSInitializationSettings initializationSettingsIOS =
+        IOSInitializationSettings(
             requestSoundPermission: false,
             onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
@@ -145,13 +145,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     );
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        //onSelectNotification: onSelectNotification
-
-
-      ///Version 15
-      // onDidReceiveBackgroundNotificationResponse: onSelectNotification,
-      //   onDidReceiveNotificationResponse: onSelectNotification
-    );
+        onSelectNotification: onSelectNotification);
   }
 
   ///Android foreground message handler
