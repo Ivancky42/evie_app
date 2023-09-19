@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,15 +30,40 @@ class UnlockingSystem extends StatefulWidget {
   State<UnlockingSystem> createState() => _UnlockingSystemState();
 }
 
-class _UnlockingSystemState extends State<UnlockingSystem> {
+class _UnlockingSystemState extends State<UnlockingSystem> with WidgetsBindingObserver {
 
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
 
   DeviceConnectResult? deviceConnectResult;
   CableLockResult? cableLockState;
-
   Widget? buttonImage;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // Register the observer
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    // Unregister the observer to prevent memory leaks
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      if (deviceConnectResult == DeviceConnectResult.connected &&
+          _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr) {
+        _bluetoothProvider.getCableLockStatus();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -170,7 +196,7 @@ class _UnlockingSystemState extends State<UnlockingSystem> {
             SizedBox(
               height: 12.h,
             ),
-            if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning) ...{
+            if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning || deviceConnectResult == DeviceConnectResult.partialConnected) ...{
               Text(
                 "Connecting bike",
                 style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
