@@ -56,10 +56,17 @@ class RideProvider extends ChangeNotifier {
 
   late String rideDataTypeString;
   late String rideDataString;
+  late String rideDataDayString = "";
+  late String rideDataWeekString = "";
+  late String rideDataMonthString = "";
+  late String rideDataYearString = "";
   late String rideDataUnit;
 
   late List<ChartData> chartData = [];
   late List<DayTimeChartData> dayTimeChartData = [];
+  late List<ChartData> weekTimeChartData = [];
+  late List<ChartData> monthTimeChartData = [];
+  late List<ChartData> yearTimeChartData = [];
 
   int selectedIndex = -1;
   RideFormat rideFormat = RideFormat.day;
@@ -86,16 +93,16 @@ class RideProvider extends ChangeNotifier {
   setRideData(RideDataType rideDataType, RideFormat rideFormat, DateTime pickedDate) {
     switch (rideFormat) {
       case RideFormat.day:
-        setRideDataType(rideDataType, dayRideHistoryList);
+        setRideDataType(rideDataType, dayRideHistoryList, rideFormat);
         break;
       case RideFormat.week:
-        setRideDataType(rideDataType, weekRideHistoryList);
+        setRideDataType(rideDataType, weekRideHistoryList, rideFormat);
         break;
       case RideFormat.month:
-        setRideDataType(rideDataType, monthRideHistoryList);
+        setRideDataType(rideDataType, monthRideHistoryList, rideFormat);
         break;
       case RideFormat.year:
-        setRideDataType(rideDataType, yearRideHistoryList);
+        setRideDataType(rideDataType, yearRideHistoryList, rideFormat);
         break;
       default:
         print('It\'s the weekend or an unknown day.');
@@ -231,11 +238,11 @@ class RideProvider extends ChangeNotifier {
     // Calculate the start of the current week (Monday)
     DateTime startOfWeek = pickedDate.subtract(Duration(days: pickedDate.weekday - 1));
     startOfWeek = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
-    print('Start of Week : ' + startOfWeek.toString());
+    //print('Start of Week : ' + startOfWeek.toString());
 
     // Calculate the end of the desired week (Sunday)
     DateTime endOfWeek = startOfWeek.add(Duration(days: 7));
-    print('End of Week : ' + endOfWeek.toString());
+    //print('End of Week : ' + endOfWeek.toString());
 
     // Filtering trip history within the desired week
     currentTripHistoryLists.forEach((key, trip) {
@@ -253,7 +260,7 @@ class RideProvider extends ChangeNotifier {
     });
 
     for (var trip in weekRideHistoryList) {
-      print('Filtered Trip - Start Time: ${trip.startTime}, End Time: ${trip.endTime}');
+      //print('Filtered Trip - Start Time: ${trip.startTime}, End Time: ${trip.endTime}');
     }
 
     weekRideHistoryList.sort((a, b) => b.startTime!.toDate().compareTo(a.startTime!.toDate()));
@@ -280,7 +287,7 @@ class RideProvider extends ChangeNotifier {
     });
 
     for (var trip in monthRideHistoryList) {
-      print('Filtered Trip - Start Time: ${trip.startTime}, End Time: ${trip.endTime}');
+      //print('Filtered Trip - Start Time: ${trip.startTime}, End Time: ${trip.endTime}');
     }
 
     monthRideHistoryList.sort((a, b) => b.startTime!.toDate().compareTo(a.startTime!.toDate()));
@@ -307,21 +314,43 @@ class RideProvider extends ChangeNotifier {
     });
 
     for (var trip in yearRideHistoryList) {
-      print('Filtered Trip - Start Time: ${trip.startTime}, End Time: ${trip.endTime}');
+      //print('Filtered Trip - Start Time: ${trip.startTime}, End Time: ${trip.endTime}');
     }
 
     notifyListeners();
   }
 
-  setRideDataType(RideDataType rideDataType, List<TripHistoryModel> tripHistoryList) {
+  setRideDataType(RideDataType rideDataType, List<TripHistoryModel> tripHistoryList, RideFormat rideFormat,) {
     if (rideDataType == RideDataType.mileage) {
       rideDataTypeString = 'Mileage';
       if (measurementSetting == MeasurementSetting.metricSystem) {
-        rideDataString = (tripHistoryList.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()) / 1000).toStringAsFixed(2);
+        if (rideFormat == RideFormat.day) {
+          rideDataDayString = (tripHistoryList.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()) / 1000).toStringAsFixed(2);
+        }
+        else if (rideFormat == RideFormat.week) {
+          rideDataWeekString = (tripHistoryList.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()) / 1000).toStringAsFixed(2);
+        }
+        else if (rideFormat == RideFormat.month) {
+          rideDataMonthString = (tripHistoryList.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()) / 1000).toStringAsFixed(2);
+        }
+        else if (rideFormat == RideFormat.year) {
+          rideDataYearString = (tripHistoryList.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()) / 1000).toStringAsFixed(2);
+        }
         rideDataUnit = " km";
       }
       else {
-        rideDataString = SettingProvider().convertMeterToMilesInString(tripHistoryList.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()));
+        if (rideFormat == RideFormat.day) {
+          rideDataDayString = SettingProvider().convertMeterToMilesInString(tripHistoryList.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()));
+        }
+        else if (rideFormat == RideFormat.week) {
+          rideDataWeekString = SettingProvider().convertMeterToMilesInString(tripHistoryList.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()));
+        }
+        else if (rideFormat == RideFormat.month) {
+          rideDataMonthString = SettingProvider().convertMeterToMilesInString(tripHistoryList.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()));
+        }
+        else if (rideFormat == RideFormat.year) {
+          rideDataYearString = SettingProvider().convertMeterToMilesInString(tripHistoryList.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()));
+        }
         rideDataUnit = " miles";
       }
       this.rideDataType = rideDataType;
@@ -329,15 +358,38 @@ class RideProvider extends ChangeNotifier {
     else if (rideDataType == RideDataType.noOfRide) {
       rideDataTypeString = 'No. of Rides';
       this.rideDataType = rideDataType;
-      rideDataString = tripHistoryList.length.toStringAsFixed(0);
+      if (rideFormat == RideFormat.day) {
+        rideDataDayString = tripHistoryList.length.toStringAsFixed(0);
+      }
+      else if (rideFormat == RideFormat.week) {
+        rideDataWeekString = tripHistoryList.length.toStringAsFixed(0);
+      }
+      else if (rideFormat == RideFormat.month) {
+        rideDataMonthString = tripHistoryList.length.toStringAsFixed(0);
+      }
+      else if (rideFormat == RideFormat.year) {
+        rideDataYearString = tripHistoryList.length.toStringAsFixed(0);
+      }
       rideDataUnit = " rides ";
     }
     else if (rideDataType == RideDataType.carbonFootprint) {
       rideDataTypeString = 'CO2 Saved';
       this.rideDataType = rideDataType;
-      rideDataString = thousandFormatting((tripHistoryList.fold<int>(0, (prev, element) => prev + element.carbonPrint!)));
+      if (rideFormat == RideFormat.day) {
+        rideDataDayString = thousandFormatting((tripHistoryList.fold<int>(0, (prev, element) => prev + element.carbonPrint!)));
+      }
+      else if (rideFormat == RideFormat.week) {
+        rideDataWeekString = thousandFormatting((tripHistoryList.fold<int>(0, (prev, element) => prev + element.carbonPrint!)));
+      }
+      else if (rideFormat == RideFormat.month) {
+        rideDataMonthString = thousandFormatting((tripHistoryList.fold<int>(0, (prev, element) => prev + element.carbonPrint!)));
+      }
+      else if (rideFormat == RideFormat.year) {
+        rideDataYearString = thousandFormatting((tripHistoryList.fold<int>(0, (prev, element) => prev + element.carbonPrint!)));
+      }
       rideDataUnit = " g";
     }
+    notifyListeners();
   }
 
   setWeekRideDataType(RideDataType rideDataType) {
@@ -378,36 +430,10 @@ class RideProvider extends ChangeNotifier {
         dayRideHistoryList.clear();
         await getDayRideHistory(pickedDate);
 
-        for(int i = 0; i <= 23; i ++){
-          dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, i, 00), 0)));
+        for(int i = 0; i <= 23; i ++) {
+          dayTimeChartData.add((DayTimeChartData(DateTime(
+              pickedDate.year, pickedDate.month, pickedDate.day, i, 00), 0)));
         }
-
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 0, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 1, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 2, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 3, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 4, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 5, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 6, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 7, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 7, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 8, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 8, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 9, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 9, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 10, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 10, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 11, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 11, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 12, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 12, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 13, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 13, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 14, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 14, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 15, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 15, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 16, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 16, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 17, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 17, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 18, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 18, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 19, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 19, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 20, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 20, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 21, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 21, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 22, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 22, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 23, 00), 0)));
-        // dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 23, 00), DateTime(pickedDate.year, pickedDate.month, pickedDate.day, 0, 00), 0)));
-
-
         notifyListeners();
         for (var trip in dayRideHistoryList) {
           //print('Filtered Trip - Start Time: ${trip.startTime}, End Time: ${trip.endTime}');
@@ -435,111 +461,111 @@ class RideProvider extends ChangeNotifier {
         notifyListeners();
         return;
       case RideFormat.week:
-        chartData.clear();
+        weekTimeChartData.clear();
         weekRideHistoryList.clear();
         await getWeekRideHistory(pickedDate);
 
         DateTime startOfWeek = pickedDate.subtract(Duration(days: pickedDate.weekday - 1));
         startOfWeek = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
-        print('Start of Week : ' + startOfWeek.toString());
+        //print('Start of Week : ' + startOfWeek.toString());
 
         for(int i = 0; i <= 6; i ++){
-          chartData.add((ChartData(startOfWeek.add(Duration(days: i)), 0)));
+          weekTimeChartData.add((ChartData(startOfWeek.add(Duration(days: i)), 0)));
         }
 
         for (var trip in weekRideHistoryList) {
           //print('Filtered Trip - Start Time: ${trip.startTime}, End Time: ${trip.endTime}');
           if (rideDataType == RideDataType.mileage) {
             //chartData.add(ChartData(trip.startTime?.toDate(), trip.distance?.toDouble()));
-            if (trip.startTime!.toDate().weekday == chartData[trip.startTime!.toDate().weekday - 1].x.weekday) {
-              var tripDistance = trip.distance!.toDouble() + chartData[trip.startTime!.toDate().weekday - 1].y;
-              chartData[trip.startTime!.toDate().weekday - 1] = ChartData(trip.startTime?.toDate(), tripDistance);
+            if (trip.startTime!.toDate().weekday == weekTimeChartData[trip.startTime!.toDate().weekday - 1].x.weekday) {
+              var tripDistance = trip.distance!.toDouble() + weekTimeChartData[trip.startTime!.toDate().weekday - 1].y;
+              weekTimeChartData[trip.startTime!.toDate().weekday - 1] = ChartData(trip.startTime?.toDate(), tripDistance);
             }
           }
           else if (rideDataType == RideDataType.noOfRide) {
             //chartData[trip.startTime!.toDate().weekday - 1] = ChartData(trip.startTime?.toDate(), 1000);
 
-            if (trip.startTime!.toDate().weekday == chartData[trip.startTime!.toDate().weekday - 1].x.weekday) {
-              var noOfRides = 1000 + chartData[trip.startTime!.toDate().weekday - 1].y;
-              chartData[trip.startTime!.toDate().weekday - 1] = ChartData(trip.startTime?.toDate(), noOfRides);
+            if (trip.startTime!.toDate().weekday == weekTimeChartData[trip.startTime!.toDate().weekday - 1].x.weekday) {
+              var noOfRides = 1000 + weekTimeChartData[trip.startTime!.toDate().weekday - 1].y;
+              weekTimeChartData[trip.startTime!.toDate().weekday - 1] = ChartData(trip.startTime?.toDate(), noOfRides);
             }
           }
           else if (rideDataType == RideDataType.carbonFootprint) {
             //chartData[trip.startTime!.toDate().weekday - 1] = ChartData(trip.startTime?.toDate(), trip.carbonPrint! * 1000);
-            if (trip.startTime!.toDate().weekday == chartData[trip.startTime!.toDate().weekday - 1].x.weekday) {
-              var carbonFP = (trip.carbonPrint!.toDouble() * 1000) + chartData[trip.startTime!.toDate().weekday - 1].y;
-              chartData[trip.startTime!.toDate().weekday - 1] = ChartData(trip.startTime?.toDate(), carbonFP);
+            if (trip.startTime!.toDate().weekday == weekTimeChartData[trip.startTime!.toDate().weekday - 1].x.weekday) {
+              var carbonFP = (trip.carbonPrint!.toDouble() * 1000) + weekTimeChartData[trip.startTime!.toDate().weekday - 1].y;
+              weekTimeChartData[trip.startTime!.toDate().weekday - 1] = ChartData(trip.startTime?.toDate(), carbonFP);
             }
           }
         }
-        chartData.sort((a, b) => a.x.compareTo(b.x));
+        weekTimeChartData.sort((a, b) => a.x.compareTo(b.x));
         notifyListeners();
         return;
       case RideFormat.month:
-        chartData.clear();
+        monthTimeChartData.clear();
         monthRideHistoryList.clear();
         await getMonthRideHistory(pickedDate);
 
         for(int i = 1; i <= 31; i ++){
           //chartData.add((ChartData(pickedDate.add(Duration(days: i)), 0)));
-          chartData.add((ChartData(DateTime(pickedDate!.year, pickedDate!.month, i), 0)));
+          monthTimeChartData.add((ChartData(DateTime(pickedDate!.year, pickedDate!.month, i), 0)));
         }
 
         for (var trip in monthRideHistoryList) {
           //print('Filtered Trip - Start Time: ${trip.startTime}, End Time: ${trip.endTime}');
           if (rideDataType == RideDataType.mileage) {
-            if (trip.startTime!.toDate().day == chartData[trip.startTime!.toDate().day - 1].x.day) {
-              var tripDistance = trip.distance!.toDouble() + chartData[trip.startTime!.toDate().day - 1].y;
-              chartData[trip.startTime!.toDate().day - 1] = ChartData(trip.startTime?.toDate(), tripDistance);
+            if (trip.startTime!.toDate().day == monthTimeChartData[trip.startTime!.toDate().day - 1].x.day) {
+              var tripDistance = trip.distance!.toDouble() + monthTimeChartData[trip.startTime!.toDate().day - 1].y;
+              monthTimeChartData[trip.startTime!.toDate().day - 1] = ChartData(trip.startTime?.toDate(), tripDistance);
             }
           }
           else if (rideDataType == RideDataType.noOfRide) {
-            if (trip.startTime!.toDate().day == chartData[trip.startTime!.toDate().day - 1].x.day) {
-              var noOfRide = 1000 + chartData[trip.startTime!.toDate().day - 1].y;
-              chartData[trip.startTime!.toDate().day - 1] = ChartData(trip.startTime?.toDate(), noOfRide);
+            if (trip.startTime!.toDate().day == monthTimeChartData[trip.startTime!.toDate().day - 1].x.day) {
+              var noOfRide = 1000 + monthTimeChartData[trip.startTime!.toDate().day - 1].y;
+              monthTimeChartData[trip.startTime!.toDate().day - 1] = ChartData(trip.startTime?.toDate(), noOfRide);
             }
           }
           else if (rideDataType == RideDataType.carbonFootprint) {
-            if (trip.startTime!.toDate().day == chartData[trip.startTime!.toDate().day - 1].x.day) {
-              var carbonFP = (trip.carbonPrint!.toDouble() * 1000) + chartData[trip.startTime!.toDate().day - 1].y;
-              chartData[trip.startTime!.toDate().day - 1] = ChartData(trip.startTime?.toDate(), carbonFP);
+            if (trip.startTime!.toDate().day == monthTimeChartData[trip.startTime!.toDate().day - 1].x.day) {
+              var carbonFP = (trip.carbonPrint!.toDouble() * 1000) + monthTimeChartData[trip.startTime!.toDate().day - 1].y;
+              monthTimeChartData[trip.startTime!.toDate().day - 1] = ChartData(trip.startTime?.toDate(), carbonFP);
             }
           }
         }
-        chartData.sort((a, b) => a.x.compareTo(b.x));
+        monthTimeChartData.sort((a, b) => a.x.compareTo(b.x));
         notifyListeners();
         return;
       case RideFormat.year:
-        chartData.clear();
+        yearTimeChartData.clear();
         yearRideHistoryList.clear();
         await getYearRideHistory(pickedDate.year);
 
         for(int i = 1; i <= 12; i ++){
-          chartData.add((ChartData(DateTime(pickedDate!.year, i, 1), 0)));
+          yearTimeChartData.add((ChartData(DateTime(pickedDate!.year, i, 1), 0)));
         }
 
         for (var trip in yearRideHistoryList) {
           if (rideDataType == RideDataType.mileage) {
-            if (trip.startTime!.toDate().month == chartData[trip.startTime!.toDate().month - 1].x.month) {
-              var tripDistance = trip.distance!.toDouble() + chartData[trip.startTime!.toDate().month - 1].y;
-              chartData[trip.startTime!.toDate().month - 1] = ChartData(trip.startTime?.toDate(), tripDistance);
+            if (trip.startTime!.toDate().month == yearTimeChartData[trip.startTime!.toDate().month - 1].x.month) {
+              var tripDistance = trip.distance!.toDouble() + yearTimeChartData[trip.startTime!.toDate().month - 1].y;
+              yearTimeChartData[trip.startTime!.toDate().month - 1] = ChartData(trip.startTime?.toDate(), tripDistance);
             }
           }
           else if (rideDataType == RideDataType.noOfRide) {
-            if (trip.startTime!.toDate().month == chartData[trip.startTime!.toDate().month - 1].x.month) {
-              var noOfRide = 1000 + chartData[trip.startTime!.toDate().month - 1].y;
-              chartData[trip.startTime!.toDate().month - 1] = ChartData(trip.startTime?.toDate(), noOfRide);
+            if (trip.startTime!.toDate().month == yearTimeChartData[trip.startTime!.toDate().month - 1].x.month) {
+              var noOfRide = 1000 + yearTimeChartData[trip.startTime!.toDate().month - 1].y;
+              yearTimeChartData[trip.startTime!.toDate().month - 1] = ChartData(trip.startTime?.toDate(), noOfRide);
             }
           }
           else if (rideDataType == RideDataType.carbonFootprint) {
-            if (trip.startTime!.toDate().month == chartData[trip.startTime!.toDate().month - 1].x.month) {
+            if (trip.startTime!.toDate().month == yearTimeChartData[trip.startTime!.toDate().month - 1].x.month) {
               var carbonFP = (trip.carbonPrint!.toDouble() * 1000) + chartData[trip.startTime!.toDate().month - 1].y;
-              chartData[trip.startTime!.toDate().month - 1] = ChartData(trip.startTime?.toDate(), carbonFP);
+              yearTimeChartData[trip.startTime!.toDate().month - 1] = ChartData(trip.startTime?.toDate(), carbonFP);
             }
           }
         }
 
-        chartData.sort((a, b) => a.x.compareTo(b.x));
+        yearTimeChartData.sort((a, b) => a.x.compareTo(b.x));
         notifyListeners();
         return;
     }

@@ -62,7 +62,6 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
     try {
       pickedDate = DateTime.now();
       filterDateByRideFormat(pickedDate!);
-      //await _rideProvider.getTripHistory();
 
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (widget.format == RideFormat.day) {
@@ -83,13 +82,12 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
         }
       });
       await _rideProvider.getChartData(widget.format, pickedDate!);
-    } catch (error) {
-      // Handle error if needed
-      print('Error loading trip history: $error');
-    } finally {
       setState(() {
         _isLoading = false; // Set loading state to false when done
       });
+    } catch (error) {
+      // Handle error if needed
+      print('Error loading trip history: $error');
     }
   }
 
@@ -98,8 +96,9 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
     _rideProvider = Provider.of<RideProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
-    return _isLoading ? Center(child: CircularProgressIndicator(color: EvieColors.primaryColor,),)
-        : SingleChildScrollView(
+    return _isLoading ?
+            Center(child: CircularProgressIndicator(color: EvieColors.primaryColor,),) :
+            SingleChildScrollView(
       physics:const BouncingScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +113,18 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
               children: [
                 Row(
                   children: [
-                    Text(_rideProvider.rideDataString, style: EvieTextStyles.display,),
+                    Text(
+                      widget.format == RideFormat.day ?
+                      _rideProvider.rideDataDayString :
+                      widget.format == RideFormat.week ?
+                      _rideProvider.rideDataWeekString :
+                      widget.format == RideFormat.month ?
+                      _rideProvider.rideDataMonthString :
+                      widget.format == RideFormat.year ?
+                      _rideProvider.rideDataYearString :
+                      _rideProvider.rideDataString,
+                      style: EvieTextStyles.display,
+                    ),
                     Text(_rideProvider.rideDataUnit, style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray,)),
                   ],
                 ),
@@ -173,6 +183,7 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                         );
                         filterDateByRideFormat(picked ?? pickedDate!);
                         _rideProvider.getChartData(widget.format, pickedDate!);
+                        _rideProvider.setRideData(RideDataType.noOfRide, widget.format, pickedDate!);
                       }
                       else if (widget.format == RideFormat.month) {
                         DateTime? picked = await showMonthPicker(
@@ -198,6 +209,7 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                         );
                         filterDateByRideFormat(picked ?? pickedDate!);
                         _rideProvider.getChartData(widget.format, pickedDate!);
+                        _rideProvider.setRideData(RideDataType.noOfRide, widget.format, pickedDate!);
                       }
                       else if (widget.format == RideFormat.year) {
                         DateTime? picked = await showMonthPicker(
@@ -224,6 +236,7 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
 
                         filterDateByRideFormat(picked ?? pickedDate!);
                         _rideProvider.getChartData(widget.format, pickedDate!);
+                        _rideProvider.setRideData(RideDataType.noOfRide, widget.format, pickedDate!);
                       }
                     },
                     child: SvgPicture.asset(
@@ -267,6 +280,70 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                       ///Spacing between the column
                       spacing: 0.2,
                       name: _rideProvider.dayTimeChartData.toString(),
+                      color: EvieColors.primaryColor,
+                      borderRadius: const BorderRadius.only(
+                        topRight:  Radius.circular(5),
+                        topLeft: Radius.circular(5),
+                      ),
+                    ),
+                  ] :
+                  RideFormat.week == widget.format ?
+                  <ColumnSeries<ChartData, dynamic>>[
+                    ColumnSeries<ChartData, dynamic>(
+                      dataSource: _rideProvider.weekTimeChartData,
+                      xValueMapper: (ChartData data, _) => weekdayName[data.x.weekday],
+                      yValueMapper: (ChartData data, _) => _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
+                      (data.y/1000):
+                      _settingProvider.convertMeterToMiles(data.y.toDouble()),
+                      ///width of the column
+                      width: 0.8,
+                      ///Spacing between the column
+                      spacing: 0.2,
+                      name: _rideProvider.weekTimeChartData.toString(),
+                      color: EvieColors.primaryColor,
+                      borderRadius: const BorderRadius.only(
+                        topRight:  Radius.circular(5),
+                        topLeft: Radius.circular(5),
+                      ),
+                    ),
+                  ] :
+                  RideFormat.month == widget.format ?
+                  <ColumnSeries<ChartData, dynamic>>[
+                    ColumnSeries<ChartData, dynamic>(
+                      dataSource: _rideProvider.monthTimeChartData,
+                      xValueMapper: (ChartData data, _) => data.x.day,
+                      yValueMapper: (ChartData data, _) =>
+                      _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
+                      (data.y/1000):
+                      _settingProvider.convertMeterToMiles(data.y.toDouble()),
+
+                      ///width of the column
+                      width: 0.8,
+                      ///Spacing between the column
+                      spacing: 0.2,
+                      name: _rideProvider.monthTimeChartData.toString(),
+                      color: EvieColors.primaryColor,
+                      borderRadius: const BorderRadius.only(
+                        topRight:  Radius.circular(5),
+                        topLeft: Radius.circular(5),
+                      ),
+                    ),
+                  ] :
+                  RideFormat.year == widget.format ?
+                  <ColumnSeries<ChartData, dynamic>>[
+                    ColumnSeries<ChartData, dynamic>(
+                      dataSource: _rideProvider.yearTimeChartData,
+                      xValueMapper: (ChartData data, _) => monthNameHalf[data.x.month],
+                      yValueMapper: (ChartData data, _) =>
+                      _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
+                      (data.y/1000):
+                      _settingProvider.convertMeterToMiles(data.y.toDouble()),
+
+                      ///width of the column
+                      width: 0.8,
+                      ///Spacing between the column
+                      spacing: 0.2,
+                      name: _rideProvider.yearTimeChartData.toString(),
                       color: EvieColors.primaryColor,
                       borderRadius: const BorderRadius.only(
                         topRight:  Radius.circular(5),
@@ -390,11 +467,12 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
           }
           else...{
             RideFormat.day == widget.format ?
-           // RecentActivity(widget.format, _rideProvider.dayTimeChartData.isEmpty ? true : false) :
-            // RecentActivity(widget.format,_rideProvider.chartData.isEmpty ? true : false )
-
             /// ΣY = 0
             RecentActivity(widget.format, _rideProvider.dayTimeChartData.fold<double>(0, (prev, element) => prev + element.y!.toDouble()) == 0 ? true : false) :
+            RideFormat.week == widget.format ?
+            RecentActivity(widget.format,_rideProvider.weekTimeChartData.fold<double>(0, (prev, element) => prev + element.y!.toDouble()) == 0 ? true : false ) :
+            RideFormat.month == widget.format ?
+            RecentActivity(widget.format,_rideProvider.monthTimeChartData.fold<double>(0, (prev, element) => prev + element.y!.toDouble()) == 0 ? true : false ) :
             RecentActivity(widget.format,_rideProvider.chartData.fold<double>(0, (prev, element) => prev + element.y!.toDouble()) == 0 ? true : false )
           }
         ],
