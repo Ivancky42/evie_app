@@ -114,6 +114,7 @@ class _NameBikeState extends State<NameBike> {
                         if(result == true){
                           /// if(bikeProvider.isAddBike == true) logic inside dialog
                         showAddBikeNameSuccess(context, _bikeProvider, _bikeNameController.text.trim());
+
                         } else{
                         showAddBikeNameFailed();
                         }

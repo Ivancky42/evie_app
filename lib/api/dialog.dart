@@ -10,6 +10,7 @@ import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/provider/firmware_provider.dart';
+import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sheet.dart';
 import 'package:evie_test/api/sheet_2.dart';
@@ -2504,3 +2505,48 @@ showNoLockExit (BuildContext context ,BikeProvider _bikeProvider,  BluetoothProv
         ),
   ));
 }
+
+showClearFeed(NotificationProvider _notificationProvider){
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Clear all Feeds?",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Are you sure you want to clear all feeds list?",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        upContent: "Cancel",
+        downContent: "Confirm",
+
+        onPressedUp: () {
+          SmartDialog.dismiss();
+        },
+
+        onPressedDown: () async {
+          SmartDialog.dismiss();
+
+          for(int i = 0; i < _notificationProvider.notificationList.length; i ++){
+            var result = await _notificationProvider.deleteNotification(_notificationProvider.notificationList.keys.elementAt(i));
+            if (result) {
+              //showDeleteNotificationSuccess();
+            } else {
+              showDeleteNotificationFailed();
+            }
+          }
+
+          // await Future.forEach(_notificationProvider.notificationList.keys, (key) async{
+          //   var result = await _notificationProvider.deleteNotification(key.toString());
+          //   if (result) {
+          //     //showDeleteNotificationSuccess();
+          //   } else {
+          //     showDeleteNotificationFailed();
+          //   }
+          // });
+        }),
+  );
+}
+

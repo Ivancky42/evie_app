@@ -3,15 +3,20 @@ import 'package:evie_test/api/navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../api/backend/stripe_api_caller.dart';
 import '../api/dialog.dart';
+import '../api/function.dart';
 import '../api/model/bike_model.dart';
 import '../api/model/plan_model.dart';
 import '../api/model/price_model.dart';
 import '../api/provider/bike_provider.dart';
+import '../api/provider/notification_provider.dart';
+import '../api/provider/notification_provider.dart';
+import '../api/provider/notification_provider.dart';
 import '../widgets/evie_single_button_dialog.dart';
 
 class StripeCheckoutScreen extends StatefulWidget {
@@ -59,8 +64,13 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
 
         navigationDelegate: (NavigationRequest request) {
           if (request.url.startsWith('https://evie-126a6.web.app/success.html')) {
+
             changeToUserHomePageScreen(context);
             showWelcomeToEVClub(context);
+            NotificationProvider().showNotification(FlutterLocalNotificationsPlugin(),
+          'Welcome to EV+!',
+          'You’ve subscribed to EV-Secure! Now you can enjoy exclusive EV+ perks until '
+          '${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day}, ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}');
             // SmartDialog.show(widget:
             // EvieSingleButtonDialog(title: 'Successfully subscribed', content: 'Plan subscribed.', rightContent: 'View Plan', onPressedRight: () {SmartDialog.dismiss();},));
           } else if (request.url.startsWith('https://evie-126a6.web.app/cancel.html')) {

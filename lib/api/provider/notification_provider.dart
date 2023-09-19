@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/notification_model.dart';
@@ -65,6 +66,12 @@ class NotificationProvider extends ChangeNotifier {
   unsubscribeFromTopic(String? topic) async {
     await messaging.unsubscribeFromTopic(topic!);
     // debugPrint("Unsubscribe to : $topic");
+  }
+
+  sendMessageToTopic() async {
+    await messaging.sendMessage(
+
+    );
   }
 
   Future<void> getNotification(String? uid) async {
@@ -230,6 +237,27 @@ class NotificationProvider extends ChangeNotifier {
     await prefs.setString(target, dateTime.toString());
     compareActionableBarTime();
     notifyListeners();
+  }
+
+  Future<void> showNotification(FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin, String title, String message) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+      'your_channel_id', // Change this to a unique channel ID
+      'Your Channel Name',
+      importance: Importance.max,
+      priority: Priority.high,
+      enableVibration: true,
+    );
+
+    const NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0, // Unique ID for the notification
+      title,
+      message,
+      platformChannelSpecifics,
+      payload: 'Custom_Sound',
+    );
   }
 
   compareActionableBarTime()async{

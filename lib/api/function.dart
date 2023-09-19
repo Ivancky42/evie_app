@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:math';
-
+import 'dart:ui';
+import 'package:evie_test/api/fonts.dart';
+import 'package:evie_test/api/sizer.dart';
+import 'package:flutter/material.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
@@ -24,6 +27,7 @@ import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_single_button_dialog.dart';
 import 'colours.dart';
 import 'enumerate.dart';
+import 'fonts.dart';
 import 'model/bike_model.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -251,8 +255,8 @@ calculateCarbonFP(dynamic carbonFP){
   }else{
     return carbonFP;
   }
-
 }
+
 
 const Map<String, String> dayTimeName = {"12 AM": "12AM", "1 AM": "1AM", "2 AM": "2AM", "3 AM": "3AM", "4 AM": "4AM", "5 AM": "5AM", "6 AM": "6AM", "7 AM": "7AM", "8 AM":"8AM", "9 AM":"9AM", "10 AM":"10AM", "11 AM": "11AM", "12 PM": "12PM", "1 PM": "1PM", "2 PM": "2PM", "3 PM": "3PM", "4 PM": "4PM", "5 PM": "5PM", "6 PM": "6PM", "7 PM": "7PM", "8 PM": "8PM", "9 PM": "9PM", "10 PM": "10PM", "11 PM":"11PM"};
 //const Map<int, String> dayTimeName = {1: "12AM", 2: "1AM", 3: "2AM", 4: "3AM", 5: "4AM", 6: "5AM", 7: "6AM", 8: "7AM", 9:"8AM", 10:"9AM", 11:"10AM", 12: "11AM", 13: "12PM", 14: "1PM", 15: "2PM", 16: "3PM", 17: "4PM", 18: "5PM", 19: "6PM", 20: "7PM", 21: "8PM", 22: "9PM", 23: "10PM", 24:"11PM"};
@@ -956,7 +960,52 @@ returnBorderColour(LocationProvider locationProvider){
       width: 2.8.w,
     );
   }
+}
 
+
+decline(int index, BikeProvider _bikeProvider, NotificationProvider _notificationProvider){
+  SmartDialog.show(
+      widget: EvieDoubleButtonDialog(
+        title: "Are you sure you want to decline?",
+        childContent: Text('Are you sure you want to decline?', style: EvieTextStyles.body16,),
+        leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
+        rightContent: "Yes",
+        onPressedRight: () async {
+          SmartDialog.dismiss();
+          SmartDialog.showLoading();
+          StreamSubscription? currentSubscription;
+
+          currentSubscription = _bikeProvider.declineSharedBike(
+              _notificationProvider.notificationList.values.elementAt(index).deviceIMEI!,
+              _notificationProvider.notificationList.values.elementAt(index).notificationId).listen((cancelStatus) {
+            if(cancelStatus == UploadFirestoreResult.success){
+
+              SmartDialog.dismiss(status: SmartStatus.loading);
+              SmartDialog.show(
+                  keepSingle: true,
+                  widget: EvieSingleButtonDialog(
+                      title: "Success",
+                      content: "You declined the invitation",
+                      rightContent: "Close",
+                      onPressedRight: () => SmartDialog.dismiss()
+                  ));
+              currentSubscription?.cancel();
+            } else if(cancelStatus == UploadFirestoreResult.failed) {
+              SmartDialog.dismiss();
+              SmartDialog.show(
+                  widget: EvieSingleButtonDialog(
+                      title: "Not success",
+                      content: "Try again",
+                      rightContent: "Close",
+                      onPressedRight: ()=>SmartDialog.dismiss()
+                  ));
+            }else{}
+
+          },
+          );
+
+        },
+      ));
 }
 
 Future<void> launch(Uri _url) async {

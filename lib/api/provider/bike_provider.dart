@@ -9,6 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../filter.dart';
 import '../function.dart';
 import '../model/bike_model.dart';
@@ -93,7 +94,7 @@ class BikeProvider extends ChangeNotifier {
   bool isAddBike = false;
   bool isReadBike = false;
   String? distanceBetween;
-  List userBikeNotificationList = ["~connection-lost","~movement-detect","~theft-attempt","~lock-reminder","~plan-reminder","~fall-detect", "crash"];
+  List userBikeNotificationList = ["~connection-lost","~movement-detect","~theft-attempt","~fall-detect"];
 
   List<String> threatFilterArray = ["warning", "danger","fall","crash"];
   DateTime? threatFilterDate1;
@@ -198,6 +199,7 @@ class BikeProvider extends ChangeNotifier {
                   changeSharedPreference('currentBikeImei', '');
                 }
 
+
                 notifyListeners();
                 break;
               case DocumentChangeType.modified:
@@ -208,9 +210,15 @@ class BikeProvider extends ChangeNotifier {
             }
           }
 
+
           userBikeList.forEach((key, value) {
             getUserBikeDetails(key);
             NotificationProvider().subscribeToTopic(key);
+
+            ///Other user that have bike also need to subscribe these topic
+            NotificationProvider().subscribeToTopic("${key}~evkey");
+            NotificationProvider().subscribeToTopic("${key}~bike-updated");
+            NotificationProvider().subscribeToTopic("${key}~plan-subscribed");
 
             if(value?.notificationSettings?.connectionLost == true ) {
               NotificationProvider().subscribeToTopic("${key}~connection-lost");
@@ -227,6 +235,7 @@ class BikeProvider extends ChangeNotifier {
             if(value?.notificationSettings?.planReminder == true ) {
               NotificationProvider().subscribeToTopic("${key}~plan-reminder");
             }
+
           });
 
           ///Subscript to topic based on looping (for first time open app only)
@@ -1431,6 +1440,7 @@ class BikeProvider extends ChangeNotifier {
   /// ****************************************** ///
   /// Command for RFID
 
+  bool isFirstGet = true;
 
   getRFIDList() async {
     await rfidListSubscription?.cancel();
@@ -1443,27 +1453,34 @@ class BikeProvider extends ChangeNotifier {
           .orderBy("created", descending: true)
           .snapshots()
           .listen((snapshot) {
+
         if (snapshot.docs.isNotEmpty) {
           for (var docChange in snapshot.docChanges) {
             switch (docChange.type) {
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
-                rfidList.putIfAbsent(docChange.doc.id,
-                        () => RFIDModel.fromJson(obj!));
+                rfidList.putIfAbsent(docChange.doc.id, () => RFIDModel.fromJson(obj!));
+                if(isFirstGet == false){
+                  NotificationProvider().showNotification(FlutterLocalNotificationsPlugin(), 'EV-Key Added', '${currentUserModel?.name ?? "[Pal Name]"} added an EV-Key, ${docChange.doc["rfidName"]}');
+                }
                 notifyListeners();
                 break;
               case DocumentChangeType.removed:
                 rfidList.removeWhere((key, value) => key == docChange.doc.id);
+                NotificationProvider().showNotification(FlutterLocalNotificationsPlugin(), 'EV-Key Removed', '${currentUserModel?.name ?? "[Pal Name]"} removed an EV-Key, ${docChange.doc["rfidName"]}');
                 notifyListeners();
                 break;
               case DocumentChangeType.modified:
                 Map<String, dynamic>? obj = docChange.doc.data();
-                rfidList.update(docChange.doc.id,
-                        (value) => RFIDModel.fromJson(obj!));
+                rfidList.update(docChange.doc.id, (value) => RFIDModel.fromJson(obj!));
+                NotificationProvider().showNotification(FlutterLocalNotificationsPlugin(), 'EV-Key Renamed', '${currentUserModel?.name ?? "[Pal Name]"} renamed an EV-Key to ${docChange.doc["rfidName"]}');
                 notifyListeners();
                 break;
             }
           }
+          isFirstGet = false;
+          notifyListeners();
+
         }else{
           rfidList.clear();
         }

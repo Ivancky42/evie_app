@@ -67,7 +67,7 @@ enum SheetList{
 ///List of Action
 enum ActionList{
   deactivateTheftAlert,
-
+  clearFeed,
 }
 
 

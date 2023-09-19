@@ -1,4 +1,5 @@
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/widgets/action_list/clear_feed.dart';
 import 'package:evie_test/widgets/action_list/deactivate_theft_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -151,6 +152,9 @@ class _EvieBottomSheetAction extends State<EvieBottomSheetAction> {
       if (list == ActionList.deactivateTheftAlert) {
         actionWidgets.add(DeactivateTheftAlert());
       }
+      if (list == ActionList.clearFeed) {
+        actionWidgets.add(ClearFeed());
+      }
   }
 
   // else if (fruit == 'apple') {
@@ -196,7 +200,7 @@ class _EvieBottomSheetAction extends State<EvieBottomSheetAction> {
           },
                   child: CupertinoPageScaffold(
                     child: Padding(
-                        padding: EdgeInsets.only(top: 0.h, bottom:64.h),
+                        padding: EdgeInsets.only(top: 0.h, bottom:30.h),
                         child: CupertinoPageScaffold(
                           backgroundColor: EvieColors.transparent,
                           resizeToAvoidBottomInset: false,

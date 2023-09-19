@@ -10,15 +10,18 @@ import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model
 import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../api/enumerate.dart';
 import '../../../api/function.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
+import '../../../api/provider/notification_provider.dart';
 import '../../../bluetooth/modelResult.dart';
 
 class AccountContainer extends StatefulWidget {
@@ -34,7 +37,7 @@ class _AccountContainerState extends State<AccountContainer> {
   late BikeProvider _bikeProvider;
   late AuthProvider _authProvider;
   late SettingProvider _settingProvider;
-  late BluetoothProvider _bluetoothProvider;
+  late NotificationProvider _notificationProvider;
 
   DeviceConnectResult? deviceConnectResult;
   String? label;
@@ -52,7 +55,7 @@ class _AccountContainerState extends State<AccountContainer> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
-    _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    _notificationProvider = Provider.of<NotificationProvider>(context);
 
     switch(label) {
       case "Personal Information":
@@ -407,10 +410,11 @@ class _AccountContainerState extends State<AccountContainer> {
                     "Revoke Account",
                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                   ),
-                  onPressed: ()  {
+                  onPressed: ()  async {
 
-
+                    _notificationProvider.showNotification(FlutterLocalNotificationsPlugin(), 'EV -Key added', 'someone added');
                   },
+
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -446,5 +450,6 @@ class _AccountContainerState extends State<AccountContainer> {
         return Container();
     }
   }
+
 }
 

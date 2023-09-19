@@ -58,13 +58,19 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       onNameChange();
     });
 
-    ///BG message
+    ///Background message
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
 
       String data = message.data["id"].toString();
 
       ///Pass notification id to get body and key
       await _notificationProvider.getNotificationFromNotificationId(data);
+
+      print("aaaaaaaaaaaaaa");
+      print(message.notification?.title);
+      print(message.notification?.body);
+      print(message.data['deviceIMEI']);
+      print(message.data["id"]);
 
       Future.delayed(Duration.zero, () {
 
@@ -83,14 +89,13 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
            //   _notificationProvider.singleNotificationList.values.first
               );
         });
-
-
        */
     });
 
     foreNotificationSetting();
 
-    ///android FG message
+
+    ///android Foreground message
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
 
       RemoteNotification? notification = message.notification;
@@ -129,8 +134,8 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings(
+    DarwinInitializationSettings initializationSettingsIOS =
+    DarwinInitializationSettings(
             requestSoundPermission: false,
             onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
@@ -140,10 +145,16 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     );
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: onSelectNotification);
+        //onSelectNotification: onSelectNotification
+
+
+      ///Version 15
+      // onDidReceiveBackgroundNotificationResponse: onSelectNotification,
+      //   onDidReceiveNotificationResponse: onSelectNotification
+    );
   }
 
-  ///Foreground select Notification android
+  ///Android foreground message handler
   Future<void> onSelectNotification(String? payload) async {
     ///Pass notification id to get body and key
     ///
@@ -152,7 +163,6 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       Future.delayed(Duration.zero, () {
         changeToFeedsScreen(context);
       });
-
 
     /*
     await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
@@ -176,8 +186,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   }
 
   ///IOS foreground message handler
-  void onDidReceiveLocalNotification(
-      int? id, String? title, String? body, String? payload) async {
+  void onDidReceiveLocalNotification(int? id, String? title, String? body, String? payload) async {
     // display a dialog with the notification details, tap ok to go to another page
     ///Pass notification id to get body and key
     await _notificationProvider.getNotificationFromNotificationId(payload);
@@ -199,6 +208,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     //   //   //   _notificationProvider.singleNotificationList.values.first
     //   // );
     // }
+
 
     /*
     await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
@@ -236,10 +246,6 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     }
   }
 
-  late List<String> imgList = [
-    'assets/images/bike_HPStatus/bike_normal.png',
-    'assets/images/bike_HPStatus/bike_normal.png',
-  ];
 
   @override
   Widget build(BuildContext context) {

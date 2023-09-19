@@ -7,6 +7,8 @@ class NotificationModel {
   String? title;
   String? type;
   bool? isRead;
+  String? action;
+  String? url;
   Timestamp? created;
   Timestamp? updated;
   String notificationId;
@@ -19,6 +21,8 @@ class NotificationModel {
     required this.title,
     required this.type,
     required this.isRead,
+    this.action,
+    this.url,
     this.created,
     this.updated,
     required this.notificationId,
@@ -28,11 +32,13 @@ class NotificationModel {
     return NotificationModel(
       notificationId: notificationId,
       body:           json['body']?? '',
-      deviceIMEI:      json['deviceIMEI']?? '',
+      deviceIMEI:     json['deviceIMEI']?? '',
       status:         json['status']?? '',
       title:          json['title']?? '',
       type:           json['type']?? '',
       isRead:         json['isRead']?? false,
+      action:         json['action']?? '',
+      url:            json['url']?? '',
       created:        timestampFromJson(json['created'] as Timestamp?),
       updated:        timestampFromJson(json['updated'] as Timestamp?),
     );

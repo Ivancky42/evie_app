@@ -1,5 +1,3 @@
-
-
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
@@ -104,7 +102,6 @@ Future main() async {
   )
   );
 }
-
 
 ///Multi provider setup
 class AppProviders extends StatelessWidget {
