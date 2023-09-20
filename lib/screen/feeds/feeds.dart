@@ -88,6 +88,7 @@ class _FeedsState extends State<Feeds> {
                         "Feeds",
                         style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
                       ),
+                      _notificationProvider.notificationList.isNotEmpty ?
                       IconButton(
                           onPressed: (){
                             showActionListSheet(context, [ActionList.clearFeed],);
@@ -95,6 +96,7 @@ class _FeedsState extends State<Feeds> {
                           icon:  SvgPicture.asset(
                             "assets/buttons/more.svg",
                           ))
+                      : Container(),
                     ],
                   ),
                 ),
