@@ -68,7 +68,7 @@ class _ClearFeedState extends State<ClearFeed> {
               EdgeInsets.only(left: 0.w, top: 0.h, bottom: 0.h),
               child: GestureDetector(
 
-                  onTap: (){
+                  onTap: () async {
                     Navigator.pop(context);
                     showClearFeed(_notificationProvider);
                    // showDeactivateTheftDialog(context, _bikeProvider);

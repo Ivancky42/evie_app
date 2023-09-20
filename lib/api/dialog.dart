@@ -2527,27 +2527,19 @@ showClearFeed(NotificationProvider _notificationProvider){
         },
 
         onPressedDown: () async {
-          //SmartDialog.dismiss();
-
-          for(int i = 0; i < _notificationProvider.notificationList.length; i ++){
-            var result = await _notificationProvider.deleteNotification(_notificationProvider.notificationList.keys.elementAt(i));
-            if (result) {
-              //showDeleteNotificationSuccess();
-            } else {
-              showDeleteNotificationFailed();
-            }
-          }
-
           SmartDialog.dismiss();
-
-          // await Future.forEach(_notificationProvider.notificationList.keys, (key) async{
-          //   var result = await _notificationProvider.deleteNotification(key.toString());
-          //   if (result) {
-          //     //showDeleteNotificationSuccess();
-          //   } else {
+          SmartDialog.showLoading();
+          // for (int i = 0; i < _notificationProvider.notificationList.length; i++) {
+          //   print('indexLLLLLLLLLLLLL : ' + i.toString());
+          //   var result = await _notificationProvider.deleteNotification(_notificationProvider.notificationList.keys.elementAt(i));
+          //   if (!result) {
           //     showDeleteNotificationFailed();
           //   }
-          // });
+          // }
+          await _notificationProvider.deleteAllNotification();
+          SmartDialog.dismiss(status: SmartStatus.loading);
+          // Dismiss the SmartDialog after the loop finishes
+
         }),
   );
 }

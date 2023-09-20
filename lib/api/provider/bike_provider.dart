@@ -1468,20 +1468,20 @@ class BikeProvider extends ChangeNotifier {
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
                 rfidList.putIfAbsent(docChange.doc.id, () => RFIDModel.fromJson(obj!));
-                if(isFirstGet == false){
-                  NotificationProvider().showNotification(FlutterLocalNotificationsPlugin(), 'EV-Key Added', '${currentUserModel?.name ?? "[Pal Name]"} added an EV-Key, ${docChange.doc["rfidName"]}');
-                }
+                // if(isFirstGet == false){
+                //   NotificationProvider().showNotification(FlutterLocalNotificationsPlugin(), 'EV-Key Added', '${currentUserModel?.name ?? "[Pal Name]"} added an EV-Key, ${docChange.doc["rfidName"]}');
+                // }
                 notifyListeners();
                 break;
               case DocumentChangeType.removed:
                 rfidList.removeWhere((key, value) => key == docChange.doc.id);
-                NotificationProvider().showNotification(FlutterLocalNotificationsPlugin(), 'EV-Key Removed', '${currentUserModel?.name ?? "[Pal Name]"} removed an EV-Key, ${docChange.doc["rfidName"]}');
+                //NotificationProvider().showNotification(FlutterLocalNotificationsPlugin(), 'EV-Key Removed', '${currentUserModel?.name ?? "[Pal Name]"} removed an EV-Key, ${docChange.doc["rfidName"]}');
                 notifyListeners();
                 break;
               case DocumentChangeType.modified:
                 Map<String, dynamic>? obj = docChange.doc.data();
                 rfidList.update(docChange.doc.id, (value) => RFIDModel.fromJson(obj!));
-                NotificationProvider().showNotification(FlutterLocalNotificationsPlugin(), 'EV-Key Renamed', '${currentUserModel?.name ?? "[Pal Name]"} renamed an EV-Key to ${docChange.doc["rfidName"]}');
+                //NotificationProvider().showNotification(FlutterLocalNotificationsPlugin(), 'EV-Key Renamed', '${currentUserModel?.name ?? "[Pal Name]"} renamed an EV-Key to ${docChange.doc["rfidName"]}');
                 notifyListeners();
                 break;
             }

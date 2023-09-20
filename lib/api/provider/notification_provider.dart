@@ -149,6 +149,18 @@ class NotificationProvider extends ChangeNotifier {
     return result;
   }
 
+  Future<void> deleteAllNotification() async {
+    final collectionRef = FirebaseFirestore.instance.collection(usersCollection).doc(currentUserModel!.uid).collection(notificationsCollection);
+
+    // Get all documents in the collection
+    final querySnapshot = await collectionRef.get();
+
+    // Delete each document
+    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+      await documentSnapshot.reference.delete();
+    }
+  }
+
   Future<Object?> getNotificationFromNotificationId(String? notificationId) async {
     currentSingleNotification = null;
     try {
