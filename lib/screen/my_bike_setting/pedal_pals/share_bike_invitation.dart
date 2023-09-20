@@ -102,7 +102,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                           return 'Please enter email address';
                         }
                         else if (value == _currentUserProvider.currentUserModel?.email) {
-                          return 'Unable to invite yourself';
+                          return 'This is your email address. You are not allow to invite yourself';
                         }
                         return null;
                       },
