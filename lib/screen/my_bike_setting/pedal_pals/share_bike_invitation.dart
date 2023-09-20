@@ -44,6 +44,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
   late AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
   late SettingProvider _settingProvider;
+  late CurrentUserProvider _currentUserProvider;
 
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -53,6 +54,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -93,12 +95,14 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                     child: EvieTextFormField(
                       controller: _emailController,
                       obscureText: false,
-//     keyboardType: TextInputType.name,
                       hintText: "Email Address",
                       labelText: "Email Address",
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter email address';
+                        }
+                        else if (value == _currentUserProvider.currentUserModel?.email) {
+                          return 'Unable to invite yourself';
                         }
                         return null;
                       },
