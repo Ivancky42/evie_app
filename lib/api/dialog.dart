@@ -2527,7 +2527,7 @@ showClearFeed(NotificationProvider _notificationProvider){
         },
 
         onPressedDown: () async {
-          SmartDialog.dismiss();
+          //SmartDialog.dismiss();
 
           for(int i = 0; i < _notificationProvider.notificationList.length; i ++){
             var result = await _notificationProvider.deleteNotification(_notificationProvider.notificationList.keys.elementAt(i));
@@ -2537,6 +2537,8 @@ showClearFeed(NotificationProvider _notificationProvider){
               showDeleteNotificationFailed();
             }
           }
+
+          SmartDialog.dismiss();
 
           // await Future.forEach(_notificationProvider.notificationList.keys, (key) async{
           //   var result = await _notificationProvider.deleteNotification(key.toString());

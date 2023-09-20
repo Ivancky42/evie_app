@@ -106,7 +106,6 @@ class _BikeContainerState extends State<BikeContainer> {
                 blurRadius: 8.0.w,
               ),
             ],
-
             border: _bikeProvider.currentBikeModel != null ?
                 widget.bikeModel.deviceIMEI == _bikeProvider.currentBikeModel!.deviceIMEI ?
                 Border.all(

@@ -61,7 +61,7 @@ class _FeedsVisibleState extends State<FeedsVisible> {
 
     return  ListView(
       physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.all(0.h),
+      padding: EdgeInsets.all(6.h),
       shrinkWrap: true,
       children: [
 
@@ -75,17 +75,19 @@ class _FeedsVisibleState extends State<FeedsVisible> {
                   alignment: AlignmentDirectional.bottomStart,
                   child: EvieButton_ReversedColor(
                       onPressed: (){
-
                         decline(widget.index, _bikeProvider, _notificationProvider );
-
                       },
                       child: Text(
                         "Decline",
-                        style: TextStyle(fontSize: 17.sp,
-                            color: EvieColors.primaryColor),
+                        style: TextStyle(
+                            fontSize: 18.sp,
+                            color: EvieColors.primaryColor,
+                            fontWeight: FontWeight.w800
+                        ),
                       ),
                       height: 36.h,
-                      width: 190.w)
+                      width: 169.w,
+                  )
               ),
 
               Align(
@@ -119,26 +121,27 @@ class _FeedsVisibleState extends State<FeedsVisible> {
                                 )
                             ));
 
+                        // for (var element in _bikeProvider.userBikeNotificationList) {
+                        //   await _notificationProvider.subscribeToTopic("${_notificationProvider.notificationList.values.elementAt(widget.index).deviceIMEI!}$element");
+                        // }
+                        // SmartDialog.dismiss();
+                        // _notificationProvider.updateUserNotificationSharedBikeStatus(_notificationProvider.notificationList.keys.elementAt(widget.index));
+                        // changeToUserHomePageScreen2(context);
+
+
                         StreamSubscription? currentSubscription;
-                        currentSubscription = _bikeProvider.acceptSharedBike(
-                            _notificationProvider.notificationList.values.elementAt(widget.index).deviceIMEI!,
-                            _currentUserProvider.currentUserModel!.uid)
-                            .listen((uploadStatus) async {
+                        currentSubscription = _bikeProvider.acceptSharedBike(_notificationProvider.notificationList.values.elementAt(widget.index).deviceIMEI!, _currentUserProvider.currentUserModel!.uid).listen((uploadStatus) async {
                           if(uploadStatus == UploadFirestoreResult.success){
                             SmartDialog.dismiss();
-                            _notificationProvider.updateUserNotificationSharedBikeStatus(
-                                _notificationProvider.notificationList.keys.elementAt(widget.index));
-
+                            _notificationProvider.updateUserNotificationSharedBikeStatus(_notificationProvider.notificationList.keys.elementAt(widget.index));
                             showBikeAddSuccessfulToast(context);
-
-                            changeToUserHomePageScreen(context);
                             for (var element in _bikeProvider.userBikeNotificationList) {
-                              await _notificationProvider.subscribeToTopic(
-                                  "${_bikeProvider.currentBikeModel!.deviceIMEI}$element");
+                              await _notificationProvider.subscribeToTopic("${_notificationProvider.notificationList.values.elementAt(widget.index).deviceIMEI!}$element");
                             }
-
+                            changeToUserHomePageScreen(context);
                             currentSubscription?.cancel();
-                          } else if(uploadStatus == UploadFirestoreResult.failed) {
+                          }
+                          else if(uploadStatus == UploadFirestoreResult.failed) {
                             SmartDialog.dismiss();
                             SmartDialog.show(
                                 backDismiss: false,
@@ -149,38 +152,10 @@ class _FeedsVisibleState extends State<FeedsVisible> {
                                     onPressedRight: () async {
                                       SmartDialog.dismiss();
                                     }));
-                            }else{}
+                            }
+                          else{}
                           },
                         );
-
-                        // _bikeProvider
-                        //     .acceptSharedBikeStatus(
-                        //     notificationModel.deviceIMEI!, _currentUserProvider.currentUserModel!.uid)
-                        //     .then((result) {
-                        //   if (result == true) {
-                        //     SmartDialog.dismiss();
-                        //     _notificationProvider
-                        //         .updateUserNotificationSharedBikeStatus(key);
-                        //     SmartDialog.show(
-                        //         widget: EvieSingleButtonDialogCupertino(
-                        //             title: "Success",
-                        //             content: "Bike added",
-                        //             rightContent: "OK",
-                        //             onPressedRight: () {
-                        //               SmartDialog.dismiss();
-                        //             }));
-                        //   } else {
-                        //     SmartDialog.dismiss();
-                        //     SmartDialog.show(
-                        //         widget: EvieSingleButtonDialogCupertino(
-                        //             title: "Error",
-                        //             content: "Bike not added, try again",
-                        //             rightContent: "OK",
-                        //             onPressedRight: () {
-                        //               SmartDialog.dismiss();
-                        //             }));
-                        //   }
-                        // });
                       },
                       child: Text(
                         "OK",
@@ -188,13 +163,11 @@ class _FeedsVisibleState extends State<FeedsVisible> {
                           color: EvieColors.grayishWhite,),
                       ),
                       height: 36.h,
-                      width: 190.w)
+                      width: 169.w)
               ),
-
             ],
           ),
         ),
-
 
         ///Action == find-out-more, general promotions
         Visibility(

@@ -201,7 +201,7 @@ class _LoginScreenState extends State<Login> {
                         if(_authProvider.isFirstLogin == true){
                           changeToBeforeYouStart(context);
                         }else{
-                          changeToUserHomePageScreen2(context);
+                          changeToUserHomePageScreen(context);
                         }
 
                       } else if (result.toString() == "Not yet verify") {

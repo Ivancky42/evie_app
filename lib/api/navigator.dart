@@ -156,10 +156,10 @@ void changeToUserHomePageScreen(BuildContext context ) {
 
 }
 
-void changeToUserHomePageScreen2(BuildContext context ) {
+void changeToUserHomePageScreen2(BuildContext context) {
 
-  // Navigator.of(context).pushReplacement(
-  //     MaterialWithModalsPageRoute(builder: (context) => UserHomePage(0)));
+  Navigator.of(context).pushReplacement(
+      MaterialWithModalsPageRoute(builder: (context) => UserHomePage(0)));
 
   // Navigator.pushReplacement(context,
   //   PageTransition(
@@ -169,7 +169,7 @@ void changeToUserHomePageScreen2(BuildContext context ) {
   //   ),
   // );
 
-  Navigator.of(context).pushNamedAndRemoveUntil("/", (route) => false);
+  //Navigator.of(context).pushNamedAndRemoveUntil("/", (route) => false);
 
 }
 

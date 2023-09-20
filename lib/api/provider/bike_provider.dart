@@ -593,14 +593,22 @@ class BikeProvider extends ChangeNotifier {
         .doc(currentUid)
         .snapshots()
         .listen((event) async {
-      Map<String, dynamic>? obj = event.data();
+          Map<String, dynamic>? obj = event.data();
 
-      if(obj!['justInvited'] == false){
-        currentSubscription?.cancel();
-        firestoreStatusListener.add(UploadFirestoreResult.success);
-      }else{
-        firestoreStatusListener.add(UploadFirestoreResult.partiallySuccess);
-      }
+          if (obj != null) {
+            if (obj!['justInvited'] == false) {
+              currentSubscription?.cancel();
+              firestoreStatusListener.add(UploadFirestoreResult.success);
+            }
+            else {
+              firestoreStatusListener.add(
+                  UploadFirestoreResult.partiallySuccess);
+            }
+          }
+          else {
+            firestoreStatusListener.add(
+                UploadFirestoreResult.partiallySuccess);
+          }
     });
     return firestoreStatusListener.stream;
   }

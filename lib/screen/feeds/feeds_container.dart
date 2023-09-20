@@ -57,46 +57,15 @@ class _FeedsContainerState extends State<FeedsContainer> {
       endActionPane:  ActionPane(
         extentRatio: 0.3,
         motion: const StretchMotion(),
-
-        ///Dismissible
-        // dismissible: DismissiblePane(
-        //
-        //   ///Confirm dismiss only when decline
-        //   // confirmDismiss: () async {
-        //   //   return await showDialog(
-        //   //     context: context,
-        //   //     builder: (BuildContext context) {
-        //   //           return EvieDoubleButtonDialog(
-        //   //               title: "Are you sure",
-        //   //               childContent: const Text("sure ma"),
-        //   //               leftContent: "Cancel",
-        //   //               rightContent: "ok",
-        //   //               onPressedLeft: (){Navigator.of(context).pop(false);},
-        //   //               onPressedRight: (){Navigator.of(context).pop(true);});
-        //   //     },
-        //   //   );
-        //   // },
-        //
-        //   onDismissed: () async {
-        //     if(_notificationProvider.notificationList.values.elementAt(index).status == "pending"){
-        //       decline(index);
-        //     }else{
-        //       var result = await _notificationProvider.deleteNotification(_notificationProvider.notificationList.keys.elementAt(index));
-        //       if(!result){
-        //         showDeleteNotificationFailed();
-        //       }
-        //     }
-        //   },
-        // ),
         children: [
           SlidableAction(
             spacing:10,
             onPressed: (context) async{
               if(_notificationProvider.notificationList.values.elementAt(widget.index).status == "userPending"){
                 decline(widget.index, _bikeProvider, _notificationProvider );
-              }else {
-                var result = await _notificationProvider.deleteNotification(
-                    _notificationProvider.notificationList.keys.elementAt(widget.index));
+              }
+              else {
+                var result = await _notificationProvider.deleteNotification(_notificationProvider.notificationList.keys.elementAt(widget.index));
                 if (result) {
                   //showDeleteNotificationSuccess();
                 } else {
@@ -112,22 +81,16 @@ class _FeedsContainerState extends State<FeedsContainer> {
       ),
 
       child: GestureDetector(
-          onTap: () async {
-            // _notificationProvider.updateIsReadStatus(_notificationProvider
-            //     .notificationList.keys
-            //     .elementAt(widget.index));
-          },
-
+          onTap: () async {},
           child: Container(
             color: _notificationProvider.notificationList.values.elementAt(widget.index).isRead! == false ? EvieColors.lightWhite : EvieColors.transparent,
             child: Padding(
-              padding:  EdgeInsets.only(top: 14.h, bottom: 14.h),
+              padding:  EdgeInsets.fromLTRB(0, 14, 0, 14),
               child: ListTile(
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        // width:260.w,
                         child: Text(_notificationProvider
                             .notificationList.values
                             .elementAt(widget.index)
@@ -143,15 +106,13 @@ class _FeedsContainerState extends State<FeedsContainer> {
                       Align(
                         alignment: AlignmentDirectional.centerStart,
                         child: Text(
-                          "${_notificationProvider.notificationList.values.elementAt(widget.index).body!}",
-                          // "\n\n${_notificationProvider.notificationList.values.elementAt(widget.index).created!.toDate()}",
+                          _notificationProvider.notificationList.values.elementAt(widget.index).body!,
                           style:  EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan),
                         ),
                       ),
 
                       ///Button visible based on different condition
                       FeedsVisible(index: widget.index),
-
                     ],
                   )),
             ),

@@ -214,7 +214,6 @@ class NotificationProvider extends ChangeNotifier {
 
   updateUserNotificationSharedBikeStatus(String targetNotifyId) {
     bool result;
-
     try {
       //Update
       FirebaseFirestore.instance
