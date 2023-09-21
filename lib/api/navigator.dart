@@ -1,7 +1,9 @@
 import 'dart:collection';
 
 import 'package:evie_test/api/model/trip_history_model.dart';
+import 'package:evie_test/screen/feeds/accepting_invitation.dart';
 import 'package:evie_test/screen/my_account/my_garage/my_garage.dart';
+import 'package:evie_test/screen/my_account/revoke_account/revoke_account.dart';
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_sensitivity.dart';
 import 'package:evie_test/screen/my_bike_setting/firmware/firmware_information.dart';
 import 'package:evie_test/screen/my_bike_setting/firmware/firmware_update_failed.dart';
@@ -29,6 +31,8 @@ import '../screen/forget_your_password.dart';
 import '../screen/my_account/account/my_account.dart';
 import '../screen/my_account/display_setting/display_setting.dart';
 import '../screen/my_account/push_notification/push_notification.dart';
+import '../screen/my_account/revoke_account/revoked_account.dart';
+import '../screen/my_account/revoke_account/revoking_account.dart';
 import '../screen/my_bike_setting/about_bike/about_bike.dart';
 import '../screen/my_bike_setting/bike_setting/bike_setting.dart';
 import '../screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
@@ -595,6 +599,16 @@ void changeToShareBikeInvitationScreen(BuildContext context) {
   );
 }
 
+void changeToAcceptingInvitationScreen(BuildContext context, deviceIMEI, currentUid, notificationId) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: AcceptingInvitation(deviceIMEI: deviceIMEI, currentUid: currentUid, notificationId: notificationId),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
 // void changeToInvitationSentScreen(BuildContext context, String email) {
 //   Navigator.pushReplacement(context,
 //     PageTransition(
@@ -652,7 +666,7 @@ void changeToEditProfile(BuildContext context) {
       builder: (context) => const EditProfile())
   );
     // Navigator.of(context).pushNamedAndRemoveUntil("/editProfile", (route) => false);
-  }
+}
 
 void changeToVerifyPassword(BuildContext context) {
   Navigator.of(context)
@@ -692,5 +706,23 @@ void changeToStripeCheckoutScreen(
 void changeToTestScreen(BuildContext context) {
   Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
       builder: (context) => const BorderPaint())
+  );
+}
+
+void changeToRevokeAccount(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
+      builder: (context) => const RevokeAccount())
+  );
+}
+
+void changeToRevokingAccount(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
+      builder: (context) => const RevokingAccount())
+  );
+}
+
+void changeToRevokedAccount(BuildContext context) {
+  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
+      builder: (context) => const RevokedAccount())
   );
 }

@@ -139,10 +139,7 @@ showBackToLogin(context, BikeProvider _bikeProvider, AuthProvider _authProvider)
             SmartDialog.showLoading();
             await _authProvider.signOut(context).then((result) async {
               if(result == true){
-                await _bikeProvider.clear();
                 SmartDialog.dismiss(status: SmartStatus.loading);
-                // _authProvider.clear();
-
                 changeToWelcomeScreen(context);
                 SmartDialog.dismiss();
                 ScaffoldMessenger.of(context)
@@ -152,7 +149,8 @@ showBackToLogin(context, BikeProvider _bikeProvider, AuthProvider _authProvider)
                     duration: Duration(
                         seconds: 2),),
                 );
-              }else{
+              }
+              else{
                 SmartDialog.dismiss(status: SmartStatus.loading);
                 ScaffoldMessenger.of(context)
                     .showSnackBar(
@@ -1897,6 +1895,49 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
 
         }
     ),
+  );
+}
+
+showRevokeAccountDialog(BuildContext context, AuthProvider _authProvider){
+  SmartDialog.show(
+    keepSingle: true,
+    backDismiss: false,
+    clickBgDismissTemp: false,
+    widget: EvieTwoButtonDialog(
+        title: Text("Revoke Account",
+          style: EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text(
+          "Are you sure that you want to permanently delete your account? The account will no longer be available, and all data in the account will be permanently deleted.",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        customButtonUp: EvieButton(
+            backgroundColor: EvieColors.primaryColor,
+            width: double.infinity,
+            height: 48.h,
+            child: Text(
+              'Revoke Account',
+              style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+            ),
+            onPressed: () async {
+              SmartDialog.dismiss();
+              changeToRevokingAccount(context);
+              // await _authProvider.deactivateAccount();
+              // await _authProvider.signOut(context);
+              // await Future.delayed(const Duration(seconds: 3));
+              // changeToRevokedAccount(context);
+              // await Future.delayed(const Duration(seconds: 3));
+              // changeToWelcomeScreen(context);
+            }
+        ),
+        downContent: "Cancel",
+        onPressedDown: () async {
+          SmartDialog.dismiss();
+        }),
   );
 }
 

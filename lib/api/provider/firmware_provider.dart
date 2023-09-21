@@ -123,4 +123,9 @@ class FirmwareProvider extends ChangeNotifier {
     await ref.writeToFile(file);
     return file;
   }
+
+  clear() async {
+    await currentFirmwareSubscription?.cancel();
+    notifyListeners();
+  }
 }

@@ -605,7 +605,7 @@ showBikeAddSuccessfulToast(context) {
               SvgPicture.asset("assets/icons/check.svg"),
               SizedBox(width: 4.w,),
               Text(
-                "'Bike added successfully!'",
+                "Bike added successfully!",
                 style: EvieTextStyles.toast,
               ),
             ],

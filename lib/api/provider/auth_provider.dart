@@ -7,6 +7,9 @@ import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:evie_test/api/model/bike_model.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:evie_test/api/provider/plan_provider.dart';
+import 'package:evie_test/api/provider/ride_provider.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +25,9 @@ import '../../widgets/evie_single_button_dialog.dart';
 import '../model/user_model.dart';
 import '../navigator.dart';
 import 'bike_provider.dart';
+import 'bluetooth_provider.dart';
+import 'firmware_provider.dart';
+import 'location_provider.dart';
 import 'notification_provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -528,15 +534,33 @@ class AuthProvider extends ChangeNotifier {
         .catchError((e) => debugPrint(e));
   }
 
+  Future<void> deactivateAccount() async {
+    FirebaseFirestore.instance.collection(usersCollection).doc(_uid).update({
+      'justDeactivated': true
+    });
+  }
+
 
   ///User sign out
   Future signOut(BuildContext context) async {
     try {
+      final _currentUserProvider = context.read<CurrentUserProvider>();
+      final _bikeProvider = context.read<BikeProvider>();
+      final _bluetoothProvider = context.read<BluetoothProvider>();
+      final _firmwareProvider = context.read<FirmwareProvider>();
+      final _locationProvider = context.read<LocationProvider>();
+      final _notificationProvider = context.read<NotificationProvider>();
+      final _planProvider = context.read<PlanProvider>();
+      final _rideProvider = context.read<RideProvider>();
 
-      //await BikeProvider().clear();
-      await CurrentUserProvider().cancelSubscription();
-      await NotificationProvider().unsubscribeFromTopic(_uid);
-      await NotificationProvider().unsubscribeFromTopic("fcm_test");
+      await _currentUserProvider.clear();
+      await _bikeProvider.clear();
+      await _bluetoothProvider.disconnectDevice();
+      await _firmwareProvider.clear();
+      await _locationProvider.clear();
+      await _notificationProvider.clear(_uid!);
+      await _planProvider.clear();
+      await _rideProvider.clear();
 
       if(credentialProvider == "google"){
         await googleSignIn.disconnect();

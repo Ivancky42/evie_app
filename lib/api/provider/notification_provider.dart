@@ -297,4 +297,14 @@ class NotificationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  clear(String uid) async {
+    notificationList.clear();
+    await unsubscribeFromTopic(uid);
+    await notificationListSubscription?.cancel();
+    await currentNotificationSubscription?.cancel();
+    isTimeArrive = true;
+    currentUserModel = null;
+    notifyListeners();
+  }
+
 }

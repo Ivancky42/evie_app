@@ -110,6 +110,9 @@ class BikeProvider extends ChangeNotifier {
   StreamSubscription? bikePlanSubscription;
   StreamSubscription? rfidListSubscription;
   StreamSubscription? currentSubscription;
+  StreamSubscription? acceptInvitationSub;
+
+  late Completer<String?> acceptInvitationCompleter;
 
   ScanQRCodeResult scanQRCodeResult = ScanQRCodeResult.unknown;
   SwitchBikeResult switchBikeResult = SwitchBikeResult.unknown;
@@ -611,6 +614,40 @@ class BikeProvider extends ChangeNotifier {
           }
     });
     return firestoreStatusListener.stream;
+  }
+
+  acceptInvitation(String deviceIMEI, String currentUid) async {
+    final result = await FirebaseFirestore.instance
+        .collection(bikesCollection)
+        .doc(deviceIMEI)
+        .collection(usersCollection)
+        .doc(currentUid)
+        .set({
+      'status': 'shared',
+      'justInvited': true,
+    }, SetOptions(merge: true));
+    return result;
+  }
+
+  Future<String?> listenAcceptInvitation(String deviceIMEI, String currentUid) {
+    acceptInvitationCompleter = Completer<String?>();
+    acceptInvitationSub = FirebaseFirestore.instance
+        .collection(bikesCollection)
+        .doc(deviceIMEI)
+        .collection(usersCollection)
+        .doc(currentUid)
+        .snapshots()
+        .listen((event) async {
+            Map<String, dynamic>? obj = event.data();
+            if (obj != null) {
+              if (obj['justInvited'] == false && obj['status'] == 'shared') {
+                acceptInvitationSub?.cancel();
+                acceptInvitationCompleter.complete('Success');
+              }
+            }
+        });
+
+    return acceptInvitationCompleter.future;
   }
 
   Stream<UploadFirestoreResult> cancelSharedBike(String targetUID, String notificationId) {
@@ -1240,7 +1277,7 @@ class BikeProvider extends ChangeNotifier {
       currentBikeModel = null;
       notifyListeners();
 
-      controlBikeList("first");
+      //controlBikeList("first");
 
       return true;
     } catch (e) {
@@ -1272,7 +1309,7 @@ class BikeProvider extends ChangeNotifier {
       currentBikeModel = null;
       notifyListeners();
 
-      controlBikeList("first");
+      //controlBikeList("first");
 
       return true;
     } catch (e) {
@@ -1737,57 +1774,4 @@ class BikeProvider extends ChangeNotifier {
     currentBikeList = 0;
     notifyListeners();
   }
-
-  /// ****************************************** ///
-  /// Likely abandon
-  /// ****************************************** ///
-  ///
-
-  Future<void> controlBikeList(String action) async {
-    SharedPreferences prefs = await _prefs;
-    switch (action) {
-      case "next":
-        {
-          if (currentBikeList < userBikeList.length - 1) {
-            currentBikeList += 1;
-            prefs.setInt('currentBikeList', currentBikeList);
-            getBike(userBikeList.keys.elementAt(currentBikeList));
-            notifyListeners();
-          } else if (currentBikeList == userBikeList.length - 1) {
-            controlBikeList("first");
-          }
-        }
-        break;
-      case "back":
-        {
-          if (currentBikeList > 0) {
-            currentBikeList -= 1;
-            prefs.setInt('currentBikeList', currentBikeList);
-            getBike(userBikeList.keys.elementAt(currentBikeList));
-            notifyListeners();
-          } else if (currentBikeList <= 0) {
-            controlBikeList("last");
-          }
-        }
-        break;
-      case "first":
-        {
-          currentBikeList = 0;
-          prefs.setInt('currentBikeList', currentBikeList);
-          getBike(userBikeList.keys.first);
-          notifyListeners();
-        }
-        break;
-      case "last":
-        {
-          currentBikeList = userBikeList.length - 1;
-          prefs.setInt('currentBikeList', currentBikeList);
-          getBike(userBikeList.keys.elementAt(currentBikeList));
-          notifyListeners();
-        }
-        break;
-    }
-    notifyListeners();
-  }
-
 }

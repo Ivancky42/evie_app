@@ -82,7 +82,7 @@ class _UserNotFoundState extends State<UserNotFound> {
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
-                        _settingProvider.changeSheetElement(SheetList.pedalPals);
+                        _settingProvider.changeSheetElement(SheetList.pedalPalsList);
 
                       },
                     ),

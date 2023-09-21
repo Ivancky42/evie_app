@@ -158,7 +158,7 @@ class CurrentUserProvider extends ChangeNotifier {
     }
   }
 
-  cancelSubscription() async {
+  clear() async {
     if(currentUserModel?.notificationSettings?.firmwareUpdate == true ){
       await NotificationProvider().unsubscribeFromTopic("~firmware-update");
     }
@@ -166,6 +166,7 @@ class CurrentUserProvider extends ChangeNotifier {
       await NotificationProvider().unsubscribeFromTopic("~general");
     }
     currentUserSubscription?.cancel();
+    notifyListeners();
   }
 
   todayRandomQuote() {

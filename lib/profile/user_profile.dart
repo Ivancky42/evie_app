@@ -329,10 +329,7 @@ class _UserProfileState extends State<UserProfile> {
                                               try {
                                                 await _authProvider.signOut(context).then((result) async {
                                                   if(result == true){
-                                                    await _bikeProvider.clear();
                                                     SmartDialog.dismiss();
-                                                   // _authProvider.clear();
-
                                                     changeToWelcomeScreen(context);
                                                     ScaffoldMessenger.of(context)
                                                         .showSnackBar(

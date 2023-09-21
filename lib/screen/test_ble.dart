@@ -1287,10 +1287,7 @@ class _TestBleState extends State<TestBle> {
                     try {
                       await _authProvider.signOut(context).then((result) async {
                         if (result == true) {
-                          await _bikeProvider.clear();
                           SmartDialog.dismiss();
-                          // _authProvider.clear();
-
                           changeToWelcomeScreen(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

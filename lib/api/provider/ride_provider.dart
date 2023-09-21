@@ -647,13 +647,14 @@ class RideProvider extends ChangeNotifier {
     this.rideFormat = rideFormat;
   }
 
-  clear(){
-    tripHistorySubscription?.cancel();
+  clear() async {
+    await tripHistorySubscription?.cancel();
     currentTripHistoryLists.clear();
     dayRideHistoryList.clear();
     weekRideHistoryList.clear();
     monthRideHistoryList.clear();
     yearRideHistoryList.clear();
+    notifyListeners();
   }
 }
 

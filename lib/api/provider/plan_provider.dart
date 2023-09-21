@@ -121,4 +121,14 @@ class PlanProvider extends ChangeNotifier {
       return value;
     });
   }
+
+  clear() async {
+    currentUserModel = null;
+    currentBikeModel = null;
+    await planListSubscription?.cancel();
+    await priceListSubscription?.cancel();
+    availablePlanList.clear();
+    priceList.clear();
+    notifyListeners();
+  }
 }

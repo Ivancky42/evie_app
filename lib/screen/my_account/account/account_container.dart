@@ -3,6 +3,7 @@ import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/account/account_model.dart';
@@ -21,7 +22,11 @@ import '../../../api/enumerate.dart';
 import '../../../api/function.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
+import '../../../api/provider/current_user_provider.dart';
+import '../../../api/provider/firmware_provider.dart';
 import '../../../api/provider/notification_provider.dart';
+import '../../../api/provider/plan_provider.dart';
+import '../../../api/provider/ride_provider.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../main.dart';
 
@@ -39,7 +44,6 @@ class _AccountContainerState extends State<AccountContainer> {
   late AuthProvider _authProvider;
   late SettingProvider _settingProvider;
   late NotificationProvider _notificationProvider;
-
   DeviceConnectResult? deviceConnectResult;
   String? label;
   String? pageNavigate;
@@ -364,9 +368,7 @@ class _AccountContainerState extends State<AccountContainer> {
                     try {
                       await _authProvider.signOut(context).then((result) async {
                         if (result == true) {
-                          await _bikeProvider.clear();
                           SmartDialog.dismiss();
-                          // _authProvider.clear();
                           changeToWelcomeScreen(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -412,9 +414,16 @@ class _AccountContainerState extends State<AccountContainer> {
                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                   ),
                   onPressed: ()  async {
+                    // _authProvider.deactivateAccount().then((value) {
+                    //   _authProvider.signOut().then((value) {
+                    //     _bikeProvider.clear();
+                    //     SmartDialog.dismiss();
+                    //     changeToWelcomeScreen(context);
+                    //   });
+                    // });
 
+                    changeToRevokeAccount(context);
                   },
-
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
