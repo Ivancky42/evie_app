@@ -243,10 +243,15 @@ class BikeProvider extends ChangeNotifier {
 
           ///Subscript to topic based on looping (for first time open app only)
           if (prefs.containsKey('currentBikeImei')) {
-            currentBikeIMEI = prefs.getString('currentBikeImei') ?? "";
-
+            if (userBikeList.keys.contains(prefs.getString('currentBikeImei'))) {
+              currentBikeIMEI = prefs.getString('currentBikeImei') ?? "";
+            }
+            else {
+              currentBikeIMEI = userBikeList.keys.first.toString();
+            }
             notifyListeners();
-          } else {
+          }
+          else {
             currentBikeIMEI = userBikeList.keys.first.toString();
           }
 
