@@ -8,10 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import '../api/colours.dart';
 import '../api/dialog.dart';
 import '../api/length.dart';
+import '../api/provider/auth_provider.dart';
 import '../widgets/evie_button.dart';
 
 class Welcome extends StatefulWidget {
@@ -22,6 +24,16 @@ class Welcome extends StatefulWidget {
 }
 
 class _WelcomeState extends State<Welcome> {
+  late AuthProvider _authProvider;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _authProvider = context.read<AuthProvider>();
+    _authProvider.init();
+  }
+
   @override
   Widget build(BuildContext context) {
 

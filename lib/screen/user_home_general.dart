@@ -15,6 +15,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
+import '../api/colours.dart';
 import '../api/dialog.dart';
 import '../api/provider/auth_provider.dart';
 import '../api/provider/bike_provider.dart';
@@ -40,6 +41,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   late AuthProvider _authProvider;
   DeviceConnectResult? deviceConnectResult;
   bool isFirstTimeConnected = false;
+  bool isLoading = true;
 
   final FocusNode _textFocus = FocusNode();
 
@@ -54,6 +56,9 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
   @override
   void initState() {
+    _authProvider = context.read<AuthProvider>();
+    _currentUserProvider = context.read<CurrentUserProvider>();
+    fetchData(_authProvider, _currentUserProvider, context);
     _textFocus.addListener(() {
       onNameChange();
     });
@@ -76,20 +81,6 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
         changeToFeedsScreen(context);
       });
-
-      /*
-      ///Future builder
-        Future.delayed(const Duration(milliseconds: 800), () {
-          changeToNotificationDetailsScreen(
-              context,
-              _notificationProvider.currentSingleNotification?.notificationId,
-              _notificationProvider.currentSingleNotification,
-
-           //   _notificationProvider.singleNotificationList.keys.first,
-           //   _notificationProvider.singleNotificationList.values.first
-              );
-        });
-       */
     });
 
     foreNotificationSetting();
@@ -118,6 +109,19 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       }
     });
     super.initState();
+  }
+
+  Future<void> fetchData(_authProvider, _currentUserProvider, context) async {
+    final result = await _currentUserProvider.checkUserAccount(_authProvider.getUid);
+    if (result == 'INVALID_USER') {
+      await _authProvider.signOut(context);
+      changeToWelcomeScreen(context);
+    }
+    else if (result == 'VALID_USER'){
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -157,26 +161,6 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       Future.delayed(Duration.zero, () {
         changeToFeedsScreen(context);
       });
-
-    /*
-    await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
-
-      ///Future builder
-      Future.delayed(const Duration(milliseconds: 800), () {
-        changeToNotificationDetailsScreen(
-          context,
-          _notificationProvider.currentSingleNotification?.notificationId,
-          _notificationProvider.currentSingleNotification,
-
-          //   _notificationProvider.singleNotificationList.keys.first,
-          //   _notificationProvider.singleNotificationList.values.first
-        );
-      });
-
-    });
-
-
-     */
   }
 
   ///IOS foreground message handler
@@ -184,44 +168,9 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
     // display a dialog with the notification details, tap ok to go to another page
     ///Pass notification id to get body and key
     await _notificationProvider.getNotificationFromNotificationId(payload);
-
       Future.delayed(Duration.zero, () {
         changeToFeedsScreen(context);
       });
-
-    // if (_notificationProvider.currentSingleNotification?.notificationId !=
-    //     null) {
-    //
-    //   changeToNotificationScreen(context);
-    //   // changeToNotificationDetailsScreen(
-    //   //   context,
-    //   //   _notificationProvider.currentSingleNotification?.notificationId,
-    //   //   _notificationProvider.currentSingleNotification,
-    //   //
-    //   //   //   _notificationProvider.singleNotificationList.keys.first,
-    //   //   //   _notificationProvider.singleNotificationList.values.first
-    //   // );
-    // }
-
-
-    /*
-    await _notificationProvider.getNotificationFromNotificationId(payload).then((result){
-
-
-      ///Future builder
-      Future.delayed(const Duration(milliseconds: 800), () {
-        changeToNotificationDetailsScreen(
-          context,
-          _notificationProvider.currentSingleNotification?.notificationId,
-          _notificationProvider.currentSingleNotification,
-
-          //   _notificationProvider.singleNotificationList.keys.first,
-          //   _notificationProvider.singleNotificationList.values.first
-        );
-      });
-    });
-
-     */
   }
 
   @override
@@ -235,7 +184,6 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   void onNameChange() {
     if (!_textFocus.hasFocus) {
       String text = _bikeNameController.text.trim();
-
       _bikeProvider.updateBikeName(text);
     }
   }
@@ -286,14 +234,14 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
         },
 
         child: Scaffold(
-            body: _buildChild(userBikeList),
+            body: isLoading ?
+                Center(child: CircularProgressIndicator(color: EvieColors.primaryColor,)) :
+            _buildChild(userBikeList),
         )
     );
   }
 
   Widget _buildChild(LinkedHashMap userBikeList) {
-
-
     if (_bikeProvider.isReadBike &&
         //_bikeProvider.currentBikeModel == null ||
         !userBikeList.isNotEmpty) {
@@ -308,7 +256,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
         }else{
           ///For not become unlimited Circular
            //if(_bikeProvider.userBikeList.isNotEmpty) _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeList.keys.first);
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator(color: EvieColors.primaryColor,));
         }
     }
   }

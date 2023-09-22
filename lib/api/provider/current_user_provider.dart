@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -31,6 +32,9 @@ class CurrentUserProvider extends ChangeNotifier {
   get fetchCurrentUserModel async => currentUserModel;
 
   StreamSubscription? currentUserSubscription;
+  StreamSubscription? checkUserAccountSub;
+
+  late Completer<String?> getUserCompleter;
 
   CurrentUserProvider() {
     init();
@@ -43,8 +47,6 @@ class CurrentUserProvider extends ChangeNotifier {
   Future<void> update(uid) async {
     if (uid != null) {
       getUser(uid);
-      //todayRandomQuote();
-
       notifyListeners();
     }
     else {
@@ -54,35 +56,80 @@ class CurrentUserProvider extends ChangeNotifier {
   }
 
   ///Get user information
-  void getUser(String? uid) {
-
+  getUser(String? uid) {
     currentUserSubscription?.cancel();
-
     if (uid == null || uid == "") {
       currentUserModel = null;
-    } else {
-
-      NotificationProvider().subscribeToTopic("fcm_test");
-      NotificationProvider().subscribeToTopic(uid);
-
-      currentUserSubscription = FirebaseFirestore.instance.collection(usersCollection).doc(uid)
-          .snapshots()
-          .listen((event) {
-        try {
-          Map<String, dynamic>? obj = event.data();
-          if (obj != null) {
-            currentUserModel = UserModel.fromJson(obj);
-            notifyListeners();
-          }
-        } on Exception catch (exception) {
-          debugPrint(exception.toString());
-        }
-        catch (error) {
-          debugPrint(error.toString());
+    }
+    else {
+      currentUserSubscription = FirebaseFirestore.instance.collection(usersCollection).doc(uid).snapshots().listen((event) {
+        Map<String, dynamic>? obj = event.data();
+        if (obj != null) {
+          currentUserModel = UserModel.fromJson(obj);
+          NotificationProvider().subscribeToTopic("fcm_test");
+          NotificationProvider().subscribeToTopic(currentUserModel?.uid);
+          notifyListeners();
         }
       });
     }
   }
+
+  ///Get user information
+  Future<String?> checkUserAccount(String? uid) {
+    getUserCompleter = Completer<String?>();
+    checkUserAccountSub?.cancel();
+
+    if (uid == null || uid == '') {
+      getUserCompleter.complete('NO_USER');
+    }
+    else {
+      FirebaseFirestore.instance.collection(usersCollection).doc(uid).get().then((doc) {
+        Map<String, dynamic>? obj = doc.data();
+        if (obj != null) {
+          currentUserModel = UserModel.fromJson(obj);
+          if (currentUserModel!.isDeactivated) {
+            getUserCompleter.complete('INVALID_USER');
+          }
+          else {
+            getUserCompleter.complete('VALID_USER');
+            NotificationProvider().subscribeToTopic("fcm_test");
+            NotificationProvider().subscribeToTopic(currentUserModel?.uid);
+          }
+        }
+        else {
+          getUserCompleter.complete('INVALID_USER');
+        }
+      });
+    }
+
+    // if (uid == null || uid == "") {
+    //   currentUserModel = null;
+    // }
+    // else {
+    //   checkUserAccountSub = FirebaseFirestore.instance.collection(usersCollection).doc(uid).snapshots().listen((event) {
+    //     Map<String, dynamic>? obj = event.data();
+    //     if (obj != null) {
+    //       currentUserModel = UserModel.fromJson(obj);
+    //       if (currentUserModel!.isDeactivated) {
+    //         getUserCompleter.complete('INVALID_USER');
+    //       }
+    //       else {
+    //         NotificationProvider().subscribeToTopic("fcm_test");
+    //         NotificationProvider().subscribeToTopic(currentUserModel?.uid);
+    //         //getUserCompleter.complete('VALID_USER');
+    //         notifyListeners();
+    //       }
+    //     }
+    //     else {
+    //       getUserCompleter.complete('INVALID_USER');
+    //     }
+    //   });
+    // }
+
+    return getUserCompleter.future;
+  }
+
+
 
 
   ///User update user profile
@@ -166,6 +213,7 @@ class CurrentUserProvider extends ChangeNotifier {
       await NotificationProvider().unsubscribeFromTopic("~general");
     }
     currentUserSubscription?.cancel();
+    checkUserAccountSub?.cancel();
     notifyListeners();
   }
 

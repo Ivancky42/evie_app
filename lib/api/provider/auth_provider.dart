@@ -58,6 +58,7 @@ class AuthProvider extends ChangeNotifier {
 
   ///Initial value
   Future<void> init() async {
+    userChangeSubscription?.cancel();
     userChangeSubscription = FirebaseAuth.instance.userChanges().listen((user) {
       if (user != null) {
         _uid = user.uid;
@@ -111,20 +112,11 @@ class AuthProvider extends ChangeNotifier {
     String profileIMG = dotenv.env['DEFAULT_PROFILE_IMG'] ?? 'DPI not found';
 
     try {
-      await _auth
-          .createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      )
-          .then((auth) {
+      await _auth.createUserWithEmailAndPassword(email: email, password: password,).then((auth) {
         firebaseUser = auth.user!;
         if (firebaseUser != null) {
-
-          createFirestoreUser(firebaseUser?.uid, firebaseUser?.email, name,
-              phoneNo, profileIMG, credentialProvider);
-
+          createFirestoreUser(firebaseUser?.uid, firebaseUser?.email, name, phoneNo, profileIMG, credentialProvider);
           sendFirestoreVerifyEmail();
-
         }
       });
       return true;
@@ -198,6 +190,7 @@ class AuthProvider extends ChangeNotifier {
             credentialProvider: credentialProvider,
             created: Timestamp.now(),
             updated: Timestamp.now(),
+            isDeactivated: false,
           ).toJson());
     } catch (e) {
       debugPrint(e.toString());
@@ -543,43 +536,38 @@ class AuthProvider extends ChangeNotifier {
 
   ///User sign out
   Future signOut(BuildContext context) async {
-    try {
-      final _currentUserProvider = context.read<CurrentUserProvider>();
-      final _bikeProvider = context.read<BikeProvider>();
-      final _bluetoothProvider = context.read<BluetoothProvider>();
-      final _firmwareProvider = context.read<FirmwareProvider>();
-      final _locationProvider = context.read<LocationProvider>();
-      final _notificationProvider = context.read<NotificationProvider>();
-      final _planProvider = context.read<PlanProvider>();
-      final _rideProvider = context.read<RideProvider>();
+    final _currentUserProvider = context.read<CurrentUserProvider>();
+    final _bikeProvider = context.read<BikeProvider>();
+    final _bluetoothProvider = context.read<BluetoothProvider>();
+    final _firmwareProvider = context.read<FirmwareProvider>();
+    final _locationProvider = context.read<LocationProvider>();
+    final _notificationProvider = context.read<NotificationProvider>();
+    final _planProvider = context.read<PlanProvider>();
+    final _rideProvider = context.read<RideProvider>();
 
-      await _currentUserProvider.clear();
-      await _bikeProvider.clear();
-      await _bluetoothProvider.disconnectDevice();
-      await _firmwareProvider.clear();
-      await _locationProvider.clear();
-      await _notificationProvider.clear(_uid!);
-      await _planProvider.clear();
-      await _rideProvider.clear();
+    await _currentUserProvider.clear();
+    await _bikeProvider.clear();
+    await _bluetoothProvider.disconnectDevice();
+    await _firmwareProvider.clear();
+    await _locationProvider.clear();
+    await _notificationProvider.clear(_uid!);
+    await _planProvider.clear();
+    await _rideProvider.clear();
 
-      if(credentialProvider == "google"){
-        await googleSignIn.disconnect();
-        await googleSignIn.signOut();
-      }
-
-      await _auth.signOut();
-
-      if(userChangeSubscription != null){
-        userChangeSubscription?.cancel();
-      }
-
-      _uid = null;
-      isLogin = false;
-      notifyListeners();
-      return true;
-    } catch (error) {
-      debugPrint(error.toString());
-      return false;
+    if(credentialProvider == "google"){
+      await googleSignIn.disconnect();
+      await googleSignIn.signOut();
     }
+
+    await _auth.signOut();
+
+    if(userChangeSubscription != null){
+      userChangeSubscription?.cancel();
+    }
+
+    _uid = null;
+    isLogin = false;
+    notifyListeners();
+    return true;
   }
 }

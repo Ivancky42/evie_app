@@ -37,13 +37,12 @@ class NotificationProvider extends ChangeNotifier {
     ///Subscribe to user uid for notification
     notificationList.clear();
     if (currentUserModel == null) {
-    } else {
+
+    }
+    else {
       this.currentUserModel = currentUserModel;
       isReadAll = true;
       getNotification(this.currentUserModel!.uid);
-
-      //  firebaseCloudMessaging_Listeners();
-
       compareActionableBarTime();
       notifyListeners();
     }

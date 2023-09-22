@@ -16,6 +16,7 @@ class UserModel {
   String? stripeLink;
   NotificationSettingModel? notificationSettings;
   LastLoginModel? lastLogin;
+  bool isDeactivated;
 
   UserModel({
     required this.uid,
@@ -30,6 +31,7 @@ class UserModel {
     this.stripeLink,
     this.notificationSettings,
     this.lastLogin,
+    required this.isDeactivated,
   });
 
   factory UserModel.fromJson(Map json) {
@@ -46,6 +48,7 @@ class UserModel {
       stripeLink:         json['stripeLink']?? '',
       notificationSettings:  json['notificationSettings'] != null ? NotificationSettingModel.fromJson(json['notificationSettings'] as Map<String, dynamic>) : null,
       lastLogin:  json['lastLogin'] != null ? LastLoginModel.fromJson(json['lastLogin'] as Map<String, dynamic>) : null,
+      isDeactivated: json['isDeactivated'] ?? false,
     );
   }
 
@@ -57,7 +60,8 @@ class UserModel {
     "profileIMG": profileIMG,
     "phoneNumber" : phoneNumber,
     "created": timestampToJson(created),
-    "updated": timestampToJson(updated)
+    "updated": timestampToJson(updated),
+    "isDeactivated": isDeactivated,
   };
 
   Timestamp? timestampToJson(Timestamp? timestamp) {
