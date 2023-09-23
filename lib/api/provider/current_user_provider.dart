@@ -282,34 +282,35 @@ class CurrentUserProvider extends ChangeNotifier {
   }
 
   compareUserLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
 
-    List<Placemark> placeMarks = await placemarkFromCoordinates(
-        position.latitude, position.longitude);
+      List<Placemark> placeMarks = await placemarkFromCoordinates(
+          position.latitude, position.longitude);
 
-    Placemark place = placeMarks[0];
+      Placemark place = placeMarks[0];
 
-    if (currentUserModel?.lastLogin?.country == null ||
-        currentUserModel?.lastLogin?.country == "" ||
-        currentUserModel?.lastLogin?.country != place.country) {
+      if (currentUserModel?.lastLogin?.country == null ||
+          currentUserModel?.lastLogin?.country == "" ||
+          currentUserModel?.lastLogin?.country != place.country) {
+        debugPrint("User country not match database info");
+        print(currentUserModel?.lastLogin?.country);
 
-      debugPrint("User country not match database info");
-      print(currentUserModel?.lastLogin?.country);
+        Map<String, dynamic> deviceData = {
+          'country': place.country,
+          'updated': DateTime.now(),
+        };
 
-      Map<String, dynamic> deviceData = {
-        'country' : place.country,
-        'updated' : DateTime.now(),
-      };
-
-      Future.delayed(const Duration(seconds: 8), () async {
-
-        await uploadDeviceInfoToFirestore(deviceData);
-
-      });
-
-    }else{
-      debugPrint("User country match database info");
+        Future.delayed(const Duration(seconds: 8), () async {
+          await uploadDeviceInfoToFirestore(deviceData);
+        });
+      } else {
+        debugPrint("User country match database info");
+      }
+    }
+    catch(error) {
+      print(error);
     }
   }
 

@@ -64,7 +64,12 @@ class AuthProvider extends ChangeNotifier {
         _uid = user.uid;
         _email = user.email!;
         isLogin = true;
-        isEmailVerified = user.emailVerified;
+        if (user.providerData[0].providerId == 'password') {
+          isEmailVerified = user.emailVerified;
+        }
+        else {
+          isEmailVerified = true;
+        }
         getIsFirstLogin();
         notifyListeners();
       }
@@ -244,16 +249,27 @@ class AuthProvider extends ChangeNotifier {
           _uid = userCredential.user!.uid;
           _email = userCredential.user!.email!;
 
-          ///Firestore
-         createFirestoreUser(
-              _uid,
-              _email,
-              //userCredential.user?.displayName.toString(), //Name
-              nameInput, //Name
-              userPhoneNo, //Phone no
-              userCredential.user?.photoURL.toString(),
-              credentialProvider //Profile image
-              );
+          if (nameInput != '') {
+            ///Firestore
+            createFirestoreUser(
+                _uid,
+                _email,
+                nameInput, //Name
+                userPhoneNo, //Phone no
+                userCredential.user?.photoURL.toString(),
+                credentialProvider //Profile image
+            );
+          }
+          else {
+            createFirestoreUser(
+                _uid,
+                _email,
+                userCredential.user?.displayName.toString(), //Name
+                userPhoneNo, //Phone no
+                userCredential.user?.photoURL.toString(),
+                credentialProvider
+            );
+          }
 
           setIsFirstLogin(true);
           notifyListeners();
@@ -277,44 +293,65 @@ class AuthProvider extends ChangeNotifier {
     try {
       final LoginResult loginResult = await FacebookAuth.instance.login(permissions: ['email', 'public_profile']);
 
-      final OAuthCredential facebookAuthCredential =
-          FacebookAuthProvider.credential(loginResult.accessToken!.token);
+      if (loginResult.status == LoginStatus.cancelled) {
+        ///Show cancel dialog
+        print('User cancel');
+      }
+      else if (loginResult.status == LoginStatus.failed) {
+        ///Show failed dialog
+        print("User failed");
+      }
+      else if (loginResult.status == LoginStatus.success) {
+        final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-      final userCredential =
-          await _auth.signInWithCredential(facebookAuthCredential);
+        final userCredential =
+        await _auth.signInWithCredential(facebookAuthCredential);
 
-      credentialProvider = "facebook";
-      notifyListeners();
+        credentialProvider = "facebook";
+        notifyListeners();
 
-      if (userCredential.additionalUserInfo!.isNewUser) {
-        String? userPhoneNo;
+        if (userCredential.additionalUserInfo!.isNewUser) {
+          String? userPhoneNo;
 
           userPhoneNo = "empty";
 
 
-        _uid = userCredential.user!.uid;
-        _email = userCredential.user!.email!;
+          _uid = userCredential.user!.uid;
+          _email = userCredential.user!.email!;
 
-        ///Firestore
-       createFirestoreUser(
-            _uid,
-            _email,
-            //userCredential.user?.displayName.toString(), //Name
-            nameInput,
-            userPhoneNo, //Phone no
-            userCredential.user?.photoURL.toString(),
-            credentialProvider //Profile image
+          if (nameInput != '') {
+            ///Firestore
+            createFirestoreUser(
+                _uid,
+                _email,
+                nameInput,
+                userPhoneNo, //Phone no
+                userCredential.user?.photoURL.toString(),
+                credentialProvider //Profile image
             );
+          }
+          else {
+            createFirestoreUser(
+                _uid,
+                _email,
+                userCredential.user?.displayName.toString(),
+                userPhoneNo, //Phone no
+                userCredential.user?.photoURL.toString(),
+                credentialProvider //Profile image
+            );
+          }
 
-        setIsFirstLogin(true);
-        notifyListeners();
-        return true;
-      } else {
-        _uid = userCredential.user!.uid;
-        _email = userCredential.user!.email!;
+          setIsFirstLogin(true);
+          notifyListeners();
+          return true;
+        }
+        else {
+          _uid = userCredential.user!.uid;
+          _email = userCredential.user!.email!;
 
-        notifyListeners();
-        return true;
+          notifyListeners();
+          return true;
+        }
       }
     } catch (error) {
       debugPrint(error.toString());
