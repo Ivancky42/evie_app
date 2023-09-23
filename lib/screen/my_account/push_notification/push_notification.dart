@@ -47,14 +47,14 @@ class _PushNotificationState extends State<PushNotification> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToMyAccount(context);
+        changeToMyAccount(context, PushNotification());
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'Push Notification',
           onPressed: () {
-            changeToMyAccount(context);
+            changeToMyAccount(context, PushNotification());
           },
         ),
         body: Stack(

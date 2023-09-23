@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math' as math;
+import 'dart:ui';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/fonts.dart';
@@ -116,176 +118,108 @@ class _AddNewBikeState extends State<AddNewBike> {
           body: SafeArea(
             child: Container(
               color: EvieColors.grayishWhite,
-              child: Stack(
+              child: Column(
                 children: [
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Column(
-                      //mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  Container(
+                    height: 77.77.h,
+                    color:  EvieColors.lightBlack,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SingleChildScrollView(
-                          child: Column(
-                            children: [
-                          SingleChildScrollView(
-                            child: Container(
-                              height: 77.77.h,
-                              color:  EvieColors.lightBlack,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset('assets/images/bike_round_empty.png', width: 56.w, height: 56.w,),
+                            ),
+                            Padding(
+                              padding:  EdgeInsets.only(left: 12.w),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Image.asset('assets/images/bike_round.png'),
+                                      Text(
+                                        "My Bike",
+                                        style: EvieTextStyles.h1.copyWith(fontWeight: FontWeight.w800, color: EvieColors.grayishWhite),
                                       ),
-                                      Padding(
-                                        padding:  EdgeInsets.only(left: 12.w),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  "My Bike",
-                                                  style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite),
-                                                ),
-                                                // Text(
-                                                //   "icons",
-                                                //   style: EvieTextStyles.h3.copyWith(color: EvieColors.grayishWhite),
-                                                // ),
-                                              ],
-                                            ),
-
-                                            Text(
-                                              "Bike status",
-                                              style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
-                          ),
-
-
-                             // GestureDetector(
-                               // onTap: (){
-                                  //changeToBeforeYouStart(context);
-                                //},
-                                // child: Padding(
-                                //   padding: EdgeInsets.only(top: 20.68.h),
-                                //   child: Stack(
-                                //     children: [
-                                //       Center(
-                                //         child: Padding(
-                                //           padding: EdgeInsets.only(left:15.w, right:15.w),
-                                //           child: SvgPicture.asset(
-                                //             "assets/images/bike_register_required.svg",
-                                //             height:608.h,
-                                //           ),
-                                //         ),
-                                //       ),
-                                //
-                                //       Center(
-                                //         child: Padding(
-                                //           padding: EdgeInsets.only(top: 120.h),
-                                //           child: Lottie.asset('assets/animations/add-bike.json'),
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
-                              //),
-
-                              Padding(
-                                padding: EdgeInsets.only(top: 16.h, left: 8.w, right: 8.w, bottom: 16.h),
-                                child: Container(
-                                  width: 357.w,
-                                  height: 620.h,
-                                  decoration: BoxDecoration(
-                                    color: EvieColors.primaryColor,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-
-                                  child: Stack(
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Center(
-                                              child: Lottie.asset(
-                                                'assets/animations/add-bike.json',
-                                              ),
-                                          ),
-
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 17.w, right: 14.w),
-                                            child: Text("Register your bike",
-                                              style: EvieTextStyles.h2.copyWith(color: EvieColors.dividerWhite),
-                                            ),
-                                          ),
-
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 17.w, right: 14.w),
-                                            child: Text("To start riding and using EVIE app "
-                                                "you’ll need to pair your bike to your account.",
-                                              style: EvieTextStyles.body18.copyWith(color: EvieColors.dividerWhite, height: 1.35.h),
-                                            ),
-                                          ),
-
-                                        ],
-
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Padding(
-                                          padding: EdgeInsets.only(top: 55.h, bottom: 24.h, left: 17.w, right: 14.w),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Expanded(
-
-                                                child: EvieButton_ReversedColor(
-                                                  width: double.infinity,
-                                                  height: 48.h,
-
-                                                  onPressed: () { changeToBeforeYouStart(context); },
-                                                  child: Center(
-                                                    child: Text(
-                                                      "Register New Bike",
-                                                      style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-
-                                            ],
-                                          ),
-                                        ),
-                                      )
-
-                                    ],
-                                  ),
-
-                                    ),
-                              ),
-
-
-                        ],
-                          ),
-                        )
+                          ],),
                       ],
                     ),
                   ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 32.h, left: 18.w, right: 18.w, bottom: 32.h),
+                    child: Container(
+                      width: double.infinity,
+                      height: Platform.isIOS ? (MediaQuery.of(context).size.height - 77.h - 50.h - 64.h - 96.h) : (MediaQuery.of(context).size.height - 77.h - 30.h - 64.h - 64.h),
+                      decoration: BoxDecoration(
+                        color: EvieColors.primaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
 
+                      child: Stack(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Lottie.asset(
+                                  'assets/animations/add-bike.json',
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 17.w, right: 14.w),
+                                child: Text("Register your bike",
+                                  style: EvieTextStyles.h2.copyWith(color: EvieColors.dividerWhite, fontWeight: FontWeight.w500),
+                                ),
+                              ),
+
+                              Padding(
+                                padding: EdgeInsets.only(left: 17.w, right: 14.w),
+                                child: Text("To start riding and using EVIE app "
+                                    "you’ll need to pair your bike to your account.",
+                                  style: EvieTextStyles.body18.copyWith(color: EvieColors.dividerWhite, fontWeight: FontWeight.w400),
+                                ),
+                              ),
+
+                              Padding(
+                                padding: EdgeInsets.only(top: 55.h, bottom: 24.h, left: 17.w, right: 14.w),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+
+                                      child: EvieButton_ReversedColor(
+                                        width: double.infinity,
+                                        height: 48.h,
+                                        onPressed: () { changeToBeforeYouStart(context); },
+                                        child: Center(
+                                          child: Text(
+                                            "Register New Bike",
+                                            style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+
+                          ),
+                        ],
+                      ),
+
+                    ),
+                  ),
                 ],
-              ),
+              )
             ),
           )
         //        ),

@@ -488,22 +488,21 @@ void changeToProPlanScreen(BuildContext context) {
   );
 }
 
-void changeToMyAccount(BuildContext context) {
-  // Navigator.pushReplacement(context,
-  //   PageTransition(
-  //     type: PageTransitionType.rightToLeft,
-  //     child: const UserHomePage(2),
-  //     duration: const Duration(milliseconds: 300),
-  //   ),
-  // );
+void changeToMyAccount(BuildContext context, Widget child) {
 
-  // Navigator.of(context)
-  //     .pushNamedAndRemoveUntil("/account", (route) => false);
-
-  Navigator.of(context).pushReplacement(
-      MaterialWithModalsPageRoute(
-      builder: (context) => const UserHomePage(2))
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.leftToRightPop,
+      child: const UserHomePage(2),
+      childCurrent: child,
+      duration: const Duration(milliseconds: 300),
+    ),
   );
+
+  // Navigator.of(context).pushReplacement(
+  //     MaterialWithModalsPageRoute(
+  //     builder: (context) => const UserHomePage(2))
+  // );
 }
 
 
@@ -662,10 +661,13 @@ void changeToThreatTimeLine(BuildContext context, [PageTransitionType? pageTrans
 
 
 void changeToEditProfile(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
-      builder: (context) => const EditProfile())
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: const EditProfile(),
+      duration: const Duration(milliseconds: 300),
+    ),
   );
-    // Navigator.of(context).pushNamedAndRemoveUntil("/editProfile", (route) => false);
 }
 
 void changeToVerifyPassword(BuildContext context) {

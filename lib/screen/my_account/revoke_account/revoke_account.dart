@@ -53,14 +53,14 @@ class _RevokeAccountState extends State<RevokeAccount> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToMyAccount(context);
+        changeToMyAccount(context, RevokeAccount());
         return false;
       },
       child: Scaffold(
           appBar: PageAppbar(
             title: 'Revoke Account',
             onPressed: () {
-              changeToMyAccount(context);
+              changeToMyAccount(context, RevokeAccount());
             },
           ),
           body: Padding(
@@ -107,7 +107,7 @@ class _RevokeAccountState extends State<RevokeAccount> {
                           style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
                         ),
                         onPressed: () {
-                          changeToMyAccount(context);
+                          changeToMyAccount(context, RevokeAccount());
                         },
                       ),
                     ),

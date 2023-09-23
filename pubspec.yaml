@@ -105,7 +105,7 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.1.2
   json_serializable: ^6.3.1
-  flutter_launcher_icons: ^0.10.0
+  flutter_launcher_icons: ^0.13.1
   integration_test:
     sdk: flutter
   test: ^1.14.4
@@ -116,10 +116,20 @@ dev_dependencies:
   flutter_lints: ^1.0.0
 
   #For splash screen
-  flutter_native_splash: ^2.2.6
+  flutter_native_splash: ^2.3.2
 
 dependency_overrides:
   firebase_core_platform_interface: 4.8.0
+
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+  color: '#ECEDEB'
+  image: assets/images/splashscreen/splashscreen_new_big.png
+  #color_dark: '#252526'
+  color_dark: '#ECEDEB'
+  image_dark: assets/images/splashscreen/splashscreen_new_big.png
 
 flutter_icons:
   android: true

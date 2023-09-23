@@ -46,14 +46,14 @@ class _DisplaySettingState extends State<DisplaySetting> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToMyAccount(context);
+        changeToMyAccount(context, DisplaySetting());
         return false;
       },
       child: Scaffold(
         appBar: PageAppbar(
           title: 'Display Setting',
           onPressed: () {
-            changeToMyAccount(context);
+            changeToMyAccount(context, DisplaySetting());
           },
         ),
         body: Column(

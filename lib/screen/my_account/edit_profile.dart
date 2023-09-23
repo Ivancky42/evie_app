@@ -54,14 +54,14 @@ class _EditProfileState extends State<EditProfile> {
 
     return WillPopScope(
       onWillPop: () async {
-        changeToMyAccount(context);
+        changeToMyAccount(context, EditProfile());
         return false;
       },
       child: Scaffold(
           appBar: PageAppbar(
             title: 'Edit My Profile',
             onPressed: () {
-                changeToMyAccount(context);
+                changeToMyAccount(context, EditProfile());
             },
           ),
           body: Column(

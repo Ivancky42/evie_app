@@ -189,12 +189,12 @@ class _LoginScreenState extends State<Login> {
                         .then((result) {
 
                       if (result.toString() == "Verified") {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Success'),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //   const SnackBar(
+                        //     content: Text('Success'),
+                        //     duration: Duration(seconds: 2),
+                        //   ),
+                        // );
 
                         _currentUserProvider.getDeviceInfo();
                         ///Quit loading and go to user home page
