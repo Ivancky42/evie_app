@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../api/colours.dart';
 import '../../api/fonts.dart';
+import '../../api/function.dart';
 import '../../api/length.dart';
 import '../../api/navigator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
@@ -40,136 +41,103 @@ class _BeforeYouStartState extends State<BeforeYouStart> {
       child: Scaffold(
           body: Stack(
               children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(16.w,76.h,16.w,4.h),
-                child:  Text(
-                  "Things you'll need before you start",
-                  style: EvieTextStyles.h2,
-                ),
-              ),
-
-              Padding(
-                padding: EdgeInsets.fromLTRB(16.w,4.h,16.w,0.h),
-                child: Container(
-                  child:   Text(
-                    "1. Assemble your bike fully.",
-                    style: EvieTextStyles.body18,
-                  ),
-                ),
-              ),
-
-              Padding(
-                padding: EdgeInsets.fromLTRB(26.w,0.h,16.w,0.h),
-                  child: TextButton(
-                      onPressed: (){
-                        Uri.http("www.google.com");
-                      },
-                      child: Row(
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 120.h, 16.w, 36.h),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("How to assemble my bike?",
-                            style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),
-                    ),
-                          SvgPicture.asset(
-                            "assets/buttons/external_link_purple.svg",
+                            Text(
+                              "Things you'll need before you start",
+                              style: EvieTextStyles.h2,
+                            ),
+                            SizedBox(height: 4.h,),
+                            Text(
+                              "1. Assemble your bike fully.",
+                              style: EvieTextStyles.body18,
+                            ),
+                            SizedBox(height: 5.h,),
+                            GestureDetector(
+                              onTap: (){
+                                const url = 'https://support.eviebikes.com/en-US/how-to-assemble-evie-s1-and-t1-174422';
+                                final Uri _url = Uri.parse(url);
+                                launch(_url);
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 20.w),
+                                child: Row(
+                                  children: [
+                                    Text("How to assemble my bike?",
+                                      style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w400, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),
+                                    ),
+                                    SvgPicture.asset(
+                                      "assets/buttons/external_link_purple.svg",
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ),
+                            SizedBox(height: 25.h,),
+                            Text(
+                              "2. Get ownership card ready.",
+                              style: EvieTextStyles.body18,
+                            ),
+                        ]
+                      ),
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: 48.h,
+                            width: double.infinity,
+                            child: EvieButton(
+                              width: double.infinity,
+                              child:Text(
+                                "I'm Ready",
+                                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                              ),
+                              onPressed: () async {
+                                changeToTurnOnQRScannerScreen(context);
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 17.h,),
+                          _bikeProvider.isAddBike ?
+                          EvieButton_ReversedColor(
+                              width: double.infinity,
+                              onPressed: (){
+                                _bikeProvider.setIsAddBike(false);
+                                changeToUserHomePageScreen(context);
+                              },
+                              child: Text("Cancel", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor))) :
+                          GestureDetector(
+                            child: Text(
+                              "I'm not ready",
+                              softWrap: false,
+                              style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                            ),
+                            onTap: () {
+                              _authProvider.setIsFirstLogin(false);
+                              changeToUserHomePageScreen(context);
+                            },
                           ),
                         ],
-                      ),
-                  ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(16.w,0.h,16.w,98.h),
-                child: Container(
-                  child:   Text(
-                    "2. Get ownership card ready.",
-                    style: EvieTextStyles.body18,
+                      )
+                    ],
                   ),
                 ),
-              ),],
-          ),
 
-            Align(
-              alignment: Alignment.center,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(78.w,152.h,78.w,127.84.h),
-                child: SvgPicture.asset(
-                  "assets/images/ride_bike_see_phone.svg",
+                Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(78.w,307.h,78.w,127.84.h),
+                    child: SvgPicture.asset(
+                      "assets/images/ride_bike_see_phone.svg",
+                    ),
+                  ),
                 ),
-              ),
-        ),
-
-           Align(
-           alignment: Alignment.bottomCenter,
-            child: Padding(
-             padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom),
-             child: SizedBox(
-               height: 48.h,
-                width: double.infinity,
-                child: EvieButton(
-                  width: double.infinity,
-                   child:Text(
-                     "I'm ready",
-                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                   ),
-                   onPressed: () async {
-                  // var locationStatus = await Permission.location.status;
-                  //
-                  // if (_bluetoothProvider.bleStatus == BleStatus.unauthorized && locationStatus == PermissionStatus.granted) {
-                  //   changeToTurnOnBluetoothScreen(context);
-                  // }
-                  // else if (locationStatus == PermissionStatus.granted && _bluetoothProvider.bleStatus != BleStatus.unauthorized) {
-
-                    changeToTurnOnQRScannerScreen(context);
-
-                  //}
-                  // else {
-                  //   changeToTurnOnLocationScreen(context);
-                  // }
-
-                },
-              ),
-            ),
-          ),
-        ),
-
-
-
-           ///Button for on boarding and add bike respectively
-           _bikeProvider.isAddBike ? Align(
-             alignment: Alignment.bottomCenter,
-             child: Padding(
-               padding: EdgeInsets.fromLTRB(16.w,25.h,16.w,EvieLength.buttonbutton_buttonBottom),
-               child: EvieButton_ReversedColor(
-                 width: double.infinity,
-                   onPressed: (){
-                   _bikeProvider.setIsAddBike(false);
-                   changeToUserHomePageScreen(context);
-                   },
-                   child: Text("Cancel", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)))
-             ),
-           ) : Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(0.w,25.h,0.w,EvieLength.buttonWord_WordBottom),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: TextButton(
-                        child: Text(
-                          "I'm not ready",
-                          softWrap: false,
-                          style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
-                        ),
-                        onPressed: () {
-                          _authProvider.setIsFirstLogin(false);
-                        changeToUserHomePageScreen(context);
-                        },
-                      ),
-                ),
-              ),
-            ),
       ])),
     );
   }

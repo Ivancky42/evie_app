@@ -38,90 +38,68 @@ class _AccountVerifiedState extends State<AccountVerified> {
         bool? exitApp = await showQuitApp() as bool?;
         return exitApp ?? false;
       },
-
       child: Scaffold(
         appBar: EvieAppbar_Back(onPressed: (){ changeToWelcomeScreen(context);}),
-        body:
-        Stack(
-      children:[
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-
-              Text(
-                "Account Verified!",
-                style: EvieTextStyles.h2,
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              Text(
-                "Awesome! You're ready to go. Let's start by registering your bike so you can have a smooth and seamless riding experience.",
-                style: EvieTextStyles.body18,
-              ),
-
-            ],
+        body: Stack(
+          children:[
+            Padding(
+              padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 32.h),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Account Verified!",
+                        style: EvieTextStyles.h2,
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Text(
+                        "Awesome! You're ready to go. Let's start by registering your bike so you can have a smooth and seamless riding experience.",
+                        style: EvieTextStyles.body18,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      EvieButton(
+                        width: double.infinity,
+                        child: Text(
+                          "Register My Bike",
+                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                        ),
+                        onPressed: () async {
+                          _authProvider.setIsFirstLogin(true);
+                          changeToBeforeYouStart(context);
+                        },
+                      ),
+                      SizedBox(height: 11.h,),
+                      GestureDetector (
+                        child: Text(
+                          "Maybe Later",
+                          softWrap: false,
+                          style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                        ),
+                        onTap: () {
+                          _authProvider.setIsFirstLogin(false);
+                          changeToUserHomePageScreen(context);
+                        },
+                      ),
+                    ],
+                  )
+                ],
+              )
           ),
-
-      ),
-
-
-        Align(
-          alignment: Alignment.center,
-          child: Lottie.asset('assets/animations/account-verify.json'),
-        ),
-
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: EdgeInsets.only(
-                left: 16, right: 16, bottom: EvieLength.buttonWord_ButtonBottom),
-            child: SizedBox(
-              width: double.infinity,
-              child:   EvieButton(
-                width: double.infinity,
-                child: Text(
-                  "Register My Bike",
-                  style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                ),
-                onPressed: () async {
-                  _authProvider.setIsFirstLogin(true);
-                  changeToBeforeYouStart(context);
-                },
-              ),
+            Align(
+              alignment: Alignment.center,
+              child: Lottie.asset('assets/animations/account-verify.json'),
             ),
-          ),
-        ),
-
-
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(0.w,25.h,0.w,EvieLength.buttonWord_WordBottom),
-            child: SizedBox(
-              width: double.infinity,
-              child: TextButton(
-                child: Text(
-                  "Maybe Later",
-                  softWrap: false,
-                  style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
-                ),
-                onPressed: () {
-                  _authProvider.setIsFirstLogin(false);
-                  changeToUserHomePageScreen(context);
-                },
-              ),
-            ),
-          ),
-        ),
-
-
-
-      ]
-      )
+          ]
+        )
       ),
     );
   }

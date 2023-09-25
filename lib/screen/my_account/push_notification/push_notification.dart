@@ -66,7 +66,7 @@ class _PushNotificationState extends State<PushNotification> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   EvieSwitch(
-                    text: "General Notifications",
+                    text: "General Notification",
                     value: _currentUserProvider.currentUserModel?.notificationSettings?.general ?? false,
                     thumbColor: _thumbColor,
                     onChanged: (value) async {
@@ -92,10 +92,41 @@ class _PushNotificationState extends State<PushNotification> {
                       }
                     },
                   ),
-                  const EvieDivider(),
+                  Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
 
                   EvieSwitch(
-                    text: "Firmware Update",
+                    text: "Promo",
+                    value: _currentUserProvider.currentUserModel?.notificationSettings?.promo ?? false,
+                    thumbColor: _thumbColor,
+                    onChanged: (value) async {
+                      SmartDialog.showLoading();
+                      var result = await _bikeProvider.updateFirestoreNotification("promo", value!);
+                      if(result == true){
+                        SmartDialog.dismiss();
+                      }
+                      else{
+                        SmartDialog.show(
+                            widget: EvieSingleButtonDialog(
+                                title: "Error",
+                                content: "Try again",
+                                rightContent: "OK",
+                                onPressedRight: (){SmartDialog.dismiss();}));
+                      }
+                    },
+                  ),
+
+                  Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+
+                  EvieSwitch(
+                    text: "Software Update",
                     value: _currentUserProvider.currentUserModel?.notificationSettings?.firmwareUpdate ?? false,
                     thumbColor: _thumbColor,
                     onChanged: (value) async {
@@ -122,18 +153,11 @@ class _PushNotificationState extends State<PushNotification> {
                     },
                   ),
 
-                  const EvieDivider(),
-
-                  EvieSwitch(
-                    text: "Offers",
-                    value: true,
-                    thumbColor: _thumbColor,
-                    onChanged: (value) {
-
-                    },
+                  Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
                   ),
-
-                  const EvieDivider(),
 
                 ],
               ),

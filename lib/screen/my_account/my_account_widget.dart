@@ -86,7 +86,7 @@ class EditProfileContainer extends StatelessWidget {
     return Container(
       height: 59.h,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+        padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 0.h),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -98,9 +98,9 @@ class EditProfileContainer extends StatelessWidget {
                   subtitle,
                   style: TextStyle(fontSize: 12.sp, color: Color(0xff5F6060)),
                 ),
-                SizedBox(
-                  height: 4.h,
-                ),
+                // SizedBox(
+                //   height: 2.h,
+                // ),
                 Text(
                   content,
                   style: TextStyle(fontSize: 16.sp),
@@ -142,19 +142,23 @@ class ChangeImageContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Padding(
-      padding: EdgeInsets.only(top: 10.h, bottom: 10.h, left: 22.h),
+      padding: EdgeInsets.only(top: 0.h, bottom: 0.h, left: 16.h),
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: onPress,
-        child: Row(
-          children: [
-            SvgPicture.asset(image),
-            Text(
-            content,
-              style: TextStyle(fontSize: 16.sp),
-            )
-          ],
-        ),
+        child: Container(
+          height: 52.h,
+          child:  Row(
+            children: [
+              SvgPicture.asset(image),
+              SizedBox(width: 8.w,),
+              Text(
+                content,
+                style: TextStyle(fontSize: 16.sp),
+              )
+            ],
+          ),
+        )
       ),
     );
   }

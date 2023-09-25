@@ -122,14 +122,14 @@ class _SignInMethodState extends State<SignInMethod> {
                               _currentUserProvider.getDeviceInfo();
                               changeToUserHomePageScreen(context);
                             } else {
-                              SmartDialog.show(
-                                  widget: EvieSingleButtonDialog(
-                                      title: "Error",
-                                      content: result,
-                                      rightContent: "Ok",
-                                      onPressedRight: () {
-                                        SmartDialog.dismiss();
-                                      }));
+                              // SmartDialog.show(
+                              //     widget: EvieSingleButtonDialog(
+                              //         title: "Error",
+                              //         content: result,
+                              //         rightContent: "Ok",
+                              //         onPressedRight: () {
+                              //           SmartDialog.dismiss();
+                              //         }));
                             }
                           });
                         }),
@@ -164,14 +164,16 @@ class _SignInMethodState extends State<SignInMethod> {
                           _currentUserProvider.getDeviceInfo();
                           changeToUserHomePageScreen(context);
                         } else {
-                          SmartDialog.show(
-                              widget: EvieSingleButtonDialog(
-                                  title: "Error",
-                                  content: result,
-                                  rightContent: "Ok",
-                                  onPressedRight: () {
-                                    SmartDialog.dismiss();
-                                  }));
+                          if (result != null) {
+                            SmartDialog.show(
+                                widget: EvieSingleButtonDialog(
+                                    title: "Error",
+                                    content: result,
+                                    rightContent: "Ok",
+                                    onPressedRight: () {
+                                      SmartDialog.dismiss();
+                                    }));
+                          }
                         }
                       });
                     }),
@@ -202,15 +204,6 @@ class _SignInMethodState extends State<SignInMethod> {
                         if (result == true) {
                           _currentUserProvider.getDeviceInfo();
                           changeToUserHomePageScreen(context);
-                        } else {
-                          SmartDialog.show(
-                              widget: EvieSingleButtonDialog(
-                                  title: "Error",
-                                  content: result.toString(),
-                                  rightContent: "Ok",
-                                  onPressedRight: () {
-                                    SmartDialog.dismiss();
-                                  }));
                         }
                       });
                     }),

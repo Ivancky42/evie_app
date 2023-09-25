@@ -20,6 +20,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
+import '../../api/colours.dart';
 import '../../api/navigator.dart';
 import '../../widgets/evie_appbar.dart';
 import '../../widgets/evie_textform.dart';
@@ -59,139 +60,142 @@ class _EditProfileState extends State<EditProfile> {
       },
       child: Scaffold(
           appBar: PageAppbar(
-            title: 'Edit My Profile',
+            title: 'Personal Information',
             onPressed: () {
                 changeToMyAccount(context, EditProfile());
             },
           ),
           body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
                 child: Container(
                   height: 96.h,
                   child: Padding(
                     padding:
-                        EdgeInsets.fromLTRB(27.7.w, 14.67.h, 18.67.w, 13.16.h),
-                    child: ClipOval(
-                      child: CachedNetworkImage(
-                        //imageUrl: document['profileIMG'],
-                        imageUrl: _currentUserProvider.currentUserModel!.profileIMG,
-                        placeholder: (context, url) =>
+                    EdgeInsets.fromLTRB(0, 15.h, 0, 14.34.h),
+                    child: Stack(
+                      children: [
+                        ClipOval(
+                          child: CachedNetworkImage(
+                            imageUrl: _currentUserProvider.currentUserModel!.profileIMG,
+                            placeholder: (context, url) =>
                             const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
-                        width: 66.67.h,
-                        height: 66.67.h,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
+                            width: 66.67.h,
+                            height: 66.67.h,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            //onTap camera pic
+                            child: GestureDetector(
+                              onTap: () {
+                                showCupertinoModalBottomSheet(
+                                  expand: false,
+                                  useRootNavigator: true,
+                                  context: context,
+                                  builder: (context) {
+                                    return SwitchProfileImage();
+                                  },
+                                );
+                              },
+                              child: SvgPicture.asset(
+                                "assets/buttons/camera_bike_pic.svg",
+                                width: 24,
+                                height: 24,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
                   ),
                 ),
               ),
-
-              //v comment: start
-              //v comment: logic to pop up the 3 options
-              TextButton(
-                onPressed: () {
-
-                  showCupertinoModalBottomSheet(
-                      expand: false,
-                      useRootNavigator: true,
-                      context: context,
-                      builder: (context) {
-                        return SwitchProfileImage();
-                      });
-
-                },
-
-                //v comment: on tap to pop up the 3 options
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset("assets/buttons/pen_edit.svg", height: 16.h, width: 16.w,),
-                    const Text(
-                      "Edit Picture",
-                      style: TextStyle(color: Color(0xff6A51CA)),
-                    ),
-                  ],
-                ),
-              ),
-              //v comment: end
-
               Divider(
                 thickness: 0.5.h,
                 color: const Color(0xff8E8E8E),
                 height: 0,
               ),
               EditProfileContainer(
-                subtitle: 'Name',
+                subtitle: 'Your Name',
                 content: _currentUserProvider.currentUserModel?.name ?? "",
                   trailingImage:  "assets/buttons/pen_edit.svg",
-                onPress: (){
-                  SmartDialog.show(
-                      widget: Form(
-                        key: _formKey,
-                        child: EvieDoubleButtonDialog(
-                        title: "Your Name",
-                        childContent: Container(
-                          child: Column(
-
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Nickname or first name are all welcome", style: TextStyle(fontSize: 16.sp, color: Color(0xff252526)),),
-                              Padding(
-                                padding:  EdgeInsets.fromLTRB(0.h, 12.h, 0.h, 8.h),
-                                child: EvieTextFormField(
-                                  controller: _nameController,
-                                  obscureText: false,
-                                  keyboardType: TextInputType.name,
-                                  hintText: "Your first name or nickname",
-                                  labelText: "Your Name",
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter your name';
-                                    }
-                                    return null;
-                                  },
+                  onPress: (){
+                    SmartDialog.show(
+                        widget: Form(
+                          key: _formKey,
+                          child: EvieDoubleButtonDialog(
+                          title: "Your Name",
+                          childContent: Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Nickname or first name are all welcome", style: TextStyle(fontSize: 16.sp, color: Color(0xff252526)),),
+                                Padding(
+                                  padding:  EdgeInsets.fromLTRB(0.h, 12.h, 0.h, 8.h),
+                                  child: EvieTextFormField(
+                                    controller: _nameController,
+                                    obscureText: false,
+                                    keyboardType: TextInputType.name,
+                                    hintText: "Your first name or nickname",
+                                    labelText: "Your Name",
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter your name';
+                                      }
+                                      return null;
+                                    },
+                                  ),
                                 ),
-                              ),
-                              Text("100 Maximum Character", style: TextStyle(fontSize: 12.sp, color: Color(0xff252526)),),
-                            ],
+                                Text("100 Maximum Character", style: TextStyle(fontSize: 12.sp, color: Color(0xff252526)),),
+                              ],
+                            ),
                           ),
-                        ),
-                        leftContent: "Cancel",
-                        rightContent: "Save",
-                        onPressedLeft: (){SmartDialog.dismiss();},
-                        onPressedRight: () async {
-                          if (_formKey.currentState!.validate()) {
-                            SmartDialog.dismiss();
-                            final result = await _currentUserProvider.updateUserName(_nameController.text.trim());
-
-                            result == true ?
-                            SmartDialog.show(widget: EvieSingleButtonDialog(
-                                title: "Success",
-                                content: "Uploaded",
-                                rightContent: "OK",
-                                onPressedRight: (){SmartDialog.dismiss();}))
-                                :
-                            SmartDialog.show(widget: EvieSingleButtonDialog(
-                                title: "Error",
-                                content: "Please try again",
-                                rightContent: "OK",
-                                onPressedRight: (){
-                                  SmartDialog.dismiss();
-                                }));
-                          }
-                        }),
-                      ));
-                },
+                          leftContent: "Cancel",
+                          rightContent: "Save",
+                          onPressedLeft: (){SmartDialog.dismiss();},
+                          onPressedRight: () async {
+                            if (_formKey.currentState!.validate()) {
+                              SmartDialog.dismiss();
+                              final result = await _currentUserProvider.updateUserName(_nameController.text.trim());
+                              result == true ?
+                              SmartDialog.show(widget: EvieSingleButtonDialog(
+                                  title: "Success",
+                                  content: "Uploaded",
+                                  rightContent: "OK",
+                                  onPressedRight: (){SmartDialog.dismiss();}))
+                                  :
+                              SmartDialog.show(widget: EvieSingleButtonDialog(
+                                  title: "Error",
+                                  content: "Please try again",
+                                  rightContent: "OK",
+                                  onPressedRight: (){
+                                    SmartDialog.dismiss();
+                                  }));
+                            }
+                          }),
+                        ));
+                  },
               ),
-              const AccountPageDivider(),
+              Divider(
+                thickness: 0.2.h,
+                color: EvieColors.darkWhite,
+                height: 0,
+              ),
               EditProfileContainer(
-                subtitle: 'Email',
+                subtitle: 'Email Address',
                 content: _currentUserProvider.currentUserModel?.email ?? "",
               ),
-              const AccountPageDivider(),
+              Divider(
+                thickness: 0.2.h,
+                color: EvieColors.darkWhite,
+                height: 0,
+              ),
 
               Visibility(
                 visible: _isEmail,
@@ -219,7 +223,11 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ),
               ),
-              const AccountPageDivider(),
+              Divider(
+                thickness: 0.2.h,
+                color: EvieColors.darkWhite,
+                height: 0,
+              ),
             ],
           )),
     );

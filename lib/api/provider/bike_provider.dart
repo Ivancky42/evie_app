@@ -188,7 +188,6 @@ class BikeProvider extends ChangeNotifier {
                 Map<String, dynamic>? obj = docChange.doc.data();
                 ///Key = imei, Val = get json object
                 userBikeList.putIfAbsent(docChange.doc.id, () => UserBikeModel.fromJson(obj!));
-
                 notifyListeners();
                 break;
               case DocumentChangeType.removed:
@@ -436,6 +435,7 @@ class BikeProvider extends ChangeNotifier {
 
     switch(type){
       case "general":
+      case "promo":
       case "firmwareUpdate":
         try {
           await FirebaseFirestore.instance

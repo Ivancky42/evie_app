@@ -17,6 +17,7 @@ class UserModel {
   NotificationSettingModel? notificationSettings;
   LastLoginModel? lastLogin;
   bool isDeactivated;
+  String? birthday;
 
   UserModel({
     required this.uid,
@@ -31,6 +32,7 @@ class UserModel {
     this.stripeLink,
     this.notificationSettings,
     this.lastLogin,
+    this.birthday,
     required this.isDeactivated,
   });
 
@@ -49,6 +51,7 @@ class UserModel {
       notificationSettings:  json['notificationSettings'] != null ? NotificationSettingModel.fromJson(json['notificationSettings'] as Map<String, dynamic>) : null,
       lastLogin:  json['lastLogin'] != null ? LastLoginModel.fromJson(json['lastLogin'] as Map<String, dynamic>) : null,
       isDeactivated: json['isDeactivated'] ?? false,
+        birthday: json['birthday'] ?? ''
     );
   }
 
@@ -62,6 +65,7 @@ class UserModel {
     "created": timestampToJson(created),
     "updated": timestampToJson(updated),
     "isDeactivated": isDeactivated,
+    "birthday": birthday,
   };
 
   Timestamp? timestampToJson(Timestamp? timestamp) {

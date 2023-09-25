@@ -66,22 +66,22 @@ class _AccountContainerState extends State<AccountContainer> {
       case "Personal Information":
         return Column(
           children: [
-
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-
                 changeToEditProfile(context);
               },
               child: Container(
-                height: 44.h,
+                height: 54.h,
                 child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
+                            SvgPicture.asset('assets/images/my_account/personal-detail.svg', width: 28.w, height: 28.w,),
+                            SizedBox(width: 8.w,),
                             Text(
                               label!,
                               style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
@@ -96,66 +96,44 @@ class _AccountContainerState extends State<AccountContainer> {
                 ),
               ),
             ),
-            const EvieDivider(),
+            Container(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(52.w, 0, 0, 0),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
+            ),
           ],
         );
-      // case "My Garage":
-      //   return Column(
-      //     children: [
-      //       GestureDetector(
-      //         behavior: HitTestBehavior.translucent,
-      //         onTap: () {
-      //
-      //   changeToMyGarageScreen(context);
-      //         },
-      //         child: Container(
-      //           height: 44.h,
-      //           child: Padding(
-      //               padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
-      //               child: Row(
-      //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //                 children: [
-      //                   Row(
-      //                     children: [
-      //                       Text(
-      //                         label!,
-      //                         style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-      //                       ),
-      //                     ],
-      //                   ),
-      //                   SvgPicture.asset(
-      //                     "assets/buttons/next.svg",
-      //                   ),
-      //                 ],
-      //               )
-      //           ),
-      //         ),
-      //       ),
-      //       const EvieDivider(),
-      //     ],
-      //   );
       case "Push Notification":
         return Column(
           children: [
-            Divider(
-              thickness: 11.h,
-              color: EvieColors.dividerWhite,
+            SizedBox(
+              child: Container(
+                color: EvieColors.dividerWhite,
+                height: 12.h,
+              ),
             ),
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-
                 changeToPushNotification(context);
               },
               child: Container(
-                height: 44.h,
+                height: 54.h,
                 child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
+                            SvgPicture.asset('assets/images/my_account/push-notification.svg', width: 28.w, height: 28.w,),
+                            SizedBox(width: 8.w,),
                             Text(
                               label!,
                               style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
@@ -170,41 +148,16 @@ class _AccountContainerState extends State<AccountContainer> {
                 ),
               ),
             ),
-            const EvieDivider(),
-          ],
-        );
-      case "Email Newsletter":
-        return Column(
-          children: [
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-
-              },
-              child: Container(
-                height: 44.h,
+            Container(
                 child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              label!,
-                              style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-                            ),
-                          ],
-                        ),
-                        SvgPicture.asset(
-                          "assets/buttons/next.svg",
-                        ),
-                      ],
-                    )
-                ),
-              ),
+                  padding: EdgeInsets.only(left: 52.w),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
             ),
-            const EvieDivider(),
           ],
         );
       case "Display Setting":
@@ -216,14 +169,16 @@ class _AccountContainerState extends State<AccountContainer> {
                 changeToDisplaySetting(context);
               },
               child: Container(
-                height: 44.h,
+                height: 54.h,
                 child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
+                            SvgPicture.asset('assets/images/my_account/display-setting.svg', width: 28.w, height: 28.w,),
+                            SizedBox(width: 8.w,),
                             Text(
                               label!,
                               style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
@@ -238,15 +193,26 @@ class _AccountContainerState extends State<AccountContainer> {
                 ),
               ),
             ),
-            const EvieDivider(),
+            Container(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 52.w),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
+            ),
           ],
         );
       case "Help Center":
         return Column(
           children: [
-            Divider(
-              thickness: 11.h,
-              color: EvieColors.dividerWhite,
+            SizedBox(
+              child: Container(
+                color: EvieColors.dividerWhite,
+                height: 12.h,
+              ),
             ),
             GestureDetector(
               behavior: HitTestBehavior.translucent,
@@ -256,14 +222,16 @@ class _AccountContainerState extends State<AccountContainer> {
                 launch(_url);
               },
               child: Container(
-                height: 44.h,
+                height: 54.h,
                 child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
+                            SvgPicture.asset('assets/images/my_account/help-center.svg', width: 28.w, height: 28.w,),
+                            SizedBox(width: 8.w,),
                             Text(
                               label!,
                               style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
@@ -278,7 +246,16 @@ class _AccountContainerState extends State<AccountContainer> {
                 ),
               ),
             ),
-            const EvieDivider(),
+            Container(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 52.w),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
+            ),
           ],
         );
       case "Privacy Policies":
@@ -292,7 +269,7 @@ class _AccountContainerState extends State<AccountContainer> {
                 launch(_url);
               },
               child: Container(
-                height: 44.h,
+                height: 54.h,
                 child: Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
                     child: Row(
@@ -300,6 +277,8 @@ class _AccountContainerState extends State<AccountContainer> {
                       children: [
                         Row(
                           children: [
+                            SvgPicture.asset('assets/images/my_account/privacy.svg', width: 28.w, height: 28.w,),
+                            SizedBox(width: 8.w,),
                             Text(
                               label!,
                               style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
@@ -314,10 +293,19 @@ class _AccountContainerState extends State<AccountContainer> {
                 ),
               ),
             ),
-            const EvieDivider(),
+            Container(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 52.w),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
+            ),
           ],
         );
-      case "Terms & Conditions":
+      case "Terms of Service":
         return Column(
           children: [
             GestureDetector(
@@ -328,14 +316,16 @@ class _AccountContainerState extends State<AccountContainer> {
                 launch(_url);
               },
               child: Container(
-                height: 44.h,
+                height: 54.h,
                 child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
+                            SvgPicture.asset('assets/images/my_account/term-service.svg', width: 28.w, height: 28.w,),
+                            SizedBox(width: 8.w,),
                             Text(
                               label!,
                               style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
@@ -350,13 +340,22 @@ class _AccountContainerState extends State<AccountContainer> {
                 ),
               ),
             ),
-            const EvieDivider(),
+            Container(
+              child: Padding(
+                padding: EdgeInsets.only(left: 52.w),
+                child: Divider(
+                  thickness: 0.2.h,
+                  color: EvieColors.darkWhite,
+                  height: 0,
+                ),
+              )
+            ),
 
             Padding(
               padding: EdgeInsets.only(
-                  left: 16.w, right: 16.w, top: 24.h, bottom: 10.h),
+                  left: 16.w, right: 16.w, top: 24.h, bottom: 8.h),
               child: Container(
-                height: 45.h,
+                height: 48.h,
                 width: double.infinity,
                 child: ElevatedButton(
                   child: Text(
@@ -364,33 +363,7 @@ class _AccountContainerState extends State<AccountContainer> {
                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                   ),
                   onPressed: () async {
-                    SmartDialog.showLoading();
-                    try {
-                      await _authProvider.signOut(context).then((result) async {
-                        if (result == true) {
-                          SmartDialog.dismiss();
-                          changeToWelcomeScreen(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Signed out'),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        } else {
-                          SmartDialog.dismiss();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Error, Try Again'),
-                              duration: Duration(seconds: 4),
-                            ),
-                          );
-                        }
-                      });
-                    } catch (e) {
-                      debugPrint(e.toString());
-                      SmartDialog.dismiss();
-                      showFailed();
-                    }
+                    showLogoutDialog(context, _authProvider);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -404,9 +377,9 @@ class _AccountContainerState extends State<AccountContainer> {
             ),
             Padding(
               padding: EdgeInsets.only(
-                  left: 16.w, right: 16.w, top: 0.h, bottom: 6.h),
+                  left: 16.w, right: 16.w, top: 0.h, bottom: 18.h),
               child: Container(
-                height: 45.h,
+                height: 48.h,
                 width: double.infinity,
                 child: ElevatedButton(
                   child: Text(
@@ -414,14 +387,6 @@ class _AccountContainerState extends State<AccountContainer> {
                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                   ),
                   onPressed: ()  async {
-                    // _authProvider.deactivateAccount().then((value) {
-                    //   _authProvider.signOut().then((value) {
-                    //     _bikeProvider.clear();
-                    //     SmartDialog.dismiss();
-                    //     changeToWelcomeScreen(context);
-                    //   });
-                    // });
-
                     changeToRevokeAccount(context);
                   },
                   style: ElevatedButton.styleFrom(

@@ -1128,7 +1128,7 @@ showMeasurementUnit(SettingProvider settingProvider){
              EvieDivider(),
 
          ],),
-         rightContent: "Ok",
+         rightContent: "Cancel",
           onPressedRight: (){SmartDialog.dismiss();} ));
 }
 
@@ -1169,7 +1169,7 @@ showErrorLoginDialog (BuildContext context){
         },
         onPressedDown: () {
           SmartDialog.dismiss();
-          changeToWelcomeScreen(context);
+          changeToInputNameScreen(context);
         }),
   );
 }
@@ -1895,6 +1895,98 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
 
         }
     ),
+  );
+}
+
+showResetPasswordDialog(BuildContext context, AuthProvider _authProvider){
+  SmartDialog.show(
+    keepSingle: true,
+    backDismiss: false,
+    clickBgDismissTemp: false,
+    widget: EvieTwoButtonDialog(
+        title: Text("Lost Your Password?",
+          style: EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text(
+          "That’s okay, it happens! We’ll send you instructions to recover your password.",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        customButtonUp: EvieButton(
+            backgroundColor: EvieColors.primaryColor,
+            width: double.infinity,
+            height: 48.h,
+            child: Text(
+              'Reset Password',
+              style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+            ),
+            onPressed: () async {
+              SmartDialog.dismiss();
+              SmartDialog.showLoading();
+              await _authProvider.resetPassword(_authProvider.getEmail);
+              SmartDialog.dismiss(status: SmartStatus.loading);
+              changeToCheckYourEmail(context);
+            }
+        ),
+        downContent: "Cancel",
+        onPressedDown: () async {
+          SmartDialog.dismiss();
+        }),
+  );
+}
+
+showLogoutDialog(BuildContext context, AuthProvider _authProvider){
+  SmartDialog.show(
+    keepSingle: true,
+    backDismiss: false,
+    clickBgDismissTemp: false,
+    widget: EvieTwoButtonDialog(
+        title: Text("Log Out",
+          style: EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text(
+          "You are about to log out. Are you sure you would like to logout?",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        customButtonUp: EvieButton(
+            backgroundColor: EvieColors.primaryColor,
+            width: double.infinity,
+            height: 48.h,
+            child: Text(
+              'Log Out',
+              style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+            ),
+            onPressed: () async {
+              SmartDialog.dismiss();
+              SmartDialog.showLoading();
+              try {
+                await _authProvider.signOut(context).then((result) async {
+                  if (result == true) {
+                    SmartDialog.dismiss();
+                    changeToWelcomeScreen(context);
+                  }
+                  else {
+                    SmartDialog.dismiss();
+                  }
+                });
+              } catch (e) {
+                debugPrint(e.toString());
+                SmartDialog.dismiss();
+                showFailed();
+              }
+            }
+        ),
+        downContent: "Cancel",
+        onPressedDown: () async {
+          SmartDialog.dismiss();
+        }),
   );
 }
 

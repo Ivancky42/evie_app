@@ -27,39 +27,42 @@ class EvieSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        title != null
-            ? Expanded(
-              child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-              Text(
-                title ?? "",
-                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-              ),
+    return  Container(
+      height: 54.h,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          title != null
+              ? Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title ?? "",
+                  style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, fontWeight: FontWeight.w400),
+                ),
 
-              Text(
-                text,
-                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
-              ),
-          ],
-        ),
-            )
-        : Text(text, style: TextStyle(fontSize: 16.sp),),
+                Text(
+                  text,
+                  style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                ),
+              ],
+            ),
+          )
+              : Text(text, style: TextStyle(fontSize: 16.sp),),
 
-    Padding(
-      padding: EdgeInsets.only(left: 8.w),
-      child: CupertinoSwitch(
-      value: value,
-      activeColor:  activeColor ?? EvieColors.primaryColor,
-      thumbColor: thumbColor,
-      trackColor: const Color(0xff6A51CA).withOpacity(0.5),
-      onChanged: onChanged,
+          Padding(
+            padding: EdgeInsets.only(left: 8.w),
+            child: CupertinoSwitch(
+              value: value,
+              activeColor:  activeColor ?? EvieColors.primaryColor,
+              thumbColor: thumbColor,
+              trackColor: const Color(0xff6A51CA).withOpacity(0.5),
+              onChanged: onChanged,
+            ),
+          ),
+        ],
       ),
-    ),
-      ],
     );
 
   }

@@ -120,7 +120,7 @@ class AuthProvider extends ChangeNotifier {
       await _auth.createUserWithEmailAndPassword(email: email, password: password,).then((auth) {
         firebaseUser = auth.user!;
         if (firebaseUser != null) {
-          createFirestoreUser(firebaseUser?.uid, firebaseUser?.email, name, phoneNo, profileIMG, credentialProvider);
+          createFirestoreUser(firebaseUser?.uid, firebaseUser?.email, name, phoneNo, profileIMG, credentialProvider, '');
           sendFirestoreVerifyEmail();
         }
       });
@@ -180,7 +180,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   ///Upload the registered data to firestore
-  Future createFirestoreUser(uid, email, name, phoneNo, profileIMG, credentialProvider) async {
+  Future createFirestoreUser(uid, email, name, phoneNo, profileIMG, credentialProvider, birthday) async {
     try {
       FirebaseFirestore.instance
           .collection(usersCollection)
@@ -220,25 +220,19 @@ class AuthProvider extends ChangeNotifier {
   ///Sign in with google
   Future signInWithGoogle(String nameInput) async {
     try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
       if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
-
+        final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
         final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
           idToken: googleSignInAuthentication.idToken,
         );
-        final UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithCredential(credential);
-
+        final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
         credentialProvider = "google";
         notifyListeners();
 
         if (userCredential.additionalUserInfo!.isNewUser) {
           String? userPhoneNo;
-
           //Check google phone number
           if (userCredential.user?.phoneNumber != null) {
             userPhoneNo = userCredential.user?.phoneNumber.toString();
@@ -257,7 +251,8 @@ class AuthProvider extends ChangeNotifier {
                 nameInput, //Name
                 userPhoneNo, //Phone no
                 userCredential.user?.photoURL.toString(),
-                credentialProvider //Profile image
+                credentialProvider,
+                ''//Profile image
             );
           }
           else {
@@ -267,7 +262,8 @@ class AuthProvider extends ChangeNotifier {
                 userCredential.user?.displayName.toString(), //Name
                 userPhoneNo, //Phone no
                 userCredential.user?.photoURL.toString(),
-                credentialProvider
+                credentialProvider,
+                ''
             );
           }
 
@@ -277,7 +273,6 @@ class AuthProvider extends ChangeNotifier {
         } else {
           _uid = userCredential.user!.uid;
           _email = userCredential.user!.email!;
-
           notifyListeners();
           return true;
         }
@@ -327,7 +322,8 @@ class AuthProvider extends ChangeNotifier {
                 nameInput,
                 userPhoneNo, //Phone no
                 userCredential.user?.photoURL.toString(),
-                credentialProvider //Profile image
+                credentialProvider,
+                ''
             );
           }
           else {
@@ -337,7 +333,8 @@ class AuthProvider extends ChangeNotifier {
                 userCredential.user?.displayName.toString(),
                 userPhoneNo, //Phone no
                 userCredential.user?.photoURL.toString(),
-                credentialProvider //Profile image
+                credentialProvider,
+                ''
             );
           }
 
@@ -403,7 +400,8 @@ class AuthProvider extends ChangeNotifier {
               nameInput,
               userPhoneNo, //Phone no
               userCredential.user?.photoURL.toString(),
-              credentialProvider //Profile image
+              credentialProvider,
+              ''
               );
 
 
@@ -485,7 +483,8 @@ class AuthProvider extends ChangeNotifier {
             userPhoneNo, //Phone no
             //userCredential.user?.photoURL.toString(), ///Cannot get profile image from apple id when first time login, need approval from user
             dotenv.env['DEFAULT_PROFILE_IMG'] ?? 'DPI not found',  //profileimg
-            credentialProvider //Profile image
+            credentialProvider,
+            ''
             );
 
         setIsFirstLogin(true);

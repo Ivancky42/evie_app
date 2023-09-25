@@ -64,27 +64,23 @@ class _EvieTextFormFieldState extends State<EvieTextFormField> {
     return SizedBox(
 
         child:Container(
-
-          // decoration: BoxDecoration(
-          //   border: Border.all(color: borderColor, width: 1.5,),
-          //   borderRadius: BorderRadius.circular(10.0),
-          // ),
-
           child: TextFormField(
               inputFormatters: widget.inputFormatter,
               focusNode: focusNode,
               controller: widget.controller,
               keyboardType: widget.keyboardType,
               obscureText: widget.obscureText!,
+
               decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
                     hintText: widget.hintText,
                     labelText: widget.labelText,
-
                     hintStyle: EvieTextStyles.body14.copyWith(color:EvieColors.darkGrayish),
                     labelStyle:  EvieTextStyles.body18.copyWith(color:EvieColors.darkGrayish),
                     filled: true,
+                    errorMaxLines: 3,
                     errorStyle: TextStyle(
+                      fontSize: 14.sp,
                       color: Theme.of(context).errorColor, // or any other color
                     ),
                     //fillColor: widget.focusNode!.hasFocus ? Colors.red : ThemeChangeNotifier().isDarkMode(context) ?  Color(0xff3F3F3F) : Color(0xffDFE0E0),

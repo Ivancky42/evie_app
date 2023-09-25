@@ -30,10 +30,8 @@ class _SignUpMethodState extends State<SignUpMethod> {
 
   @override
   Widget build(BuildContext context) {
-
     _authProvider = Provider.of<AuthProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
-
     return WillPopScope(
       onWillPop: () async {
         changeToInputNameScreen(context);
@@ -42,26 +40,22 @@ class _SignUpMethodState extends State<SignUpMethod> {
 
       child:  Scaffold(
         appBar: EvieAppbar_Back(onPressed: (){ changeToInputNameScreen(context);}),
-
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(left: 16.w, right: 16.w, top:24.h),
+            padding: EdgeInsets.only(left: 16.w, right: 16.w, top:16.h, bottom: 32.h),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Text("${widget.name}, let's setup your account",
                   style: EvieTextStyles.h2,),
-
                 SizedBox(
-                  height: 4.h,
+                  height: 2.h,
                 ),
-                Text("Choose a method you would like to setup your account",
+                Text("Enter your email address",
                   style: EvieTextStyles.body18,),
-
                 SizedBox(
-                  height: 9.h,
+                  height: 16.h,
                 ),
 
                 EvieButton(
@@ -119,14 +113,14 @@ class _SignUpMethodState extends State<SignUpMethod> {
                               _currentUserProvider.getDeviceInfo();
                               changeToBeforeYouStart(context);
                             } else {
-                              SmartDialog.show(
-                                  widget: EvieSingleButtonDialog(
-                                      title: "Error",
-                                      content: result,
-                                      rightContent: "Ok",
-                                      onPressedRight: () {
-                                        SmartDialog.dismiss();
-                                      }));
+                              // SmartDialog.show(
+                              //     widget: EvieSingleButtonDialog(
+                              //         title: "Error",
+                              //         content: result,
+                              //         rightContent: "Ok",
+                              //         onPressedRight: () {
+                              //           SmartDialog.dismiss();
+                              //         }));
                             }
                           });
                         }
@@ -160,14 +154,16 @@ class _SignUpMethodState extends State<SignUpMethod> {
                           _currentUserProvider.getDeviceInfo();
                         changeToBeforeYouStart(context);
                         } else {
-                          SmartDialog.show(
-                              widget: EvieSingleButtonDialog(
-                                  title: "Error",
-                                  content: result,
-                                  rightContent: "Ok",
-                                  onPressedRight: () {
-                                    SmartDialog.dismiss();
-                                  }));
+                          if (result != null) {
+                            SmartDialog.show(
+                                widget: EvieSingleButtonDialog(
+                                    title: "Error",
+                                    content: result,
+                                    rightContent: "Ok",
+                                    onPressedRight: () {
+                                      SmartDialog.dismiss();
+                                    }));
+                          }
                         }
                       });
                     }
@@ -198,15 +194,6 @@ class _SignUpMethodState extends State<SignUpMethod> {
                         if (result == true) {
                           _currentUserProvider.getDeviceInfo();
                           changeToBeforeYouStart(context);
-                        } else {
-                          SmartDialog.show(
-                              widget: EvieSingleButtonDialog(
-                                  title: "Error",
-                                  content: result,
-                                  rightContent: "Ok",
-                                  onPressedRight: () {
-                                    SmartDialog.dismiss();
-                                  }));
                         }
                       });
                     }

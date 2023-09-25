@@ -40,7 +40,7 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 11.h, bottom: 29.h),
+                padding: EdgeInsets.only(top: 11.h, bottom: 11.h),
                 child: Image.asset(
                   "assets/buttons/home_indicator.png",
                   width: 40.w,
@@ -62,9 +62,9 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
                               SmartDialog.dismiss();
                             }));
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Photo upload success!')),
-                    );
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   const SnackBar(content: Text('Photo upload success!')),
+                    // );
                     SmartDialog.dismiss(status: SmartStatus.loading);
                   }
                 },
@@ -88,9 +88,9 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
                               SmartDialog.dismiss();
                             }));
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Photo upload success!')),
-                    );
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   const SnackBar(content: Text('Photo upload success!')),
+                    // );
                     SmartDialog.dismiss(status: SmartStatus.loading);
                   }
                 },
@@ -123,7 +123,7 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
 
               //V comment:end of 3 options for profile pic
               const AccountPageDivider(),
-              SizedBox(height: 50.h)
+              SizedBox(height: 38.h)
             ],
           ),
         ),

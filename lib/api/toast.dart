@@ -340,6 +340,43 @@ showControlAdmissionToast(double bottomPadding) {
   );
 }
 
+showUpdatedPasswordToast(double bottomPadding) {
+  SmartDialog.showToast("",
+      alignment: Alignment.topCenter,
+      widget: Container(
+          width: double.infinity,
+          height: double.infinity,
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: bottomPadding),
+            child: Container (
+              width: 358.w,
+              alignment: Alignment.centerLeft,
+              height: 44.h,
+              child: Padding(
+                padding: EdgeInsets.only(left: 16.w),
+                child: Row(
+                  children: [
+                    SvgPicture.asset("assets/icons/check.svg"),
+                    SizedBox(width: 4.w,),
+                    Text(
+                      "Your password has been updated.",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.w),
+                color: Colors.black,
+              ),
+            ),
+          )
+      ));
+}
+
 showUpgradePlanToast(double bottomPadding) {
   SmartDialog.showToast("",
       alignment: Alignment.bottomLeft,

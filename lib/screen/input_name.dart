@@ -31,69 +31,61 @@ class _InputNameState extends State<InputName> {
 
       child:  Scaffold(
         appBar: EvieAppbar_Back(onPressed: (){ changeToWelcomeScreen(context);}),
-
         body: Stack(
           children: [
           Form(
           key: _formKey,
             child:Padding(
-              padding: EdgeInsets.only(left: 16.w, right: 16.w, top:24.h),
+              padding: EdgeInsets.only(left: 16.w, right: 16.w, top:16.h, bottom: 32.h),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-
-                  Text(
-                    "Hi, what's your name?",
-                    style: EvieTextStyles.h2,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Hi, what's your name?",
+                        style: EvieTextStyles.h2,
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Text("This appears on your EVIE profile.", style: EvieTextStyles.body18,),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      EvieTextFormField(
+                        controller: _nameController,
+                        obscureText: false,
+                        keyboardType: TextInputType.name,
+                        hintText: "Your first name or nickname",
+                        labelText: "Name",
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your name';
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: 4.h,
-                  ),
-                  Text("Just your first name or nickname will do the trick", style: EvieTextStyles.body18,),
-                  SizedBox(
-                    height: 9.h,
-                  ),
-
-                  EvieTextFormField(
-                    controller: _nameController,
-                    obscureText: false,
-                    keyboardType: TextInputType.name,
-                    hintText: "enter your first name",
-                    labelText: "First Name",
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your name';
+                  EvieButton(
+                    width: double.infinity,
+                    child: Text(
+                      "Next",
+                      style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                    ),
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        ///For keyboard un focus
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        changeToSignUpScreen(context, _nameController.text.trim());
                       }
-                      return null;
                     },
                   ),
                 ],
-              ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding:
-                     EdgeInsets.only(left: 16.w, right: 16.w, bottom: EvieLength.button_Bottom),
-                child: EvieButton(
-                  width: double.infinity,
-                  child: Text(
-                    "Next",
-                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                  ),
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-
-                      ///For keyboard un focus
-                      FocusManager.instance.primaryFocus?.unfocus();
-
-                      changeToSignUpMethodScreen(
-                          context, _nameController.text.trim());
-                    }
-                  },
-                ),
+              )
               ),
             ),
           ],

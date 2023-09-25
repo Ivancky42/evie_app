@@ -65,9 +65,9 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
                               SmartDialog.dismiss();
                             }));
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Photo upload success!')),
-                    );
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   const SnackBar(content: Text('Photo upload success!')),
+                    // );
                     SmartDialog.dismiss(status: SmartStatus.loading);
                   }
                 },
@@ -90,9 +90,9 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
                               SmartDialog.dismiss();
                             }));
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Photo upload success!')),
-                    );
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   const SnackBar(content: Text('Photo upload success!')),
+                    // );
                     SmartDialog.dismiss(status: SmartStatus.loading);
                   }
                 },

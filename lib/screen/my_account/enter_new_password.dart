@@ -20,6 +20,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 import '../../api/colours.dart';
 import '../../api/length.dart';
 import '../../api/navigator.dart';
+import '../../api/snackbar.dart';
 import '../../widgets/evie_appbar.dart';
 import '../../widgets/evie_single_button_dialog.dart';
 import '../../widgets/evie_textform.dart';
@@ -52,12 +53,13 @@ class _EnterNewPasswordState extends State<EnterNewPassword> {
       },
       child: Scaffold(
         appBar: PageAppbar(
-          title: 'Update Password',
+          title: 'Create New Password',
           onPressed: () {
             changeToEditProfile(context);
           },
         ),
-        body: Stack(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Form(
               key: _formKey,
@@ -65,29 +67,27 @@ class _EnterNewPasswordState extends State<EnterNewPassword> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
+                    padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 1.h),
                     child: Text(
-                      "Enter New Password",
-                      style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 15.h),
-                    child: Text(
-                      "Enter your new password",
-                      style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                      "Create New Password",
+                      style: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.w500),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
+                    child: Text(
+                      "Password must contain at least 8 characters, with letters and numbers.",
+                      style: TextStyle(fontSize: 16.sp,height: 1.5.h, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(16.w, 17.h, 16.w, 0.h),
                     child: EvieTextFormField(
                       controller: _passwordController,
                       obscureText: false,
                       //     keyboardType: TextInputType.name,
-                      hintText: "your new password",
+                      hintText: "Type in new password",
                       labelText: "Password",
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -100,72 +100,48 @@ class _EnterNewPasswordState extends State<EnterNewPassword> {
                 ],
               ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom),
-                child: SizedBox(
-                  height: 48.h,
-                  width: double.infinity,
-                  child: EvieButton(
-                    width: double.infinity,
-                    child: Text(
-                      "Save",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w700
+            Padding(
+                padding: EdgeInsets.fromLTRB(16.w,0,16.w,32.h),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 48.h,
+                      width: double.infinity,
+                      child: EvieButton(
+                        width: double.infinity,
+                        child: Text(
+                          "Reset Password",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w700
+                          ),
+                        ),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+
+                            final result = await _authProvider.changeUserPassword(
+                                _passwordController.text.trim()); //
+
+                            result == true ?
+                            {
+                              changeToEditProfile(context),
+                              showUpdatedPasswordToast(context),
+                            } :
+                            SmartDialog.show(
+                                widget: EvieSingleButtonDialog(
+                                    title: "Error",
+                                    content: "Try again",
+                                    rightContent: "OK",
+                                    onPressedRight: (){
+                                      SmartDialog.dismiss();
+                                    }));
+                          }
+                        },
                       ),
                     ),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-
-                        final result = await _authProvider.changeUserPassword(
-                        _passwordController.text.trim()); //
-
-                        result == true ?
-                            {
-                        changeToEditProfile(context),
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(
-                          const SnackBar(content: Text(
-                              'Password update success!')),
-                        )
-                            }
-                        :
-                        SmartDialog.show(
-                            widget: EvieSingleButtonDialog(
-                            title: "Error",
-                            content: "Try again",
-                            rightContent: "OK",
-                            onPressedRight: (){
-                              SmartDialog.dismiss();
-                            }));
-                    }
-                    },
-                  ),
-                ),
-              ),
-            ),
-
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(0.w,25.h,0.w,EvieLength.buttonWord_WordBottom),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: TextButton(
-                    child: Text(
-                      "Skip",
-                      softWrap: false,
-                      style: TextStyle(fontSize: 12.sp,color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
-                    ),
-                    onPressed: () {
-
-                    },
-                  ),
-                ),
-              ),
+                  ],
+                )
             ),
           ],
         ),),

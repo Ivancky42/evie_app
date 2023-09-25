@@ -20,6 +20,7 @@ import 'package:evie_test/screen/verify_email.dart';
 import 'package:evie_test/screen/welcome_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -252,15 +253,15 @@ class MyApp extends StatelessWidget {
           onGenerateRoute: (RouteSettings settings) {
             switch (settings.name) {
               case '/':
-                return MaterialWithModalsPageRoute(
+                return CupertinoModalPopupRoute(
                     builder: (_) => UserHomePage(0),
                     settings: settings);
               case '/feed':
-                return MaterialWithModalsPageRoute(
+                return CupertinoModalPopupRoute(
                     builder: (_) => UserHomePage(1),
                     settings: settings);
               case '/account':
-                return MaterialWithModalsPageRoute(
+                return CupertinoModalPopupRoute(
                     builder: (_) => UserHomePage(2),
                     settings: settings);
             }

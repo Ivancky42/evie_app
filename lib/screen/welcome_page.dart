@@ -14,7 +14,10 @@ import '../api/colours.dart';
 import '../api/dialog.dart';
 import '../api/length.dart';
 import '../api/provider/auth_provider.dart';
+import '../api/provider/bike_provider.dart';
+import '../api/provider/current_user_provider.dart';
 import '../widgets/evie_button.dart';
+import '../widgets/evie_single_button_dialog.dart';
 
 class Welcome extends StatefulWidget {
   const Welcome({Key? key}) : super(key: key);
@@ -25,17 +28,24 @@ class Welcome extends StatefulWidget {
 
 class _WelcomeState extends State<Welcome> {
   late AuthProvider _authProvider;
+  late CurrentUserProvider _currentUserProvider;
+  late BikeProvider _bikeProvider;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _authProvider = context.read<AuthProvider>();
+    _currentUserProvider = context.read<CurrentUserProvider>();
     _authProvider.init();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    _authProvider = Provider.of<AuthProvider>(context);
+    _bikeProvider = Provider.of<BikeProvider>(context);
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
@@ -47,78 +57,213 @@ class _WelcomeState extends State<Welcome> {
         body: Stack(
           children: [
             Column(
-              //mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: 142.h,
+                  height: 136.h,
                 ),
-
                 Image(
-                  image: AssetImage("assets/logo/evie_logo.png",),
-                  width: 191.w,
-                  height: 42.h,),
-
+                  image: AssetImage("assets/logo/evie_logo_2.png",),
+                  width: 203.w,
+                  height: 50.h,),
+                //
                 SizedBox(
-                  height: 99.h,
+                  height: 15.h,
+                ),
+                Text(
+                  'Ride Smarter',
+                  style: TextStyle(
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(
+                  height: 16.h,
                 ),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: Container(
-                    width: 395.92.w,
-                    height: 279.62.h,
+                    width: 364.1.w,
+                    height: 218.04.h,
                     alignment: Alignment.bottomRight,
                     child: const Image(
-                      image: AssetImage("assets/images/evie_bike_shadow.png"),
+                      image: AssetImage("assets/images/evie_bike_shadow_2.png"),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height:93.38.h,
-                ),
 
-              ],
-            ),
-
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding:  EdgeInsets.only(left: 16.w, right: 16.w, bottom: 180.h),
-                child:  EvieButton(
-                  height: 48.h,
-                  width: double.infinity,
-                  child: Text(
-                    "Get Started",
-                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                  ),
-
-                  onPressed: () async {
-                    changeToInputNameScreen(context);
-                    //changeToLetsGoScreen(context);
-                  },
-                ),
-               )
-              ),
-            Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding:  EdgeInsets.only(left: 16.w, right: 16.w, bottom: 135.h),
-                  child:       Container(
-                    width: double.infinity,
-                    child: RawMaterialButton(
-                      elevation: 0.0,
-                      padding: EdgeInsets.fromLTRB(0, 23.5.h, 0, 0),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0)),
-                      onPressed: () {
-                        changeToSignInMethodScreen(context);
-                      },
-                      child: Text(
-                          "I already have an account",
-                          style: EvieTextStyles.body14.copyWith(color: EvieColors.primaryColor, decoration: TextDecoration.underline,)),
-                    ),
-                  ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 22.h, 16.w, 0),
+                  child: Column(
+                    children: [
+                      EvieButton(
+                        width: double.infinity,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Image(
+                              image: AssetImage("assets/icons/logo_email.png"),
+                              height: 24.0,
+                            ),
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            Text(
+                              "Sign Up with Email",
+                              style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                            ),
+                          ],
+                        ),
+                        onPressed: () async {
+                          changeToInputNameScreen(context);
+                        },
+                      ),
+                      Platform.isIOS ?
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          EvieButton(
+                              backgroundColor: Color(0xffDFE0E0),
+                              width: double.infinity,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // const Image(
+                                  //   image: AssetImage("assets/icons/logo_apple.png"),
+                                  //   height: 20.0,
+                                  // ),
+                                  SvgPicture.asset("assets/icons/logo_apple.svg"),
+                                  SizedBox(
+                                    width: 4.w,
+                                  ),
+                                  Text(
+                                    "Continue with Apple",
+                                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
+                                  ),
+                                ],
+                              ),
+                              onPressed: () async {
+                                _authProvider.signInWithAppleID("").then((result) {
+                                  if (result == true) {
+                                    _currentUserProvider.getDeviceInfo();
+                                    changeToUserHomePageScreen(context);
+                                  } else {
+                                    // SmartDialog.show(
+                                    //     widget: EvieSingleButtonDialog(
+                                    //         title: "Error",
+                                    //         content: result,
+                                    //         rightContent: "Ok",
+                                    //         onPressedRight: () {
+                                    //           SmartDialog.dismiss();
+                                    //         }));
+                                  }
+                                });
+                              }),
+                        ],
+                      ) : Container(),
+                      SizedBox(
+                        height: 8.h,
+                      ),
+                      EvieButton(
+                          backgroundColor: EvieColors.lightGrayishCyan,
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // const Image(
+                              //   image: AssetImage("assets/icons/logo_facebook.png"),
+                              //   height: 24.0,
+                              // ),
+                              SvgPicture.asset("assets/icons/logo_facebook.svg"),
+                              SizedBox(
+                                width: 4.w,
+                              ),
+                              Text(
+                                "Continue with Facebook",
+                                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
+                              ),
+                            ],
+                          ),
+                          onPressed: () async {
+                            _authProvider.signInWithFacebook("").then((result) {
+                              if (result == true) {
+                                _currentUserProvider.getDeviceInfo();
+                                changeToUserHomePageScreen(context);
+                              } else {
+                                SmartDialog.show(
+                                    widget: EvieSingleButtonDialog(
+                                        title: "Error",
+                                        content: result.toString(),
+                                        rightContent: "Ok",
+                                        onPressedRight: () {
+                                          SmartDialog.dismiss();
+                                        }));
+                              }
+                            });
+                          }),
+                      SizedBox(
+                        height: 8.h,
+                      ),
+                      EvieButton(
+                          backgroundColor: EvieColors.lightGrayishCyan,
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // const Image(
+                              //   image: AssetImage("assets/icons/logo_google.png"),
+                              //   height: 24.0,
+                              // ),
+                              SvgPicture.asset("assets/icons/logo_google.svg"),
+                              SizedBox(
+                                width: 4.w,
+                              ),
+                              Text(
+                                "Continue with Google",
+                                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
+                              ),
+                            ],
+                          ),
+                          onPressed: () async {
+                            _authProvider.signInWithGoogle("").then((result) {
+                              if (result == true) {
+                                _currentUserProvider.getDeviceInfo();
+                                changeToUserHomePageScreen(context);
+                              } else {
+                                if (result != null) {
+                                  SmartDialog.show(
+                                      widget: EvieSingleButtonDialog(
+                                          title: "Error",
+                                          content: result,
+                                          rightContent: "Ok",
+                                          onPressedRight: () {
+                                            SmartDialog.dismiss();
+                                          }));
+                                }
+                              }
+                            });
+                          }),
+                      Container(
+                        width: double.infinity,
+                        child: RawMaterialButton(
+                          elevation: 0.0,
+                          padding: EdgeInsets.fromLTRB(0, 23.5.h, 0, 0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0)),
+                          onPressed: () {
+                            changeToSignInScreen(context);
+                          },
+                          child: Text(
+                              "Log in with Email",
+                              style: EvieTextStyles.body18.copyWith(color: EvieColors.primaryColor, fontWeight: FontWeight.w800, decoration: TextDecoration.underline,)),
+                        ),
+                      ),
+                    ],
+                  )
                 )
+              ],
             ),
           ],
         ),

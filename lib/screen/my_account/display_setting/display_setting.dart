@@ -65,7 +65,6 @@ class _DisplaySettingState extends State<DisplaySetting> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: (){
-
                 showMeasurementUnit(_settingProvider);
               },
               child: Container(

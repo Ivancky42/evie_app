@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import '../../../api/backend/debouncer.dart';
 import '../../../api/colours.dart';
@@ -20,6 +21,7 @@ import '../../../api/fonts.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
+import '../switch_profile_image.dart';
 import 'account_container.dart';
 import 'account_model.dart';
 import 'account_search_container.dart';
@@ -102,21 +104,19 @@ class _MyAccountState extends State<MyAccount> {
         bool? exitApp = await showQuitApp() as bool?;
         return exitApp ?? false;
       },
-
-
       child: Scaffold(
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(16.w, 51.h, 0.w, 7.h),
-            child: Container(
-              child: Text(
-                "My Account",
-                style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
+              Padding(
+                padding: EdgeInsets.fromLTRB(16.w, 51.h, 0.w, 7.h),
+                child: Container(
+                  child: Text(
+                    "My Account",
+                    style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
+                  ),
+                ),
               ),
-            ),
-          ),
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
                 child: CustomSearchController(
@@ -198,17 +198,47 @@ class _MyAccountState extends State<MyAccount> {
                     Padding(
                       padding:
                       EdgeInsets.fromLTRB(27.7.w, 14.67.h, 18.67.w, 14.67.h),
-                      child: ClipOval(
-                        child: CachedNetworkImage(
-                          //imageUrl: document['profileIMG'],
-                          imageUrl: _currentUserProvider.currentUserModel != null ? _currentUserProvider.currentUserModel!.profileIMG : "",
-                          placeholder: (context, url) => const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => const Icon(Icons.error),
-                          width: 66.67.h,
-                          height: 66.67.h,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                      child: Stack(
+                        children: [
+                          ClipOval(
+                            child: CachedNetworkImage(
+                              //imageUrl: document['profileIMG'],
+                              imageUrl: _currentUserProvider.currentUserModel != null ? _currentUserProvider.currentUserModel!.profileIMG : "",
+                              placeholder: (context, url) => const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                              width: 66.67.h,
+                              height: 66.67.h,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Align(
+                              alignment: Alignment.bottomRight,
+                              //onTap camera pic
+                              child: GestureDetector(
+                                onTap: () {
+                                  showCupertinoModalBottomSheet(
+                                    expand: false,
+                                    useRootNavigator: true,
+                                    context: context,
+                                    builder: (context) {
+                                      return SwitchProfileImage();
+                                    },
+                                  );
+
+                                },
+                                child: SvgPicture.asset(
+                                  "assets/buttons/camera_bike_pic.svg",
+                                  width: 24,
+                                  height: 24,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,

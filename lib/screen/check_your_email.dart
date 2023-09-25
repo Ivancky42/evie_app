@@ -86,6 +86,7 @@ class _CheckYourEmailState extends State<CheckYourEmail> {
   @override
   Widget build(BuildContext context) {
     _authProvider = Provider.of<AuthProvider>(context);
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     return WillPopScope(
       onWillPop: () async {
         bool? exitApp = await showQuitApp() as bool?;
@@ -94,121 +95,105 @@ class _CheckYourEmailState extends State<CheckYourEmail> {
 
       child: Scaffold(
           appBar: EvieAppbar_Back(onPressed: (){ changeToWelcomeScreen(context);}),
-          body:
-          Stack(
-              children:[Padding(
-                padding: const EdgeInsets.all(16.0),
+          body: Stack (
+              children:[
+                Padding(
+                padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 32.h),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-
-                    Text(
-                      "Check your mail",
-                      style: EvieTextStyles.h2,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Check your mail",
+                          style: EvieTextStyles.h2,
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Text(
+                          "We have sent a password recover instruction to your email.",
+                          style: EvieTextStyles.body18,
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Text(
-                      "We have sent a password recover instruction to your email.",
-                      style: EvieTextStyles.body18,
-                    ),
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child:   EvieButton(
+                            width: double.infinity,
+                            child: Text(
+                              "Open Email Inbox",
+                              style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                            ),
+                            onPressed: () async {
+                              await OpenMailApp.openMailApp();
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 8.h,),
+                        EvieButton_ReversedColor(
+                          width: double.infinity,
+                          child: Text(
+                            "Return to Log In",
+                            style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
+                          ),
+                          onPressed: () async {
+                            changeToWelcomeScreen(context);
+                          },
+                        ),
+                        SizedBox(
+                          height: 11.h,
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              "Did not receive the email? Check your spam filter,",
+                              style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w400, color: EvieColors.lightBlack,),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "or try ",
+                                  style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w400, color: EvieColors.lightBlack,),
+                                ),
+                                GestureDetector(
+                                  child: Text(
+                                    "resend email.",
+                                    style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w800, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                                  ),
+                                  onTap: () async {
+                                    if(isCountDownOver == false){
+                                      showResentEmailFailedToast(context);
+                                    }
+                                    else if(isCountDownOver == true){
+                                     await _authProvider.resetPassword(_authProvider.getEmail);
+                                      showResentEmailSuccess(_currentUserProvider);
+                                      setState(() {
+                                        isCountDownOver = false;
+                                        resetTimer();
+                                        startCountDownTimer();
+                                      });
+                                    }
+                                  },
+                                ),
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    )
                   ],
-                ),
+                )
               ),
-
-
                 Align(
                   alignment: Alignment.center,
                   child: SvgPicture.asset(
                     "assets/images/send_email.svg",
-                  ),
-                ),
-
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: 16, right: 16, bottom: EvieLength.buttonWord_ButtonBottom+40.h),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child:   EvieButton(
-                        width: double.infinity,
-                        child: Text(
-                          "Open Email Inbox",
-                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                        ),
-                        onPressed: () async {
-                          await OpenMailApp.openMailApp();
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child:Padding(
-                      padding: EdgeInsets.fromLTRB(16.w,25.h,16.w,EvieLength.buttonbutton_buttonBottom+40.h),
-                      child: EvieButton_ReversedColor(
-                          width: double.infinity,
-                          onPressed: (){
-                            changeToSignInScreen(context);
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                "assets/buttons/mail.svg",
-                              ),
-                              Text("Log In with Email", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)),
-                            ],
-                          ))
-                  ),
-                ),
-
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding:EdgeInsets.only(left: 16, right: 16, bottom: EvieLength.buttonWord_WordBottom),
-                    child: Text(
-                      "Did not receive the email? Check your spam filter, or try",
-                      softWrap: true,
-                      style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w400, color: EvieColors.lightBlack,),
-                    ),
-                  ),
-                ),
-
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16, bottom:  EvieLength.buttonWord_WordBottom-25.h),
-                    child: SizedBox(
-                      height: 35,
-                      width: 100,
-                      child: TextButton(
-                        child: Text(
-                          "resend email.",
-                          style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w400, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
-                        ),
-                        onPressed: () async {
-                          if(isCountDownOver == false){
-
-                            showResentEmailFailedToast(context);
-
-                          }else if(isCountDownOver == true){
-
-                            showResentEmailSuccess(_currentUserProvider);
-                            setState(() {
-                              isCountDownOver = false;
-                              resetTimer();
-                              startCountDownTimer();
-                            });
-                          }
-                        },
-                      ),
-                    ),
                   ),
                 ),
               ]

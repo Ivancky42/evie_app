@@ -51,110 +51,91 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
         changeToSignInScreen(context);
         return false;
       },
-
       child: Scaffold(
           appBar: EvieAppbar_Back(onPressed: (){  changeToSignInScreen(context);}),
           body:
           Form(
             key: _formKey,
             child: Stack(
-                children:[Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-
-                      Text(
-                        "Lost your password?",
-                        style: EvieTextStyles.h2,
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Text(
-                        "That's okay, it happens! Enter the email address you used for creating your account and we'll send you a password recover instruction.",
-                        style: EvieTextStyles.body18,
-                      ),
-
-
-
-                      EvieTextFormField(
-                        controller: _emailController,
-                        obscureText: false,
-                        keyboardType: TextInputType.emailAddress,
-                        hintText: "enter your email address",
-                        labelText: "Email Address",
-                        validator: (value) {
-                          if (value == null ||
-                              value.isEmpty ||
-                              !value.contains("@")) {
-                            return 'Please enter amy valid email address';
-                          }
-                          //Check if email is in database
-
-                          return null;
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-
-
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          left: 16, right: 16, bottom: EvieLength.buttonWord_ButtonBottom),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child:   EvieButton(
-                          width: double.infinity,
-                          child: Text(
-                            "Recover Password",
-                            style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                children:[
+                    Padding(
+                      padding:  EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 32.h),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Lost your password?",
+                                style: EvieTextStyles.h2,
+                              ),
+                              SizedBox(
+                                height: 1.h,
+                              ),
+                              Text(
+                                "That's okay, it happens! Enter the email address you used for creating your account and we'll send you a password recover instruction.",
+                                style: EvieTextStyles.body18,
+                              ),
+                              SizedBox(height: 16.h,),
+                              EvieTextFormField(
+                                controller: _emailController,
+                                obscureText: false,
+                                keyboardType: TextInputType.emailAddress,
+                                hintText: "Enter your email address",
+                                labelText: "Email Address",
+                                validator: (value) {
+                                  if (value == null ||
+                                      value.isEmpty ||
+                                      !value.contains("@")) {
+                                    return 'Please enter a valid email address';
+                                  }
+                                  //Check if email is in database
+                                  return null;
+                                },
+                              ),
+                            ],
                           ),
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
+                          Column(
+                            children: [
+                              EvieButton(
+                                width: double.infinity,
+                                child: Text(
+                                  "Recover Password",
+                                  style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                                ),
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()) {
 
-                              ///For keyboard un focus
-                              FocusManager.instance.primaryFocus?.unfocus();
+                                    ///For keyboard un focus
+                                    FocusManager.instance.primaryFocus?.unfocus();
 
-                              //auth provider check if fire store user exist if no pop up if yes change to check your email screen
-                              AuthProvider()
-                                  .resetPassword(_emailController.text.trim());
+                                    //auth provider check if fire store user exist if no pop up if yes change to check your email screen
+                                    AuthProvider().resetPassword(_emailController.text.trim());
 
-                              changeToCheckYourEmail(context);
+                                    changeToCheckYourEmail(context);
 
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Instruction Sent')),
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-
-
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(0.w,25.h,0.w,EvieLength.buttonWord_WordBottom),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: TextButton(
-                          child: Text(
-                            "I don't have an account yet",
-                            softWrap: false,
-                            style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
-                          ),
-                          onPressed: () {
-                            changeToInputNameScreen(context);
-                          },
-                        ),
-                      ),
-                    ),
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('Instruction Sent')),
+                                    );
+                                  }
+                                },
+                              ),
+                              SizedBox(height: 13.h,),
+                              GestureDetector(
+                                child: Text(
+                                  "I don't have an account yet",
+                                  style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),
+                                ),
+                                onTap: () {
+                                  changeToInputNameScreen(context);
+                                },
+                              ),
+                            ],
+                          )
+                        ],
+                      )
                   ),
                 ]
             ),

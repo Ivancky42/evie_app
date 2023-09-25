@@ -88,11 +88,9 @@ class _SignUpPasswordState extends State<SignUpPassword> {
       },
 
       child: Scaffold(
-
         ///ensure words do not collide when keyboard activated
           resizeToAvoidBottomInset: false,
           appBar: EvieAppbar_Back(onPressed: (){ changeToInputNameScreen(context);}),
-
         ///on tap closes keyboard
         body: GestureDetector(
             onTap: () {
@@ -100,258 +98,228 @@ class _SignUpPasswordState extends State<SignUpPassword> {
             },
             child: Stack(
               children: [
-                SingleChildScrollView(
-                  child: Column(
+                Form(
+                  key: _formKey,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h, bottom: 32.h),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                  Form(
-                    key: _formKey,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 16.w, right: 16.w, top:24.h),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-
-                          Text("Create a password",
-                            style: EvieTextStyles.h2,),
-
-                          SizedBox(
-                            height: 4.h,
-                          ),
-
-                          Text("Try to create a password that’s not easy to guess.",
-                            style: EvieTextStyles.body18,),
-
-                          SizedBox(
-                            height: 9.h,
-                          ),
-
-                          SizedBox(
-                            height: 8.h,
-                          ),
-
-                          ///text field to prompt user to key in password
-                          EvieTextFormField(
-                            controller: _passwordController,
-                            obscureText: _isObscure,
-                            labelText: "Password",
-                            hintText: "Enter a password",
-                            suffixIcon: IconButton(
-                              icon: _isObscure
-                                  ? const Image(
-                                image: AssetImage("assets/buttons/view_off.png"),
-                              )
-                                  : const Image(
-                                image: AssetImage("assets/buttons/view_on.png"),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Create a password",
+                              style: EvieTextStyles.h2,),
+                            SizedBox(
+                              height: 1.h,
+                            ),
+                            Text("Try to create a password that’s not easy to guess.",
+                              style: EvieTextStyles.body18,),
+                            SizedBox(
+                              height: 16.h,
+                            ),
+                            ///text field to prompt user to key in password
+                            EvieTextFormField(
+                              controller: _passwordController,
+                              obscureText: _isObscure,
+                              labelText: "Password",
+                              hintText: "Enter a password",
+                              suffixIcon: IconButton(
+                                icon: _isObscure
+                                    ? const Image(
+                                  image: AssetImage("assets/buttons/view_off.png"),
+                                )
+                                    : const Image(
+                                  image: AssetImage("assets/buttons/view_on.png"),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isObscure = !_isObscure;
+                                  });
+                                },
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  _isObscure = !_isObscure;
-                                });
+
+                              ///red words under text field
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your password';
+                                }
+                                if (value.length < 8) {
+                                  return 'Password must have at least 8 characters';
+                                }
+                                return null;
                               },
                             ),
 
-                            ///red words under text field
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter your password';
-                              }
-                              if (value.length < 8) {
-                                return 'Password must have at least 8 characters';
-                              }
-                              return null;
-                            },
-                          ),
+                            SizedBox(
+                              height: 4.h,
+                            ),
 
-                          SizedBox(
-                            height: 4.h,
-                          ),
+                            Text("Password must include:",
+                                style: EvieTextStyles.body14),
 
-                          Text("Password must include:",
-                            style: EvieTextStyles.body14),
+                            SizedBox(
+                              height: 7.5.h,
+                            ),
 
-                          SizedBox(
-                            height: 7.5.h,
-                          ),
+                            /// Change image in real time if length is more than 8
+                            Row(
+                              children: [
+                                if (_passwordController.text.length >= 8) ...{
+                                  SvgPicture.asset(
+                                    "assets/icons/check.svg",
+                                  ),
+                                } else ...{
+                                  SvgPicture.asset(
+                                    "assets/icons/grey_tick.svg",
+                                  ),
+                                },
 
-                          /// Change image in real time if length is more than 8
-                          Row(
-                            children: [
-                              if (_passwordController.text.length >= 8) ...{
-                                SvgPicture.asset(
-                                  "assets/icons/check.svg",
+                                Text(
+                                  "At least 8 characters.",
+                                  style: EvieTextStyles.body14,
                                 ),
-                              } else ...{
-                                SvgPicture.asset(
-                                  "assets/icons/grey_tick.svg",
+                              ],
+                            ),
+
+                            /// Change image in real time if password has letters and numbers
+                            Row(
+                              children: [
+                                if (containsLettersAndNumbers(_passwordController.text))...{
+                                  SvgPicture.asset(
+                                    "assets/icons/check.svg",
+                                  ),
+                                } else...{
+                                  SvgPicture.asset(
+                                    "assets/icons/grey_tick.svg",
+                                  ),
+                                },
+                                Text(
+                                  "Contain letters and numbers.",
+                                  style: EvieTextStyles.body14,
                                 ),
-                              },
-
-                              Text(
-                                "At least 8 characters.",
-                                style: EvieTextStyles.body14,
-                              ),
-                            ],
-                          ),
-
-                          /// Change image in real time if password has letters and numbers
-                          Row(
-                            children: [
-                              if (containsLettersAndNumbers(_passwordController.text))...{
-                                SvgPicture.asset(
-                                  "assets/icons/check.svg",
-                                ),
-                              } else...{
-                                SvgPicture.asset(
-                                  "assets/icons/grey_tick.svg",
-                                ),
-                              },
-                              Text(
-                                "Contain letters and numbers.",
-                                style: EvieTextStyles.body14,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 200.h,
-                  )
-
-                ]),
-              ),
-
-              ///terms and condition statement and check box
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding:  EdgeInsets.only(left: 16.w, right: 16.w, bottom: EvieLength.buttonWord_ButtonBottom),
-                  child: Row(
-                      children: [
-
-                        EvieCheckBox(
-                            onChanged: (bool? value) {
-                              setState(() {
-                                isCheckTermsCondition = value!;
-                              });
-                            },
-                            value: isCheckTermsCondition),
-
-                        Expanded(
-                          child: Container(
-
-                              child:Text("By creating an account, I accept EVIE's terms of use and privacy policy.",
-                                style: EvieTextStyles.body14)
-                          ),
+                              ],
+                            ),
+                          ],
                         ),
+                        Column(
+                          children: [
+                            Row(
+                                children: [
+                                  EvieCheckBox(
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          isCheckTermsCondition = value!;
+                                        });
+                                      },
+                                      value: isCheckTermsCondition),
+                                  Expanded(
+                                    child: Container(
 
-
-                      ]),
-                ),
-              ),
-
-              ///button to create account
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding:  EdgeInsets.only(left: 16.w, right: 16.w, bottom: EvieLength.button_Bottom),
-                  child: EvieButton(
-                    width: double.infinity,
-                    child: Text(
-                      "Create Account",
-                      style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                    ),
-
-                    ///conditions for button to be active
-                    onPressed: isCheckTermsCondition == true &&
-                        _passwordController.text.length >= 8 &&
-                        containsLettersAndNumbers(_passwordController.text)
-                        ? () async {
-                      if (_formKey.currentState!.validate()) {
-
-                        ///For keyboard un focus
-                        FocusManager.instance.primaryFocus?.unfocus();
-
-                        try {
-                          if (await _authProvider.signUp(
-                              widget.email,
-                              _passwordController.text.trim(),
-                              widget.name,
-                              "empty") ?? true) {
-
-                            _authProvider.setIsFirstLogin(true);
-
-                            await _authProvider
-                                .login(widget.email,
-                                _passwordController.text.trim())
-                                .then((result) {
-                              if (result.toString() == "Verified") {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Success'),
-                                    duration: Duration(seconds: 2),
+                                        child:Text("By creating an account, I accept EVIE's terms of use and privacy policy.",
+                                            style: EvieTextStyles.body14)
+                                    ),
                                   ),
-                                );
+                                ]),
+                            SizedBox(height: 12.h,),
+                            EvieButton(
+                              width: double.infinity,
+                              child: Text(
+                                "Create Account",
+                                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                              ),
+                              ///conditions for button to be active
+                              onPressed: isCheckTermsCondition == true &&
+                                  _passwordController.text.length >= 8 &&
+                                  containsLettersAndNumbers(_passwordController.text)
+                                  ? () async {
+                                if (_formKey.currentState!.validate()) {
 
-                                ///Quit loading and go to user home page
-                                changeToBeforeYouStart(context);
-                              } else if (result.toString() == "Not yet verify") {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Verify your account'),
-                                    duration: Duration(seconds: 2),
-                                  ),
-                                );
-                                changeToVerifyEmailScreen(context);
+                                  ///For keyboard un focus
+                                  FocusManager.instance.primaryFocus?.unfocus();
 
-                                _currentUserProvider.getDeviceInfo();
-                              } else {
-                                SmartDialog.show(
-                                  widget: EvieSingleButtonDialog(
-                                      title: "Error",
-                                      content: result.toString(),
-                                      rightContent: "Ok",
-                                      widget: Image.asset(
-                                        "assets/images/error.png",
-                                        width: 36,
-                                        height: 36,
-                                      ),
-                                      onPressedRight: () {
-                                        SmartDialog.dismiss();
-                                      }),
-                                );
-                              }
-                            });
+                                  try {
+                                    if (await _authProvider.signUp(
+                                        widget.email,
+                                        _passwordController.text.trim(),
+                                        widget.name,
+                                        "empty") ?? true) {
 
-                          } else {
-                            debugPrint("Sign Up Error");
-                            SmartDialog.show(
-                              widget: EvieSingleButtonDialog(
-                                  title: "Error",
-                                  content: "Try again",
-                                  rightContent: "Ok",
-                                  widget: Image.asset(
-                                    "assets/images/error.png",
-                                    width: 36,
-                                    height: 36,
-                                  ),
-                                  onPressedRight: () {
-                                    SmartDialog.dismiss();
-                                  }),
-                            );
-                          }
-                        } catch (error) {
-                          debugPrint(error.toString());
-                        }
-                      }
-                      ///null to disable button when conditions are not met
-                    } : null,
+                                      _authProvider.setIsFirstLogin(true);
+
+                                      await _authProvider
+                                          .login(widget.email,
+                                          _passwordController.text.trim())
+                                          .then((result) {
+                                        if (result.toString() == "Verified") {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                              content: Text('Success'),
+                                              duration: Duration(seconds: 2),
+                                            ),
+                                          );
+
+                                          ///Quit loading and go to user home page
+                                          changeToBeforeYouStart(context);
+                                        } else if (result.toString() == "Not yet verify") {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                              content: Text('Verify your account'),
+                                              duration: Duration(seconds: 2),
+                                            ),
+                                          );
+                                          changeToVerifyEmailScreen(context);
+
+                                          _currentUserProvider.getDeviceInfo();
+                                        } else {
+                                          SmartDialog.show(
+                                            widget: EvieSingleButtonDialog(
+                                                title: "Error",
+                                                content: result.toString(),
+                                                rightContent: "Ok",
+                                                widget: Image.asset(
+                                                  "assets/images/error.png",
+                                                  width: 36,
+                                                  height: 36,
+                                                ),
+                                                onPressedRight: () {
+                                                  SmartDialog.dismiss();
+                                                }),
+                                          );
+                                        }
+                                      });
+
+                                    } else {
+                                      debugPrint("Sign Up Error");
+                                      SmartDialog.show(
+                                        widget: EvieSingleButtonDialog(
+                                            title: "Error",
+                                            content: "Try again",
+                                            rightContent: "Ok",
+                                            widget: Image.asset(
+                                              "assets/images/error.png",
+                                              width: 36,
+                                              height: 36,
+                                            ),
+                                            onPressedRight: () {
+                                              SmartDialog.dismiss();
+                                            }),
+                                      );
+                                    }
+                                  } catch (error) {
+                                    debugPrint(error.toString());
+                                  }
+                                }
+                                ///null to disable button when conditions are not met
+                              } : null,
+                            ),
+                          ],
+                        )
+                      ],
+                    )
                   ),
                 ),
-              ),
               ],
           )),
     ));

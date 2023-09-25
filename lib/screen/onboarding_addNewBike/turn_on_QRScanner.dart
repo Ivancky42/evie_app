@@ -40,65 +40,54 @@ class _TurnOnQRScannerState extends State<TurnOnQRScanner> {
       child: Scaffold(
           body: Stack(
               children:[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-
-                    const EvieProgressIndicator(currentPageNumber: 0, totalSteps: 5,),
-
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
-                      child: Text(
-                        "First up, scan the QR Code",
-                        style: EvieTextStyles.h2,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 113.h),
-                      child: Text(
-                        "You can find the QR on the ownership card.",
-                        style: EvieTextStyles.body18,
-                      ),
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(45.w, 0.h, 45.2.w,221.h),
-                      child:  Center(
-                        child: SvgPicture.asset(
-                            "assets/images/scan_qr.svg",
+                Padding(
+                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 32.h),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            EvieProgressIndicator(currentPageNumber: 0, totalSteps: 5,),
+                            Text(
+                              "First up, scan the QR Code",
+                              style: EvieTextStyles.h2,
+                            ),
+                            SizedBox(
+                              height: 1.h,
+                            ),
+                            Text(
+                              "You can find the QR on the ownership card.",
+                              style: EvieTextStyles.body18,
+                            ),
+                            SizedBox(height: 145.h,),
+                            Center(
+                              child: SvgPicture.asset(
+                                "assets/images/scan_qr.svg",
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.button_Bottom),
-                    child:  EvieButton(
-                      width: double.infinity,
-                      height: 48.h,
-                      child: Text(
-                        "Scan QR Code",
-                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                      ),
-                      onPressed: () async{
-                      if (await Permission.camera.request().isGranted){
-                        changeToQRScanningScreen(context);
-                        }else{
-                        changeToQRScanningScreen(context);
-                          //showCameraDisable();
-                        }
-                      },
-                    ),
-                  ),
-                ),
-
+                        EvieButton(
+                          width: double.infinity,
+                          height: 48.h,
+                          child: Text(
+                            "Scan QR Code",
+                            style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                          ),
+                          onPressed: () async{
+                            if (await Permission.camera.request().isGranted){
+                              changeToQRScanningScreen(context);
+                            }else{
+                              changeToQRScanningScreen(context);
+                              //showCameraDisable();
+                            }
+                          },
+                        ),
+                      ],
+                    )
+                )
               ]
           )
       ),

@@ -32,15 +32,8 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   //To read data from user input
   final TextEditingController _emailController = TextEditingController();
-  // final TextEditingController _passwordController = TextEditingController();
-  // final TextEditingController _passwordConfirmController = TextEditingController();
-  // final TextEditingController _nameController = TextEditingController();
   late AuthProvider _authProvider;
   late CurrentUserProvider _currentUserProvider;
-
-  //For user input password visibility true/false
-  bool _isObscure = true;
-  bool _isObscure2 = true;
   bool isCheckTermsCondition = false;
 
   ///Create form for later form validation
@@ -59,83 +52,68 @@ class _SignUpState extends State<SignUp> {
 
       child: Scaffold(
           appBar: EvieAppbar_Back(onPressed: (){  changeToInputNameScreen(context);}),
-
-        body: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(children: [
+          body: Stack(
+              children: [
                 Form(
                   key: _formKey,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 16.w, right: 16.w, top:24.h),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h, bottom: 16.h),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("${widget.name}, let's setup your account",
+                                style: EvieTextStyles.h2,),
+                              SizedBox(
+                                height: 1.h,
+                              ),
+                              Text("Enter your email address",
+                                style: EvieTextStyles.body18,),
+                              SizedBox(
+                                height: 16.h,
+                              ),
+                              EvieTextFormField(
+                                controller: _emailController,
+                                obscureText: false,
+                                keyboardType: TextInputType.emailAddress,
+                                labelText: "Email Address",
+                                hintText: "lyouremail@sample.com",
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your email';
+                                  }else if(!value.contains("@")){
+                                    return 'Looks like you entered the wrong email. The correct format for email address as follow “sample@youremail.com”.';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ],
+                          ),
+                          EvieButton(
+                              width: double.infinity,
 
-                        Text("${widget.name}, let's setup your account",
-                          style: EvieTextStyles.h2,),
-                        SizedBox(
-                          height: 4.h,
-                        ),
-                        Text("Enter your email address",
-                          style: EvieTextStyles.body18,),
-                        SizedBox(
-                          height: 9.h,
-                        ),
-                        EvieTextFormField(
-                          controller: _emailController,
-                          obscureText: false,
-                          keyboardType: TextInputType.emailAddress,
-                          labelText: "Email Address",
-                          hintText: "enter your email address",
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your email';
-                            }else if(!value.contains("@")){
-                              return 'Looks like you entered the wrong email. '
-                                  'The correct format for email address ad follow "sample@youremail.com". ';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 8.h,
-                        ),
+                              child: Text(
+                                "Next",
+                                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                              ),
 
-                      ],
-                    ),
+                              onPressed: ()  {
+                                if (_formKey.currentState!.validate()){
+                                  changeToSignUpPasswordScreen(context, widget.name, _emailController.text.trim());
+                                }
+                              }
+
+                          ),
+                        ],
+                      ),
                   ),
                 ),
-                SizedBox(
-                  height: 200.h,
-                )
-              ]),
-            ),
-
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding:  EdgeInsets.only(left: 16.w, right: 16.w, bottom: EvieLength.button_Bottom),
-                child: EvieButton(
-                  width: double.infinity,
-
-                  child: Text(
-                    "Next",
-                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                  ),
-
-                  onPressed: ()  {
-                    if (_formKey.currentState!.validate()){
-                    changeToSignUpPasswordScreen(context, widget.name, _emailController.text.trim());
-                  }
-                  }
-
-                ),
-              ),
-            ),
-          ],
-        )),
+              ]
+          ),
+      ),
     );
   }
 }

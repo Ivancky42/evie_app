@@ -11,6 +11,7 @@ class NotificationSettingModel {
   bool? theftAttempt;
   bool? firmwareUpdate;
   bool? general;
+  bool? promo;
 
   NotificationSettingModel({
     this.connectionLost,
@@ -23,6 +24,7 @@ class NotificationSettingModel {
     this.theftAttempt,
     this.firmwareUpdate,
     this.general,
+    this.promo,
   });
 
   factory NotificationSettingModel.fromJson(Map json) {
@@ -37,6 +39,7 @@ class NotificationSettingModel {
       theftAttempt:   json['theftAttempt'] ?? false,
       firmwareUpdate:   json['firmwareUpdate'] ?? false,
       general:   json['general'] ?? false,
+      promo: json['promo'] ?? false,
     );
   }
 
