@@ -130,13 +130,18 @@ flutter_native_splash:
   #color_dark: '#252526'
   color_dark: '#ECEDEB'
   image_dark: assets/images/splashscreen/splashscreen_new_big.png
+  android_12:
+    color: '#ECEDEB'
+    image: assets/images/splashscreen/android12_splash_logo.png
+    color_dark: '#ECEDEB'
+    image_dark: assets/images/splashscreen/android12_splash_logo.png
 
-flutter_icons:
+flutter_launcher_icons:
   android: true
   ios: true
   image_path: 'assets/logo/evie_new_logo_noAlpha.png'
   adaptive_icon_background: '#6A51CA'  #masking for android
-  adaptive_icon_foreground: 'assets/logo/evie_new_logo.png'  #masking for android
+  adaptive_icon_foreground: 'assets/logo/evie_logo_android12.png'  #masking for android
 
 
 flutter:

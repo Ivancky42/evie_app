@@ -101,7 +101,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
               channel.id,
               channel.name,
               channelDescription: channel.description,
-              icon: 'launch_background',
+              icon: 'test_notification',
             ),
           ),
           payload: message.data["id"].toString(),
@@ -135,8 +135,8 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
   ///Foreground notification setting
   Future foreNotificationSetting() async {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('test_notification');
+    //const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
 
     IOSInitializationSettings initializationSettingsIOS =
         IOSInitializationSettings(
