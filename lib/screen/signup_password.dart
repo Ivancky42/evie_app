@@ -1,5 +1,6 @@
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/screen/signup_page.dart';
 import 'package:evie_test/widgets/evie_checkbox.dart';
 import 'package:evie_test/widgets/evie_textform.dart';
 import 'package:flutter/material.dart';
@@ -80,27 +81,20 @@ class _SignUpPasswordState extends State<SignUpPassword> {
     _authProvider = Provider.of<AuthProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
-    return WillPopScope(
-      onWillPop: () async {
-        changeToSignUpMethodScreen(
-            context, _nameController.text.trim());
-        return true;
-      },
-
-      child: Scaffold(
-        ///ensure words do not collide when keyboard activated
-          resizeToAvoidBottomInset: false,
-          appBar: EvieAppbar_Back(onPressed: (){ changeToInputNameScreen(context);}),
-        ///on tap closes keyboard
-        body: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: Stack(
-              children: [
-                Form(
-                  key: _formKey,
-                  child: Padding(
+    return Scaffold(
+      ///ensure words do not collide when keyboard activated
+      resizeToAvoidBottomInset: false,
+      appBar: EvieAppbar_Back(onPressed: (){ back(context, SignUp(widget.name));}),
+      ///on tap closes keyboard
+      body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Stack(
+            children: [
+              Form(
+                key: _formKey,
+                child: Padding(
                     padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h, bottom: 32.h),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -276,15 +270,16 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                                           SmartDialog.show(
                                             widget: EvieSingleButtonDialog(
                                                 title: "Error",
-                                                content: result.toString(),
-                                                rightContent: "Ok",
-                                                widget: Image.asset(
-                                                  "assets/images/error.png",
-                                                  width: 36,
-                                                  height: 36,
-                                                ),
+                                                content: 'User account already exists. Please log in instead.',
+                                                rightContent: "Go to Login",
+                                                // widget: Image.asset(
+                                                //   "assets/images/error.png",
+                                                //   width: 36,
+                                                //   height: 36,
+                                                // ),
                                                 onPressedRight: () {
                                                   SmartDialog.dismiss();
+                                                  changeToSignInScreen(context);
                                                 }),
                                           );
                                         }
@@ -318,10 +313,10 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                         )
                       ],
                     )
-                  ),
                 ),
-              ],
+              ),
+            ],
           )),
-    ));
+    );
   }
 }

@@ -50,72 +50,65 @@ class _RevokeAccountState extends State<RevokeAccount> {
 
   @override
   Widget build(BuildContext context) {
-
-    return WillPopScope(
-      onWillPop: () async {
-        changeToMyAccount(context, RevokeAccount());
-        return false;
-      },
-      child: Scaffold(
-          appBar: PageAppbar(
-            title: 'Revoke Account',
-            onPressed: () {
-              changeToMyAccount(context, RevokeAccount());
-            },
-          ),
-          body: Padding(
-            padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w, 28.h),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Permanently delete account', style: EvieTextStyles.h2.copyWith(fontWeight: FontWeight.w500),),
-                    Text(
-                      'The account will no longer be available, and all data in the account will be permanently deleted. Are you sure you would like to revoke account?',
-                      style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.w400),
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 4.w),
-                      child: EvieButton(
-                          width: double.infinity,
-                          height: 48.h,
-                          child: Text(
-                            'Revoke Account',
-                            style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                          ),
-                          onPressed: () async {
-                            showRevokeAccountDialog(context, _authProvider);
-                          }
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8.h,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 4.w),
-                      child: EvieButton_ReversedColor(
+    return Scaffold(
+      appBar: PageAppbar(
+        title: 'Revoke Account',
+        onPressed: () {
+          back(context, RevokeAccount());
+        },
+      ),
+      body: Padding(
+          padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w, 28.h),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Permanently delete account', style: EvieTextStyles.h2.copyWith(fontWeight: FontWeight.w500),),
+                  Text(
+                    'The account will no longer be available, and all data in the account will be permanently deleted. Are you sure you would like to revoke account?',
+                    style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.w400),
+                  )
+                ],
+              ),
+              Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 4.w),
+                    child: EvieButton(
                         width: double.infinity,
                         height: 48.h,
                         child: Text(
-                          'Cancel',
-                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
+                          'Revoke Account',
+                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                         ),
-                        onPressed: () {
-                          changeToMyAccount(context, RevokeAccount());
-                        },
-                      ),
+                        onPressed: () async {
+                          showRevokeAccountDialog(context, _authProvider);
+                        }
                     ),
-                  ],
-                ),
-              ],
-            )),
-          ),
+                  ),
+                  SizedBox(
+                    height: 8.h,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 4.w),
+                    child: EvieButton_ReversedColor(
+                      width: double.infinity,
+                      height: 48.h,
+                      child: Text(
+                        'Cancel',
+                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
+                      ),
+                      onPressed: () {
+                        changeToMyAccount(context, RevokeAccount());
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          )),
     );
   }
 }

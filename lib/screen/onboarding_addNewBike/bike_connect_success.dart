@@ -68,7 +68,7 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                       ),
 
                       Padding(
-                        padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 63.h),
+                        padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 57.h),
                         child: Text(
                           "Woo hoo! Your bike is now successfully paired with EVIE app.",
                           style: EvieTextStyles.body18,
@@ -99,27 +99,35 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
 
 
                 Padding(
-                    padding: EdgeInsets.fromLTRB(19.w, 386.h, 19.w, 288.h),
-                    child: Container(
-                      height: 220.h,
-                      width: 352.18.w,
-                      child:Stack(
-                        alignment: Alignment.center,
-                        children: <Widget>[
-                      Lottie.asset("assets/animations/register_bike_success.json",),
+                  padding: EdgeInsets.only(top: 200.h),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Lottie.asset("assets/animations/register_bike_success.json"),
+                  ),
+                ),
 
-                          // IconButton(
-                          //   iconSize: 100.h,
-                          //   icon: Image.asset("assets/icons/connect_success.png"),
-                          //   onPressed: () {
-                          //
-                          //   },
-                          // ),
-
-                        ],
-                      ),
-                    ),
-          ),
+                // Padding(
+                //     padding: EdgeInsets.fromLTRB(19.w, 386.h, 19.w, 288.h),
+                //     child: Container(
+                //       height: 220.h,
+                //       width: 352.18.w,
+                //       child:Stack(
+                //         alignment: Alignment.center,
+                //         children: <Widget>[
+                //       Lottie.asset("assets/animations/register_bike_success.json",),
+                //
+                //           // IconButton(
+                //           //   iconSize: 100.h,
+                //           //   icon: Image.asset("assets/icons/connect_success.png"),
+                //           //   onPressed: () {
+                //           //
+                //           //   },
+                //           // ),
+                //
+                //         ],
+                //       ),
+                //     ),
+                // ),
               ]
           )
       ),

@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/screen/my_account/edit_profile.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evie_test/screen/my_account/verify_password.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -46,105 +48,99 @@ class _EnterNewPasswordState extends State<EnterNewPassword> {
     final TextEditingController _passwordController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
 
-    return WillPopScope(
-      onWillPop: () async {
-        changeToEditProfile(context);
-        return false;
-      },
-      child: Scaffold(
-        appBar: PageAppbar(
-          title: 'Create New Password',
-          onPressed: () {
-            changeToEditProfile(context);
-          },
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Form(
-              key: _formKey,
-              child:Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return Scaffold(
+      appBar: PageAppbar(
+        title: 'Create New Password',
+        onPressed: () {
+          back(context, VerifyPassword());
+        },
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Form(
+            key: _formKey,
+            child:Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 1.h),
+                  child: Text(
+                    "Create New Password",
+                    style: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.w500),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
+                  child: Text(
+                    "Password must contain at least 8 characters, with letters and numbers.",
+                    style: TextStyle(fontSize: 16.sp,height: 1.5.h, fontWeight: FontWeight.w400),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 17.h, 16.w, 0.h),
+                  child: EvieTextFormField(
+                    controller: _passwordController,
+                    obscureText: false,
+                    //     keyboardType: TextInputType.name,
+                    hintText: "Type in new password",
+                    labelText: "Password",
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+              padding: EdgeInsets.fromLTRB(16.w,0,16.w,32.h),
+              child: Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 1.h),
-                    child: Text(
-                      "Create New Password",
-                      style: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
-                    child: Text(
-                      "Password must contain at least 8 characters, with letters and numbers.",
-                      style: TextStyle(fontSize: 16.sp,height: 1.5.h, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 17.h, 16.w, 0.h),
-                    child: EvieTextFormField(
-                      controller: _passwordController,
-                      obscureText: false,
-                      //     keyboardType: TextInputType.name,
-                      hintText: "Type in new password",
-                      labelText: "Password",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
+                  SizedBox(
+                    height: 48.h,
+                    width: double.infinity,
+                    child: EvieButton(
+                      width: double.infinity,
+                      child: Text(
+                        "Reset Password",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+
+                          final result = await _authProvider.changeUserPassword(
+                              _passwordController.text.trim()); //
+
+                          result == true ?
+                          {
+                            changeToEditProfile(context),
+                            showUpdatedPasswordToast(context),
+                          } :
+                          SmartDialog.show(
+                              widget: EvieSingleButtonDialog(
+                                  title: "Error",
+                                  content: "Try again",
+                                  rightContent: "OK",
+                                  onPressedRight: (){
+                                    SmartDialog.dismiss();
+                                  }));
                         }
-                        return null;
                       },
                     ),
                   ),
                 ],
-              ),
-            ),
-            Padding(
-                padding: EdgeInsets.fromLTRB(16.w,0,16.w,32.h),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 48.h,
-                      width: double.infinity,
-                      child: EvieButton(
-                        width: double.infinity,
-                        child: Text(
-                          "Reset Password",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w700
-                          ),
-                        ),
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-
-                            final result = await _authProvider.changeUserPassword(
-                                _passwordController.text.trim()); //
-
-                            result == true ?
-                            {
-                              changeToEditProfile(context),
-                              showUpdatedPasswordToast(context),
-                            } :
-                            SmartDialog.show(
-                                widget: EvieSingleButtonDialog(
-                                    title: "Error",
-                                    content: "Try again",
-                                    rightContent: "OK",
-                                    onPressedRight: (){
-                                      SmartDialog.dismiss();
-                                    }));
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                )
-            ),
-          ],
-        ),),
-    );
+              )
+          ),
+        ],
+      ),);
   }
 }

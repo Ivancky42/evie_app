@@ -1,6 +1,7 @@
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/screen/welcome_page.dart';
 import 'package:evie_test/widgets/evie_textform.dart';
 import 'package:flutter/material.dart';
 
@@ -23,76 +24,69 @@ class _InputNameState extends State<InputName> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        changeToWelcomeScreen(context);
-        return true;
-      },
-
-      child:  Scaffold(
-        appBar: EvieAppbar_Back(onPressed: (){ changeToWelcomeScreen(context);}),
-        body: Stack(
-          children: [
+    return Scaffold(
+      appBar: EvieAppbar_Back(onPressed: (){ back(context, Welcome());}),
+      body: Stack(
+        children: [
           Form(
-          key: _formKey,
+            key: _formKey,
             child:Padding(
-              padding: EdgeInsets.only(left: 16.w, right: 16.w, top:16.h, bottom: 32.h),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Hi, what's your name?",
-                        style: EvieTextStyles.h2,
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Text("This appears on your EVIE profile.", style: EvieTextStyles.body18,),
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      EvieTextFormField(
-                        controller: _nameController,
-                        obscureText: false,
-                        keyboardType: TextInputType.name,
-                        hintText: "Your first name or nickname",
-                        labelText: "Name",
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your name';
-                          }
-                          return null;
-                        },
-                      ),
-                    ],
-                  ),
-                  EvieButton(
-                    width: double.infinity,
-                    child: Text(
-                      "Next",
-                      style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                padding: EdgeInsets.only(left: 16.w, right: 16.w, top:16.h, bottom: 32.h),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Hi, what's your name?",
+                          style: EvieTextStyles.h2,
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Text("This appears on your EVIE profile.", style: EvieTextStyles.body18,),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        EvieTextFormField(
+                          controller: _nameController,
+                          obscureText: false,
+                          keyboardType: TextInputType.name,
+                          hintText: "Your first name or nickname",
+                          labelText: "Name",
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your name';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
                     ),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        ///For keyboard un focus
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        changeToSignUpScreen(context, _nameController.text.trim());
-                      }
-                    },
-                  ),
-                ],
-              )
-              ),
+                    EvieButton(
+                      width: double.infinity,
+                      child: Text(
+                        "Next",
+                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                      ),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          ///For keyboard un focus
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          changeToSignUpScreen(context, _nameController.text.trim());
+                        }
+                      },
+                    ),
+                  ],
+                )
             ),
-          ],
-        ),
-
-        //        ),
+          ),
+        ],
       ),
+
+      //        ),
     );
   }
 }

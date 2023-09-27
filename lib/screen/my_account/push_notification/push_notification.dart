@@ -45,126 +45,120 @@ class _PushNotificationState extends State<PushNotification> {
     _notificationProvider = Provider.of<NotificationProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
-    return WillPopScope(
-      onWillPop: () async {
-        changeToMyAccount(context, PushNotification());
-        return false;
-      },
-      child: Scaffold(
-        appBar: PageAppbar(
-          title: 'Push Notification',
-          onPressed: () {
-            changeToMyAccount(context, PushNotification());
-          },
-        ),
-        body: Stack(
-          children: [
-            Padding(
-              padding:  EdgeInsets.only(left: 16.w, right: 16.w),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  EvieSwitch(
-                    text: "General Notification",
-                    value: _currentUserProvider.currentUserModel?.notificationSettings?.general ?? false,
-                    thumbColor: _thumbColor,
-                    onChanged: (value) async {
-                      SmartDialog.showLoading();
-                      var result = await _bikeProvider.updateFirestoreNotification("general", value!);
-                      if(result == true){
-                        SmartDialog.dismiss();
-                        switch(value){
-                          case true:
-                            await _notificationProvider.subscribeToTopic("~general");
-                            break;
-                          case false:
-                            await _notificationProvider.unsubscribeFromTopic("~general");
-                            break;
-                        }
-                      }else{
-                        SmartDialog.show(
-                            widget: EvieSingleButtonDialog(
-                                title: "Error",
-                                content: "Try again",
-                                rightContent: "OK",
-                                onPressedRight: (){SmartDialog.dismiss();}));
+    return Scaffold(
+      appBar: PageAppbar(
+        title: 'Push Notification',
+        onPressed: () {
+          changeToMyAccount(context, PushNotification());
+        },
+      ),
+      body: Stack(
+        children: [
+          Padding(
+            padding:  EdgeInsets.only(left: 16.w, right: 16.w),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                EvieSwitch(
+                  text: "General Notification",
+                  value: _currentUserProvider.currentUserModel?.notificationSettings?.general ?? false,
+                  thumbColor: _thumbColor,
+                  onChanged: (value) async {
+                    SmartDialog.showLoading();
+                    var result = await _bikeProvider.updateFirestoreNotification("general", value!);
+                    if(result == true){
+                      SmartDialog.dismiss();
+                      switch(value){
+                        case true:
+                          await _notificationProvider.subscribeToTopic("~general");
+                          break;
+                        case false:
+                          await _notificationProvider.unsubscribeFromTopic("~general");
+                          break;
                       }
-                    },
-                  ),
-                  Divider(
-                    thickness: 0.2.h,
-                    color: EvieColors.darkWhite,
-                    height: 0,
-                  ),
+                    }else{
+                      SmartDialog.show(
+                          widget: EvieSingleButtonDialog(
+                              title: "Error",
+                              content: "Try again",
+                              rightContent: "OK",
+                              onPressedRight: (){SmartDialog.dismiss();}));
+                    }
+                  },
+                ),
+                Divider(
+                  thickness: 0.2.h,
+                  color: EvieColors.darkWhite,
+                  height: 0,
+                ),
 
-                  EvieSwitch(
-                    text: "Promo",
-                    value: _currentUserProvider.currentUserModel?.notificationSettings?.promo ?? false,
-                    thumbColor: _thumbColor,
-                    onChanged: (value) async {
-                      SmartDialog.showLoading();
-                      var result = await _bikeProvider.updateFirestoreNotification("promo", value!);
-                      if(result == true){
-                        SmartDialog.dismiss();
+                EvieSwitch(
+                  text: "Promo",
+                  value: _currentUserProvider.currentUserModel?.notificationSettings?.promo ?? false,
+                  thumbColor: _thumbColor,
+                  onChanged: (value) async {
+                    SmartDialog.showLoading();
+                    var result = await _bikeProvider.updateFirestoreNotification("promo", value!);
+                    if(result == true){
+                      SmartDialog.dismiss();
+                    }
+                    else{
+                      SmartDialog.show(
+                          widget: EvieSingleButtonDialog(
+                              title: "Error",
+                              content: "Try again",
+                              rightContent: "OK",
+                              onPressedRight: (){SmartDialog.dismiss();}));
+                    }
+                  },
+                ),
+
+                Divider(
+                  thickness: 0.2.h,
+                  color: EvieColors.darkWhite,
+                  height: 0,
+                ),
+
+                EvieSwitch(
+                  text: "Software Update",
+                  value: _currentUserProvider.currentUserModel?.notificationSettings?.firmwareUpdate ?? false,
+                  thumbColor: _thumbColor,
+                  onChanged: (value) async {
+                    SmartDialog.showLoading();
+                    var result = await _bikeProvider.updateFirestoreNotification("firmwareUpdate", value!);
+                    if(result == true){
+                      SmartDialog.dismiss();
+                      switch(value){
+                        case true:
+                          await _notificationProvider.subscribeToTopic("~firmware-update");
+                          break;
+                        case false:
+                          await _notificationProvider.unsubscribeFromTopic("~firmware-update");
+                          break;
                       }
-                      else{
-                        SmartDialog.show(
-                            widget: EvieSingleButtonDialog(
-                                title: "Error",
-                                content: "Try again",
-                                rightContent: "OK",
-                                onPressedRight: (){SmartDialog.dismiss();}));
-                      }
-                    },
-                  ),
+                    }else{
+                      SmartDialog.show(
+                          widget: EvieSingleButtonDialog(
+                              title: "Error",
+                              content: "Try again",
+                              rightContent: "OK",
+                              onPressedRight: (){SmartDialog.dismiss();}));
+                    }
+                  },
+                ),
 
-                  Divider(
-                    thickness: 0.2.h,
-                    color: EvieColors.darkWhite,
-                    height: 0,
-                  ),
+                Divider(
+                  thickness: 0.2.h,
+                  color: EvieColors.darkWhite,
+                  height: 0,
+                ),
 
-                  EvieSwitch(
-                    text: "Software Update",
-                    value: _currentUserProvider.currentUserModel?.notificationSettings?.firmwareUpdate ?? false,
-                    thumbColor: _thumbColor,
-                    onChanged: (value) async {
-                      SmartDialog.showLoading();
-                      var result = await _bikeProvider.updateFirestoreNotification("firmwareUpdate", value!);
-                      if(result == true){
-                        SmartDialog.dismiss();
-                        switch(value){
-                          case true:
-                            await _notificationProvider.subscribeToTopic("~firmware-update");
-                            break;
-                          case false:
-                            await _notificationProvider.unsubscribeFromTopic("~firmware-update");
-                            break;
-                        }
-                      }else{
-                        SmartDialog.show(
-                            widget: EvieSingleButtonDialog(
-                                title: "Error",
-                                content: "Try again",
-                                rightContent: "OK",
-                                onPressedRight: (){SmartDialog.dismiss();}));
-                      }
-                    },
-                  ),
-
-                  Divider(
-                    thickness: 0.2.h,
-                    color: EvieColors.darkWhite,
-                    height: 0,
-                  ),
-
-                ],
-              ),
+              ],
             ),
-          ],
-        ),),
-    );
+          ),
+        ],
+      ),);
   }
 
 }

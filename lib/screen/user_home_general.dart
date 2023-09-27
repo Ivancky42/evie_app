@@ -24,6 +24,7 @@ import '../api/provider/notification_provider.dart';
 import '../api/snackbar.dart';
 import '../bluetooth/modelResult.dart';
 import '../main.dart';
+import '../widgets/evie_appbar.dart';
 
 ///Default user home page if login is true(display bicycle info)
 class UserHomeGeneral extends StatefulWidget {
@@ -126,6 +127,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
   @override
   void dispose() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     hideCurrentSnackBar(_navigator);
     _textFocus.dispose();
     super.dispose();
@@ -234,8 +236,9 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
         },
 
         child: Scaffold(
-            body: isLoading ?
-                Center(child: CircularProgressIndicator(color: EvieColors.primaryColor,)) :
+            //backgroundColor: EvieColors.lightBlack,
+            appBar: EmptyAppbar(),
+            body: isLoading ? Center(child: CircularProgressIndicator(color: EvieColors.primaryColor,)) :
             _buildChild(userBikeList),
         )
     );

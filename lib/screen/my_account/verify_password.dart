@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/screen/my_account/edit_profile.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,112 +47,106 @@ class _VerifyPasswordState extends State<VerifyPassword> {
     final TextEditingController _passwordController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
 
-    return WillPopScope(
-      onWillPop: () async {
-        changeToEditProfile(context);
-        return false;
-      },
-      child: Scaffold(
-          appBar: PageAppbar(
-            title: 'Update Password',
-            onPressed: () {
-             changeToEditProfile(context);
-            },
-          ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 1.h),
-                      child: Text(
-                        "Verify Password",
-                        style: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
-                      child: Text(
-                        "Keep your account safe, please verify your identity by entering your password.",
-                        style: TextStyle(fontSize: 16.sp,height: 1.5.h, fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 17.h, 16.w, 0.h),
-                      child: EvieTextFormField(
-                        controller: _passwordController,
-                        obscureText: false,
-                        hintText: "Your login password",
-                        labelText: "Password",
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  ],
+    return Scaffold(
+      appBar: PageAppbar(
+        title: 'Update Password',
+        onPressed: () {
+          back(context, EditProfile());
+        },
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 1.h),
+                  child: Text(
+                    "Verify Password",
+                    style: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.w500),
+                  ),
                 ),
-              ),
-              Padding(
-                  padding: EdgeInsets.fromLTRB(16.w,0,16.w,32.h),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 48.h,
-                        width: double.infinity,
-                        child: EvieButton(
-                          width: double.infinity,
-                          child: Text(
-                            "Continue",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w700
-                            ),
-                          ),
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              final result = await _authProvider.reauthentication(_passwordController.text.trim());
-                              result == true ?
-                              changeToEnterNewPassword(context)
-                                  :
-                              SmartDialog.show(widget: EvieSingleButtonDialog(
-                                  title: "Error",
-                                  content: "Wrong password",
-                                  rightContent: "OK",
-                                  onPressedRight: (){
-                                    SmartDialog.dismiss();
-                                  }));
-                            }
-                          },
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
+                  child: Text(
+                    "Keep your account safe, please verify your identity by entering your password.",
+                    style: TextStyle(fontSize: 16.sp,height: 1.5.h, fontWeight: FontWeight.w400),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 17.h, 16.w, 0.h),
+                  child: EvieTextFormField(
+                    controller: _passwordController,
+                    obscureText: false,
+                    hintText: "Your login password",
+                    labelText: "Password",
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+              padding: EdgeInsets.fromLTRB(16.w,0,16.w,32.h),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 48.h,
+                    width: double.infinity,
+                    child: EvieButton(
+                      width: double.infinity,
+                      child: Text(
+                        "Continue",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 7.h),
-                        child: GestureDetector(
-                          child: Text(
-                            "Forgot Password",
-                            style: TextStyle(fontSize: 14.sp, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),
-                          ),
-                          onTap: () {
-                            showResetPasswordDialog(context, _authProvider);
-                          },
-                        ),
-                      )
-                    ],
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          final result = await _authProvider.reauthentication(_passwordController.text.trim());
+                          result == true ?
+                          changeToEnterNewPassword(context)
+                              :
+                          SmartDialog.show(widget: EvieSingleButtonDialog(
+                              title: "Error",
+                              content: "Wrong password",
+                              rightContent: "OK",
+                              onPressedRight: (){
+                                SmartDialog.dismiss();
+                              }));
+                        }
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 7.h),
+                    child: GestureDetector(
+                      child: Text(
+                        "Forgot Password",
+                        style: TextStyle(fontSize: 14.sp, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),
+                      ),
+                      onTap: () {
+                        showResetPasswordDialog(context, _authProvider);
+                      },
+                    ),
                   )
-              ),
-            ],
-          ),),
-    );
+                ],
+              )
+          ),
+        ],
+      ),);
   }
 }

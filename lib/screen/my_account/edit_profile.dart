@@ -53,24 +53,19 @@ class _EditProfileState extends State<EditProfile> {
       _isEmail = false;
     }
 
-    return WillPopScope(
-      onWillPop: () async {
-        changeToMyAccount(context, EditProfile());
-        return false;
-      },
-      child: Scaffold(
-          appBar: PageAppbar(
-            title: 'Personal Information',
-            onPressed: () {
-                changeToMyAccount(context, EditProfile());
-            },
-          ),
-          body: Column(
-            children: [
-              Center(
-                child: Container(
-                  height: 96.h,
-                  child: Padding(
+    return Scaffold(
+        appBar: PageAppbar(
+          title: 'Personal Information',
+          onPressed: () {
+            back(context, EditProfile());
+          },
+        ),
+        body: Column(
+          children: [
+            Center(
+              child: Container(
+                height: 96.h,
+                child: Padding(
                     padding:
                     EdgeInsets.fromLTRB(0, 15.h, 0, 14.34.h),
                     child: Stack(
@@ -113,23 +108,23 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ],
                     )
-                  ),
                 ),
               ),
-              Divider(
-                thickness: 0.5.h,
-                color: const Color(0xff8E8E8E),
-                height: 0,
-              ),
-              EditProfileContainer(
-                subtitle: 'Your Name',
-                content: _currentUserProvider.currentUserModel?.name ?? "",
-                  trailingImage:  "assets/buttons/pen_edit.svg",
-                  onPress: (){
-                    SmartDialog.show(
-                        widget: Form(
-                          key: _formKey,
-                          child: EvieDoubleButtonDialog(
+            ),
+            Divider(
+              thickness: 0.5.h,
+              color: const Color(0xff8E8E8E),
+              height: 0,
+            ),
+            EditProfileContainer(
+              subtitle: 'Your Name',
+              content: _currentUserProvider.currentUserModel?.name ?? "",
+              trailingImage:  "assets/buttons/pen_edit.svg",
+              onPress: (){
+                SmartDialog.show(
+                    widget: Form(
+                      key: _formKey,
+                      child: EvieDoubleButtonDialog(
                           title: "Your Name",
                           childContent: Container(
                             child: Column(
@@ -179,57 +174,56 @@ class _EditProfileState extends State<EditProfile> {
                                   }));
                             }
                           }),
-                        ));
-                  },
-              ),
-              Divider(
-                thickness: 0.2.h,
-                color: EvieColors.darkWhite,
-                height: 0,
-              ),
-              EditProfileContainer(
-                subtitle: 'Email Address',
-                content: _currentUserProvider.currentUserModel?.email ?? "",
-              ),
-              Divider(
-                thickness: 0.2.h,
-                color: EvieColors.darkWhite,
-                height: 0,
-              ),
+                    ));
+              },
+            ),
+            Divider(
+              thickness: 0.2.h,
+              color: EvieColors.darkWhite,
+              height: 0,
+            ),
+            EditProfileContainer(
+              subtitle: 'Email Address',
+              content: _currentUserProvider.currentUserModel?.email ?? "",
+            ),
+            Divider(
+              thickness: 0.2.h,
+              color: EvieColors.darkWhite,
+              height: 0,
+            ),
 
-              Visibility(
-                visible: _isEmail,
-                child: GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    changeToVerifyPassword(context);
-                  },
-                  child: Container(
-                    height: 59.h,
-                    width: double.infinity,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Update Password",
-                            style: TextStyle(fontSize: 16.sp),
-                          ),
-                        ],
-                      ),
+            Visibility(
+              visible: _isEmail,
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  changeToVerifyPassword(context);
+                },
+                child: Container(
+                  height: 59.h,
+                  width: double.infinity,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Update Password",
+                          style: TextStyle(fontSize: 16.sp),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-              Divider(
-                thickness: 0.2.h,
-                color: EvieColors.darkWhite,
-                height: 0,
-              ),
-            ],
-          )),
-    );
+            ),
+            Divider(
+              thickness: 0.2.h,
+              color: EvieColors.darkWhite,
+              height: 0,
+            ),
+          ],
+        ));
   }
 }

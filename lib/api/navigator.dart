@@ -2,8 +2,10 @@ import 'dart:collection';
 
 import 'package:evie_test/api/model/trip_history_model.dart';
 import 'package:evie_test/screen/feeds/accepting_invitation.dart';
+import 'package:evie_test/screen/login_page.dart';
 import 'package:evie_test/screen/my_account/my_garage/my_garage.dart';
 import 'package:evie_test/screen/my_account/revoke_account/revoke_account.dart';
+import 'package:evie_test/screen/my_account/verify_password.dart';
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_sensitivity.dart';
 import 'package:evie_test/screen/my_bike_setting/firmware/firmware_information.dart';
 import 'package:evie_test/screen/my_bike_setting/firmware/firmware_update_failed.dart';
@@ -25,11 +27,15 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../screen/account_verified.dart';
 import '../screen/check_your_email.dart';
 import '../screen/feeds/feeds.dart';
 import '../screen/forget_your_password.dart';
+import '../screen/input_name.dart';
+import '../screen/login_method.dart';
 import '../screen/my_account/account/my_account.dart';
 import '../screen/my_account/display_setting/display_setting.dart';
+import '../screen/my_account/enter_new_password.dart';
 import '../screen/my_account/push_notification/push_notification.dart';
 import '../screen/my_account/revoke_account/revoked_account.dart';
 import '../screen/my_account/revoke_account/revoking_account.dart';
@@ -80,39 +86,81 @@ void changeToWelcomeScreen(BuildContext context) {
 }
 
 void changeToInputNameScreen(BuildContext context) {
-  Navigator.of(context).pushNamedAndRemoveUntil("/inputName", (route) => false);
+  //Navigator.of(context).pushNamedAndRemoveUntil("/inputName", (route) => false);
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return InputName();
+    },
+  ));
 }
 
 void changeToSignUpMethodScreen(BuildContext context, name) {
-  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
-          builder: (context) => SignUpMethod(name))
-  );
+  // Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
+  //         builder: (context) => SignUpMethod(name))
+  // );
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return SignUpMethod(name);
+    },
+  ));
 }
 
 
 void changeToSignUpScreen(BuildContext context, name) {
-  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
-      builder: (context) => SignUp(name))
-  );
+  // Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
+  //     builder: (context) => SignUp(name))
+  // );
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return SignUp(name);
+    },
+  ));
 }
 
 void changeToSignUpPasswordScreen(BuildContext context, name, email) {
-  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
-      builder: (context) => SignUpPassword(name, email))
-  );
+  // Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
+  //     builder: (context) => SignUpPassword(name, email))
+  // );
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return SignUpPassword(name, email);
+    },
+  ));
 }
 void changeToAccountVerifiedScreen(BuildContext context) {
-  Navigator.of(context).pushNamedAndRemoveUntil("/accountVerified", (route) => false);
+  //Navigator.of(context).pushNamedAndRemoveUntil("/accountVerified", (route) => false);
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return AccountVerified();
+    },
+  ));
 }
 
 void changeToVerifyEmailScreen(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
-      builder: (context) => VerifyEmail())
-  );
+  // Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
+  //     builder: (context) => VerifyEmail())
+  // );
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return VerifyEmail();
+    },
+  ));
 }
 
 changeToSignInMethodScreen(BuildContext context) {
-  Navigator.of(context).pushNamedAndRemoveUntil("/signInMethod", (route) => false);
+  //Navigator.of(context).pushNamedAndRemoveUntil("/signInMethod", (route) => false);
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return SignInMethod();
+    },
+  ));
 }
 
 // void changeToSignUpPasswordScreen(BuildContext context) {
@@ -121,11 +169,23 @@ changeToSignInMethodScreen(BuildContext context) {
 
 
 void changeToSignInScreen(BuildContext context) {
-  Navigator.of(context).pushNamedAndRemoveUntil("/signIn", (route) => false);
+  //Navigator.of(context).pushNamedAndRemoveUntil("/signIn", (route) => false);
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return SignIn();
+    },
+  ));
 }
 
 void changeToForgetPasswordScreen(BuildContext context) {
-  Navigator.of(context).pushNamedAndRemoveUntil("/forgetPassword", (route) => false);
+  //Navigator.of(context).pushNamedAndRemoveUntil("/forgetPassword", (route) => false);
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return ForgetYourPassword();
+    },
+  ));
 }
 
 void changeToUserProfileScreen(BuildContext context) {
@@ -157,7 +217,6 @@ void changeToUserHomePageScreen(BuildContext context ) {
   // Navigator.of(context).pushReplacement(
   //     MaterialWithModalsPageRoute(builder: (context) => UserHomePage(0)));
   Navigator.of(context).pushNamedAndRemoveUntil("/", (route) => false);
-
 }
 
 void changeToUserHomePageScreen2(BuildContext context) {
@@ -219,6 +278,12 @@ void changeToBeforeYouStart(BuildContext context) {
   Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
       builder: (context) => const BeforeYouStart())
   );
+
+  // Navigator.of(context).push(CupertinoPageRoute(
+  //   builder: (context) {
+  //     return BeforeYouStart();
+  //   },
+  // ));
 }
 
 void changeToNameBikeScreen(BuildContext context) {
@@ -489,41 +554,46 @@ void changeToProPlanScreen(BuildContext context) {
 }
 
 void changeToMyAccount(BuildContext context, Widget child) {
-
   Navigator.pushReplacement(context,
     PageTransition(
-      type: PageTransitionType.leftToRightPop,
-      child: const UserHomePage(2),
-      childCurrent: child,
+      type: PageTransitionType.leftToRight,
+      child: UserHomePage(2),
       duration: const Duration(milliseconds: 300),
     ),
   );
+}
 
-  // Navigator.of(context).pushReplacement(
-  //     MaterialWithModalsPageRoute(
-  //     builder: (context) => const UserHomePage(2))
-  // );
+void changeToEditProfile(BuildContext context) {
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return EditProfile();
+    },
+  ));
 }
 
 
 void changeToPushNotification(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const PushNotification(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return PushNotification();
+    },
+  ));
 }
 
 void changeToDisplaySetting(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const DisplaySetting(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
+  // Navigator.pushReplacement(context,
+  //   PageTransition(
+  //     type: PageTransitionType.rightToLeft,
+  //     child: const DisplaySetting(),
+  //     duration: const Duration(milliseconds: 300),
+  //   ),
+  // );
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return DisplaySetting();
+    },
+  ));
 }
 // void changeToEmailNewsletter(BuildContext context) {
 //   Navigator.pushReplacement(context,
@@ -659,25 +729,20 @@ void changeToThreatTimeLine(BuildContext context, [PageTransitionType? pageTrans
   );
 }
 
-
-void changeToEditProfile(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const EditProfile(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
-
 void changeToVerifyPassword(BuildContext context) {
-  Navigator.of(context)
-      .pushNamedAndRemoveUntil("/verifyPassword", (route) => false);
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return VerifyPassword();
+    },
+  ));
 }
 
 void changeToEnterNewPassword(BuildContext context) {
-  Navigator.of(context)
-      .pushNamedAndRemoveUntil("/enterNewPassword", (route) => false);
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return EnterNewPassword();
+    },
+  ));
 }
 
 
@@ -712,19 +777,47 @@ void changeToTestScreen(BuildContext context) {
 }
 
 void changeToRevokeAccount(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
-      builder: (context) => const RevokeAccount())
-  );
+  // Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
+  //     builder: (context) => const RevokeAccount())
+  // );
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return RevokeAccount();
+    },
+  ));
 }
 
 void changeToRevokingAccount(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
-      builder: (context) => const RevokingAccount())
-  );
+  // Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
+  //     builder: (context) => const RevokingAccount())
+  // );
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return RevokingAccount();
+    },
+  ));
 }
 
 void changeToRevokedAccount(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
-      builder: (context) => const RevokedAccount())
+  // Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
+  //     builder: (context) => const RevokedAccount())
+  // );
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return RevokedAccount();
+    },
+  ));
+}
+
+void back(context, child) {
+  Navigator.pop(context,
+    PageTransition(
+      type: PageTransitionType.leftToRight,
+      child: child,
+      duration: const Duration(milliseconds: 300),
+    ),
   );
 }

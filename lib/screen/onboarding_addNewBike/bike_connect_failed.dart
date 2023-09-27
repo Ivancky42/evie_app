@@ -10,6 +10,7 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 import '../../animation/ripple_pulse_animation.dart';
 import '../../api/colours.dart';
 import '../../api/fonts.dart';
+import '../../api/function.dart';
 import '../../api/length.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../widgets/evie_button.dart';
@@ -56,30 +57,30 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
             Padding(
               padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 63.h),
               child: Text(
-                "Oops! Look like ${_bikeProvider.scanQRCodeResult.toString()} happen.",
+                "Oops! Please scan a valid ownership card.",
                 style: EvieTextStyles.body18,
               ),
             ),
-            Center(
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(32.w, 0.h, 32.w, 4.h),
-                child: Text(
-                  "Evie Bike",
-                  style:
-                  EvieTextStyles.body20,
-                ),
-              ),
-            ),
-            Center(
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(32.w, 4.h, 32.w, 32.h),
-                child: Text(
-                  "Bike Serial Number",
-                  style:
-                      EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan),
-                ),
-              ),
-            ),
+            // Center(
+            //   child: Padding(
+            //     padding: EdgeInsets.fromLTRB(32.w, 0.h, 32.w, 4.h),
+            //     child: Text(
+            //       "Evie Bike",
+            //       style:
+            //       EvieTextStyles.body20,
+            //     ),
+            //   ),
+            // ),
+            // Center(
+            //   child: Padding(
+            //     padding: EdgeInsets.fromLTRB(32.w, 4.h, 32.w, 32.h),
+            //     child: Text(
+            //       "Bike Serial Number",
+            //       style:
+            //           EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
         Padding(
@@ -128,7 +129,9 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
                 child: EvieButton_ReversedColor(
                     width: double.infinity,
                     onPressed: (){
-
+                      const url = 'https://support.eviebikes.com/en-US';
+                      final Uri _url = Uri.parse(url);
+                      launch(_url);
                     },
                     child: Text("Get Help", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)))
             ),
@@ -142,9 +145,9 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
                   width: double.infinity,
                   child: TextButton(
                     child: Text(
-                      "Skip register bike process",
+                      "Skip bike registration",
                       softWrap: false,
-                      style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                      style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w800, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
                         _authProvider.setIsFirstLogin(false);

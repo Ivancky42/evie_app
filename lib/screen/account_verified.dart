@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/screen/welcome_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
@@ -39,7 +40,7 @@ class _AccountVerifiedState extends State<AccountVerified> {
         return exitApp ?? false;
       },
       child: Scaffold(
-        appBar: EvieAppbar_Back(onPressed: (){ changeToWelcomeScreen(context);}),
+        appBar: EvieAppbar_Back(onPressed: (){ showQuitApp();}),
         body: Stack(
           children:[
             Padding(

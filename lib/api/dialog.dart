@@ -52,7 +52,7 @@ showQuitApp(){
   SmartDialog.show(
       widget: EvieDoubleButtonDialog(
           title: "Close this app?",
-          childContent: const Text("Are you sure you want to close this App?"),
+          childContent: Text("Are you sure you want to close this App?", style: EvieTextStyles.body18,),
           leftContent: "No",
           rightContent: "Yes",
           onPressedLeft: () {
@@ -130,7 +130,7 @@ showBackToLogin(context, BikeProvider _bikeProvider, AuthProvider _authProvider)
       widget:
       EvieDoubleButtonDialog(
           title: "Back to Login Page?",
-          childContent: Text("Are you sure you want to sign out and back to login page?"),
+          childContent: Text("Are you sure you want to sign out and back to login page?", style: EvieTextStyles.body18),
           leftContent: "No",
           rightContent: "Yes",
           onPressedLeft: (){SmartDialog.dismiss();},

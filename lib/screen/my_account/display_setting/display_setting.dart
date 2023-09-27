@@ -44,65 +44,59 @@ class _DisplaySettingState extends State<DisplaySetting> {
 
     _settingProvider = Provider.of<SettingProvider>(context);
 
-    return WillPopScope(
-      onWillPop: () async {
-        changeToMyAccount(context, DisplaySetting());
-        return false;
-      },
-      child: Scaffold(
-        appBar: PageAppbar(
-          title: 'Display Setting',
-          onPressed: () {
-            changeToMyAccount(context, DisplaySetting());
-          },
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 24.h,),
+    return Scaffold(
+      appBar: PageAppbar(
+        title: 'Display Setting',
+        onPressed: () {
+          changeToMyAccount(context, DisplaySetting());
+        },
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 24.h,),
 
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: (){
-                showMeasurementUnit(_settingProvider);
-              },
-              child: Container(
-                height: 54.h,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Measurements",
-                        style: EvieTextStyles.body18,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            splitCapitalString(capitalizeFirstCharacter(_settingProvider.currentMeasurementSetting.toString().split('.').last)),
-                            style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayish),
-                          ),
-                          SvgPicture.asset(
-                            "assets/buttons/next.svg",
-                            height: 24.h,
-                            width: 24.w,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: (){
+              showMeasurementUnit(_settingProvider);
+            },
+            child: Container(
+              height: 54.h,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Measurements",
+                      style: EvieTextStyles.body18,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          splitCapitalString(capitalizeFirstCharacter(_settingProvider.currentMeasurementSetting.toString().split('.').last)),
+                          style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayish),
+                        ),
+                        SvgPicture.asset(
+                          "assets/buttons/next.svg",
+                          height: 24.h,
+                          width: 24.w,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
+          ),
 
-           const EvieDivider(),
+          const EvieDivider(),
 
-          ],
-        ),),
-    );
+        ],
+      ),);
   }
 
 }

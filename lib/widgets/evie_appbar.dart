@@ -19,6 +19,7 @@ class EvieAppbar_Back extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
       leading: IconButton(
         icon: SettingProvider().isDarkMode(context) == true
             ? Image.asset('assets/buttons/back_darkMode.png')
@@ -53,6 +54,7 @@ class PageAppbar extends StatelessWidget implements PreferredSizeWidget {
     return enable == null || enable == true ? Padding(
       padding: EdgeInsets.only(top: 6),
       child: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         leading: IconButton(
           icon: SvgPicture.asset("assets/buttons/back_big.svg"),
           onPressed: onPressed,
@@ -80,6 +82,7 @@ class EmptyAppbar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       systemOverlayStyle: SystemUiOverlayStyle.light,
+      backgroundColor: EvieColors.lightBlack,
     );
   }
 

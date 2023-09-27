@@ -38,6 +38,8 @@
 		</array>
 		<key>CFBundleVersion</key>
 		<string>$(CURRENT_PROJECT_VERSION)</string>
+		<key>UIStatusBarStyle</key>
+        <string>UIStatusBarStyleDarkContent</string>
 		<key>FacebookAdvertiserIDCollectionEnabled</key>
 		<string>TRUE</string>
 		<key>FacebookAppID</key>

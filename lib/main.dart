@@ -234,7 +234,7 @@ class MyApp extends StatelessWidget {
       return AnnotatedRegion<SystemUiOverlayStyle>(
 
         value: const SystemUiOverlayStyle(
-          statusBarIconBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.dark,
           statusBarColor: EvieColors.transparent,
         ),
 
@@ -253,15 +253,15 @@ class MyApp extends StatelessWidget {
           onGenerateRoute: (RouteSettings settings) {
             switch (settings.name) {
               case '/':
-                return CupertinoModalPopupRoute(
+                return MaterialWithModalsPageRoute(
                     builder: (_) => UserHomePage(0),
                     settings: settings);
               case '/feed':
-                return CupertinoModalPopupRoute(
+                return MaterialWithModalsPageRoute(
                     builder: (_) => UserHomePage(1),
                     settings: settings);
               case '/account':
-                return CupertinoModalPopupRoute(
+                return MaterialWithModalsPageRoute(
                     builder: (_) => UserHomePage(2),
                     settings: settings);
             }

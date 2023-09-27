@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/screen/welcome_page.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -110,7 +111,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
         bool? exitApp = await showBackToLogin(context, _bikeProvider, _authProvider)  as bool?;
         return exitApp ?? false;
       },
-
       child:  Scaffold(
         appBar: EvieAppbar_Back(onPressed: () {showBackToLogin(context, _bikeProvider, _authProvider) as bool?;}),
         body: Stack(children: [
@@ -155,7 +155,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                         style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
                       ),
                       onPressed: () async {
-                        changeToWelcomeScreen(context);
+                        back(context, Welcome());
                       },
                     ),
                     SizedBox(

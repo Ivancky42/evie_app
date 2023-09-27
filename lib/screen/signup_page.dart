@@ -1,5 +1,6 @@
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/screen/input_name.dart';
 import 'package:evie_test/widgets/evie_checkbox.dart';
 import 'package:evie_test/widgets/evie_textform.dart';
 import 'package:flutter/material.dart';
@@ -44,75 +45,68 @@ class _SignUpState extends State<SignUp> {
     _authProvider = Provider.of<AuthProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
-    return WillPopScope(
-      onWillPop: () async {
-        changeToInputNameScreen(context);
-        return true;
-      },
+    return Scaffold(
+      appBar: EvieAppbar_Back(onPressed: (){  back(context, InputName());}),
+      body: Stack(
+          children: [
+            Form(
+              key: _formKey,
+              child: Padding(
+                padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h, bottom: 16.h),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("${widget.name}, let's setup your account",
+                          style: EvieTextStyles.h2,),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Text("Enter your email address",
+                          style: EvieTextStyles.body18,),
+                        SizedBox(
+                          height: 16.h,
+                        ),
+                        EvieTextFormField(
+                          controller: _emailController,
+                          obscureText: false,
+                          keyboardType: TextInputType.emailAddress,
+                          labelText: "Email Address",
+                          hintText: "lyouremail@sample.com",
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your email';
+                            }else if(!value.contains("@")){
+                              return 'Looks like you entered the wrong email. The correct format for email address as follow “sample@youremail.com”.';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                    EvieButton(
+                        width: double.infinity,
 
-      child: Scaffold(
-          appBar: EvieAppbar_Back(onPressed: (){  changeToInputNameScreen(context);}),
-          body: Stack(
-              children: [
-                Form(
-                  key: _formKey,
-                  child: Padding(
-                      padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h, bottom: 16.h),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("${widget.name}, let's setup your account",
-                                style: EvieTextStyles.h2,),
-                              SizedBox(
-                                height: 1.h,
-                              ),
-                              Text("Enter your email address",
-                                style: EvieTextStyles.body18,),
-                              SizedBox(
-                                height: 16.h,
-                              ),
-                              EvieTextFormField(
-                                controller: _emailController,
-                                obscureText: false,
-                                keyboardType: TextInputType.emailAddress,
-                                labelText: "Email Address",
-                                hintText: "lyouremail@sample.com",
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter your email';
-                                  }else if(!value.contains("@")){
-                                    return 'Looks like you entered the wrong email. The correct format for email address as follow “sample@youremail.com”.';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ],
-                          ),
-                          EvieButton(
-                              width: double.infinity,
+                        child: Text(
+                          "Next",
+                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                        ),
 
-                              child: Text(
-                                "Next",
-                                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                              ),
+                        onPressed: ()  {
+                          if (_formKey.currentState!.validate()){
+                            changeToSignUpPasswordScreen(context, widget.name, _emailController.text.trim());
+                          }
+                        }
 
-                              onPressed: ()  {
-                                if (_formKey.currentState!.validate()){
-                                  changeToSignUpPasswordScreen(context, widget.name, _emailController.text.trim());
-                                }
-                              }
-
-                          ),
-                        ],
-                      ),
-                  ),
+                    ),
+                  ],
                 ),
-              ]
-          ),
+              ),
+            ),
+          ]
       ),
     );
   }
