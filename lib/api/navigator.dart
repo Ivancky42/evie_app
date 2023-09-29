@@ -170,7 +170,6 @@ changeToSignInMethodScreen(BuildContext context) {
 
 void changeToSignInScreen(BuildContext context) {
   //Navigator.of(context).pushNamedAndRemoveUntil("/signIn", (route) => false);
-
   Navigator.of(context).push(CupertinoPageRoute(
     builder: (context) {
       return SignIn();

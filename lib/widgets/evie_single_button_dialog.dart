@@ -219,7 +219,10 @@ class EvieOneButtonDialog extends StatelessWidget{
                       width: 239.w,
                     ),
                   ),
-                ): svgpicture!,
+                ): Padding(
+                  padding: EdgeInsets.only(top: 32.h),
+                  child: svgpicture!,
+                ),
               ),
 
               title != null ?  Container(
@@ -765,7 +768,7 @@ class EvieOneDialog extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Dialog(
-        insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
+        insetPadding: EdgeInsets.only(left: 10, right: 10),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -773,25 +776,17 @@ class EvieOneDialog extends StatelessWidget{
         backgroundColor: EvieColors.grayishWhite,
         child: Container(
           padding:  EdgeInsets.only(
-              left: 17.w,
-              right: 17.w,
-              top: 16.w,
-              bottom: 16.w
+              left: 16.w,
+              right: 16.w,
+              top: 32.h,
+              bottom: 16.h
           ),
 
           child: Column(
             //crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-
-              Padding(
-                padding: EdgeInsets.only(top: 32.h),
-                child: SvgPicture.asset(
-                  "assets/images/people_search.svg",
-                  height: 150.h,
-                  width: 239.w,),
-              ),
-
+              svgpicture ?? Container(),
               Container(
                 width: 325.w,
                 child: Padding(
@@ -829,7 +824,7 @@ class EvieOneDialog extends StatelessWidget{
               widget != null ? widget! : SizedBox(),
 
               Padding(
-                padding: EdgeInsets.only(top: 37.h, bottom: 16.h),
+                padding: EdgeInsets.only(top: 37.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

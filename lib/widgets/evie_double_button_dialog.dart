@@ -456,7 +456,6 @@ class EvieTwoButtonDialog extends StatelessWidget{
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-
               Center(
                 child: havePic == false ? Container() : svgpicture == null? Container(
                   alignment: Alignment.center,
@@ -464,11 +463,14 @@ class EvieTwoButtonDialog extends StatelessWidget{
                     padding: EdgeInsets.only(top: 32.h),
                     child: SvgPicture.asset(
                       "assets/images/people_search.svg",
-                      height: 150.h,
+                      height: 173.h,
                       width: 239.w,
                     ),
                   ),
-                ): svgpicture!,
+                ): Padding(
+                  padding: EdgeInsets.only(top: 32.h),
+                  child: svgpicture!,
+                )
               ),
 
               Container(
@@ -479,8 +481,7 @@ class EvieTwoButtonDialog extends StatelessWidget{
                 ),
               ),
 
-              Container(
-                  child: childContent),
+              Container(child: childContent),
 
               Padding(
                 padding: EdgeInsets.only(top: 37.h),

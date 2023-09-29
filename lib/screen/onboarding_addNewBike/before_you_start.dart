@@ -85,6 +85,12 @@ class _BeforeYouStartState extends State<BeforeYouStart> {
                               "2. Get ownership card ready.",
                               style: EvieTextStyles.body18,
                             ),
+                            SizedBox(height: 108.h,),
+                            Center(
+                              child: SvgPicture.asset(
+                                "assets/images/assemble_bike.svg", width: 268.w, height: 195.h,
+                              ),
+                            )
                         ]
                       ),
                       Column(
@@ -129,15 +135,15 @@ class _BeforeYouStartState extends State<BeforeYouStart> {
                   ),
                 ),
 
-                Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(78.w,307.h,78.w,127.84.h),
-                    child: SvgPicture.asset(
-                      "assets/images/ride_bike_see_phone.svg",
-                    ),
-                  ),
-                ),
+                // Align(
+                //   alignment: Alignment.center,
+                //   child: Padding(
+                //     padding: EdgeInsets.fromLTRB(78.w,307.h,78.w,127.84.h),
+                //     child: SvgPicture.asset(
+                //       "assets/images/ride_bike_see_phone.svg",
+                //     ),
+                //   ),
+                // ),
       ])),
     );
   }

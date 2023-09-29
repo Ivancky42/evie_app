@@ -1,117 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-	<dict>
-		<key>CADisableMinimumFrameDurationOnPhone</key>
-		<true/>
-		<key>CFBundleDevelopmentRegion</key>
-		<string>$(DEVELOPMENT_LANGUAGE)</string>
-		<key>CFBundleDisplayName</key>
-		<string>Evie Bike</string>
-		<key>CFBundleExecutable</key>
-		<string>$(EXECUTABLE_NAME)</string>
-		<key>CFBundleIdentifier</key>
-		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-		<key>CFBundleInfoDictionaryVersion</key>
-		<string>6.0</string>
-		<key>CFBundleName</key>
-		<string>Evie Bike</string>
-		<key>CFBundlePackageType</key>
-		<string>APPL</string>
-		<key>CFBundleShortVersionString</key>
-		<string>$(FLUTTER_BUILD_NAME)</string>
-		<key>CFBundleSignature</key>
-		<string>????</string>
-		<key>CFBundleURLTypes</key>
-		<array>
-			<dict>
-				<key>CFBundleTypeRole</key>
-				<string>Editor</string>
-				<key>CFBundleURLName</key>
-				<string>REVERSED_CLIENT_ID</string>
-				<key>CFBundleURLSchemes</key>
-				<array>
-					<string>com.googleusercontent.apps.484859945311-vffv9uipl1ohirg96h70u78t7pbg8mq1</string>
-					<string>fb629782542571340</string>
-				</array>
-			</dict>
-		</array>
-		<key>CFBundleVersion</key>
-		<string>$(CURRENT_PROJECT_VERSION)</string>
-		<key>UIStatusBarStyle</key>
-        <string>UIStatusBarStyleDarkContent</string>
-		<key>FacebookAdvertiserIDCollectionEnabled</key>
-		<string>TRUE</string>
-		<key>FacebookAppID</key>
-		<string>629782542571340</string>
-		<key>FacebookAutoLogAppEventsEnabled</key>
-		<string>TRUE</string>
-		<key>FacebookClientToken</key>
-		<string>0145ecf7b47ba54e2d182059771135a3</string>
-		<key>FacebookDisplayName</key>
-		<string>Evie Bike</string>
-		<key>FirebaseAppDelegateProxyEnabled</key>
-		<false/>
-		<key>LSApplicationQueriesSchemes</key>
-		<array>
-			<string>comgooglemaps</string>
-			<string>iosamap</string>
-			<string>waze</string>
-		</array>
-		<key>LSRequiresIPhoneOS</key>
-		<true/>
-		<key>MBXAccessToken</key>
-		<string>pk.eyJ1IjoiaGVsbG9ldmllIiwiYSI6ImNsN3pvMm9oZTBsM3ozcG4zd2NmenVlZWQifQ.Y1R7b5ban6IwnLODyrf9Zw</string>
-		<key>MGLMapboxMetricsEnabledSettingShownInApp</key>
-		<true/>
-		<key>NSBluetoothAlwaysUsageDescription</key>
-		<string>Need bluetooth permission</string>
-		<key>NSBluetoothPeripheralUsageDescription</key>
-		<string>Need bluetooth permission</string>
-		<key>NSBonjourServices</key>
-		<array>
-			<string>_dartobservatory._tcp</string>
-		</array>
-		<key>NSCameraUsageDescription</key>
-		<string>Access camera</string>
-		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-		<string>Need Location permission</string>
-		<key>NSLocationAlwaysUsageDescription</key>
-		<string>Need Location permission</string>
-		<key>NSLocationUsageDescription</key>
-		<string>Need Location permission</string>
-		<key>NSLocationWhenInUseUsageDescription</key>
-		<string>Need Location permission</string>
-		<key>NSPhotoLibraryUsageDescription</key>
-		<string>Photo Library Access Warning</string>
-		<key>UIApplicationSupportsIndirectInputEvents</key>
-		<true/>
-		<key>UIBackgroundModes</key>
-		<array>
-			<string>fetch</string>
-			<string>remote-notification</string>
-		</array>
-		<key>UILaunchStoryboardName</key>
-		<string>LaunchScreen</string>
-		<key>UIMainStoryboardFile</key>
-		<string>Main</string>
-		<key>UIStatusBarHidden</key>
-		<false/>
-		<key>UISupportedInterfaceOrientations</key>
-		<array>
-			<string>UIInterfaceOrientationPortrait</string>
-			<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		</array>
-		<key>UISupportedInterfaceOrientations~ipad</key>
-		<array>
-			<string>UIInterfaceOrientationPortrait</string>
-			<string>UIInterfaceOrientationPortraitUpsideDown</string>
-			<string>UIInterfaceOrientationLandscapeLeft</string>
-			<string>UIInterfaceOrientationLandscapeRight</string>
-		</array>
-		<key>UIViewControllerBasedStatusBarAppearance</key>
-		<false/>
-		<key>io.flutter.embedded_views_preview</key>
-		<true/>
-	</dict>
+  <dict>
+    <key>CADisableMinimumFrameDurationOnPhone</key>
+    <true/>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>$(DEVELOPMENT_LANGUAGE)</string>
+    <key>CFBundleDisplayName</key>
+    <string>EVIE Bikes</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>Evie Bike</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>$(FLUTTER_BUILD_NAME)</string>
+    <key>CFBundleSignature</key>
+    <string>????</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLName</key>
+        <string>REVERSED_CLIENT_ID</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.484859945311-vffv9uipl1ohirg96h70u78t7pbg8mq1</string>
+          <string>fb629782542571340</string>
+        </array>
+      </dict>
+    </array>
+    <key>CFBundleVersion</key>
+    <string>$(CURRENT_PROJECT_VERSION)</string>
+    <key>UIStatusBarStyle</key>
+    <string>UIStatusBarStyleDarkContent</string>
+    <key>FacebookAdvertiserIDCollectionEnabled</key>
+    <string>TRUE</string>
+    <key>FacebookAppID</key>
+    <string>629782542571340</string>
+    <key>FacebookAutoLogAppEventsEnabled</key>
+    <string>TRUE</string>
+    <key>FacebookClientToken</key>
+    <string>0145ecf7b47ba54e2d182059771135a3</string>
+    <key>FacebookDisplayName</key>
+    <string>Evie Bike</string>
+    <key>FirebaseAppDelegateProxyEnabled</key>
+    <false/>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>comgooglemaps</string>
+      <string>iosamap</string>
+      <string>waze</string>
+    </array>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>MBXAccessToken</key>
+    <string>pk.eyJ1IjoiaGVsbG9ldmllIiwiYSI6ImNsN3pvMm9oZTBsM3ozcG4zd2NmenVlZWQifQ.Y1R7b5ban6IwnLODyrf9Zw</string>
+    <key>MGLMapboxMetricsEnabledSettingShownInApp</key>
+    <true/>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>Need bluetooth permission</string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>Need bluetooth permission</string>
+    <key>NSBonjourServices</key>
+    <array>
+      <string>_dartobservatory._tcp</string>
+    </array>
+    <key>NSCameraUsageDescription</key>
+    <string>Access camera</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Need Location permission</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Need Location permission</string>
+    <key>NSLocationUsageDescription</key>
+    <string>Need Location permission</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Need Location permission</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Photo Library Access Warning</string>
+    <key>UIApplicationSupportsIndirectInputEvents</key>
+    <true/>
+    <key>UIBackgroundModes</key>
+    <array>
+      <string>fetch</string>
+      <string>remote-notification</string>
+    </array>
+    <key>UILaunchStoryboardName</key>
+    <string>LaunchScreen</string>
+    <key>UIMainStoryboardFile</key>
+    <string>Main</string>
+    <key>UIStatusBarHidden</key>
+    <false/>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+      <string>UIInterfaceOrientationPortrait</string>
+      <string>UIInterfaceOrientationPortraitUpsideDown</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+      <string>UIInterfaceOrientationPortrait</string>
+      <string>UIInterfaceOrientationPortraitUpsideDown</string>
+      <string>UIInterfaceOrientationLandscapeLeft</string>
+      <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <false/>
+    <key>io.flutter.embedded_views_preview</key>
+    <true/>
+  </dict>
 </plist>

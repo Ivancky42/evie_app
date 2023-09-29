@@ -407,11 +407,11 @@ class _AccountContainerState extends State<AccountContainer> {
                 child: Column(
                   children: [
                     Text(
-                      "${_settingProvider.packageInfo?.appName ?? "Evie Bike"} ${_settingProvider.packageInfo?.version ?? "v1.0.0"} (${_settingProvider.packageInfo?.buildNumber ?? "0"})",
+                      "${_settingProvider.packageInfo?.appName ?? "EVIE Bikes"} ${_settingProvider.packageInfo?.version ?? "v1.0.0"} (${_settingProvider.packageInfo?.buildNumber ?? "0"})",
                       style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                     ),
                     Text(
-                      "Copyright 2023 by Hyperion Innovations",
+                      "© 2023 EVIE Bikes ApS",
                       style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                     ),
                   ],

@@ -6,6 +6,7 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -77,23 +78,30 @@ class _WelcomeState extends State<Welcome> {
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(
-                  height: 16.h,
-                ),
+                // Align(
+                //   alignment: Alignment.bottomRight,
+                //   child: Container(
+                //     width: 364.1.w,
+                //     height: 218.04.h,
+                //     alignment: Alignment.bottomRight,
+                //     child: const Image(
+                //       image: AssetImage("assets/images/evie_bike_shadow_2.png"),
+                //     ),
+                //   ),
+                // ),
+
                 Align(
                   alignment: Alignment.bottomRight,
                   child: Container(
-                    width: 364.1.w,
-                    height: 218.04.h,
+                    width: 435.w,
+                    height: 245.h,
                     alignment: Alignment.bottomRight,
-                    child: const Image(
-                      image: AssetImage("assets/images/evie_bike_shadow_2.png"),
-                    ),
+                    child: Image.asset('assets/images/evie_bike_shadow_3.png'),
                   ),
                 ),
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 22.h, 16.w, 0),
+                  padding: EdgeInsets.fromLTRB(16.w, 18.h, 16.w, 0),
                   child: Column(
                     children: [
                       EvieButton(
@@ -187,15 +195,15 @@ class _WelcomeState extends State<Welcome> {
                             ],
                           ),
                           onPressed: () async {
-                            _authProvider.signInWithFacebook("").then((result) {
-                              if (result == true) {
+                            _authProvider.signInWithFacebook("").then((loginStatus) {
+                              if (loginStatus.status == LoginStatus.success) {
                                 _currentUserProvider.getDeviceInfo();
                                 changeToUserHomePageScreen(context);
-                              } else {
+                              } else if (loginStatus.status == LoginStatus.failed) {
                                 SmartDialog.show(
                                     widget: EvieSingleButtonDialog(
                                         title: "Error",
-                                        content: result.toString(),
+                                        content: loginStatus.message.toString(),
                                         rightContent: "Ok",
                                         onPressedRight: () {
                                           SmartDialog.dismiss();

@@ -171,6 +171,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                               Center(
                                 child: Lottie.asset(
                                   'assets/animations/add-bike.json',
+                                    repeat:false,
                                 ),
                               ),
                               Padding(

@@ -62,7 +62,7 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                       Padding(
                         padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),
                         child: Text(
-                          "Yay! Bike is Connected! ",
+                          "Yay! Bike is registered!",
                           style: EvieTextStyles.h2,
                         ),
                       ),
@@ -70,7 +70,7 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                       Padding(
                         padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 57.h),
                         child: Text(
-                          "Woo hoo! Your bike is now successfully paired with EVIE app.",
+                          "Woohoo! Your bike has been successfully registered to your account.",
                           style: EvieTextStyles.body18,
                         ),
                       ),
@@ -102,7 +102,7 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                   padding: EdgeInsets.only(top: 200.h),
                   child: Align(
                     alignment: Alignment.center,
-                    child: Lottie.asset("assets/animations/register_bike_success.json"),
+                    child: Lottie.asset("assets/animations/register_bike_success.json", repeat: false),
                   ),
                 ),
 

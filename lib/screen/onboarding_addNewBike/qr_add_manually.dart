@@ -73,7 +73,7 @@ class _QRAddManuallyState extends State<QRAddManually> {
                             onTap: (){
                               _authProvider.setIsFirstLogin(false);
                               _bikeProvider.setIsAddBike(false);
-                              changeToUserHomePageScreen(context);
+                              showEvieExitRegistrationDialog(context);
                             },
                             child: SvgPicture.asset(
                               "assets/buttons/close_black.svg",

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/screen/welcome_page.dart';
 import 'package:evie_test/widgets/evie_appbar.dart';
 import 'package:evie_test/widgets/evie_textform.dart';
 import 'package:flutter/services.dart';
@@ -70,18 +71,12 @@ class _LoginScreenState extends State<Login> {
     _authProvider = Provider.of<AuthProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
-    return WillPopScope(
-      onWillPop: () async {
-        changeToWelcomeScreen(context);
-        return true;
-      },
-
-      child:Scaffold(
-        appBar: EvieAppbar_Back(onPressed: (){ changeToWelcomeScreen(context);}),
-        body: Stack(children: [
-          Form(
-            key: _formKey,
-            child: Padding(
+    return Scaffold(
+      appBar: EvieAppbar_Back(onPressed: (){ back(context, Welcome());}),
+      body: Stack(children: [
+        Form(
+          key: _formKey,
+          child: Padding(
               padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -226,10 +221,9 @@ class _LoginScreenState extends State<Login> {
                   )
                 ],
               )
-            ),
           ),
-        ]),
-      ),
+        ),
+      ]),
     );
   }
 

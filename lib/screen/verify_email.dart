@@ -50,6 +50,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
   void initState() {
     super.initState();
 
+    _authProvider = context.read<AuthProvider>();
+    _authProvider.sendFirestoreVerifyEmail();
     startCountDownTimer();
 
     ///Loop timer 5 every 5 second and detect isVerified condition
@@ -155,7 +157,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                         style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
                       ),
                       onPressed: () async {
-                        back(context, Welcome());
+                        changeToWelcomeScreen(context);
                       },
                     ),
                     SizedBox(
@@ -185,7 +187,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                   showResentEmailFailedToast(context);
 
                                 }else if(isCountDownOver == true){
-
+                                  _authProvider.sendFirestoreVerifyEmail();
                                   showEvieResendDialog (context, FirebaseAuth.instance.currentUser!.email!);
 
                                   setState(() {

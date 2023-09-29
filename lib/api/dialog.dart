@@ -117,9 +117,9 @@ showWhereToFindCodes(){
       widget: EvieSingleButtonDialog(
           title: "Where to find these?",
           widget:  SvgPicture.asset(
-            "assets/images/allow_camera.svg",
+            "assets/images/where_to_find_these.svg",
           ),
-          content: "Serial Number and Validation Key can be found on the back side of greeting card.",
+          content: "The Serial Number and Validation Key can be found on the back of your ownership card.",
           rightContent: "Ok",
           onPressedRight:(){SmartDialog.dismiss();})
   );
@@ -1137,11 +1137,12 @@ showMeasurementUnit(SettingProvider settingProvider){
 showEvieResendDialog(BuildContext context, String email) {
   SmartDialog.show(
     widget: EvieOneDialog(
-        title: "Email re-sent",
+        title: "Email Re-Sent",
         content1: "We've re-sent email to ",
         content2: ". Do check the spam mailbox too!",
         email: email,
         middleContent: "Done",
+        svgpicture: SvgPicture.asset('assets/images/email_resend.svg', width: 180.w, height: 150.h,),
         onPressedMiddle: () {
           SmartDialog.dismiss();
         }));
@@ -1150,17 +1151,17 @@ showEvieResendDialog(BuildContext context, String email) {
 showErrorLoginDialog (BuildContext context){
   SmartDialog.show(
     widget: EvieTwoButtonDialog(
-        title: Text("Login Error",
+        title: Text("User Not Found",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
         ),
-        childContent: Text("Oops, the password you "
-            "entered is incorrect or you do not have an account yet. "
-            "Please double-check and try again",
+        childContent: Text("Oops, it seems like the email address you entered is incorrect. Please double-check and try again, or sign up for a new account if you haven't already.",
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
-          "assets/images/people_search.svg",
+          "assets/images/user_not_found.svg",
+          width: 173.w,
+          height: 150.h,
         ),
         upContent: "Retry",
         downContent: "Register Now",
@@ -1239,11 +1240,11 @@ showEvieExitRegistrationDialog(BuildContext context) {
         textAlign: TextAlign.center,
       ),
       childContent: Text(
-        "Are you sure you want to cancel registering your bike?",
+        "Are you sure you want to quit bike registration?",
         textAlign: TextAlign.center,
         style: EvieTextStyles.body18,
       ),
-      svgpicture: SvgPicture.asset("assets/images/people_search.svg"),
+      svgpicture: SvgPicture.asset("assets/images/exit.svg"),
       upContent: "Not Now",
       downContent: "Exit Registration",
       onPressedUp: () {
@@ -1289,9 +1290,14 @@ showEvieCameraSettingDialog(BuildContext context) {
 showEvieFindQRDialog(BuildContext context){
   SmartDialog.show(
       widget: EvieOneButtonDialog(
-          title: "Where to find QR Code?",
-          content: "QR code can be found on the ownership card.",
+          title: "Where to find the QR Code?",
+          content: "The QR code can be found on the back of your ownership card.",
           middleContent: "Done",
+          svgpicture: SvgPicture.asset(
+            "assets/images/find_the_qrcode.svg",
+            height: 140.h,
+            width: 266.w,
+          ),
           onPressedMiddle: () {
             SmartDialog.dismiss();
           }
@@ -1302,9 +1308,10 @@ showEvieFindQRDialog(BuildContext context){
 showEvieFindSerialDialog(BuildContext context){
   SmartDialog.show(
       widget: EvieOneButtonDialog(
-          title: "Where to find these?",
-          content: "Serial Number and Validation Key can be found on the ownership card.",
+          title: "Where to Find These?",
+          content: "The Serial Number and Validation Key can be found on the back of your ownership card.",
           middleContent: "Done",
+          svgpicture: SvgPicture.asset('assets/images/where_to_find_these.svg', width: 252.w, height: 126.h,),
           onPressedMiddle: () {
             SmartDialog.dismiss();
           }
@@ -1953,7 +1960,7 @@ showLogoutDialog(BuildContext context, AuthProvider _authProvider){
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
-          "assets/images/people_search.svg",
+          "assets/images/logout.svg",
         ),
         customButtonUp: EvieButton(
             backgroundColor: EvieColors.primaryColor,
@@ -2005,7 +2012,7 @@ showRevokeAccountDialog(BuildContext context, AuthProvider _authProvider){
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
-          "assets/images/people_search.svg",
+          "assets/images/revoke_account.svg", width: 131.96.w, height: 149.09.h,
         ),
         customButtonUp: EvieButton(
             backgroundColor: EvieColors.primaryColor,
