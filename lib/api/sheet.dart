@@ -122,14 +122,7 @@ void showCupertinoSheet(BuildContext context, Widget widget) {
 }
 
 void showActionListSheet(BuildContext context, List<ActionList> action) {
-  // Navigator.of(context).push(
-  //   CupertinoSheetRoute<void>(
-  //     builder: (BuildContext context) => EvieBottomSheet(widget: widget,),
-  //   ),
-  // );
-
   showCupertinoModalBottomSheet(
-
     expand: false,
     useRootNavigator: true,
     ///enableDrag: false,

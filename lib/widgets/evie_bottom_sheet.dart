@@ -155,12 +155,7 @@ class _EvieBottomSheetAction extends State<EvieBottomSheetAction> {
       if (list == ActionList.clearFeed) {
         actionWidgets.add(ClearFeed());
       }
-  }
-
-  // else if (fruit == 'apple') {
-  //   actionWidgets.add(DeactivateTheftAlert());
-  // }
-  // Add more conditions for other fruits if needed
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -169,80 +164,45 @@ class _EvieBottomSheetAction extends State<EvieBottomSheetAction> {
 
     return Material(
       child: GestureDetector(
-                ///To prevent sheet drag dismiss
-                // onVerticalDragStart: (details) {
-                //
-                // }
-
-                 ///Working cannot dismiss
         child: WillPopScope(
           onWillPop: () async {
-            // bool shouldClose = true;
-            // await showDialog<void>(
-            //     context: context,
-            //     builder: (BuildContext context) =>
-            //         EvieDoubleButtonDialog(
-            //             title: "Close this sheet?",
-            //             childContent: Text("Are you sure you want to close this sheet?",
-            //               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),),
-            //             leftContent: "No",
-            //             rightContent: "Yes",
-            //             onPressedLeft: () {
-            //               shouldClose = false;
-            //               Navigator.of(context).pop();
-            //             },
-            //             onPressedRight: () {
-            //               shouldClose = true;
-            //               Navigator.of(context).pop();
-            //             }));
-            // return shouldClose;
             return true;
           },
-                  child: CupertinoPageScaffold(
-                    child: Padding(
-                        padding: EdgeInsets.only(top: 0.h, bottom:30.h),
-                        child: CupertinoPageScaffold(
-                          backgroundColor: EvieColors.transparent,
-                          resizeToAvoidBottomInset: false,
-                          child:  Container(
-                            decoration: const BoxDecoration(
-                              color: EvieColors.grayishWhite,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-                            ),
-                            child: Column(
-                              children: [
-                                /// home indicator
-                                Padding(
-                                  padding: EdgeInsets.only(top: 11.h, bottom:10.h),
-                                  child: Image.asset(
-                                    "assets/buttons/home_indicator.png",
-                                    width: 40.w,
-                                    height: 4.h,
-                                  ),
-                                ),
-
-                                ListView(
-                                  shrinkWrap: true,
-                                  children: actionWidgets,
-                                ),
-                                // Column(
-                                //   mainAxisSize: MainAxisSize.min,
-                                //   children: [Container(
-                                //     height: 100.h,
-                                //     child: Text("hiii"),
-                                //   ),]
-                                // ),
-
-                              ],
-                            ),
+          child: CupertinoPageScaffold(
+            child: Padding(
+                padding: EdgeInsets.only(top: 0.h, bottom:50.h),
+                child: CupertinoPageScaffold(
+                  backgroundColor: EvieColors.transparent,
+                  resizeToAvoidBottomInset: false,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: EvieColors.grayishWhite,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                    ),
+                    child: Column(
+                      children: [
+                        /// home indicator
+                        Padding(
+                          padding: EdgeInsets.only(top: 10.35.h, bottom:16.h),
+                          child: Image.asset(
+                            "assets/buttons/home_indicator.png",
+                            width: 40.w,
+                            height: 4.h,
                           ),
-                        )
+                        ),
+                        ListView(
+                          shrinkWrap: true,
+                          children: actionWidgets,
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ),
-
+                )
+            ),
+          ),
+        ),
+      ),
     );
   }
 

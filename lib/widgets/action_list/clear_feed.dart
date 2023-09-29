@@ -52,61 +52,46 @@ class _ClearFeedState extends State<ClearFeed> {
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _notificationProvider = Provider.of<NotificationProvider>(context);
 
-    return Material(
-      child: Container(
-        height: 100.h,
-        decoration: const BoxDecoration(
-          color: EvieColors.grayishWhite,
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-
-            Padding(
-              padding:
-              EdgeInsets.only(left: 0.w, top: 0.h, bottom: 0.h),
-              child: GestureDetector(
-
-                  onTap: () async {
-                    Navigator.pop(context);
-                    showClearFeed(_notificationProvider);
-                   // showDeactivateTheftDialog(context, _bikeProvider);
-                  },
-                  child: Container(
-                    height: 100.h,
-                    child: ListTile(
-                      contentPadding: EdgeInsets.only(left: 18.w, right: 8.w),
-                      leading:  SvgPicture.asset(
-                        "assets/icons/delete_black.svg",
-                      ),
-
-                      title: Padding(
-                        padding: EdgeInsets.only(top:10.h),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Clear Feed",
-                              style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.bold, color: EvieColors.mediumLightBlack),
-                            ),
-
-                          ],
-                        ),
-                      ),
-                      subtitle: Wrap(
-                          children: [
-                            Text(
-                              "Delete all your notifications.",
-                              style: EvieTextStyles.body14.copyWith(fontWeight: FontWeight.bold, color: EvieColors.darkGrayishCyan),
-                            ),
-                          ]
-                      ),
+    return Padding(
+      padding:
+      EdgeInsets.only(left: 0.w, top: 0.h, bottom: 0.h, right: 0.w),
+      child: GestureDetector(
+          onTap: () async {
+            Navigator.pop(context);
+            showClearFeed(_notificationProvider);
+          },
+          child: Container(
+            color: Colors.transparent,
+            child: ListTile(
+              contentPadding: EdgeInsets.only(left: 8.w, right: 8.w),
+              leading: Padding(
+                padding: EdgeInsets.only(
+                  left: 8.w,
+                ),
+                child: Container(
+                  width: 36.w,
+                  height: 36.w,
+                  child: Center(
+                    child: SvgPicture.asset(
+                      "assets/icons/delete_black.svg",
                     ),
-                  )
+                  ),
+                ),
+              ),
+              title:Text(
+                "Clear Feed",
+                style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.bold, color: EvieColors.mediumLightBlack),
+              ),
+              subtitle: Wrap(
+                  children: [
+                    Text(
+                      "Delete all your notifications.",
+                      style: EvieTextStyles.body14.copyWith(fontWeight: FontWeight.bold, color: EvieColors.darkGrayishCyan),
+                    ),
+                  ]
               ),
             ),
-          ],
-        ),
+          )
       ),
     );
   }
