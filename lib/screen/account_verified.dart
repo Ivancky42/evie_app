@@ -44,7 +44,7 @@ class _AccountVerifiedState extends State<AccountVerified> {
         body: Stack(
           children:[
             Padding(
-              padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 32.h),
+              padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, EvieLength.screen_bottom),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

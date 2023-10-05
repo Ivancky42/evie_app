@@ -95,7 +95,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
               Form(
                 key: _formKey,
                 child: Padding(
-                    padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h, bottom: 32.h),
+                    padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h, bottom: EvieLength.screen_bottom),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

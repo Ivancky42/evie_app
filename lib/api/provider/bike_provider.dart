@@ -753,6 +753,20 @@ class BikeProvider extends ChangeNotifier {
   Future<String?> removeAllPedalPals() async {
     removeAllPalsCompleter = Completer<String?>();
 
+    currentSubscription = FirebaseFirestore.instance
+        .collection(bikesCollection)
+        .doc(currentBikeModel!.deviceIMEI)
+        .collection(usersCollection)
+        .snapshots()
+        .listen((event) async {
+      final int docCount = event.docs.length;
+
+      if (docCount == 1) {
+        currentSubscription?.cancel();
+        removeAllPalsCompleter.complete('Success');
+      }
+    });
+
     currentSubscription?.cancel();
     bikeUserList.forEach((key, bikeUserModel) {
       if (bikeUserModel.role != 'owner') {
@@ -790,19 +804,7 @@ class BikeProvider extends ChangeNotifier {
         }
       }
     });
-    currentSubscription = FirebaseFirestore.instance
-        .collection(bikesCollection)
-        .doc(currentBikeModel!.deviceIMEI)
-        .collection(usersCollection)
-        .snapshots()
-        .listen((event) async {
-      final int docCount = event.docs.length;
 
-      if (docCount == 1) {
-        currentSubscription?.cancel();
-        removeAllPalsCompleter.complete('Success');
-      }
-    });
 
     return removeAllPalsCompleter.future;
   }
