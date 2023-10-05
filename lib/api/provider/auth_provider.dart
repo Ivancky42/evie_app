@@ -536,17 +536,27 @@ class AuthProvider extends ChangeNotifier {
 
   Future<UserModel?> checkIfFirestoreUserExist(String email) async {
     UserModel? userModel;
-
-    QuerySnapshot snapshot =
-    await FirebaseFirestore.instance.collection(usersCollection).get();
+    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection(usersCollection)
+        .where('email', isEqualTo: email)
+        .get();
 
     for (var element in snapshot.docs) {
       if (element.exists) {
-        if (element['email'] == email) {
-          Map<String, dynamic>? obj = element.data() as Map<String, dynamic>?;
-          userModel = UserModel.fromJson(obj!);
-
-          break; // Exit the loop once a matching email is found
+        Map<String, dynamic>? data = element.data() as Map<String, dynamic>?;
+        if (data != null) {
+          if (!data.containsKey('isDeactivated')) {
+            Map<String, dynamic>? obj = element.data() as Map<String, dynamic>?;
+            userModel = UserModel.fromJson(obj!);
+            break; // Exit the loop once a matching email is found
+          }
+          else {
+            if (data['isDeactivated'] == false) {
+              Map<String, dynamic>? obj = element.data() as Map<String,
+                  dynamic>?;
+              userModel = UserModel.fromJson(obj!);
+              break; // Exit the loop once a matching email is found
+            }
+          }
         }
       }
     }

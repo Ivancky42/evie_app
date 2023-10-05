@@ -130,8 +130,9 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                             children: [
                               SlidableAction(
                                 spacing:10,
-                                onPressed: (context){
-                                  showDeleteShareBikeUser(_bikeProvider, index);
+                                onPressed: (context) async {
+                                  await showDeleteShareBikeUser(_bikeProvider, index);
+                                  print('hello');
                                 },
                                 backgroundColor: EvieColors.red,
                                 foregroundColor: Colors.white,
@@ -174,7 +175,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                                 style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish)),
 
                             trailing: isOwner == true && isManageList && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
-                            Text(capitalizeFirstCharacter(_bikeProvider.bikeUserList.values.elementAt(index).role),
+                            Text(checkUserAndChangeText(_bikeProvider.bikeUserList.values.elementAt(index).role),
                                 style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),)
                                 : isManageList ?
                                 Container()
@@ -185,7 +186,7 @@ class _ShareBikeUserListState extends State<ShareBikeUserList> {
                             SvgPicture.asset(
                               "assets/icons/pending_tag.svg",
                             )
-                                : Text(capitalizeFirstCharacter(_bikeProvider.bikeUserList.values.elementAt(index).role),
+                                : Text(checkUserAndChangeText(_bikeProvider.bikeUserList.values.elementAt(index).role),
                               style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),)
                           ),
                         );

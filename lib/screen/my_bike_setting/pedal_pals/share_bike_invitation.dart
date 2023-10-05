@@ -147,9 +147,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                   }
                                   else {
                                     ///check bike user list if the user already own this bike
-                                    var existResult = await _bikeProvider.checkIsUserExist(
-                                        _emailController.text.trim());
-
+                                    var existResult = await _bikeProvider.checkIsUserExist(_emailController.text.trim());
                                     if (existResult == false) {
                                       SmartDialog.show(
                                           widget: EvieDoubleButtonDialog(
@@ -165,7 +163,6 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                             rightContent: "Share",
                                             onPressedRight: () async {
                                               SmartDialog.dismiss();
-
                                               await _bikeProvider.updateSharedBike(result).
                                               then((update) {
                                                 if (update == true) {
@@ -195,7 +192,8 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                               });
                                             },
                                           ));
-                                    } else {
+                                    }
+                                    else {
                                       SmartDialog.show(
                                           backDismiss: false,
                                           widget: EvieSingleButtonDialog(

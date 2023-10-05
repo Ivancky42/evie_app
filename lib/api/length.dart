@@ -1,4 +1,5 @@
 import 'package:evie_test/api/sizer.dart';
+import 'dart:io';
 
 class EvieLength {
 
@@ -15,5 +16,7 @@ class EvieLength {
   static var sheet_expand = .92;
 
   static var battery_curved_bottom = 200.h;
+
+  static var screen_bottom = Platform.isIOS ? 36.h : 18.h;
 
 }

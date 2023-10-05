@@ -187,6 +187,15 @@ capitalizeFirstCharacter(String sentence){
   return words.join(' ');
 }
 
+checkUserAndChangeText(String sentence) {
+  if (sentence == 'owner') {
+    return 'Owner';
+  }
+  else {
+    return 'Pal';
+  }
+}
+
 splitCapitalString(String word){
   RegExp pattern = RegExp(r'(?=[A-Z])'); // Lookahead for capital letter
 

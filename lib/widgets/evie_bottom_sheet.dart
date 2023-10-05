@@ -1,6 +1,7 @@
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/action_list/clear_feed.dart';
 import 'package:evie_test/widgets/action_list/deactivate_theft_alert.dart';
+import 'package:evie_test/widgets/action_list/remove_all_pals.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -154,6 +155,9 @@ class _EvieBottomSheetAction extends State<EvieBottomSheetAction> {
       }
       if (list == ActionList.clearFeed) {
         actionWidgets.add(ClearFeed());
+      }
+      if (list == ActionList.removeAllPals) {
+        actionWidgets.add(RemoveAllPals());
       }
     }
   }

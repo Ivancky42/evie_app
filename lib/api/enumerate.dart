@@ -68,6 +68,7 @@ enum SheetList{
 enum ActionList{
   deactivateTheftAlert,
   clearFeed,
+  removeAllPals,
 }
 
 

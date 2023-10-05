@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -37,7 +38,7 @@ class _SignUpMethodState extends State<SignUpMethod> {
       appBar: EvieAppbar_Back(onPressed: (){ back(context, InputName());}),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(left: 16.w, right: 16.w, top:16.h, bottom: 32.h),
+          padding: EdgeInsets.only(left: 16.w, right: 16.w, top:16.h, bottom: EvieLength.screen_bottom),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

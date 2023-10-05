@@ -113,6 +113,7 @@ class BikeProvider extends ChangeNotifier {
   StreamSubscription? acceptInvitationSub;
 
   late Completer<String?> acceptInvitationCompleter;
+  late Completer<String?> removeAllPalsCompleter;
 
   ScanQRCodeResult scanQRCodeResult = ScanQRCodeResult.unknown;
   SwitchBikeResult switchBikeResult = SwitchBikeResult.unknown;
@@ -747,6 +748,63 @@ class BikeProvider extends ChangeNotifier {
     });
 
     return firestoreStatusListener.stream;
+  }
+
+  Future<String?> removeAllPedalPals() async {
+    removeAllPalsCompleter = Completer<String?>();
+
+    currentSubscription?.cancel();
+    bikeUserList.forEach((key, bikeUserModel) {
+      if (bikeUserModel.role != 'owner') {
+        if (bikeUserModel.status == 'pending') {
+          FirebaseFirestore.instance
+              .collection(bikesCollection)
+              .doc(currentBikeModel!.deviceIMEI)
+              .collection(usersCollection)
+              .doc(bikeUserModel.uid)
+              .set({
+            'status': 'cancel',
+            'justInvited': true,
+          }, SetOptions(merge: true));
+
+          ///Update user notification id status == removed
+          FirebaseFirestore.instance
+              .collection(usersCollection)
+              .doc(bikeUserModel.uid)
+              .collection(notificationsCollection)
+              .doc(bikeUserModel.notificationId)
+              .set({
+            'status': 'cancel',
+          }, SetOptions(merge: true));
+        }
+        else {
+          FirebaseFirestore.instance
+              .collection(bikesCollection)
+              .doc(currentBikeModel!.deviceIMEI)
+              .collection(usersCollection)
+              .doc(bikeUserModel.uid)
+              .set({
+            'status': 'removed',
+            'justInvited': true,
+          }, SetOptions(merge: true));
+        }
+      }
+    });
+    currentSubscription = FirebaseFirestore.instance
+        .collection(bikesCollection)
+        .doc(currentBikeModel!.deviceIMEI)
+        .collection(usersCollection)
+        .snapshots()
+        .listen((event) async {
+      final int docCount = event.docs.length;
+
+      if (docCount == 1) {
+        currentSubscription?.cancel();
+        removeAllPalsCompleter.complete('Success');
+      }
+    });
+
+    return removeAllPalsCompleter.future;
   }
 
   Stream<UploadFirestoreResult> leaveSharedBike(String targetUID, String notificationId) {

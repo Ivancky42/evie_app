@@ -398,84 +398,61 @@ showUpdateFailedDialog() {
           onPressedRight: (){SmartDialog.dismiss();} ));
 }
 
-showDeleteShareBikeUser(BikeProvider _bikeProvider, int index){
-
-  SmartDialog.show(
-      widget: EvieDoubleButtonDialog(
-        title: "Are you sure you want to delete this user",
-        childContent: Text('Are you sure you want to delete ${_bikeProvider.bikeUserDetails.values.elementAt(index).name!}',
-          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),),
-        leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
-        rightContent: "Yes",
-        onPressedRight: () async {
+Future<String> showDeleteShareBikeUser(BikeProvider _bikeProvider, int index) async {
+  String result = 'none';
+  await SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Remove Pal",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Are you sure you would like to remove " + _bikeProvider.bikeUserDetails.values.elementAt(index).name! + " from " + _bikeProvider.currentBikeModel!.pedalPalsModel!.name! + "?",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        upContent: "Remove",
+        downContent: "Cancel",
+        onPressedUp: () async {
+          result = 'action';
           SmartDialog.dismiss();
-          SmartDialog.showLoading();
+        },
+        onPressedDown: () {
+          SmartDialog.dismiss();
+        }),
+  );
 
-          StreamSubscription? currentSubscription;
+  return result;
+}
 
-          ///Cancel user invitation
-          if(_bikeProvider.bikeUserList.values.elementAt(index).status == "pending"){
-            currentSubscription = _bikeProvider.cancelSharedBike(
-                _bikeProvider.bikeUserList.values.elementAt(index).uid,
-                _bikeProvider.bikeUserList.values.elementAt(index).notificationId!).listen((uploadStatus) {
+Future<String> showRemoveAllPals(BuildContext context, String teamName) async {
+  String result = 'none';
+  await SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Remove All PedalPals?",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Are you sure you would like to remove all PedalPals from " + teamName + "?",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        upContent: "Confirm",
+        downContent: "Cancel",
+        onPressedUp: () async {
+          result = 'action';
+          SmartDialog.dismiss();
+        },
+        onPressedDown: () {
+          SmartDialog.dismiss();
+        }),
+  );
 
-              if(uploadStatus == UploadFirestoreResult.success){
-                SmartDialog.dismiss(status: SmartStatus.loading);
-                SmartDialog.show(
-                    keepSingle: true,
-                    widget: EvieSingleButtonDialog(
-                        title: "Success",
-                        content: "You canceled the invitation",
-                        rightContent: "Close",
-                        onPressedRight: () => SmartDialog.dismiss()
-                    ));
-                currentSubscription?.cancel();
-              } else if(uploadStatus == UploadFirestoreResult.failed) {
-                SmartDialog.dismiss();
-                SmartDialog.show(
-                    widget: EvieSingleButtonDialog(
-                        title: "Not success",
-                        content: "Try again",
-                        rightContent: "Close",
-                        onPressedRight: ()=>SmartDialog.dismiss()
-                    ));
-              }else{};
-
-            },
-            );
-          }else{
-
-            ///Remove user
-            currentSubscription = _bikeProvider.removedSharedBike(
-                _bikeProvider.bikeUserList.values.elementAt(index).uid,
-                _bikeProvider.bikeUserList.values.elementAt(index).notificationId!).listen((uploadStatus) {
-
-              if(uploadStatus == UploadFirestoreResult.success){
-
-                SmartDialog.dismiss(status: SmartStatus.loading);
-                SmartDialog.show(
-                    keepSingle: true,
-                    widget: EvieSingleButtonDialog(
-                        title: "Success",
-                        content: "You removed the user",
-                        rightContent: "Close",
-                        onPressedRight: () => SmartDialog.dismiss()
-                    ));
-                currentSubscription?.cancel();
-              } else if(uploadStatus == UploadFirestoreResult.failed) {
-                SmartDialog.dismiss();
-                SmartDialog.show(
-                    widget: EvieSingleButtonDialog(
-                        title: "Not success",
-                        content: "Try again",
-                        rightContent: "Close",
-                        onPressedRight: ()=>SmartDialog.dismiss()
-                    ));
-              }else{}
-
-            },
-            );}}));
-    }
+  return result;
+}
 
 showDeleteNotificationSuccess(){
   SmartDialog.show(

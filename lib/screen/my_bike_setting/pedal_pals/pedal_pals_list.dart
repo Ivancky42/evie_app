@@ -6,6 +6,7 @@ import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
+import 'package:evie_test/widgets/evie_appbar_badge.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
 
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ import '../../../api/navigator.dart';
 import '../../../api/provider/current_user_provider.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
+import '../../../api/snackbar.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../../../widgets/evie_textform.dart';
@@ -69,112 +71,117 @@ class _PedalPalsListState extends State<PedalPalsList> {
         return true;
       },
       child: Scaffold(
-        appBar: PageAppbar(
+        appBar: PageAppbarWithBadge(
           title: 'PedalPals',
-          onPressed: () {
+          withAction: isOwner ? _bikeProvider.bikeUserList.length != 1 ? true : false : false,
+          onPressedLeading: () {
             _settingProvider.changeSheetElement(SheetList.bikeSetting);
           },
+          onPressedAction: () {
+            showActionListSheet(context, [ActionList.removeAllPals],);
+          },
         ),
-        body: Stack(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+        body: Container(
+          //color: Colors.green,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(20.w, 24.h, 16.h, 14.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
 
-                Padding(
-                  padding: EdgeInsets.fromLTRB(20.w, 28.h, 22.7.w, 14.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-
-                      Text(
-                        _bikeProvider.currentBikeModel?.pedalPalsModel?.name ?? "None",
-                        style: EvieTextStyles.h3,
-                      ),
-
-                      GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: (){
-                          SmartDialog.show(
-                              widget: Form(
-                                key: _formKey,
-                                child: EvieDoubleButtonDialog(
-                                    title: "Team Name",
-                                    childContent: Container(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text("Give your team an epic name", style: TextStyle(fontSize: 16.sp, color: Color(0xff252526)),),
-                                          Padding(
-                                            padding:  EdgeInsets.fromLTRB(0.h, 12.h, 0.h, 8.h),
-                                            child: EvieTextFormField(
-                                              controller: _nameController,
-                                              obscureText: false,
-                                              keyboardType: TextInputType.name,
-                                              hintText: "Create an epic team name",
-                                              labelText: "Team Name",
-                                              validator: (value) {
-                                                if (value == null || value.isEmpty) {
-                                                  return 'Please enter your name';
-                                                }
-                                                return null;
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    leftContent: "Cancel",
-                                    rightContent: "Save",
-                                    onPressedLeft: (){SmartDialog.dismiss();},
-                                    onPressedRight: () async {
-                                      if (_formKey.currentState!.validate()) {
-                                        SmartDialog.dismiss();
-                                        final result = await _bikeProvider.updateTeamName(_nameController.text.trim());
-
-                                        result == true ?
-                                        SmartDialog.show(widget: EvieSingleButtonDialog(
-                                            title: "Success",
-                                            content: "Team name uploaded",
-                                            rightContent: "OK",
-                                            onPressedRight: (){
-                                              SmartDialog.dismiss();}))
-                                            :
-                                        SmartDialog.show(widget: EvieSingleButtonDialog(
-                                            title: "Error",
-                                            content: "Please try again",
-                                            rightContent: "OK",
-                                            onPressedRight: (){
-                                              SmartDialog.dismiss();
-                                            }));
-                                      }
-                                    }),
-                              ));
-                        },
-                        child: SvgPicture.asset(
-                          "assets/buttons/pen_edit.svg",
-                          height: 24.h,
-                          width: 24.w,
+                        Text(
+                          _bikeProvider.currentBikeModel?.pedalPalsModel?.name ?? "None",
+                          style: EvieTextStyles.h3,
                         ),
-                      ),
-                  ],
+
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: (){
+                            SmartDialog.show(
+                                widget: Form(
+                                  key: _formKey,
+                                  child: EvieDoubleButtonDialog(
+                                      title: "Team Name",
+                                      childContent: Container(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text("Give your team an epic name", style: TextStyle(fontSize: 16.sp, color: Color(0xff252526)),),
+                                            Padding(
+                                              padding:  EdgeInsets.fromLTRB(0.h, 12.h, 0.h, 8.h),
+                                              child: EvieTextFormField(
+                                                controller: _nameController,
+                                                obscureText: false,
+                                                keyboardType: TextInputType.name,
+                                                hintText: "Create an epic team name",
+                                                labelText: "Team Name",
+                                                validator: (value) {
+                                                  if (value == null || value.isEmpty) {
+                                                    return 'Please enter your name';
+                                                  }
+                                                  return null;
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      leftContent: "Cancel",
+                                      rightContent: "Save",
+                                      onPressedLeft: (){SmartDialog.dismiss();},
+                                      onPressedRight: () async {
+                                        if (_formKey.currentState!.validate()) {
+                                          SmartDialog.dismiss();
+                                          final result = await _bikeProvider.updateTeamName(_nameController.text.trim());
+
+                                          result == true ?
+                                          SmartDialog.show(widget: EvieSingleButtonDialog(
+                                              title: "Success",
+                                              content: "Team name uploaded",
+                                              rightContent: "OK",
+                                              onPressedRight: (){
+                                                SmartDialog.dismiss();}))
+                                              :
+                                          SmartDialog.show(widget: EvieSingleButtonDialog(
+                                              title: "Error",
+                                              content: "Please try again",
+                                              rightContent: "OK",
+                                              onPressedRight: (){
+                                                SmartDialog.dismiss();
+                                              }));
+                                        }
+                                      }),
+                                ));
+                          },
+                          child: SvgPicture.asset(
+                            "assets/buttons/pen_edit.svg",
+                            height: 24.h,
+                            width: 24.w,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
 
+                  EvieDivider( thickness: 0.5,color: Color(0xFF8E8E8E),),
 
-                EvieDivider( thickness: 0.5,),
-
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0.w, 28.h, 0.w, 4.h),
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.zero,
-                    separatorBuilder: (context, index) {
-                      return Divider(height: 1.h);
-                    },
-                    itemCount: _bikeProvider.bikeUserList.length,
-                    itemBuilder: (context, index) {
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0.w, 3.h, 0.w, 4.h),
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      separatorBuilder: (context, index) {
+                        return Divider(height: 1.h);
+                      },
+                      itemCount: _bikeProvider.bikeUserList.length,
+                      itemBuilder: (context, index) {
                         return Slidable(
                           enabled: isOwner && _bikeProvider.bikeUserList.keys.elementAt(index) != _currentUserProvider.currentUserModel!.uid,
                           endActionPane:  ActionPane(
@@ -183,8 +190,67 @@ class _PedalPalsListState extends State<PedalPalsList> {
                             children: [
                               SlidableAction(
                                 spacing:10,
-                                onPressed: (context){
-                                  showDeleteShareBikeUser(_bikeProvider, index);
+                                onPressed: (context) async {
+                                  final result = await showDeleteShareBikeUser(_bikeProvider, index);
+                                  if (result == "action") {
+                                    SmartDialog.showLoading(msg:"Removing " + _bikeProvider.bikeUserDetails.values.elementAt(index).name! + " ....");
+                                    StreamSubscription? currentSubscription;
+                                    ///Cancel user invitation
+                                    if(_bikeProvider.bikeUserList.values.elementAt(index).status == "pending"){
+                                      currentSubscription = _bikeProvider.cancelSharedBike(
+                                          _bikeProvider.bikeUserList.values.elementAt(index).uid,
+                                          _bikeProvider.bikeUserList.values.elementAt(index).notificationId!).listen((uploadStatus) {
+
+                                        if(uploadStatus == UploadFirestoreResult.success){
+                                          SmartDialog.dismiss(status: SmartStatus.loading);
+                                          SmartDialog.show(
+                                              keepSingle: true,
+                                              widget: EvieSingleButtonDialog(
+                                                  title: "Success",
+                                                  content: "You canceled the invitation",
+                                                  rightContent: "Close",
+                                                  onPressedRight: () => SmartDialog.dismiss()
+                                              ));
+                                          currentSubscription?.cancel();
+                                        }
+                                        else if(uploadStatus == UploadFirestoreResult.failed) {
+                                          SmartDialog.dismiss();
+                                          SmartDialog.show(
+                                              widget: EvieSingleButtonDialog(
+                                                  title: "Not success",
+                                                  content: "Try again",
+                                                  rightContent: "Close",
+                                                  onPressedRight: ()=>SmartDialog.dismiss()
+                                              ));
+                                        }
+                                      },
+                                      );
+                                    }
+                                    else{
+                                      ///Remove user
+                                      currentSubscription = _bikeProvider.removedSharedBike(
+                                          _bikeProvider.bikeUserList.values.elementAt(index).uid,
+                                          _bikeProvider.bikeUserList.values.elementAt(index).notificationId!).listen((uploadStatus) {
+
+                                        if(uploadStatus == UploadFirestoreResult.success){
+                                          SmartDialog.dismiss(status: SmartStatus.loading);
+                                          currentSubscription?.cancel();
+                                        }
+                                        else if(uploadStatus == UploadFirestoreResult.failed) {
+                                          SmartDialog.dismiss();
+                                          SmartDialog.show(
+                                              widget: EvieSingleButtonDialog(
+                                                  title: "Not success",
+                                                  content: "Try again",
+                                                  rightContent: "Close",
+                                                  onPressedRight: ()=>SmartDialog.dismiss()
+                                              ));
+                                        }
+                                      },
+                                      );
+                                    }
+                                  }
+                                  showRemoveUserToast(context, result);
                                 },
                                 backgroundColor: EvieColors.red,
                                 foregroundColor: Colors.white,
@@ -212,7 +278,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                 children: [
                                   Text(
                                       _bikeProvider.bikeUserDetails.values.elementAt(index).name,
-                                    style: EvieTextStyles.body18),
+                                      style: EvieTextStyles.body18),
 
                                   Visibility(
                                     visible: _currentUserProvider.currentUserModel!.name == _bikeProvider.bikeUserDetails.values.elementAt(index).name,
@@ -223,171 +289,66 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                 ],
                               ),
                               subtitle: Text(
-                                "${_bikeProvider.bikeUserDetails.values.elementAt(index).email}",
-                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish)),
+                                  "${_bikeProvider.bikeUserDetails.values.elementAt(index).email}",
+                                  style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish)),
 
-                            trailing: isOwner == true && isManageList && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
-                            Text(capitalizeFirstCharacter(_bikeProvider.bikeUserList.values.elementAt(index).role),
+                              trailing: isOwner == true && isManageList && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
+                              Text(checkUserAndChangeText(_bikeProvider.bikeUserList.values.elementAt(index).role),
                                 style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),)
-                                : isManageList ?
-                                Container()
-                          //            ShareBikeDelete(bikeProvider: _bikeProvider, index: index,)
-                                : isOwner == false && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
-                                    ShareBikeLeave(bikeProvider: _bikeProvider, settingProvider: _settingProvider, index: index,)
-                                : _bikeProvider.bikeUserList.values.elementAt(index).status == "pending" ?
-                            SvgPicture.asset(
-                              "assets/icons/pending_tag.svg",
-                            )
-                                : Text(capitalizeFirstCharacter(_bikeProvider.bikeUserList.values.elementAt(index).role),
-                              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),)
+                                  : isManageList ?
+                              Container()
+                              //            ShareBikeDelete(bikeProvider: _bikeProvider, index: index,)
+                                  : isOwner == false && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
+                              ShareBikeLeave(bikeProvider: _bikeProvider, settingProvider: _settingProvider, index: index,)
+                                  : _bikeProvider.bikeUserList.values.elementAt(index).status == "pending" ?
+                              SvgPicture.asset(
+                                "assets/icons/pending_tag.svg",
+                              )
+                                  : Text(checkUserAndChangeText(_bikeProvider.bikeUserList.values.elementAt(index).role),
+                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),)
                           ),
                         );
-                    },
-                  ),
-                ),
-              ],
-            ),
-
-
-
-            ///Bottom page button
-            isManageList ? Visibility(
-              visible: isOwner,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 127.84.h, 16.w,
-                      EvieLength.buttonWord_ButtonBottom),
-                  child: EvieButton(
-                    width: double.infinity,
-                    height: 48.h,
-                    child: Text(
-                      "Save",
-                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
+                      },
                     ),
-                    onPressed: () {
-                      setState(() {
-                        isManageList = false;
-                      });
-                    },
                   ),
-                ),
+                ],
               ),
-            )
-                : Visibility(
-                visible: isOwner,
-                  child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 127.84.h, 16.w,
-                      EvieLength.buttonWord_ButtonBottom),
-                  child: EvieButton(
-                    width: double.infinity,
-                    height: 48.h,
-                    child: Text(
-                      "Invite Pal",
-                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
-                    ),
-                    onPressed: () {
-                      ///Check if bike already have 5 user
-                      if(_bikeProvider.bikeUserList.length <= 5 ){
-                        _settingProvider.changeSheetElement(SheetList.shareBikeInvitation);
-                      }else{
-                        SmartDialog.show(widget: EvieSingleButtonDialog(
-                            title: "Exist Limit",
-                            content: "Only 5 user are allowed",
-                            rightContent: "OK",
-                            onPressedRight: (){SmartDialog.dismiss();}));
-                              }
-                            },
+              Column(
+                children: [
+                  Visibility(
+                    visible: isOwner,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, EvieLength.screen_bottom),
+                        child: EvieButton(
+                          width: double.infinity,
+                          height: 48.h,
+                          child: Text(
+                              "Invite Pal",
+                              style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                           ),
+                          onPressed: () {
+                            ///Check if bike already have 5 user
+                            if(_bikeProvider.bikeUserList.length <= 5 ){
+                              _settingProvider.changeSheetElement(SheetList.shareBikeInvitation);
+                            }else{
+                              SmartDialog.show(widget: EvieSingleButtonDialog(
+                                  title: "Exist Limit",
+                                  content: "Only 5 user are allowed",
+                                  rightContent: "OK",
+                                  onPressedRight: (){SmartDialog.dismiss();}));
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                ),
-
-
-            ///Bottom page button
-            isManageList ? Visibility(
-             visible: isOwner,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 52.h),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: EvieButton_ReversedColor(
-                      width: double.infinity,
-                      height: 52.h,
-                      child: Text(
-                        "Cancel",
-                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          isManageList = false;
-                        });
-                      },
                     ),
                   ),
-                ),
-              ),
-            )
-                :
-            Visibility(
-              visible: isOwner,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 52.h),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: EvieButton_ReversedColor(
-                      width: double.infinity,
-                      height: 52.h,
-                      child: Text(
-                        "Remove All Pal",
-                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)
-                      ),
-                      onPressed: () {
-
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ),
-                /*
-            Visibility(
-              visible: isOwner,
-                  child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 52.h),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: EvieButton_ReversedColor(
-                      width: double.infinity,
-                      height: 52.h,
-                      child: Text(
-                        "Manage List",
-                        style: TextStyle(
-                            color: EvieColors.PrimaryColor,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          isManageList = true;
-                        });
-                      },
-                    ),
-                  ),
-              ),
-            ),
-                ),
-            */
-          ],
-        ),
+                ],
+              )
+            ],
+          ),
+        )
       ),
     );
   }
