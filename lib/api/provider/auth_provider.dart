@@ -133,9 +133,14 @@ class AuthProvider extends ChangeNotifier {
   }
 
   sendFirestoreVerifyEmail(){
-    User? firebaseUser;
-    firebaseUser = _auth.currentUser;
-    firebaseUser!.sendEmailVerification();
+    try {
+      User? firebaseUser;
+      firebaseUser = _auth.currentUser;
+      firebaseUser!.sendEmailVerification();
+    }
+    catch(error) {
+      print(error);
+    }
   }
 
   Future checkIsVerify() async {

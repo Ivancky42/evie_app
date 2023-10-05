@@ -46,6 +46,7 @@ import '../widgets/evie_slider_button.dart';
 import '../widgets/evie_switch.dart';
 import '../widgets/evie_textform.dart';
 import 'colours.dart';
+import 'model/rfid_model.dart';
 import 'navigator.dart';
 
 showQuitApp(){
@@ -1068,6 +1069,89 @@ showDeleteEVKeyFailed(BuildContext context, String error){
           onPressedRight: () {
             SmartDialog.dismiss();
           }));
+}
+
+showRemoveEVKeyDialog (BuildContext context, RFIDModel rfidModel, BikeProvider _bikeProvider, BluetoothProvider _bluetoothProvider){
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Remove EV-Key",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Are you sure you would like to remove " + rfidModel.rfidName! + '?',
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        upContent: "Remove",
+        downContent: "Cancel",
+        onPressedUp: () {
+          SmartDialog.dismiss();
+
+          SmartDialog.showLoading(msg: "Removing EV Key....");
+          StreamSubscription? deleteRFIDStream;
+          deleteRFIDStream = _bluetoothProvider
+              .deleteRFID(rfidModel.rfidID!)
+              .listen((deleteRFIDStatus) {
+
+            SmartDialog.dismiss(status: SmartStatus.loading);
+
+            if (deleteRFIDStatus.result == CommandResult.success) {
+              deleteRFIDStream?.cancel();
+              final result = _bikeProvider.deleteRFIDFirestore(rfidModel.rfidID!);
+              if (result == true) {
+                //showEVRemovedToast(context, rfidModel.rfidName!);
+                SmartDialog.dismiss(status: SmartStatus.loading);
+
+              } else {
+                showDeleteEVKeyFailed(context, "Error removing EV Card");
+              }
+            }
+          }, onError: (error) {
+            deleteRFIDStream?.cancel();
+            SmartDialog.dismiss(status: SmartStatus.loading);
+            showDeleteEVKeyFailed(context, error.toString());
+          });
+        },
+        onPressedDown: () {
+          SmartDialog.dismiss();
+        }),
+  );
+}
+
+showRemoveAllEVKeyDialog (BuildContext context, BikeProvider  _bikeProvider, BluetoothProvider _bluetoothProvider, SettingProvider _settingProvider){
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Remove All EV-Key?",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Are you sure you would like to remove all EV-Key?",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/people_search.svg",
+        ),
+        upContent: "Confirm",
+        downContent: "Cancel",
+        onPressedUp: () async {
+          SmartDialog.dismiss();
+          SmartDialog.showLoading(msg: "Removing all EV-Key....");
+          List keysToDelete = _bikeProvider.rfidList.keys.toList();
+          for (var key in keysToDelete) {
+            final rfidModel = _bikeProvider.rfidList[key];
+            _bluetoothProvider.deleteRFID(key);
+            await _bikeProvider.deleteRFIDFirestore(key);
+            await Future.delayed(Duration(seconds: 2));
+          }
+          SmartDialog.dismiss(status: SmartStatus.loading);
+          //_settingProvider.changeSheetElement(SheetList.evKey);
+        },
+        onPressedDown: () {
+          SmartDialog.dismiss();
+        }),
+  );
 }
 
 

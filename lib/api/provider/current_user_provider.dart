@@ -67,7 +67,9 @@ class CurrentUserProvider extends ChangeNotifier {
         if (obj != null) {
           currentUserModel = UserModel.fromJson(obj);
           NotificationProvider().subscribeToTopic("fcm_test");
-          NotificationProvider().subscribeToTopic(currentUserModel?.uid);
+          if (currentUserModel?.uid != null) {
+            NotificationProvider().subscribeToTopic(currentUserModel?.uid);
+          }
           notifyListeners();
         }
       });
@@ -92,8 +94,6 @@ class CurrentUserProvider extends ChangeNotifier {
           }
           else {
             getUserCompleter.complete('VALID_USER');
-            NotificationProvider().subscribeToTopic("fcm_test");
-            NotificationProvider().subscribeToTopic(currentUserModel?.uid);
           }
         }
         else {

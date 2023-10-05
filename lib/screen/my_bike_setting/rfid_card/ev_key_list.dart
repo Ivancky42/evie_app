@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:evie_test/api/fonts.dart';
+import 'package:evie_test/api/model/rfid_model.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -41,6 +42,7 @@ class _EVKeyListState extends State<EVKeyList> {
   bool isManageList = false;
 
   late StreamSubscription deleteRFIDStream;
+  late Completer<String?> deleteAllEVKeyCompleter;
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +53,14 @@ class _EVKeyListState extends State<EVKeyList> {
     final TextEditingController _rfidNameController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
 
+    if (_bikeProvider.rfidList.isEmpty) {
+      Future.delayed(Duration.zero).then((value) {
+        _settingProvider.changeSheetElement(SheetList.evKey);
+      });
+    }
+
     return WillPopScope(
       onWillPop: () async {
-        //_settingProvider.changeSheetElement(SheetList.bikeSetting);
         return true;
       },
       child: Scaffold(
@@ -89,7 +96,8 @@ class _EVKeyListState extends State<EVKeyList> {
                            SlidableAction(
                              spacing:10,
                              onPressed: (context) async{
-                               deleteSingleFRFID(index);
+                               RFIDModel rfidModel = _bikeProvider.rfidList.values.elementAt(index);
+                               showRemoveEVKeyDialog(context, rfidModel, _bikeProvider, _bluetoothProvider);
                              },
                              backgroundColor: EvieColors.red,
                              foregroundColor: Colors.white,
@@ -336,9 +344,7 @@ class _EVKeyListState extends State<EVKeyList> {
                                   fontWeight: FontWeight.w700),
                             ),
                             onPressed: () {
-                              // setState(() {
-                              //   isManageList = true;
-                              // });
+                              showRemoveAllEVKeyDialog(context, _bikeProvider, _bluetoothProvider, _settingProvider);
                             },
                           ),
                         ),
@@ -349,41 +355,5 @@ class _EVKeyListState extends State<EVKeyList> {
         ),
       ),
     );
-  }
-
-  deleteSingleFRFID(index){
-    SmartDialog.showLoading(msg: "Delete RFID....");
-
-    String name = _bikeProvider.rfidList.values.elementAt(index).rfidName;
-
-    deleteRFIDStream = _bluetoothProvider
-        .deleteRFID(_bikeProvider
-        .rfidList.keys
-        .elementAt(index))
-        .listen((deleteRFIDStatus) {
-
-      SmartDialog.dismiss(status: SmartStatus.loading);
-
-      if (deleteRFIDStatus.result == CommandResult.success) {
-        deleteRFIDStream.cancel();
-        final result = _bikeProvider.deleteRFIDFirestore(_bikeProvider.rfidList.keys.elementAt(index));
-        if (result == true) {
-          SmartDialog.dismiss(status: SmartStatus.loading);
-
-          showEVRemovedToast(context, name);
-
-          if(_bikeProvider.rfidList.length == 1){
-            _settingProvider.changeSheetElement(SheetList.bikeSetting);
-          }
-        } else {
-          showDeleteEVKeyFailed(context, "Error deleting EV Card");
-        }
-      }
-    }, onError: (error) {
-      deleteRFIDStream.cancel();
-      SmartDialog.dismiss(status: SmartStatus.loading);
-      showDeleteEVKeyFailed(context, error.toString());
-
-    });
   }
 }

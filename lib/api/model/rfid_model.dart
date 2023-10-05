@@ -13,7 +13,7 @@ class RFIDModel {
 
   factory RFIDModel.fromJson(Map json) {
     return RFIDModel(
-      rfidID:        json['rfidId']?? '',
+      rfidID:        json['rfidID']?? '',
       rfidName:      json['rfidName']?? '',
       created:       timestampFromJson(json['created'] as Timestamp?),
     );

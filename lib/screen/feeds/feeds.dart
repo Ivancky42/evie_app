@@ -79,7 +79,7 @@ class _FeedsState extends State<Feeds> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(16.w, 51.h, 0.w, 0.h),
+                padding: EdgeInsets.fromLTRB(16.w, 51.h, 16.w, 0.h),
                 child: Container(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -89,13 +89,16 @@ class _FeedsState extends State<Feeds> {
                         style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
                       ),
                       _notificationProvider.notificationList.isNotEmpty ?
-                      IconButton(
-                          onPressed: (){
+                      GestureDetector(
+                          onTap: (){
                             showActionListSheet(context, [ActionList.clearFeed],);
                           },
-                          icon:  SvgPicture.asset(
-                            "assets/buttons/more.svg",
-                          ))
+                          child: Container(
+                            child:  SvgPicture.asset(
+                              "assets/buttons/more.svg", width: 36.w, height: 36.w,
+                            ),
+                          )
+                      )
                       : Container(),
                     ],
                   ),

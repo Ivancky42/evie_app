@@ -15,7 +15,7 @@
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>Evie Bike</string>
+    <string>EVIE Bikes</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
@@ -49,7 +49,7 @@
     <key>FacebookClientToken</key>
     <string>0145ecf7b47ba54e2d182059771135a3</string>
     <key>FacebookDisplayName</key>
-    <string>Evie Bike</string>
+    <string>EVIE Bikes</string>
     <key>FirebaseAppDelegateProxyEnabled</key>
     <false/>
     <key>LSApplicationQueriesSchemes</key>
@@ -65,25 +65,25 @@
     <key>MGLMapboxMetricsEnabledSettingShownInApp</key>
     <true/>
     <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>Need bluetooth permission</string>
+    <string>Bluetooth is used to communicate with BLE devices</string>
     <key>NSBluetoothPeripheralUsageDescription</key>
-    <string>Need bluetooth permission</string>
+    <string>Bluetooth is used to communicate with BLE devices</string>
     <key>NSBonjourServices</key>
     <array>
       <string>_dartobservatory._tcp</string>
     </array>
     <key>NSCameraUsageDescription</key>
-    <string>Access camera</string>
+    <string>Need to access your camera to capture a photo add and update profile picture.</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Need Location permission</string>
+    <string>This app needs location data for EVIE's signature anti-theft system. This data is used to retrieve your positional data relative to the bike's position.</string>
     <key>NSLocationAlwaysUsageDescription</key>
-    <string>Need Location permission</string>
+    <string>This app needs location data for EVIE's signature anti-theft system. This data is used to retrieve your positional data relative to the bike's position.</string>
     <key>NSLocationUsageDescription</key>
-    <string>Need Location permission</string>
+    <string>This app needs location data for EVIE's signature anti-theft system. This data is used to retrieve your positional data relative to the bike's position.</string>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Need Location permission</string>
+    <string>This app needs location data for EVIE's signature anti-theft system. This data is used to retrieve your positional data relative to the bike's position.</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>Photo Library Access Warning</string>
+    <string>Need to access your photo library to select a photo add and update profile picture</string>
     <key>UIApplicationSupportsIndirectInputEvents</key>
     <true/>
     <key>UIBackgroundModes</key>
