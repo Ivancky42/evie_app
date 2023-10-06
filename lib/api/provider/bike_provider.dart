@@ -752,7 +752,7 @@ class BikeProvider extends ChangeNotifier {
 
   Future<String?> removeAllPedalPals() async {
     removeAllPalsCompleter = Completer<String?>();
-
+    currentSubscription?.cancel();
     currentSubscription = FirebaseFirestore.instance
         .collection(bikesCollection)
         .doc(currentBikeModel!.deviceIMEI)
@@ -767,7 +767,6 @@ class BikeProvider extends ChangeNotifier {
       }
     });
 
-    currentSubscription?.cancel();
     bikeUserList.forEach((key, bikeUserModel) {
       if (bikeUserModel.role != 'owner') {
         if (bikeUserModel.status == 'pending') {
