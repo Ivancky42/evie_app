@@ -102,25 +102,35 @@ class _MapDetailsState extends State<MapDetails> {
     loadMarker();
 
     ///User location
-    final ByteData bytes = await rootBundle.load("assets/icons/user_location_icon.png");
+    final ByteData bytes = await rootBundle.load("assets/icons/security/user_location_icon.png");
     final Uint8List list = bytes.buffer.asUint8List();
 
+    final ByteData bytes2 = await rootBundle.load("assets/icons/security/top_location.png");
+    final Uint8List list2 = bytes2.buffer.asUint8List();
+
+    final ByteData bytes3 = await rootBundle.load("assets/icons/security/shadow.png");
+    final Uint8List list3 = bytes3.buffer.asUint8List();
+
     IMG.Image? img = IMG.decodeImage(list);
-    IMG.Image resized = IMG.copyResize(img!, width: 50.w.toInt(), height:70.h.toInt());
+    IMG.Image resized = IMG.copyResize(img!, width: 20.w.toInt(), height:20.w.toInt());
     Uint8List resizedImg = Uint8List.fromList(IMG.encodePng(resized));
 
     await mapboxMap.location.updateSettings(
         LocationComponentSettings(
+            pulsingColor: 6967754,
             enabled: true,
             pulsingEnabled: true,
             puckBearingEnabled: true,
-            locationPuck: LocationPuck(
-                locationPuck2D: LocationPuck2D(
-                  topImage: resizedImg,
-                  bearingImage: resizedImg,
-                  shadowImage: resizedImg,
-                  //scaleExpression: "50",
-                ))
+            //accuracyRingColor: 6967754,
+            //accuracyRingBorderColor: 6967754,
+            puckBearingSource: PuckBearingSource.HEADING,
+            // locationPuck: LocationPuck(
+            //     locationPuck2D: LocationPuck2D(
+            //       topImage: list2,
+            //       bearingImage: list,
+            //       //shadowImage: list3,
+            //     )
+            // )
         ));
 
     timer = Timer.periodic(const Duration(seconds: 1),
@@ -155,7 +165,7 @@ class _MapDetailsState extends State<MapDetails> {
                   Padding(
                     padding: EdgeInsets.only(left: 17.w, top: 0.h, bottom: 0.h),
                     child: Text(
-                      "Orbital Anti-Theft 2",
+                      "Orbital Anti-Theft",
                       style: EvieTextStyles.h1,
                     ),
                   ),
@@ -344,48 +354,48 @@ class _MapDetailsState extends State<MapDetails> {
                       ),
                     ),
 
-                    Padding(
-                        padding: EdgeInsets.only(left:16.w, right: 16.w),
-                        child: Container(
-                          width: double.infinity,
-                          height: 36.h,
-                          child: Padding(
-                            padding: EdgeInsets.only(left:8.w, right: 8.w),
-                            child: Row(
-                              children: [
-                                ///Get icon by status
-                                SvgPicture.asset(
-                                  getCurrentBikeStatusIconSimple(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
-                                ),
-
-                                SizedBox(width: 5.w),
-
-                                ///Get text by status
-                                Text(getCurrentBikeStatusString(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
-                                  style: EvieTextStyles.body16.copyWith(color: EvieColors.grayishWhite),),
-                              ],
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-
-                            ///Get colour by status
-                            color: _bikeProvider.currentBikeModel!.location!.isConnected == false ||
-                                _bikeProvider.currentBikeModel!.location!.status == "warning" ||
-                                _bikeProvider.currentBikeModel!.location!.status == "fall" ?
-                            EvieColors.orange : EvieColors.darkWhite,
-
-                            borderRadius: BorderRadius.circular(10.w),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color.fromRGBO(122, 122, 121, 0.15),
-                                offset: Offset(0, 3),
-                                blurRadius: 12.0,
-                                spreadRadius: 0.0,
-                              ),
-                            ],
-                          ),
-                        )
-                    )
+                    // Padding(
+                    //     padding: EdgeInsets.only(left:16.w, right: 16.w),
+                    //     child: Container(
+                    //       width: double.infinity,
+                    //       height: 36.h,
+                    //       child: Padding(
+                    //         padding: EdgeInsets.only(left:8.w, right: 8.w),
+                    //         child: Row(
+                    //           children: [
+                    //             ///Get icon by status
+                    //             SvgPicture.asset(
+                    //               getCurrentBikeStatusIconSimple(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
+                    //             ),
+                    //
+                    //             SizedBox(width: 5.w),
+                    //
+                    //             ///Get text by status
+                    //             Text(getCurrentBikeStatusString(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
+                    //               style: EvieTextStyles.body16.copyWith(color: EvieColors.grayishWhite),),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       decoration: BoxDecoration(
+                    //
+                    //         ///Get colour by status
+                    //         color: _bikeProvider.currentBikeModel!.location!.isConnected == false ||
+                    //             _bikeProvider.currentBikeModel!.location!.status == "warning" ||
+                    //             _bikeProvider.currentBikeModel!.location!.status == "fall" ?
+                    //         EvieColors.orange : EvieColors.darkWhite,
+                    //
+                    //         borderRadius: BorderRadius.circular(10.w),
+                    //         boxShadow: const [
+                    //           BoxShadow(
+                    //             color: Color.fromRGBO(122, 122, 121, 0.15),
+                    //             offset: Offset(0, 3),
+                    //             blurRadius: 12.0,
+                    //             spreadRadius: 0.0,
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     )
+                    // )
 
                   ],
                 ),
@@ -428,7 +438,7 @@ class _MapDetailsState extends State<MapDetails> {
       currentAnnotationIdList.add(pointAnnotationManager);
 
       if(_locationProvider.locationModel!.isConnected == false){
-        final ByteData bytes = await rootBundle.load("assets/icons/marker_warning.png");
+        final ByteData bytes = await rootBundle.load("assets/icons/security/offline_4x.png");
         final Uint8List list = bytes.buffer.asUint8List();
 
         options.add(PointAnnotationOptions(
@@ -438,13 +448,13 @@ class _MapDetailsState extends State<MapDetails> {
                   _locationProvider.locationModel?.geopoint.latitude ?? 0))
               .toJson(),
           image: list,
-          iconSize: 1.5.h,
+          iconSize: 34.mp,
         ));
 
         ///Add danger threat
       }else if (_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger") {
 
-        final ByteData bytes = await rootBundle.load("assets/icons/marker_danger.png");
+        final ByteData bytes = await rootBundle.load("assets/icons/security/danger_4x.png");
         final Uint8List list = bytes.buffer.asUint8List();
 
         ///load a few more marker
@@ -456,11 +466,11 @@ class _MapDetailsState extends State<MapDetails> {
                   _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint.latitude ?? 0,
                 )).toJson(),
             image: list,
-            iconSize: 1.5.h,
+            iconSize: 35.mp,
           ));
         }
       } else {
-        final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? "safe"));
+        final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? "safe", _bikeProvider.currentBikeModel?.isLocked ?? false));
         final Uint8List list = bytes.buffer.asUint8List();
 
         options.add(PointAnnotationOptions(
@@ -470,7 +480,8 @@ class _MapDetailsState extends State<MapDetails> {
                   _locationProvider.locationModel?.geopoint.latitude ?? 0))
               .toJson(),
           image: list,
-          iconSize: 1.5.h,
+          //iconImage: "assets/icons/security/safe_lock_3x.png",
+          iconSize: 35.mp,
         ));
       }
       pointAnnotationManager.setIconAllowOverlap(false);

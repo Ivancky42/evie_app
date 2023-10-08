@@ -17,9 +17,9 @@ import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
-import '../../../api/colours.dart';
-import '../../../api/fonts.dart';
-import '../../../api/navigator.dart';
+import '../../../../api/colours.dart';
+import '../../../../api/fonts.dart';
+import '../../../../api/navigator.dart';
 
 class ThreatBikeRecovered extends StatefulWidget {
   const ThreatBikeRecovered({Key? key}) : super(key: key);

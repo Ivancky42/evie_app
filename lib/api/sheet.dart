@@ -5,7 +5,7 @@ import 'package:evie_test/screen/my_bike_setting/reset_bike/bike_erase_unlink.da
 import 'package:evie_test/screen/ride/ride_detail.dart';
 import 'package:evie_test/screen/trip_history/trip_history.dart';
 import 'package:evie_test/screen/user_home_page/battery_details.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/threat_history.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/threat/threat_history.dart';
 import 'package:evie_test/widgets/evie_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;

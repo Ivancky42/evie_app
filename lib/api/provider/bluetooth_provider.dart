@@ -136,6 +136,16 @@ class BluetoothProvider extends ChangeNotifier {
   StreamController.broadcast();
 
 
+  /** Scan RSSI **/
+  StreamController<BLEScanResult> scanResultStream = StreamController.broadcast();
+  StreamSubscription? bleScanSub;
+  BLEScanResult? scanResult;
+  DiscoveredDevice? discoverDevice;
+  int deviceRssi = 0;
+  double deviceRssiProgress = 0.0;
+  bool shouldStopTimer = true;
+
+
   BluetoothProvider() {
     checkBLEStatus();
   }
@@ -194,24 +204,58 @@ class BluetoothProvider extends ChangeNotifier {
     return bleStatusListener.stream;
   }
 
-  void startScan() {
-    discoverDeviceList.clear();
-    scanSubscription = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((device) {
-      if (device.name.contains("EVIE")) {
-        discoverDeviceList.update(
-          device.id,
-              (existingDevice) => device,
-          ifAbsent: () => device,
-        );
+  Stream<DeviceConnectResult> startScanRSSI() {
+    scanSubscription?.cancel();
+    deviceRssi = 0;
+    deviceRssiProgress = 0.0;
+    discoverDevice = null;
+    disconnectDevice();
+    startScanTimer?.cancel();
+    startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
+      print("Scan RSSI Timer: " + timer.tick.toString() + "s");
+      if (timer.tick == 10) {
+        await stopScan();
+        scanSubscription?.cancel();
+        startScanTimer?.cancel();
+        deviceConnectStream.add(DeviceConnectResult.scanTimeout);
+        deviceConnectResult = DeviceConnectResult.scanTimeout;
+        timer.cancel();
+        notifyListeners();
+      }
+    });
+
+    scanSubscription = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((discoveredDevice) {
+      if (deviceConnectResult == null || deviceConnectResult != DeviceConnectResult.deviceFound) {
+        deviceConnectResult = DeviceConnectResult.scanning;
+        deviceConnectStream.add(DeviceConnectResult.scanning);
+        notifyListeners();
+      }
+      if (discoveredDevice.name == currentBikeModel?.bleName) {
+        startScanTimer?.cancel();
+        deviceConnectResult = DeviceConnectResult.deviceFound;
+        deviceConnectStream.add(DeviceConnectResult.deviceFound);
+        discoverDevice = discoveredDevice;
+        deviceRssi = discoverDevice!.rssi.abs();
+        if (deviceRssi.abs() > 0 && deviceRssi.abs() < 100) {
+          deviceRssiProgress = 1.0 - (deviceRssi.abs() / 100.0);
+        } else {
+          deviceRssiProgress = 0.0;
+        }
+        print('RSSISSSISISIISISII : ' + deviceRssi.toString());
         notifyListeners();
       }
     }, onError: (error) {
+      deviceConnectStream.add(DeviceConnectResult.scanError);
+      deviceConnectResult = DeviceConnectResult.scanError;
       stopScan();
-      scanSubscription = null;
-      discoverDeviceList.clear();
-      notifyListeners();
-      debugPrint(error.toString());
+
+      if (error.message.message == 'Bluetooth disabled (code 1)') {
+        checkBLEStatus();
+        SmartDialog.dismiss(tag: 'threat');
+      }
     });
+
+    return deviceConnectStream.stream;
   }
 
   stopScan() async {
@@ -252,6 +296,7 @@ class BluetoothProvider extends ChangeNotifier {
         deviceConnectResult = DeviceConnectResult.scanError;
         stopScan();
         scanSubscription = null;
+        checkBLEStatus();
       });
     return deviceConnectStream.stream;
   }
@@ -406,16 +451,22 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   bool sendCommand(List<int> command) {
-    if (connectionStateUpdate?.connectionState ==
-        DeviceConnectionState.connected) {
-      final writeCharacteristic = QualifiedCharacteristic(
-          serviceId: serviceUUID,
-          characteristicId: writeUUID,
-          deviceId: selectedDeviceId!);
-      flutterReactiveBle.writeCharacteristicWithoutResponse(writeCharacteristic,
-          value: command);
-      return true;
-    } else {
+    try {
+      if (connectionStateUpdate?.connectionState ==
+          DeviceConnectionState.connected) {
+        final writeCharacteristic = QualifiedCharacteristic(
+            serviceId: serviceUUID,
+            characteristicId: writeUUID,
+            deviceId: selectedDeviceId!);
+        flutterReactiveBle.writeCharacteristicWithoutResponse(
+            writeCharacteristic, value: command);
+        return true;
+      } else {
+        return false;
+      }
+    }
+    catch(error) {
+      print(error.toString());
       return false;
     }
   }
@@ -719,7 +770,7 @@ class BluetoothProvider extends ChangeNotifier {
       bool isConnected = sendCommand(bluetoothCommand.cableUnlock(requestComKeyResult!.communicationKey));
       if (isConnected) {
         return cableLockResult.stream
-            .timeout(const Duration(seconds: 12), onTimeout: (sink) {
+            .timeout(const Duration(seconds: 6), onTimeout: (sink) {
           sink.addError("Operation timeout");
           sink.close();
         });
@@ -848,7 +899,8 @@ class BluetoothProvider extends ChangeNotifier {
           else {
             var tempCableLockResult = CableLockResult(decodedData);
             if (cableLockState?.lockState == tempCableLockResult.lockState) {
-
+              // cableLockResult.add(CableLockResult(decodedData));
+              // cableLockState = CableLockResult(decodedData);
             }
             else {
               cableLockResult.add(CableLockResult(decodedData));
@@ -1256,71 +1308,63 @@ class BluetoothProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  StreamController<BLEScanResult> scanResultStream = StreamController.broadcast();
-  StreamSubscription? bleScanSub;
-  BLEScanResult? scanResult;
-  int deviceRssi = 0;
-  double deviceRssiProgress = 0.0;
-
-  bool shouldStopTimer = true;
-
-    Stream<BLEScanResult> startScanRSSI() {
-
-      shouldStopTimer = true;
-
-      bleScanSub?.cancel();
-
-      startScanTimer?.cancel();
-      scanResultStream.add(BLEScanResult.scanning);
-      scanResult = BLEScanResult.scanning;
-
-      startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
-
-        print("Scan Timer: " + timer.tick.toString() + "s");
-
-        if (timer.tick == 10 && shouldStopTimer) {
-          await stopScan();
-          await disconnectDevice();
-          startScanTimer?.cancel();
-          scanResultStream.add(BLEScanResult.unknown);
-          scanResult = BLEScanResult.unknown;
-
-          scanResultStream.add(BLEScanResult.scanTimeout);
-          scanResult = BLEScanResult.scanTimeout;
-          bleStatusSubscription?.cancel();
-
-          bleScanSub?.cancel();
-          timer.cancel();
-          notifyListeners();
-        }
-      });
-
-    bleScanSub = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((discoveredDevice) async {
-
-      if (discoveredDevice.name == currentBikeModel?.bleName) {
-
-        shouldStopTimer = false;
-
-        scanResultStream.add(BLEScanResult.deviceFound);
-        scanResult = BLEScanResult.deviceFound;
-
-        deviceRssi = discoveredDevice.rssi.abs();
-
-        if(deviceRssi.abs() > 0 && deviceRssi.abs() < 100){
-          deviceRssiProgress = 1.0 - (deviceRssi.abs() / 100.0);
-        }else{
-          deviceRssiProgress = 0.0;
-        }
-
-        notifyListeners();
-      }
-
-    }, onError: (error) {
-      bleScanSub?.cancel();
-    });
-
-      return scanResultStream.stream;
-  }
+  //   Stream<BLEScanResult> startScanRSSI() {
+  //
+  //     shouldStopTimer = true;
+  //
+  //     bleScanSub?.cancel();
+  //
+  //     startScanTimer?.cancel();
+  //     scanResultStream.add(BLEScanResult.scanning);
+  //     scanResult = BLEScanResult.scanning;
+  //
+  //     startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
+  //
+  //       print("Scan Timer: " + timer.tick.toString() + "s");
+  //
+  //       if (timer.tick == 10 && shouldStopTimer) {
+  //         await stopScan();
+  //         await disconnectDevice();
+  //         startScanTimer?.cancel();
+  //         scanResultStream.add(BLEScanResult.unknown);
+  //         scanResult = BLEScanResult.unknown;
+  //
+  //         scanResultStream.add(BLEScanResult.scanTimeout);
+  //         scanResult = BLEScanResult.scanTimeout;
+  //         bleStatusSubscription?.cancel();
+  //
+  //         bleScanSub?.cancel();
+  //         timer.cancel();
+  //         notifyListeners();
+  //       }
+  //     });
+  //
+  //   bleScanSub = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((discoveredDevice) async {
+  //
+  //     if (discoveredDevice.name == currentBikeModel?.bleName) {
+  //
+  //       shouldStopTimer = false;
+  //
+  //       scanResultStream.add(BLEScanResult.deviceFound);
+  //       scanResult = BLEScanResult.deviceFound;
+  //
+  //       deviceRssi = discoveredDevice.rssi.abs();
+  //
+  //       if(deviceRssi.abs() > 0 && deviceRssi.abs() < 100){
+  //         deviceRssiProgress = 1.0 - (deviceRssi.abs() / 100.0);
+  //       }else{
+  //         deviceRssiProgress = 0.0;
+  //       }
+  //
+  //       notifyListeners();
+  //     }
+  //
+  //   }, onError: (error) {
+  //     bleScanSub?.cancel();
+  //   });
+  //
+  //     return scanResultStream.stream;
+  // }
 
   void stopScanTimer() {
     startScanTimer?.cancel();

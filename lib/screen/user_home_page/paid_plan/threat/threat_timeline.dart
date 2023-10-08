@@ -17,14 +17,14 @@ import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 
 
-import '../../../api/colours.dart';
-import '../../../api/function.dart';
-import '../../../api/navigator.dart';
-import '../../../api/provider/bike_provider.dart';
-import '../../../api/provider/bluetooth_provider.dart';
-import '../../../api/provider/location_provider.dart';
-import '../../../widgets/evie_radio_button.dart';
-import '../../../widgets/evie_switch.dart';
+import '../../../../api/colours.dart';
+import '../../../../api/function.dart';
+import '../../../../api/navigator.dart';
+import '../../../../api/provider/bike_provider.dart';
+import '../../../../api/provider/bluetooth_provider.dart';
+import '../../../../api/provider/location_provider.dart';
+import '../../../../widgets/evie_radio_button.dart';
+import '../../../../widgets/evie_switch.dart';
 
 class ThreatTimeLine extends StatefulWidget {
 
@@ -81,7 +81,7 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
 
                   GestureDetector(
                       onTap: (){
-                        changeToThreatMap(context, PageTransitionType.fade);
+                        changeToThreatMap(context, false, PageTransitionType.fade);
                       },
                       child: SvgPicture.asset(
                         "assets/buttons/list_selected.svg",

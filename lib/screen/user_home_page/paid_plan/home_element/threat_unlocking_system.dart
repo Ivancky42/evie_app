@@ -100,25 +100,22 @@ class _ThreatUnlockingSystemState extends State<ThreatUnlockingSystem> {
                           if(widget.page == "home"){
 
                             ///Context is parent ancestor when call show threat connect bike dialog here, move to threat map instead.
-                            changeToThreatMap(context, true);
-
+                            if (_bluetoothProvider.bleStatus == BleStatus.ready) {
+                              changeToThreatMap(context, true);
+                            }
+                            else if (_bluetoothProvider.bleStatus == BleStatus.poweredOff || _bluetoothProvider.bleStatus == BleStatus.unauthorized) {
+                              showBluetoothNotTurnOn();
+                              changeToThreatMap(context, true);
+                            }
                           }else{
-
-                            _bluetoothProvider.checkBLEStatus().listen((event) {
-                              if(event == BleStatus.ready){
-                                showThreatConnectBikeDialog(context, setState, _bluetoothProvider,_bikeProvider);
-
-                                _bluetoothProvider.startScanRSSI().listen((bLEScanResult) {
-                                  // if(bLEScanResult == BLEScanResult.scanTimeout){
-                                  //   SmartDialog.dismiss();
-                                  //
-                                  //   stream?.cancel();
-                                  // }
-                                });
-                              }else if(event == BleStatus.poweredOff || event == BleStatus.unauthorized){
-                                showBluetoothNotTurnOn();
-                              }
-                            });
+                            if (_bluetoothProvider.bleStatus == BleStatus.ready) {
+                              //_bluetoothProvider.startScanRSSI();
+                              showThreatDialog(context);
+                            }
+                            else if (_bluetoothProvider.bleStatus == BleStatus.poweredOff || _bluetoothProvider.bleStatus == BleStatus.unauthorized) {
+                              showBluetoothNotTurnOn();
+                            }
+                            print(_bluetoothProvider.bleStatus.toString());
                           }
 
                         },

@@ -69,6 +69,7 @@ enum ActionList{
   deactivateTheftAlert,
   clearFeed,
   removeAllPals,
+  removeAllEVKeys,
 }
 
 

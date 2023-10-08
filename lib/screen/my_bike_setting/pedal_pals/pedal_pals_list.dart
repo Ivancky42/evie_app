@@ -5,6 +5,7 @@ import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/api/toast.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
 import 'package:evie_test/widgets/evie_appbar_badge.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
@@ -74,6 +75,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
         appBar: PageAppbarWithBadge(
           title: 'PedalPals',
           withAction: isOwner ? _bikeProvider.bikeUserList.length != 1 ? true : false : false,
+          //withAction: isOwner  ? true : false ,
           onPressedLeading: () {
             _settingProvider.changeSheetElement(SheetList.bikeSetting);
           },
@@ -203,14 +205,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
 
                                         if(uploadStatus == UploadFirestoreResult.success){
                                           SmartDialog.dismiss(status: SmartStatus.loading);
-                                          SmartDialog.show(
-                                              keepSingle: true,
-                                              widget: EvieSingleButtonDialog(
-                                                  title: "Success",
-                                                  content: "You canceled the invitation",
-                                                  rightContent: "Close",
-                                                  onPressedRight: () => SmartDialog.dismiss()
-                                              ));
+                                          showTextToast(_bikeProvider.bikeUserDetails.values.elementAt(index).name + " have been removed from " + _bikeProvider.currentBikeModel?.pedalPalsModel?.name + '.');
                                           currentSubscription?.cancel();
                                         }
                                         else if(uploadStatus == UploadFirestoreResult.failed) {
@@ -234,6 +229,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
 
                                         if(uploadStatus == UploadFirestoreResult.success){
                                           SmartDialog.dismiss(status: SmartStatus.loading);
+                                          showTextToast(_bikeProvider.bikeUserDetails.values.elementAt(index).name + " have been removed from " + _bikeProvider.currentBikeModel?.pedalPalsModel?.name + '.');
                                           currentSubscription?.cancel();
                                         }
                                         else if(uploadStatus == UploadFirestoreResult.failed) {

@@ -19,7 +19,7 @@ import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/screen/trip_history/ride_history.dart';
 import 'package:evie_test/screen/trip_history/trip_history.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/threat_bike_recovered.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/threat/threat_bike_recovered.dart';
 import 'package:evie_test/screen/user_home_page/user_home_page.dart';
 import 'package:evie_test/screen/verify_email.dart';
 import 'package:flutter/cupertino.dart';
@@ -73,9 +73,9 @@ import '../screen/signup_page.dart';
 
 import '../abandon/user_notification_details.dart';
 import '../screen/signup_password.dart';
-import '../screen/user_home_page/paid_plan/threat_map.dart';
-import '../screen/user_home_page/paid_plan/threat_map.dart';
-import '../screen/user_home_page/paid_plan/threat_timeline.dart';
+import '../screen/user_home_page/paid_plan/threat/threat_map.dart';
+import '../screen/user_home_page/paid_plan/threat/threat_map.dart';
+import '../screen/user_home_page/paid_plan/threat/threat_timeline.dart';
 import '../test/test.dart';
 import 'model/bike_model.dart';
 import 'model/plan_model.dart';
@@ -396,13 +396,19 @@ void changeToCongratsBikeAdded(BuildContext context, String bikeName) {
 }
 
 void changeToThreatBikeRecovered(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const ThreatBikeRecovered(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
+  // Navigator.pushReplacement(context,
+  //   PageTransition(
+  //     type: PageTransitionType.rightToLeft,
+  //     child: const ThreatBikeRecovered(),
+  //     duration: const Duration(milliseconds: 300),
+  //   ),
+  // );
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return ThreatBikeRecovered();
+    },
+  ));
 }
 
 void changeToMyGarageScreen(BuildContext context) {

@@ -25,6 +25,7 @@ import '../../../api/sheet.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
+import '../../../widgets/evie_appbar_badge.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../../../widgets/evie_textform.dart';
 
@@ -64,10 +65,14 @@ class _EVKeyListState extends State<EVKeyList> {
         return true;
       },
       child: Scaffold(
-        appBar: PageAppbar(
+        appBar: PageAppbarWithoutBadge(
           title: 'EV-Key',
-          onPressed: () {
+          withAction: _bikeProvider.isOwner! ? true : false,
+          onPressedLeading: () {
             _settingProvider.changeSheetElement(SheetList.bikeSetting);
+          },
+          onPressedAction: () {
+            showActionListSheet(context, [ActionList.removeAllEVKeys],);
           },
         ),
         body: Stack(

@@ -29,11 +29,10 @@ class EvieSliderButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliderButton(
-
       dismissible: dismissible ?? false,
       disable: disable ?? false,
       action: action,
-      width: 300.w,
+      width: double.infinity,
       backgroundColor: backgroundColor ?? const Color(0xffe0e0e0),
       label: Text(
         text,
@@ -44,14 +43,15 @@ class EvieSliderButton extends StatelessWidget {
       ),
       alignLabel: Alignment(0.2.w,0),
       buttonColor: EvieColors.primaryColor,
-      shimmer: false,
+      shimmer: true,
+      baseColor: EvieColors.primaryColor,
+      highlightedColor: Colors.white,
       icon:  SvgPicture.asset(
         "assets/buttons/arrow_slider.svg",
         height: 64.h,
         width: 64.w,
       ),
-
-
+      dismissThresholds: 4,
     );
 
   }

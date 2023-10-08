@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/bike_model.dart';
+import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/api/sheet.dart';
@@ -51,6 +52,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
   GeoPoint? selectedGeopoint;
   String? locationStatus;
   bool? isConnected;
+  bool? isLocked;
   DeviceConnectResult? deviceConnectResult;
 
   var options = <PointAnnotationOptions>[];
@@ -410,7 +412,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                   _settingProvider.changeSheetElement(SheetList.mapDetails);
                   showSheetNavigate(context);
                 }else if(_bikeProvider.currentBikeModel?.location?.status == "danger") {
-                  changeToThreatMap(context, false);
+                  _settingProvider.changeSheetElement(SheetList.mapDetails);
+                  showSheetNavigate(context);
                 }else{
                   _settingProvider.changeSheetElement(SheetList.mapDetails);
                   showSheetNavigate(context);
@@ -560,11 +563,10 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
         mapCreatedAnimateBounce();
       }
     }
-    // selectedGeopoint = _locationProvider.locationModel?.geopoint;
-    // locationStatus = _locationProvider.locationModel?.status;
-    // isConnected = _locationProvider.locationModel?.isConnected;
-    //
-    // mapCreatedAnimateBounce();
+    if (isLocked != _bikeProvider.currentBikeModel?.isLocked) {
+      isLocked = _bikeProvider.currentBikeModel?.isLocked;
+      mapCreatedAnimateBounce();
+    }
   }
 
   loadMarker() async {
@@ -584,7 +586,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
 
       ///Add disconnected threat
       if(_locationProvider.locationModel!.isConnected == false){
-        final ByteData bytes = await rootBundle.load("assets/icons/marker_warning.png");
+        final ByteData bytes = await rootBundle.load("assets/icons/security/offline_4x.png");
         final Uint8List list = bytes.buffer.asUint8List();
 
         options.add(
@@ -594,7 +596,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                         _locationProvider.locationModel?.geopoint.longitude ?? 0,
                         _locationProvider.locationModel?.geopoint.latitude ?? 0
                     )).toJson(),
-                iconSize: 1.5.h,
+                iconSize: 27.mp,
                 image: list)
             );
 
@@ -602,7 +604,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
       }
       else if (_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger") {
 
-        final ByteData bytes = await rootBundle.load("assets/icons/marker_danger.png");
+        final ByteData bytes = await rootBundle.load("assets/icons/security/danger_4x.png");
         final Uint8List list = bytes.buffer.asUint8List();
 
         options.add(
@@ -612,14 +614,15 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                         _locationProvider.locationModel?.geopoint.longitude ?? 0,
                         _locationProvider.locationModel?.geopoint.latitude ?? 0
                     )).toJson(),
-                iconSize: 1.5.h,
+                iconSize: 27.mp,
                 image: list));
 
       }
       else {
-        final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? "safe"));
+        final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? "safe", _bikeProvider.currentBikeModel?.isLocked ?? false));
         final Uint8List list = bytes.buffer.asUint8List();
 
+        print('iconSize: ' + 27.mp.toString());
         options.add(
             PointAnnotationOptions(
                 geometry: Point(
@@ -627,7 +630,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                         _locationProvider.locationModel?.geopoint.longitude ?? 0,
                         _locationProvider.locationModel?.geopoint.latitude ?? 0
                     )).toJson(),
-                iconSize: 1.5.h,
+                iconSize: 27.mp,
                 image: list)
         );
       }

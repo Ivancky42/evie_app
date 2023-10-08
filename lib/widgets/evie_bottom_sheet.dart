@@ -12,6 +12,7 @@ import '../../api/navigator.dart';
 import '../../api/provider/bike_provider.dart';
 import '../api/enumerate.dart';
 import '../api/provider/setting_provider.dart';
+import 'action_list/remove_all_keys.dart';
 import 'evie_double_button_dialog.dart';
 
 class EvieBottomSheet extends StatefulWidget {
@@ -158,6 +159,9 @@ class _EvieBottomSheetAction extends State<EvieBottomSheetAction> {
       }
       if (list == ActionList.removeAllPals) {
         actionWidgets.add(RemoveAllPals());
+      }
+      if (list == ActionList.removeAllEVKeys) {
+        actionWidgets.add(RemoveAllKeys());
       }
     }
   }

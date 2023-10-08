@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
+import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
@@ -23,19 +24,21 @@ import '../../api/provider/notification_provider.dart';
 import '../../api/snackbar.dart';
 import '../../api/toast.dart';
 
-class RemoveAllPals extends StatefulWidget {
-  RemoveAllPals({
+class RemoveAllKeys extends StatefulWidget {
+  RemoveAllKeys({
     Key? key,
 
   }) : super(key: key);
 
   @override
-  State<RemoveAllPals> createState() => _RemoveAllPalsState();
+  State<RemoveAllKeys> createState() => _RemoveAllKeysState();
 }
 
-class _RemoveAllPalsState extends State<RemoveAllPals> {
+class _RemoveAllKeysState extends State<RemoveAllKeys> {
 
   late BikeProvider _bikeProvider;
+  late BluetoothProvider _bluetoothProvider;
+  late SettingProvider _settingProvider;
 
   @override
   void dispose() {
@@ -46,6 +49,8 @@ class _RemoveAllPalsState extends State<RemoveAllPals> {
   Widget build(BuildContext context) {
 
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    _settingProvider = Provider.of<SettingProvider>(context);
 
     return Padding(
       padding:
@@ -53,15 +58,7 @@ class _RemoveAllPalsState extends State<RemoveAllPals> {
       child: GestureDetector(
           onTap: () async {
             Navigator.pop(context);
-            final result = await showRemoveAllPals(context, _bikeProvider.currentBikeModel?.pedalPalsModel?.name ?? "None");
-            if (result == "action") {
-              SmartDialog.showLoading(msg: "Removing all Pedal Pals...");
-              final result = await _bikeProvider.removeAllPedalPals();
-              if (result == 'Success') {
-                showTextToast("Successfully removed all the PedalPals from your team.");
-                SmartDialog.dismiss(status: SmartStatus.loading);
-              }
-            }
+            showRemoveAllEVKeyDialog(context, _bikeProvider, _bluetoothProvider, _settingProvider);
           },
           child: Container(
             color: Colors.transparent,
@@ -82,13 +79,13 @@ class _RemoveAllPalsState extends State<RemoveAllPals> {
                 ),
               ),
               title:Text(
-                "Remove All PedalPals",
+                "Remove All EV-Key",
                 style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.bold, color: EvieColors.mediumLightBlack),
               ),
               subtitle: Wrap(
                   children: [
                     Text(
-                      "Delete all the PedalPals from your team.",
+                      "Delete all the EV-Key from your list.",
                       style: EvieTextStyles.body14.copyWith(fontWeight: FontWeight.bold, color: EvieColors.darkGrayishCyan),
                     ),
                   ]

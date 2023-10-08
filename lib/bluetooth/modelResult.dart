@@ -14,6 +14,7 @@ enum DeviceConnectResult {
   disconnecting,
   disconnected,
   connectError,
+  deviceFound,
 }
 
 enum CommandResult {

@@ -23,7 +23,7 @@ class EvieColors {
   static const lightWhite = Color(0xffE6E2F6);
   static const thumbColorTrue = Color(0xffFAFAFA);
   static const lightGrayishCyan = Color(0xffDFE0E0);
-  //static const grayishWhite = Color(0xFFECEDEB);
+  static const grayishWhite2 = Color(0xFFECEDEB);
   static const grayishWhite = Color.fromARGB(255, 236, 237, 235);
   //static const dividerWhite = Color(0xffF4F4F4);
   static const dividerWhite = Color.fromARGB(255, 244, 244, 244);

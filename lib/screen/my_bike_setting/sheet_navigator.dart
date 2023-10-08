@@ -37,7 +37,8 @@ import 'package:evie_test/screen/my_bike_setting/subscription/current_plan.dart'
 import 'package:evie_test/screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/current_plan.dart';
 import 'package:evie_test/screen/my_bike_setting/user_manual/user_manual.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/threat_history.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/threat/threat_history.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/threat/threat_map.dart';
 import 'package:evie_test/widgets/evie_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +81,9 @@ class _SheetNavigatorState extends State<SheetNavigator> {
 
     switch(_settingProvider.currentSheetList){
       case SheetList.mapDetails:
-        return MapDetails();
+        return  ThreatMap(false);
+      // case SheetList.mapDetails:
+      //   return MapDetails();
       case SheetList.threatHistory:
         return ThreatHistory();
 

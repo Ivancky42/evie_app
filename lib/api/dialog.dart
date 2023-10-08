@@ -16,8 +16,10 @@ import 'package:evie_test/api/sheet.dart';
 import 'package:evie_test/api/sheet_2.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/api/snackbar.dart';
+import 'package:evie_test/api/toast.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/threat_bike_recovered.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/threat/threat_bike_recovered.dart';
+import 'package:evie_test/screen/user_home_page/paid_plan/threat/threat_dialog.dart';
 import 'package:evie_test/test/widget_test.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import 'package:evie_test/widgets/evie_radio_button.dart';
@@ -1078,9 +1080,8 @@ showRemoveEVKeyDialog (BuildContext context, RFIDModel rfidModel, BikeProvider _
               deleteRFIDStream?.cancel();
               final result = _bikeProvider.deleteRFIDFirestore(rfidModel.rfidID!);
               if (result == true) {
-                //showEVRemovedToast(context, rfidModel.rfidName!);
+                showTextToast("${rfidModel.rfidName} have been removed from your EV-Key list.");
                 SmartDialog.dismiss(status: SmartStatus.loading);
-
               } else {
                 showDeleteEVKeyFailed(context, "Error removing EV Card");
               }
@@ -1123,7 +1124,7 @@ showRemoveAllEVKeyDialog (BuildContext context, BikeProvider  _bikeProvider, Blu
             await Future.delayed(Duration(seconds: 2));
           }
           SmartDialog.dismiss(status: SmartStatus.loading);
-          //_settingProvider.changeSheetElement(SheetList.evKey);
+          showTextToast('Successfully removed all the EV-Key from your bike.');
         },
         onPressedDown: () {
           SmartDialog.dismiss();
@@ -1135,7 +1136,7 @@ showRemoveAllEVKeyDialog (BuildContext context, BikeProvider  _bikeProvider, Blu
 showExitOrbitalAntiTheft(BuildContext context){
   SmartDialog.show(
       widget: EvieDoubleButtonDialog(
-          title: "Exit Orbital Anti-theft?",
+          title: "Exit Orbital Anti-theft? 2",
           childContent: Text("Are you sure you would like to exit orbital anti-theft page?",style: EvieTextStyles.body18,),
           leftContent: "Cancel",
           rightContent: "OK",
@@ -1248,7 +1249,7 @@ showDeactivateTheftDialog (BuildContext context, BikeProvider _bikeProvider){
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
-          "assets/images/people_search.svg",
+          "assets/images/deactivate_theft_alert.svg",
         ),
         upContent: "Cancel",
         downContent: "Confirm Deactivate",
@@ -1727,11 +1728,11 @@ showEvieExitOrbitalDialog(BuildContext context) {
         textAlign: TextAlign.center,
       ),
       childContent: Text(
-        "Are you sure you would like to exit the Orbital Anti-theft page?",
+        "Are you sure you would like to exit orbital anti-theft page?",
         textAlign: TextAlign.center,
         style: EvieTextStyles.body18,
       ),
-      svgpicture: SvgPicture.asset("assets/images/people_search.svg"),
+      svgpicture: SvgPicture.asset("assets/images/exit_anti_theft.svg"),
       upContent: "Exit Orbital Anti-theft",
       downContent: "Cancel",
       onPressedUp: () {
@@ -2115,6 +2116,16 @@ showScanTimeout(BuildContext context) {
   );
 }
 
+showThreatDialog(BuildContext context) {
+  SmartDialog.show(
+    //keepSingle: true,
+    clickBgDismissTemp: false,
+    backDismiss: false,
+    widget: ThreatDialog(contextS: context,),
+    tag: 'threat'
+  );
+}
+
 showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _bluetoothProvider,BikeProvider _bikeProvider){
 
   Widget? buttonImage = Text(
@@ -2257,17 +2268,7 @@ showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _b
                         _bluetoothProvider.checkBLEStatus().listen((event) {
                           if(event == BleStatus.ready){
                             showThreatConnectBikeDialog(context, setState, _bluetoothProvider,_bikeProvider);
-
-                            StreamSubscription? stream;
-                            stream = _bluetoothProvider.startScanRSSI().listen((bLEScanResult) {
-
-                              // if(bLEScanResult == BLEScanResult.scanTimeout){
-                              //   SmartDialog.dismiss();
-                              //   SmartDialog.dismiss();
-                              //
-                              //   stream?.cancel();
-                              // }
-                            });
+                            _bluetoothProvider.startScanRSSI();
                           }else if(event == BleStatus.poweredOff || event == BleStatus.unauthorized){
                             showBluetoothNotTurnOn();
                           }
@@ -2281,7 +2282,8 @@ showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _b
                   },
                 ),
               );
-            }else{
+            }
+            else{
               return WillPopScope(
                 onWillPop: () async {
                   return false;
@@ -2304,8 +2306,9 @@ showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _b
 
                       Padding(
                         padding: EdgeInsets.only(top: 25.h, bottom: 25.h),
-                        child: SvgPicture.asset(
-                          "assets/icons/scanning_bike.svg",
+                        child: Lottie.asset(
+                          'assets/animations/scanning-for-bike.json',
+                          repeat:false,
                         ),
                       ),
 
@@ -2331,8 +2334,8 @@ showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _b
                 ),
               );
             }
-          }else{
-
+          }
+          else{
               return WillPopScope(
                 onWillPop: () async {
                   return false;
@@ -2356,8 +2359,22 @@ showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _b
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
-                            SvgPicture.asset(
-                              "assets/icons/rssi_middle.svg",
+                            // SvgPicture.asset(
+                            //   "assets/icons/rssi_middle.svg",
+                            // ),
+                            _bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
+                                _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
+                                _bluetoothProvider.deviceConnectResult == DeviceConnectResult.partialConnected ?
+                            Center(
+                              child: Lottie.asset(
+                                'assets/animations/scanning-connecting-bike.json',
+                                repeat:false,
+                              ),
+                            ) : Center(
+                              child: Lottie.asset(
+                                'assets/animations/scanning-proximity.json',
+                                repeat:false,
+                              ),
                             ),
 
                             Positioned(
@@ -2654,7 +2671,7 @@ showDontConnectBike (BuildContext context ,BikeProvider _bikeProvider,  Bluetoot
 showNoLockExit (BuildContext context ,BikeProvider _bikeProvider,  BluetoothProvider _bluetoothProvider){
   SmartDialog.show(
     widget: EvieTwoButtonDialog(
-        title: Text("Exit....?",
+        title: Text("Exit Bike Unlock?",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
         ),
@@ -2663,14 +2680,14 @@ showNoLockExit (BuildContext context ,BikeProvider _bikeProvider,  BluetoothProv
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
-          "assets/images/people_search.svg",
+          "assets/images/exit_anti_theft.svg",
         ),
 
-        customButtonUp:  EvieButton_ReversedColor(
+        customButtonDown:  EvieButton_ReversedColor(
           width: double.infinity,
           height: 48.h,
           child: Text(
-            "Stop Unlocking Bike",
+            "Stop Unlock Bike",
             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
           ),
           onPressed: () async {
@@ -2691,7 +2708,7 @@ showNoLockExit (BuildContext context ,BikeProvider _bikeProvider,  BluetoothProv
           },
         ),
 
-        customButtonDown: Padding(
+        customButtonUp: Padding(
           padding: EdgeInsets.only(top: 4.h),
           child: EvieButton(
               width: double.infinity,

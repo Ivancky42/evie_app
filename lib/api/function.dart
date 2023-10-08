@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 import 'package:evie_test/api/fonts.dart';
@@ -483,21 +484,21 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, Bluetoo
             return "assets/buttons/bike_security_not_available.svg";
           } else {
             if (bikeModel.location?.isConnected == false) {
-              return "assets/buttons/bike_security_warning.svg";
+              return "assets/buttons/bike_security_offline.svg";
             } else {
               switch (bikeModel.location!.status) {
                 case 'safe':
                   {
                     if(bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
                       if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
-                        return "assets/buttons/bike_security_unlock.svg";
+                        return "assets/buttons/bike_security_unlock_black.svg";
                       } else {
                         return "assets/buttons/bike_security_lock_and_secure_black.svg";
                       }
                     }
                     else{
                       if(bikeModel.isLocked == false){
-                        return "assets/buttons/bike_security_unlock.svg";
+                        return "assets/buttons/bike_security_unlock_black.svg";
                       }else{
                         return "assets/buttons/bike_security_lock_and_secure_black.svg";
                       }
@@ -529,7 +530,7 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, Bluetoo
 
 getCurrentBikeStatusIcon2(LockState? lockState) {
   if (lockState == LockState.unlock) {
-    return "assets/buttons/bike_security_unlock.svg";
+    return "assets/buttons/bike_security_unlock_black.svg";
   } else {
     return "assets/buttons/bike_security_lock_and_secure_black.svg";
   }
@@ -823,18 +824,22 @@ getCurrentBikeStatusIconSimple(BikeModel bikeModel, BikeProvider bikeProvider, B
     }
 
 ///Load image according danger status
-loadMarkerImageString(String dangerStatus){
+loadMarkerImageString(String dangerStatus, bool isLocked){
   /// connection lost
-
   switch (dangerStatus) {
     case 'safe':
-      return "assets/icons/marker_safe.png";
+      if (isLocked) {
+        return "assets/icons/security/safe_lock_4x.png";
+      }
+      else {
+        return "assets/icons/security/safe_unlock_4x.png";
+      }
     case 'warning':
-      return "assets/icons/marker_warning.png";
+      return "assets/icons/security/warning_4x.png";
     case 'fall':
       return "assets/icons/marker_warning.png";
     case 'danger':
-      return "assets/icons/marker_danger.png";
+      return "assets/icons/security/danger_4x.png";
     case 'crash':
       return "assets/icons/marker_danger.png";
     default:
@@ -851,7 +856,7 @@ getSecurityIconWidget(String eventType) {
     case "lock":
       return "assets/buttons/bike_security_lock_and_secure.svg";
     case "unlock":
-      return "assets/buttons/bike_security_unlock.svg";
+      return "assets/buttons/bike_security_unlock_black.svg";
     case "fall":
       return "assets/buttons/bike_security_warning.svg";
     default:

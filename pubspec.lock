@@ -1825,13 +1825,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  slide_to_act:
+    dependency: "direct main"
+    description:
+      name: slide_to_act
+      sha256: cd4ea5019754347d5a2b0375e802ad948610a0e233adfe51a9cc5b3a1fc3a43b
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   slider_button:
     dependency: "direct main"
     description:
-      name: slider_button
-      sha256: "9e23a806af48fa615b0891a18be87bb751ae3b6ca8dd5a299ecaafdf351623ef"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "0b0db03c78c779653604d10b1e393f1fc47cd37c"
+      url: "https://github.com/da-nish/Slider-Button"
+    source: git
     version: "2.0.0"
   source_gen:
     dependency: transitive

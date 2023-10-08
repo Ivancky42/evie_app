@@ -11,6 +11,7 @@ class AppTheme{
     //Default font setting for the application is Raleway
     //Font are store in assets/fonts
     fontFamily: 'Avenir',
+    primaryColor: EvieColors.primaryColor,
 
     //Default font colour
     textTheme: const TextTheme(

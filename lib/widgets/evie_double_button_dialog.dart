@@ -443,7 +443,7 @@ class EvieTwoButtonDialog extends StatelessWidget{
           borderRadius: BorderRadius.circular(10),
         ),
         elevation: 0.0,
-        backgroundColor: EvieColors.grayishWhite,
+        backgroundColor: EvieColors.grayishWhite2,
         child: Container(
           padding:  EdgeInsets.only(
               left: 17.w,
