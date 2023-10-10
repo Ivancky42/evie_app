@@ -55,6 +55,58 @@ class _EvieOvalGrayState extends State<EvieOvalGray> {
   }
 }
 
+class EvieOvalGrayLocation extends StatefulWidget {
+  final String buttonText;
+  final VoidCallback? onPressed;
+
+  const EvieOvalGrayLocation({Key? key,
+    required this.buttonText,
+    required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  _EvieOvalGrayLocationState createState() => _EvieOvalGrayLocationState();
+}
+
+class _EvieOvalGrayLocationState extends State<EvieOvalGrayLocation> {
+  double buttonWidth = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        buttonWidth = getTextWidth(widget.buttonText);
+        return GestureDetector(
+          onTap: widget.onPressed,
+          child: Container(
+            width: buttonWidth > constraints.maxWidth ? constraints.maxWidth : buttonWidth,
+            height: 30.h,
+            decoration: BoxDecoration(
+              color: EvieColors.lightGrayishCyan,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Center(
+              child: Text(widget.buttonText, style: TextStyle(
+                color: EvieColors.darkGray,
+                fontSize: 14.sp
+              ), ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  double getTextWidth(String text) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: EvieTextStyles.body14),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    )..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.width + 24.w; // add some padding to the width
+  }
+}
+
 
 
 

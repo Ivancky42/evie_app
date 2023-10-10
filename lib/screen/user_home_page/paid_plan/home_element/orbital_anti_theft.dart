@@ -410,10 +410,11 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                 _locationProvider.locations();
                 if(_locationProvider.locationModel?.isConnected == false){
                   _settingProvider.changeSheetElement(SheetList.mapDetails);
-                  showSheetNavigate(context);
+                    showSheetNavigate(context);
                 }else if(_bikeProvider.currentBikeModel?.location?.status == "danger") {
-                  _settingProvider.changeSheetElement(SheetList.mapDetails);
-                  showSheetNavigate(context);
+                  // _settingProvider.changeSheetElement(SheetList.mapDetails);
+                  // showSheetNavigate(context);
+                  changeToThreatMap(context, false);
                 }else{
                   _settingProvider.changeSheetElement(SheetList.mapDetails);
                   showSheetNavigate(context);
@@ -490,37 +491,6 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
 
                     ],
                   ),
-
-                  material.Transform.translate(
-                    offset: Offset(0, -30.h),
-                    child: Padding(
-                      padding: EdgeInsets.only(right:20.w),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: material.Visibility(
-                            visible: _bikeProvider.currentBikeModel?.location?.status == "danger",
-                            child: Stack(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: IconButton(
-                                    iconSize: 42.h,
-                                    icon: SvgPicture.asset(
-                                      "assets/buttons/dot.svg",
-                                    ),
-                                    onPressed: () {
-                                      showActionListSheet(context, [ActionList.deactivateTheftAlert]);
-                                    },
-                                  ),
-                                ),
-                              ],
-                            )
-
-
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -533,9 +503,24 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
             child: Align(
               alignment: Alignment.topRight,
               child: Container(
-                color: EvieColors.transparent,
-                width: 120.w,
-                height: 90.h,
+                color: Colors.transparent,
+                width: 100.w,
+                height: 70.h,
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                      padding: EdgeInsets.only(right: 16.w),
+                      child: IconButton(
+                        iconSize: 42.w,
+                        icon: SvgPicture.asset(
+                          "assets/buttons/dot.svg",
+                        ),
+                        onPressed: () {
+                          showActionListSheet(context, [ActionList.deactivateTheftAlert]);
+                        },
+                      )
+                  ),
+                )
               ),
             ),
           ) : Container(),

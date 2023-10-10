@@ -81,15 +81,11 @@ class _SheetNavigatorState extends State<SheetNavigator> {
 
     switch(_settingProvider.currentSheetList){
       case SheetList.mapDetails:
-        return  ThreatMap(false);
-      // case SheetList.mapDetails:
-      //   return MapDetails();
+        return MapDetails();
       case SheetList.threatHistory:
         return ThreatHistory();
-
       case SheetList.bikeSetting:
         return BikeSetting(source: widget.source);
-
       case SheetList.evKey:
         return EVKey();
       case SheetList.evKeyList:
@@ -98,8 +94,6 @@ class _SheetNavigatorState extends State<SheetNavigator> {
         return EVAddFailed();
       case SheetList.nameEv:
         return NameEV();
-        //return NameEV(rfidNumber);
-        break;
       case SheetList.registerEvKey:
         return RegisterEVKey();
 

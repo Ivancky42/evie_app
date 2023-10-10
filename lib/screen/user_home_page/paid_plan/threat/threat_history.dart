@@ -62,37 +62,19 @@ class _ThreatHistoryState extends State<ThreatHistory> {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          // Padding(
-          //   padding:  EdgeInsets.only(top: 13.h),
-          //   child: SvgPicture.asset(
-          //     "assets/buttons/down.svg",
-          //   ),
-          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
               Padding(
-                padding:  EdgeInsets.only(left: 6.w, top: 0.h),
-                child: IconButton(
-                    onPressed: (){
-                      Navigator.of(context, rootNavigator: true).pop();
-                    },
-                    icon:  SvgPicture.asset(
-                      "assets/buttons/down_big.svg",
-                    ),)
-
-              ),
-              Padding(
-                padding:
-                EdgeInsets.only(left: 17.w, top: 12.h, bottom: 0.h),
+                padding: EdgeInsets.only(left: 17.w, top: 0.h, bottom: 0.h),
                 child: Text(
-                  "Orbital Anti-theft",
-                  style: EvieTextStyles.headlineB,
+                  "Orbital Anti-Theft",
+                  style: EvieTextStyles.h1,
                 ),
               ),
+
               Padding(
-                padding: EdgeInsets.only( top: 12.h,),
+                padding: EdgeInsets.all(0),
                 child: IconButton(
                   onPressed: () {
                     _locationProvider.locations();
@@ -100,7 +82,8 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                   },
                   icon: SvgPicture.asset(
                     "assets/buttons/list_selected.svg",
-
+                    width: 36.w,
+                    height: 36.w,
                   ),
                 ),
               ),
@@ -108,9 +91,9 @@ class _ThreatHistoryState extends State<ThreatHistory> {
           ),
 
           const Divider(
-            thickness: 2,
+            thickness: 0.5,
+            color: EvieColors.darkWhite,
           ),
-
 
           Align(
             alignment: Alignment.centerLeft,

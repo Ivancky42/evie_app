@@ -18,7 +18,6 @@ import '../../../api/length.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
-import '../../../api/sheet_2.dart';
 
 class EVAddFailed extends StatefulWidget {
   const EVAddFailed({Key? key}) : super(key: key);

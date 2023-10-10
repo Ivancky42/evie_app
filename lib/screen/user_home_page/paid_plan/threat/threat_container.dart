@@ -35,6 +35,9 @@ class _ThreatContainerState extends State<ThreatContainer> {
   late BluetoothProvider _bluetoothProvider;
   late BikeProvider _bikeProvider;
   bool isSlided = false;
+  Widget slideToUnlock = SvgPicture.asset(
+    "assets/images/slide_lock.svg",
+  );
 
   @override
   void initState() {
@@ -91,9 +94,8 @@ class _ThreatContainerState extends State<ThreatContainer> {
 
             Padding(
               padding: EdgeInsets.only(top: 25.h, bottom: 25.h),
-              child: SvgPicture.asset(
-                "assets/icons/scanning_bike.svg",
-              ),
+              child:
+              Lottie.asset("assets/icons/security/scanning-for-bike.json"),
             ),
             Center(
               child: Text(
@@ -212,21 +214,11 @@ class _ThreatContainerState extends State<ThreatContainer> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  SvgPicture.asset(
-                    "assets/icons/rssi_middle.svg",
-                  ),
-
-                  Positioned(
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: EvieColors.grayishWhite,
-                        ),
-                        height: 55.h,
-                        width: 55.w,
-                      )
-                  ),
-
+                  _bluetoothProvider.deviceRssi >= 70 ?
+                  Lottie.asset("assets/icons/security/scanning-proximity-R0.json") :
+                  _bluetoothProvider.deviceRssi >= 50 && _bluetoothProvider.deviceRssi <= 69 ?
+                  Lottie.asset("assets/icons/security/scanning-proximity-R1.json") :
+                  Lottie.asset("assets/icons/security/scanning-proximity-R2.json"),
                   Text(
                     _bluetoothProvider.deviceRssi.toString(), style: EvieTextStyles.batteryPercent.copyWith(color: EvieColors.darkGrayishCyan),
                   ),
@@ -293,20 +285,17 @@ class _ThreatContainerState extends State<ThreatContainer> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  SvgPicture.asset(
-                    "assets/icons/loading_purple.svg",
-                  ),
-
-                  Positioned(
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: EvieColors.grayishWhite,
-                        ),
-                        height: 55.h,
-                        width: 55.w,
-                      )
-                  ),
+                  Lottie.asset("assets/icons/security/scanning-connecting-bike.json"),
+                  // Positioned(
+                  //     child: Container(
+                  //       decoration: const BoxDecoration(
+                  //         shape: BoxShape.circle,
+                  //         color: EvieColors.grayishWhite,
+                  //       ),
+                  //       height: 55.h,
+                  //       width: 55.w,
+                  //     )
+                  // ),
                 ],
               ),
             ),
@@ -365,9 +354,7 @@ class _ThreatContainerState extends State<ThreatContainer> {
 
             Padding(
               padding: EdgeInsets.only(top: 25.h, bottom: 25.h),
-              child: SvgPicture.asset(
-                  "assets/images/slide_lock.svg",
-              ),
+              child: slideToUnlock,
             ),
 
             Center(
@@ -417,6 +404,13 @@ class _ThreatContainerState extends State<ThreatContainer> {
               onSubmit: () {
                 setState(() {
                   isSlided = true;
+                  slideToUnlock = Stack(
+                    children: [
+                        SvgPicture.asset(
+                        "assets/images/slide_unlock.svg",
+                      ),
+                    ],
+                  );
                 });
 
                 _bluetoothProvider.setIsUnlocking(true);

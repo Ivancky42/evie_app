@@ -89,7 +89,9 @@ class _ThreatUnlockingSystemState extends State<ThreatUnlockingSystem> {
                       width: 96.w,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(EvieColors.primaryColor),
+                          padding: MaterialStateProperty.all(EdgeInsets.zero),
+                          backgroundColor: MaterialStateProperty.all(EvieColors.transparent),
+                          shadowColor: MaterialStateProperty.all(EvieColors.transparent),
                           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50.w), // Adjust the border radius as needed

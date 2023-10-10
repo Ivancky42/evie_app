@@ -13,7 +13,6 @@ import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sheet.dart';
-import 'package:evie_test/api/sheet_2.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/api/snackbar.dart';
 import 'package:evie_test/api/toast.dart';
@@ -2622,14 +2621,27 @@ showDontConnectBike (BuildContext context ,BikeProvider _bikeProvider,  Bluetoot
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
-          "assets/images/people_search.svg",
+          "assets/images/revoke_account.svg",
         ),
 
-        customButtonUp:  EvieButton_ReversedColor(
+        customButtonUp: Padding(
+          padding: EdgeInsets.only(top: 4.h),
+          child: EvieButton(
+              width: double.infinity,
+              height: 48.h,
+              child: Text(
+                "Cancel",
+                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+              ),
+              onPressed: () {
+                SmartDialog.dismiss();
+              }),
+        ),
+        customButtonDown:EvieButton_ReversedColor(
           width: double.infinity,
           height: 48.h,
           child: Text(
-            "Stop Connecting",
+            "Stop Connect",
             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
           ),
           onPressed: () async {
@@ -2649,20 +2661,6 @@ showDontConnectBike (BuildContext context ,BikeProvider _bikeProvider,  Bluetoot
             SmartDialog.dismiss();
           },
         ),
-
-        customButtonDown: Padding(
-          padding: EdgeInsets.only(top: 4.h),
-          child: EvieButton(
-              width: double.infinity,
-              height: 48.h,
-              child: Text(
-                "Cancel",
-                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-              ),
-              onPressed: () {
-                SmartDialog.dismiss();
-              }),
-          ),
         ),
   );
 }

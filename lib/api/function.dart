@@ -78,14 +78,14 @@ calculateTimeAgo(DateTime dateTime){
 
     String timeAgo;
     if (diff.inMinutes > 0 && diff.inMinutes < 60){
-      timeAgo = "${diff.inMinutes} ${diff.inMinutes == 1 ? "min" : "min"} ago";
+      timeAgo = "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
     }else if(diff.inHours > 0 && diff.inHours < 24){
       timeAgo = "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
     }
 
     ///For current minute
     else if(dateTime.second > 0 && diff.inMinutes < 60){
-      timeAgo = "1 min ago";
+      timeAgo = "1 minute ago";
     }
 
     else{
@@ -954,6 +954,75 @@ pointBounce2(MapboxMap? mapboxMap, LocationProvider locationProvider, userPositi
   );
 
   mapboxMap.flyTo(cameraOpt, MapAnimationOptions(duration: 2000, startDelay: 0));
+
+}
+
+pointBounce3(MapboxMap? mapboxMap, LocationProvider locationProvider, userPosition) async {
+
+  final LatLng southwest = LatLng(
+    min(locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
+    min(locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
+  );
+
+  final LatLng northeast = LatLng(
+    max(locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
+    max(locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
+  );
+
+  if (mapboxMap != null) {
+    if (Platform.isIOS) {
+      final CameraOptions cameraOpt = await mapboxMap!
+          .cameraForCoordinateBounds(
+        CoordinateBounds(
+          northeast: Point(
+            coordinates: Position(northeast.longitude, northeast.latitude),
+          ).toJson(),
+          southwest: Point(
+              coordinates: Position(southwest.longitude, southwest.latitude)
+          ).toJson(),
+          infiniteBounds: true,
+        ),
+        MbxEdgeInsets(
+          // use whatever padding you need
+          left: 170.w,
+          top: 300.h,
+          bottom: 800.h,
+          right: 170.w,
+        ),
+        null,
+        null,
+      );
+
+      mapboxMap.flyTo(
+          cameraOpt, MapAnimationOptions(duration: 1000, startDelay: 0));
+    }
+    else {
+      final CameraOptions cameraOpt = await mapboxMap!
+          .cameraForCoordinateBounds(
+        CoordinateBounds(
+          northeast: Point(
+            coordinates: Position(northeast.longitude, northeast.latitude),
+          ).toJson(),
+          southwest: Point(
+              coordinates: Position(southwest.longitude, southwest.latitude)
+          ).toJson(),
+          infiniteBounds: true,
+        ),
+        MbxEdgeInsets(
+          // use whatever padding you need
+          left: 170.w,
+          top: 300.h,
+          bottom: 800.h,
+          right: 170.w,
+        ),
+        null,
+        null,
+      );
+
+      mapboxMap.flyTo(
+          cameraOpt, MapAnimationOptions(duration: 1000, startDelay: 0));
+    }
+  }
 
 }
 

@@ -1,14 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
-
 import 'package:evie_test/api/enumerate.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/home_element/battery.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/home_element/rides.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/home_element/setting.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:image/image.dart' as IMG;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
@@ -24,6 +18,7 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel2/sliding_up_panel2.dart';
 
 import '../../../../api/colours.dart';
 import '../../../../api/function.dart';
@@ -119,22 +114,24 @@ class _MapDetailsState extends State<MapDetails> {
         LocationComponentSettings(
             pulsingColor: 6967754,
             enabled: true,
-            pulsingEnabled: true,
-            puckBearingEnabled: true,
+            //pulsingEnabled: true,
+            //puckBearingEnabled: true,
             //accuracyRingColor: 6967754,
             //accuracyRingBorderColor: 6967754,
             puckBearingSource: PuckBearingSource.HEADING,
-            // locationPuck: LocationPuck(
-            //     locationPuck2D: LocationPuck2D(
-            //       topImage: list2,
-            //       bearingImage: list,
-            //       //shadowImage: list3,
-            //     )
-            // )
+            locationPuck: LocationPuck(
+                locationPuck2D: LocationPuck2D(
+                  topImage: list2,
+                  bearingImage: list,
+                  //shadowImage: list3,
+                )
+            )
         ));
+    await Future.delayed(Duration(seconds: 1));
+    await updateUserPositionAndBearing(true);
 
-    timer = Timer.periodic(const Duration(seconds: 1),
-            (Timer t) => updateUserPositionAndBearing());
+    timer = Timer.periodic(const Duration(seconds: 2),
+            (Timer t) => updateUserPositionAndBearing(false));
   }
 
   _onMapLoaded(MapLoadedEventData onMapLoaded) async {}
@@ -163,7 +160,7 @@ class _MapDetailsState extends State<MapDetails> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 17.w, top: 0.h, bottom: 0.h),
+                    padding: EdgeInsets.only(left: 17.w, top: 0.h, bottom: 6.h),
                     child: Text(
                       "Orbital Anti-Theft",
                       style: EvieTextStyles.h1,
@@ -171,22 +168,27 @@ class _MapDetailsState extends State<MapDetails> {
                   ),
 
                   Padding(
-                    padding: EdgeInsets.only( top: 12.h,),
+                    padding: EdgeInsets.all(0),
                     child: IconButton(
                       onPressed: () {
                         _settingProvider.changeSheetElement(SheetList.threatHistory);
                       },
                       icon: SvgPicture.asset(
                         "assets/buttons/list_purple.svg",
-
+                        width: 36.w,
+                        height: 36.w,
                       ),
                     ),
                   ),
                 ],
               ),
-              const Divider(
-                thickness: 0.5,
-                color: EvieColors.darkWhite,
+              Padding(
+                padding: EdgeInsets.all(0),
+                child: Divider(
+                  height: 1,
+                  thickness: 0.5,
+                  color: EvieColors.darkWhite,
+                ),
               ),
 
               Expanded(
@@ -222,7 +224,7 @@ class _MapDetailsState extends State<MapDetails> {
                         child: GestureDetector(
                           onTap: () async {
                             _locationProvider.hasLocationPermission == true ?
-                            pointBounce2(mapboxMap, _locationProvider, userPosition) :
+                            pointBounce3(mapboxMap, _locationProvider, userPosition) :
                             {
                               if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
                                 _locationProvider.checkLocationPermissionStatus()
@@ -322,9 +324,8 @@ class _MapDetailsState extends State<MapDetails> {
                       ),
                     ),
 
-
                     Padding(
-                      padding:  EdgeInsets.only(bottom:0.h),
+                      padding:  EdgeInsets.only(bottom:23.h),
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: Row(
@@ -411,13 +412,13 @@ class _MapDetailsState extends State<MapDetails> {
   }
 
   void locationListener() {
-    //setButtonImage();
-    //getDistanceBetween();
-    selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    animateBounce(mapboxMap, _locationProvider.locationModel?.geopoint.longitude ?? 0, _locationProvider.locationModel?.geopoint.latitude ?? 0);
-    loadMarker();
-    // loadImage(currentDangerStatus);
-    //pointBounce(mapboxMap, _locationProvider, userPosition);
+    if (selectedGeopoint != _locationProvider.locationModel?.geopoint) {
+      selectedGeopoint = _locationProvider.locationModel?.geopoint;
+      animateBounce(
+          mapboxMap, _locationProvider.locationModel?.geopoint.longitude ?? 0,
+          _locationProvider.locationModel?.geopoint.latitude ?? 0);
+      loadMarker();
+    }
   }
 
   loadMarker() async {
@@ -489,7 +490,7 @@ class _MapDetailsState extends State<MapDetails> {
     });
   }
 
-  Future<void> updateUserPositionAndBearing() async {
+  Future<void> updateUserPositionAndBearing(bool isFirstTime) async {
     Layer? layer;
     if (Platform.isAndroid) {
       layer =
@@ -500,5 +501,12 @@ class _MapDetailsState extends State<MapDetails> {
 
     var location = (layer as LocationIndicatorLayer)?.location;
     userPosition = Position(location![1]!, location[0]!);
+    num? latitude = userPosition[1];
+    num? longitude = userPosition[0];
+    _locationProvider.setUserPosition(GeoPoint(latitude!.toDouble(), longitude!.toDouble()));
+
+    if (isFirstTime) {
+      pointBounce3(mapboxMap, _locationProvider, userPosition);
+    }
   }
 }

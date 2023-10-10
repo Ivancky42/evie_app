@@ -6,7 +6,7 @@ import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/provider/trip_provider.dart';
-import 'package:evie_test/api/sheet_2.dart';
+
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';

@@ -25,6 +25,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel2/sliding_up_panel2.dart';
 import 'package:timelines/timelines.dart';
 
 import '../../../../api/colours.dart';
@@ -78,11 +79,21 @@ class _ThreatMapState extends State<ThreatMap> {
   var currentClickedAnnotation;
   Timer? timer;
 
+  final double _initFabHeight = 120.0;
+  double _fabHeight = 0;
+  double _panelHeightOpen = 244.h;
+  double _panelHeightClosed = 95.h;
+  late final ScrollController scrollController;
+  late final PanelController panelController;
+
 
   @override
   void initState() {
+    scrollController = ScrollController();
+    panelController = PanelController();
     super.initState();
     _bluetoothProvider = context.read<BluetoothProvider>();
+    _fabHeight = _initFabHeight;
     Future.delayed(Duration.zero).then((value) {
       _locationProvider = Provider.of<LocationProvider>(context, listen: false);
       _locationProvider.addListener(locationListener);
@@ -115,7 +126,7 @@ class _ThreatMapState extends State<ThreatMap> {
 
     // if(currentAnnotationManager != null){
     //   await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager as BaseAnnotationManager);
-    // currentAnnotationManager = null;
+    //   currentAnnotationManager = null;
     // }
 
 
@@ -146,22 +157,21 @@ class _ThreatMapState extends State<ThreatMap> {
         LocationComponentSettings(
           pulsingColor: 6967754,
           enabled: true,
-          pulsingEnabled: true,
-          puckBearingEnabled: true,
-          //accuracyRingColor: 6967754,
-          //accuracyRingBorderColor: 6967754,
           puckBearingSource: PuckBearingSource.HEADING,
-          // locationPuck: LocationPuck(
-          //     locationPuck2D: LocationPuck2D(
-          //       topImage: list2,
-          //       bearingImage: list,
-          //       //shadowImage: list3,
-          //     )
-          // )
+          locationPuck: LocationPuck(
+              locationPuck2D: LocationPuck2D(
+                topImage: list2,
+                bearingImage: list,
+                //shadowImage: list3,
+              )
+          )
         ));
 
-    // timer = Timer.periodic(const Duration(seconds: 1),
-    //         (Timer t) => updateUserPositionAndBearing());
+    await Future.delayed(const Duration(seconds: 1));
+    await updateUserPositionAndBearing(true);
+
+    timer = Timer.periodic(const Duration(seconds: 1),
+            (Timer t) async => await updateUserPositionAndBearing(false));
   }
 
   _onMapLoaded(MapLoadedEventData onMapLoaded) async {
@@ -174,10 +184,11 @@ class _ThreatMapState extends State<ThreatMap> {
 
   @override
   Widget build(BuildContext context) {
-
+    _panelHeightOpen = MediaQuery.of(context).size.height * .30;
     _bikeProvider = Provider.of<BikeProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+
 
     return Container(
       decoration: const BoxDecoration(
@@ -246,138 +257,220 @@ class _ThreatMapState extends State<ThreatMap> {
                       ].toSet(),
                     ),
 
-                    Padding(
-                      padding:  EdgeInsets.only(bottom:280.h),
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: GestureDetector(
-                          onTap: () async {
-                            List<map_launcher.AvailableMap> availableMaps =
-                            await map_launcher.MapLauncher.installedMaps;
-                            if (isMapListShowing) {
-                              setState(() {
-                                this.availableMaps = null;
-                                isMapListShowing = false;
-                              });
-                            } else {
-                              setState(() {
-                                this.availableMaps = availableMaps;
-                                isMapListShowing = true;
-                              });
-                            }
-                          },
-                          child: Container(
-                              height: 50.h,
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    availableMaps != null ? ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      shrinkWrap: true,
-                                      itemBuilder: (context, index) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            if(selectedGeopoint != null){
-                                              map_launcher.MapLauncher.showDirections(
-                                                  mapType: availableMaps![index].mapType,
-                                                  destination: map_launcher.Coords(
-                                                      selectedGeopoint!.latitude,
-                                                      selectedGeopoint!.longitude));
-                                            }else{
-                                              map_launcher.MapLauncher.showDirections(
-                                                  mapType: availableMaps![index].mapType,
-                                                  destination: map_launcher.Coords(
-                                                      _bikeProvider.currentBikeModel!.location!.geopoint.latitude,
-                                                      _bikeProvider.currentBikeModel!.location!.geopoint.longitude));
-                                            }
+                    // Padding(
+                    //   padding:  EdgeInsets.only(bottom:280.h),
+                    //   child: Align(
+                    //     alignment: Alignment.bottomRight,
+                    //     child: GestureDetector(
+                    //       onTap: () async {
+                    //         List<map_launcher.AvailableMap> availableMaps =
+                    //         await map_launcher.MapLauncher.installedMaps;
+                    //         if (isMapListShowing) {
+                    //           setState(() {
+                    //             this.availableMaps = null;
+                    //             isMapListShowing = false;
+                    //           });
+                    //         } else {
+                    //           setState(() {
+                    //             this.availableMaps = availableMaps;
+                    //             isMapListShowing = true;
+                    //           });
+                    //         }
+                    //       },
+                    //       child: Container(
+                    //           height: 50.h,
+                    //           child: Align(
+                    //             alignment: Alignment.bottomRight,
+                    //             child: Row(
+                    //               mainAxisSize: MainAxisSize.min,
+                    //               children: [
+                    //                 availableMaps != null ? ListView.builder(
+                    //                   scrollDirection: Axis.horizontal,
+                    //                   shrinkWrap: true,
+                    //                   itemBuilder: (context, index) {
+                    //                     return GestureDetector(
+                    //                       onTap: () {
+                    //                         if(selectedGeopoint != null){
+                    //                           map_launcher.MapLauncher.showDirections(
+                    //                               mapType: availableMaps![index].mapType,
+                    //                               destination: map_launcher.Coords(
+                    //                                   selectedGeopoint!.latitude,
+                    //                                   selectedGeopoint!.longitude));
+                    //                         }else{
+                    //                           map_launcher.MapLauncher.showDirections(
+                    //                               mapType: availableMaps![index].mapType,
+                    //                               destination: map_launcher.Coords(
+                    //                                   _bikeProvider.currentBikeModel!.location!.geopoint.latitude,
+                    //                                   _bikeProvider.currentBikeModel!.location!.geopoint.longitude));
+                    //                         }
+                    //
+                    //                       },
+                    //                       child: SvgPicture.asset(
+                    //                         availableMaps![index].icon,
+                    //                         width: 36.w,
+                    //                         height: 36.h,
+                    //                       ),
+                    //                     );
+                    //                   },
+                    //                   itemCount: availableMaps?.length,
+                    //                 )
+                    //                     : SizedBox(),
+                    //                 Padding(
+                    //                   padding: EdgeInsets.only(right: 8.h),
+                    //                   child: SvgPicture.asset(
+                    //                     "assets/buttons/direction.svg",
+                    //                     width: 50.w,
+                    //                     height: 50.h,
+                    //                   ),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           )),
+                    //     ),
+                    //   ),
+                    // ),
 
-                                          },
-                                          child: SvgPicture.asset(
-                                            availableMaps![index].icon,
-                                            width: 36.w,
-                                            height: 36.h,
-                                          ),
-                                        );
-                                      },
-                                      itemCount: availableMaps?.length,
-                                    )
-                                        : SizedBox(),
-                                    Padding(
-                                      padding: EdgeInsets.only(right: 8.h),
-                                      child: SvgPicture.asset(
-                                        "assets/buttons/direction.svg",
-                                        width: 50.w,
-                                        height: 50.h,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )),
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding:  EdgeInsets.only(bottom:230.h),
+                    //   child: Align(
+                    //     alignment: Alignment.bottomRight,
+                    //     child: GestureDetector(
+                    //       onTap: () async {
+                    //         //pointBounce2(mapboxMap, _locationProvider, userPosition);
+                    //         mapboxMap?.flyTo(
+                    //             CameraOptions(
+                    //                 center: Point(
+                    //                     coordinates: Position(userPosition.lng, userPosition.lat)).toJson(),
+                    //                 zoom: 16
+                    //               ),
+                    //             MapAnimationOptions(duration: 2000, startDelay: 0));
+                    //       },
+                    //       child: Container(
+                    //           height: 50.h,
+                    //           child: Align(
+                    //             alignment: Alignment.bottomRight,
+                    //             child: Padding(
+                    //               padding: EdgeInsets.only(right: 8.h),
+                    //               child: SvgPicture.asset(
+                    //                 "assets/buttons/location.svg",
+                    //                 width: 50.w,
+                    //                 height: 50.h,
+                    //               ),
+                    //             ),
+                    //           )),
+                    //     ),
+                    //   ),
+                    // ),
 
-                    Padding(
-                      padding:  EdgeInsets.only(bottom:230.h),
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: GestureDetector(
-                          onTap: () async {
-                            //pointBounce2(mapboxMap, _locationProvider, userPosition);
-                            mapboxMap?.flyTo(
-                                CameraOptions(
-                                    center: Point(
-                                        coordinates: Position(userPosition.lng, userPosition.lat)).toJson(),
-                                    zoom: 16
-                                  ),
-                                MapAnimationOptions(duration: 2000, startDelay: 0));
-                          },
-                          child: Container(
-                              height: 50.h,
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: Padding(
-                                  padding: EdgeInsets.only(right: 8.h),
-                                  child: SvgPicture.asset(
-                                    "assets/buttons/location.svg",
-                                    width: 50.w,
-                                    height: 50.h,
-                                  ),
-                                ),
-                              )),
-                        ),
-                      ),
-                    ),
-
-                    Padding(
-                      padding:  EdgeInsets.only(bottom:0.h),
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
+                    SlidingUpPanel(
+                      panelSnapping: false,
+                      snapPoint: .9,
+                      disableDraggableOnScrolling: false,
+                      color: EvieColors.grayishWhite2,
+                      header: SizedBox(
+                        width: MediaQuery.of(context).size.width,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Expanded(
-                              child: AspectRatio(
-                                aspectRatio: 1,
-                                child: Padding(
-                                  padding: EdgeInsets.fromLTRB(16, 2, 6, 8),
-                                  child: Location(),
-                                ),
-                              ),
-                            ),
-
-                            Expanded(
-                              child: AspectRatio(
-                                aspectRatio: 1,
-                                child: Padding(
-                                  padding: EdgeInsets.fromLTRB(6, 2, 16, 8),
-                                  child: ThreatUnlockingSystem(page: 'map'),
+                            ForceDraggableWidget(
+                              child: Container(
+                                width: 100,
+                                height: 40,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                      height: 12.0,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Container(
+                                          width: 40.w,
+                                          height: 4.h,
+                                          decoration: BoxDecoration(
+                                              color: EvieColors.lightGrayishCyan,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(12.0))),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ],
+                        ),
+                      ),
+                      maxHeight: _panelHeightOpen,
+                      minHeight: _panelHeightClosed,
+                      parallaxEnabled: true,
+                      parallaxOffset: .5,
+                      body: Container(),
+                      controller: panelController,
+                      scrollController: scrollController,
+                      panelBuilder: () => Padding(
+                        padding:  EdgeInsets.only(bottom:23.h),
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: AspectRatio(
+                                  aspectRatio: 1,
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(16, 2, 6, 8),
+                                    child: Location(),
+                                  ),
+                                ),
+                              ),
+
+                              Expanded(
+                                child: AspectRatio(
+                                  aspectRatio: 1,
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(6, 2, 16, 8),
+                                    child: ThreatUnlockingSystem(page: 'map'),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(18.0),
+                          topRight: Radius.circular(18.0)),
+                      onPanelSlide: (double pos) => setState(() {
+                        _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) +
+                            _initFabHeight;
+                      }),
+                    ),
+
+                    Positioned(
+                      right: 10.w,
+                      bottom: _fabHeight - 15.h,
+                      child: GestureDetector(
+                        onTap: () async {
+                          //pointBounce2(mapboxMap, _locationProvider, userPosition);
+                          // mapboxMap?.flyTo(
+                          //     CameraOptions(
+                          //         center: Point(
+                          //             coordinates: Position(userPosition.lng, userPosition.lat)).toJson(),
+                          //         zoom: 16
+                          //     ),
+                          //     MapAnimationOptions(duration: 2000, startDelay: 0));
+
+                          pointBounce3(mapboxMap, _locationProvider, userPosition);
+                        },
+                        child: Container(
+                            height: 50.h,
+                            child: SvgPicture.asset(
+                              "assets/buttons/location.svg",
+                              width: 50.h,
+                              height: 50.h,
+                            ),
                         ),
                       ),
                     ),
@@ -391,8 +484,14 @@ class _ThreatMapState extends State<ThreatMap> {
   }
 
   void locationListener() {
-    selectedGeopoint  = _locationProvider.locationModel?.geopoint;
-    loadMarker();
+    if (selectedGeopoint != _locationProvider.locationModel?.geopoint) {
+      selectedGeopoint = _locationProvider.locationModel?.geopoint;
+      // animateBounce(
+      //     mapboxMap, _locationProvider.locationModel?.geopoint.longitude ?? 0,
+      //     _locationProvider.locationModel?.geopoint.latitude ?? 0);
+      pointBounce3(mapboxMap, _locationProvider, userPosition);
+      loadMarker();
+    }
   }
 
   loadMarker() async {
@@ -403,10 +502,10 @@ class _ThreatMapState extends State<ThreatMap> {
 
 
     ///Check if have this manager
-    // if(currentAnnotationManager != null){
-    //   await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager as BaseAnnotationManager);
-    //   currentAnnotationManager = null;
-    // }
+    if(currentAnnotationManager != null){
+      await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager as BaseAnnotationManager);
+      currentAnnotationManager = null;
+    }
 
     await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
       ///Using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
@@ -416,8 +515,12 @@ class _ThreatMapState extends State<ThreatMap> {
 
       ///Load and add 7 image
       for (int i = 1; i <= 7; i++) {
-        var bytes = await rootBundle.load("assets/icons/danger_pin/danger_pin_${i.toString()}.png");
-        pins.add(bytes.buffer.asUint8List());
+        // var bytes = await rootBundle.load("assets/icons/danger_pin/danger_pin_${i.toString()}.png");
+        // pins.add(bytes.buffer.asUint8List());
+
+        final ByteData bytes = await rootBundle.load("assets/icons/danger_pin/danger_pin_${i.toString()}.png");
+        final Uint8List list = bytes.buffer.asUint8List();
+        pins.add(list);
       }
 
       if(pointAnnotation != null){
@@ -427,8 +530,6 @@ class _ThreatMapState extends State<ThreatMap> {
 
       ///threatRoutesLists.length is always 7 or less
       for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
-
-        // GeoPoint routeGeopoint = _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint;
         // createOneAnnotation(
         //     pins[i],
         //     _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint.longitude ?? 0,
@@ -448,18 +549,29 @@ class _ThreatMapState extends State<ThreatMap> {
                         .latitude ?? 0,
                   )).toJson(),
               image: pins[i],
-              iconSize: i == 0 ? 35.mp : 2,
+              iconSize: i == 0 ? 20.mp : 0.7,
             ),);
-
+        //
         currentAnnotationManager?.setIconAllowOverlap(false);
         currentAnnotationManager?.createMulti(options);
-        OnPointAnnotationClickListener listener = MyPointAnnotationClickListener(_locationProvider);
-        pointAnnotationManager.addOnPointAnnotationClickListener(listener);
+        // OnPointAnnotationClickListener listener = MyPointAnnotationClickListener(_locationProvider);
+        // pointAnnotationManager.addOnPointAnnotationClickListener(listener);
       }
     });
   }
 
-  Future<void> updateUserPositionAndBearing() async {
+  void createOneAnnotation(Uint8List list, latitude, longitude) {
+    currentAnnotationManager?.create(
+        PointAnnotationOptions(
+            geometry: Point(
+                coordinates: Position(
+                  latitude, longitude,
+                )).toJson(),
+            iconSize: Platform.isIOS ? 0.5 : 0.5, image: list))
+        .then((value) {pointAnnotation?.add(value);});
+  }
+
+  Future<void> updateUserPositionAndBearing(bool isFirstTime) async {
     Layer? layer;
     if (Platform.isAndroid) {
       layer =
@@ -470,17 +582,12 @@ class _ThreatMapState extends State<ThreatMap> {
 
     var location = (layer as LocationIndicatorLayer)?.location;
     userPosition = Position(location![1]!, location[0]!);
-  }
-
-  void createOneAnnotation(Uint8List list, latitude, longitude) {
-    currentAnnotationManager?.create(
-        PointAnnotationOptions(
-        geometry: Point(
-            coordinates: Position(
-              latitude, longitude,
-            )).toJson(),
-        iconSize: Platform.isIOS ? 2.5.h : 3.0.h, image: list))
-        .then((value) {pointAnnotation?.add(value);});
+    num? latitude = userPosition[1];
+    num? longitude = userPosition[0];
+    _locationProvider.setUserPosition(GeoPoint(latitude!.toDouble(), longitude!.toDouble()));
+    if (isFirstTime) {
+      pointBounce3(mapboxMap, _locationProvider, userPosition);
+    }
   }
 }
 

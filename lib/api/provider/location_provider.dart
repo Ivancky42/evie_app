@@ -5,11 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:get/utils.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../dialog.dart';
@@ -28,11 +26,13 @@ class LocationProvider extends ChangeNotifier {
   LinkedHashMap? get getThreatRoutesLists => threatRoutesLists;
 
   LocationModel? locationModel;
-  //UserLocation? userPosition;
+  GeoPoint? userPosition;
   Placemark? currentPlaceMark;
   String? currentPlaceMarkString;
   PointAnnotation? selectedPointAnnotation;
   GeoPoint? selectedAnnotationGeopoint;
+  GeoPoint? checkingGeopoint;
+  String? checkPlaceMarkRenamed = "Loading";
 
   bool hasLocationPermission = false;
 
@@ -257,6 +257,78 @@ class LocationProvider extends ChangeNotifier {
     }
 
     return placeMarkRenamed;
+  }
+
+  Future<String?> returnPlaceMarksString2(GeoPoint selectedGeopoint) async {
+
+    if (selectedGeopoint != checkingGeopoint) {
+      checkingGeopoint = selectedGeopoint;
+      Placemark? placeMark;
+      String? placeMarkRenamed;
+      try {
+        List<Placemark> placeMarks = await placemarkFromCoordinates(
+            checkingGeopoint!.latitude, checkingGeopoint!.longitude, localeIdentifier: "en");
+
+        if (placeMarks.isNotEmpty) {
+          if (Platform.isAndroid) {
+            placeMark = placeMarks[0];
+            placeMarkRenamed = (placeMark.name!
+                .replaceAll("NO HOUSE NUMBER, ", "").toString() == ""
+                ? placeMark.name.toString()
+                : placeMark.name.toString() + ', ') +
+                placeMark.thoroughfare.toString();
+            checkPlaceMarkRenamed = placeMarkRenamed;
+          }
+          else {
+            for (var element in placeMarks) {
+              placeMark = element;
+              break; // Exit the loop once a address is found
+            }
+
+            placeMarkRenamed =
+                placeMark?.name!.replaceAll("NO HOUSE NUMBER, ", "");
+            checkPlaceMarkRenamed = placeMarkRenamed;
+          }
+        }
+        else {
+          placeMarkRenamed = null;
+        }
+
+        notifyListeners();
+      }
+      catch (error) {
+        debugPrint(error.toString());
+        placeMark = null;
+      }
+
+      return placeMarkRenamed;
+    }
+    else {
+      return checkPlaceMarkRenamed;
+    }
+  }
+
+  void setUserPosition(GeoPoint userPosition) {
+      this.userPosition = userPosition;
+      notifyListeners();
+  }
+
+  // Calculate the distance between locationModel?.geopoint and userPosition
+  double calculateDistance() {
+    if (locationModel == null || userPosition == null) {
+      // Handle null values, if necessary
+      return 0;
+    }
+
+    double distanceInMeters = Geolocator.distanceBetween(
+      locationModel!.geopoint.latitude,
+      locationModel!.geopoint.longitude,
+      userPosition!.latitude,
+      userPosition!.longitude,
+    );
+
+    // You now have the distance in meters. You can convert it to other units if needed.
+    return distanceInMeters/1000;
   }
 
   void setDefaultSelectedGeopoint() {
