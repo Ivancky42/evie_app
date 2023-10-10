@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:io';
 import 'dart:math';
 
@@ -30,6 +31,7 @@ import 'package:timelines/timelines.dart';
 
 import '../../../../api/colours.dart';
 import '../../../../api/function.dart';
+import '../../../../api/model/threat_routes_model.dart';
 import '../../../../api/navigator.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/provider/bluetooth_provider.dart';
@@ -86,6 +88,8 @@ class _ThreatMapState extends State<ThreatMap> {
   late final ScrollController scrollController;
   late final PanelController panelController;
 
+  LinkedHashMap currentThreatRoutesLists = LinkedHashMap<String, ThreatRoutesModel>();
+
 
   @override
   void initState() {
@@ -137,7 +141,7 @@ class _ThreatMapState extends State<ThreatMap> {
 
     ///Disable scaleBar on top left corner
     await this.mapboxMap?.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
-    loadMarker();
+    loadMarker2();
 
     ///User location
     final ByteData bytes = await rootBundle.load("assets/icons/security/user_location_icon.png");
@@ -157,7 +161,7 @@ class _ThreatMapState extends State<ThreatMap> {
         LocationComponentSettings(
           pulsingColor: 6967754,
           enabled: true,
-          puckBearingSource: PuckBearingSource.HEADING,
+          puckBearingSource: PuckBearingSource.COURSE,
           locationPuck: LocationPuck(
               locationPuck2D: LocationPuck2D(
                 topImage: list2,
@@ -486,11 +490,15 @@ class _ThreatMapState extends State<ThreatMap> {
   void locationListener() {
     if (selectedGeopoint != _locationProvider.locationModel?.geopoint) {
       selectedGeopoint = _locationProvider.locationModel?.geopoint;
-      // animateBounce(
-      //     mapboxMap, _locationProvider.locationModel?.geopoint.longitude ?? 0,
-      //     _locationProvider.locationModel?.geopoint.latitude ?? 0);
       pointBounce3(mapboxMap, _locationProvider, userPosition);
-      loadMarker();
+      loadMarker2();
+    }
+    else if (_bikeProvider.isUpdateThreat) {
+      Future.delayed(Duration.zero).then((value) {
+        _bikeProvider.setIsUpdateThreat();
+      });
+      pointBounce3(mapboxMap, _locationProvider, userPosition);
+      loadMarker2();
     }
   }
 
@@ -523,10 +531,10 @@ class _ThreatMapState extends State<ThreatMap> {
         pins.add(list);
       }
 
-      if(pointAnnotation != null){
-        pointAnnotation?.forEach((element) {currentAnnotationManager?.delete(element);});
-        pointAnnotation?.clear();
-      }
+      // if(pointAnnotation != null){
+      //   pointAnnotation?.forEach((element) {currentAnnotationManager?.delete(element);});
+      //   pointAnnotation?.clear();
+      // }
 
       ///threatRoutesLists.length is always 7 or less
       for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
@@ -556,6 +564,75 @@ class _ThreatMapState extends State<ThreatMap> {
         currentAnnotationManager?.createMulti(options);
         // OnPointAnnotationClickListener listener = MyPointAnnotationClickListener(_locationProvider);
         // pointAnnotationManager.addOnPointAnnotationClickListener(listener);
+      }
+    });
+  }
+
+  loadMarker2() async {
+    List<Uint8List> pins = [];
+
+    ///Clear Marker
+    options.clear();
+
+    ///Check if have this manager
+    if(currentAnnotationManager != null){
+      await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager as BaseAnnotationManager);
+      currentAnnotationManager = null;
+    }
+
+    await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
+      ///Using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
+
+      ///Create new annotation manager
+      currentAnnotationManager = pointAnnotationManager;
+
+      final ByteData bytes = await rootBundle.load("assets/icons/security/danger_4x.png");
+      final Uint8List dangerMain = bytes.buffer.asUint8List();
+
+      options.add(PointAnnotationOptions(
+        geometry: Point(
+            coordinates: Position(
+                _locationProvider.locationModel?.geopoint.longitude ?? 0,
+                _locationProvider.locationModel?.geopoint.latitude ?? 0))
+            .toJson(),
+        image: dangerMain,
+        iconSize: 34.mp,
+      ));
+
+      ///Load and add 7 image
+      for (int i = 1; i <= 7; i++) {
+        if (i != 1) {
+          final ByteData bytes = await rootBundle.load(
+              "assets/icons/danger_pin/danger_pin_${i.toString()}.png");
+          final Uint8List list = bytes.buffer.asUint8List();
+          pins.add(list);
+        }
+      }
+
+      ///threatRoutesLists.length is always 7 or less
+      for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
+        if (i != 0) {
+          options.add(
+            PointAnnotationOptions(
+              geometry: Point(
+                  coordinates: Position(
+                    _bikeProvider.threatRoutesLists.values
+                        .elementAt(i)
+                        .geopoint
+                        .longitude ?? 0,
+
+                    _bikeProvider.threatRoutesLists.values
+                        .elementAt(i)
+                        .geopoint
+                        .latitude ?? 0,
+                  )).toJson(),
+              image: pins[i - 1],
+              iconSize: 0.8,
+            ),);
+
+          currentAnnotationManager?.setIconAllowOverlap(false);
+          currentAnnotationManager?.createMulti(options);
+        }
       }
     });
   }

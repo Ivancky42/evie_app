@@ -99,6 +99,7 @@ class BikeProvider extends ChangeNotifier {
   List<String> threatFilterArray = ["warning", "danger","fall","crash"];
   DateTime? threatFilterDate1;
   DateTime? threatFilterDate2;
+  bool isUpdateThreat = false;
 
   StreamSubscription? bikeListSubscription;
   StreamSubscription? currentBikeSubscription;
@@ -395,8 +396,8 @@ class BikeProvider extends ChangeNotifier {
                 for (var entry in entries) {
                   threatRoutesLists[entry.key] = entry.value;
                 }
+                isUpdateThreat = true;
                 notifyListeners();
-
 
               }else{
                 threatRoutesLists.clear();
@@ -408,6 +409,11 @@ class BikeProvider extends ChangeNotifier {
         currentThreatRoutesSubscription?.cancel();
       }
     }
+  }
+
+  setIsUpdateThreat() {
+    isUpdateThreat = false;
+    notifyListeners();
   }
 
   Stream<SwitchBikeResult> switchBike() {

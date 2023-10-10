@@ -72,6 +72,9 @@ class _MapDetailsState extends State<MapDetails> {
 
   List<map_launcher.AvailableMap>? availableMaps;
   GeoPoint? selectedGeopoint;
+  bool? isConnected;
+  String? locationStatus;
+  bool? isLocked;
 
   @override
   void initState() {
@@ -414,9 +417,21 @@ class _MapDetailsState extends State<MapDetails> {
   void locationListener() {
     if (selectedGeopoint != _locationProvider.locationModel?.geopoint) {
       selectedGeopoint = _locationProvider.locationModel?.geopoint;
-      animateBounce(
-          mapboxMap, _locationProvider.locationModel?.geopoint.longitude ?? 0,
-          _locationProvider.locationModel?.geopoint.latitude ?? 0);
+      pointBounce3(mapboxMap, _locationProvider, userPosition);
+      loadMarker();
+    }
+
+    if (isConnected != _locationProvider.locationModel?.isConnected || locationStatus != _locationProvider.locationModel?.status) {
+      selectedGeopoint = _locationProvider.locationModel?.geopoint;
+      locationStatus = _locationProvider.locationModel?.status;
+      isConnected = _locationProvider.locationModel?.isConnected;
+      pointBounce3(mapboxMap, _locationProvider, userPosition);
+      loadMarker();
+    }
+
+    if (isLocked != _bikeProvider.currentBikeModel?.isLocked) {
+      isLocked = _bikeProvider.currentBikeModel?.isLocked;
+      pointBounce3(mapboxMap, _locationProvider, userPosition);
       loadMarker();
     }
   }
@@ -455,25 +470,27 @@ class _MapDetailsState extends State<MapDetails> {
         ///Add danger threat
       }else if (_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger") {
 
-        final ByteData bytes = await rootBundle.load("assets/icons/security/danger_4x.png");
-        final Uint8List list = bytes.buffer.asUint8List();
-
-        ///load a few more marker
-        for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
-          options.add(PointAnnotationOptions(
-            geometry: Point(
-                coordinates: Position(
-                  _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint.longitude ?? 0,
-                  _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint.latitude ?? 0,
-                )).toJson(),
-            image: list,
-            iconSize: 35.mp,
-          ));
-        }
+        // final ByteData bytes = await rootBundle.load("assets/icons/security/danger_4x.png");
+        // final Uint8List list = bytes.buffer.asUint8List();
+        //
+        // ///load a few more marker
+        // for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
+        //   options.add(PointAnnotationOptions(
+        //     geometry: Point(
+        //         coordinates: Position(
+        //           _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint.longitude ?? 0,
+        //           _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint.latitude ?? 0,
+        //         )).toJson(),
+        //     image: list,
+        //     iconSize: 35.mp,
+        //   ));
+        // }
+        Navigator.pop(context);
       } else {
         final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? "safe", _bikeProvider.currentBikeModel?.isLocked ?? false));
         final Uint8List list = bytes.buffer.asUint8List();
 
+        print('POKEMON: ' + 35.mp.toString());
         options.add(PointAnnotationOptions(
           geometry: Point(
               coordinates: Position(

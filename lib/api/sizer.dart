@@ -24,7 +24,13 @@ extension Sizer on num {
   //double get sp => this * SizerUtil.height / 900.6;
   double get sp => this * SizerUtil.height / 855.8;
 
-  double get mp => Platform.isAndroid ? this * SizerUtil.height / 32400 : this * SizerUtil.height / 47000;
+  ///double get mp => Platform.isAndroid ? this * SizerUtil.height / 32400 : (this / 90)  * SizerUtil.height / SizerUtil.width;
+
+  //double get mp => (this / 110)  * SizerUtil.height / SizerUtil.width;
+  double get mp => this * 7.66 /((300 / 928.4 * SizerUtil.height) + 100);
+
+  double get width => this * SizerUtil.width;
+  double get height => this * SizerUtil.height;
 }
 
 getScreenHeight(){

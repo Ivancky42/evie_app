@@ -574,7 +574,7 @@ getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bike
                 case 'warning':
                   return "Movement Detected";
                 case 'danger':
-                  return "Under Threat";
+                  return "Theft Attempt";
                 case 'fall':
                   return "Fall Detected";
                 case 'crash':
@@ -622,7 +622,7 @@ getCurrentBikeStatusString2(BikeProvider bikeProvider, BluetoothProvider bluetoo
       case 'warning':
         return "Movement Detected";
       case 'danger':
-        return "Under Threat";
+        return "Theft Attempt";
       case 'fall':
         return "Fall Detected";
       case 'crash':
@@ -660,7 +660,7 @@ getCurrentBikeStatusString3(BikeProvider bikeProvider, BluetoothProvider bluetoo
         case 'warning':
           return "Movement Detected";
         case 'danger':
-          return "Under Threat";
+          return "Theft Attempt";
         case 'fall':
           return "Fall Detected";
         case 'crash':
@@ -682,7 +682,7 @@ getCurrentBikeStatusString3(BikeProvider bikeProvider, BluetoothProvider bluetoo
         case 'warning':
           return "Movement Detected";
         case 'danger':
-          return "Under Threat";
+          return "Theft Attempt";
         case 'fall':
           return "Fall Detected";
         case 'crash':
@@ -869,7 +869,7 @@ getSecurityTextWidget(String eventType) {
     case "warning":
       return "Movement Detected";
     case "danger":
-      return "Under threat";
+      return "Theft Attempt";
     case "lock":
       return "Lock bike";
     case "unlock":

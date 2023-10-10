@@ -589,7 +589,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
       }
       else if (_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger") {
 
-        final ByteData bytes = await rootBundle.load("assets/icons/security/danger_4x.png");
+        final ByteData bytes = await rootBundle.load("assets/icons/security/danger_2x.png");
         final Uint8List list = bytes.buffer.asUint8List();
 
         options.add(
@@ -599,7 +599,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                         _locationProvider.locationModel?.geopoint.longitude ?? 0,
                         _locationProvider.locationModel?.geopoint.latitude ?? 0
                     )).toJson(),
-                iconSize: 27.mp,
+                //iconSize: 170.w * 0.003,
+                //iconSize: 27.mp,
                 image: list));
 
       }
@@ -607,7 +608,6 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
         final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? "safe", _bikeProvider.currentBikeModel?.isLocked ?? false));
         final Uint8List list = bytes.buffer.asUint8List();
 
-        print('iconSize: ' + 27.mp.toString());
         options.add(
             PointAnnotationOptions(
                 geometry: Point(
