@@ -81,7 +81,7 @@ class _ThreatMapState extends State<ThreatMap> {
   var currentClickedAnnotation;
   Timer? timer;
 
-  final double _initFabHeight = 120.0;
+  final double _initFabHeight = 300;
   double _fabHeight = 0;
   double _panelHeightOpen = 244.h;
   double _panelHeightClosed = 95.h;
@@ -230,7 +230,8 @@ class _ThreatMapState extends State<ThreatMap> {
                       },
                       child: SvgPicture.asset(
                         "assets/buttons/list.svg",
-                      )),
+                      ),
+                  ),
                 ],
               ),
             ),
@@ -261,112 +262,8 @@ class _ThreatMapState extends State<ThreatMap> {
                       ].toSet(),
                     ),
 
-                    // Padding(
-                    //   padding:  EdgeInsets.only(bottom:280.h),
-                    //   child: Align(
-                    //     alignment: Alignment.bottomRight,
-                    //     child: GestureDetector(
-                    //       onTap: () async {
-                    //         List<map_launcher.AvailableMap> availableMaps =
-                    //         await map_launcher.MapLauncher.installedMaps;
-                    //         if (isMapListShowing) {
-                    //           setState(() {
-                    //             this.availableMaps = null;
-                    //             isMapListShowing = false;
-                    //           });
-                    //         } else {
-                    //           setState(() {
-                    //             this.availableMaps = availableMaps;
-                    //             isMapListShowing = true;
-                    //           });
-                    //         }
-                    //       },
-                    //       child: Container(
-                    //           height: 50.h,
-                    //           child: Align(
-                    //             alignment: Alignment.bottomRight,
-                    //             child: Row(
-                    //               mainAxisSize: MainAxisSize.min,
-                    //               children: [
-                    //                 availableMaps != null ? ListView.builder(
-                    //                   scrollDirection: Axis.horizontal,
-                    //                   shrinkWrap: true,
-                    //                   itemBuilder: (context, index) {
-                    //                     return GestureDetector(
-                    //                       onTap: () {
-                    //                         if(selectedGeopoint != null){
-                    //                           map_launcher.MapLauncher.showDirections(
-                    //                               mapType: availableMaps![index].mapType,
-                    //                               destination: map_launcher.Coords(
-                    //                                   selectedGeopoint!.latitude,
-                    //                                   selectedGeopoint!.longitude));
-                    //                         }else{
-                    //                           map_launcher.MapLauncher.showDirections(
-                    //                               mapType: availableMaps![index].mapType,
-                    //                               destination: map_launcher.Coords(
-                    //                                   _bikeProvider.currentBikeModel!.location!.geopoint.latitude,
-                    //                                   _bikeProvider.currentBikeModel!.location!.geopoint.longitude));
-                    //                         }
-                    //
-                    //                       },
-                    //                       child: SvgPicture.asset(
-                    //                         availableMaps![index].icon,
-                    //                         width: 36.w,
-                    //                         height: 36.h,
-                    //                       ),
-                    //                     );
-                    //                   },
-                    //                   itemCount: availableMaps?.length,
-                    //                 )
-                    //                     : SizedBox(),
-                    //                 Padding(
-                    //                   padding: EdgeInsets.only(right: 8.h),
-                    //                   child: SvgPicture.asset(
-                    //                     "assets/buttons/direction.svg",
-                    //                     width: 50.w,
-                    //                     height: 50.h,
-                    //                   ),
-                    //                 ),
-                    //               ],
-                    //             ),
-                    //           )),
-                    //     ),
-                    //   ),
-                    // ),
-
-                    // Padding(
-                    //   padding:  EdgeInsets.only(bottom:230.h),
-                    //   child: Align(
-                    //     alignment: Alignment.bottomRight,
-                    //     child: GestureDetector(
-                    //       onTap: () async {
-                    //         //pointBounce2(mapboxMap, _locationProvider, userPosition);
-                    //         mapboxMap?.flyTo(
-                    //             CameraOptions(
-                    //                 center: Point(
-                    //                     coordinates: Position(userPosition.lng, userPosition.lat)).toJson(),
-                    //                 zoom: 16
-                    //               ),
-                    //             MapAnimationOptions(duration: 2000, startDelay: 0));
-                    //       },
-                    //       child: Container(
-                    //           height: 50.h,
-                    //           child: Align(
-                    //             alignment: Alignment.bottomRight,
-                    //             child: Padding(
-                    //               padding: EdgeInsets.only(right: 8.h),
-                    //               child: SvgPicture.asset(
-                    //                 "assets/buttons/location.svg",
-                    //                 width: 50.w,
-                    //                 height: 50.h,
-                    //               ),
-                    //             ),
-                    //           )),
-                    //     ),
-                    //   ),
-                    // ),
-
                     SlidingUpPanel(
+                      defaultPanelState: PanelState.OPEN,
                       panelSnapping: false,
                       snapPoint: .9,
                       disableDraggableOnScrolling: false,
@@ -448,7 +345,7 @@ class _ThreatMapState extends State<ThreatMap> {
                           topRight: Radius.circular(18.0)),
                       onPanelSlide: (double pos) => setState(() {
                         _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) +
-                            _initFabHeight;
+                            120;
                       }),
                     ),
 
@@ -457,15 +354,6 @@ class _ThreatMapState extends State<ThreatMap> {
                       bottom: _fabHeight - 15.h,
                       child: GestureDetector(
                         onTap: () async {
-                          //pointBounce2(mapboxMap, _locationProvider, userPosition);
-                          // mapboxMap?.flyTo(
-                          //     CameraOptions(
-                          //         center: Point(
-                          //             coordinates: Position(userPosition.lng, userPosition.lat)).toJson(),
-                          //         zoom: 16
-                          //     ),
-                          //     MapAnimationOptions(duration: 2000, startDelay: 0));
-
                           pointBounce3(mapboxMap, _locationProvider, userPosition);
                         },
                         child: Container(
@@ -502,72 +390,6 @@ class _ThreatMapState extends State<ThreatMap> {
     }
   }
 
-  loadMarker() async {
-    List<Uint8List> pins = [];
-
-    ///Clear Marker
-    options.clear();
-
-
-    ///Check if have this manager
-    if(currentAnnotationManager != null){
-      await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager as BaseAnnotationManager);
-      currentAnnotationManager = null;
-    }
-
-    await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {
-      ///Using a "addOnPointAnnotationClickListener" to allow click on the symbols for a specific screen
-
-      ///Create new annotation manager
-      currentAnnotationManager = pointAnnotationManager;
-
-      ///Load and add 7 image
-      for (int i = 1; i <= 7; i++) {
-        // var bytes = await rootBundle.load("assets/icons/danger_pin/danger_pin_${i.toString()}.png");
-        // pins.add(bytes.buffer.asUint8List());
-
-        final ByteData bytes = await rootBundle.load("assets/icons/danger_pin/danger_pin_${i.toString()}.png");
-        final Uint8List list = bytes.buffer.asUint8List();
-        pins.add(list);
-      }
-
-      // if(pointAnnotation != null){
-      //   pointAnnotation?.forEach((element) {currentAnnotationManager?.delete(element);});
-      //   pointAnnotation?.clear();
-      // }
-
-      ///threatRoutesLists.length is always 7 or less
-      for (int i = 0; i < _bikeProvider.threatRoutesLists.length; i++) {
-        // createOneAnnotation(
-        //     pins[i],
-        //     _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint.longitude ?? 0,
-        //     _bikeProvider.threatRoutesLists.values.elementAt(i).geopoint.latitude ?? 0);
-          options.add(
-            PointAnnotationOptions(
-              geometry: Point(
-                  coordinates: Position(
-                    _bikeProvider.threatRoutesLists.values
-                        .elementAt(i)
-                        .geopoint
-                        .longitude ?? 0,
-
-                    _bikeProvider.threatRoutesLists.values
-                        .elementAt(i)
-                        .geopoint
-                        .latitude ?? 0,
-                  )).toJson(),
-              image: pins[i],
-              iconSize: i == 0 ? 20.mp : 0.7,
-            ),);
-        //
-        currentAnnotationManager?.setIconAllowOverlap(false);
-        currentAnnotationManager?.createMulti(options);
-        // OnPointAnnotationClickListener listener = MyPointAnnotationClickListener(_locationProvider);
-        // pointAnnotationManager.addOnPointAnnotationClickListener(listener);
-      }
-    });
-  }
-
   loadMarker2() async {
     List<Uint8List> pins = [];
 
@@ -585,6 +407,10 @@ class _ThreatMapState extends State<ThreatMap> {
 
       ///Create new annotation manager
       currentAnnotationManager = pointAnnotationManager;
+      if(pointAnnotation != null){
+        pointAnnotation?.forEach((element) {currentAnnotationManager?.delete(element);});
+        pointAnnotation?.clear();
+      }
 
       final ByteData bytes = await rootBundle.load("assets/icons/security/danger_4x.png");
       final Uint8List dangerMain = bytes.buffer.asUint8List();
@@ -596,7 +422,7 @@ class _ThreatMapState extends State<ThreatMap> {
                 _locationProvider.locationModel?.geopoint.latitude ?? 0))
             .toJson(),
         image: dangerMain,
-        iconSize: 34.mp,
+        iconSize: Platform.isAndroid ? 38.mp : 16.mp,
       ));
 
       ///Load and add 7 image
@@ -627,13 +453,15 @@ class _ThreatMapState extends State<ThreatMap> {
                         .latitude ?? 0,
                   )).toJson(),
               image: pins[i - 1],
-              iconSize: 0.8,
+              iconSize: Platform.isAndroid ? 0.8 : 0.4,
             ),);
 
           currentAnnotationManager?.setIconAllowOverlap(false);
           currentAnnotationManager?.createMulti(options);
         }
       }
+
+      currentAnnotationManager?.addOnPointAnnotationClickListener(MyPointAnnotationClickListener(_locationProvider));
     });
   }
 

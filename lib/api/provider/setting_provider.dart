@@ -11,7 +11,7 @@ class SettingProvider with ChangeNotifier {
   MeasurementSetting? currentMeasurementSetting;
   String? measurementString;
 
-  ThemeMode? currentThemeMode;
+  ThemeMode? currentThemeMode = ThemeMode.light;
   String? themeString;
 
   SheetList? currentSheetList;
@@ -39,18 +39,19 @@ class SettingProvider with ChangeNotifier {
     }
 
     ///Theme
-    themeString = prefs.getString('themeMode') ?? "";
-    if (themeString == "system") {
-      currentThemeMode = ThemeMode.system;
-    }
-    else if (themeString == "light") {
-      currentThemeMode = ThemeMode.light;
-    }
-    else if (themeString == "dark") {
-      currentThemeMode = ThemeMode.dark;
-    }else{
-      currentThemeMode = ThemeMode.system;
-    }
+    // themeString = prefs.getString('themeMode') ?? "";
+    // if (themeString == "system") {
+    //   currentThemeMode = ThemeMode.system;
+    // }
+    // else if (themeString == "light") {
+    //   currentThemeMode = ThemeMode.light;
+    // }
+    // else if (themeString == "dark") {
+    //   currentThemeMode = ThemeMode.dark;
+    // }
+    // else{
+    //   currentThemeMode = ThemeMode.system;
+    // }
 
     packageInfo = await PackageInfo.fromPlatform();
 
@@ -91,7 +92,7 @@ class SettingProvider with ChangeNotifier {
   bool isDarkMode(context){
     var darkMode = MediaQuery.of(context).platformBrightness;
     if(darkMode == Brightness.dark){
-      return true;
+      return false;
     }else if(darkMode == Brightness.light)
     {
       return false;

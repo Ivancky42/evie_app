@@ -346,6 +346,7 @@ class LocationProvider extends ChangeNotifier {
     double longitude = doublesList[0];
     double latitude = doublesList[1];
     selectedAnnotationGeopoint = GeoPoint(latitude, longitude);
+    getPlaceMarks(latitude, longitude);
     notifyListeners();
   }
 

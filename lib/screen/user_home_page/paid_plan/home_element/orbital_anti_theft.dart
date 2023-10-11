@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -85,7 +86,6 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
 
     ///Disable scaleBar on top left corner
     await this.mapboxMap?.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
-
     mapCreatedAnimateBounce();
   }
 
@@ -581,7 +581,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                         _locationProvider.locationModel?.geopoint.longitude ?? 0,
                         _locationProvider.locationModel?.geopoint.latitude ?? 0
                     )).toJson(),
-                iconSize: 27.mp,
+                iconSize: Platform.isAndroid ? 34.mp : 14.mp,
                 image: list)
             );
 
@@ -589,7 +589,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
       }
       else if (_locationProvider.locationModel!.isConnected == true && _bikeProvider.currentBikeModel?.location?.status == "danger") {
 
-        final ByteData bytes = await rootBundle.load("assets/icons/security/danger_2x.png");
+        final ByteData bytes = await rootBundle.load("assets/icons/security/danger_4x.png");
         final Uint8List list = bytes.buffer.asUint8List();
 
         options.add(
@@ -600,7 +600,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                         _locationProvider.locationModel?.geopoint.latitude ?? 0
                     )).toJson(),
                 //iconSize: 170.w * 0.003,
-                //iconSize: 27.mp,
+                iconSize: Platform.isAndroid ? 34.mp : 14.mp,
                 image: list));
 
       }
@@ -615,7 +615,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                         _locationProvider.locationModel?.geopoint.longitude ?? 0,
                         _locationProvider.locationModel?.geopoint.latitude ?? 0
                     )).toJson(),
-                iconSize: 27.mp,
+                iconSize: Platform.isAndroid ? 34.mp : 14.mp,
                 image: list)
         );
       }

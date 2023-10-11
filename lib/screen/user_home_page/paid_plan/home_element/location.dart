@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../api/colours.dart';
@@ -46,7 +47,65 @@ class _LocationState extends State<Location> {
     super.initState();
     _locationProvider = Provider.of<LocationProvider>(context, listen: false);
     _settingProvider = Provider.of<SettingProvider>(context, listen: false);
-    selectedGeopoint  = _locationProvider.locationModel?.geopoint;
+  }
+
+  // This shows a CupertinoModalPopup which hosts a CupertinoActionSheet.
+  void _showActionSheet(BuildContext context, List<AvailableMap> availableMaps) {
+    final action = CupertinoActionSheet(
+      title: Column(
+        children: [
+          Text(
+            "Selection",
+            style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600, color: Colors.black),
+          ),
+          SizedBox(height: 3.h,),
+          Text(
+            "Select Navigation App ",
+            style: TextStyle(fontSize: 13.sp),
+          ),
+        ],
+      ),
+      actions: <Widget>[
+        Container(
+          height: availableMaps.length * 52.h,
+          child: ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return CupertinoActionSheetAction(
+                child: Text(availableMaps[index].mapName, style: TextStyle(fontSize: 20.sp, color: EvieColors.blue, fontWeight: FontWeight.w400),),
+                isDefaultAction: true,
+                onPressed: () {
+                  if(selectedGeopoint != null){
+                    MapLauncher.showDirections(
+                        mapType: availableMaps![index].mapType,
+                        destination: Coords(
+                            selectedGeopoint!.latitude,
+                            selectedGeopoint!.longitude));
+                  }else{
+                    MapLauncher.showDirections(
+                        mapType: availableMaps![index].mapType,
+                        destination: Coords(
+                            _bikeProvider.currentBikeModel!.location!.geopoint.latitude,
+                            _bikeProvider.currentBikeModel!.location!.geopoint.longitude));
+                  }
+                },
+              );
+            },
+            itemCount: availableMaps.length,
+          ),
+        )
+      ],
+      cancelButton: CupertinoActionSheetAction(
+        child: Text("Cancel", style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600, color: EvieColors.blue),),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
+
+    showCupertinoModalPopup(
+        context: context, builder: (context) => action);
   }
 
   @override
@@ -55,82 +114,89 @@ class _LocationState extends State<Location> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _locationProvider = Provider.of<LocationProvider>(context);
+    selectedGeopoint  = _locationProvider.locationModel?.geopoint;
 
-    return EvieCard(
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              child: EvieOvalGrayLocation(
-                buttonText: isLocation ? 'Location' : 'Distance',
-                onPressed: () {
-                  setState(() {
-                    isLocation = !isLocation;
-                  });
-                },
-              ),
-              padding: EdgeInsets.only(top: 16.h),
-            ),
-
-            Column(
+    return GestureDetector(
+      onTap: () async {
+        List<AvailableMap> availableMaps = await MapLauncher.installedMaps;
+        _showActionSheet(context, availableMaps);
+      },
+      child: EvieCard(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                isLocation ?
                 Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 11.h),
-                    child: Container(
-                      child: SvgPicture.asset("assets/icons/location_pin_point.svg",
-                        height: 36.h, width:  36.w,),
-                    )
-                ) :
-                Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 11.h),
-                    child: Container(
-                      child: SvgPicture.asset("assets/icons/distance.svg",
-                        height: 36.h, width:  36.w,),
-                    )
+                  child: EvieOvalGrayLocation(
+                    buttonText: isLocation ? 'Location' : 'Distance',
+                    onPressed: () {
+                      setState(() {
+                        isLocation = !isLocation;
+                      });
+                    },
+                  ),
+                  padding: EdgeInsets.only(top: 16.h),
                 ),
-                isLocation ?
-                Selector<LocationProvider, String?>(
-                  selector: (context, locationProvider) => _locationProvider.currentPlaceMarkString,
-                  builder: (context, currentPlaceMarkString, child) {
-                    return Text(
-                      currentPlaceMarkString ?? 'Loading',
-                      style: EvieTextStyles.headlineB.copyWith( color: EvieColors.mediumLightBlack, height:1.2),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                    );
-                  },
-                ) :
-                Row(
-                  children: [
-                    Text(
-                      _settingProvider.currentMeasurementSetting == MeasurementSetting.imperialSystem ?
-                      _settingProvider.convertKiloMeterToMilesInString(_locationProvider.calculateDistance())  : (_locationProvider.calculateDistance().toStringAsFixed(2)),
-                      style: EvieTextStyles.headlineB.copyWith( color: EvieColors.mediumLightBlack, height:1.2),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                    ),
-                    Text(
-                      _settingProvider.currentMeasurementSetting == MeasurementSetting.imperialSystem ?
-                      ' mi away' : ' km away',
-                      style: EvieTextStyles.body14,
-                      maxLines: 2,
-                    ),
-                  ],
-                ),
-                Text(calculateTimeAgo(_locationProvider.locationModel!.updated!.toDate()),
-                    style: EvieTextStyles.body14.copyWith(color: EvieColors.mediumLightBlack, fontWeight: FontWeight.w400)),
-                SizedBox(height: 16.h,),
-              ],
-            )
-          ],
-        ),
-      )
 
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    isLocation ?
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 11.h),
+                        child: Container(
+                          child: SvgPicture.asset("assets/icons/location_pin_point.svg",
+                            height: 36.h, width:  36.w,),
+                        )
+                    ) :
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 11.h),
+                        child: Container(
+                          child: SvgPicture.asset("assets/icons/distance.svg",
+                            height: 36.h, width:  36.w,),
+                        )
+                    ),
+                    isLocation ?
+                    Selector<LocationProvider, String?>(
+                      selector: (context, locationProvider) => _locationProvider.currentPlaceMarkString,
+                      builder: (context, currentPlaceMarkString, child) {
+                        return Text(
+                          currentPlaceMarkString ?? 'Loading',
+                          style: EvieTextStyles.headlineB.copyWith( color: EvieColors.mediumLightBlack, height:1.2),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        );
+                      },
+                    ) :
+                    Row(
+                      children: [
+                        Text(
+                          _settingProvider.currentMeasurementSetting == MeasurementSetting.imperialSystem ?
+                          _settingProvider.convertKiloMeterToMilesInString(_locationProvider.calculateDistance())  : (_locationProvider.calculateDistance().toStringAsFixed(2)),
+                          style: EvieTextStyles.headlineB.copyWith( color: EvieColors.mediumLightBlack, height:1.2),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                        Text(
+                          _settingProvider.currentMeasurementSetting == MeasurementSetting.imperialSystem ?
+                          ' mi away' : ' km away',
+                          style: EvieTextStyles.body14,
+                          maxLines: 2,
+                        ),
+                      ],
+                    ),
+                    Text(calculateTimeAgo(_locationProvider.locationModel!.updated!.toDate()),
+                        style: EvieTextStyles.body14.copyWith(color: EvieColors.mediumLightBlack, fontWeight: FontWeight.w400)),
+                    SizedBox(height: 16.h,),
+                  ],
+                )
+              ],
+            ),
+          )
+
+      ),
     );
   }
 }

@@ -98,7 +98,7 @@ dependencies:
   syncfusion_flutter_charts: ^20.4.52
   syncfusion_flutter_datepicker: ^20.4.52
 #  mapbox_maps_flutter: ^0.4.4
-  mapbox_maps_flutter: ^0.4.4
+  mapbox_maps_flutter: ^0.4.5
   device_info_plus: ^9.0.3
   timelines: ^0.1.0
   share_plus: ^7.1.0

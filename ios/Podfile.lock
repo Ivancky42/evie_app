@@ -971,7 +971,7 @@ PODS:
     - Flutter
   - map_launcher (0.0.1):
     - Flutter
-  - mapbox_maps_flutter (0.4.4):
+  - mapbox_maps_flutter (0.4.5):
     - Flutter
     - MapboxMaps (~> 10.13.1)
   - MapboxCommon (23.5.0)
@@ -1341,7 +1341,7 @@ SPEC CHECKSUMS:
   leveldb-library: f03246171cce0484482ec291f88b6d563699ee06
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   map_launcher: e325db1261d029ff33e08e03baccffe09593ffea
-  mapbox_maps_flutter: b7750303639682268cc7f487bfc6f474a456acab
+  mapbox_maps_flutter: d86eb8d532ae2f7e5d389fff3aa197b743d3c747
   MapboxCommon: fdf7fd31c90b7b607cd9c63e37797f023c01d860
   MapboxCoreMaps: 24270c7c6b8cb71819fc2f3c549db9620ee4d019
   MapboxMaps: cb76511b98d3b95c74b0771ed105bc69f30ace6b

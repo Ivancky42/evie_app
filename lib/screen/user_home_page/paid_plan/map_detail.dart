@@ -259,8 +259,7 @@ class _MapDetailsState extends State<MapDetails> {
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
                           onTap: () async {
-                            List<map_launcher.AvailableMap> availableMaps =
-                            await map_launcher.MapLauncher.installedMaps;
+                            List<map_launcher.AvailableMap> availableMaps = await map_launcher.MapLauncher.installedMaps;
                             if (isMapListShowing) {
                               setState(() {
                                 this.availableMaps = null;
@@ -464,7 +463,7 @@ class _MapDetailsState extends State<MapDetails> {
                   _locationProvider.locationModel?.geopoint.latitude ?? 0))
               .toJson(),
           image: list,
-          iconSize: 34.mp,
+          iconSize: Platform.isAndroid ? 38.mp : 16.mp,
         ));
 
         ///Add danger threat
@@ -489,8 +488,6 @@ class _MapDetailsState extends State<MapDetails> {
       } else {
         final ByteData bytes = await rootBundle.load(loadMarkerImageString(_locationProvider.locationModel?.status ?? "safe", _bikeProvider.currentBikeModel?.isLocked ?? false));
         final Uint8List list = bytes.buffer.asUint8List();
-
-        print('POKEMON: ' + 35.mp.toString());
         options.add(PointAnnotationOptions(
           geometry: Point(
               coordinates: Position(
@@ -499,11 +496,12 @@ class _MapDetailsState extends State<MapDetails> {
               .toJson(),
           image: list,
           //iconImage: "assets/icons/security/safe_lock_3x.png",
-          iconSize: 35.mp,
+          iconSize: Platform.isAndroid ? 38.mp : 16.mp,
         ));
       }
       pointAnnotationManager.setIconAllowOverlap(false);
       pointAnnotationManager.createMulti(options);
+      pointAnnotationManager.addOnPointAnnotationClickListener(MyPointAnnotationClickListener());
     });
   }
 
