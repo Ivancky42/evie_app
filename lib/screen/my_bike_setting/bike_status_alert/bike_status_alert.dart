@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
+import 'package:evie_test/widgets/evie_appbar_badge.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
     _notificationProvider = Provider.of<NotificationProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
-    var currentNotificationSettings = _bikeProvider.userBikeList[_bikeProvider.currentBikeModel?.deviceIMEI];
+    var currentNotificationSettings = _bikeProvider.currentBikeModel?.notificationSettings;
 
     return WillPopScope(
       onWillPop: () async {
@@ -57,9 +58,9 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
         return true;
       },
       child: Scaffold(
-        appBar: PageAppbar(
+        appBar: PageAppbarWithBadge(
           title: 'Anti-theft Alert',
-          onPressed: () {
+          onPressedLeading: () {
             _settingProvider.changeSheetElement(SheetList.bikeSetting);
           },
         ),
@@ -81,27 +82,21 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 21.h, 16.w,4.h),
                   child: EvieSwitch(
+                    height: 82.h,
                     activeColor: _bikeProvider.isOwner == true ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
                     title: "Connection Lost",
                     text: "You will receive an notification when your bike lost connection for more than 10mins",
-                    value: currentNotificationSettings?.notificationSettings?.connectionLost ?? false,
+                    value: currentNotificationSettings?.connectionLost ?? false,
                     thumbColor: _thumbColor,
                     onChanged: (value) async {
 
                       if(_bikeProvider.isOwner == true){
                         SmartDialog.showLoading();
-                        var result = await _bikeProvider.updateFirestoreNotification("connectionLost", value!);
+                        var result = await _bikeProvider.updateBikeNotifySetting("connectionLost", value!);
                         if(result == true){
                           SmartDialog.dismiss();
-                          switch(value){
-                            case true:
-                              await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~connection-lost");
-                              break;
-                            case false:
-                              await _notificationProvider.unsubscribeFromTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~connection-lost");
-                              break;
-                          }
-                        }else{
+                        }
+                        else{
                           SmartDialog.show(
                               widget: EvieSingleButtonDialog(
                                   title: "Error",
@@ -109,7 +104,8 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
                                   rightContent: "OK",
                                   onPressedRight: (){SmartDialog.dismiss();}));
                         }
-                      }else{
+                      }
+                      else{
                         showAccNoPermissionToast(context);
                       }
                     },
@@ -119,32 +115,20 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
                 Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
                     child: EvieSwitch(
+                      height: 82.h,
                       activeColor: _bikeProvider.isOwner == true ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
                       title: "Movement Detection",
                       text: "Whenever movement is detection, a push notification will be send",
-                      value: currentNotificationSettings?.notificationSettings?.movementDetect ?? false,
+                      value: currentNotificationSettings?.movementDetect ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {
                           if(_bikeProvider.isOwner == true) {
                             SmartDialog.showLoading();
                             var result = await _bikeProvider
-                                .updateFirestoreNotification(
+                                .updateBikeNotifySetting(
                                 "movementDetect", value!);
                             if (result == true) {
                               SmartDialog.dismiss();
-                              switch (value) {
-                                case true:
-                                  await _notificationProvider.subscribeToTopic(
-                                      "${_bikeProvider.currentBikeModel!
-                                          .deviceIMEI}~movement-detect");
-                                  break;
-                                case false:
-                                  await _notificationProvider
-                                      .unsubscribeFromTopic(
-                                      "${_bikeProvider.currentBikeModel!
-                                          .deviceIMEI}~movement-detect");
-                                  break;
-                              }
                             } else {
                               SmartDialog.show(
                                   widget: EvieSingleButtonDialog(
@@ -165,28 +149,19 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
                 Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
                     child: EvieSwitch(
+                      height: 82.h,
                       activeColor: _bikeProvider.isOwner == true ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
                       title: "Theft Attempt",
                       text: "Theft attempt alert will be trigger when your bike is being moved for more than 50m radius",
-                      value:  currentNotificationSettings?.notificationSettings?.theftAttempt ?? false,
+                      value:  currentNotificationSettings?.theftAttempt ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {
                           if(_bikeProvider.isOwner == true) {
                             SmartDialog.showLoading();
-                            var result = await _bikeProvider.updateFirestoreNotification(
+                            var result = await _bikeProvider.updateBikeNotifySetting(
                                 "theftAttempt", value!);
                             if (result == true) {
                               SmartDialog.dismiss();
-                              switch (value) {
-                                case true:
-                                  await _notificationProvider.subscribeToTopic(
-                                      "${_bikeProvider.currentBikeModel!.deviceIMEI}~theft-attempt");
-                                  break;
-                                case false:
-                                  await _notificationProvider.unsubscribeFromTopic(
-                                      "${_bikeProvider.currentBikeModel!.deviceIMEI}~theft-attempt");
-                                  break;
-                              }
                             } else {
                               SmartDialog.show(
                                   widget: EvieSingleButtonDialog(
@@ -204,44 +179,44 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
                     )
                 ),
                 const EvieDivider(),
-                Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
-                    child: EvieSwitch(
-                      activeColor: _bikeProvider.isOwner == true ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
-                      title: "Fall Detection",
-                      text: "Fall Detection Alert will be trigger when bike fall without rider.",
-                      value:  currentNotificationSettings?.notificationSettings?.fallDetect ?? false,
-                      thumbColor: _thumbColor,
-                      onChanged: (value) async {
-                        if(_bikeProvider.isOwner == true) {
-                          SmartDialog.showLoading();
-                          var result = await _bikeProvider.updateFirestoreNotification("fallDetect", value!);
-                          if (result == true) {
-                            SmartDialog.dismiss();
-                            switch(value){
-                              case true:
-                                await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~fall-detect");
-                                break;
-                              case false:
-                                await _notificationProvider.unsubscribeFromTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~fall-detect");
-                                break;
-                            }
-                          } else {
-                            SmartDialog.show(
-                                widget: EvieSingleButtonDialog(
-                                    title: "Error",
-                                    content: "Try again",
-                                    rightContent: "OK",
-                                    onPressedRight: () {
-                                      SmartDialog.dismiss();
-                                    }));
-                          }
-                        }else{
-                          showAccNoPermissionToast(context);
-                        }
-                      },
-                    )
-                ),
+                // Padding(
+                //     padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
+                //     child: EvieSwitch(
+                //       activeColor: _bikeProvider.isOwner == true ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
+                //       title: "Fall Detection",
+                //       text: "Fall Detection Alert will be trigger when bike fall without rider.",
+                //       value:  currentNotificationSettings?.notificationSettings?.fallDetect ?? false,
+                //       thumbColor: _thumbColor,
+                //       onChanged: (value) async {
+                //         if(_bikeProvider.isOwner == true) {
+                //           SmartDialog.showLoading();
+                //           var result = await _bikeProvider.updateFirestoreNotification("fallDetect", value!);
+                //           if (result == true) {
+                //             SmartDialog.dismiss();
+                //             switch(value){
+                //               case true:
+                //                 await _notificationProvider.subscribeToTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~fall-detect");
+                //                 break;
+                //               case false:
+                //                 await _notificationProvider.unsubscribeFromTopic("${_bikeProvider.currentBikeModel!.deviceIMEI}~fall-detect");
+                //                 break;
+                //             }
+                //           } else {
+                //             SmartDialog.show(
+                //                 widget: EvieSingleButtonDialog(
+                //                     title: "Error",
+                //                     content: "Try again",
+                //                     rightContent: "OK",
+                //                     onPressedRight: () {
+                //                       SmartDialog.dismiss();
+                //                     }));
+                //           }
+                //         }else{
+                //           showAccNoPermissionToast(context);
+                //         }
+                //       },
+                //     )
+                // ),
                 const EvieDivider(),
                 // Padding(
                 //     padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),

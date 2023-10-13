@@ -66,10 +66,10 @@ class CurrentUserProvider extends ChangeNotifier {
         Map<String, dynamic>? obj = event.data();
         if (obj != null) {
           currentUserModel = UserModel.fromJson(obj);
-          NotificationProvider().subscribeToTopic("fcm_test");
-          if (currentUserModel?.uid != null) {
-            NotificationProvider().subscribeToTopic(currentUserModel?.uid);
-          }
+          // NotificationProvider().subscribeToTopic("abc");
+          // if (currentUserModel?.uid != null) {
+          //   NotificationProvider().subscribeToTopic(currentUserModel?.uid);
+          // }
           notifyListeners();
         }
       });
@@ -206,12 +206,12 @@ class CurrentUserProvider extends ChangeNotifier {
   }
 
   clear() async {
-    if(currentUserModel?.notificationSettings?.firmwareUpdate == true ){
-      await NotificationProvider().unsubscribeFromTopic("~firmware-update");
-    }
-    if( currentUserModel?.notificationSettings?.general == true ){
-      await NotificationProvider().unsubscribeFromTopic("~general");
-    }
+    // if(currentUserModel?.notificationSettings?.firmwareUpdate == true ){
+    //   await NotificationProvider().unsubscribeFromTopic("~firmware-update");
+    // }
+    // if( currentUserModel?.notificationSettings?.general == true ){
+    //   await NotificationProvider().unsubscribeFromTopic("~general");
+    // }
     currentUserSubscription?.cancel();
     checkUserAccountSub?.cancel();
     notifyListeners();

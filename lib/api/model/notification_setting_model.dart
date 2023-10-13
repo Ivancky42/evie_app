@@ -12,6 +12,7 @@ class NotificationSettingModel {
   bool? firmwareUpdate;
   bool? general;
   bool? promo;
+  bool? evKey;
 
   NotificationSettingModel({
     this.connectionLost,
@@ -25,7 +26,43 @@ class NotificationSettingModel {
     this.firmwareUpdate,
     this.general,
     this.promo,
+    this.evKey,
   });
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is NotificationSettingModel &&
+        connectionLost == other.connectionLost &&
+        crash == other.crash &&
+        fallDetect == other.fallDetect &&
+        lock == other.lock &&
+        lowBattery == other.lowBattery &&
+        movementDetect == other.movementDetect &&
+        planReminder == other.planReminder &&
+        theftAttempt == other.theftAttempt &&
+        firmwareUpdate == other.firmwareUpdate &&
+        general == other.general &&
+        promo == other.promo &&
+        evKey == other.evKey;
+  }
+
+  @override
+  int get hashCode {
+    return connectionLost.hashCode ^
+    crash.hashCode ^
+    fallDetect.hashCode ^
+    lock.hashCode ^
+    lowBattery.hashCode ^
+    movementDetect.hashCode ^
+    planReminder.hashCode ^
+    theftAttempt.hashCode ^
+    firmwareUpdate.hashCode ^
+    general.hashCode ^
+    promo.hashCode ^
+    evKey.hashCode;
+  }
 
   factory NotificationSettingModel.fromJson(Map json) {
     return NotificationSettingModel(
@@ -40,6 +77,7 @@ class NotificationSettingModel {
       firmwareUpdate:   json['firmwareUpdate'] ?? false,
       general:   json['general'] ?? false,
       promo: json['promo'] ?? false,
+      evKey: json['evKey'] ?? false,
     );
   }
 

@@ -221,7 +221,7 @@ class _MapDetailsState extends State<MapDetails> {
                     ),
 
                     Padding(
-                      padding:  EdgeInsets.only(bottom:270.h),
+                      padding:  EdgeInsets.only(bottom:220.h),
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
@@ -253,78 +253,78 @@ class _MapDetailsState extends State<MapDetails> {
                       ),
                     ),
 
-                    Padding(
-                      padding:  EdgeInsets.only(bottom:220.h),
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: GestureDetector(
-                          onTap: () async {
-                            List<map_launcher.AvailableMap> availableMaps = await map_launcher.MapLauncher.installedMaps;
-                            if (isMapListShowing) {
-                              setState(() {
-                                this.availableMaps = null;
-                                isMapListShowing = false;
-                              });
-                            } else {
-                              setState(() {
-                                this.availableMaps = availableMaps;
-                                isMapListShowing = true;
-                              });
-                            }
-                          },
-                          child: Container(
-                              height: 50.h,
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    availableMaps != null
-                                        ? ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      shrinkWrap: true,
-                                      itemBuilder: (context, index) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            if(selectedGeopoint != null){
-                                              map_launcher.MapLauncher.showDirections(
-                                                  mapType: availableMaps![index].mapType,
-                                                  destination: map_launcher.Coords(
-                                                      selectedGeopoint!.latitude,
-                                                      selectedGeopoint!.longitude));
-                                            }else{
-                                              map_launcher.MapLauncher.showDirections(
-                                                  mapType: availableMaps![index].mapType,
-                                                  destination: map_launcher.Coords(
-                                                      _bikeProvider.currentBikeModel!.location!.geopoint.latitude,
-                                                      _bikeProvider.currentBikeModel!.location!.geopoint.longitude));
-                                            }
-
-                                          },
-                                          child: SvgPicture.asset(
-                                            availableMaps![index].icon,
-                                            width: 36.w,
-                                            height: 36.h,
-                                          ),
-                                        );
-                                      },
-                                      itemCount: availableMaps?.length,
-                                    )
-                                        : SizedBox(),
-                                    Padding(
-                                      padding: EdgeInsets.only(right: 8.h),
-                                      child: SvgPicture.asset(
-                                        "assets/buttons/direction.svg",
-                                        width: 50.w,
-                                        height: 50.h,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )),
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding:  EdgeInsets.only(bottom:220.h),
+                    //   child: Align(
+                    //     alignment: Alignment.bottomRight,
+                    //     child: GestureDetector(
+                    //       onTap: () async {
+                    //         List<map_launcher.AvailableMap> availableMaps = await map_launcher.MapLauncher.installedMaps;
+                    //         if (isMapListShowing) {
+                    //           setState(() {
+                    //             this.availableMaps = null;
+                    //             isMapListShowing = false;
+                    //           });
+                    //         } else {
+                    //           setState(() {
+                    //             this.availableMaps = availableMaps;
+                    //             isMapListShowing = true;
+                    //           });
+                    //         }
+                    //       },
+                    //       child: Container(
+                    //           height: 50.h,
+                    //           child: Align(
+                    //             alignment: Alignment.bottomRight,
+                    //             child: Row(
+                    //               mainAxisSize: MainAxisSize.min,
+                    //               children: [
+                    //                 availableMaps != null
+                    //                     ? ListView.builder(
+                    //                   scrollDirection: Axis.horizontal,
+                    //                   shrinkWrap: true,
+                    //                   itemBuilder: (context, index) {
+                    //                     return GestureDetector(
+                    //                       onTap: () {
+                    //                         if(selectedGeopoint != null){
+                    //                           map_launcher.MapLauncher.showDirections(
+                    //                               mapType: availableMaps![index].mapType,
+                    //                               destination: map_launcher.Coords(
+                    //                                   selectedGeopoint!.latitude,
+                    //                                   selectedGeopoint!.longitude));
+                    //                         }else{
+                    //                           map_launcher.MapLauncher.showDirections(
+                    //                               mapType: availableMaps![index].mapType,
+                    //                               destination: map_launcher.Coords(
+                    //                                   _bikeProvider.currentBikeModel!.location!.geopoint.latitude,
+                    //                                   _bikeProvider.currentBikeModel!.location!.geopoint.longitude));
+                    //                         }
+                    //
+                    //                       },
+                    //                       child: SvgPicture.asset(
+                    //                         availableMaps![index].icon,
+                    //                         width: 36.w,
+                    //                         height: 36.h,
+                    //                       ),
+                    //                     );
+                    //                   },
+                    //                   itemCount: availableMaps?.length,
+                    //                 )
+                    //                     : SizedBox(),
+                    //                 Padding(
+                    //                   padding: EdgeInsets.only(right: 8.h),
+                    //                   child: SvgPicture.asset(
+                    //                     "assets/buttons/direction.svg",
+                    //                     width: 50.w,
+                    //                     height: 50.h,
+                    //                   ),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           )),
+                    //     ),
+                    //   ),
+                    // ),
 
                     Padding(
                       padding:  EdgeInsets.only(bottom:23.h),
@@ -356,50 +356,6 @@ class _MapDetailsState extends State<MapDetails> {
                         ),
                       ),
                     ),
-
-                    // Padding(
-                    //     padding: EdgeInsets.only(left:16.w, right: 16.w),
-                    //     child: Container(
-                    //       width: double.infinity,
-                    //       height: 36.h,
-                    //       child: Padding(
-                    //         padding: EdgeInsets.only(left:8.w, right: 8.w),
-                    //         child: Row(
-                    //           children: [
-                    //             ///Get icon by status
-                    //             SvgPicture.asset(
-                    //               getCurrentBikeStatusIconSimple(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
-                    //             ),
-                    //
-                    //             SizedBox(width: 5.w),
-                    //
-                    //             ///Get text by status
-                    //             Text(getCurrentBikeStatusString(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected, _bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),
-                    //               style: EvieTextStyles.body16.copyWith(color: EvieColors.grayishWhite),),
-                    //           ],
-                    //         ),
-                    //       ),
-                    //       decoration: BoxDecoration(
-                    //
-                    //         ///Get colour by status
-                    //         color: _bikeProvider.currentBikeModel!.location!.isConnected == false ||
-                    //             _bikeProvider.currentBikeModel!.location!.status == "warning" ||
-                    //             _bikeProvider.currentBikeModel!.location!.status == "fall" ?
-                    //         EvieColors.orange : EvieColors.darkWhite,
-                    //
-                    //         borderRadius: BorderRadius.circular(10.w),
-                    //         boxShadow: const [
-                    //           BoxShadow(
-                    //             color: Color.fromRGBO(122, 122, 121, 0.15),
-                    //             offset: Offset(0, 3),
-                    //             blurRadius: 12.0,
-                    //             spreadRadius: 0.0,
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     )
-                    // )
-
                   ],
                 ),
               ),

@@ -39,9 +39,9 @@ class _AcceptingInvitationState extends State<AcceptingInvitation> {
     if (result == 'Success') {
       _bikeProvider.changeBikeUsingIMEI(widget.deviceIMEI!);
       _notificationProvider.updateUserNotificationSharedBikeStatus(widget.notificationId);
-      for (var element in _bikeProvider.userBikeNotificationList) {
-        await _notificationProvider.subscribeToTopic("${widget.deviceIMEI!}$element");
-      }
+      // for (var element in _bikeProvider.userBikeNotificationList) {
+      //   await _notificationProvider.subscribeToTopic("${widget.deviceIMEI!}$element");
+      // }
       showBikeAddSuccessfulToast(context);
       changeToUserHomePageScreen(context);
     }

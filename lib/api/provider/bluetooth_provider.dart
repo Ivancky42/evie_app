@@ -64,6 +64,7 @@ class BluetoothProvider extends ChangeNotifier {
   String? iotData;
   bool isAutoConnect = false;
   Timer? startScanTimer;
+  Timer? deviceFoundTimer;
   String? currentConnectedDevice;
 
   LinkedHashMap<String, DiscoveredDevice> discoverDeviceList = LinkedHashMap<String, DiscoveredDevice>();
@@ -204,12 +205,7 @@ class BluetoothProvider extends ChangeNotifier {
     return bleStatusListener.stream;
   }
 
-  Stream<DeviceConnectResult> startScanRSSI() {
-    scanSubscription?.cancel();
-    deviceRssi = 0;
-    deviceRssiProgress = 0.0;
-    discoverDevice = null;
-    disconnectDevice();
+  startScanCountTimer() {
     startScanTimer?.cancel();
     startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
       print("Scan RSSI Timer: " + timer.tick.toString() + "s");
@@ -223,6 +219,15 @@ class BluetoothProvider extends ChangeNotifier {
         notifyListeners();
       }
     });
+  }
+
+  Stream<DeviceConnectResult> startScanRSSI() {
+    scanSubscription?.cancel();
+    deviceRssi = 0;
+    deviceRssiProgress = 0.0;
+    discoverDevice = null;
+    disconnectDevice();
+    startScanCountTimer();
 
     scanSubscription = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((discoveredDevice) {
       if (deviceConnectResult == null || deviceConnectResult != DeviceConnectResult.deviceFound) {
@@ -232,6 +237,16 @@ class BluetoothProvider extends ChangeNotifier {
       }
       if (discoveredDevice.name == currentBikeModel?.bleName) {
         startScanTimer?.cancel();
+        deviceFoundTimer?.cancel();
+
+        deviceFoundTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
+          print("Scan RSSI Timer: " + timer.tick.toString() + "s");
+          if (timer.tick == 3) {
+            startScanCountTimer();
+            notifyListeners();
+          }
+        });
+
         deviceConnectResult = DeviceConnectResult.deviceFound;
         deviceConnectStream.add(DeviceConnectResult.deviceFound);
         discoverDevice = discoveredDevice;
@@ -247,6 +262,7 @@ class BluetoothProvider extends ChangeNotifier {
     }, onError: (error) {
       deviceConnectStream.add(DeviceConnectResult.scanError);
       deviceConnectResult = DeviceConnectResult.scanError;
+      deviceFoundTimer?.cancel();
       stopScan();
 
       if (error.message.message == 'Bluetooth disabled (code 1)') {

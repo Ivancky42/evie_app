@@ -195,15 +195,11 @@ class BikeProvider extends ChangeNotifier {
               case DocumentChangeType.removed:
                 userBikeList.removeWhere((key, value) => key == docChange.doc.id);
                 userBikeDetails.removeWhere((key, value) => key == docChange.doc.id);
-                NotificationProvider().unsubscribeFromTopic(docChange.doc.id);
-
-                if(userBikePlans.length != 0){
-                  changeBikeUsingIMEI(userBikePlans.keys.first);
+                if(userBikeList.isNotEmpty){
+                  changeBikeUsingIMEI(userBikeList.keys.first);
                 }else{
                   changeSharedPreference('currentBikeImei', '');
                 }
-
-
                 notifyListeners();
                 break;
               case DocumentChangeType.modified:
@@ -217,29 +213,6 @@ class BikeProvider extends ChangeNotifier {
 
           userBikeList.forEach((key, value) {
             getUserBikeDetails(key);
-            NotificationProvider().subscribeToTopic(key);
-
-            ///Other user that have bike also need to subscribe these topic
-            NotificationProvider().subscribeToTopic("${key}~evkey");
-            NotificationProvider().subscribeToTopic("${key}~bike-updated");
-            NotificationProvider().subscribeToTopic("${key}~plan-subscribed");
-
-            if(value?.notificationSettings?.connectionLost == true ) {
-              NotificationProvider().subscribeToTopic("${key}~connection-lost");
-            }
-            if(value?.notificationSettings?.movementDetect == true ) {
-              NotificationProvider().subscribeToTopic("${key}~movement-detect");
-            }
-            if(value?.notificationSettings?.theftAttempt == true ) {
-              NotificationProvider().subscribeToTopic("${key}~theft-attempt");
-            }
-            if(value?.notificationSettings?.lock == true ) {
-              NotificationProvider().subscribeToTopic("${key}~lock-reminder");
-            }
-            if(value?.notificationSettings?.planReminder == true ) {
-              NotificationProvider().subscribeToTopic("${key}~plan-reminder");
-            }
-
           });
 
           ///Subscript to topic based on looping (for first time open app only)
@@ -262,13 +235,14 @@ class BikeProvider extends ChangeNotifier {
 
         } else {
 
-          if(userBikePlans.length != 0){
+          if(userBikePlans.isNotEmpty){
             changeBikeUsingIMEI(userBikePlans.keys.first);
           }else{
             changeSharedPreference('currentBikeImei', '');
           }
 
           userBikeList.clear();
+          userBikeDetails.clear();
           currentBikeModel = null;
           notifyListeners();
         }
@@ -286,53 +260,90 @@ class BikeProvider extends ChangeNotifier {
 
   ///Get bike information based on selected current bike
   Future getBike(String? imei) async {
-
-
     currentBikeModel = null;
     SharedPreferences prefs = await _prefs;
     isPlanSubscript = null;
 
     await currentBikeSubscription?.cancel();
 
-    for (int index = 0; index < userBikeList.length; index++) {
-      if (userBikeList.keys.elementAt(index) == imei) {
-        ///Current bike model = userBikeList doc that match imei
-        currentBikeSubscription = FirebaseFirestore.instance
-            .collection(bikesCollection)
-            .doc(imei)
-            .snapshots()
-            .listen((event) {
+    if (userBikeList.containsKey(imei)) {
+      currentBikeSubscription = FirebaseFirestore.instance.collection(bikesCollection).doc(imei).snapshots().listen((event) {
+            try {
+              Map<String, dynamic>? obj = event.data();
+              if (obj != null) {
+                currentBikeModel = BikeModel.fromJson(obj);
+                prefs.setString('currentBikeImei', imei!);
 
-          try {
-            Map<String, dynamic>? obj = event.data();
-            if (obj != null) {
-              currentBikeModel = BikeModel.fromJson(obj);
-              prefs.setString('currentBikeImei', imei!);
+                ///Switch case
+                switchBikeResult = SwitchBikeResult.success;
+                switchBikeResultListener.add(switchBikeResult);
+                getCurrentPlanSubscript();
+                getThreatRoutes();
 
-              ///Switch case
-              switchBikeResult = SwitchBikeResult.success;
+                notifyListeners();
+              }
+              else {
+                currentBikeModel = null;
+              }
+            } on Exception catch (exception) {
+              switchBikeResult = SwitchBikeResult.failure;
               switchBikeResultListener.add(switchBikeResult);
-              getCurrentPlanSubscript();
-              getThreatRoutes();
-
-              notifyListeners();
-            } else {
-
-              currentBikeModel = null;
+              debugPrint(exception.toString());
+            } catch (_) {
+              switchBikeResult = SwitchBikeResult.failure;
+              switchBikeResultListener.add(switchBikeResult);
             }
-          } on Exception catch (exception) {
-            switchBikeResult = SwitchBikeResult.failure;
-            switchBikeResultListener.add(switchBikeResult);
-            debugPrint(exception.toString());
-          } catch (_) {
-            switchBikeResult = SwitchBikeResult.failure;
-            switchBikeResultListener.add(switchBikeResult);
-          }
-          getRFIDList();
-          getBikeUserList();
-        });
+            getRFIDList();
+            getBikeUserList();
+      });
+    }
+    else {
+      if (userBikeList.isNotEmpty) {
+        changeBikeUsingIMEI(userBikeList.keys.first);
       }
     }
+
+    // for (int index = 0; index < userBikeList.length; index++) {
+    //   if (userBikeList.keys.elementAt(index) == imei) {
+    //     ///Current bike model = userBikeList doc that match imei
+    //     currentBikeSubscription = FirebaseFirestore.instance
+    //         .collection(bikesCollection)
+    //         .doc(imei)
+    //         .snapshots()
+    //         .listen((event) {
+    //
+    //       try {
+    //         Map<String, dynamic>? obj = event.data();
+    //         if (obj != null) {
+    //           currentBikeModel = BikeModel.fromJson(obj);
+    //           prefs.setString('currentBikeImei', imei!);
+    //
+    //           ///Switch case
+    //           switchBikeResult = SwitchBikeResult.success;
+    //           switchBikeResultListener.add(switchBikeResult);
+    //           getCurrentPlanSubscript();
+    //           getThreatRoutes();
+    //
+    //           notifyListeners();
+    //         } else {
+    //           currentBikeModel = null;
+    //         }
+    //       } on Exception catch (exception) {
+    //         switchBikeResult = SwitchBikeResult.failure;
+    //         switchBikeResultListener.add(switchBikeResult);
+    //         debugPrint(exception.toString());
+    //       } catch (_) {
+    //         switchBikeResult = SwitchBikeResult.failure;
+    //         switchBikeResultListener.add(switchBikeResult);
+    //       }
+    //       getRFIDList();
+    //       getBikeUserList();
+    //     });
+    //   }
+    //   else {
+    //     print('HEY YOU?');
+    //   }
+    // }
   }
 
   getOwnerUid(String deviceIMEI, String ownerUid) async {
@@ -424,7 +435,6 @@ class BikeProvider extends ChangeNotifier {
   changeBikeUsingIMEI(String deviceIMEI) async {
     SharedPreferences prefs = await _prefs;
     await prefs.setString('currentBikeImei', deviceIMEI.trim());
-
     await getBike(deviceIMEI);
   }
 
@@ -478,6 +488,23 @@ class BikeProvider extends ChangeNotifier {
         }
     }
   }
+
+  Future updateBikeNotifySetting(String type, bool value) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(bikesCollection)
+          .doc(currentBikeModel!.deviceIMEI)
+          .set({
+        "notificationSettings": {
+          type: value,
+        }
+      }, SetOptions(merge: true));
+      return true;
+    }catch(e){
+      return false;
+    }
+  }
+
 
   /// ****************************************** ///
   /// Share bike
@@ -1016,16 +1043,13 @@ class BikeProvider extends ChangeNotifier {
           Map<String, dynamic>? obj = snapshot.data();
 
           if (obj != null) {
-            userBikeDetails.update(
-                snapshot.id, (value) => BikeModel.fromJson(obj),
-                ifAbsent: () => BikeModel.fromJson(obj));
-
-            notifyListeners();
-
+            userBikeDetails.update(snapshot.id, (value) => BikeModel.fromJson(obj), ifAbsent: () => BikeModel.fromJson(obj));
             if (obj['ownerUid'] != null) {
               getOwnerUid(deviceIMEI, obj['ownerUid']);
             }
-          } else if (obj == null) {
+            notifyListeners();
+          }
+          else if (obj == null) {
             userBikeDetails.removeWhere((key, value) => key == obj?.keys);
             notifyListeners();
           }
@@ -1160,7 +1184,14 @@ class BikeProvider extends ChangeNotifier {
         notifyListeners();
         return false;
       } else if (validationKey == snapshot["validationKey"]) {
-        await checkIsBikeExist(snapshot["bikeRef"]);
+        final data = snapshot.data() as Map<String, dynamic>;
+        if (data.containsKey('bikeRef')) {
+          await checkIsBikeExist(snapshot["bikeRef"]);
+        }
+        else {
+          scanQRCodeResult = ScanQRCodeResult.validateFailure;
+          notifyListeners();
+        }
       } else {
         scanQRCodeResult = ScanQRCodeResult.validateFailure;
         notifyListeners();
@@ -1181,8 +1212,7 @@ class BikeProvider extends ChangeNotifier {
             .get();
 
         if (snapshot.size == 0) {
-          await uploadUserToFireStore(
-              documentSnapshot["deviceIMEI"].toString());
+          await uploadUserToFireStore(documentSnapshot["deviceIMEI"].toString());
         } else {
           scanQRCodeResult = ScanQRCodeResult.userExistFailure;
 
@@ -1257,6 +1287,14 @@ class BikeProvider extends ChangeNotifier {
           .doc(selectedDeviceId)
           .set({
         'ownerUid': currentUserModel!.uid,
+        "notificationSettings": {
+          'connectionLost': true,
+          'movementDetect': true,
+          'theftAttempt': true,
+          'lock': false,
+          'planReminder': true,
+          'evKey': true,
+        },
       }, SetOptions(merge: true));
 
       scanQRCodeResult = ScanQRCodeResult.success;
@@ -1779,25 +1817,25 @@ class BikeProvider extends ChangeNotifier {
 
 
   clear() async {
-    userBikeList.forEach((key, value) async {
-      await NotificationProvider().unsubscribeFromTopic(key);
-
-      if(value?.notificationSettings?.connectionLost == true ) {
-        NotificationProvider().unsubscribeFromTopic("$key~connection-lost");
-      }
-      if(value?.notificationSettings?.movementDetect == true ) {
-        NotificationProvider().unsubscribeFromTopic("$key~movement-detect");
-      }
-      if(value?.notificationSettings?.theftAttempt == true ) {
-        NotificationProvider().unsubscribeFromTopic("$key~theft-attempt");
-      }
-      if(value?.notificationSettings?.lock == true ) {
-        NotificationProvider().unsubscribeFromTopic("$key~lock-reminder");
-      }
-      if(value?.notificationSettings?.planReminder == true ) {
-        NotificationProvider().unsubscribeFromTopic("$key~plan-reminder");
-      }
-    });
+    // userBikeList.forEach((key, value) async {
+    //   await NotificationProvider().unsubscribeFromTopic(key);
+    //
+    //   if(value?.notificationSettings?.connectionLost == true ) {
+    //     NotificationProvider().unsubscribeFromTopic("$key~connection-lost");
+    //   }
+    //   if(value?.notificationSettings?.movementDetect == true ) {
+    //     NotificationProvider().unsubscribeFromTopic("$key~movement-detect");
+    //   }
+    //   if(value?.notificationSettings?.theftAttempt == true ) {
+    //     NotificationProvider().unsubscribeFromTopic("$key~theft-attempt");
+    //   }
+    //   if(value?.notificationSettings?.lock == true ) {
+    //     NotificationProvider().unsubscribeFromTopic("$key~lock-reminder");
+    //   }
+    //   if(value?.notificationSettings?.planReminder == true ) {
+    //     NotificationProvider().unsubscribeFromTopic("$key~plan-reminder");
+    //   }
+    // });
 
     RideProvider().clear();
 

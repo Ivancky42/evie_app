@@ -10,6 +10,7 @@ import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
 import 'package:evie_test/api/provider/ride_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
+import 'package:evie_test/api/provider/shared_pref_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -589,6 +590,7 @@ class AuthProvider extends ChangeNotifier {
     final _notificationProvider = context.read<NotificationProvider>();
     final _planProvider = context.read<PlanProvider>();
     final _rideProvider = context.read<RideProvider>();
+    final _sharedPrefProvider = context.read<SharedPreferenceProvider>();
 
     await _currentUserProvider.clear();
     await _bikeProvider.clear();
@@ -598,6 +600,7 @@ class AuthProvider extends ChangeNotifier {
     await _notificationProvider.clear(_uid!);
     await _planProvider.clear();
     await _rideProvider.clear();
+    await _sharedPrefProvider.clear();
 
     await _auth.signOut();
 

@@ -3,6 +3,7 @@ import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
 import 'package:evie_test/api/provider/ride_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
+import 'package:evie_test/api/provider/shared_pref_provider.dart';
 import 'package:evie_test/profile/user_profile.dart';
 import 'package:evie_test/screen/account_verified.dart';
 import 'package:evie_test/screen/input_name.dart';
@@ -196,7 +197,18 @@ class AppProviders extends StatelessWidget {
               update: (_, currentUserProvider, bikeProvider, planProvider) {
                 return planProvider!..update(currentUserProvider.getCurrentUserModel, bikeProvider.currentBikeModel);
               }
-          )
+          ),
+          ChangeNotifierProxyProvider2<CurrentUserProvider, BikeProvider, SharedPreferenceProvider>(
+            lazy: true,
+            create: (_) => SharedPreferenceProvider(),
+            update: (_, currentUserProvider, bikeProvider, sharedPreferenceProvider) {
+              return sharedPreferenceProvider!..update(
+                  currentUserProvider.getCurrentUserModel,
+                  currentUserProvider.currentUserModel?.notificationSettings,
+                  bikeProvider.userBikeDetails,
+              );
+            }
+          ),
         ],
         child: child
     );

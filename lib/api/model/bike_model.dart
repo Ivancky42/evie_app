@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/movement_setting_model.dart';
+import 'package:evie_test/api/model/notification_setting_model.dart';
 import 'package:evie_test/api/model/pedal_pals_model.dart';
 import 'package:evie_test/api/model/plan_model.dart';
 import 'package:evie_test/api/model/simcard_model.dart';
@@ -46,6 +47,7 @@ class BikeModel {
   String? serialNumber;
   String? type;
   String? bikeIMG;
+  NotificationSettingModel? notificationSettings;
 
   ///about bike mileage get from firestore
   /// If it is (10) means 1km , (20) means 2km, 2 means 0.2km. and miles
@@ -81,6 +83,7 @@ class BikeModel {
     this.type,
     this.bikeIMG,
     this.mileage,
+    this.notificationSettings,
   });
 
   Map<String, dynamic> toJson() => {
@@ -123,6 +126,7 @@ class BikeModel {
       ///about bike mileage get from firestore
       /// If it is (10) means 1km , (20) means 2km, 2 means 0.2km. and miles
       mileage: json['mileage'] ?? 0,
+      notificationSettings:  json['notificationSettings'] != null ? NotificationSettingModel.fromJson(json['notificationSettings'] as Map<String, dynamic>) : null,
     );
   }
 

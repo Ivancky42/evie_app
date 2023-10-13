@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:evie_test/api/model/trip_history_model.dart';
 import 'package:evie_test/screen/feeds/accepting_invitation.dart';
 import 'package:evie_test/screen/login_page.dart';
@@ -10,11 +8,8 @@ import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_se
 import 'package:evie_test/screen/my_bike_setting/firmware/firmware_information.dart';
 import 'package:evie_test/screen/my_bike_setting/firmware/firmware_update_failed.dart';
 import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/motion_sensitivity.dart';
-
 import 'package:evie_test/screen/my_account/edit_profile.dart';
-//import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_set_colour_code.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
-
 import 'package:evie_test/screen/stripe_checkout.dart';
 import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/screen/trip_history/ride_history.dart';
@@ -26,36 +21,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
-
 import '../screen/account_verified.dart';
 import '../screen/check_your_email.dart';
-import '../screen/feeds/feeds.dart';
 import '../screen/forget_your_password.dart';
 import '../screen/input_name.dart';
 import '../screen/login_method.dart';
-import '../screen/my_account/account/my_account.dart';
 import '../screen/my_account/display_setting/display_setting.dart';
 import '../screen/my_account/enter_new_password.dart';
 import '../screen/my_account/push_notification/push_notification.dart';
 import '../screen/my_account/revoke_account/revoked_account.dart';
 import '../screen/my_account/revoke_account/revoking_account.dart';
 import '../screen/my_bike_setting/about_bike/about_bike.dart';
-import '../screen/my_bike_setting/bike_setting/bike_setting.dart';
 import '../screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
 import '../screen/my_bike_setting/firmware/firmware_update_completed.dart';
-import '../screen/my_bike_setting/pedal_pals/invitation_sent.dart';
 import '../screen/my_bike_setting/pedal_pals/pedal_pals.dart';
 import '../screen/my_bike_setting/pedal_pals/pedal_pals_list.dart';
 import '../screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
-import '../screen/my_bike_setting/pedal_pals/user_not_found.dart';
 import '../screen/my_bike_setting/reset_bike/reset_bike.dart';
-import '../screen/my_bike_setting/rfid_card/register_ev_key.dart';
-import '../screen/my_bike_setting/rfid_card/name_ev.dart';
-import '../screen/my_bike_setting/rfid_card/ev_add_failed.dart';
-import '../screen/my_bike_setting/rfid_card/ev_key.dart';
-import '../screen/my_bike_setting/rfid_card/ev_key_list.dart';
-import '../screen/my_bike_setting/sos_center/sos_center.dart';
-
 import '../screen/onboarding_addNewBike/bike_connect_failed.dart';
 import '../screen/onboarding_addNewBike/bike_connect_success.dart';
 import '../screen/onboarding_addNewBike/congrats_bike_added.dart';
@@ -67,13 +49,9 @@ import '../screen/onboarding_addNewBike/qr_scanning.dart';
 import '../screen/onboarding_addNewBike/turn_on_QRScanner.dart';
 import '../screen/onboarding_addNewBike/turn_on_bluetooth.dart';
 import '../screen/onboarding_addNewBike/turn_on_location.dart';
-import '../screen/onboarding_addNewBike/turn_on_notifications.dart';
 import '../screen/signup_method.dart';
 import '../screen/signup_page.dart';
-
-import '../abandon/user_notification_details.dart';
 import '../screen/signup_password.dart';
-import '../screen/user_home_page/paid_plan/threat/threat_map.dart';
 import '../screen/user_home_page/paid_plan/threat/threat_map.dart';
 import '../screen/user_home_page/paid_plan/threat/threat_timeline.dart';
 import '../test/test.dart';
@@ -274,15 +252,21 @@ void changeToRideHistory(BuildContext context, String tripId, TripHistoryModel c
 }
 
 void changeToBeforeYouStart(BuildContext context) {
-  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
-      builder: (context) => const BeforeYouStart())
-  );
-
+  // Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
+  //     builder: (context) => const BeforeYouStart())
+  // );
+  //
   // Navigator.of(context).push(CupertinoPageRoute(
   //   builder: (context) {
-  //     return BeforeYouStart();
+  //     return EditProfile();
   //   },
   // ));
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return BeforeYouStart();
+    },
+  ));
 }
 
 void changeToNameBikeScreen(BuildContext context) {
@@ -339,16 +323,6 @@ void changeToQRAddManuallyScreen(BuildContext context) {
   PageTransition(
     type: PageTransitionType.rightToLeft,
     child: const QRAddManually(),
-    duration: const Duration(milliseconds: 300),
-  ),
-  );
-}
-
-void changeToTurnOnNotificationsScreen(BuildContext context) {
-  Navigator.pushReplacement(context,
-  PageTransition(
-    type: PageTransitionType.rightToLeft,
-    child: const TurnOnNotifications(),
     duration: const Duration(milliseconds: 300),
   ),
   );
@@ -521,16 +495,6 @@ void changeToResetBike(BuildContext context) {
     PageTransition(
       type: PageTransitionType.rightToLeft,
       child: const ResetBike(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
-
-void changeToSOSCenterScreen(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const SOSCenter(),
       duration: const Duration(milliseconds: 300),
     ),
   );

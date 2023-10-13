@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/provider/shared_pref_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/screen/user_home_page/add_new_bike/add_new_bike.dart';
@@ -40,6 +41,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   late NotificationProvider _notificationProvider;
   late CurrentUserProvider _currentUserProvider;
   late AuthProvider _authProvider;
+  late SharedPreferenceProvider _sharedPreferenceProvider;
   DeviceConnectResult? deviceConnectResult;
   bool isFirstTimeConnected = false;
   bool isLoading = true;
@@ -59,6 +61,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   void initState() {
     _authProvider = context.read<AuthProvider>();
     _currentUserProvider = context.read<CurrentUserProvider>();
+    _sharedPreferenceProvider = context.read<SharedPreferenceProvider>();
     fetchData(_authProvider, _currentUserProvider, context);
     _textFocus.addListener(() {
       onNameChange();
@@ -245,22 +248,20 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
   }
 
   Widget _buildChild(LinkedHashMap userBikeList) {
-    if (_bikeProvider.isReadBike &&
-        //_bikeProvider.currentBikeModel == null ||
-        !userBikeList.isNotEmpty) {
+    if (_bikeProvider.isReadBike && !userBikeList.isNotEmpty) {
       return const AddNewBike();
-    } else {
-
-        if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == true && _bikeProvider.userBikeList.length != 0) {
-          return const PaidPlan();
-
-        } else if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == false && _bikeProvider.userBikeList.length != 0) {
-          return const FreePlan();
-        }else{
-          ///For not become unlimited Circular
-           //if(_bikeProvider.userBikeList.isNotEmpty) _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeList.keys.first);
-          return const Center(child: CircularProgressIndicator(color: EvieColors.primaryColor,));
-        }
+    }
+    else {
+      if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == true && _bikeProvider.userBikeList.isNotEmpty) {
+        return const PaidPlan();
+      }
+      else if (_bikeProvider.currentBikeModel != null && _bikeProvider.isPlanSubscript == false && _bikeProvider.userBikeList.isNotEmpty) {
+        return const FreePlan();
+      }
+      else{
+        ///For not become unlimited Circular
+        return const Center(child: CircularProgressIndicator(color: EvieColors.primaryColor,));
+      }
     }
   }
 

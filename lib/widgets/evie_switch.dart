@@ -14,6 +14,7 @@ class EvieSwitch extends StatelessWidget {
   final bool value;
   final Color thumbColor;
   final Color? activeColor;
+  final double? height;
 
   const EvieSwitch({
     Key? key,
@@ -23,12 +24,13 @@ class EvieSwitch extends StatelessWidget {
     required this.value,
     required this.thumbColor,
     this.activeColor,
+    this.height,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
-      height: 54.h,
+    return  SizedBox(
+      height: height ?? 54.h,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

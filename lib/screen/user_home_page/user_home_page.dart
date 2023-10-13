@@ -37,7 +37,6 @@ class _UserHomePageState extends State<UserHomePage> {
   final screen = [
     const UserHomeGeneral(),
     const Feeds(),
-    //Test(),
     const MyAccount(),
   ];
 
@@ -151,12 +150,3 @@ class _UserHomePageState extends State<UserHomePage> {
     );
   }
 }
-
-// class CustomBottomNavigationBarItem extends BottomNavigationBarItem {
-//   CustomBottomNavigationBarItem({required Widget icon, required Widget title}) : super(
-//     icon: Column(
-//       mainAxisAlignment: MainAxisAlignment.start,
-//       children: [icon],
-//     ),
-//   );
-// }

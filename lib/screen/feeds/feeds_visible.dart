@@ -135,9 +135,9 @@ class _FeedsVisibleState extends State<FeedsVisible> {
                             SmartDialog.dismiss();
                             _notificationProvider.updateUserNotificationSharedBikeStatus(_notificationProvider.notificationList.keys.elementAt(widget.index));
                             showBikeAddSuccessfulToast(context);
-                            for (var element in _bikeProvider.userBikeNotificationList) {
-                              await _notificationProvider.subscribeToTopic("${_notificationProvider.notificationList.values.elementAt(widget.index).deviceIMEI!}$element");
-                            }
+                            // for (var element in _bikeProvider.userBikeNotificationList) {
+                            //   await _notificationProvider.subscribeToTopic("${_notificationProvider.notificationList.values.elementAt(widget.index).deviceIMEI!}$element");
+                            // }
                             changeToUserHomePageScreen(context);
                             currentSubscription?.cancel();
                           }

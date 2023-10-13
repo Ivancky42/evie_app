@@ -78,14 +78,14 @@ calculateTimeAgo(DateTime dateTime){
 
     String timeAgo;
     if (diff.inMinutes > 0 && diff.inMinutes < 60){
-      timeAgo = "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
+      timeAgo = "${diff.inMinutes} ${diff.inMinutes == 1 ? "min" : "mins"} ago";
     }else if(diff.inHours > 0 && diff.inHours < 24){
       timeAgo = "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
     }
 
     ///For current minute
     else if(dateTime.second > 0 && diff.inMinutes < 60){
-      timeAgo = "1 minute ago";
+      timeAgo = "1 min ago";
     }
 
     else{

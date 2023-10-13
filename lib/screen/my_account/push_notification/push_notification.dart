@@ -67,17 +67,10 @@ class _PushNotificationState extends State<PushNotification> {
                   onChanged: (value) async {
                     SmartDialog.showLoading();
                     var result = await _bikeProvider.updateFirestoreNotification("general", value!);
-                    if(result == true){
+                    if(result) {
                       SmartDialog.dismiss();
-                      switch(value){
-                        case true:
-                          await _notificationProvider.subscribeToTopic("~general");
-                          break;
-                        case false:
-                          await _notificationProvider.unsubscribeFromTopic("~general");
-                          break;
-                      }
-                    }else{
+                    }
+                    else {
                       SmartDialog.show(
                           widget: EvieSingleButtonDialog(
                               title: "Error",
@@ -127,17 +120,10 @@ class _PushNotificationState extends State<PushNotification> {
                   onChanged: (value) async {
                     SmartDialog.showLoading();
                     var result = await _bikeProvider.updateFirestoreNotification("firmwareUpdate", value!);
-                    if(result == true){
+                    if(result) {
                       SmartDialog.dismiss();
-                      switch(value){
-                        case true:
-                          await _notificationProvider.subscribeToTopic("~firmware-update");
-                          break;
-                        case false:
-                          await _notificationProvider.unsubscribeFromTopic("~firmware-update");
-                          break;
-                      }
-                    }else{
+                    }
+                    else {
                       SmartDialog.show(
                           widget: EvieSingleButtonDialog(
                               title: "Error",
