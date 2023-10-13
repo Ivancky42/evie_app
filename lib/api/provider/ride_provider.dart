@@ -648,7 +648,7 @@ class RideProvider extends ChangeNotifier {
   }
 
   clear() async {
-    await tripHistorySubscription?.cancel();
+    tripHistorySubscription?.cancel();
     currentTripHistoryLists.clear();
     dayRideHistoryList.clear();
     weekRideHistoryList.clear();

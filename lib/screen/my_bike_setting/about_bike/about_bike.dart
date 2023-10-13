@@ -67,9 +67,7 @@ class _AboutBikeState extends State<AboutBike> {
         appBar: PageAppbar(
           title: 'About Bike',
           onPressed: () {
-
             _settingProvider.changeSheetElement(SheetList.bikeSetting);
-
           },
         ),
         body: Stack(

@@ -110,18 +110,106 @@ calculateTimeAgoWithTime(DateTime dateTime){
 }
 
 ///Return today/yesterday/Thursday, Aug 20  16.00 - 16.14
-calculateDateAgo(DateTime startDateTime, DateTime endDateTime){
-  Duration diff = DateTime.now().difference(startDateTime);
+String calculateDateAgo(DateTime startDateTime, DateTime endDateTime) {
+  DateTime now = DateTime.now();
 
-  String timeAgo;
-  if (diff.inHours >= 0 && diff.inHours <= 24){
-    timeAgo = "Today ${startDateTime.hour.toString().padLeft(2,'0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2,'0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
-  }else if(diff.inHours > 24  && diff.inHours <= 48){
-    timeAgo = "Yesterday ${startDateTime.hour.toString().padLeft(2,'0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2,'0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
-  }else{
-    timeAgo = "${weekdayNameFull[startDateTime.weekday]}, ${monthNameHalf[startDateTime.month]} ${startDateTime.day}, ${startDateTime.hour.toString().padLeft(2,'0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2,'0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
+  // Check if it's today by comparing year, month, and day
+  if (startDateTime.year == now.year &&
+      startDateTime.month == now.month &&
+      startDateTime.day == now.day) {
+    return "Today ${startDateTime.hour.toString().padLeft(2, '0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2, '0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
   }
-  return timeAgo;
+  // Check if it's yesterday
+  else if (startDateTime.isAfter(now.subtract(Duration(days: 1)))){
+    return "Yesterday ${startDateTime.hour.toString().padLeft(2, '0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2, '0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
+  }
+  // For all other cases
+  else {
+    return "${weekdayNameFull[startDateTime.weekday]}, ${monthNameHalf[startDateTime.month]} ${startDateTime.day}, ${startDateTime.year}, ${startDateTime.hour.toString().padLeft(2, '0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2, '0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
+  }
+}
+
+int calculateDurationInMinutes(DateTime startDateTime, DateTime endDateTime) {
+  Duration difference = endDateTime.difference(startDateTime);
+  return difference.inMinutes;
+}
+
+String formatDuration(DateTime startDateTime, DateTime endDateTime) {
+  int durationInMinutes = calculateDurationInMinutes(startDateTime, endDateTime);
+
+  if (durationInMinutes < 60) {
+    return '$durationInMinutes mins';
+  } else {
+    int hours = durationInMinutes ~/ 60; // Get the number of whole hours
+    int remainingMinutes = durationInMinutes % 60; // Get the remaining minutes
+
+    if (remainingMinutes > 0) {
+      return '$hours h $remainingMinutes m';
+    } else {
+      return '$hours h';
+    }
+  }
+}
+
+Widget returnTextStyle(DateTime startDateTime, DateTime endDateTime) {
+  String durationText = formatDuration(
+      startDateTime,
+      endDateTime
+  );
+
+  if (durationText.contains('mins')) {
+    return RichText(
+      text: TextSpan(
+        text: durationText.replaceAll('mins', ""),
+        style: EvieTextStyles.headlineB,
+        children: <TextSpan>[
+          TextSpan(
+            text: 'mins',
+            style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan, fontFamily: 'Avenir',),
+          ),
+        ],
+      ),
+    );
+  }
+  else {
+    List<TextSpan> textSpans = [];
+
+    final RegExp regExp = RegExp(
+        r'(\d+)\s*([hm]?)'); // Regular expression to capture digits followed by 'h' or 'm'.
+
+    for (final match in regExp.allMatches(durationText)) {
+      textSpans.add(
+        TextSpan(
+          text: match.group(1), // The captured digits
+          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w900, color: EvieColors.darkGray, fontFamily: 'Avenir',),
+        ),
+      );
+
+      if (match.group(2) == 'h') {
+        textSpans.add(
+          TextSpan(
+            text: ' h ',
+            style: EvieTextStyles.body18.copyWith(
+                color: EvieColors.darkGrayishCyan, fontFamily: 'Avenir',),
+          ),
+        );
+      } else if (match.group(2) == 'm') {
+        textSpans.add(
+          TextSpan(
+            text: ' m ',
+            style: EvieTextStyles.body18.copyWith(
+                color: EvieColors.darkGrayishCyan, fontFamily: 'Avenir',),
+          ),
+        );
+      }
+    }
+
+    return RichText(
+      text: TextSpan(
+        children: textSpans,
+      ),
+    );
+  }
 }
 
 calculateTimeDifferentInHourMinutes(DateTime startDateTime, DateTime endDateTime){

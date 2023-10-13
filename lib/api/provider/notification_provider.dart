@@ -298,8 +298,8 @@ class NotificationProvider extends ChangeNotifier {
 
   clear(String uid) async {
     notificationList.clear();
-    await notificationListSubscription?.cancel();
-    await currentNotificationSubscription?.cancel();
+    notificationListSubscription?.cancel();
+    currentNotificationSubscription?.cancel();
     isTimeArrive = true;
     currentUserModel = null;
     notifyListeners();

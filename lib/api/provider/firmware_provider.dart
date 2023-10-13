@@ -125,7 +125,7 @@ class FirmwareProvider extends ChangeNotifier {
   }
 
   clear() async {
-    await currentFirmwareSubscription?.cancel();
+    currentFirmwareSubscription?.cancel();
     notifyListeners();
   }
 }

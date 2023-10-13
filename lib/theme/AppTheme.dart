@@ -63,7 +63,6 @@ class AppTheme{
       dialogTheme: DialogTheme(
         backgroundColor: const Color(0xffF2F2F2).withOpacity(0.9),
       ),
-
   //  brightness: Brightness.dark,
   );
 

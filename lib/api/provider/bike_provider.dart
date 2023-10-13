@@ -1817,27 +1817,6 @@ class BikeProvider extends ChangeNotifier {
 
 
   clear() async {
-    // userBikeList.forEach((key, value) async {
-    //   await NotificationProvider().unsubscribeFromTopic(key);
-    //
-    //   if(value?.notificationSettings?.connectionLost == true ) {
-    //     NotificationProvider().unsubscribeFromTopic("$key~connection-lost");
-    //   }
-    //   if(value?.notificationSettings?.movementDetect == true ) {
-    //     NotificationProvider().unsubscribeFromTopic("$key~movement-detect");
-    //   }
-    //   if(value?.notificationSettings?.theftAttempt == true ) {
-    //     NotificationProvider().unsubscribeFromTopic("$key~theft-attempt");
-    //   }
-    //   if(value?.notificationSettings?.lock == true ) {
-    //     NotificationProvider().unsubscribeFromTopic("$key~lock-reminder");
-    //   }
-    //   if(value?.notificationSettings?.planReminder == true ) {
-    //     NotificationProvider().unsubscribeFromTopic("$key~plan-reminder");
-    //   }
-    // });
-
-    RideProvider().clear();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('currentBikeName');

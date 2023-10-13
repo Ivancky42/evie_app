@@ -230,9 +230,9 @@ class SharedPreferenceProvider with ChangeNotifier {
   Future<void> clear() async {
     await removeUid();
     currentNotificationSettings = null;
-    await unsubscribeFromTopic(generalTopic);
-    await unsubscribeFromTopic(promoTopic);
-    await unsubscribeFromTopic(firmwareUpdateTopic);
+    unsubscribeFromTopic(generalTopic);
+    unsubscribeFromTopic(promoTopic);
+    unsubscribeFromTopic(firmwareUpdateTopic);
     List<String> bikeListKey = await loadCurrentUserBikeListKeysFromSharedPreferences();
     // Convert the list to a set for easier comparison
     Set<String> bikeListKeySet = Set<String>.from(bikeListKey);

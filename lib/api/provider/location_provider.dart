@@ -367,7 +367,7 @@ class LocationProvider extends ChangeNotifier {
   clear() async {
     locationModel = null;
     threatRoutesLists?.clear();
-    await locationPermissionStatus?.cancel();
+    locationPermissionStatus?.cancel();
     notifyListeners();
   }
 
