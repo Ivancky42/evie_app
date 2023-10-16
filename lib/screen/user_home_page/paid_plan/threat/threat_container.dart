@@ -215,10 +215,11 @@ class _ThreatContainerState extends State<ThreatContainer> {
                 alignment: Alignment.center,
                 children: [
                   _bluetoothProvider.deviceRssi >= 70 ?
-                  Lottie.asset("assets/icons/security/scanning-proximity-R0.json") :
+                  Lottie.asset("assets/icons/security/scanning-proximity-color-light.json", repeat: false) :
                   _bluetoothProvider.deviceRssi >= 50 && _bluetoothProvider.deviceRssi <= 69 ?
-                  Lottie.asset("assets/icons/security/scanning-proximity-R1.json") :
-                  Lottie.asset("assets/icons/security/scanning-proximity-R2.json"),
+                  Lottie.asset("assets/icons/security/scanning-proximity-color-light-to-medium.json", repeat: false) :
+                  Lottie.asset("assets/icons/security/scanning-proximity-color-medium-to-dark.json", repeat: false),
+                  Lottie.asset("assets/icons/security/scanning-proximity-V2-R0.json", repeat: true),
                   Text(
                     _bluetoothProvider.deviceRssi.toString(), style: EvieTextStyles.batteryPercent.copyWith(color: EvieColors.darkGrayishCyan),
                   ),

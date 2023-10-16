@@ -156,7 +156,13 @@ class NotificationProvider extends ChangeNotifier {
 
     // Delete each document
     for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-      await documentSnapshot.reference.delete();
+      final data = documentSnapshot.data() as Map<String, dynamic>;
+      if (data['status'] == 'userPending') {
+
+      }
+      else {
+        await documentSnapshot.reference.delete();
+      }
     }
   }
 

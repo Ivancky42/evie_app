@@ -181,8 +181,8 @@ class SharedPreferenceProvider with ChangeNotifier {
     if (uid != null) {
       currentUserModel = null;
       await prefs.remove(userId);
-      await unsubscribeFromTopic(uid);
-      await unsubscribeFromTopic('abc');
+      unsubscribeFromTopic(uid);
+      unsubscribeFromTopic('abc');
     }
   }
 
@@ -229,6 +229,8 @@ class SharedPreferenceProvider with ChangeNotifier {
 
   Future<void> clear() async {
     await removeUid();
+    currentUserBikeList.clear();
+    mapsAreEqual = true;
     currentNotificationSettings = null;
     unsubscribeFromTopic(generalTopic);
     unsubscribeFromTopic(promoTopic);

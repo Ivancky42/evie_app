@@ -107,6 +107,7 @@ class BikeProvider extends ChangeNotifier {
   StreamSubscription? bikeUserSubscription;
   StreamSubscription? currentBikeUserSubscription;
   StreamSubscription? currentUserBikeSubscription;
+  Map<String, StreamSubscription> currentUserBikeSubMap = {};
   StreamSubscription? currentBikePlanSubscription;
   StreamSubscription? bikePlanSubscription;
   StreamSubscription? rfidListSubscription;
@@ -195,6 +196,7 @@ class BikeProvider extends ChangeNotifier {
               case DocumentChangeType.removed:
                 userBikeList.removeWhere((key, value) => key == docChange.doc.id);
                 userBikeDetails.removeWhere((key, value) => key == docChange.doc.id);
+                currentUserBikeSubMap[docChange.doc.id]?.cancel();
                 if(userBikeList.isNotEmpty){
                   changeBikeUsingIMEI(userBikeList.keys.first);
                 }else{
@@ -244,6 +246,21 @@ class BikeProvider extends ChangeNotifier {
           userBikeList.clear();
           userBikeDetails.clear();
           currentBikeModel = null;
+
+          for (var docChange in snapshot.docChanges) {
+            switch (docChange.type) {
+            ///element.type
+              case DocumentChangeType.added:
+                break;
+              case DocumentChangeType.removed:
+                currentUserBikeSubMap[docChange.doc.id]?.cancel();
+                notifyListeners();
+                break;
+              case DocumentChangeType.modified:
+                break;
+            }
+          }
+
           notifyListeners();
         }
 
@@ -1032,13 +1049,14 @@ class BikeProvider extends ChangeNotifier {
   }
 
   getUserBikeDetails(String deviceIMEI) async {
-    await currentUserBikeSubscription?.cancel();
+    await currentUserBikeSubMap[deviceIMEI]?.cancel();
     try {
-      currentUserBikeSubscription = FirebaseFirestore.instance
+      currentUserBikeSubMap[deviceIMEI] = FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(deviceIMEI)
           .snapshots()
           .listen((snapshot) async {
+
         if (snapshot.data() != null) {
           Map<String, dynamic>? obj = snapshot.data();
 
@@ -1048,12 +1066,28 @@ class BikeProvider extends ChangeNotifier {
               getOwnerUid(deviceIMEI, obj['ownerUid']);
             }
             notifyListeners();
-          }
-          else if (obj == null) {
+          } else {
             userBikeDetails.removeWhere((key, value) => key == obj?.keys);
             notifyListeners();
+            currentUserBikeSubMap[deviceIMEI]?.cancel();
           }
         }
+
+        // if (snapshot.data() != null) {
+        //   Map<String, dynamic>? obj = snapshot.data();
+        //
+        //   if (obj != null) {
+        //     userBikeDetails.update(snapshot.id, (value) => BikeModel.fromJson(obj), ifAbsent: () => BikeModel.fromJson(obj));
+        //     if (obj['ownerUid'] != null) {
+        //       getOwnerUid(deviceIMEI, obj['ownerUid']);
+        //     }
+        //     notifyListeners();
+        //   }
+        //   else if (obj == null) {
+        //     userBikeDetails.removeWhere((key, value) => key == obj?.keys);
+        //     notifyListeners();
+        //   }
+        // }
       });
 
 
@@ -1663,6 +1697,7 @@ class BikeProvider extends ChangeNotifier {
         'rfidID' : rfidID,
         'rfidName' : rfidName,
         'created': Timestamp.now(),
+        'updatedBy': currentUserModel?.name,
       }, SetOptions(merge: true));
 
       return true;
@@ -1681,6 +1716,7 @@ class BikeProvider extends ChangeNotifier {
           .doc(rfidID.toString())
           .update({
         'rfidName': rfidName,
+        'updatedBy': currentUserModel?.name,
       });
       return true;
     } catch (e) {
@@ -1690,21 +1726,30 @@ class BikeProvider extends ChangeNotifier {
   }
 
   deleteRFIDFirestore(String rfidID) {
-    try {
-          FirebaseFirestore.instance
-          .collection(bikesCollection)
-          .doc(currentBikeModel!.deviceIMEI)
-          .collection(rfidCollection)
-          .doc(rfidID.toString())
-          .delete();
+    FirebaseFirestore.instance
+        .collection(bikesCollection)
+        .doc(currentBikeModel!.deviceIMEI)
+        .collection(rfidCollection)
+        .doc(rfidID.toString())
+        .update({
+      'updatedBy': currentUserModel?.name,
+    }).then((value) {
+      try {
+        FirebaseFirestore.instance
+            .collection(bikesCollection)
+            .doc(currentBikeModel!.deviceIMEI)
+            .collection(rfidCollection)
+            .doc(rfidID.toString())
+            .delete();
 
-      notifyListeners();
+        notifyListeners();
 
-      return true;
-    } catch (e) {
-      debugPrint(e.toString());
-      return false;
-    }
+        return true;
+      } catch (e) {
+        debugPrint(e.toString());
+        return false;
+      }
+    });
   }
 
 

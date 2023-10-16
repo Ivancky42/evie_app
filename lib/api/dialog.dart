@@ -1081,7 +1081,7 @@ showRemoveEVKeyDialog (BuildContext context, RFIDModel rfidModel, BikeProvider _
               if (result == true) {
                 showTextToast("${rfidModel.rfidName} have been removed from your EV-Key list.");
                 SmartDialog.dismiss(status: SmartStatus.loading);
-              } else {
+              } else if (result == false){
                 showDeleteEVKeyFailed(context, "Error removing EV Card");
               }
             }

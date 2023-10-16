@@ -284,7 +284,7 @@ class _EVKeyListState extends State<EVKeyList> {
                 : Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 127.84.h, 16.w, _bikeProvider.isOwner == true ? EvieLength.buttonWord_ButtonBottom : 48.h),
+                      padding: EdgeInsets.fromLTRB(16.w, 127.84.h, 16.w, 48.h),
                       child: EvieButton(
                         width: double.infinity,
                         height: 48.h,
@@ -304,58 +304,58 @@ class _EVKeyListState extends State<EVKeyList> {
                   ),
 
 
-            ///Bottom page button
-            isManageList ? Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 56.h),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: EvieButton_ReversedColor(
-                          width: double.infinity,
-                          height: 48.h,
-                          child: Text(
-                            "Cancel",
-                            style: TextStyle(
-                                color: EvieColors.primaryColor,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              isManageList = false;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  )
-                : Visibility(
-                  visible: _bikeProvider.isOwner == true,
-                  child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 48.h),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: EvieButton_ReversedColor(
-                            width: double.infinity,
-                            height: 48.h,
-                            child: Text(
-                              "Remove All EV-Key",
-                              style: TextStyle(
-                                  color: EvieColors.primaryColor,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                            onPressed: () {
-                              showRemoveAllEVKeyDialog(context, _bikeProvider, _bluetoothProvider, _settingProvider);
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                ),
+            // ///Bottom page button
+            // isManageList ? Align(
+            //         alignment: Alignment.bottomCenter,
+            //         child: Padding(
+            //           padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 56.h),
+            //           child: SizedBox(
+            //             width: double.infinity,
+            //             child: EvieButton_ReversedColor(
+            //               width: double.infinity,
+            //               height: 48.h,
+            //               child: Text(
+            //                 "Cancel",
+            //                 style: TextStyle(
+            //                     color: EvieColors.primaryColor,
+            //                     fontSize: 16.sp,
+            //                     fontWeight: FontWeight.w700),
+            //               ),
+            //               onPressed: () {
+            //                 setState(() {
+            //                   isManageList = false;
+            //                 });
+            //               },
+            //             ),
+            //           ),
+            //         ),
+            //       )
+            //     : Visibility(
+            //       visible: _bikeProvider.isOwner == true,
+            //       child: Align(
+            //           alignment: Alignment.bottomCenter,
+            //           child: Padding(
+            //             padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 48.h),
+            //             child: SizedBox(
+            //               width: double.infinity,
+            //               child: EvieButton_ReversedColor(
+            //                 width: double.infinity,
+            //                 height: 48.h,
+            //                 child: Text(
+            //                   "Remove All EV-Key",
+            //                   style: TextStyle(
+            //                       color: EvieColors.primaryColor,
+            //                       fontSize: 16.sp,
+            //                       fontWeight: FontWeight.w700),
+            //                 ),
+            //                 onPressed: () {
+            //                   showRemoveAllEVKeyDialog(context, _bikeProvider, _bluetoothProvider, _settingProvider);
+            //                 },
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //     ),
           ],
         ),
       ),

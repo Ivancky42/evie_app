@@ -180,7 +180,7 @@ class _NameEVState extends State<NameEV> {
                       style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
-                      addRFIDtoFireStore("Ev-Key ${_bikeProvider.rfidList.length.toString()}");
+                      _settingProvider.changeSheetElement(SheetList.evKeyList);
                       // if(_bikeProvider.rfidList.length >0){
                       //   _settingProvider.changeSheetElement(SheetList.evKeyList);
                       // }else{
