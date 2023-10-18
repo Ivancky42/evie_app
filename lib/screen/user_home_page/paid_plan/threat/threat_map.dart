@@ -356,12 +356,14 @@ class _ThreatMapState extends State<ThreatMap> {
                       bottom: _fabHeight - 15.h,
                       child: GestureDetector(
                         onTap: () async {
-                          pointBounce3(mapboxMap, _locationProvider, userPosition);
+                          _locationProvider.hasLocationPermission == true ?
+                          pointBounce3(mapboxMap, _locationProvider, userPosition) :
+                          showEvieAllowOrbitalDialog(_locationProvider);
                         },
                         child: Container(
                             height: 50.h,
                             child: SvgPicture.asset(
-                              "assets/buttons/location.svg",
+                              _locationProvider.hasLocationPermission == true ? "assets/buttons/location.svg" : "assets/buttons/location_unavailable.svg",
                               width: 50.h,
                               height: 50.h,
                             ),

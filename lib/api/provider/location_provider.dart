@@ -351,18 +351,14 @@ class LocationProvider extends ChangeNotifier {
   }
 
   locations() async{
-    if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
-      checkLocationPermissionStatus();
-    }else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
-      showLocationServiceDisable();
-      //OpenSettings.openLocationSourceSetting();
+    await checkLocationPermissionStatus();
+    if (hasLocationPermission) {
+
+    }
+    else {
+      showEvieAllowOrbitalDialog(this);
     }
   }
-  // updateUserPosition(UserLocation userLocation) async {
-  //   userPosition = userLocation;
-  //   //notifyListeners();
-  //
-  // }
 
   clear() async {
     locationModel = null;

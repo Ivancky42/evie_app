@@ -80,7 +80,6 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
       child: Scaffold(
           backgroundColor: EvieColors.lightBlack,
-          //appBar: const EmptyAppbar(),
           body: SafeArea(
               child: Container(
                 color: EvieColors.grayishWhite,
@@ -105,16 +104,19 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
                                 },
                                 child:Padding(
-                                  padding: EdgeInsets.fromLTRB(0, Platform.isIOS ? 5.h : 10.h, 0, 5.h),
+                                  padding: EdgeInsets.fromLTRB(0, Platform.isIOS ? 5.h : 10.h, 0, 0),
                                   child: Container(
                                       height: 73.33.h,
                                       color:  EvieColors.lightBlack,
+                                      //color:  EvieColors.blue,
                                       child: Container(
                                         alignment: Alignment.centerLeft,
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 _bikeProvider.currentBikeModel?.bikeIMG == ''
                                                     ? Padding(
@@ -123,8 +125,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                                   image: const AssetImage("assets/buttons/bike_left_pic.png"),
                                                   width: 56.h,
                                                   height: 56.h,
-                                                ),
-                                                    )
+                                                ),)
                                                     : Padding(
                                                   padding: const EdgeInsets.only(left: 15.0),
                                                   child: _bikeProvider.currentBikeModel != null ?
@@ -144,7 +145,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                                 Padding(
                                                   padding:  EdgeInsets.only(left: 12.w),
                                                   child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Container(
@@ -153,7 +154,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                                           children: [
                                                             Text(
                                                               _bikeProvider.currentBikeModel?.deviceName ?? "loading",
-                                                              style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite),
+                                                              style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite, height: 1.2),
                                                             ),
                                                             SvgPicture.asset(
                                                               "assets/icons/batch_tick.svg",

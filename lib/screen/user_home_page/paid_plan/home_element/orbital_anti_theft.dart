@@ -34,7 +34,7 @@ import '../../../../api/provider/setting_provider.dart';
 import '../../../../bluetooth/modelResult.dart';
 import '../../../../widgets/evie_card.dart';
 
-class OrbitalAntiTheft extends StatefulWidget {
+class OrbitalAntiTheft extends StatefulWidget  {
   OrbitalAntiTheft({
     Key? key
   }) : super(key: key);
@@ -43,7 +43,7 @@ class OrbitalAntiTheft extends StatefulWidget {
   State<OrbitalAntiTheft> createState() => _OrbitalAntiTheftState();
 }
 
-class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerProviderStateMixin {
+class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
 
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
@@ -70,6 +70,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
   void initState() {
     super.initState();
     // _locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    WidgetsBinding.instance.addObserver(this);
     Future.delayed(Duration.zero).then((value) {
       _locationProvider = Provider.of<LocationProvider>(context, listen: false);
       _locationProvider.setDefaultSelectedGeopoint();
@@ -77,7 +78,15 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _locationProvider.checkLocationPermissionStatus();
+    }
+  }
+
+  @override
   Future<void> dispose() async {
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -124,6 +133,35 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                                 child: Stack(
                                   children: [
                                     MapWidget(
+                                      onTapListener: (hello) {
+                                        print('hello');
+                                        if(_currentIndex == 0){
+                                          _locationProvider.locations();
+                                          if(_locationProvider.locationModel?.isConnected == false){
+                                            _settingProvider.changeSheetElement(SheetList.mapDetails);
+                                            showSheetNavigate(context);
+                                          }else if(_bikeProvider.currentBikeModel?.location?.status == "danger") {
+                                            // _settingProvider.changeSheetElement(SheetList.mapDetails);
+                                            // showSheetNavigate(context);
+                                            changeToThreatMap(context, false);
+                                          }else{
+                                            _settingProvider.changeSheetElement(SheetList.mapDetails);
+                                            showSheetNavigate(context);
+                                          }
+                                        }else{
+                                          if(_locationProvider.locationModel?.isConnected == false){
+                                            _locationProvider.locations();
+                                            _settingProvider.changeSheetElement(SheetList.threatHistory);
+                                            showSheetNavigate(context);
+                                          }else if(_bikeProvider.currentBikeModel?.location?.status == "danger"){
+                                            _locationProvider.locations();
+                                            changeToThreatTimeLine(context);
+                                          }else {
+                                            _settingProvider.changeSheetElement(SheetList.threatHistory);
+                                            showSheetNavigate(context);
+                                          }
+                                        }
+                                      },
                                       onScrollListener: onMapScrollListener,
                                       key: const ValueKey("mapWidget"),
                                       resourceOptions: ResourceOptions(
@@ -140,15 +178,15 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                                       ),
                                     ),
 
-                                    _locationProvider.hasLocationPermission == true ? SizedBox.shrink() : Positioned(
-                                      bottom: 90.h,
+                                    _locationProvider.hasLocationPermission ? SizedBox.shrink() : Positioned(
+                                      bottom: 70.h,
                                       right: 10.w,
                                       child: Align(
                                         alignment: Alignment.bottomRight,
                                         //onTap camera pic
                                         child: GestureDetector(
                                           onTap: () async {
-                                           _locationProvider.locations();
+                                            showEvieAllowOrbitalDialog(_locationProvider);
                                           },
                                           child: SvgPicture.asset(
                                             "assets/buttons/location_unavailable.svg",

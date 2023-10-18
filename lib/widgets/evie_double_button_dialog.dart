@@ -411,6 +411,7 @@ class EvieTwoButtonDialog extends StatelessWidget{
   final bool? havePic;
   final Widget childContent;
   final SvgPicture? svgpicture;
+  final Widget? lottie;
   final String? upContent;
   final String? downContent;
   final VoidCallback? onPressedDown;
@@ -430,7 +431,7 @@ class EvieTwoButtonDialog extends StatelessWidget{
     this.onPressedDown,
     this.onPressedUp,
     this.customButtonUp,
-    this.customButtonDown,
+    this.customButtonDown, this.lottie,
 
   }) : super(key: key);
 
@@ -472,6 +473,11 @@ class EvieTwoButtonDialog extends StatelessWidget{
                   child: svgpicture!,
                 )
               ),
+
+              lottie != null ?
+              Center(
+                  child: lottie,
+              ) : Container(),
 
               Container(
                 width: 325.w,

@@ -48,7 +48,7 @@ class MapDetails extends StatefulWidget {
   State<MapDetails> createState() => _MapDetailsState();
 }
 
-class _MapDetailsState extends State<MapDetails> {
+class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late LocationProvider _locationProvider;
@@ -79,8 +79,16 @@ class _MapDetailsState extends State<MapDetails> {
   @override
   void initState() {
     super.initState();
+     WidgetsBinding.instance.addObserver(this);
     _locationProvider = Provider.of<LocationProvider>(context, listen: false);
     _locationProvider.addListener(locationListener);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _locationProvider.checkLocationPermissionStatus();
+    }
   }
 
   @override
@@ -88,6 +96,7 @@ class _MapDetailsState extends State<MapDetails> {
     _locationProvider.removeListener(locationListener);
     userLocationSubscription?.cancel();
     timer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -221,20 +230,14 @@ class _MapDetailsState extends State<MapDetails> {
                     ),
 
                     Padding(
-                      padding:  EdgeInsets.only(bottom:220.h),
+                      padding:  EdgeInsets.only(bottom:240.h),
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
                           onTap: () async {
                             _locationProvider.hasLocationPermission == true ?
                             pointBounce3(mapboxMap, _locationProvider, userPosition) :
-                            {
-                              if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
-                                _locationProvider.checkLocationPermissionStatus()
-                              }else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
-                                showLocationServiceDisable()
-                              }
-                            };
+                            showEvieAllowOrbitalDialog(_locationProvider);
                           },
                           child: Container(
                               height: 50.h,

@@ -10,6 +10,7 @@ import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/provider/firmware_provider.dart';
+import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sheet.dart';
@@ -1447,6 +1448,13 @@ showSyncRideThrive2(){
   );
 }
 
+showSyncRideThrive3(){
+  /// icon not yet altered
+  SmartDialog.show(
+    widget: Evie4OneButtonDialog(),
+  );
+}
+
 showMasterYourRide(){
   SmartDialog.show(
       widget: Evie3IconOneButtonDialog(
@@ -1465,271 +1473,24 @@ showMasterYourRide(){
           }));
 }
 
-// showSyncRideThrive(){
-//
-//   bool isChange = false;
-//
-//   SmartDialog.show(
-//       widget: StatefulBuilder(
-//             builder: (context, setState) {
-//
-//               return isChange == false ?
-//               EvieOneButtonDialog(
-//                   havePic: false,
-//                   widget: Column(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//
-//                       const EvieProgressIndicator(currentPageNumber: 0, totalSteps: 2, ),
-//
-//                       Padding(
-//                         padding: EdgeInsets.only(top: 32.h),
-//                         child: SvgPicture.asset(
-//                           "assets/images/people_search.svg",
-//                           height: 150.h,
-//                           width: 239.w,
-//                         ),
-//                       ),
-//
-//                       Container(
-//                         width: 325.w,
-//                         child: Padding(
-//                           padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
-//                           child: Text("Sync. Ride. Thrive.",
-//                               style:EvieTextStyles.h1.copyWith(fontWeight: FontWeight.w800),
-//                               textAlign: TextAlign.center
-//                           ),
-//                         ),
-//                       ),
-//
-//                       Padding(
-//                         padding: EdgeInsets.fromLTRB(10.w, 0.h, 8.w, 8.h),
-//                         child: Row(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           crossAxisAlignment: CrossAxisAlignment.center,
-//                           children: [
-//                             SvgPicture.asset(
-//                               "assets/icons/bluetooth_connected.svg",
-//                               height: 36.h,
-//                               width: 36.w,
-//                             ),
-//                             Column(
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               children: [
-//                                 Text("Stay Connected", style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.w800)),
-//
-//                                 Text("Seamlessly sync your bike and stay in control with Bluetooth connectivity.", style: EvieTextStyles.body14.copyWith(fontWeight: FontWeight.w400),)
-//                               ],
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//
-//                       Padding(
-//                         padding: EdgeInsets.fromLTRB(10.w, 0.h, 8.w, 8.h),
-//                         child: Row(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           crossAxisAlignment: CrossAxisAlignment.center,
-//                           children: [
-//                             SvgPicture.asset(
-//                               "assets/icons/lock_safe.svg",
-//                               height: 36.h,
-//                               width: 36.w,
-//                             ),
-//                             Column(
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               children: [
-//                                 Text("One Tap Unlock", style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.w800),),
-//                                 Text("Security has never been this convenient with EVIE's built-in locking system.", style: EvieTextStyles.body14.copyWith(fontWeight: FontWeight.w400),)
-//                               ],
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//
-//
-//                       Padding(
-//                         padding: EdgeInsets.fromLTRB(10.w, 0.h, 8.w, 8.h),
-//                         child: Row(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           crossAxisAlignment: CrossAxisAlignment.center,
-//                           children: [
-//                             Padding(
-//                               padding: EdgeInsets.all(4.h),
-//                               child: SvgPicture.asset(
-//                                 "assets/icons/bar_chart.svg",
-//                                 height: 32.h,
-//                                 width: 32.w,
-//                               ),
-//                             ),
-//                             Column(
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               mainAxisAlignment: MainAxisAlignment.start,
-//                               children: [
-//                                 Row(
-//                                   mainAxisAlignment: MainAxisAlignment.start,
-//                                   crossAxisAlignment: CrossAxisAlignment.start,
-//                                   children: [
-//                                     Text("Ride History", style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.w800),),
-//                                     SvgPicture.asset(
-//                                       "assets/icons/batch_tick.svg",
-//                                       //height: 157.h,
-//                                       //width: 164.w,
-//                                     ),
-//                                   ],
-//                                 ),
-//                                 Text("Explore your journey through time with Ride History. "
-//                                     "An immersive experience that unveils your past adventure.", style: EvieTextStyles.body14.copyWith(fontWeight: FontWeight.w400),)
-//                               ],
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//
-//                     ],
-//                   ),
-//
-//                   middleContent: "Next",
-//                   onPressedMiddle: (){
-//                     setState(() {
-//                       isChange = true;
-//                     });
-//                   }
-//               ) :
-//               EvieOneButtonDialog(
-//                   havePic: false,
-//                   widget: Column(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       const EvieProgressIndicator(currentPageNumber: 0, totalSteps: 2, ),
-//
-//                       Padding(
-//                         padding: EdgeInsets.only(top: 32.h),
-//                         child: SvgPicture.asset(
-//                           "assets/images/people_search.svg",
-//                           height: 150.h,
-//                           width: 239.w,
-//                         ),
-//                       ),
-//
-//                       Container(
-//                         width: 325.w,
-//                         child: Padding(
-//                           padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
-//                           child: Text("Master Your Ride",
-//                               style:EvieTextStyles.h2.copyWith(fontWeight: FontWeight.w800),
-//                               textAlign: TextAlign.center
-//                           ),
-//                         ),
-//                       ),
-//
-//                       Padding(
-//                         padding: EdgeInsets.all(0.1),
-//                         child: Row(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           crossAxisAlignment: CrossAxisAlignment.center,
-//                           children: [
-//                             SvgPicture.asset(
-//                               "assets/icons/bluetooth_connected.svg",
-//                               height: 36.h,
-//                               width: 36.w,
-//                             ),
-//                             Column(
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               children: [
-//                                 Text("Bike Setting", style: EvieTextStyles.body18,),
-//
-//                                 Text("Seamlessly sync your bike and stay in control with Bluetooth connectivity.", style: EvieTextStyles.body14,)
-//                               ],
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//
-//                       Padding(
-//                         padding: EdgeInsets.all(0.1),
-//                         child: Row(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           crossAxisAlignment: CrossAxisAlignment.center,
-//                           children: [
-//                             SvgPicture.asset(
-//                               "assets/icons/lock_safe.svg",
-//                               height: 36.h,
-//                               width: 36.w,
-//                             ),
-//                             Column(
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               children: [
-//                                 Text("One Tap Unlock", style: EvieTextStyles.body18,),
-//                                 Text("Security has never been this convenient with EVIE's built-in locking system.", style: EvieTextStyles.body14,)
-//                               ],
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//
-//
-//                       Padding(
-//                         padding: EdgeInsets.all(0.1),
-//                         child: Row(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           crossAxisAlignment: CrossAxisAlignment.center,
-//                           children: [
-//                             SvgPicture.asset(
-//                               "assets/icons/bar_chart.svg",
-//                               height: 36.h,
-//                               width: 36.w,
-//                             ),
-//                             Column(
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               mainAxisAlignment: MainAxisAlignment.start,
-//                               children: [
-//                                 Row(
-//                                   mainAxisAlignment: MainAxisAlignment.start,
-//                                   crossAxisAlignment: CrossAxisAlignment.start,
-//                                   children: [
-//                                     Text("Ride History", style: EvieTextStyles.body18,),
-//                                     SvgPicture.asset(
-//                                       "assets/icons/batch_tick.svg",
-//                                       //height: 157.h,
-//                                       //width: 164.w,
-//                                     ),
-//                                   ],
-//                                 ),
-//                                 Text("Explore your journey through time with Ride History. "
-//                                     "An immersive experience that unveils your past adventure.", style: EvieTextStyles.body14,)
-//                               ],
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//
-//                     ],
-//                   ),
-//
-//                   middleContent: "Done",
-//                   onPressedMiddle: (){
-//                     SmartDialog.dismiss();
-//                   }
-//               )
-//               ;
-//             }
-//       )
-//       );
-// }
-
 ///Allow location permission to access Orbital Anti_Theft
 ///icon paddings need to be altered
-showEvieAllowOrbitalDialog(BuildContext context){
+showEvieAllowOrbitalDialog(LocationProvider _locationProvider){
   SmartDialog.show(
       widget:Evie2IconBatchOneButtonDialog(
           title: "Worry-free with EV-Secure",
           miniTitle1: "Orbital Anti-theft",
           miniTitle2: "GPS Tracking",
-          content1:"Built-in theft detection, GPS tracking and notifications" ,
-          content2:"Built-in theft detection, GPS tracking and notifications" ,
+          content1:"Built-in theft detection. Receive instant security alerts when a theft attempt is detected." ,
+          content2:"Monitor your bike’s location remotely. Be notified when your bike move beyond its GPS Geofence." ,
           middleContent: "Allow Location",
-          onPressedMiddle: (){
+          onPressedMiddle: () async {
+            if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
+
+            }else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
+              OpenSettings.openLocationSourceSetting();
+            }
+            _locationProvider.checkLocationPermissionStatus();
             SmartDialog.dismiss();
           }));
 }
@@ -1967,13 +1728,20 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                       textAlign: TextAlign.center,
                     ),
                     childContent: Text(
-                      "Embark on the next step by connecting with your bike. "
-                          "An essential requirement to unlock and progress through this seamless process.",
+                      "Ready for the next step? Simply connect with your bike to unlock and experience the next stage of this process.",
                       textAlign: TextAlign.center,
                       style: EvieTextStyles.body18,),
                     svgpicture: SvgPicture.asset(
-                      "assets/images/people_search.svg",
+                      "assets/images/connect_your_bike.svg",
                     ),
+                    // havePic: false,
+                    // lottie: Container(
+                    //   // width: 296.77.w,
+                    //   //height: 131.24.h,
+                    //   padding: EdgeInsets.zero,
+                    //   //color: Colors.red,
+                    //   child: Lottie.asset('assets/images/connect-to-bike.json', repeat: false),
+                    // ),
                     customButtonUp: EvieButton(
                         backgroundColor: _bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
                             _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||

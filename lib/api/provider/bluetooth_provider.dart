@@ -556,7 +556,7 @@ class BluetoothProvider extends ChangeNotifier {
       else if (bleScanStatus.isPermanentlyDenied) {
         ///Prompt dialog and redirect user to enable bluetooth permission
         //showBluetoothNotAuthorized();
-        showSyncRideThrive2();
+        showSyncRideThrive3();
         return PermissionStatus.permanentlyDenied;
       }
       else if (bleScanStatus.isLimited) {
@@ -575,7 +575,7 @@ class BluetoothProvider extends ChangeNotifier {
     else if (bleConnectStatus.isPermanentlyDenied) {
       ///Prompt dialog and redirect user to enable bluetooth permission
       //showBluetoothNotAuthorized();
-      showSyncRideThrive2();
+      showSyncRideThrive3();
       return PermissionStatus.permanentlyDenied;
     }
     else if (bleConnectStatus.isLimited) {
@@ -607,7 +607,7 @@ class BluetoothProvider extends ChangeNotifier {
       else if (bleScanStatus.isPermanentlyDenied) {
         ///Prompt dialog and redirect user to enable bluetooth permission
         //showBluetoothNotAuthorized();
-        showSyncRideThrive2();
+        showSyncRideThrive3();
         return PermissionStatus.permanentlyDenied;
       }
       else if (bleScanStatus.isLimited) {
@@ -621,13 +621,13 @@ class BluetoothProvider extends ChangeNotifier {
       }
     }
     else if (bleConnectStatus.isDenied){
-      showSyncRideThrive2();
+      showSyncRideThrive3();
       return PermissionStatus.denied;
     }
     else if (bleConnectStatus.isPermanentlyDenied) {
       ///Prompt dialog and redirect user to enable bluetooth permission
       //showBluetoothNotAuthorized();
-      showSyncRideThrive2();
+      showSyncRideThrive3();
       return PermissionStatus.permanentlyDenied;
     }
     else if (bleConnectStatus.isLimited) {

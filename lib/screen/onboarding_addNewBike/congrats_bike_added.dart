@@ -109,8 +109,8 @@ class _CongratsBikeAddedState extends State<CongratsBikeAdded> {
                         _bikeProvider.setIsAddBike(false);
 
                         ///show sync
-                        showSyncRideThrive(context, _bluetoothProvider, _bikeProvider);
-
+                        //showSyncRideThrive(context, _bluetoothProvider, _bikeProvider);
+                        showSyncRideThrive3();
                         changeToUserHomePageScreen(context);
                       },
                     ),

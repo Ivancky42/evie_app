@@ -1047,6 +1047,10 @@ pointBounce2(MapboxMap? mapboxMap, LocationProvider locationProvider, userPositi
 
 pointBounce3(MapboxMap? mapboxMap, LocationProvider locationProvider, userPosition) async {
 
+  if (userPosition.lat == 0 && userPosition.lng == 0) {
+    return;
+  }
+
   final LatLng southwest = LatLng(
     min(locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
     min(locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
