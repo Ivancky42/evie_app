@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../api/colours.dart';
+import '../../../../api/dialog.dart';
 import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
 import '../../../../api/function.dart';
@@ -48,6 +49,10 @@ class _BatteryState extends State<Battery> {
     String estimatedDistance = getEstDistance(batteryPercentage, _settingProvider);
 
     return EvieCard(
+      showInfo: true,
+      onInfoPress: () {
+        showBatteryInfoDialog(context);
+      },
       onPress: (){
         showBatteryDetailsSheet(context);
       },
@@ -57,7 +62,6 @@ class _BatteryState extends State<Battery> {
         crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-
               Row(
                  crossAxisAlignment: CrossAxisAlignment.end,
                 children: [

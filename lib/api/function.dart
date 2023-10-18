@@ -43,7 +43,7 @@ checkBleStatusAndConnectDevice(BluetoothProvider _bluetoothProvider, BikeProvide
       break;
     case BleStatus.unauthorized:
       //showBluetoothNotAuthorized();
-      _bluetoothProvider.handlePermission();
+      _bluetoothProvider.handlePermission2();
       break;
     case BleStatus.locationServicesDisabled:
       showLocationServiceDisable();
@@ -942,7 +942,7 @@ getSecurityIconWidget(String eventType) {
     case "danger":
       return "assets/buttons/bike_security_danger.svg";
     case "lock":
-      return "assets/buttons/bike_security_lock_and_secure.svg";
+      return "assets/buttons/bike_security_lock_and_secure_black.svg";
     case "unlock":
       return "assets/buttons/bike_security_unlock_black.svg";
     case "fall":
@@ -959,9 +959,9 @@ getSecurityTextWidget(String eventType) {
     case "danger":
       return "Theft Attempt";
     case "lock":
-      return "Lock bike";
+      return "Locked & Secured";
     case "unlock":
-      return "Unlock bike";
+      return "Bike Unlocked";
     case "fall":
       return "Fall detection";
     default:

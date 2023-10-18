@@ -96,7 +96,7 @@ class BikeProvider extends ChangeNotifier {
   String? distanceBetween;
   List userBikeNotificationList = ["~connection-lost","~movement-detect","~theft-attempt","~fall-detect"];
 
-  List<String> threatFilterArray = ["warning", "danger","fall","crash"];
+  List<String> threatFilterArray = ["warning", "danger","fall","crash", "lock", "unlock"];
   DateTime? threatFilterDate1;
   DateTime? threatFilterDate2;
   bool isUpdateThreat = false;
@@ -134,7 +134,6 @@ class BikeProvider extends ChangeNotifier {
       // final FirebaseAuth auth = FirebaseAuth.instance;
       // final User? user = auth.currentUser;
       // final uid = user?.uid;
-
       //Update
       var docUser = FirebaseFirestore.instance.collection(bikesCollection);
       docUser
@@ -1325,7 +1324,7 @@ class BikeProvider extends ChangeNotifier {
           'connectionLost': true,
           'movementDetect': true,
           'theftAttempt': true,
-          'lock': false,
+          'lock': true,
           'planReminder': true,
           'evKey': true,
         },

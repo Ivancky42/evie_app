@@ -174,8 +174,10 @@ class _ThreatMapState extends State<ThreatMap> {
     await Future.delayed(const Duration(seconds: 1));
     await updateUserPositionAndBearing(true);
 
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     timer = Timer.periodic(const Duration(seconds: 1),
             (Timer t) async => await updateUserPositionAndBearing(false));
+
   }
 
   _onMapLoaded(MapLoadedEventData onMapLoaded) async {
@@ -459,6 +461,11 @@ class _ThreatMapState extends State<ThreatMap> {
           currentAnnotationManager?.setIconAllowOverlap(false);
           currentAnnotationManager?.createMulti(options);
         }
+      }
+
+      if (_bikeProvider.threatRoutesLists.length == 1) {
+        currentAnnotationManager?.setIconAllowOverlap(false);
+        currentAnnotationManager?.createMulti(options);
       }
 
       currentAnnotationManager?.addOnPointAnnotationClickListener(MyPointAnnotationClickListener(_locationProvider));

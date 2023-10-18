@@ -205,6 +205,13 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
       ///From widget function, show loading dialog screen
       SmartDialog.showLoading(backDismiss: false);
       String bikeIMG = dotenv.env['DEFAULT_BIKE_IMG'] ?? 'DBI not found';
+      String? model = bikeProvider.currentBikeModel?.serialNumber?.substring(0, 2) ?? 'S1';
+      if (model == 'S1') {
+        bikeIMG = dotenv.env['DEFAULT_S1_BIKE_IMG'] ?? 'DBI not found';
+      }
+      else if (model == 'T1') {
+        bikeIMG = dotenv.env['DEFAULT_T1_BIKE_IMG'] ?? 'DBI not found';
+      }
       bikeProvider.updateUserBikeImage(bikeIMG);
 
       setState(() {});

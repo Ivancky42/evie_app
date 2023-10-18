@@ -227,6 +227,12 @@ class _ThreatContainerState extends State<ThreatContainer> {
               ),
             ),
 
+            // Center(
+            //   child: Text(
+            //     "Real RSSI: " + _bluetoothProvider.realRssi.toString(), style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
+            //   ),
+            // ),
+
             Center(
               child:
               Text(

@@ -275,6 +275,192 @@ class EvieOneButtonDialog extends StatelessWidget{
   }
 }
 
+class Evie4IconOneButtonDialog extends StatelessWidget{
+  final String title;
+  final String miniTitle1;
+  final String miniTitle2;
+  final String content1;
+  final String content2;
+  final SvgPicture? svgpicture;
+  final String middleContent;
+  final VoidCallback onPressedMiddle;
+
+  const Evie4IconOneButtonDialog({
+    Key? key,
+    required this.title,
+    required this.miniTitle1,
+    required this.miniTitle2,
+    required this.content1,
+    required this.content2,
+    this.svgpicture,
+    required this.middleContent,
+    required this.onPressedMiddle,
+
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+        insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        elevation: 0.0,
+        backgroundColor: EvieColors.grayishWhite,
+        child: Container(
+          padding:  EdgeInsets.only(
+              left: 17.w,
+              right: 17.w,
+              top: 16.w,
+              bottom: 16.w
+          ),
+
+          child: Column(
+            //crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 18.h),
+                    child: Container(
+                      width: 25.w,
+                      height: 4.h,
+                      decoration: BoxDecoration(
+                        color: EvieColors.primaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 6.w),
+                  Padding(
+                    padding: EdgeInsets.only(top: 18.h),
+                    child: Container(
+                      width: 25.w,
+                      height: 4.h,
+                      decoration: BoxDecoration(
+                        color: EvieColors.progressBarGrey,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(top: 50.h),
+                child: SvgPicture.asset(
+                  "assets/images/people_search.svg",
+                  height: 150.h,
+                  width: 239.w,),
+              ),
+
+              Container(
+                width: 325.w,
+                child: Padding(
+                  padding:  EdgeInsets.only(bottom: 24.h, top: 31.76.h),
+                  child: Text(title,
+                    style:EvieTextStyles.title,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+
+              Container(
+                width: 326.w,
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      "assets/icons/bluetooth_connected.svg",
+                      height: 36.h,
+                      width: 36.w,
+                    ),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            miniTitle1,
+                            style: EvieTextStyles.miniTitle,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 16.h),
+                            child: Text(
+                              content1,
+                              textAlign: TextAlign.left,
+                              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Container(
+                width: 326.w,
+
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      "assets/icons/lock_safe.svg",
+                      height: 36.h,
+                      width: 36.w,
+                    ),
+
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          Text(
+                            miniTitle2,
+                            style: EvieTextStyles.miniTitle,
+                          ),
+
+                          Text(
+                            content2,
+                            textAlign: TextAlign.left,
+                            style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(top: 140.h, bottom: 16.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child:
+                      EvieButton(
+                          width: double.infinity,
+                          height: 48.h,
+                          child: Text(
+                            middleContent,
+                            style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                          ),
+                          onPressed: onPressedMiddle
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        )
+    );
+
+  }
+}
+
 class Evie2IconOneButtonDialog extends StatelessWidget{
   final String title;
   final String miniTitle1;

@@ -1221,6 +1221,18 @@ showMissingGPSDataDialog(BuildContext context) {
           }));
 }
 
+showBatteryInfoDialog(BuildContext context) {
+  SmartDialog.show(
+      widget: EvieOneDialog(
+          title: "Battery info",
+          content1: "Please note that the battery info displayed is based on the last time your device was connected to your bike, and may not reflect real-time data.",
+          middleContent: "Done",
+          svgpicture: SvgPicture.asset('assets/images/battery_info.svg'),
+          onPressedMiddle: () {
+            SmartDialog.dismiss();
+          }));
+}
+
 showErrorLoginDialog (BuildContext context){
   SmartDialog.show(
     widget: EvieTwoButtonDialog(
@@ -1410,6 +1422,28 @@ showSyncRideThrive (context, BluetoothProvider _bluetoothProvider, BikeProvider 
             SmartDialog.dismiss();
             showMasterYourRide();
             })
+  );
+}
+
+showSyncRideThrive2(){
+  /// icon not yet altered
+  SmartDialog.show(
+      widget: Evie4IconOneButtonDialog(
+          title: "Sync. Ride. Thrive.",
+          miniTitle1: "Stay Connected",
+          miniTitle2: "One Tap Unlock",
+          content1:"Seamlessly sync your bike and stay in control with Bluetooth connectivity." ,
+          content2:"Security has never been this convenient with EVIE's built-in locking system." ,
+          middleContent: "Allow Bluetooth",
+          onPressedMiddle: () async {
+            SmartDialog.dismiss();
+            if (Platform.isAndroid) {
+              Permission.bluetoothConnect.request();
+            }
+            else {
+              openAppSettings();
+            }
+          })
   );
 }
 

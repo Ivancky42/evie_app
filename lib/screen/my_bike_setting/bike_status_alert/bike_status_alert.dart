@@ -179,6 +179,39 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
                     )
                 ),
                 const EvieDivider(),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
+                    child: EvieSwitch(
+                      height: 82.h,
+                      activeColor: _bikeProvider.isOwner == true ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
+                      title: "Lock / Unlock",
+                      text: "You will receive an notification when your bike is lock/unlock.",
+                      value:  currentNotificationSettings?.lock ?? false,
+                      thumbColor: _thumbColor,
+                      onChanged: (value) async {
+                        if(_bikeProvider.isOwner == true) {
+                          SmartDialog.showLoading();
+                          var result = await _bikeProvider.updateBikeNotifySetting(
+                              "lock", value!);
+                          if (result == true) {
+                            SmartDialog.dismiss();
+                          } else {
+                            SmartDialog.show(
+                                widget: EvieSingleButtonDialog(
+                                    title: "Error",
+                                    content: "Try again",
+                                    rightContent: "OK",
+                                    onPressedRight: () {
+                                      SmartDialog.dismiss();
+                                    }));
+                          }
+                        }else{
+                          showAccNoPermissionToast(context);
+                        }
+                      },
+                    )
+                ),
+                const EvieDivider(),
                 // Padding(
                 //     padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
                 //     child: EvieSwitch(

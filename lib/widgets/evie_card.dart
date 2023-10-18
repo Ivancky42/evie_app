@@ -1,6 +1,7 @@
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../api/colours.dart';
 
@@ -13,6 +14,8 @@ class EvieCard extends StatelessWidget {
   final Color? color;
   final Decoration? decoration;
   final EdgeInsetsGeometry? padding;
+  final bool? showInfo;
+  final VoidCallback? onInfoPress;
 
   const EvieCard({
     Key? key,
@@ -23,7 +26,7 @@ class EvieCard extends StatelessWidget {
     this.onPress,
     this.color,
     this.decoration,
-    this.padding,
+    this.padding, this.showInfo, this.onInfoPress,
 
   }) : super(key: key);
 
@@ -35,21 +38,37 @@ class EvieCard extends StatelessWidget {
       child: Container(
         width: width ?? 168.w,
         height: height ?? 168.h,
-        
         child: title != null ?
-        Padding(
-          padding: padding ?? EdgeInsets.only(left: 16.w, top: 16.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title!,
-                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),),
-              child ?? Container(),
-            ],
-          ),
+        Stack(
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: showInfo != null ?
+              GestureDetector(
+                onTap: onInfoPress,
+                child: Container(
+                    //color: Colors.red,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 8.h, 8.w, 16.h),
+                      child: SvgPicture.asset("assets/buttons/info_grey.svg",),
+                    )
+                ),
+              ) :
+              Container(),
+            ),
+            Padding(
+              padding: padding ?? EdgeInsets.only(left: 16.w, top: 16.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title!, style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),),
+                  child ?? Container(),
+                ],
+              ),
+            )
+          ],
         ) :
         child,
-
         decoration: decoration ?? BoxDecoration(
           color: color ?? EvieColors.dividerWhite,
           borderRadius: BorderRadius.circular(10.w),

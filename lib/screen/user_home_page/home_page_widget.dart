@@ -215,7 +215,7 @@ String getBatteryImage(int batteryPercent) {
   } else if (batteryPercent > 5 && batteryPercent <= 25) {
     return "assets/icons/battery_25.svg";
   } else if (batteryPercent >= 0 && batteryPercent <= 5) {
-    return "assets/icons/battery_0.svg";
+    return "assets/icons/battery_zero.svg";
   } else {
     return "assets/icons/battery_?.svg";
   }

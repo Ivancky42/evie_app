@@ -143,6 +143,7 @@ class BluetoothProvider extends ChangeNotifier {
   BLEScanResult? scanResult;
   DiscoveredDevice? discoverDevice;
   int deviceRssi = 0;
+  int realRssi = 0;
   double deviceRssiProgress = 0.0;
   bool shouldStopTimer = true;
 
@@ -251,6 +252,16 @@ class BluetoothProvider extends ChangeNotifier {
         deviceConnectStream.add(DeviceConnectResult.deviceFound);
         discoverDevice = discoveredDevice;
         deviceRssi = discoverDevice!.rssi.abs();
+        realRssi = discoveredDevice!.rssi.abs();
+        deviceRssi = 1 + (((deviceRssi - 60) * (99))/40).toInt();
+
+        if (deviceRssi <= 0) {
+          deviceRssi = 1;
+        }
+        else if (deviceRssi >= 100) {
+          deviceRssi = 100;
+        }
+
         if (deviceRssi.abs() > 0 && deviceRssi.abs() < 100) {
           deviceRssiProgress = 1.0 - (deviceRssi.abs() / 100.0);
         } else {
@@ -275,6 +286,7 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   stopScan() async {
+    deviceFoundTimer?.cancel();
     await scanSubscription?.cancel();
   }
 
@@ -524,7 +536,6 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   Future<PermissionStatus> handlePermission() async {
-
     var bleConnectStatus = await Permission.bluetoothConnect.request();
     if (bleConnectStatus.isGranted) {
       //return PermissionStatus.granted;
@@ -534,7 +545,8 @@ class BluetoothProvider extends ChangeNotifier {
       ///Location permission is required to use bluetooth
       if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
 
-      }else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
+      }
+      else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
         showLocationServiceDisable();
       }
 
@@ -543,7 +555,8 @@ class BluetoothProvider extends ChangeNotifier {
       }
       else if (bleScanStatus.isPermanentlyDenied) {
         ///Prompt dialog and redirect user to enable bluetooth permission
-        showBluetoothNotAuthorized();
+        //showBluetoothNotAuthorized();
+        showSyncRideThrive2();
         return PermissionStatus.permanentlyDenied;
       }
       else if (bleScanStatus.isLimited) {
@@ -561,7 +574,60 @@ class BluetoothProvider extends ChangeNotifier {
     }
     else if (bleConnectStatus.isPermanentlyDenied) {
       ///Prompt dialog and redirect user to enable bluetooth permission
-      showBluetoothNotAuthorized();
+      //showBluetoothNotAuthorized();
+      showSyncRideThrive2();
+      return PermissionStatus.permanentlyDenied;
+    }
+    else if (bleConnectStatus.isLimited) {
+      return PermissionStatus.limited;
+    }
+    else {
+      return PermissionStatus.restricted;
+    }
+  }
+
+  Future<PermissionStatus> handlePermission2() async {
+    var bleConnectStatus = await Permission.bluetoothConnect.status;
+    if (bleConnectStatus.isGranted) {
+      //return PermissionStatus.granted;
+      var bleScanStatus = await Permission.bluetoothScan.request();
+
+
+      ///Location permission is required to use bluetooth
+      if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
+
+      }
+      else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
+        showLocationServiceDisable();
+      }
+
+      if (bleScanStatus.isDenied){
+        return PermissionStatus.denied;
+      }
+      else if (bleScanStatus.isPermanentlyDenied) {
+        ///Prompt dialog and redirect user to enable bluetooth permission
+        //showBluetoothNotAuthorized();
+        showSyncRideThrive2();
+        return PermissionStatus.permanentlyDenied;
+      }
+      else if (bleScanStatus.isLimited) {
+        return PermissionStatus.limited;
+      }
+      else if (bleScanStatus.isGranted) {
+        return PermissionStatus.granted;
+      }
+      else {
+        return PermissionStatus.restricted;
+      }
+    }
+    else if (bleConnectStatus.isDenied){
+      showSyncRideThrive2();
+      return PermissionStatus.denied;
+    }
+    else if (bleConnectStatus.isPermanentlyDenied) {
+      ///Prompt dialog and redirect user to enable bluetooth permission
+      //showBluetoothNotAuthorized();
+      showSyncRideThrive2();
       return PermissionStatus.permanentlyDenied;
     }
     else if (bleConnectStatus.isLimited) {
@@ -1384,6 +1450,7 @@ class BluetoothProvider extends ChangeNotifier {
 
   void stopScanTimer() {
     startScanTimer?.cancel();
+    deviceFoundTimer?.cancel();
     bleScanSub?.cancel();
     notifyListeners();
   }

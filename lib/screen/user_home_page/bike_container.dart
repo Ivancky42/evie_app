@@ -137,7 +137,7 @@ class _BikeContainerState extends State<BikeContainer> {
                   : ClipOval(
                 child: CachedNetworkImage(
                   imageUrl: widget.bikeModel.bikeIMG!,
-                  placeholder: (context, url) => const CircularProgressIndicator(),
+                  placeholder: (context, url) => const CircularProgressIndicator(color: EvieColors.primaryColor,),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                   width: 56.h,
                   height: 56.h,

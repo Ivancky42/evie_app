@@ -62,25 +62,6 @@ class _BatteryDetailsState extends State<BatteryDetails> {
     return Material(
       child: WillPopScope(
         onWillPop: () async {
-          // bool shouldClose = true;
-          // await showDialog<void>(
-          //     context: context,
-          //     builder: (BuildContext context) =>
-          //         EvieDoubleButtonDialog(
-          //             title: "Close this sheet?",
-          //             childContent: Text("Are you sure you want to close this sheet?",
-          //               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),),
-          //             leftContent: "No",
-          //             rightContent: "Yes",
-          //             onPressedLeft: () {
-          //               shouldClose = false;
-          //               Navigator.of(context).pop();
-          //             },
-          //             onPressedRight: () {
-          //               shouldClose = true;
-          //               Navigator.of(context).pop();
-          //             }));
-          // return shouldClose;
            return true;
         },
 
@@ -92,13 +73,6 @@ class _BatteryDetailsState extends State<BatteryDetails> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              // Padding(
-              //   padding:  EdgeInsets.only(top: 13.h),
-              //   child: SvgPicture.asset(
-              //     "assets/buttons/down.svg",
-              //   ),
-              // ),
-
               Row(
                 mainAxisAlignment:
                 MainAxisAlignment.spaceBetween,

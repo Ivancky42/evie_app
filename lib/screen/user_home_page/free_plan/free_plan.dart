@@ -43,6 +43,7 @@ import '../../../widgets/evie_double_button_dialog.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../home_page_widget.dart';
 import '../paid_plan/home_element/actionable_bar.dart';
+import '../paid_plan/home_element/battery.dart';
 import '../paid_plan/paid_plan.dart';
 import '../switch_bike.dart';
 import 'bottom_sheet_widget.dart';
@@ -211,23 +212,25 @@ class _FreePlanState extends State<FreePlan> {
                                 return GestureDetector(
                                   onTap: (){},
                                   child:Padding(
-                                    padding: EdgeInsets.fromLTRB(0, Platform.isIOS ? 5.h : 10.h, 0, 5.h),
+                                    padding: EdgeInsets.fromLTRB(0, Platform.isIOS ? 5.h : 10.h, 0, 0),
 
                                     child: Container(
                                         height: 73.33.h,
                                         color:  EvieColors.lightBlack,
                                         child: Container(
+                                          //color: Colors.red,
                                           alignment: Alignment.centerLeft,
                                           child: SingleChildScrollView(
                                             physics: NeverScrollableScrollPhysics(),
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Row(
                                                   children: [
                                                     _bikeProvider.currentBikeModel?.bikeIMG == ''
                                                         ? Padding(
-                                                      padding: const EdgeInsets.only(left: 15.0),
+                                                      padding: EdgeInsets.only(left: 15.w),
                                                       child: Image(
                                                         image: const AssetImage("assets/buttons/bike_left_pic.png"),
                                                         width: 56.h,
@@ -235,12 +238,12 @@ class _FreePlanState extends State<FreePlan> {
                                                       ),
                                                     )
                                                         : Container(
-                                                      padding: const EdgeInsets.only(left: 15.0),
+                                                      padding: EdgeInsets.only(left: 15.w),
                                                       child: ClipOval(
                                                         child: CachedNetworkImage(
                                                           //imageUrl: document['profileIMG'],
                                                           imageUrl: _bikeProvider.currentBikeModel!.bikeIMG!,
-                                                          placeholder: (context, url) => const CircularProgressIndicator(),
+                                                          placeholder: (context, url) => CircularProgressIndicator( color: EvieColors.primaryColor,),
                                                           errorWidget: (context, url, error) => Icon(Icons.error),
                                                           width: 56.h,
                                                           height: 56.h,
@@ -251,21 +254,21 @@ class _FreePlanState extends State<FreePlan> {
                                                     Padding(
                                                       padding:  EdgeInsets.only(left: 12.w),
                                                       child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: [
 
-                                                          Row(
-                                                            children: [
-                                                              Text(
-                                                                _bikeProvider.currentBikeModel?.deviceName ?? "loading",
-                                                                style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite),
-                                                              ),
-                                                              // Text(
-                                                              //   "icons",
-                                                              //   style: EvieTextStyles.h3.copyWith(color: EvieColors.grayishWhite),
-                                                              // ),
-                                                            ],
+                                                          Container(
+                                                            padding: EdgeInsets.only(left: 2),
+                                                            //color: Colors.red,
+                                                            child: Row(
+                                                              children: [
+                                                                Text(
+                                                                  _bikeProvider.currentBikeModel?.deviceName ?? "loading",
+                                                                  style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite, height: 1.2),
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
 
                                                           deviceConnectResult == DeviceConnectResult.connected ?
@@ -280,17 +283,21 @@ class _FreePlanState extends State<FreePlan> {
                                                               ),
                                                             ],
                                                           ) :
-                                                          Row(
-                                                            children: [
-                                                              SvgPicture.asset(
-                                                                "assets/icons/bluetooth_disconnected.svg",
-                                                              ),
-                                                              Text(
-                                                                "Disconnected",
-                                                                style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
-                                                              ),
-                                                            ],
-                                                          ),
+                                                          Container(
+                                                            padding: EdgeInsets.zero,
+                                                            //color: Colors.green,
+                                                            child: Row(
+                                                              children: [
+                                                                SvgPicture.asset(
+                                                                  "assets/icons/bluetooth_disconnected.svg",
+                                                                ),
+                                                                Text(
+                                                                  "Disconnected",
+                                                                  style: EvieTextStyles.body14.copyWith(color: EvieColors.grayishWhite),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          )
                                                         ],
                                                       ),
                                                     ),
@@ -363,20 +370,21 @@ class _FreePlanState extends State<FreePlan> {
                                        alignment: Alignment.centerLeft,
                                        children: [
                                          Padding(
-                                           padding: EdgeInsets.only(left: 16.w, top: 18.h, bottom: 17.58.h,
-                                               right: 59.79.w
-                                           ),
-                                           child: SvgPicture.asset(
-                                             "assets/images/bike_illustration.svg",
-                                             width: 295.21.w,
-                                             height: 196.42.h,
-                                           ),
+                                           padding: EdgeInsets.only(left: 16.w, top: 18.h, bottom: 17.58.h, right: 59.79.w),
+                                           child: Container(
+                                             //color:Colors.red,
+                                             child: SvgPicture.asset(
+                                               "assets/images/bike_illustration.svg",
+                                               // width: 295.21.w,
+                                               // height: 196.42.h,
+                                             ),
+                                           )
                                          ),
 
                                          Align(
-                                           alignment: Alignment.bottomRight,
+                                           alignment: Alignment.centerRight,
                                            child: Padding(
-                                             padding: EdgeInsets.only(top: 93.h),
+                                             padding: EdgeInsets.only(top: 100.h),
                                              child: Column(
                                                mainAxisAlignment: MainAxisAlignment.start,
                                                crossAxisAlignment: CrossAxisAlignment.start,
@@ -392,7 +400,7 @@ class _FreePlanState extends State<FreePlan> {
 
                                                  Padding(
                                                    padding: EdgeInsets.only(top: 0.h, left: 185.w, right: 15.w),
-                                                   child: SvgPicture.asset(
+                                                   child:SvgPicture.asset(
                                                      "assets/buttons/EVIE+.svg",
                                                    ),
                                                  )
@@ -415,131 +423,18 @@ class _FreePlanState extends State<FreePlan> {
                                Expanded(
                                  child: AspectRatio(
                                    aspectRatio: 1,
-                                 child: Padding(
-                                     padding: EdgeInsets.only(left: 19.w, right: 8.w, bottom: 8.h),
-                                     child: EvieCard(
-                                       onPress: (){
-                                         // showBatteryDetailsSheet(context);
-                                       },
-                                       title: "Battery",
-                                       child: Expanded(
-                                         child: Stack(
-                                           children: [
-                                             Column(
-                                               crossAxisAlignment: CrossAxisAlignment.start,
-                                               mainAxisAlignment: MainAxisAlignment.end,
-                                               children: [
-                                                 Row(
-                                                   crossAxisAlignment: CrossAxisAlignment.end,
-                                                   children: [
-                                                     Padding(
-                                                       padding: EdgeInsets.only(bottom: 4.h, right: 8.w),
-                                                       child: SvgPicture.asset(
-                                                         getBatteryImage(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
-                                                         int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")
-                                                             : _bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0),
-                                                         width: 30.w,
-                                                         height: 60.h,
-                                                       ),
-                                                     ),
-                                                     Column(
-                                                       mainAxisAlignment: MainAxisAlignment.end,
-                                                       crossAxisAlignment: CrossAxisAlignment.start,
-                                                       children: [
-                                                         Row(
-                                                           mainAxisAlignment: MainAxisAlignment.end,
-
-                                                           children: [
-                                                             Padding(
-                                                               padding:EdgeInsets.only(left: 0.w),
-                                                               child: Text(
-                                                                 _bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
-                                                                 "${int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "-")}" :
-                                                                 "${_bikeProvider.currentBikeModel?.batteryModel?.percentage ?? "-"}",
-
-                                                                 style: EvieTextStyles.batteryPercent.copyWith(height: 0.7),
-                                                               ),
-                                                             ),
-                                                             Padding(
-                                                               padding: EdgeInsets.only(right: 15.w),
-                                                               child: Text(
-                                                                 " %",
-                                                                 style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGray),
-                                                               ),
-                                                             ),
-                                                           ],
-                                                         ),
-                                                         SizedBox(height: 0.h),
-                                                         Padding(
-                                                           padding: EdgeInsets.only(left: 0.w, right: 15.w),
-                                                           child: Text(
-                                                             "$estimatedDistance",
-                                                             style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
-                                                           ),
-                                                         ),
-                                                       ],
-                                                     ),
-                                                   ],
-                                                 ),
-                                                 Padding(
-                                                   padding: EdgeInsets.only(bottom: 16.h, top: 12.h),
-                                                   child: Text(
-                                                       _bikeProvider.currentBikeModel?.batteryModel?.lastUpdated != null ?
-                                                       calculateTimeAgo(_bikeProvider.currentBikeModel?.batteryModel?.lastUpdated?.toDate() ?? DateTime.now())
-                                                     : "- ago",
-                                                     style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),
-                                                   ),),
-                                               ],
-                                             ),
-
-
-                                             Transform.translate(
-                                               offset: Offset(100.w, -40.h),
-                                               child: IconButton(
-
-                                                   onPressed: (){
-
-                                                   },
-                                                   icon: SvgPicture.asset("assets/buttons/info_grey.svg",)),
-                                             ),
-                                           ],
-                                         ),
-                                       ),
-                                     ),
-
-                                     // child: EvieCard(
-                                     //   onPress: (){
-                                     //     SnackBar.showUpgradePlanToast(context, _settingProvider, true);
-                                     //   },
-                                     //   ///Listen to bluetooth provider data
-                                     //   title: "Battery",
-                                     //   child: Expanded(
-                                     //     child: Column(
-                                     //       crossAxisAlignment: CrossAxisAlignment.start,
-                                     //       mainAxisAlignment: MainAxisAlignment.end,
-                                     //       children: [
-                                     //         SvgPicture.asset(
-                                     //           "assets/icons/battery_not_available.svg",
-                                     //           width: 36.w,
-                                     //           height: 36.h,
-                                     //         ),
-                                     //         //Text("${int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")} %", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
-                                     //         Text("- %", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
-                                     //         Text("Est - km", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
-                                     //         ),
-                                     //         SizedBox(height: 16.h,),
-                                     //       ],
-                                     //     ),
-                                     //   ),
-                                     // )
-                                 ),),
+                                   child: Padding(
+                                     padding: EdgeInsets.fromLTRB(19.w, 0, 8.w, 16.h),
+                                     child: Battery(),
+                                   ),
+                                 ),
                                ),
 
                                Expanded(
                                  child: AspectRatio(
                                    aspectRatio: 1,
                                  child: Padding(
-                                     padding: EdgeInsets.only(right: 19.w, left: 8.w,  bottom: 8.h),
+                                     padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 16.h),
                                      child: EvieCard(
                                        onPress: (){    SnackBar.showUpgradePlanToast(context, _settingProvider, true);},
                                        color: EvieColors.grayishWhite,
@@ -581,7 +476,7 @@ class _FreePlanState extends State<FreePlan> {
                                  child: AspectRatio(
                                    aspectRatio: 1,
                                  child: Padding(
-                                     padding: EdgeInsets.only(left: 19.w, right: 8.w, bottom: 20.h, top: 8.h),
+                                   padding: EdgeInsets.fromLTRB(19.w, 0, 8.w, 16.h),
                                      child: EvieCard(
                                        onPress: (){
                                          _settingProvider.changeSheetElement(SheetList.bikeSetting);
@@ -598,7 +493,7 @@ class _FreePlanState extends State<FreePlan> {
                                              ),
                                              Padding(
                                                padding: EdgeInsets.only(bottom: 16.h),
-                                               child: Text("Bike Setting", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
+                                               child: Text("Bike Settings", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
                                              ),
                                            ],
                                          ),
@@ -611,7 +506,7 @@ class _FreePlanState extends State<FreePlan> {
                                  child: AspectRatio(
                                    aspectRatio: 1,
                                  child: Padding(
-                                     padding: EdgeInsets.only(right: 19.w, left: 8.w, top: 8.h, bottom: 20.h),
+                                     padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 16.h),
                                      child: EvieCard(
                                        child: Column(
                                          mainAxisAlignment: MainAxisAlignment.center,
@@ -862,85 +757,17 @@ class _FreePlanState extends State<FreePlan> {
                                     child: AspectRatio(
                                       aspectRatio: 1,
                                       child: Padding(
-                                          padding: EdgeInsets.only(left: 19.w, right: 8.w, bottom: 8.h),
-                                          child: EvieCard(
-                                            ///Listen to bluetooth provider data
-                                            title: "Battery",
-                                            child: Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-
-                                                  Row(
-                                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                                    children: [
-                                                      Padding(
-                                                        padding: EdgeInsets.only(bottom: 4.h, right: 8.w),
-                                                        child: SvgPicture.asset(
-                                                          getBatteryImage(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
-                                                          int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0")
-                                                              : _bikeProvider.currentBikeModel?.batteryPercent ?? 0),
-                                                          width: 30.w,
-                                                          height: 60.h,
-                                                        ),
-                                                      ),
-                                                      Column(
-                                                        mainAxisAlignment: MainAxisAlignment.end,
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Row(
-                                                            mainAxisAlignment: MainAxisAlignment.end,
-
-                                                            children: [
-                                                              Padding(
-                                                                padding:EdgeInsets.only(left: 0.w),
-                                                                child: Text(
-                                                                  "${_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
-                                                                  int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0") :
-                                                                  _bikeProvider.currentBikeModel?.batteryPercent ?? 0}",
-                                                                  style: EvieTextStyles.batteryPercent.copyWith(height: 0.7),
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                padding: EdgeInsets.only(right: 15.w),
-                                                                child: Text(
-                                                                  " %",
-                                                                  style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGray),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          SizedBox(height: 0.h),
-                                                          Padding(
-                                                            padding: EdgeInsets.only(left: 0.w, right: 15.w),
-                                                            child: Text(
-                                                              "$estimatedDistance",
-                                                              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(bottom: 16.h, top: 12.h),
-                                                    child: Text(
-                                                      " 23 hours ago",
-                                                      style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),
-                                                    ),),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                      ),),
+                                        padding: EdgeInsets.fromLTRB(19.w, 0, 8.w, 16.h),
+                                        child: Battery(),
+                                      ),
+                                    ),
                                   ),
 
                                   Expanded(
                                     child: AspectRatio(
                                       aspectRatio: 1,
                                       child: Padding(
-                                          padding: EdgeInsets.only(right: 19.w, left: 8.w,  bottom: 8.h),
+                                          padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 16.h),
                                           child: EvieCard(
                                             color: EvieColors.grayishWhite,
                                             title: "Rides",
@@ -981,7 +808,7 @@ class _FreePlanState extends State<FreePlan> {
                                     child: AspectRatio(
                                       aspectRatio: 1,
                                       child: Padding(
-                                        padding: EdgeInsets.only(left: 19.w, right: 8.w, bottom: 20.h, top: 8.h),
+                                        padding: EdgeInsets.fromLTRB(19.w, 0, 8.w, 20.h),
                                         child: EvieCard(
                                           onPress: (){
                                             _settingProvider.changeSheetElement(SheetList.bikeSetting);
@@ -998,7 +825,7 @@ class _FreePlanState extends State<FreePlan> {
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.only(bottom: 16.h),
-                                                  child: Text("Bike Setting", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
+                                                  child: Text("Bike Settings", style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray)),
                                                 ),
                                               ],
                                             ),
@@ -1011,7 +838,7 @@ class _FreePlanState extends State<FreePlan> {
                                     child: AspectRatio(
                                       aspectRatio: 1,
                                       child: Padding(
-                                          padding: EdgeInsets.only(right: 19.w, left: 8.w, top: 8.h, bottom: 20.h),
+                                          padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 20.h),
                                           child: EvieCard(
                                             child: Column(
                                               mainAxisAlignment: MainAxisAlignment.center,
