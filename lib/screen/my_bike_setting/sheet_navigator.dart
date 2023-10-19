@@ -52,6 +52,7 @@ import '../../api/enumerate.dart';
 import '../../api/navigator.dart';
 import '../../api/provider/setting_provider.dart';
 import '../user_home_page/paid_plan/map_detail.dart';
+import '../user_home_page/paid_plan/threat/threat_history2.dart';
 import 'bike_setting/bike_setting.dart';
 
 class SheetNavigator extends StatefulWidget {
@@ -83,7 +84,7 @@ class _SheetNavigatorState extends State<SheetNavigator> {
       case SheetList.mapDetails:
         return MapDetails();
       case SheetList.threatHistory:
-        return ThreatHistory();
+        return ThreatHistory2();
       case SheetList.bikeSetting:
         return BikeSetting(source: widget.source);
       case SheetList.evKey:

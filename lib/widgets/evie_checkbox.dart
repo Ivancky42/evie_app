@@ -29,7 +29,7 @@ class EvieCheckBox extends StatelessWidget {
           if (states.contains(MaterialState.selected)) {
             return EvieColors.primaryColor; // color of the checkbox when it's checked
           } else {
-            return Colors.grey; // color of the checkbox when it's unchecked
+            return EvieColors.lightGrayishCyan; // color of the checkbox when it's unchecked
           }
         },
         ),
@@ -37,9 +37,15 @@ class EvieCheckBox extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.w),
         ),
-        // side: MaterialStateBorderSide.resolveWith(
-        //       (states) => BorderSide(width: 1.w, color:EvieColors.lightGrayishCyan),
-        // ),
+        side: MaterialStateBorderSide.resolveWith(
+              (states) {
+                if (states.contains(MaterialState.selected)) {
+                  return BorderSide(width: 1, color: EvieColors.primaryColor); // color of the checkbox when it's checked
+                } else {
+                  return BorderSide(color: EvieColors.lightGrayishCyan); // color of the checkbox when it's unchecked
+                }
+              },
+        ),
         visualDensity: VisualDensity.comfortable,
       ),
     );

@@ -21,22 +21,20 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
   bool warning = bikeProvider.threatFilterArray.contains("warning") ? true : false;
   bool fall = bikeProvider.threatFilterArray.contains("fall") ? true : false;
   bool danger = bikeProvider.threatFilterArray.contains("danger") ? true : false;
-  bool crash = bikeProvider.threatFilterArray.contains("crash") ? true : false;
+  bool lock = bikeProvider.threatFilterArray.contains("lock") ? true : false;
+  bool unlock = bikeProvider.threatFilterArray.contains("unlock") ? true : false;
 
-  if (bikeProvider.threatFilterArray.toSet().containsAll(['warning', 'fall', 'danger', 'crash'])) {
+  if (bikeProvider.threatFilterArray.toSet().containsAll(['warning', 'fall', 'danger', 'lock', 'unlock'])) {
     warning = false;
     fall = false;
     danger = false;
-    crash = false;
+    lock = false;
+    unlock = false;
   }
 
   SmartDialog.show(
       backDismiss: false,
       keepSingle: true,
-      // maskColorTemp: EvieColors.transparent,
-      // targetContext: context,
-      // target: Offset(120, 200),
-
       widget: StatefulBuilder(
       builder: (context, setState){
         return  EvieDoubleButtonDialogFilter(
@@ -51,10 +49,11 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
                         warning = true;
                         fall = true;
                         danger = true;
-                        crash = true;
+                        lock = true;
+                        unlock = true;
                       });
 
-                  List<String> filter = ["warning","fall","danger","crash"];
+                  List<String> filter = ["warning","fall","danger", "lock", "unlock"];
                   await bikeProvider.applyThreatFilterStatus(filter);
 
                   SmartDialog.dismiss();
@@ -66,74 +65,111 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Movement Detected", style: EvieTextStyles.body18,
-                      ),
-                      EvieCheckBox(
-                        onChanged: (value) {
-                          setState(() {
-                            warning = value!;
-                          });
-                        },
-                        value: warning,
-                      ),
-                    ],
+                  Container(
+                    height: 54.h,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Movement Detected", style: EvieTextStyles.body18,
+                        ),
+                        EvieCheckBox(
+                          onChanged: (value) {
+                            setState(() {
+                              warning = value!;
+                            });
+                          },
+                          value: warning,
+                        ),
+                      ],
+                    ),
                   ),
                   const EvieDivider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Fall Detected", style: EvieTextStyles.body18,
-                      ),
-                      EvieCheckBox(
-                        onChanged: (value) {
-                          setState(() {
-                            fall = value!;
-                          });
-                        },
-                        value: fall,
-                      ),
-                    ],
+                  Container(
+                    height: 54.h,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Fall Detected", style: EvieTextStyles.body18,
+                        ),
+                        EvieCheckBox(
+                          onChanged: (value) {
+                            setState(() {
+                              fall = value!;
+                            });
+                          },
+                          value: fall,
+                        ),
+                      ],
+                    ),
                   ),
                   const EvieDivider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Theft Attempt", style: EvieTextStyles.body18,
-                      ),
-                      EvieCheckBox(
-                        onChanged: (value) {
-                          setState(() {
-                            danger = value!;
-                          });
-                        },
-                        value: danger,
-                      ),
-                    ],
+                  Container(
+                    height: 54.h,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Theft Attempt", style: EvieTextStyles.body18,
+                        ),
+                        EvieCheckBox(
+                          onChanged: (value) {
+                            setState(() {
+                              danger = value!;
+                            });
+                          },
+                          value: danger,
+                        ),
+                      ],
+                    ),
                   ),
                   const EvieDivider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Crash Alert", style: EvieTextStyles.body18,
-                      ),
-                      EvieCheckBox(
-                        onChanged: (value) {
-                          setState(() {
-                            crash = value!;
-                          });
-                        },
-                        value: crash,
-                      ),
-                    ],
+                  Container(
+                    height: 54.h,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Lock", style: EvieTextStyles.body18,
+                        ),
+                        EvieCheckBox(
+                          onChanged: (value) {
+                            setState(() {
+                              lock = value!;
+                            });
+                          },
+                          value: lock,
+                        ),
+                      ],
+                    ),
                   ),
                  const EvieDivider(),
+                  Container(
+                    height: 54.h,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Unlock", style: EvieTextStyles.body18,
+                        ),
+                        EvieCheckBox(
+                          onChanged: (value) {
+                            setState(() {
+                              unlock = value!;
+                            });
+                          },
+                          value: unlock,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const EvieDivider(),
 
                       ],),
                   ),
@@ -153,7 +189,8 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
               if(warning == true){filter.add("warning");}
               if(fall == true){filter.add("fall");}
               if(danger == true){filter.add("danger");}
-              if(crash == true){filter.add("crash");}
+              if(lock == true){filter.add("lock");}
+              if(unlock == true){filter.add("unlock");}
 
               await bikeProvider.applyThreatFilterStatus(filter);
 

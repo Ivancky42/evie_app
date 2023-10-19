@@ -21,6 +21,7 @@ import '../screen/my_bike_setting/subscription/current_plan.dart';
 import '../screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
 import '../screen/ride/ride_history.dart';
 import '../screen/user_home_page/paid_plan/map_detail.dart';
+import '../screen/user_home_page/paid_plan/threat/threat_history2.dart';
 import 'enumerate.dart';
 import 'model/trip_history_model.dart';
 
@@ -84,6 +85,7 @@ void showShareBikeInvitationSheet(BuildContext context) {
 
 void showThreatHistorySheet(BuildContext context) {
   showCupertinoSheet(context, ThreatHistory());
+  //showCupertinoSheet(context, ThreatHistory2());
 }
 
 void showBatteryDetailsSheet(BuildContext context) {
@@ -114,8 +116,8 @@ void showCupertinoSheet(BuildContext context, Widget widget) {
   showCupertinoModalBottomSheet(
     expand: true,
     useRootNavigator: true,
-    ///enableDrag: false,
-    ///isDismissible: false,
+    // enableDrag: false,
+    // isDismissible: false,
     context: context,
     builder: (context) => EvieBottomSheet(widget: widget,),
   );

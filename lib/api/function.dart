@@ -95,18 +95,37 @@ calculateTimeAgo(DateTime dateTime){
 }
 
 
-calculateTimeAgoWithTime(DateTime dateTime){
+// calculateTimeAgoWithTime(DateTime dateTime){
+//   Duration diff = DateTime.now().difference(dateTime);
+//
+//   String timeAgo;
+//   if (diff.inMinutes >= 0 && diff.inMinutes <= 60){
+//     timeAgo = "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
+//   }else if(diff.inHours >= 0 && diff.inHours <= 24){
+//     timeAgo = "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
+//   }else{
+//     timeAgo = "${monthsInYear[dateTime.month]} ${dateTime.day.toString()} ${dateTime.year.toString()}, at ${dateTime.hour}:${dateTime.minute}";
+//   }
+//   return timeAgo;
+// }
+
+String calculateTimeAgoWithTime(DateTime dateTime) {
   Duration diff = DateTime.now().difference(dateTime);
 
-  String timeAgo;
-  if (diff.inMinutes >= 0 && diff.inMinutes <= 60){
-    timeAgo = "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
-  }else if(diff.inHours >= 0 && diff.inHours <= 24){
-    timeAgo = "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
-  }else{
-    timeAgo = "${monthsInYear[dateTime.month]} ${dateTime.day.toString()} ${dateTime.year.toString()}, at ${dateTime.hour}:${dateTime.minute}";
+  if (diff.inSeconds <= 10) {
+    return "Just now";
+  } else if (diff.inMinutes == 1) {
+    return "1 min ago";
+  } else if (diff.inMinutes < 60) {
+    return "${diff.inMinutes} mins ago";
+  } else if (diff.inHours == 1) {
+    return "1 hour ago";
+  } else if (diff.inHours < 24) {
+    return "${diff.inHours} hours ago";
+  } else {
+    String formattedDate = "${monthsInYear[dateTime.month]} ${dateTime.day} ${dateTime.year}, at ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}";
+    return formattedDate;
   }
-  return timeAgo;
 }
 
 ///Return today/yesterday/Thursday, Aug 20  16.00 - 16.14

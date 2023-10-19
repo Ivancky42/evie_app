@@ -23,19 +23,38 @@ class EvieRadioButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(text ?? "", style: EvieTextStyles.body18,),
+    return Container(
+      height: 54.h,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(text ?? "", style: EvieTextStyles.body18,),
 
-        Radio(
-        fillColor: MaterialStateColor.resolveWith(
-        (states) => EvieColors.primaryColor),
-        value: value,
-        groupValue: groupValue,
-        onChanged: onChanged,
-        ),
-      ],
+          Container(
+            width: 20,
+            height: 20,
+            decoration: BoxDecoration(
+              color: value == groupValue ? Colors.transparent : EvieColors.lightGrayishCyan,
+              shape: BoxShape.circle, // You can adjust the shape as needed
+            ),
+            child: Radio(
+              fillColor: MaterialStateColor.resolveWith(
+                      (states) {
+                    if (states.contains(MaterialState.selected)) {
+                      return EvieColors.primaryColor; // color of the checkbox when it's checked
+                    } else {
+                      return EvieColors.lightGrayishCyan; // color of the checkbox when it's unchecked
+                    }
+                  }),
+              value: value,
+              groupValue: groupValue,
+              onChanged: onChanged,
+              visualDensity: VisualDensity.compact,
+            ),
+          )
+        ],
+      ),
     );
 
 

@@ -230,10 +230,10 @@ class EvieDoubleButtonDialogFilter extends StatelessWidget{
         backgroundColor: EvieColors.grayishWhite,
         child: Container(
           padding:  EdgeInsets.only(
-              left: 17.w,
-              right: 17.w,
-              top: 16.w,
-              bottom: 16.w
+              left: 18.w,
+              right: 16.w,
+              top: 12.h,
+              bottom: 22.h
           ),
 
           child: Column(
@@ -242,24 +242,19 @@ class EvieDoubleButtonDialogFilter extends StatelessWidget{
             children: [
 
               Padding(
-                padding:  EdgeInsets.only(bottom: 8.h),
+                padding:  EdgeInsets.only(bottom: 12.h),
                 child: title,
               ),
-              Padding(
-                padding:  EdgeInsets.only(bottom: 11.h),
-                child: Divider(
-                  thickness: 0.5.h,
-                  color: EvieColors.darkWhite,
-                  height: 0,
-                ),
+              Divider(
+                thickness: 0.5.h,
+                color: EvieColors.darkWhite,
+                height: 0,
               ),
-
-              SizedBox(height: 8.h,),
 
               childContent,
 
               Padding(
-                padding: EdgeInsets.only(top: 9.h),
+                padding: EdgeInsets.only(top: 16.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

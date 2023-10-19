@@ -96,7 +96,7 @@ class BikeProvider extends ChangeNotifier {
   String? distanceBetween;
   List userBikeNotificationList = ["~connection-lost","~movement-detect","~theft-attempt","~fall-detect"];
 
-  List<String> threatFilterArray = ["warning", "danger","fall","crash", "lock", "unlock"];
+  List<String> threatFilterArray = ["warning", "danger","fall", "lock", "unlock"];
   DateTime? threatFilterDate1;
   DateTime? threatFilterDate2;
   bool isUpdateThreat = false;
@@ -1871,7 +1871,7 @@ class BikeProvider extends ChangeNotifier {
     threatFilterDate1 = null;
     threatFilterDate2 = null;
 
-    threatFilterArray = ["warning", "danger","fall","crash"];
+    threatFilterArray = ["warning", "danger","fall","lock", "unlock"];
     bikeListSubscription?.cancel();
     currentBikeSubscription?.cancel();
     currentThreatRoutesSubscription?.cancel();

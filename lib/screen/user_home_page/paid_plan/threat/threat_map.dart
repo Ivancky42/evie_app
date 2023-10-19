@@ -23,8 +23,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:paginate_firestore/bloc/pagination_listeners.dart';
-import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel2/sliding_up_panel2.dart';
 import 'package:timelines/timelines.dart';
