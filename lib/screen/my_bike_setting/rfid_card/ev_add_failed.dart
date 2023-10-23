@@ -5,6 +5,7 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -12,12 +13,16 @@ import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/dialog.dart';
 import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
+import '../../../api/function.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
+import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
+import '../../../bluetooth/modelResult.dart';
 
 class EVAddFailed extends StatefulWidget {
   const EVAddFailed({Key? key}) : super(key: key);
@@ -31,12 +36,16 @@ class _EVAddFailedState extends State<EVAddFailed> {
   late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
   late SettingProvider _settingProvider;
+  late BluetoothProvider _bluetoothProvider;
+  DeviceConnectResult? deviceConnectResult;
 
   @override
   Widget build(BuildContext context) {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
+    _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
 
     return WillPopScope(
@@ -54,7 +63,7 @@ class _EVAddFailedState extends State<EVAddFailed> {
               children: [
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 82.h, 16.w,2.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 0),
                   child: Text(
                     "Whoops! There's an issue.",
                     style: EvieTextStyles.h2.copyWith(color:EvieColors.mediumBlack),
@@ -62,23 +71,17 @@ class _EVAddFailedState extends State<EVAddFailed> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 0.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 0),
                   child: Text(
-                    "We're sorry, but there was an error registering your EV-Key. \n\n"
-                        "Make sure your RFID tag is working properly and is within range. (some instruction on what can be done more correctly)",
+                    "We're sorry, but there was an error registering your EV-Key.  \n\n"
+                        "Make sure your EV-Key is fully touching the lock and try again.",
                     style: EvieTextStyles.body18.copyWith(color:EvieColors.lightBlack),
                   ),
                 ),
 
                   Center(
-                      child: Container(
-                        width: 291.15.w,
-                         height: 300.h,
-                        child: Lottie.asset('assets/animations/error-animate.json' ,width:
-                        291.15.w, height:
-                        182.04.h),
-                      ),
-                    ),
+                      child: Lottie.asset('assets/animations/error-animate.json', repeat: false)
+                  ),
               ],
             ),
 
@@ -94,7 +97,20 @@ class _EVAddFailedState extends State<EVAddFailed> {
                       style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                   ),
                   onPressed: () {
-                    _settingProvider.changeSheetElement(SheetList.evKey);
+                    if (deviceConnectResult == null
+                        || deviceConnectResult == DeviceConnectResult.disconnected
+                        || deviceConnectResult == DeviceConnectResult.scanTimeout
+                        || deviceConnectResult == DeviceConnectResult.connectError
+                        || deviceConnectResult == DeviceConnectResult.scanError
+                        || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
+                    ) {
+                      _settingProvider.changeSheetElement(SheetList.registerEvKey);
+                      showConnectBluetoothDialog(context, _bluetoothProvider, _bikeProvider);
+                      //showConnectDialog(_bluetoothProvider, _bikeProvider);
+                    }
+                    else if (deviceConnectResult == DeviceConnectResult.connected) {
+                      _settingProvider.changeSheetElement(SheetList.registerEvKey);
+                    }
                   },
                 ),
               ),
@@ -107,9 +123,20 @@ class _EVAddFailedState extends State<EVAddFailed> {
                   child: EvieButton_ReversedColor(
                       width: double.infinity,
                       onPressed: (){
-
+                        const url = 'https://support.eviebikes.com/en-US';
+                        final Uri _url = Uri.parse(url);
+                        launch(_url);
                       },
-                      child: Text("Get Help", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)))
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Get Help", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)),
+                          SvgPicture.asset(
+                            "assets/buttons/external_link.svg",
+                          ),
+                        ],
+                      )
+                  )
               ),
             ),
 

@@ -4,6 +4,7 @@ import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:evie_test/widgets/evie_button.dart';
@@ -65,54 +66,57 @@ class _EVKeyState extends State<EVKey> {
               children: [
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 32.5.h, 16.w,2.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 0),
                   child: Text(
-                    "Unlock bike with EV-Key",
+                    "Unlock your bike with EV-Key",
                     style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack),
                   ),
                 ),
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 0.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 31.h),
                   child: Text(
                     "Unlocking your bike has never been easier with the EV-Key! This convenient and secure method lets you access your bike with just a simple tap.\n\n "
-                        "A maximum number of 5 EV-Key can be register.",
+                        "A maximum number of 5 EV-Keys can be register.",
                     style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                   ),
                 ),
 
-
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.zero,
-                    child: Center(
-                      child: Container(
-                        width: 200.w,
-                        height: 228.84.h,
-                        child: Lottie.asset(
-                          'assets/animations/RFIDCardRegister.json',
-                          // delegates: LottieDelegates(
-                          //   text: (initialText) => '**$initialText**',
-                          //   values: [
-                          //     ValueDelegate.color(
-                          //       const ['Rectangle Path 1', 'Rectangle 1', 'Path 1','Group 1',],
-                          //       value: Colors.red,
-                          //     ),
-                          //   ],
-                          // ),
-                      ),
-                      ),
-                    ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 56.h),
+                  child: Center(
+                    child: SvgPicture.asset('assets/images/evkey.svg'),
                   ),
                 ),
 
-                Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 122.h),
-                  child: Center(
-                    child: Text(
-                      "You don't have EV-Key registered yet.",
-                      style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-                    ),
+                // Expanded(
+                //   child: Padding(
+                //     padding: EdgeInsets.zero,
+                //     child: Center(
+                //       child: Container(
+                //         width: 200.w,
+                //         height: 228.84.h,
+                //         child: Lottie.asset(
+                //           'assets/animations/RFIDCardRegister.json',
+                //           // delegates: LottieDelegates(
+                //           //   text: (initialText) => '**$initialText**',
+                //           //   values: [
+                //           //     ValueDelegate.color(
+                //           //       const ['Rectangle Path 1', 'Rectangle 1', 'Path 1','Group 1',],
+                //           //       value: Colors.red,
+                //           //     ),
+                //           //   ],
+                //           // ),
+                //       ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+
+                Center(
+                  child: Text(
+                    "You don't have EV-Key registered yet.",
+                    style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                   ),
                 ),
               ],
@@ -121,7 +125,7 @@ class _EVKeyState extends State<EVKey> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
+                padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, 18.h),
                 child: SizedBox(
                   height: 48.h,
                   width: double.infinity,
@@ -147,7 +151,7 @@ class _EVKeyState extends State<EVKey> {
                               else if (deviceConnectResult == DeviceConnectResult.connected) {
                           _settingProvider.changeSheetElement(SheetList.registerEvKey);
                               }
-                            },
+                              },
                   ),
                 ),
               ),

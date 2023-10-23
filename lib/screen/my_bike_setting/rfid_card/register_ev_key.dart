@@ -88,20 +88,15 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 16.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0),
                   child: Text(
                     "Hold and place your EV-Key near the bike's lock.",
                     style: EvieTextStyles.body18,
                   ),
                 ),
                 Center(
-                      child: Container(
-                        width: double.infinity,
-                        height: 500.h,
-                        child: Lottie.asset('assets/animations/RFIDCardRegister.json', width: 200.w, height: 228.84.h),
-                      ),
-                    ),
-
+                  child: Lottie.asset('assets/animations/RFIDCardRegister.json'),
+                ),
               ],
             ),
           ],
@@ -131,15 +126,8 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
       }else if(addRFIDStatus.addRFIDState == AddRFIDState.cardIsExist){
         ///Upload to firestore and change to name rfid page
         addRFIDStream.cancel();
-        final result = await _bikeProvider.uploadRFIDtoFireStore(addRFIDStatus.rfidNumber!,  "EV-Key ${_bikeProvider.rfidList.isEmpty ? 1 : _bikeProvider.rfidList.length.toString()}");
-        if (result == true) {
-
-          showEVKeyExistAndUploadToFirestore(context, addRFIDStatus.rfidNumber!);
-          _settingProvider.changeSheetElement(SheetList.nameEv, addRFIDStatus.rfidNumber!);
-
-        } else {
-          _settingProvider.changeSheetElement(SheetList.evAddFailed);
-        }
+        showEVKeyExistAndUploadToFirestore(context, addRFIDStatus.rfidNumber!);
+        _settingProvider.changeSheetElement(SheetList.evKeyList, addRFIDStatus.rfidNumber!);
       }
     }, onError: (error) {
       addRFIDStream.cancel();

@@ -1007,7 +1007,7 @@ showEVKeyExistAndUploadToFirestore(BuildContext context, String rfidNumber){
   SmartDialog.show(
       widget: EvieSingleButtonDialog(
           title: "Success",
-          content: "Card data uploaded",
+          content: "Card data already existed.",
           rightContent: "OK",
           onPressedRight: () {
             SmartDialog.dismiss();
@@ -1061,7 +1061,7 @@ showRemoveEVKeyDialog (BuildContext context, RFIDModel rfidModel, BikeProvider _
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
-          "assets/images/people_search.svg",
+          "assets/images/dustbin.svg",
         ),
         upContent: "Remove",
         downContent: "Cancel",
@@ -1109,7 +1109,7 @@ showRemoveAllEVKeyDialog (BuildContext context, BikeProvider  _bikeProvider, Blu
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
-          "assets/images/people_search.svg",
+          "assets/images/dustbin.svg",
         ),
         upContent: "Confirm",
         downContent: "Cancel",

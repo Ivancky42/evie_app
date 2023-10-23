@@ -132,27 +132,6 @@ class _BikeSettingState extends State<BikeSetting> {
     return WillPopScope(
       onWillPop: () async {
         return true;
-
-        ///Choose to close
-        // bool shouldClose = true;
-        // await showDialog<void>(
-        //     context: context,
-        //     builder: (BuildContext context) =>
-        //         EvieDoubleButtonDialog(
-        //             title: "Close this sheet?",
-        //             childContent: Text("Are you sure you want to close this sheet?",
-        //                           style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),),
-        //             leftContent: "No",
-        //             rightContent: "Yes",
-        //             onPressedLeft: () {
-        //               shouldClose = false;
-        //               Navigator.of(context).pop();
-        //             },
-        //             onPressedRight: () {
-        //               shouldClose = true;
-        //               Navigator.of(context).pop();
-        //             }));
-        // return shouldClose;
       },
 
       child: Scaffold(
@@ -189,7 +168,7 @@ class _BikeSettingState extends State<BikeSetting> {
                         },
                         child: Padding(
                           padding:
-                          EdgeInsets.only(left: 17.w, top: 0.h, bottom: 0.h),
+                          EdgeInsets.only(left: 17.w, top: 0, bottom: 0),
                           child: Text(
                             "My Bike Setting",
                             style: EvieTextStyles.h1,
@@ -200,14 +179,14 @@ class _BikeSettingState extends State<BikeSetting> {
                     ),
                   ),
 
-                  const Divider(
-                    thickness: 2,
-                  ),
+                  // const Divider(
+                  //   thickness: 2,
+                  // ),
                   ],),
 
               //search bar
               Padding(
-                padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
+                padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 0),
                 child: CustomSearchController(
                   suffixIcon: _isSearching ?
                   GestureDetector(
@@ -282,7 +261,6 @@ class _BikeSettingState extends State<BikeSetting> {
               ),
 
               Container(
-                height: 96.h,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -294,7 +272,7 @@ class _BikeSettingState extends State<BikeSetting> {
                         //first widget in row, bike pic
                         Padding(
                           padding:
-                          EdgeInsets.fromLTRB(27.7.w, 14.67.h, 6.w, 14.67.h),
+                          EdgeInsets.fromLTRB(21.w, 16.h, 6.w, 16.h),
                           child: Stack(
                             children: [
                               _bikeProvider.currentBikeModel?.bikeIMG == '' ? Image(
@@ -376,7 +354,7 @@ class _BikeSettingState extends State<BikeSetting> {
                         _bluetoothProvider.currentConnectedDevice ==
                             _bikeProvider.currentBikeModel?.macAddr ?
                     Padding(
-                      padding: EdgeInsets.only(right: 8.w),
+                      padding: EdgeInsets.only(right: 0),
                       child: Container(
                         // width: 148.w,
                         height: 36.h,
@@ -402,7 +380,7 @@ class _BikeSettingState extends State<BikeSetting> {
                       ),
                     )
                         : Padding(
-                      padding: EdgeInsets.only(right: 8.w),
+                      padding: EdgeInsets.only(right: 0),
                       child: Container(
                         // width:90.w,
                         height: 36.h,
@@ -445,27 +423,45 @@ class _BikeSettingState extends State<BikeSetting> {
                     else if (snapshot.connectionState == ConnectionState.done) {
                       if (!_isSearching) {
                         return Expanded(
-                          child: SingleChildScrollView(
-                            physics: BouncingScrollPhysics(),
-                            child: Column(
-                              children: [
-                                ...bikeSettingList.map((e) => BikeSettingContainer(bikeSettingModel: e)).toList(),
-                              ],
+                          child: NotificationListener<ScrollNotification>(
+                            onNotification: (notification) {
+                              // Prevent the notification from reaching the parent
+                              return true;
+                            },
+                            child: SingleChildScrollView(
+                              physics: BouncingScrollPhysics(),
+                              child: Column(
+                                children: [
+                                  ...bikeSettingList.map((e) => BikeSettingContainer(bikeSettingModel: e)).toList(),
+                                  Container(
+                                    color: Colors.transparent,
+                                    height: 43.h,
+                                  )
+                                ],
+                              ),
                             ),
-                          )
+                          ),
+
                       );
                       } else {
                         return Expanded(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  ..._searchFirstResult.map((e) =>
-                                      BikeSettingContainer(bikeSettingModel: e))
-                                      .toList(),
-                                  secondSearchResult(),
-                                ],
-                              ),
-                            )
+                            child: NotificationListener<ScrollNotification>(
+                                  onNotification: (notification) {
+                                    // Prevent the notification from reaching the parent
+                                    return true;
+                                  },
+                                  child: SingleChildScrollView(
+                                    physics: BouncingScrollPhysics(),
+                                    child: Column(
+                                      children: [
+                                        ..._searchFirstResult.map((e) =>
+                                            BikeSettingContainer(bikeSettingModel: e))
+                                            .toList(),
+                                        secondSearchResult(),
+                                      ],
+                                    ),
+                                  ),
+                            ),
                         );
                       }
                     }

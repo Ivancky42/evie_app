@@ -88,61 +88,68 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
         borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         children: [
           isScrolling ?
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 17.w, top: 0.h, bottom: 0.h),
-                child: Text(
-                  "Orbital Anti-Theft",
-                  style: EvieTextStyles.h1,
-                ),
-              ),
-
-              Padding(
-                padding: EdgeInsets.all(0),
-                child: IconButton(
-                  onPressed: () {
-                    _locationProvider.locations();
-                    _settingProvider.changeSheetElement(SheetList.mapDetails);
-                  },
-                  icon: SvgPicture.asset(
-                    "assets/buttons/list_selected.svg",
-                    width: 36.w,
-                    height: 36.w,
+          Container(
+          height: 48.h,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 17.w, top: 0.h, bottom: 0.h),
+                  child: Text(
+                    "Orbital Anti-Theft",
+                    style: EvieTextStyles.h1,
                   ),
                 ),
-              ),
-            ],
-          ) :Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 17.w, top: 0.h, bottom: 0.h),
-                child: Text(
-                  "Orbital Anti-Theft",
-                  style: EvieTextStyles.h1,
-                ),
-              ),
 
-              Padding(
-                padding: EdgeInsets.all(0),
-                child: IconButton(
-                  onPressed: () {
-                    _locationProvider.locations();
-                    _settingProvider.changeSheetElement(SheetList.mapDetails);
-                  },
-                  icon: SvgPicture.asset(
-                    "assets/buttons/list_selected.svg",
-                    width: 36.w,
-                    height: 36.w,
+                Padding(
+                  padding: EdgeInsets.all(0),
+                  child: IconButton(
+                    onPressed: () {
+                      _locationProvider.locations();
+                      _settingProvider.changeSheetElement(SheetList.mapDetails);
+                    },
+                    icon: SvgPicture.asset(
+                      "assets/buttons/list_selected.svg",
+                      width: 36.w,
+                      height: 36.w,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
+          ) :
+          Container(
+            height: 48.h,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 17.w, top: 0.h, bottom: 0.h),
+                  child: Text(
+                    "Orbital Anti-Theft",
+                    style: EvieTextStyles.h1,
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.all(0),
+                  child: IconButton(
+                    onPressed: () {
+                      _locationProvider.locations();
+                      _settingProvider.changeSheetElement(SheetList.mapDetails);
+                    },
+                    icon: SvgPicture.asset(
+                      "assets/buttons/list_selected.svg",
+                      width: 36.w,
+                      height: 36.w,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
 
           const Divider(
@@ -275,25 +282,26 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
               padding: EdgeInsets.only(top: 9.h),
               child: NotificationListener<ScrollNotification> (
                 onNotification: (scrollNotification) {
-                  print(scrollNotification.metrics);
-                  if (scrollNotification is ScrollStartNotification) {
-                    // The user has started scrolling.
-                    setState(() {
-                      isScrolling = true;
-                    });
-                  } else if (scrollNotification is ScrollEndNotification) {
-                    // Scroll has ended, check if it has returned to the original position.
-                    if (scrollNotification.metrics.pixels == 0.0) {
-                      setState(() {
-                        isScrolling = false;
-                      });
-                    }
-                  }
-                  return false; // Continue to bubble the notification.
+                  // print(scrollNotification.metrics);
+                  // if (scrollNotification is ScrollStartNotification) {
+                  //   // The user has started scrolling.
+                  //   setState(() {
+                  //     isScrolling = true;
+                  //   });
+                  // } else if (scrollNotification is ScrollEndNotification) {
+                  //   // Scroll has ended, check if it has returned to the original position.
+                  //   if (scrollNotification.metrics.pixels == 0.0) {
+                  //     setState(() {
+                  //       isScrolling = false;
+                  //     });
+                  //   }
+                  // }
+                  return true; // Continue to bubble the notification.
                 },
                 child: Scrollbar(
                   thumbVisibility: true,
                   child: RefreshIndicator(
+                    color: EvieColors.primaryColor,
                     child: PaginateFirestore(
                       initialLoader: Center(
                         child: CircularProgressIndicator(strokeWidth: 2, color: EvieColors.primaryColor,),

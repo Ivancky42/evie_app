@@ -86,14 +86,14 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
     switch(label) {
       case "Bike Name":
         return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {},
               child: Container(
-                height: 62.h,
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 10.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -142,7 +142,17 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               ),
             ),
-            const EvieDivider(),
+            Container(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
+            ),
           ],
         );
       case "EV-Key":
@@ -174,9 +184,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 }
               },
               child: Container(
-                height: 62.h,
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 10.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -218,7 +227,17 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               ),
             ),
-            const EvieDivider(),
+            Container(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
+            ),
           ],
         );
       case "Motion Sensitivity":
@@ -251,9 +270,9 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
 
               },
               child: Container(
-                height: 62.h,
+                //color: Colors.red,
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 10.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -295,15 +314,25 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               ),
             ),
-            const EvieDivider(),
+            Container(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
+            ),
           ],
         );
-      case "EV+ Subscription":
+      case "EV+":
         return Column(
           children: [
-            Divider(
-              thickness: 11.h,
+            Container(
               color: const Color(0xffF4F4F4),
+              padding: EdgeInsets.zero,
+              height: 12.h,
             ),
             GestureDetector(
               behavior: HitTestBehavior.translucent,
@@ -311,9 +340,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 _settingProvider.changeSheetElement(SheetList.currentPlan);
               },
               child: Container(
-                height: 62.h,
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 10.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -342,7 +370,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                           Row(
                             children: [
                               Text(
-                                _bikeProvider.isPlanSubscript == false ? "Starter" : "Premium",
+                                _bikeProvider.isPlanSubscript == false ? "No Subscription" : "EV-Secure",
                                 style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                               ),
                               SizedBox(width: 8.17.w,),
@@ -365,10 +393,20 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               ),
             ),
-            const EvieDivider(),
+            Container(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
+            ),
           ],
         );
-      case "Pedal Pals":
+      case "PedalPals":
         return Column(
           children: [
             GestureDetector(
@@ -400,9 +438,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
               child: Opacity(
                 opacity: getOpacityByRole(),
                 child: Container(
-                  height: 62.h,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                    padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 10.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -457,7 +494,17 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               )
             ),
-            const EvieDivider(),
+            Container(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
+            ),
           ],
         );
       case "Bike Status Alert":
@@ -488,16 +535,15 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
               child: Opacity(
                 opacity: getOpacityByRole(),
                 child: Container(
-                  height: 44.h,
                   child: Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                      padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [
                               Text(
-                                'Anti-Theft Alert',
+                                'Orbital Anti-theft',
                                 style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                               ),
                               SizedBox(width: 8.17.w,),
@@ -515,7 +561,17 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               )
             ),
-            const EvieDivider(),
+            Container(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
+            ),
           ],
         );
 
@@ -627,9 +683,10 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
       case "About Bike":
         return Column(
           children: [
-            Divider(
-              thickness: 11.h,
+            Container(
               color: const Color(0xffF4F4F4),
+              padding: EdgeInsets.zero,
+              height: 12.h,
             ),
             GestureDetector(
               behavior: HitTestBehavior.translucent,
@@ -637,9 +694,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 _settingProvider.changeSheetElement(SheetList.aboutBike);
               },
               child: Container(
-                height: 44.h,
                 child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                    padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -659,7 +715,17 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               ),
             ),
-            const EvieDivider(),
+            Container(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
+            ),
           ],
         );
       case "Firmware Version":
@@ -691,9 +757,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                   //_settingProvider.changeSheetElement(SheetList.firmwareInformation);
                 },
                 child: Container(
-                  height: 62.h,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                    padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 10.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -752,7 +817,17 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                   ),
                 ),
             ),
-            const EvieDivider(),
+            Container(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
+            ),
           ],
         );
       case "User Manual":
@@ -767,9 +842,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 launch(_url);
               },
               child: Container(
-                height: 44.h,
                 child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                    padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -789,7 +863,17 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               ),
             ),
-            const EvieDivider(),
+            Container(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
+            ),
           ],
         );
 
@@ -809,9 +893,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
 
               },
               child: Container(
-                height: 44.h,
                 child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                    padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -839,11 +922,21 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                 ),
               ),
             ),
-            const EvieDivider(),
-            Divider(
-              thickness: 11.h,
-              color: const Color(0xffF4F4F4),
+            Container(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
             ),
+            // Divider(
+            //   thickness: 11.h,
+            //   color: const Color(0xffF4F4F4),
+            // ),
           ],
         );
       default:
