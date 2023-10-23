@@ -1022,7 +1022,7 @@ class _FreePlanState extends State<FreePlan> {
 
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(color: EvieColors.primaryColor,),
           );
         }
 

@@ -204,7 +204,7 @@ class _MyAccountState extends State<MyAccount> {
                             child: CachedNetworkImage(
                               //imageUrl: document['profileIMG'],
                               imageUrl: _currentUserProvider.currentUserModel != null ? _currentUserProvider.currentUserModel!.profileIMG : "",
-                              placeholder: (context, url) => const CircularProgressIndicator(),
+                              placeholder: (context, url) => const CircularProgressIndicator(color: EvieColors.primaryColor,),
                               errorWidget: (context, url, error) => const Icon(Icons.error),
                               width: 66.67.h,
                               height: 66.67.h,
@@ -268,7 +268,7 @@ class _MyAccountState extends State<MyAccount> {
                   future: loadDataFuture,
                   builder: (context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator(color: EvieColors.primaryColor,));
                     }
                     else if (snapshot.connectionState == ConnectionState.done) {
                       if (!_isSearching) {

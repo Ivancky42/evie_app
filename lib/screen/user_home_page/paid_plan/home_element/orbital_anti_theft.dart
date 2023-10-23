@@ -208,7 +208,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                     );
                   } else {
                     return const Center(
-                      child: material.CircularProgressIndicator(),
+                      child: material.CircularProgressIndicator(color: EvieColors.primaryColor,),
                     );
                   }
                 }),

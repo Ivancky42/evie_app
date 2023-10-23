@@ -261,7 +261,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                   //imageUrl: document['profileIMG'],
                                   imageUrl: _bikeProvider.bikeUserDetails.values.elementAt(index).profileIMG,
                                   placeholder: (context, url) =>
-                                  const CircularProgressIndicator(),
+                                  const CircularProgressIndicator(color: EvieColors.primaryColor,),
                                   errorWidget: (context, url, error) =>
                                       Icon(Icons.error),
                                   width: 50,

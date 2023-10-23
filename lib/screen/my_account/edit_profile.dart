@@ -74,7 +74,7 @@ class _EditProfileState extends State<EditProfile> {
                           child: CachedNetworkImage(
                             imageUrl: _currentUserProvider.currentUserModel!.profileIMG,
                             placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
+                            const CircularProgressIndicator(color: EvieColors.primaryColor,),
                             errorWidget: (context, url, error) => Icon(Icons.error),
                             width: 66.67.h,
                             height: 66.67.h,

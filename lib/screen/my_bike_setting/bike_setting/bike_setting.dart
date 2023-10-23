@@ -285,7 +285,7 @@ class _BikeSettingState extends State<BikeSetting> {
                                   imageUrl:
                                   _bikeProvider.currentBikeModel!.bikeIMG!,
                                     placeholder: (context, url) =>
-                                    const CircularProgressIndicator(),
+                                    const CircularProgressIndicator(color: EvieColors.primaryColor,),
                                     errorWidget: (context, url, error) => Icon(Icons.error),
                                     width: 49.h,
                                     height: 49.h,

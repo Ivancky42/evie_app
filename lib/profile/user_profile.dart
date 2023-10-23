@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:sizer/sizer.dart';
@@ -185,7 +186,7 @@ class _UserProfileState extends State<UserProfile> {
                                             //imageUrl: document['profileIMG'],
                                             imageUrl: uploadimageUrl,
                                             placeholder: (context, url) =>
-                                                const CircularProgressIndicator(),
+                                                const CircularProgressIndicator(color: EvieColors.primaryColor,),
                                             errorWidget: (context, url, error) =>
                                                 Icon(Icons.error),
                                             width: 15.h,

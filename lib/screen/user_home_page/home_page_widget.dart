@@ -201,7 +201,7 @@ Widget getFirestoreSecurityTextWidget(bool? isLocked, String status) {
       }
       break;
   }
-  return CircularProgressIndicator();
+  return CircularProgressIndicator(color: EvieColors.primaryColor,);
 }
 
 String getBatteryImage(int batteryPercent) {
