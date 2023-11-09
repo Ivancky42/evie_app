@@ -135,21 +135,7 @@ class _BikeSettingState extends State<BikeSetting> {
       },
 
       child: Scaffold(
-          appBar: PageAppbar(
-            enable: widget.source != 'Home',
-            title: 'My Bike Setting',
-            onPressed: () {
-              if(widget.source == 'MyGarage'){
-                changeToMyGarageScreen(context);
-              }else if(widget.source == 'SwitchBike'){
-                changeToUserHomePageScreen(context);
-              }else if(widget.source == 'Home'){
-                changeToUserHomePageScreen(context);
-              }else{
-                changeToUserHomePageScreen(context);
-              }
-            },
-          ),
+          resizeToAvoidBottomInset: false,
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -170,7 +156,7 @@ class _BikeSettingState extends State<BikeSetting> {
                           padding:
                           EdgeInsets.only(left: 17.w, top: 0, bottom: 0),
                           child: Text(
-                            "My Bike Setting",
+                            "My Bike Settings",
                             style: EvieTextStyles.h1,
                           ),
                         ),
@@ -444,24 +430,15 @@ class _BikeSettingState extends State<BikeSetting> {
 
                       );
                       } else {
-                        return Expanded(
-                            child: NotificationListener<ScrollNotification>(
-                                  onNotification: (notification) {
-                                    // Prevent the notification from reaching the parent
-                                    return true;
-                                  },
-                                  child: SingleChildScrollView(
-                                    physics: BouncingScrollPhysics(),
-                                    child: Column(
-                                      children: [
-                                        ..._searchFirstResult.map((e) =>
-                                            BikeSettingContainer(bikeSettingModel: e))
-                                            .toList(),
-                                        secondSearchResult(),
-                                      ],
-                                    ),
-                                  ),
-                            ),
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              ..._searchFirstResult.map((e) =>
+                                  BikeSettingContainer(bikeSettingModel: e))
+                                  .toList(),
+                              secondSearchResult(),
+                            ],
+                          ),
                         );
                       }
                     }

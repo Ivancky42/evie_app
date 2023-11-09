@@ -14,6 +14,7 @@ import 'package:evie_test/api/provider/shared_pref_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -110,7 +111,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   ///Data for user email sign up
-  Future signUp(String email, String password, String name, String phoneNo) async {
+  Future<String?> signUp(String email, String password, String name, String phoneNo) async {
     User? firebaseUser;
     credentialProvider = "email";
 
@@ -127,9 +128,16 @@ class AuthProvider extends ChangeNotifier {
           });
         }
       });
-      return true;
+      return 'Success';
     } catch (e) {
-      debugPrint(e.toString());
+      if (e is FirebaseAuthException) {
+        debugPrint(e.code.toString());
+        return e.code.toString();
+      }
+      else {
+        debugPrint("Unknown exception: $e");
+        return "Unknown exception";
+      }
     }
   }
 

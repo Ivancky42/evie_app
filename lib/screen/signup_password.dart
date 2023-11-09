@@ -233,77 +233,60 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                                   ///For keyboard un focus
                                   FocusManager.instance.primaryFocus?.unfocus();
 
-                                  try {
-                                    if (await _authProvider.signUp(
-                                        widget.email,
-                                        _passwordController.text.trim(),
-                                        widget.name,
-                                        "empty") ?? true) {
+                                  String? result = await _authProvider.signUp(widget.email, _passwordController.text.trim(), widget.name, "empty");
+                                  if (result == 'Success') {
+                                    _authProvider.setIsFirstLogin(true);
+                                    await _authProvider.login(widget.email,_passwordController.text.trim()).then((result) {
+                                      if (result.toString() == "Verified") {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(
+                                            content: Text('Success'),
+                                            duration: Duration(seconds: 2),
+                                          ),
+                                        );
+                                        ///Quit loading and go to user home page
+                                        changeToBeforeYouStart(context);
+                                      }
+                                      else if (result.toString() == "Not yet verify") {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(
+                                            content: Text('Verify your account'),
+                                            duration: Duration(seconds: 2),
+                                          ),
+                                        );
+                                        changeToVerifyEmailScreen(context);
 
-                                      _authProvider.setIsFirstLogin(true);
-
-                                      await _authProvider
-                                          .login(widget.email,
-                                          _passwordController.text.trim())
-                                          .then((result) {
-                                        if (result.toString() == "Verified") {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            const SnackBar(
-                                              content: Text('Success'),
-                                              duration: Duration(seconds: 2),
-                                            ),
-                                          );
-
-                                          ///Quit loading and go to user home page
-                                          changeToBeforeYouStart(context);
-                                        } else if (result.toString() == "Not yet verify") {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            const SnackBar(
-                                              content: Text('Verify your account'),
-                                              duration: Duration(seconds: 2),
-                                            ),
-                                          );
-                                          changeToVerifyEmailScreen(context);
-
-                                          _currentUserProvider.getDeviceInfo();
-                                        } else {
-                                          SmartDialog.show(
-                                            widget: EvieSingleButtonDialog(
-                                                title: "Error",
-                                                content: 'User account already exists. Please log in instead.',
-                                                rightContent: "Go to Login",
-                                                // widget: Image.asset(
-                                                //   "assets/images/error.png",
-                                                //   width: 36,
-                                                //   height: 36,
-                                                // ),
-                                                onPressedRight: () {
-                                                  SmartDialog.dismiss();
-                                                  changeToSignInScreen(context);
-                                                }),
-                                          );
-                                        }
-                                      });
-
-                                    } else {
-                                      debugPrint("Sign Up Error");
-                                      SmartDialog.show(
-                                        widget: EvieSingleButtonDialog(
-                                            title: "Error",
-                                            content: "Try again",
-                                            rightContent: "Ok",
-                                            widget: Image.asset(
-                                              "assets/images/error.png",
-                                              width: 36,
-                                              height: 36,
-                                            ),
-                                            onPressedRight: () {
-                                              SmartDialog.dismiss();
-                                            }),
-                                      );
-                                    }
-                                  } catch (error) {
-                                    debugPrint(error.toString());
+                                        _currentUserProvider.getDeviceInfo();
+                                      }
+                                    });
+                                  }
+                                  else if (result == 'email-already-in-use') {
+                                    SmartDialog.show(
+                                      widget: EvieSingleButtonDialog(
+                                          title: "Error",
+                                          content: 'The email address is already in use by another account.',
+                                          rightContent: "Go to Login",
+                                          onPressedRight: () {
+                                            SmartDialog.dismiss();
+                                            changeToSignInScreen(context);
+                                          }),
+                                    );
+                                  }
+                                  else {
+                                    SmartDialog.show(
+                                      widget: EvieSingleButtonDialog(
+                                          title: "Error",
+                                          content: "Try again",
+                                          rightContent: "Ok",
+                                          widget: Image.asset(
+                                            "assets/images/error.png",
+                                            width: 36,
+                                            height: 36,
+                                          ),
+                                          onPressedRight: () {
+                                            SmartDialog.dismiss();
+                                          }),
+                                    );
                                   }
                                 }
                                 ///null to disable button when conditions are not met

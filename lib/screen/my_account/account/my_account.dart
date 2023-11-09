@@ -15,6 +15,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import '../../../api/backend/debouncer.dart';
+import '../../../api/backend/sim_api_caller.dart';
 import '../../../api/colours.dart';
 import '../../../api/dialog.dart';
 import '../../../api/fonts.dart';
@@ -110,10 +111,15 @@ class _MyAccountState extends State<MyAccount> {
             children: [
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 51.h, 0.w, 7.h),
-                child: Container(
-                  child: Text(
-                    "My Account",
-                    style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
+                child: GestureDetector(
+                  onTap: () {
+                    //SimApiCaller.setDataLimit('64e85bf1b5bb40c773b159dfda5ba98e7eec2f154ff78c3029a5b21596d4e961', 30);
+                  },
+                  child: Container(
+                      child: Text(
+                        "My Account",
+                        style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
+                      ),
                   ),
                 ),
               ),
