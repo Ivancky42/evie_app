@@ -4,16 +4,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LocationModel {
   String? eventId;
-  String status;
-  GeoPoint geopoint;
-  bool isConnected;
+  String? status;
+  GeoPoint? geopoint;
+  bool? isConnected;
   Timestamp? updated;
 
   LocationModel({
     this.eventId,
-    required this.status,
-    required this.geopoint,
-    required this.isConnected,
+    this.status,
+    this.geopoint,
+    this.isConnected,
     this.updated,
   });
 
@@ -30,7 +30,7 @@ class LocationModel {
       eventId: json['eventId']?? '',
       status: json['status']?? '',
       isConnected: json['isConnected']?? true,
-      geopoint: fromJsonGeoPoint(json['geopoint'] as GeoPoint),
+      geopoint: json['geopoint'] != null ? fromJsonGeoPoint(json['geopoint'] as GeoPoint) : null,
       updated: timestampFromJson(json['updated']),
     );
   }

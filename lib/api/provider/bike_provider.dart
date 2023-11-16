@@ -169,6 +169,20 @@ class BikeProvider extends ChangeNotifier {
     }
   }
 
+  Future checkHasBike(String? uid) async {
+    final result = await FirebaseFirestore.instance
+        .collection(usersCollection)
+        .doc(uid)
+        .collection(bikesCollection)
+        .get();
+
+    if (result.docs.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   ///Read user's bike list
   Future<void> getBikeList(String? uid) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -1246,13 +1260,14 @@ class BikeProvider extends ChangeNotifier {
 
         if (snapshot.size == 0) {
           await uploadUserToFireStore(documentSnapshot["deviceIMEI"].toString());
-        } else {
+        }
+        else {
           scanQRCodeResult = ScanQRCodeResult.userExistFailure;
-
           notifyListeners();
           return "";
         }
-      } else {
+      }
+      else {
         scanQRCodeResult = ScanQRCodeResult.noBikeDataFailure;
         notifyListeners();
       }

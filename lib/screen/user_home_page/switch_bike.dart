@@ -64,7 +64,7 @@ class _SwitchBikeState extends State<SwitchBike> {
                 child: EvieButton(
                     onPressed: (){
                       _bikeProvider.setIsAddBike(true);
-                      changeToBeforeYouStart(context);
+                      changeToTurnOnQRScannerScreen(context);
                     },
                     child: Text(
                       "Add More Bike",

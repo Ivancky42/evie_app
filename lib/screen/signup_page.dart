@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/input_name.dart';
@@ -52,7 +53,7 @@ class _SignUpState extends State<SignUp> {
             Form(
               key: _formKey,
               child: Padding(
-                padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h, bottom: 16.h),
+                padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h, bottom: EvieLength.screen_bottom),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -95,9 +96,9 @@ class _SignUpState extends State<SignUp> {
                           style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                         ),
 
-                        onPressed: ()  {
+                        onPressed: ()  async {
                           if (_formKey.currentState!.validate()){
-                            changeToSignUpPasswordScreen(context, widget.name, _emailController.text.trim());
+                            changeToSignUpPasswordScreen(context, widget.name, _emailController.text.replaceAll(" ", "").trim());
                           }
                         }
 

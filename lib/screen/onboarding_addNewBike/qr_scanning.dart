@@ -123,10 +123,10 @@ class _QRScanningState extends State<QRScanning> {
 
                         if (_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success) {
                           SmartDialog.dismiss(status: SmartStatus.loading);
-                          changeToBikeConnectSuccessScreen(context);
+                          changeToRegisteringBikeScreen(context, true);
                         } else {
                           SmartDialog.dismiss(status: SmartStatus.loading);
-                          changeToBikeConnectFailedScreen(context);
+                          changeToRegisteringBikeScreen(context, false);
                         }
                       }
                     }

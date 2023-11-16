@@ -83,6 +83,7 @@ showConnectedToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
@@ -113,6 +114,7 @@ showConnectingToast(context) {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10))
       ),
+      elevation: 0,
       content:  GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -147,6 +149,7 @@ showScanTimeoutToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -182,6 +185,7 @@ showScanErrorToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -217,6 +221,7 @@ showConnectErrorToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -252,6 +257,7 @@ showDisconnectedToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -288,6 +294,7 @@ showUnlockingToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -321,6 +328,7 @@ showToLockBikeInstructionToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -401,6 +409,7 @@ showUpgradePlanToast(context, SettingProvider settingProvider,[bool? isPop]){
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -460,6 +469,7 @@ showControlAdmissionToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -493,6 +503,7 @@ showOnlyForProToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -528,6 +539,7 @@ showAccNoPermissionToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -561,23 +573,21 @@ showResentEmailFailedToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              Container(
-                width: 300.w,
-                child: Text(
-                  "You may request to resend email in another 30 seconds.",
-                  style: EvieTextStyles.toast,
-                ),
-              )
-            ],
-          ),
+        child: Row(
+          children: [
+            Container(
+              width: 300.w,
+              child: Text(
+                "You may request to resend email in another 30 seconds.",
+                style: EvieTextStyles.toast,
+              ),
+            )
+          ],
         ),
       ),
       duration: const Duration(seconds: 2),
@@ -594,6 +604,7 @@ showBikeAddSuccessfulToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -626,6 +637,7 @@ showEVRemovedToast(context, String keyName) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -659,6 +671,7 @@ showScanTimeOut(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -694,6 +707,7 @@ showUpdatedPasswordToast(context) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
@@ -726,6 +740,7 @@ showRemoveUserToast(context, msg) {
           BorderRadius.all(Radius.circular(10)
           )
       ),
+      elevation: 0,
       content: GestureDetector(
         onTap: () {
           Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());

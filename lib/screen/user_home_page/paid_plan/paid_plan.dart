@@ -272,67 +272,71 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                     ///No Actionable Bar
                     _bikeProvider.actionableBarItem == ActionableBarItem.none ?
                     Expanded(
-                      child: Column(
-                        children: [
-                         Expanded(
-                           child: Padding(
-                               padding: EdgeInsets.fromLTRB(19.w, 19.42.h, 19.w, 16.w),
-                             child: OrbitalAntiTheft(),
-                           ),
-                         ),
+                      child: SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _bikeProvider.currentBikeModel?.location != null ?
+                            Padding(
+                                padding: EdgeInsets.fromLTRB(19.w, 19.42.h, 19.w, 16.w),
+                                //  padding: EdgeInsets.fromLTRB(19.w, 16.42.h, 19.w, 16.w),
+                                child: Container(
+                                    height: 250.h,
+                                    child: OrbitalAntiTheft())
+                            ) : Container(),
 
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: AspectRatio(
-                                  aspectRatio: 1,
-                                  child: Padding(
-                                    padding: EdgeInsets.fromLTRB(19.w, 0, 8.w, 16.h),
-                                    child: Battery(),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: AspectRatio(
-                                  aspectRatio: 1,
-                                  child: Padding(
-                                    padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 16.h),
-                                    child: Rides(),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
                                   child: AspectRatio(
                                     aspectRatio: 1,
                                     child: Padding(
-                                      padding: EdgeInsets.fromLTRB(19.w, 0, 8.w, 20.h),
-                                      child: Setting(),
+                                      padding: EdgeInsets.fromLTRB(19.w, 0, 8.w, 16.h),
+                                      child: Battery(),
                                     ),
-                                  )
-                              ),
-                              Expanded(
+                                  ),
+                                ),
+                                Expanded(
                                   child: AspectRatio(
                                     aspectRatio: 1,
                                     child: Padding(
-                                      padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 20.h),
-                                      child: _bikeProvider.currentBikeModel?.location?.status == "danger" ? ThreatUnlockingSystem(page: 'home') : UnlockingSystem(),
+                                      padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 16.h),
+                                      child: Rides(),
                                     ),
-                                  )
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: Padding(
+                                        padding: EdgeInsets.fromLTRB(19.w, 0, 8.w, 20.h),
+                                        child: Setting(),
+                                      ),
+                                    )
+                                ),
+                                Expanded(
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: Padding(
+                                        padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 20.h),
+                                        child: _bikeProvider.currentBikeModel?.location?.status == "danger" ? ThreatUnlockingSystem(page: 'home') : UnlockingSystem(),
+                                      ),
+                                    )
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    ) :
                     ///Has Actionable Bar
-                         :
                     Expanded(
                       child: SingleChildScrollView(
                         physics: BouncingScrollPhysics(),

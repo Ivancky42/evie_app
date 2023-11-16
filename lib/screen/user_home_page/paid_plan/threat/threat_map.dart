@@ -251,8 +251,8 @@ class _ThreatMapState extends State<ThreatMap> {
                       cameraOptions: CameraOptions(
                         center: Point(
                             coordinates: Position(
-                                _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                                _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                                _locationProvider.locationModel?.geopoint!.longitude ?? 0,
+                                _locationProvider.locationModel?.geopoint!.latitude ?? 0))
                             .toJson(),
                         zoom: 16,
                       ),
@@ -420,8 +420,8 @@ class _ThreatMapState extends State<ThreatMap> {
       options.add(PointAnnotationOptions(
         geometry: Point(
             coordinates: Position(
-                _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                _locationProvider.locationModel?.geopoint!.longitude ?? 0,
+                _locationProvider.locationModel?.geopoint!.latitude ?? 0))
             .toJson(),
         image: dangerMain,
         iconSize: Platform.isAndroid ? 38.mp : 16.mp,

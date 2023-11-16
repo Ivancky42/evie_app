@@ -33,6 +33,14 @@ import 'location_provider.dart';
 import 'notification_provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+enum SignInStatus {
+  isNewUser,
+  registeredUser,
+  failed,
+  error,
+  cancelled,
+}
+
 class AuthProvider extends ChangeNotifier {
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
   String credentialProvider = "";
@@ -102,11 +110,17 @@ class AuthProvider extends ChangeNotifier {
         notifyListeners();
 
         return "Not yet verify";
-      } else {
+      }
+      else {
         return "Incorrect login info";
       }
     } catch (e) {
-      return e.toString();
+      if (e is FirebaseAuthException) {
+        return e.code.toString();
+      }
+      else {
+        return e.toString();
+      }
     }
   }
 
@@ -234,7 +248,7 @@ class AuthProvider extends ChangeNotifier {
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   ///Sign in with google
-  Future signInWithGoogle(String nameInput) async {
+  Future<Map<SignInStatus, String>> signInWithGoogle(String nameInput) async {
     try {
       final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
       if (googleSignInAccount != null) {
@@ -285,28 +299,32 @@ class AuthProvider extends ChangeNotifier {
 
           setIsFirstLogin(true);
           notifyListeners();
-          return true;
-        } else {
+          return {SignInStatus.isNewUser: 'Success'};
+        }
+        else {
           _uid = userCredential.user!.uid;
           _email = userCredential.user!.email!;
           notifyListeners();
-          return true;
+          return {SignInStatus.registeredUser: 'Success'};
         }
+      }
+      else {
+        return {SignInStatus.failed: 'Unknown Error.'};
       }
     } catch (error) {
       debugPrint(error.toString());
-      return error.toString();
+      return {SignInStatus.error: error.toString()};
     }
   }
 
   ///Sign in with facebook
-  Future<LoginResult> signInWithFacebook(String nameInput) async {
+  Future<Map<SignInStatus, String>> signInWithFacebook(String nameInput) async {
     LoginResult loginResult = await FacebookAuth.instance.login(permissions: ['email', 'public_profile']);
     if (loginResult.status == LoginStatus.cancelled) {
-      return loginResult;
+      return {SignInStatus.cancelled: 'User Cancelled.'};
     }
     else if (loginResult.status == LoginStatus.failed) {
-      return loginResult;
+      return {SignInStatus.failed: 'Unknown Error'};
     }
     else if (loginResult.status == LoginStatus.success) {
       final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
@@ -349,18 +367,18 @@ class AuthProvider extends ChangeNotifier {
 
         setIsFirstLogin(true);
         notifyListeners();
-        return loginResult;
+        return {SignInStatus.isNewUser: 'Success'};
       }
       else {
         _uid = userCredential.user!.uid;
         _email = userCredential.user!.email!;
 
         notifyListeners();
-        return loginResult;
+        return {SignInStatus.registeredUser: 'Success'};
       }
     }
     else {
-      return loginResult;
+      return {SignInStatus.error: loginResult.message!};
     }
   }
 
@@ -432,7 +450,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   ///Sign in with appleID
-  Future signInWithAppleID(String? nameInput) async {
+  Future<Map<SignInStatus, String>> signInWithAppleID(String? nameInput) async {
     try {
       final rawNonce = generateNonce();
       final nonce = sha256ofString(rawNonce);
@@ -453,8 +471,7 @@ class AuthProvider extends ChangeNotifier {
 
       // Sign in the user with Firebase. If the nonce we generated earlier does
       // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-      final userCredential =
-          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
       credentialProvider = "apple";
       notifyListeners();
@@ -498,17 +515,17 @@ class AuthProvider extends ChangeNotifier {
         setIsFirstLogin(true);
 
         notifyListeners();
-        return true;
+        return {SignInStatus.isNewUser : 'Success'};
       } else {
         _uid = userCredential.user!.uid;
         _email = userCredential.user!.email!;
 
         notifyListeners();
-        return true;
+        return {SignInStatus.registeredUser : 'Success'};
       }
     } catch (error) {
       debugPrint(error.toString());
-      return error.toString();
+      return {SignInStatus.error : 'Success'};
     }
   }
 

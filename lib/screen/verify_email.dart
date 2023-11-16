@@ -37,21 +37,19 @@ class VerifyEmail extends StatefulWidget {
 class _VerifyEmailState extends State<VerifyEmail> {
   Timer? timer;
   Timer? countdownTimer;
-  bool isCountDownOver = false;
   bool isEmailVerified = false;
 
   late AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
   late CurrentUserProvider _currentUserProvider;
-
-  Duration myDuration = const Duration(seconds: 30);
+  String? counting;
 
   @override
   void initState() {
     super.initState();
 
     _authProvider = context.read<AuthProvider>();
-    _authProvider.sendFirestoreVerifyEmail();
+    _currentUserProvider = context.read<CurrentUserProvider>();
     startCountDownTimer();
 
     ///Loop timer 5 every 5 second and detect isVerified condition
@@ -77,28 +75,19 @@ class _VerifyEmailState extends State<VerifyEmail> {
   }
 
   void startCountDownTimer() {
-    countdownTimer =
-        Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
-  }
-
-  void stopTimer() {
-    setState(() => countdownTimer!.cancel());
-  }
-
-  void resetTimer() {
-    stopTimer();
-    setState(() => myDuration = const Duration(seconds: 30));
-  }
-
-  void setCountDown() {
-    const reduceSecondsBy = 1;
-    setState(() {
-      final seconds = myDuration.inSeconds - reduceSecondsBy;
-      if (seconds < 0) {
-        countdownTimer!.cancel();
-          isCountDownOver = true;
-      } else {
-        myDuration = Duration(seconds: seconds);
+    _authProvider.sendFirestoreVerifyEmail();
+    countdownTimer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
+      if (timer.tick == 30) {
+        setState(() {
+          counting = null;
+        });
+        countdownTimer?.cancel();
+      }
+      else {
+        //print('Timer tick: ${timer.tick}');
+        setState(() {
+          counting = (30 - timer.tick).toString();
+        });
       }
     });
   }
@@ -132,9 +121,24 @@ class _VerifyEmailState extends State<VerifyEmail> {
                       SizedBox(
                         height: 1.h,
                       ),
-                      Text(
-                        "To keep your account secure, we've sent an email to ${_authProvider.getEmail}. Please follow the instruction to verify your account.",
-                        style: EvieTextStyles.body18,
+                      Text.rich(
+                        TextSpan(
+                          text: "To keep your account secure, we've sent an email to ",
+                          style: EvieTextStyles.body18,
+                          children: [
+                            TextSpan(
+                              text: _authProvider.getEmail,
+                              style: TextStyle(
+                                color: EvieColors.primaryColor, // Set your desired color
+                                // Other styles if needed
+                              ),
+                            ),
+                            TextSpan(
+                              text: ". Please follow the instruction to verify your account.",
+                              style: EvieTextStyles.body18,
+                            ),
+                          ],
+                        ),
                       ),
                     ]),
                 Column(
@@ -176,28 +180,33 @@ class _VerifyEmailState extends State<VerifyEmail> {
                               "or try ",
                               style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w400, color: EvieColors.lightBlack,),
                             ),
+
+                            countdownTimer != null ?
+                            counting != null ?
+                            Text(
+                              "resend email after " + counting! + 's.',
+                              style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w800, color: EvieColors.lightGrayish,),
+                            ) :
                             GestureDetector(
                               child: Text(
                                 "resend email.",
                                 style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w800, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                               ),
                               onTap: () async {
-                                if(isCountDownOver == false){
-
-                                  showResentEmailFailedToast(context);
-
-                                }else if(isCountDownOver == true){
-                                  _authProvider.sendFirestoreVerifyEmail();
-                                  showEvieResendDialog (context, FirebaseAuth.instance.currentUser!.email!);
-
-                                  setState(() {
-                                    myDuration = const Duration(seconds: 30);
-                                    isCountDownOver == false;
-                                  });
-                                  startCountDownTimer();
-                                }
+                                startCountDownTimer();
+                                showResentEmailSuccess(_currentUserProvider);
                               },
-                            ),
+                            ) :
+                            GestureDetector(
+                              child: Text(
+                                "resend email.",
+                                style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w800, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                              ),
+                              onTap: () async {
+                                startCountDownTimer();
+                                showResentEmailSuccess(_currentUserProvider);
+                              },
+                            )
                           ],
                         )
                       ],

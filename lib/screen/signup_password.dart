@@ -3,6 +3,7 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/signup_page.dart';
 import 'package:evie_test/widgets/evie_checkbox.dart';
 import 'package:evie_test/widgets/evie_textform.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -13,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../api/fonts.dart';
+import '../api/function.dart';
 import '../api/length.dart';
 import '../api/navigator.dart';
 import '../api/provider/auth_provider.dart';
@@ -120,12 +122,11 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                               labelText: "Password",
                               hintText: "Enter a password",
                               suffixIcon: IconButton(
-                                icon: _isObscure
-                                    ? const Image(
-                                  image: AssetImage("assets/buttons/view_off.png"),
-                                )
-                                    : const Image(
-                                  image: AssetImage("assets/buttons/view_on.png"),
+                                icon: _isObscure ? SvgPicture.asset(
+                                  "assets/buttons/view_off.svg",
+                                ):
+                                SvgPicture.asset(
+                                  "assets/buttons/view_on.svg",
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -210,9 +211,44 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                                       value: isCheckTermsCondition),
                                   Expanded(
                                     child: Container(
-
-                                        child:Text("By creating an account, I accept EVIE's terms of use and privacy policy.",
-                                            style: EvieTextStyles.body14)
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text: "By creating an account, I accept EVIE's ",
+                                            style: EvieTextStyles.body14.copyWith(color: Colors.black, fontFamily: 'Avenir'),
+                                            children: [
+                                              TextSpan(
+                                                text: "terms of use",
+                                                style: TextStyle(
+                                                  decoration: TextDecoration.underline,
+                                                  color: EvieColors.primaryColor, // Change to your desired color
+                                                ),
+                                                recognizer: TapGestureRecognizer()
+                                                  ..onTap = () {
+                                                    const url = 'https://eviebikes.com/policies/terms-of-service';
+                                                    final Uri _url = Uri.parse(url);
+                                                    launch(_url);
+                                                  },
+                                              ),
+                                              TextSpan(
+                                                text: " and ",
+                                                style: EvieTextStyles.body14.copyWith(color: Colors.black, fontFamily: 'Avenir'),
+                                              ),
+                                              TextSpan(
+                                                text: "privacy policy",
+                                                style: TextStyle(
+                                                  decoration: TextDecoration.underline,
+                                                  color: EvieColors.primaryColor, // Change to your desired color
+                                                ),
+                                                recognizer: TapGestureRecognizer()
+                                                  ..onTap = () {
+                                                    const url = 'https://eviebikes.com/policies/privacy-policy';
+                                                    final Uri _url = Uri.parse(url);
+                                                    launch(_url);
+                                                  },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                     ),
                                   ),
                                 ]),
@@ -224,12 +260,8 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                                 style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                               ),
                               ///conditions for button to be active
-                              onPressed: isCheckTermsCondition == true &&
-                                  _passwordController.text.length >= 8 &&
-                                  containsLettersAndNumbers(_passwordController.text)
-                                  ? () async {
+                              onPressed: isCheckTermsCondition == true && _passwordController.text.length >= 8 && containsLettersAndNumbers(_passwordController.text) ? () async {
                                 if (_formKey.currentState!.validate()) {
-
                                   ///For keyboard un focus
                                   FocusManager.instance.primaryFocus?.unfocus();
 
@@ -248,12 +280,12 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                                         changeToBeforeYouStart(context);
                                       }
                                       else if (result.toString() == "Not yet verify") {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
-                                            content: Text('Verify your account'),
-                                            duration: Duration(seconds: 2),
-                                          ),
-                                        );
+                                        // ScaffoldMessenger.of(context).showSnackBar(
+                                        //   const SnackBar(
+                                        //     content: Text('Verify your account'),
+                                        //     duration: Duration(seconds: 2),
+                                        //   ),
+                                        // );
                                         changeToVerifyEmailScreen(context);
 
                                         _currentUserProvider.getDeviceInfo();
@@ -265,7 +297,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                                       widget: EvieSingleButtonDialog(
                                           title: "Error",
                                           content: 'The email address is already in use by another account.',
-                                          rightContent: "Go to Login",
+                                          rightContent: "Login Now",
                                           onPressedRight: () {
                                             SmartDialog.dismiss();
                                             changeToSignInScreen(context);
@@ -290,7 +322,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                                   }
                                 }
                                 ///null to disable button when conditions are not met
-                              } : null,
+                              } : null
                             ),
                           ],
                         )

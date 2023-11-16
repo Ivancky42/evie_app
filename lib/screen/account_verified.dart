@@ -31,16 +31,18 @@ class AccountVerified extends StatefulWidget {
 class _AccountVerifiedState extends State<AccountVerified> {
 
   late AuthProvider _authProvider;
+  late CurrentUserProvider _userProvider;
   @override
   Widget build(BuildContext context) {
     _authProvider = Provider.of<AuthProvider>(context);
+    _userProvider = Provider.of<CurrentUserProvider>(context);
     return WillPopScope(
       onWillPop: () async {
         bool? exitApp = await showQuitApp() as bool?;
         return exitApp ?? false;
       },
       child: Scaffold(
-        appBar: EvieAppbar_Back(onPressed: (){ showQuitApp();}),
+        appBar: EvieAppbar_Back(enabled: false, onPressed: (){ showQuitApp();}),
         body: Stack(
           children:[
             Padding(
@@ -60,7 +62,7 @@ class _AccountVerifiedState extends State<AccountVerified> {
                         height: 1.h,
                       ),
                       Text(
-                        "Awesome! You're ready to go. Let's start by registering your bike so you can have a smooth and seamless riding experience.",
+                        "Awesome " + _userProvider.currentUserModel!.name.toString() + "! You're ready to go. Let's start by registering your bike so you can have a smooth and seamless riding experience.",
                         style: EvieTextStyles.body18,
                       ),
                     ],
@@ -97,7 +99,7 @@ class _AccountVerifiedState extends State<AccountVerified> {
           ),
             Align(
               alignment: Alignment.center,
-              child: Lottie.asset('assets/animations/account-verify.json'),
+              child: Lottie.asset('assets/animations/account-verify.json', repeat: false),
             ),
           ]
         )

@@ -105,18 +105,33 @@ class _SignUpMethodState extends State<SignUpMethod> {
                         _authProvider
                             .signInWithAppleID(widget.name)
                             .then((result) {
-                          if (result == true) {
+                          if (result.containsKey(SignInStatus.isNewUser)) {
                             _currentUserProvider.getDeviceInfo();
-                            changeToBeforeYouStart(context);
-                          } else {
-                            // SmartDialog.show(
-                            //     widget: EvieSingleButtonDialog(
-                            //         title: "Error",
-                            //         content: result,
-                            //         rightContent: "Ok",
-                            //         onPressedRight: () {
-                            //           SmartDialog.dismiss();
-                            //         }));
+                            changeToAccountRegisterScreen(context);
+                          }
+                          else if (result.containsKey(SignInStatus.registeredUser)) {
+                            _currentUserProvider.getDeviceInfo();
+                            changeToUserHomePageScreen(context);
+                          }
+                          else if (result.containsKey(SignInStatus.error)) {
+                            SmartDialog.show(
+                                widget: EvieSingleButtonDialog(
+                                    title: "Error",
+                                    content: result[SignInStatus.error],
+                                    rightContent: "Ok",
+                                    onPressedRight: () {
+                                      SmartDialog.dismiss();
+                                    }));
+                          }
+                          else if (result.containsKey(SignInStatus.failed)) {
+                            SmartDialog.show(
+                                widget: EvieSingleButtonDialog(
+                                    title: "Error",
+                                    content: result[SignInStatus.failed],
+                                    rightContent: "Ok",
+                                    onPressedRight: () {
+                                      SmartDialog.dismiss();
+                                    }));
                           }
                         });
                       }
@@ -146,20 +161,33 @@ class _SignUpMethodState extends State<SignUpMethod> {
                     _authProvider
                         .signInWithGoogle(widget.name)
                         .then((result) {
-                      if (result == true) {
+                      if (result.containsKey(SignInStatus.isNewUser)) {
                         _currentUserProvider.getDeviceInfo();
-                        changeToBeforeYouStart(context);
-                      } else {
-                        if (result != null) {
-                          SmartDialog.show(
-                              widget: EvieSingleButtonDialog(
-                                  title: "Error",
-                                  content: result,
-                                  rightContent: "Ok",
-                                  onPressedRight: () {
-                                    SmartDialog.dismiss();
-                                  }));
-                        }
+                        changeToAccountRegisterScreen(context);
+                      }
+                      else if (result.containsKey(SignInStatus.registeredUser)) {
+                        _currentUserProvider.getDeviceInfo();
+                        changeToUserHomePageScreen(context);
+                      }
+                      else if (result.containsKey(SignInStatus.error)) {
+                        SmartDialog.show(
+                            widget: EvieSingleButtonDialog(
+                                title: "Error",
+                                content: result[SignInStatus.error],
+                                rightContent: "Ok",
+                                onPressedRight: () {
+                                  SmartDialog.dismiss();
+                                }));
+                      }
+                      else if (result.containsKey(SignInStatus.failed)) {
+                        SmartDialog.show(
+                            widget: EvieSingleButtonDialog(
+                                title: "Error",
+                                content: result[SignInStatus.failed],
+                                rightContent: "Ok",
+                                onPressedRight: () {
+                                  SmartDialog.dismiss();
+                                }));
                       }
                     });
                   }
@@ -186,10 +214,34 @@ class _SignUpMethodState extends State<SignUpMethod> {
                   onPressed: () async {
                     _authProvider
                         .signInWithFacebook(widget.name)
-                        .then((result) {
-                      if (result == true) {
+                        .then((loginStatus) {
+                      if (loginStatus.containsKey(SignInStatus.isNewUser)) {
                         _currentUserProvider.getDeviceInfo();
-                        changeToBeforeYouStart(context);
+                        changeToAccountRegisterScreen(context);
+                      }
+                      else if (loginStatus.containsKey(SignInStatus.registeredUser)) {
+                        _currentUserProvider.getDeviceInfo();
+                        changeToUserHomePageScreen(context);
+                      }
+                      else if (loginStatus.containsKey(SignInStatus.error)) {
+                        SmartDialog.show(
+                            widget: EvieSingleButtonDialog(
+                                title: "Error",
+                                content: loginStatus[SignInStatus.error],
+                                rightContent: "Ok",
+                                onPressedRight: () {
+                                  SmartDialog.dismiss();
+                                }));
+                      }
+                      else if (loginStatus.containsKey(SignInStatus.failed)) {
+                        SmartDialog.show(
+                            widget: EvieSingleButtonDialog(
+                                title: "Error",
+                                content: loginStatus[SignInStatus.failed],
+                                rightContent: "Ok",
+                                onPressedRight: () {
+                                  SmartDialog.dismiss();
+                                }));
                       }
                     });
                   }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
@@ -70,8 +72,6 @@ Future main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   if (!kIsWeb) {
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
     channel = const AndroidNotificationChannel(
       'high_importance_channel', // id
       'High Importance Notifications', // title
@@ -79,6 +79,8 @@ Future main() async {
       playSound: true,
       importance: Importance.max,
     );
+
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
@@ -339,6 +341,17 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
   if (notification != null && android != null && !kIsWeb) {
+    // Convert the message to JSON string
+    Map<String, dynamic> payloadData = {
+      'title': notification.title,
+      'body': notification.body,
+      'data': message.data,
+      // Include any other fields you need
+    };
+
+    // Convert the map to a JSON string
+    String payloadJson = jsonEncode(payloadData);
+
     flutterLocalNotificationsPlugin.show(
       notification.hashCode,
       notification.title,
@@ -348,12 +361,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           channel.id,
           channel.name,
           channelDescription: channel.description,
-          // TODO add a proper drawable resource to android, for now using
-          //      one that already exists in example app.
-          icon: 'launch_background',
+          icon: 'test_notification',
         ),
       ),
-      payload : channel.id,
+      payload: payloadJson,
     );
   }
 }

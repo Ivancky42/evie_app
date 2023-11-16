@@ -10,23 +10,23 @@ import '../api/provider/setting_provider.dart';
 
 class EvieAppbar_Back extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onPressed;
+  final bool? enabled;
 
   const EvieAppbar_Back({
     Key? key,
     required this.onPressed,
+    this.enabled,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       systemOverlayStyle: SystemUiOverlayStyle.dark,
-      leading: IconButton(
-        icon: SettingProvider().isDarkMode(context) == true
-            ? Image.asset('assets/buttons/back_darkMode.png')
-            : SvgPicture.asset('assets/buttons/back_big.svg',),
-
+      leading: enabled == null || enabled == true ?
+      IconButton(
+        icon: SvgPicture.asset('assets/buttons/back_big.svg',),
         onPressed: onPressed,
-      ),
+      ) : Container(),
     );
   }
 
@@ -49,21 +49,37 @@ class PageAppbar extends StatelessWidget implements PreferredSizeWidget {
     required this.onPressed,
   }) : super(key: key);
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return enable == null || enable == true ? Padding(
+  //     padding: EdgeInsets.only(top: 6),
+  //     child: AppBar(
+  //       systemOverlayStyle: SystemUiOverlayStyle.dark,
+  //       leading: IconButton(
+  //         icon: SvgPicture.asset('assets/buttons/back_big.svg',),
+  //         onPressed: onPressed,
+  //       ),
+  //       centerTitle: true,
+  //       title: Text(
+  //         title, style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1),
+  //       ),
+  //     ),
+  //   ) : Container();
+  // }
+
   @override
   Widget build(BuildContext context) {
-    return enable == null || enable == true ? Padding(
-      padding: EdgeInsets.only(top: 6),
-      child: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-        leading: IconButton(
-          icon: SvgPicture.asset("assets/buttons/back_big.svg"),
-          onPressed: onPressed,
-        ),
+    return enable == null || enable == true ?
+      AppBar(
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
+      leading: IconButton(
+        icon: SvgPicture.asset('assets/buttons/back_big.svg',),
+        onPressed: onPressed,
+      ),
         centerTitle: true,
         title: Text(
-          title, style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),
+          title, style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack),
         ),
-      ),
     ) : Container();
   }
 

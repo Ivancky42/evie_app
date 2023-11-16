@@ -84,7 +84,7 @@ class _UnlockingSystemState extends State<UnlockingSystem> with WidgetsBindingOb
               _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr)...{
 
             SizedBox(
-              height: 96.h,
+              height: 96.w,
               width: 96.w,
               child:
               ElevatedButton(
@@ -175,7 +175,7 @@ class _UnlockingSystemState extends State<UnlockingSystem> with WidgetsBindingOb
           }
           else...{
             SizedBox(
-                height: 96.h,
+                height: 96.w,
                 width: 96.w,
                 child:
                 ElevatedButton(
@@ -227,7 +227,7 @@ class _UnlockingSystemState extends State<UnlockingSystem> with WidgetsBindingOb
         buttonImage = SvgPicture.asset(
           "assets/buttons/lock_unlock.svg",
           width: 52.w,
-          height: 50.h,
+          height: 50.w,
         );
       }
       else if(_bluetoothProvider.isUnlocking){
@@ -238,7 +238,7 @@ class _UnlockingSystemState extends State<UnlockingSystem> with WidgetsBindingOb
         buttonImage = SvgPicture.asset(
           "assets/buttons/lock_lock.svg",
           width: 52.w,
-          height: 50.h,);
+          height: 50.w,);
       }
     }
     else if (cableLockState?.lockState == LockState.unknown) {
@@ -251,14 +251,14 @@ class _UnlockingSystemState extends State<UnlockingSystem> with WidgetsBindingOb
       buttonImage = SvgPicture.asset(
         "assets/buttons/bluetooth_not_connected.svg",
         width: 52.w,
-        height: 50.h,
+        height: 50.w,
       );
     }
     else {
       buttonImage = SvgPicture.asset(
         "assets/buttons/bluetooth_not_connected.svg",
         width: 52.w,
-        height: 50.h,
+        height: 50.w,
       );
     }
   }

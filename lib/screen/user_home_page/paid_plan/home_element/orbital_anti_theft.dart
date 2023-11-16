@@ -173,8 +173,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                                       cameraOptions: CameraOptions(
                                         center: Point(
                                             coordinates: Position(
-                                                _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                                                _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                                                _locationProvider.locationModel?.geopoint!.longitude ?? 0,
+                                                _locationProvider.locationModel?.geopoint!.latitude ?? 0))
                                             .toJson(),
                                         zoom: 12,
                                       ),
@@ -267,7 +267,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SvgPicture.asset(getCurrentBikeStatusIcon(bikeProvider.currentBikeModel!, bikeProvider, bluetoothProvider),),
+                          bikeProvider.currentBikeModel != null ?
+                          SvgPicture.asset(getCurrentBikeStatusIcon(bikeProvider.currentBikeModel, bikeProvider, bluetoothProvider),) : Container(),
                           Text(getCurrentBikeStatusString3(
                               bikeProvider, bluetoothProvider),
                             style: EvieTextStyles.headlineB.copyWith(
@@ -342,7 +343,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
           return Container();
         },
         query: FirebaseFirestore.instance.collection("bikes")
-            .doc(_bikeProvider.currentBikeModel!.deviceIMEI!)
+            .doc(_bikeProvider.currentBikeModel?.deviceIMEI)
             .collection("events")
             .orderBy("created", descending: true),
       ),
@@ -531,8 +532,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
             PointAnnotationOptions(
                 geometry: Point(
                     coordinates: Position(
-                        _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                        _locationProvider.locationModel?.geopoint.latitude ?? 0
+                        _locationProvider.locationModel?.geopoint!.longitude ?? 0,
+                        _locationProvider.locationModel?.geopoint!.latitude ?? 0
                     )).toJson(),
                 iconSize: Platform.isAndroid ? 34.mp : 14.mp,
                 image: list)
@@ -549,8 +550,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
             PointAnnotationOptions(
                 geometry: Point(
                     coordinates: Position(
-                        _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                        _locationProvider.locationModel?.geopoint.latitude ?? 0
+                        _locationProvider.locationModel?.geopoint!.longitude ?? 0,
+                        _locationProvider.locationModel?.geopoint!.latitude ?? 0
                     )).toJson(),
                 //iconSize: 170.w * 0.003,
                 iconSize: Platform.isAndroid ? 34.mp : 14.mp,
@@ -565,8 +566,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
             PointAnnotationOptions(
                 geometry: Point(
                     coordinates: Position(
-                        _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                        _locationProvider.locationModel?.geopoint.latitude ?? 0
+                        _locationProvider.locationModel?.geopoint!.longitude ?? 0,
+                        _locationProvider.locationModel?.geopoint!.latitude ?? 0
                     )).toJson(),
                 iconSize: Platform.isAndroid ? 34.mp : 14.mp,
                 image: list)
@@ -594,8 +595,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
         CameraOptions(
           center: Point(
               coordinates: Position(
-                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                  _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                  _locationProvider.locationModel?.geopoint!.longitude ?? 0,
+                  _locationProvider.locationModel?.geopoint!.latitude ?? 0))
               .toJson(),
           zoom: 12,
         ),

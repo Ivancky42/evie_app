@@ -38,6 +38,7 @@ class EvieButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.w)),
             elevation: 0.0,
             backgroundColor: backgroundColor ?? EvieColors.primaryColor,
+            disabledBackgroundColor: EvieColors.primaryColor.withOpacity(0.3),
         ),
       ),
     );

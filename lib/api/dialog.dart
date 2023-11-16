@@ -1261,6 +1261,33 @@ showErrorLoginDialog (BuildContext context){
   );
 }
 
+showWrongPasswordDialog (BuildContext context){
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Wrong Password",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Oops, it seems like the password is invalid or the user does not have a password.",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/user_not_found.svg",
+          width: 173.w,
+          height: 150.h,
+        ),
+        upContent: "Retry",
+        downContent: "Register Now",
+        onPressedUp: () {
+          SmartDialog.dismiss();
+        },
+        onPressedDown: () {
+          SmartDialog.dismiss();
+          changeToInputNameScreen(context);
+        }),
+  );
+}
+
 showDeactivateTheftDialog (BuildContext context, BikeProvider _bikeProvider){
   SmartDialog.show(
     widget: EvieTwoButtonDialog(

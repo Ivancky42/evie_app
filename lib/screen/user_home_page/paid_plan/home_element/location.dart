@@ -86,8 +86,8 @@ class _LocationState extends State<Location> {
                     MapLauncher.showDirections(
                         mapType: availableMaps![index].mapType,
                         destination: Coords(
-                            _bikeProvider.currentBikeModel!.location!.geopoint.latitude,
-                            _bikeProvider.currentBikeModel!.location!.geopoint.longitude));
+                            _bikeProvider.currentBikeModel!.location!.geopoint!.latitude,
+                            _bikeProvider.currentBikeModel!.location!.geopoint!.longitude));
                   }
                 },
               );

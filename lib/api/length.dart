@@ -11,12 +11,12 @@ class EvieLength {
   static var button_Bottom = 56.h;
 
   static var bottom_bar_icon_height = 51.67.h;
-  static var bottom_bar_icon_offset = -8.h;
+  static var bottom_bar_icon_offset = -10.h;
 
   static var sheet_expand = .92;
 
   static var battery_curved_bottom = 200.h;
 
-  static var screen_bottom = Platform.isIOS ? 36.h : 18.h;
+  static var screen_bottom = Platform.isIOS ? 40.h : 22.h;
 
 }

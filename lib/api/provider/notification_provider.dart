@@ -25,7 +25,7 @@ class NotificationProvider extends ChangeNotifier {
 
   NotificationModel? currentSingleNotification;
   UserModel? currentUserModel;
-  bool? isReadAll;
+  bool isReadAll = true;
 
   StreamSubscription? notificationListSubscription;
   StreamSubscription? currentNotificationSubscription;
@@ -88,6 +88,10 @@ class NotificationProvider extends ChangeNotifier {
           .snapshots()
           .listen((snapshot) {
         if (snapshot.docs.isNotEmpty) {
+
+          int processedChanges = 0;
+          int totalChanges = snapshot.docChanges.length;
+
           for (var docChange in snapshot.docChanges) {
             switch (docChange.type) {
               case DocumentChangeType.added:
@@ -110,17 +114,27 @@ class NotificationProvider extends ChangeNotifier {
                     (value) =>
                         NotificationModel.fromJson(obj!, docChange.doc.id));
                 notifyListeners();
+                // if (processedChanges == totalChanges) {
+                //   ///Is Read all
+                //   isReadAll = true;
+                //   detectIsReadAll(notificationList);
+                // }
                 break;
+            }
+
+            processedChanges++;
+
+            // Check if all changes have been processed
+            if (processedChanges == totalChanges) {
+              ///Is Read all
+              isReadAll = true;
+              detectIsReadAll(notificationList);
             }
           }
         }else{
           notificationList.clear();
           notifyListeners();
         }
-
-      ///Is Read all
-        isReadAll = true;
-        detectIsReadAll(notificationList);
       });
     } on Exception catch (exception) {
       debugPrint(exception.toString());

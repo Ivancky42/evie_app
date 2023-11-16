@@ -47,8 +47,8 @@ class LocationProvider extends ChangeNotifier {
     if (locationModel != null) {
       if (this.locationModel != locationModel) {
         if (this.locationModel?.geopoint != locationModel.geopoint) {
-          getPlaceMarks(locationModel.geopoint.latitude,
-              locationModel.geopoint.longitude);
+          getPlaceMarks(locationModel.geopoint!.latitude,
+              locationModel.geopoint!.longitude);
         }
         this.locationModel = locationModel;
       }
@@ -321,8 +321,8 @@ class LocationProvider extends ChangeNotifier {
     }
 
     double distanceInMeters = Geolocator.distanceBetween(
-      locationModel!.geopoint.latitude,
-      locationModel!.geopoint.longitude,
+      locationModel!.geopoint!.latitude,
+      locationModel!.geopoint!.longitude,
       userPosition!.latitude,
       userPosition!.longitude,
     );

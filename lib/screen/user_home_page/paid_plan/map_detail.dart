@@ -218,8 +218,8 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
                       cameraOptions: CameraOptions(
                         center: Point(
                             coordinates: Position(
-                                _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                                _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                                _locationProvider.locationModel?.geopoint!.longitude ?? 0,
+                                _locationProvider.locationModel?.geopoint!.latitude ?? 0))
                             .toJson(),
                         zoom: 16,
                       ),
@@ -345,8 +345,8 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
         options.add(PointAnnotationOptions(
           geometry: Point(
               coordinates: Position(
-                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                  _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                  _locationProvider.locationModel?.geopoint!.longitude ?? 0,
+                  _locationProvider.locationModel?.geopoint!.latitude ?? 0))
               .toJson(),
           image: list,
           iconSize: Platform.isAndroid ? 38.mp : 16.mp,
@@ -377,8 +377,8 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
         options.add(PointAnnotationOptions(
           geometry: Point(
               coordinates: Position(
-                  _locationProvider.locationModel?.geopoint.longitude ?? 0,
-                  _locationProvider.locationModel?.geopoint.latitude ?? 0))
+                  _locationProvider.locationModel?.geopoint!.longitude ?? 0,
+                  _locationProvider.locationModel?.geopoint!.latitude ?? 0))
               .toJson(),
           image: list,
           //iconImage: "assets/icons/security/safe_lock_3x.png",

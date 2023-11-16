@@ -21,6 +21,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
+import '../screen/account_registered.dart';
 import '../screen/account_verified.dart';
 import '../screen/check_your_email.dart';
 import '../screen/forget_your_password.dart';
@@ -40,6 +41,7 @@ import '../screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
 import '../screen/my_bike_setting/reset_bike/reset_bike.dart';
 import '../screen/onboarding_addNewBike/bike_connect_failed.dart';
 import '../screen/onboarding_addNewBike/bike_connect_success.dart';
+import '../screen/onboarding_addNewBike/bike_registering.dart';
 import '../screen/onboarding_addNewBike/congrats_bike_added.dart';
 import '../screen/onboarding_addNewBike/email_preference_control.dart';
 import '../screen/onboarding_addNewBike/before_you_start.dart';
@@ -115,6 +117,16 @@ void changeToAccountVerifiedScreen(BuildContext context) {
   Navigator.of(context).push(CupertinoPageRoute(
     builder: (context) {
       return AccountVerified();
+    },
+  ));
+}
+
+void changeToAccountRegisterScreen(BuildContext context) {
+  //Navigator.of(context).pushNamedAndRemoveUntil("/accountVerified", (route) => false);
+
+  Navigator.of(context).push(CupertinoPageRoute(
+    builder: (context) {
+      return AccountRegistered();
     },
   ));
 }
@@ -335,6 +347,16 @@ void changeToBikeConnectSuccessScreen(BuildContext context) {
     child: const BikeConnectSuccess(),
     duration: const Duration(milliseconds: 300),
   ),
+  );
+}
+
+void changeToRegisteringBikeScreen(BuildContext context, bool isSuccess) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: BikeRegistering(isSuccess: isSuccess,),
+      duration: const Duration(milliseconds: 300),
+    ),
   );
 }
 

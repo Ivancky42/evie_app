@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:convert';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/shared_pref_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -67,24 +68,51 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       onNameChange();
     });
 
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message != null) {
+        RemoteNotification? notification = message.notification;
+        AndroidNotification? android = message.notification?.android;
+        Map<String, dynamic> payloadData = {
+          'title': notification?.title,
+          'body': notification?.body,
+          'data': message.data,
+          // Include any other fields you need
+        };
+
+        // Convert the map to a JSON string
+        String payloadJson = jsonEncode(payloadData);
+        onSelectNotification(payloadJson);
+      }
+    });
+
     ///Background message
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
 
-      String data = message.data["id"].toString();
+      // String data = message.data["id"].toString();
+      //
+      // print("aaaaaaaaaaaaaa");
+      // print(message.notification?.title);
+      // print(message.notification?.body);
+      // print(message.data['deviceIMEI']);
+      // print(message.data["id"]);
+      //
+      // Future.delayed(Duration.zero, () {
+      //   changeToFeedsScreen(context);
+      // });
 
-      ///Pass notification id to get body and key
-      await _notificationProvider.getNotificationFromNotificationId(data);
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      Map<String, dynamic> payloadData = {
+        'title': notification?.title,
+        'body': notification?.body,
+        'data': message.data,
+        // Include any other fields you need
+      };
 
-      print("aaaaaaaaaaaaaa");
-      print(message.notification?.title);
-      print(message.notification?.body);
-      print(message.data['deviceIMEI']);
-      print(message.data["id"]);
+      // Convert the map to a JSON string
+      String payloadJson = jsonEncode(payloadData);
+      onSelectNotification(payloadJson);
 
-      Future.delayed(Duration.zero, () {
-
-        changeToFeedsScreen(context);
-      });
     });
 
     foreNotificationSetting();
@@ -96,6 +124,17 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null && !kIsWeb) {
+        // Convert the message to JSON string
+        Map<String, dynamic> payloadData = {
+          'title': notification.title,
+          'body': notification.body,
+          'data': message.data,
+          // Include any other fields you need
+        };
+
+        // Convert the map to a JSON string
+        String payloadJson = jsonEncode(payloadData);
+
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
           notification.title,
@@ -108,7 +147,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
               icon: 'test_notification',
             ),
           ),
-          payload: message.data["id"].toString(),
+          payload: payloadJson,
         );
       }
     });
@@ -159,20 +198,30 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
   ///Android foreground message handler
   Future<void> onSelectNotification(String? payload) async {
-    ///Pass notification id to get body and key
-    ///
-    await _notificationProvider.getNotificationFromNotificationId(payload);
 
-      Future.delayed(Duration.zero, () {
-        changeToFeedsScreen(context);
-      });
+    if (payload != null) {
+      // Convert JSON string to Dart map
+      Map<String, dynamic> payloadMap = jsonDecode(payload);
+      // Access the fields in the map
+      String title = payloadMap['title'];
+      String body = payloadMap['body'];
+      Map<String, dynamic> data = payloadMap['data'];
+
+      String action = data['action'];
+      String deviceIMEI = data['deviceIMEI'];
+      if (action == 'unlock' || action == 'lock' || action == 'connection-lost' || action == 'movement-detect' || action == 'fall-detect' || action == 'theft-attempt') {
+        await _bikeProvider.changeBikeUsingIMEI(deviceIMEI);
+      }
+      else {
+        Future.delayed(Duration.zero, () {
+          changeToFeedsScreen(context);
+        });
+      }
+    }
   }
 
   ///IOS foreground message handler
   void onDidReceiveLocalNotification(int? id, String? title, String? body, String? payload) async {
-    // display a dialog with the notification details, tap ok to go to another page
-    ///Pass notification id to get body and key
-    await _notificationProvider.getNotificationFromNotificationId(payload);
       Future.delayed(Duration.zero, () {
         changeToFeedsScreen(context);
       });

@@ -576,11 +576,11 @@ getCurrentBikeStatusImage(BikeModel bikeModel, BikeProvider bikeProvider, Blueto
   }
 }
 
-getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
+getCurrentBikeStatusIcon(BikeModel? bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
 
   if (bikeProvider.userBikePlans.isNotEmpty) {
     for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
-      if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
+      if (bikeModel?.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
         if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
           final result = calculateDateDifferenceFromNow(
               bikeProvider.userBikePlans.values
@@ -590,10 +590,10 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, Bluetoo
           if (result < 0) {
             return "assets/buttons/bike_security_not_available.svg";
           } else {
-            if (bikeModel.location?.isConnected == false) {
+            if (bikeModel?.location?.isConnected == false) {
               return "assets/buttons/bike_security_offline.svg";
             } else {
-              switch (bikeModel.location!.status) {
+              switch (bikeModel?.location?.status) {
                 case 'safe':
                   {
                     if(bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
@@ -604,7 +604,7 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, Bluetoo
                       }
                     }
                     else{
-                      if(bikeModel.isLocked == false){
+                      if(bikeModel?.isLocked == false){
                         return "assets/buttons/bike_security_unlock_black.svg";
                       }else{
                         return "assets/buttons/bike_security_lock_and_secure_black.svg";
@@ -625,12 +625,14 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, BikeProvider bikeProvider, Bluetoo
               }
             }
           }
-        }else{
+        }
+        else {
           return "assets/buttons/bike_security_not_available.svg";
         }
       }
     }
-  }else{
+  }
+  else{
     return "assets/buttons/bike_security_not_available.svg";
   }
 }
@@ -660,7 +662,7 @@ getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bike
             if (bikeModel.location?.isConnected == false) {
               return "Connection Lost";
             } else {
-              switch (bikeModel.location!.status) {
+              switch (bikeModel.location?.status) {
                 case 'safe':
                   {
                     if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
@@ -706,7 +708,7 @@ getCurrentBikeStatusString2(BikeProvider bikeProvider, BluetoothProvider bluetoo
     return "Connection Lost";
   }
   else {
-    switch (bikeProvider.currentBikeModel!.location!.status) {
+    switch (bikeProvider.currentBikeModel!.location?.status) {
       case 'safe':
         {
           if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
@@ -741,13 +743,13 @@ getCurrentBikeStatusString2(BikeProvider bikeProvider, BluetoothProvider bluetoo
 }
 
 getCurrentBikeStatusString3(BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
-  if (bikeProvider.currentBikeModel!.location?.isConnected == false) {
+  if (bikeProvider.currentBikeModel?.location?.isConnected == false) {
     return "Connection Lost";
   }
   else {
     if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
       ///Bike connected with bluetooth
-      switch (bikeProvider.currentBikeModel!.location!.status) {
+      switch (bikeProvider.currentBikeModel?.location?.status) {
         case 'safe':
           if (bluetoothProvider.cableLockState?.lockState == LockState.unlock && bikeProvider.currentBikeModel?.isLocked == false) {
             return "Unlocked";
@@ -778,7 +780,7 @@ getCurrentBikeStatusString3(BikeProvider bikeProvider, BluetoothProvider bluetoo
     }
     else {
       ///Bike not connect with bluetooth
-      switch (bikeProvider.currentBikeModel!.location!.status) {
+      switch (bikeProvider.currentBikeModel?.location?.status) {
         case 'safe':
           if (bikeProvider.currentBikeModel!.isLocked == false) {
             return "Unlocked";
@@ -827,7 +829,7 @@ getCurrentBikeStatusColour(bool isLocked, BikeModel bikeModel, BikeProvider bike
             if (bikeModel.location?.isConnected == false) {
               return EvieColors.orange;
             } else {
-              switch (bikeModel.location!.status) {
+              switch (bikeModel.location?.status) {
                 case 'safe':
                   return EvieColors.transparent;
                 case 'warning':
@@ -870,7 +872,7 @@ getCurrentBikeStatusColourText(bool isLocked, BikeModel bikeModel, BikeProvider 
             if (bikeModel.location?.isConnected == false) {
               return EvieColors.orange;
             } else {
-              switch (bikeModel.location!.status) {
+              switch (bikeModel.location?.status) {
                 case 'safe':
                   return EvieColors.darkGrayishCyan;
                 case 'warning':
@@ -901,7 +903,7 @@ getCurrentBikeStatusIconSimple(BikeModel bikeModel, BikeProvider bikeProvider, B
   if (bikeModel.location?.isConnected == false) {
     return "assets/icons/warning_white.svg";
   } else {
-    switch (bikeModel.location!.status) {
+    switch (bikeModel.location?.status) {
       case 'safe':
         {
           if(bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
@@ -1006,13 +1008,13 @@ animateBounce(mapboxMap, longitude, latitude) {
 pointBounce(mapboxMap, LocationProvider locationProvider, userPosition) {
 
   final LatLng southwest = LatLng(
-    min(locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
-    min(locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
+    min(locationProvider.locationModel?.geopoint!.latitude ?? 0, userPosition.lat.toDouble()),
+    min(locationProvider.locationModel?.geopoint!.longitude ?? 0, userPosition.lng.toDouble()),
   );
 
   final LatLng northeast = LatLng(
-    max(locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
-    max(locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
+    max(locationProvider.locationModel?.geopoint!.latitude ?? 0, userPosition.lat.toDouble()),
+    max(locationProvider.locationModel?.geopoint!.longitude ?? 0, userPosition.lng.toDouble()),
   );
   LatLngBounds latLngBounds = LatLngBounds(southwest, northeast);
 
@@ -1030,13 +1032,13 @@ pointBounce(mapboxMap, LocationProvider locationProvider, userPosition) {
 pointBounce2(MapboxMap? mapboxMap, LocationProvider locationProvider, userPosition) async {
 
   final LatLng southwest = LatLng(
-    min(locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
-    min(locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
+    min(locationProvider.locationModel?.geopoint!.latitude ?? 0, userPosition.lat.toDouble()),
+    min(locationProvider.locationModel?.geopoint!.longitude ?? 0, userPosition.lng.toDouble()),
   );
 
   final LatLng northeast = LatLng(
-    max(locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
-    max(locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
+    max(locationProvider.locationModel?.geopoint!.latitude ?? 0, userPosition.lat.toDouble()),
+    max(locationProvider.locationModel?.geopoint!.longitude ?? 0, userPosition.lng.toDouble()),
   );
 
   final CameraOptions cameraOpt = await mapboxMap!.cameraForCoordinateBounds(
@@ -1071,13 +1073,13 @@ pointBounce3(MapboxMap? mapboxMap, LocationProvider locationProvider, userPositi
   }
 
   final LatLng southwest = LatLng(
-    min(locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
-    min(locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
+    min(locationProvider.locationModel?.geopoint!.latitude ?? 0, userPosition.lat.toDouble()),
+    min(locationProvider.locationModel?.geopoint!.longitude ?? 0, userPosition.lng.toDouble()),
   );
 
   final LatLng northeast = LatLng(
-    max(locationProvider.locationModel?.geopoint.latitude ?? 0, userPosition.lat.toDouble()),
-    max(locationProvider.locationModel?.geopoint.longitude ?? 0, userPosition.lng.toDouble()),
+    max(locationProvider.locationModel?.geopoint!.latitude ?? 0, userPosition.lat.toDouble()),
+    max(locationProvider.locationModel?.geopoint!.longitude ?? 0, userPosition.lng.toDouble()),
   );
 
   if (mapboxMap != null) {
