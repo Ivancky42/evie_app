@@ -92,26 +92,28 @@ class _BatteryDetailsState extends State<BatteryDetails> {
               const Divider(
                 thickness: 2,
               ),
-
+              SizedBox(height: 30.h,),
               Stack(
                 children: [
-                      Container(
-                      height: 220.h,
-                      width: double.infinity,
-                      child: WavedCurvesAnimation(),
-                    ),
-
+                  Image.asset("assets/images/battery_wave.png", height: 180.h, fit: BoxFit.fill,),
                   Container(
-                    height: EvieLength.battery_curved_bottom-30.h,
+                    height: EvieLength.battery_curved_bottom - 35.h,
+                    //color: Colors.green,
                     child: Padding(
-                      padding: EdgeInsets.only(left:16.w, right: 16.w),
+                      padding: EdgeInsets.only(left: 16.w, right: 16.w),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("${_bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0}%", style: EvieTextStyles.batteryPercent.copyWith(color: EvieColors.lightBlack),),
-                          Text("Estimate ${getEstDistance(_bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0, _settingProvider)} remaining", style: EvieTextStyles.body16,),
-                      ],
+                          Text(
+                            "${_bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0}%",
+                            style: EvieTextStyles.batteryPercent.copyWith(color: EvieColors.lightBlack),
+                          ),
+                          Text(
+                            "Estimate ${getEstDistance(_bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0, _settingProvider)} remaining",
+                            style: EvieTextStyles.body16,
+                          ),
+                        ],
                       ),
                     ),
                   )
@@ -119,7 +121,7 @@ class _BatteryDetailsState extends State<BatteryDetails> {
               ),
 
               Padding(
-                padding: EdgeInsets.only(left:16.w, right: 16.w),
+                padding: EdgeInsets.only(left:16.w, right: 16.w, top: 6.h),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +147,7 @@ class _BatteryDetailsState extends State<BatteryDetails> {
               ),
             ],
           ),
-          height: 750.h,
+          //height: 750.h,
         ),
       ),
     );

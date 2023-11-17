@@ -9,6 +9,7 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/threat_unlocking_system.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
 import 'package:evie_test/widgets/actionable_bar.dart';
+import 'package:evie_test/widgets/evie-unlocking-button.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter/scheduler.dart';
@@ -28,6 +29,7 @@ import '../../../api/provider/notification_provider.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
+import '../../../widgets/evie_card.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../../../widgets/evie_slider_button.dart';
 import '../switch_bike.dart';
@@ -51,6 +53,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   late BluetoothProvider _bluetoothProvider;
   bool isActionBarAppear = false;
   DeviceConnectResult? deviceConnectResult;
+  Widget arrowDirection = SvgPicture.asset("assets/buttons/down_white.svg",);
 
   @override
   void initState() {
@@ -241,15 +244,25 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                               padding: EdgeInsets.only(right: 22.5.w),
                                               child: IconButton(
                                                   onPressed: (){
+
+                                                    setState(() {
+                                                      arrowDirection = SvgPicture.asset("assets/buttons/up_white.svg",);
+                                                    });
+
                                                     showCupertinoModalBottomSheet(
                                                         expand: false,
                                                         useRootNavigator: true,
                                                         context: context,
                                                         builder: (context) {
                                                           return SwitchBike();
-                                                        });
+                                                        }).then((value) {
+                                                      setState(() {
+                                                        arrowDirection = SvgPicture.asset("assets/buttons/down_white.svg",);
+                                                      });
+                                                    });
                                                   },
-                                                  icon: SvgPicture.asset("assets/buttons/down_white.svg",)),
+                                                  icon: arrowDirection,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -294,7 +307,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                     aspectRatio: 1,
                                     child: Padding(
                                       padding: EdgeInsets.fromLTRB(19.w, 0, 8.w, 16.h),
-                                      child: Battery(),
+                                      child: Battery(isShow: false),
                                     ),
                                   ),
                                 ),
@@ -326,7 +339,9 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                       aspectRatio: 1,
                                       child: Padding(
                                         padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 20.h),
-                                        child: _bikeProvider.currentBikeModel?.location?.status == "danger" ? ThreatUnlockingSystem(page: 'home') : UnlockingSystem(),
+                                        child: _bikeProvider.currentBikeModel?.location?.status == "danger" ? ThreatUnlockingSystem(page: 'home') : EvieCard(
+                                          child: UnlockingButton(),
+                                        ),
                                       ),
                                     )
                                 ),
@@ -365,7 +380,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                     aspectRatio: 1,
                                     child: Padding(
                                       padding: EdgeInsets.fromLTRB(19.w, 0, 8.w, 16.h),
-                                      child: Battery(),
+                                      child: Battery(isShow: false),
                                     ),
                                   ),
                                 ),
@@ -397,7 +412,9 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                       aspectRatio: 1,
                                       child: Padding(
                                         padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 20.h),
-                                        child: _bikeProvider.currentBikeModel?.location?.status == "danger" ? ThreatUnlockingSystem(page: 'home') : UnlockingSystem(),
+                                        child: _bikeProvider.currentBikeModel?.location?.status == "danger" ? ThreatUnlockingSystem(page: 'home') : EvieCard(
+                                          child: UnlockingButton(),
+                                        ),
                                       ),
                                     )
                                 ),

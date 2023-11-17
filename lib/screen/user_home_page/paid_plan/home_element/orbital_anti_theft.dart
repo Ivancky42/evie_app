@@ -83,7 +83,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      _locationProvider.checkLocationPermissionStatus();
+      //_locationProvider.checkLocationPermissionStatus();
     }
   }
 
@@ -180,24 +180,24 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                                       ),
                                     ),
 
-                                    _locationProvider.hasLocationPermission ? SizedBox.shrink() : Positioned(
-                                      bottom: 70.h,
-                                      right: 10.w,
-                                      child: Align(
-                                        alignment: Alignment.bottomRight,
-                                        //onTap camera pic
-                                        child: GestureDetector(
-                                          onTap: () async {
-                                            showEvieAllowOrbitalDialog(_locationProvider);
-                                          },
-                                          child: SvgPicture.asset(
-                                            "assets/buttons/location_unavailable.svg",
-                                            width: 36.w,
-                                            height: 36.h,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                    // _locationProvider.hasLocationPermission ? SizedBox.shrink() : Positioned(
+                                    //   bottom: 70.h,
+                                    //   right: 10.w,
+                                    //   child: Align(
+                                    //     alignment: Alignment.bottomRight,
+                                    //     //onTap camera pic
+                                    //     child: GestureDetector(
+                                    //       onTap: () async {
+                                    //         showEvieAllowOrbitalDialog(_locationProvider);
+                                    //       },
+                                    //       child: SvgPicture.asset(
+                                    //         "assets/buttons/location_unavailable.svg",
+                                    //         width: 36.w,
+                                    //         height: 36.h,
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ),

@@ -356,7 +356,7 @@ class LocationProvider extends ChangeNotifier {
 
     }
     else {
-      showEvieAllowOrbitalDialog(this);
+      //showEvieAllowOrbitalDialog(this);
     }
   }
 

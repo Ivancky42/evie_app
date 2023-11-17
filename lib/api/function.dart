@@ -588,18 +588,31 @@ getCurrentBikeStatusIcon(BikeModel? bikeModel, BikeProvider bikeProvider, Blueto
                   .periodEnd
                   .toDate());
           if (result < 0) {
-            return "assets/buttons/bike_security_not_available.svg";
-          } else {
+            if(bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected && bluetoothProvider.currentConnectedDevice == bikeModel?.macAddr) {
+              if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+                return "assets/buttons/bike_security_unlock_black.svg";
+              }
+              else {
+                return "assets/buttons/bike_security_lock_and_secure_black.svg";
+              }
+            }
+            else{
+              return "assets/buttons/bike_security_not_available.svg";
+            }
+          }
+          else {
             if (bikeModel?.location?.isConnected == false) {
               return "assets/buttons/bike_security_offline.svg";
-            } else {
+            }
+            else {
               switch (bikeModel?.location?.status) {
                 case 'safe':
                   {
                     if(bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
                       if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
                         return "assets/buttons/bike_security_unlock_black.svg";
-                      } else {
+                      }
+                      else {
                         return "assets/buttons/bike_security_lock_and_secure_black.svg";
                       }
                     }
@@ -657,7 +670,17 @@ getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bike
                   .periodEnd
                   .toDate());
           if (result < 0) {
-            return "-";
+            if(bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected && bluetoothProvider.currentConnectedDevice == bikeModel.macAddr) {
+              if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+                return "Unlocked";
+              }
+              else {
+                return "Locked & Secured";
+              }
+            }
+            else{
+              return "-";
+            }
           } else {
             if (bikeModel.location?.isConnected == false) {
               return "Connection Lost";

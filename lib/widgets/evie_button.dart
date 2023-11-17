@@ -210,21 +210,16 @@ class EvieButton_PickDate extends StatelessWidget {
     return Container(
         height: height ?? 32.h,
         width: width ?? double.infinity,
-        child: Row(
-          children: [
-            ElevatedButton(
-              child: child,
-              onPressed: onPressed,
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.w)),
-                elevation: 0.0,
-                backgroundColor: showColour == true ? EvieColors.lightGrayishCyan : EvieColors.transparent,
-              ),
-            ),
-
-          ],
-        )
+        child: ElevatedButton(
+          child: child,
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.w)),
+            elevation: 0.0,
+            backgroundColor: showColour == true ? EvieColors.lightGrayishCyan : EvieColors.transparent,
+          ),
+        ),
     );
   }
 }

@@ -3,8 +3,11 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
+import 'package:evie_test/widgets/evie-unlocking-button.dart';
+import 'package:evie_test/widgets/evie_card.dart';
 import 'package:image/image.dart' as IMG;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -19,6 +22,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel2/sliding_up_panel2.dart';
+import 'package:super_tooltip/super_tooltip.dart';
 
 import '../../../../api/colours.dart';
 import '../../../../api/function.dart';
@@ -76,18 +80,24 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
   String? locationStatus;
   bool? isLocked;
 
+  final tooltipController = JustTheController();
+  final _controller = SuperTooltipController();
+
   @override
   void initState() {
     super.initState();
      WidgetsBinding.instance.addObserver(this);
     _locationProvider = Provider.of<LocationProvider>(context, listen: false);
     _locationProvider.addListener(locationListener);
+    Future.delayed(const Duration(seconds: 1), () {
+      _controller.showTooltip();
+    });
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      _locationProvider.checkLocationPermissionStatus();
+      //_locationProvider.checkLocationPermissionStatus();
     }
   }
 
@@ -180,7 +190,7 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
                   ),
 
                   Padding(
-                    padding: EdgeInsets.all(0),
+                    padding: EdgeInsets.only(right: 10.w),
                     child: IconButton(
                       onPressed: () {
                         _settingProvider.changeSheetElement(SheetList.threatHistory);
@@ -229,33 +239,77 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
                       ].toSet(),
                     ),
 
+                    _locationProvider.hasLocationPermission == true ?
                     Padding(
                       padding:  EdgeInsets.only(bottom:240.h),
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
                           onTap: () async {
-                            _locationProvider.hasLocationPermission == true ?
-                            pointBounce3(mapboxMap, _locationProvider, userPosition) :
-                            showEvieAllowOrbitalDialog(_locationProvider);
+                            pointBounce3(mapboxMap, _locationProvider, userPosition);
                           },
                           child: Container(
-                              height: 50.h,
                               child: Align(
                                 alignment: Alignment.bottomRight,
                                 child: Padding(
-                                  padding: EdgeInsets.only(right: 8.h),
-                                  child: SvgPicture.asset(
-                                    _locationProvider.hasLocationPermission == true ? "assets/buttons/location.svg" : "assets/buttons/location_unavailable.svg",
-                                    width: 50.w,
-                                    height: 50.h,
-                                  ),
+                                    padding: EdgeInsets.only(right: 8.h),
+                                    child: Container(
+                                      //color: Colors.red,
+                                      width: 64.w,
+                                      height: 64.w,
+                                      child: SvgPicture.asset(
+                                        "assets/buttons/location.svg",
+                                      ),
+                                    )
                                 ),
-                              )),
+                              ))
                         ),
                       ),
+                    ) :
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 260.h),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: GestureDetector(
+                          onTap: () {
+                            showEvieAllowOrbitalDialog(_locationProvider);
+                          },
+                          child: SuperTooltip(
+                            onShow: () async {
+                              await Future.delayed(Duration(seconds: 3));
+                              _controller.hideTooltip();
+                            },
+                            backgroundColor: Colors.black,
+                            showBarrier: false,
+                            controller: _controller,
+                            popupDirection: TooltipDirection.up,
+                            hasShadow: false,
+                            content: Padding(
+                              padding: EdgeInsets.fromLTRB(6, 6, 6, 6),
+                              child: Text(
+                                "See your location",
+                                softWrap: true,
+                                style: EvieTextStyles.body14.copyWith(color: Colors.white),
+                              ),
+                            ),
+                            child: GestureDetector(
+                              child: Container(
+                                //color: Colors.red,
+                                padding: EdgeInsets.only(top: 20.h),
+                                width: 70.w,
+                                height: 70.w,
+                                child: SvgPicture.asset(
+                                  "assets/buttons/location_unavailable.svg",
+                                ),
+                              ),
+                              onTap: () {
+                                showEvieAllowOrbitalDialog(_locationProvider);
+                              },
+                            )
+                          ),
+                        )
+                      ),
                     ),
-
                     Padding(
                       padding:  EdgeInsets.only(bottom:23.h),
                       child: Align(
@@ -278,7 +332,9 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
                                 aspectRatio: 1,
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(6, 2, 16, 8),
-                                  child: UnlockingSystem(),
+                                  child: EvieCard(
+                                    child: UnlockingButton(),
+                                  )
                                 ),
                               ),
                             ),

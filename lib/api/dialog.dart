@@ -1505,7 +1505,7 @@ showMasterYourRide(){
 showEvieAllowOrbitalDialog(LocationProvider _locationProvider){
   SmartDialog.show(
       widget:Evie2IconBatchOneButtonDialog(
-          title: "Worry-free with EV-Secure",
+          title: "Worry-free with \n EV-Secure",
           miniTitle1: "Orbital Anti-theft",
           miniTitle2: "GPS Tracking",
           content1:"Built-in theft detection. Receive instant security alerts when a theft attempt is detected." ,

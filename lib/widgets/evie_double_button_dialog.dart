@@ -242,7 +242,7 @@ class EvieDoubleButtonDialogFilter extends StatelessWidget{
             children: [
 
               Padding(
-                padding:  EdgeInsets.only(bottom: 12.h),
+                padding:  EdgeInsets.only(bottom: 6.h),
                 child: title,
               ),
               Divider(

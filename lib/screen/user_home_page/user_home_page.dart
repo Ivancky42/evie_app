@@ -13,7 +13,6 @@ import '../../test/test.dart';
 import '../feeds/feeds.dart';
 import '../feeds/feeds2.dart';
 import '../my_account/account/my_account.dart';
-import '../../abandon/user_notification.dart';
 
 
 class UserHomePage extends StatefulWidget {
@@ -45,7 +44,7 @@ class _UserHomePageState extends State<UserHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    _notificationProvider = context.read<NotificationProvider>();
+    _notificationProvider = context.watch<NotificationProvider>();
     return Scaffold(
       body: screen[currentIndex],
       bottomNavigationBar: BottomAppBar(

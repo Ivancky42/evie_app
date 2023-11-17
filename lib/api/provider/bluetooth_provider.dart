@@ -1390,64 +1390,6 @@ class BluetoothProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //   Stream<BLEScanResult> startScanRSSI() {
-  //
-  //     shouldStopTimer = true;
-  //
-  //     bleScanSub?.cancel();
-  //
-  //     startScanTimer?.cancel();
-  //     scanResultStream.add(BLEScanResult.scanning);
-  //     scanResult = BLEScanResult.scanning;
-  //
-  //     startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
-  //
-  //       print("Scan Timer: " + timer.tick.toString() + "s");
-  //
-  //       if (timer.tick == 10 && shouldStopTimer) {
-  //         await stopScan();
-  //         await disconnectDevice();
-  //         startScanTimer?.cancel();
-  //         scanResultStream.add(BLEScanResult.unknown);
-  //         scanResult = BLEScanResult.unknown;
-  //
-  //         scanResultStream.add(BLEScanResult.scanTimeout);
-  //         scanResult = BLEScanResult.scanTimeout;
-  //         bleStatusSubscription?.cancel();
-  //
-  //         bleScanSub?.cancel();
-  //         timer.cancel();
-  //         notifyListeners();
-  //       }
-  //     });
-  //
-  //   bleScanSub = flutterReactiveBle.scanForDevices(scanMode: ScanMode.lowLatency, withServices: []).listen((discoveredDevice) async {
-  //
-  //     if (discoveredDevice.name == currentBikeModel?.bleName) {
-  //
-  //       shouldStopTimer = false;
-  //
-  //       scanResultStream.add(BLEScanResult.deviceFound);
-  //       scanResult = BLEScanResult.deviceFound;
-  //
-  //       deviceRssi = discoveredDevice.rssi.abs();
-  //
-  //       if(deviceRssi.abs() > 0 && deviceRssi.abs() < 100){
-  //         deviceRssiProgress = 1.0 - (deviceRssi.abs() / 100.0);
-  //       }else{
-  //         deviceRssiProgress = 0.0;
-  //       }
-  //
-  //       notifyListeners();
-  //     }
-  //
-  //   }, onError: (error) {
-  //     bleScanSub?.cancel();
-  //   });
-  //
-  //     return scanResultStream.stream;
-  // }
-
   void stopScanTimer() {
     startScanTimer?.cancel();
     deviceFoundTimer?.cancel();

@@ -24,20 +24,15 @@ class EvieRadioButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 54.h,
+      height: 70.h,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(text ?? "", style: EvieTextStyles.body18,),
 
-          Container(
-            width: 20,
-            height: 20,
-            decoration: BoxDecoration(
-              color: value == groupValue ? Colors.transparent : EvieColors.lightGrayishCyan,
-              shape: BoxShape.circle, // You can adjust the shape as needed
-            ),
+          Transform.scale(
+            scale: 1.4, // Adjust the scale factor as needed
             child: Radio(
               fillColor: MaterialStateColor.resolveWith(
                       (states) {

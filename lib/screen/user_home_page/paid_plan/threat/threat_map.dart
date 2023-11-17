@@ -202,16 +202,15 @@ class _ThreatMapState extends State<ThreatMap> {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-
           Container(
+            height: 120.h,
             color: EvieColors.lightBlack,
             child: Padding(
-              padding: EdgeInsets.only(left: 17.w, top: 45.h, bottom: 11.h, right:17.w),
+              padding: EdgeInsets.only(left: 17.w, top: 50.h, bottom: 0, right:10.w),
               child: Row(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-
                   GestureDetector(
                       onTap: (){
                         showEvieExitOrbitalDialog(context);
@@ -224,13 +223,16 @@ class _ThreatMapState extends State<ThreatMap> {
                     style: EvieTextStyles.h2.copyWith(color: EvieColors.grayishWhite),
                    ),
 
-                  GestureDetector(
-                      onTap: (){
-                        changeToThreatTimeLine(context, PageTransitionType.fade);
-                      },
-                      child: SvgPicture.asset(
-                        "assets/buttons/list.svg",
-                      ),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      changeToThreatTimeLine(context, PageTransitionType.fade);
+                    },
+                    icon: SvgPicture.asset(
+                      "assets/buttons/list.svg",
+                      width: 36.w,
+                      height: 36.w,
+                    ),
                   ),
                 ],
               ),
@@ -351,7 +353,7 @@ class _ThreatMapState extends State<ThreatMap> {
 
                     Positioned(
                       right: 10.w,
-                      bottom: _fabHeight - 15.h,
+                      bottom: _fabHeight - 20.h,
                       child: GestureDetector(
                         onTap: () async {
                           _locationProvider.hasLocationPermission == true ?
@@ -359,11 +361,10 @@ class _ThreatMapState extends State<ThreatMap> {
                           showEvieAllowOrbitalDialog(_locationProvider);
                         },
                         child: Container(
-                            height: 50.h,
+                            width: 64.w,
+                            height: 64.w,
                             child: SvgPicture.asset(
                               _locationProvider.hasLocationPermission == true ? "assets/buttons/location.svg" : "assets/buttons/location_unavailable.svg",
-                              width: 50.h,
-                              height: 50.h,
                             ),
                         ),
                       ),

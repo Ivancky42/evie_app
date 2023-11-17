@@ -105,7 +105,7 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.all(0),
+                  padding: EdgeInsets.only(right:10.w),
                   child: IconButton(
                     onPressed: () {
                       _locationProvider.locations();
@@ -135,16 +135,17 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.all(0),
+                  padding: EdgeInsets.only(right:10.w),
                   child: IconButton(
+                    padding: EdgeInsets.zero,
                     onPressed: () {
                       _locationProvider.locations();
                       _settingProvider.changeSheetElement(SheetList.mapDetails);
                     },
                     icon: SvgPicture.asset(
                       "assets/buttons/list_selected.svg",
-                      width: 36.w,
-                      height: 36.w,
+                      width: 40.w,
+                      height: 40.w,
                     ),
                   ),
                 ),
@@ -179,7 +180,6 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                   padding: EdgeInsets.only(left: 12.w, right: 12.w),
                   child: Container(
                     height: 33.h,
-                    padding: EdgeInsets.zero,
                     child: ElevatedButton(
                       child: _bikeProvider.threatFilterArray.length == 5 ?
                       Row(
@@ -201,11 +201,11 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                         children: [
                           Text(
                             getSecurityTextWidget(_bikeProvider.threatFilterArray[0]),
-                            style: EvieTextStyles.ctaSmall.copyWith(color: EvieColors.white),
+                            style: EvieTextStyles.ctaSmall.copyWith(color: EvieColors.darkGray),
                           ),
                           SizedBox(width: 4.w,),
                           SvgPicture.asset(
-                            "assets/buttons/down_mini_bold_white.svg",
+                            "assets/buttons/up-mini.svg",
                           ),
                         ],
                       ) :
@@ -214,10 +214,10 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                         children: [
                           Text(
                             "${_bikeProvider.threatFilterArray.length} Statuses",
-                            style: EvieTextStyles.ctaSmall.copyWith(color: _bikeProvider.threatFilterArray.length == 5 ? EvieColors.darkGray : EvieColors.dividerWhite),
+                            style: EvieTextStyles.ctaSmall.copyWith(color: _bikeProvider.threatFilterArray.length >= 1 ? EvieColors.darkGray : EvieColors.dividerWhite),
                           ),
                           SvgPicture.asset(
-                            "assets/buttons/down_mini_bold_white.svg",
+                            "assets/buttons/up-mini.svg",
                           ),
                         ],
                       ),
@@ -230,10 +230,10 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
-                            side:  _bikeProvider.threatFilterArray.length == 5 ? BorderSide(color: EvieColors.darkGray, width: 1.0.w) : BorderSide(color: EvieColors.transparent,width: 0)),
+                            side:  _bikeProvider.threatFilterArray.length >= 1 ? BorderSide(color: EvieColors.darkGray, width: 1.0.w) : BorderSide(color: EvieColors.transparent,width: 0)),
                         elevation: 0.0,
-                        backgroundColor: _bikeProvider.threatFilterArray.length == 5 ? EvieColors.transparent : EvieColors.lightGrayish,
-
+                        backgroundColor: _bikeProvider.threatFilterArray.length == 5 ? EvieColors.transparent : EvieColors.progressBarGrey,
+                        padding: EdgeInsets.only(left: 12.w, right: 12.w, bottom: 0),
                       ),
                     ),
                   ),
@@ -249,11 +249,11 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                         children: [
                           Text(
                             "Date",
-                            style: EvieTextStyles.ctaSmall.copyWith(color: _bikeProvider.threatFilterDate == ThreatFilterDate.all ? EvieColors.darkGray : EvieColors.dividerWhite),
+                            style: EvieTextStyles.ctaSmall.copyWith(color: _bikeProvider.threatFilterDate == ThreatFilterDate.all ? EvieColors.darkGray : EvieColors.darkGray),
                           ),
                           SizedBox(width: 4.w,),
                           SvgPicture.asset(
-                            _bikeProvider.threatFilterDate == ThreatFilterDate.all ? "assets/buttons/down_mini_bold.svg" : "assets/buttons/down_mini_bold_white.svg",
+                            _bikeProvider.threatFilterDate == ThreatFilterDate.all ? "assets/buttons/down_mini_bold.svg" : "assets/buttons/up-mini.svg",
                           ),
                         ],
                       ),
@@ -266,10 +266,10 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
-                            side:  _bikeProvider.threatFilterDate == ThreatFilterDate.all ? BorderSide(color: EvieColors.darkGray, width: 1.0.w) : BorderSide(color: EvieColors.transparent,width: 0)),
+                            side:  _bikeProvider.threatFilterDate == ThreatFilterDate.all ? BorderSide(color: EvieColors.darkGray, width: 1.0.w) : BorderSide(color: EvieColors.darkGray,width: 1.0.w)),
                         elevation: 0.0,
-                        backgroundColor: _bikeProvider.threatFilterDate == ThreatFilterDate.all ? EvieColors.transparent : EvieColors.lightGrayish,
-
+                        backgroundColor: _bikeProvider.threatFilterDate == ThreatFilterDate.all ? EvieColors.transparent : EvieColors.progressBarGrey,
+                        padding: EdgeInsets.only(left: 12.w, right: 12.w, bottom: 0),
                       ),
                     ),
                   ),

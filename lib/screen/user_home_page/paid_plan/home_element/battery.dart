@@ -21,8 +21,9 @@ import '../../home_page_widget.dart';
 
 
 class Battery extends StatefulWidget {
+  final bool isShow;
   Battery({
-    Key? key
+    Key? key, required this.isShow
   }) : super(key: key);
 
   @override
@@ -49,7 +50,7 @@ class _BatteryState extends State<Battery> {
     String estimatedDistance = getEstDistance(batteryPercentage, _settingProvider);
 
     return EvieCard(
-      showInfo: true,
+      showInfo: widget.isShow ? true : null,
       onInfoPress: () {
         showBatteryInfoDialog(context);
       },

@@ -71,7 +71,10 @@ class _RidesState extends State<Rides> {
                   Row(
                     children: [
                       Text(_rideProvider.weekCardData ?? '-', style: EvieTextStyles.display,),
-                      Text(_rideProvider.weekCardDataUnit ?? '', style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray,)),
+                      Padding(
+                        padding: EdgeInsets.only(top: 6.h),
+                        child: Text(_rideProvider.weekCardDataUnit ?? '', style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray,)),
+                      )
                     ],
                   ),
                   Text("this week", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray,height: 1.2),),

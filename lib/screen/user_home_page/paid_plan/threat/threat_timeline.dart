@@ -76,17 +76,15 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
           Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-
               Container(
+                height: 120.h,
                 color: EvieColors.lightBlack,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 17.w, top: 45.h, bottom: 11.h, right:17.w),
-
+                  padding: EdgeInsets.only(left: 17.w, top: 50.h, bottom: 0, right:17.w),
                   child: Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-
                       GestureDetector(
                           onTap: (){
                             showEvieExitOrbitalDialog(context);
@@ -99,13 +97,25 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
                         style: EvieTextStyles.h2.copyWith(color: EvieColors.grayishWhite),
                       ),
 
-                      GestureDetector(
-                          onTap: (){
-                            changeToThreatMap(context, false, PageTransitionType.fade);
-                          },
-                          child: SvgPicture.asset(
-                            "assets/buttons/list_selected.svg",
-                          )),
+                      // GestureDetector(
+                      //     onTap: (){
+                      //       changeToThreatMap(context, false, PageTransitionType.fade);
+                      //     },
+                      //     child: SvgPicture.asset(
+                      //       "assets/buttons/list_selected.svg",
+                      //     )),
+
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          changeToThreatMap(context, false, PageTransitionType.fade);
+                        },
+                        icon: SvgPicture.asset(
+                          "assets/buttons/list_selected.svg",
+                          width: 40.w,
+                          height: 40.w,
+                        )
+                      ),
                     ],
                   ),
                 ),

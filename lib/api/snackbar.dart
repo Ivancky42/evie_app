@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 import '../bluetooth/modelResult.dart';
 import 'colours.dart';
 import 'enumerate.dart';
@@ -119,21 +120,22 @@ showConnectingToast(context) {
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
-        child:SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              SvgPicture.asset("assets/icons/loading.svg"),
-              SizedBox(width: 4.w,),
-              Text(
-                "Connecting bike.",
-                style: EvieTextStyles.toast,
-              ),
-            ],
-          ),
+        child:Row(
+          children: [
+            SizedBox(
+              width: 24.w,
+              height: 24.w,
+              child: Lottie.asset('assets/animations/loading-button-grey.json', repeat: true),
+            ),
+            SizedBox(width: 4.w,),
+            Text(
+              "Connecting bike.",
+              style: EvieTextStyles.toast,
+            ),
+          ],
         ),
       ),
-      duration: const Duration(seconds: 30),
+      duration: const Duration(seconds: 12),
     ),
   );
 }
@@ -152,23 +154,19 @@ showScanTimeoutToast(context) {
       elevation: 0,
       content: GestureDetector(
         onTap: () {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
         },
-        child:SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
-              SizedBox(width: 4.w,),
-              Container(
-                width: 300.w,
-                child: Text(
-                  "Fail to connect your bike. Please stay close to your bike and connect again.",
-                  style: EvieTextStyles.toast,
-                ),
-              )
-            ],
-          ),
+        child: Row(
+          children: [
+            SvgPicture.asset("assets/icons/fail.svg"),
+            SizedBox(width: 4.w,),
+            Flexible(
+              child: Text(
+                "Scan timeout. Please stay close to your bike and connect again.",
+                style: EvieTextStyles.toast,
+              ),
+            ),
+          ],
         ),
       ),
       duration: const Duration(seconds: 2),
@@ -188,23 +186,19 @@ showScanErrorToast(context) {
       elevation: 0,
       content: GestureDetector(
         onTap: () {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
         },
-        child:SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
-              SizedBox(width: 4.w,),
-              Container(
-                width: 300.w,
-                child: Text(
-                  "Scan Error. Please re-enabled your bluetooth.",
-                  style: EvieTextStyles.toast,
-                ),
-              )
-            ],
-          ),
+        child: Row(
+          children: [
+            SvgPicture.asset("assets/icons/fail.svg"),
+            SizedBox(width: 4.w,),
+            Flexible(
+              child: Text(
+                "Scan Error. Please re-enabled your bluetooth.",
+                style: EvieTextStyles.toast,
+              ),
+            ),
+          ],
         ),
       ),
       duration: const Duration(seconds: 2),
@@ -224,23 +218,19 @@ showConnectErrorToast(context) {
       elevation: 0,
       content: GestureDetector(
         onTap: () {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
         },
-        child:SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
-              SizedBox(width: 4.w,),
-              Container(
-                width: 300.w,
-                child: Text(
-                  "Connect Error. Please try again.",
-                  style: EvieTextStyles.toast,
-                ),
-              )
-            ],
-          ),
+        child: Row(
+          children: [
+            SvgPicture.asset("assets/icons/fail.svg"),
+            SizedBox(width: 4.w,),
+            Flexible(
+              child: Text(
+                "Connection failed. Make sure you are near to your bike and try again.",
+                style: EvieTextStyles.toast,
+              ),
+            ),
+          ],
         ),
       ),
       duration: const Duration(seconds: 2),
@@ -260,58 +250,19 @@ showDisconnectedToast(context) {
       elevation: 0,
       content: GestureDetector(
         onTap: () {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
         },
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
-              SizedBox(width: 4.w,),
-              Container(
-                width: 300.w,
-                child: Text(
-                  "Bike Disconnected.",
-                  style: EvieTextStyles.toast,
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-      duration: const Duration(seconds: 2),
-    ),
-  );
-}
-
-
-showUnlockingToast(context) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-          borderRadius:
-          BorderRadius.all(Radius.circular(10)
-          )
-      ),
-      elevation: 0,
-      content: GestureDetector(
-        onTap: () {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              Container(
-                width: 300.w,
-                child: Text(
-                  "Unlocking...",
-                  style: EvieTextStyles.toast,
-                ),
-              )
-            ],
-          ),
+        child: Row(
+          children: [
+            SvgPicture.asset("assets/icons/fail.svg"),
+            SizedBox(width: 4.w,),
+            Flexible(
+              child: Text(
+                "Bike Disconnected.",
+                style: EvieTextStyles.toast,
+              ),
+            ),
+          ],
         ),
       ),
       duration: const Duration(seconds: 2),
@@ -674,21 +625,18 @@ showScanTimeOut(context) {
       elevation: 0,
       content: GestureDetector(
         onTap: () {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
         },
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
+              SvgPicture.asset("assets/icons/check.svg"),
               SizedBox(width: 4.w,),
-              Container(
-                width: 300.w,
-                child: Text(
-                  "Fail to connect your bike. Please stay close to your bike and connect again.",
-                  style: EvieTextStyles.toast,
-                ),
-              )
+              Text(
+                "Scan timeout. Please stay close to your bike and connect again.",
+                style: EvieTextStyles.toast,
+              ),
             ],
           ),
         ),

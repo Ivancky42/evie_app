@@ -40,6 +40,7 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
         return  EvieDoubleButtonDialogFilter(
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text("Filter by status", style: EvieTextStyles.headlineB),
                 TextButton(
@@ -57,8 +58,8 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
                   await bikeProvider.applyThreatFilterStatus(filter);
 
                   SmartDialog.dismiss();
-                }
-                    , child: Text("Clear", style: EvieTextStyles.body18.copyWith(color: EvieColors.primaryColor, fontWeight: FontWeight.w900),))
+                }, child: Text("Clear", style: EvieTextStyles.body18.copyWith(color: EvieColors.primaryColor, fontWeight: FontWeight.w900),)
+                )
               ],
             ),
             childContent: Container(
@@ -66,7 +67,7 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 54.h,
+                    height: 70.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -87,7 +88,7 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
                   ),
                   const EvieDivider(),
                   Container(
-                    height: 54.h,
+                    height: 70.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -108,7 +109,7 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
                   ),
                   const EvieDivider(),
                   Container(
-                    height: 54.h,
+                    height: 70.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -129,7 +130,7 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
                   ),
                   const EvieDivider(),
                   Container(
-                    height: 54.h,
+                    height: 70.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -150,7 +151,7 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
                   ),
                  const EvieDivider(),
                   Container(
-                    height: 54.h,
+                    height: 70.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -192,8 +193,13 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
               if(lock == true){filter.add("lock");}
               if(unlock == true){filter.add("unlock");}
 
-              await bikeProvider.applyThreatFilterStatus(filter);
-
+              if (filter.isNotEmpty) {
+                await bikeProvider.applyThreatFilterStatus(filter);
+              }
+              else {
+                filter = ["warning","fall","danger", "lock", "unlock"];
+                await bikeProvider.applyThreatFilterStatus(filter);
+              }
               SmartDialog.dismiss();
             });
       }
@@ -224,10 +230,6 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
   SmartDialog.show(
       useSystem: true,
       backDismiss: false,
-      // maskColorTemp: EvieColors.transparent,
-      // targetContext: context,
-      // target: Offset(120, 200),
-
       widget: StatefulBuilder(
           builder: (context, setState){
             return  EvieDoubleButtonDialogFilter(
@@ -310,14 +312,16 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
 
                       Visibility(
                         visible: _selectedRadio == 3,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: EvieButton_PickDate(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 0, bottom: 12.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              EvieButton_PickDate(
+                                  width: 155.w,
+                                height: 48.h,
                                 onPressed: () async {
                                   if(_selectedRadio == 3){
-
                                     var range = await showDateRangePicker(
                                       context: context,
                                       initialDateRange: pickedDateRange,
@@ -366,24 +370,35 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
 
                                   }
                                 },
-                                child: Row(
-                                  children: [
-                                    Text(pickedDate1 != null ? "${monthsInYear[pickedDate1!.month]} ${pickedDate1!.day} ${pickedDate1!.year}": "",
-                                      style: TextStyle(color: EvieColors.darkGrayishCyan),),
-                                    SvgPicture.asset(
-                                      "assets/buttons/calendar.svg",
-                                      height: 24.h,
-                                      width: 24.w,
-                                    ),
-                                  ],
-                                ),),
-                            ),
+                                child: Container(
+                                  width: 170.w,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(pickedDate1 != null ? "${monthsInYear[pickedDate1!.month]} ${pickedDate1!.day} ${pickedDate1!.year}": "-",
+                                        style: TextStyle(color: EvieColors.darkGrayishCyan),),
+                                      SvgPicture.asset(
+                                        "assets/buttons/calendar.svg",
+                                        height: 24.h,
+                                        width: 24.w,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ),
 
-                            // Expanded(child: const Text("-"),),
+                              SizedBox(
+                                child: Container(
+                                  padding: EdgeInsets.only(left: 6.w, right: 6.w),
+                                  color: Colors.black,
+                                  width: 8.w,
+                                  height: 1.h,
+                                )
+                              ),
 
-                            Expanded(
-                              child:  EvieButton_PickDate(
-                                width: 155.w,
+                              EvieButton_PickDate(
+                                width: 170.w,
+                                height: 48.h,
                                 onPressed: () async {
                                   if(_selectedRadio == 3){
 
@@ -440,8 +455,9 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                                   }
                                 },
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(pickedDate2 != null ? "${monthsInYear[pickedDate2!.month]} ${pickedDate2!.day} ${pickedDate2!.year}": "",
+                                    Text(pickedDate2 != null ? "${monthsInYear[pickedDate2!.month]} ${pickedDate2!.day} ${pickedDate2!.year}": "-",
                                       style: const TextStyle(color: EvieColors.darkGrayishCyan),),
                                     SvgPicture.asset(
                                       "assets/buttons/calendar.svg",
@@ -450,9 +466,9 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                                     ),
                                   ],
                                 ),
-                              ),
-                            ),
-                          ],),
+                              )
+                            ],),
+                        )
                       ),
                       const EvieDivider(),
                     ],

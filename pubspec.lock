@@ -1188,6 +1188,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.7.1"
+  just_the_tooltip:
+    dependency: "direct main"
+    description:
+      name: just_the_tooltip
+      sha256: "7a081133d57285bfb41b331f411006d57b433d7b35772e6155745f6a7a09cb82"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.12"
   latlong2:
     dependency: transitive
     description:
@@ -1994,6 +2002,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
+  super_tooltip:
+    dependency: "direct main"
+    description:
+      name: super_tooltip
+      sha256: "925bbc20d825922e415e9445b22a41987c10be5812f292b9f8b44c4b3ff16e21"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.7"
   sweepline_intersections:
     dependency: transitive
     description:

@@ -67,29 +67,43 @@ class _LocationState extends State<Location> {
       ),
       actions: <Widget>[
         Container(
-          height: availableMaps.length * 52.h,
+          height: availableMaps.length * 72.h,
           child: ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              return CupertinoActionSheetAction(
-                child: Text(availableMaps[index].mapName, style: TextStyle(fontSize: 20.sp, color: EvieColors.blue, fontWeight: FontWeight.w400),),
-                isDefaultAction: true,
-                onPressed: () {
-                  if(selectedGeopoint != null){
-                    MapLauncher.showDirections(
-                        mapType: availableMaps![index].mapType,
-                        destination: Coords(
+              return Column(
+                children: [
+                  CupertinoActionSheetAction(
+                    child: Container(
+                      child: Text(
+                        availableMaps[index].mapName,
+                        style: TextStyle(fontSize: 20.sp, color: EvieColors.blue, fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                    isDefaultAction: true,
+                    onPressed: () {
+                      if (selectedGeopoint != null) {
+                        MapLauncher.showDirections(
+                          mapType: availableMaps![index].mapType,
+                          destination: Coords(
                             selectedGeopoint!.latitude,
-                            selectedGeopoint!.longitude));
-                  }else{
-                    MapLauncher.showDirections(
-                        mapType: availableMaps![index].mapType,
-                        destination: Coords(
+                            selectedGeopoint!.longitude,
+                          ),
+                        );
+                      } else {
+                        MapLauncher.showDirections(
+                          mapType: availableMaps![index].mapType,
+                          destination: Coords(
                             _bikeProvider.currentBikeModel!.location!.geopoint!.latitude,
-                            _bikeProvider.currentBikeModel!.location!.geopoint!.longitude));
-                  }
-                },
+                            _bikeProvider.currentBikeModel!.location!.geopoint!.longitude,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  Divider(), // Add a divider between items
+                ],
               );
             },
             itemCount: availableMaps.length,

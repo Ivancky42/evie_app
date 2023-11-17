@@ -1421,7 +1421,7 @@ class Evie2IconBatchOneButtonDialog extends StatelessWidget{
                 child: Padding(
                   padding:  EdgeInsets.only(bottom: 8.h, top: 31.76.h),
                   child: Text(title,
-                    style:EvieTextStyles.title,
+                    style:EvieTextStyles.title.copyWith(height: 1.3),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -1448,7 +1448,7 @@ class Evie2IconBatchOneButtonDialog extends StatelessWidget{
                                 padding:EdgeInsets.only(right: 4.w),
                                 child: Text(
                                   miniTitle1,
-                                  style: EvieTextStyles.miniTitle,
+                                  style: EvieTextStyles.miniTitle.copyWith(color: Color(0xff3f3f3f)),
                                 ),
                               ),
 
@@ -1462,7 +1462,7 @@ class Evie2IconBatchOneButtonDialog extends StatelessWidget{
                             child: Text(
                               content1,
                               textAlign: TextAlign.left,
-                              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan, height: 1.3),
                             ),
                           ),
                         ],
