@@ -1210,6 +1210,18 @@ showEvieResendDialog(BuildContext context, String email) {
         }));
 }
 
+showGPSNotFound() {
+  SmartDialog.show(
+      widget: EvieOneDialog(
+          title: "Oops! We missed capturing GPS data",
+          content1: "It’s possible that the bike was in a location with weak satellite signals, like inside a building, a tunnel, or under some thick trees. Don’t worry, we’ll get the next one!",
+          middleContent: "Done",
+          svgpicture: SvgPicture.asset('assets/images/lost_gps.svg', width: 180.w, height: 150.h,),
+          onPressedMiddle: () {
+            SmartDialog.dismiss();
+          }));
+}
+
 showMissingGPSDataDialog(BuildContext context) {
   SmartDialog.show(
       widget: EvieOneDialog(

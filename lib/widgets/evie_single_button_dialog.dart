@@ -1320,15 +1320,15 @@ class EvieOneDialog extends StatelessWidget{
                     children: [
                       TextSpan(
                         text: content1 ?? "",
-                        style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumBlack),
+                        style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, fontFamily: 'Avenir', height: EvieTextStyles.lineHeight),
                       ),
 
                       TextSpan(text: email,
-                        style: EvieTextStyles.body18.copyWith(color: EvieColors.primaryColor),
+                        style: EvieTextStyles.body18.copyWith(color: EvieColors.primaryColor, fontFamily: 'Avenir', height: EvieTextStyles.lineHeight),
                       ),
 
                       TextSpan(text: content2,
-                        style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumBlack),
+                        style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, fontFamily: 'Avenir', height: EvieTextStyles.lineHeight),
                       ),
                     ],
                   ),

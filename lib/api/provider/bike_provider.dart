@@ -1360,38 +1360,47 @@ class BikeProvider extends ChangeNotifier {
   }
 
   Future uploadPlaceMarkAddressToFirestore(String deviceIMEI, String eventID, String address) async {
-    if(EvieFilter.isNullOrBlank(address) == false){
-      try {
-        FirebaseFirestore.instance
-            .collection(bikesCollection)
-            .doc(deviceIMEI)
-            .collection(eventsCollection)
-            .doc(eventID)
-            .set({
-          'address': address,
-        }, SetOptions(merge: true));
-
-      } catch (e) {
-        debugPrint(e.toString());
+    if (address == 'Location not found') {
+      print('hello');
+    }
+    else {
+      if (EvieFilter.isNullOrBlank(address) == false) {
+        try {
+          FirebaseFirestore.instance
+              .collection(bikesCollection)
+              .doc(deviceIMEI)
+              .collection(eventsCollection)
+              .doc(eventID)
+              .set({
+            'address': address,
+          }, SetOptions(merge: true));
+        } catch (e) {
+          debugPrint(e.toString());
+        }
       }
     }
   }
 
   Future uploadThreatRoutesAddressToFirestore(String eventID, String routeID, String address) async {
-    if (EvieFilter.isNullOrBlank(address) == false) {
-      try {
-        FirebaseFirestore.instance
-            .collection(bikesCollection)
-            .doc(currentBikeModel?.deviceIMEI)
-            .collection(theftHistoryCollection)
-        // .doc(eventID)
-        // .collection(routesCollection)
-            .doc(routeID)
-            .set({
-          'address': address,
-        }, SetOptions(merge: true));
-      } catch (e) {
-        debugPrint(e.toString());
+    if (address == 'Location not found') {
+       print('hello');
+    }
+    else {
+      if (EvieFilter.isNullOrBlank(address) == false) {
+        try {
+          FirebaseFirestore.instance
+              .collection(bikesCollection)
+              .doc(currentBikeModel?.deviceIMEI)
+              .collection(theftHistoryCollection)
+          // .doc(eventID)
+          // .collection(routesCollection)
+              .doc(routeID)
+              .set({
+            'address': address,
+          }, SetOptions(merge: true));
+        } catch (e) {
+          debugPrint(e.toString());
+        }
       }
     }
   }

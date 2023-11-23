@@ -112,17 +112,17 @@ calculateTimeAgo(DateTime dateTime){
 String calculateTimeAgoWithTime(DateTime dateTime) {
   Duration diff = DateTime.now().difference(dateTime);
 
-  if (diff.inSeconds <= 10) {
-    return "Just now";
-  } else if (diff.inMinutes == 1) {
+  if (diff.inMinutes > 0 && diff.inMinutes < 60){
+    return "${diff.inMinutes} ${diff.inMinutes == 1 ? "min" : "mins"} ago";
+  }else if(diff.inHours > 0 && diff.inHours < 24){
+    return "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
+  }
+
+  ///For current minute
+  else if(dateTime.second > 0 && diff.inMinutes < 60){
     return "1 min ago";
-  } else if (diff.inMinutes < 60) {
-    return "${diff.inMinutes} mins ago";
-  } else if (diff.inHours == 1) {
-    return "1 hour ago";
-  } else if (diff.inHours < 24) {
-    return "${diff.inHours} hours ago";
-  } else {
+  }
+  else {
     String formattedDate = "${monthsInYear[dateTime.month]} ${dateTime.day} ${dateTime.year}, at ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}";
     return formattedDate;
   }
@@ -180,7 +180,7 @@ Widget returnTextStyle(DateTime startDateTime, DateTime endDateTime) {
     return RichText(
       text: TextSpan(
         text: durationText.replaceAll('mins', ""),
-        style: EvieTextStyles.headlineB,
+        style: EvieTextStyles.headlineB.copyWith(fontFamily: 'Avenir'),
         children: <TextSpan>[
           TextSpan(
             text: 'mins',

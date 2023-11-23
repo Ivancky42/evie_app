@@ -123,9 +123,12 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                       widget.format == RideFormat.year ?
                       _rideProvider.rideDataYearString :
                       _rideProvider.rideDataString,
-                      style: EvieTextStyles.display,
+                      style: EvieTextStyles.measurement,
                     ),
-                    Text(_rideProvider.rideDataUnit, style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray,)),
+                    Padding(
+                      padding: EdgeInsets.only(top: 8.h),
+                      child: Text(_rideProvider.rideDataUnit, style: EvieTextStyles.unit),
+                    )
                   ],
                 ),
 
@@ -152,23 +155,28 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
             padding: EdgeInsets.only(left: 16.w, right: 16.w),
             child: Row(
               children: [
-                Text(
-                  selectedDateTemp != null ?
-                  widget.format == RideFormat.day?
-                  "${selectedDateTemp!.hour.toString().padLeft(2,'0')}:${selectedDateTemp!.minute.toString().padLeft(2,'0')} ${weekdayNameFull[selectedDateTemp!.weekday]}, ${monthsInYear[selectedDateTemp!.month]} ${selectedDateTemp!.day} ${selectedDateTemp!.year}"  :
-                  widget.format == RideFormat.week ?
-                  "${weekdayNameFull[selectedDateTemp!.weekday]}, ${monthsInYear[selectedDateTemp!.month]} ${selectedDateTemp!.day} ${selectedDateTemp!.year}" :
-                  widget.format == RideFormat.month ?
-                  "${weekdayNameFull[selectedDateTemp!.weekday]}, ${monthsInYear[selectedDateTemp!.month]} ${selectedDateTemp!.day} ${selectedDateTemp!.year}" :
-                  "${monthNameHalf[selectedDateTemp!.month]} ${selectedDateTemp!.year}" :
-                  selectedDate,
-                  style: const TextStyle(color: EvieColors.darkGrayishCyan),),
-                Expanded(
-                  child:  EvieButton_PickDate(
+                Container(
+                  //color: Colors.yellow,
+                  child: Text(
+                    selectedDateTemp != null ?
+                    widget.format == RideFormat.day?
+                    "${selectedDateTemp!.hour.toString().padLeft(2,'0')}:${selectedDateTemp!.minute.toString().padLeft(2,'0')} ${weekdayNameFull[selectedDateTemp!.weekday]}, ${monthsInYear[selectedDateTemp!.month]} ${selectedDateTemp!.day} ${selectedDateTemp!.year}"  :
+                    widget.format == RideFormat.week ?
+                    "${weekdayNameFull[selectedDateTemp!.weekday]}, ${monthsInYear[selectedDateTemp!.month]} ${selectedDateTemp!.day} ${selectedDateTemp!.year}" :
+                    widget.format == RideFormat.month ?
+                    "${weekdayNameFull[selectedDateTemp!.weekday]}, ${monthsInYear[selectedDateTemp!.month]} ${selectedDateTemp!.day} ${selectedDateTemp!.year}" :
+                    "${monthNameHalf[selectedDateTemp!.month]} ${selectedDateTemp!.year}" :
+                    selectedDate,
+                    style: const TextStyle(color: EvieColors.darkGrayishCyan),),
+                ),
+
+                Container(
+                  //color: Colors.green,
+                  child: EvieButton_PickDate(
+                    width: 50.w,
                     showColour: false,
-                    width: 155.w,
                     onPressed: () async {
-                      if (widget.format == RideFormat.day || widget.format == RideFormat.week ) {
+                      if (widget.format == RideFormat.day) {
                         DateTime? picked = await showDatePicker(
                           context: context,
                           initialDate: pickedDate!,
@@ -182,8 +190,27 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                           },
                         );
                         filterDateByRideFormat(picked ?? pickedDate!);
-                        _rideProvider.getChartData(widget.format, pickedDate!);
-                        _rideProvider.setRideData(RideDataType.noOfRide, widget.format, pickedDate!);
+                        //_rideProvider.getChartData(widget.format, pickedDate!);
+                        await _rideProvider.getDayRideHistory(pickedDate!);
+                        _rideProvider.setRideData(_rideProvider.rideDataType, widget.format, pickedDate!);
+                      }
+                      else if (widget.format == RideFormat.week) {
+                        DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: pickedDate!,
+                          firstDate: DateTime(pickedDate!.year - 2),
+                          lastDate: DateTime.now(),
+                          builder: (context, child) {
+                            return Theme(data: Theme.of(context).copyWith(
+                              colorScheme: const ColorScheme.light(
+                                primary: EvieColors.primaryColor,
+                              ),), child: child!);
+                          },
+                        );
+                        filterDateByRideFormat(picked ?? pickedDate!);
+                        //_rideProvider.getChartData(widget.format, pickedDate!);
+                        await _rideProvider.getWeekRideHistory(pickedDate!);
+                        _rideProvider.setRideData(_rideProvider.rideDataType, widget.format, pickedDate!);
                       }
                       else if (widget.format == RideFormat.month) {
                         DateTime? picked = await showMonthPicker(
@@ -208,8 +235,9 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                             )
                         );
                         filterDateByRideFormat(picked ?? pickedDate!);
-                        _rideProvider.getChartData(widget.format, pickedDate!);
-                        _rideProvider.setRideData(RideDataType.noOfRide, widget.format, pickedDate!);
+                        //_rideProvider.getChartData(widget.format, pickedDate!);
+                        await _rideProvider.getMonthRideHistory(pickedDate!);
+                        _rideProvider.setRideData(_rideProvider.rideDataType, widget.format, pickedDate!);
                       }
                       else if (widget.format == RideFormat.year) {
                         DateTime? picked = await showMonthPicker(
@@ -235,8 +263,9 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                         );
 
                         filterDateByRideFormat(picked ?? pickedDate!);
-                        _rideProvider.getChartData(widget.format, pickedDate!);
-                        _rideProvider.setRideData(RideDataType.noOfRide, widget.format, pickedDate!);
+                        //_rideProvider.getChartData(widget.format, pickedDate!);
+                        await _rideProvider.getYearRideHistory(pickedDate!.year);
+                        _rideProvider.setRideData(_rideProvider.rideDataType, widget.format, pickedDate!);
                       }
                     },
                     child: SvgPicture.asset(
@@ -245,7 +274,7 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                       width: 24.w,
                     ),
                   ),
-                ),
+                )
               ],
             ),
           ),
@@ -258,23 +287,49 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                 SfCartesianChart(
                   primaryXAxis: CategoryAxis(
                     isVisible: true,
+                    // RideFormat.day == widget.format ?
+                    // _rideProvider.dayRideHistoryList.isEmpty ? false :
+                    // RideFormat.month == widget.format ?
+                    // _rideProvider.monthRideHistoryList.isEmpty ? false :
+                    // RideFormat.year == widget.format ?
+                    // _rideProvider.yearTimeChartData.isEmpty ? false :
+                    // RideFormat.week == widget.format ?
+                    // _rideProvider.weekRideHistoryList.isEmpty ? false :
+                    //     true : true : true : true : true,
                   ),
                   ///maximum, data.duration highest
                   primaryYAxis: NumericAxis(
-                    //minimum: 0, maximum: 2500, interval: 300,
+                    minimum: 0,
+                    maximum: getMaxValue(widget.format),
+                    //interval: 2,
                     numberFormat: NumberFormat('#,##0'),
                     opposedPosition: true,
+                    isVisible: true,
+                    // RideFormat.day == widget.format ?
+                    // _rideProvider.dayRideHistoryList.isEmpty ? false :
+                    // RideFormat.month == widget.format ?
+                    // _rideProvider.monthRideHistoryList.isEmpty ? false :
+                    // RideFormat.year == widget.format ?
+                    // _rideProvider.yearTimeChartData.isEmpty ? false :
+                    // RideFormat.week == widget.format ?
+                    // _rideProvider.weekRideHistoryList.isEmpty ? false :
+                    // true : true : true : true : true,
                   ),
                   series: RideFormat.day == widget.format ?
                   <ColumnSeries<DayTimeChartData, dynamic>>[
                     ColumnSeries<DayTimeChartData, dynamic>(
+                      //borderRadius: BorderRadius.circular(10),
                       dataSource: _rideProvider.dayTimeChartData,
-                      xValueMapper: (DayTimeChartData data, _) =>
-                      dayTimeName[DateFormat('h a').format(data.x)],
-                      yValueMapper: (DayTimeChartData data, _) =>
-                      _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
-                      (data.y/1000):
-                      _settingProvider.convertMeterToMiles(data.y.toDouble()),
+                      xValueMapper: (DayTimeChartData data, _) => dayTimeName[DateFormat('h a').format(data.x)],
+                      yValueMapper: (DayTimeChartData data, _) {
+
+                        if (_settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem) {
+                          return (data.y/1000);
+                        }
+                        else {
+                          return _settingProvider.convertMeterToMiles(data.y.toDouble());
+                        }
+                      },
                       ///width of the column
                       width: 0.8,
                       ///Spacing between the column
@@ -282,8 +337,8 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                       name: _rideProvider.dayTimeChartData.toString(),
                       color: EvieColors.primaryColor,
                       borderRadius: const BorderRadius.only(
-                        topRight:  Radius.circular(5),
-                        topLeft: Radius.circular(5),
+                        topRight:  Radius.circular(10),
+                        topLeft: Radius.circular(10),
                       ),
                     ),
                   ] :
@@ -302,8 +357,8 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                       name: _rideProvider.weekTimeChartData.toString(),
                       color: EvieColors.primaryColor,
                       borderRadius: const BorderRadius.only(
-                        topRight:  Radius.circular(5),
-                        topLeft: Radius.circular(5),
+                        topRight:  Radius.circular(10),
+                        topLeft: Radius.circular(10),
                       ),
                     ),
                   ] :
@@ -316,7 +371,6 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                       _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
                       (data.y/1000):
                       _settingProvider.convertMeterToMiles(data.y.toDouble()),
-
                       ///width of the column
                       width: 0.8,
                       ///Spacing between the column
@@ -324,8 +378,8 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                       name: _rideProvider.monthTimeChartData.toString(),
                       color: EvieColors.primaryColor,
                       borderRadius: const BorderRadius.only(
-                        topRight:  Radius.circular(5),
-                        topLeft: Radius.circular(5),
+                        topRight:  Radius.circular(10),
+                        topLeft: Radius.circular(10),
                       ),
                     ),
                   ] :
@@ -346,8 +400,8 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                       name: _rideProvider.yearTimeChartData.toString(),
                       color: EvieColors.primaryColor,
                       borderRadius: const BorderRadius.only(
-                        topRight:  Radius.circular(5),
-                        topLeft: Radius.circular(5),
+                        topRight:  Radius.circular(10),
+                        topLeft: Radius.circular(10),
                       ),
                     ),
                   ] :
@@ -373,8 +427,8 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                       name: _rideProvider.chartData.toString(),
                       color: EvieColors.primaryColor,
                       borderRadius: const BorderRadius.only(
-                        topRight:  Radius.circular(5),
-                        topLeft: Radius.circular(5),
+                        topRight:  Radius.circular(10),
+                        topLeft: Radius.circular(10),
                       ),
                     ),
                   ],
@@ -393,8 +447,8 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                       canShowMarker: false,
                       format: 'point.x : point.y' + _rideProvider.rideDataUnit,
                     ),
-                  )
-                      : TrackballBehavior(
+                  ) :
+                  TrackballBehavior(
                     shouldAlwaysShow: true,
                     enable: true,
                     activationMode: ActivationMode.singleTap,
@@ -515,6 +569,95 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
           _rideProvider.currentTripHistoryListDay,
           _rideProvider.currentTripHistoryLists.values.elementAt(i))) {
         isDataEmpty = false;
+      }
+    }
+  }
+
+
+  double? getMaxValue(RideFormat rideFormat) {
+    if (rideFormat == RideFormat.day) {
+      var data = _rideProvider.dayTimeChartData;
+      if (data.isEmpty) {
+        return 5; // Set a default value if the list is empty
+      }
+
+      var maximunValue = data.map((entry) => entry.y).reduce((max, value) => max > value ? max : value).toDouble();
+
+      if (_settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem) {
+        maximunValue = (maximunValue/1000);
+      }
+      else {
+        maximunValue = _settingProvider.convertMeterToMiles(maximunValue.toDouble());
+      }
+
+      if (maximunValue <= 5) {
+        return 5;
+      }
+      else {
+        return maximunValue;
+      }
+    }
+    else if (rideFormat == RideFormat.week) {
+      var data = _rideProvider.weekTimeChartData;
+      if (data.isEmpty) {
+        return 5; // Set a default value if the list is empty
+      }
+
+      var maximunValue = data.map((entry) => entry.y).reduce((max, value) => max > value ? max : value).toDouble();
+      if (_settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem) {
+        maximunValue = (maximunValue/1000);
+      }
+      else {
+        maximunValue = _settingProvider.convertMeterToMiles(maximunValue.toDouble());
+      }
+
+      if (maximunValue <= 5) {
+        return 5;
+      }
+      else {
+        return maximunValue;
+      }
+    }
+    else if (rideFormat == RideFormat.month) {
+      var data = _rideProvider.monthTimeChartData;
+      if (data.isEmpty) {
+        return 5; // Set a default value if the list is empty
+      }
+
+      var maximunValue = data.map((entry) => entry.y).reduce((max, value) => max > value ? max : value).toDouble();
+      if (_settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem) {
+        maximunValue = (maximunValue/1000);
+      }
+      else {
+        maximunValue = _settingProvider.convertMeterToMiles(maximunValue.toDouble());
+      }
+
+      if (maximunValue <= 5) {
+        return 5;
+      }
+      else {
+        return maximunValue;
+      }
+    }
+    else if (rideFormat == RideFormat.year) {
+      var data = _rideProvider.yearTimeChartData;
+      if (data.isEmpty) {
+        return 5; // Set a default value if the list is empty
+      }
+
+      var maximunValue = data.map((entry) => entry.y).reduce((max, value) => max > value ? max : value).toDouble();
+      if (_settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem) {
+        maximunValue = (maximunValue/1000);
+      }
+      else {
+        maximunValue = _settingProvider.convertMeterToMiles(maximunValue.toDouble());
+      }
+
+      if (maximunValue <= 5) {
+        return 5;
+      }
+      else {
+        return maximunValue;
       }
     }
   }

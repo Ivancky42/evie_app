@@ -93,16 +93,16 @@ class RideProvider extends ChangeNotifier {
   setRideData(RideDataType rideDataType, RideFormat rideFormat, DateTime pickedDate) {
     switch (rideFormat) {
       case RideFormat.day:
-        setRideDataType(rideDataType, dayRideHistoryList, rideFormat);
+        setRideDataType(rideDataType, dayRideHistoryList, RideFormat.day);
         break;
       case RideFormat.week:
-        setRideDataType(rideDataType, weekRideHistoryList, rideFormat);
+        setRideDataType(rideDataType, weekRideHistoryList, RideFormat.week);
         break;
       case RideFormat.month:
-        setRideDataType(rideDataType, monthRideHistoryList, rideFormat);
+        setRideDataType(rideDataType, monthRideHistoryList, RideFormat.month);
         break;
       case RideFormat.year:
-        setRideDataType(rideDataType, yearRideHistoryList, rideFormat);
+        setRideDataType(rideDataType, yearRideHistoryList, RideFormat.year);
         break;
       default:
         print('It\'s the weekend or an unknown day.');
@@ -353,7 +353,7 @@ class RideProvider extends ChangeNotifier {
         }
         rideDataUnit = " miles";
       }
-      this.rideDataType = rideDataType;
+      //this.rideDataType = rideDataType;
     }
     else if (rideDataType == RideDataType.noOfRide) {
       rideDataTypeString = 'No. of Rides';
@@ -431,8 +431,7 @@ class RideProvider extends ChangeNotifier {
         await getDayRideHistory(pickedDate);
 
         for(int i = 0; i <= 23; i ++) {
-          dayTimeChartData.add((DayTimeChartData(DateTime(
-              pickedDate.year, pickedDate.month, pickedDate.day, i, 00), 0)));
+          dayTimeChartData.add((DayTimeChartData(DateTime(pickedDate.year, pickedDate.month, pickedDate.day, i, 00), 0)));
         }
         notifyListeners();
         for (var trip in dayRideHistoryList) {
@@ -505,8 +504,8 @@ class RideProvider extends ChangeNotifier {
         monthTimeChartData.clear();
         monthRideHistoryList.clear();
         await getMonthRideHistory(pickedDate);
-
-        for(int i = 1; i <= 31; i ++){
+        int daysOfCurrentMonth = DateTime(pickedDate.year, pickedDate.month + 1, 0).day;
+        for(int i = 1; i <= daysOfCurrentMonth; i ++){
           //chartData.add((ChartData(pickedDate.add(Duration(days: i)), 0)));
           monthTimeChartData.add((ChartData(DateTime(pickedDate!.year, pickedDate!.month, i), 0)));
         }

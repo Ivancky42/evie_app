@@ -69,7 +69,7 @@ class _RecentActivityState extends State<RecentActivity> {
           color: EvieColors.dividerWhite,
           width: double.infinity,
           child: Padding(
-            padding:  EdgeInsets.only(top: 10.h, left: 16.w, right: 16.w),
+            padding:  EdgeInsets.only(top: 10.h, left: 16.w, right: 16.w, bottom: 10.h),
             child: Text("Trips", style: EvieTextStyles.h4),
           ),
         ),
@@ -130,16 +130,26 @@ class _RecentActivityState extends State<RecentActivity> {
                               _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
                               Text(
                                 "${(tripList[index].distance!.toDouble()/1000).toStringAsFixed(2)} km",
-                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                                style: EvieTextStyles.h4.copyWith(color: EvieColors.lightBlack),
                               ):
                               Text(
                                 "${_settingProvider.convertMeterToMilesInString((tripList[index].distance!.toDouble()))}miles",
-                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                                style: EvieTextStyles.h4.copyWith(color: EvieColors.lightBlack),
                               ),
-                              Text(
-                                "${thousandFormatting(tripList[index].carbonPrint!)}g CO2 Saved",
-                                style: EvieTextStyles.body14,
-                              ),
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "${thousandFormatting(tripList[index].carbonPrint!)}",
+                                      style: EvieTextStyles.body14.copyWith(color: EvieColors.lightBlack, fontFamily: 'Avenir', fontWeight: FontWeight.w400, height: EvieTextStyles.lineHeight)
+                                    ),
+                                    TextSpan(
+                                      text: " g CO2 Saved",
+                                      style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan, fontFamily: 'Avenir', fontWeight: FontWeight.w400, height: EvieTextStyles.lineHeight)
+                                    ),
+                                  ],
+                                ),
+                              )
                             ],
                           )
                         ],

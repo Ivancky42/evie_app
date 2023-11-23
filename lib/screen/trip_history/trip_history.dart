@@ -47,13 +47,9 @@ class _TripHistoryState extends State<TripHistory> {
         return false;
       },
       child: Scaffold(
-        body:
-            Container(
+        body: Container(
               ///Detect if user have bike
-              child: _bikeProvider.userBikeList.isNotEmpty ?
-              ///Detect if premium plan subscript
-                  _bikeProvider.isPlanSubscript == true ?
-              DefaultTabController(
+              child: DefaultTabController(
                   length: 4,
                   child: Scaffold(
                     body: Column(
@@ -90,21 +86,63 @@ class _TripHistoryState extends State<TripHistory> {
                                     color: EvieColors.dividerWhite),
 
                                 tabs: [
-                                  Text(
-                                    "Day",
-                                    style: EvieTextStyles.ctaSmall,
+                                  Container(
+                                    height: double.infinity,
+                                    color: Colors.red,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 10.h),
+                                          child: Text(
+                                            "Days",
+                                            style: EvieTextStyles.ctaSmall,
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                  Text(
-                                    "Week",
-                                    style: EvieTextStyles.ctaSmall,
+                                  Tab(
+                                    child: Container(
+                                      height: double.infinity,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Week",
+                                            style: EvieTextStyles.ctaSmall,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                  Text(
-                                    "Month",
-                                    style: EvieTextStyles.ctaSmall,
+                                  Tab(
+                                    child: Container(
+                                      height: double.infinity,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Month",
+                                            style: EvieTextStyles.ctaSmall,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                  Text(
-                                    "Year",
-                                    style: EvieTextStyles.ctaSmall,
+                                  Tab(
+                                    child: Container(
+                                      height: double.infinity,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Year",
+                                            style: EvieTextStyles.ctaSmall,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ],
 
@@ -119,79 +157,16 @@ class _TripHistoryState extends State<TripHistory> {
                         const Expanded(
                           child: TabBarView(
                               children: [
-                               TripHistoryData(TripFormat.day),
-                               TripHistoryData(TripFormat.week),
-                               TripHistoryData(TripFormat.month),
-                               TripHistoryData(TripFormat.year),
+                                TripHistoryData(TripFormat.day),
+                                TripHistoryData(TripFormat.week),
+                                TripHistoryData(TripFormat.month),
+                                TripHistoryData(TripFormat.year),
                               ]),
                         ),
                       ],
                     ),
-                  ))
-                  ///Premium plan subscript == false
-                      :
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(16.w, 51.h, 0.w, 22.h),
-                        child: Container(
-                          child: Text(
-                            "Trip History",
-                            style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
-                          ),
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Center(child: Text("You do not have plan subscript")),
-                          Center(
-                            child: Padding(
-                              padding: EdgeInsets.only(top: 120.h),
-                              child: Lottie.asset('assets/animations/add-bike.json'),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  )
-              ///User no bike
-                  :
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(16.w, 51.h, 0.w, 22.h),
-                        child: Container(
-                          child: Text(
-                            "Trip History",
-                            style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
-                          ),
-                        ),
-                      ),
-                      Stack(
-                        children: [
-                          Center(
-                            child: Padding(
-                              padding: EdgeInsets.only(left:15.w, right:15.w),
-                              child: SvgPicture.asset(
-                                        "assets/images/bike_register_required.svg",
-                                        height:608.h,
-                              ),
-                            ),
-                          ),
-
-                          Center(
-                            child: Padding(
-                              padding: EdgeInsets.only(top: 120.h),
-                              child: Lottie.asset('assets/animations/add-bike.json'),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-            ),
+                  )),
+            )
       ),
     );
   }

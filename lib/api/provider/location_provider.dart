@@ -231,24 +231,33 @@ class LocationProvider extends ChangeNotifier {
     String? placeMarkRenamed;
 
     try {
-      List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude, localeIdentifier: "en");
+      if (latitude != 0.0 && longitude != 0.0) {
+        List<Placemark> placeMarks = await placemarkFromCoordinates(
+            latitude, longitude, localeIdentifier: "en");
 
-      if (placeMarks.isNotEmpty) {
-        if (Platform.isAndroid) {
-          placeMark = placeMarks[0];
-          placeMarkRenamed = (placeMark.name!.replaceAll("NO HOUSE NUMBER, ", "").toString() == "" ? placeMark.name.toString() : placeMark.name.toString() + ', ') + placeMark.thoroughfare.toString();
+        if (placeMarks.isNotEmpty) {
+          if (Platform.isAndroid) {
+            placeMark = placeMarks[0];
+            placeMarkRenamed = (placeMark.name!
+                .replaceAll("NO HOUSE NUMBER, ", "").toString() == ""
+                ? placeMark.name.toString()
+                : placeMark.name.toString() + ', ') +
+                placeMark.thoroughfare.toString();
+          }
+          else {
+            for (var element in placeMarks) {
+              placeMark = element;
+              break; // Exit the loop once a address is found
+            }
+            placeMarkRenamed = placeMark?.name!.replaceAll("NO HOUSE NUMBER, ", "");
+          }
         }
         else {
-          for (var element in placeMarks) {
-            placeMark = element;
-            break; // Exit the loop once a address is found
-          }
-
-          placeMarkRenamed = placeMark?.name!.replaceAll("NO HOUSE NUMBER, ", "");
+          placeMarkRenamed = null;
         }
       }
       else {
-        placeMarkRenamed = null;
+        placeMarkRenamed = 'Location not found';
       }
     }
     catch(error){

@@ -40,15 +40,26 @@ class _OrbitalListContainerState extends State<OrbitalListContainer> {
   }
 
   Future<String?> fetchData() async {
-    String? address = await _locationProvider.returnPlaceMarksString(widget.eventModel.geopoint.latitude, widget.eventModel.geopoint.longitude);
-    _bikeProvider.uploadPlaceMarkAddressToFirestore(
-        _bikeProvider.currentBikeModel!.deviceIMEI!,
-        widget.eventModel.eventId,
-        address!
-    );
-    setState(() {
-      tempAddress = address;
-    });
+    String? address;
+    if (widget.eventModel.geopoint.latitude == 0 && widget.eventModel.geopoint.longitude == 0) {
+      address = 'Location not found';
+      setState(() {
+        tempAddress = address!;
+      });
+    }
+    else {
+      address = await _locationProvider.returnPlaceMarksString(
+          widget.eventModel.geopoint.latitude,
+          widget.eventModel.geopoint.longitude);
+      _bikeProvider.uploadPlaceMarkAddressToFirestore(
+          _bikeProvider.currentBikeModel!.deviceIMEI!,
+          widget.eventModel.eventId,
+          address!
+      );
+      setState(() {
+        tempAddress = address!;
+      });
+    }
   }
 
   @override

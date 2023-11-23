@@ -118,8 +118,8 @@ class _RideDetailState extends State<RideDetail> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 8.5.h,),
-                Divider(thickness: 0.5, height: 5, color: EvieColors.darkWhite,),
+                //SizedBox(height: 8.5.h,),
+                //Divider(thickness: 0.5, height: 5, color: EvieColors.darkWhite,),
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w,4.h),
                   child: Text(
@@ -129,7 +129,7 @@ class _RideDetailState extends State<RideDetail> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 0.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
                   child: Row(
                     children: [
                       Text(
@@ -142,7 +142,7 @@ class _RideDetailState extends State<RideDetail> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 12.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 12.h),
                   child: Text(
                     "CO2 Saved",
                     style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),

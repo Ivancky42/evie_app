@@ -86,22 +86,74 @@ class _RideHistoryState extends State<RideHistory> with SingleTickerProviderStat
                                 borderRadius: BorderRadius.circular(30),
                                 color: EvieColors.dividerWhite),
                             tabs: [
-                              Text(
-                                "Day",
-                                style: EvieTextStyles.ctaSmall,
+                              Tab(
+                                child: Container(
+                                  height: double.infinity,
+                                  //color: Colors.red,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 2.h),
+                                        child: Text(
+                                          "Day",
+                                          style: EvieTextStyles.ctaSmall,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
-
-                              Text(
-                                "Week",
-                                style: EvieTextStyles.ctaSmall,
+                              Tab(
+                                child: Container(
+                                  height: double.infinity,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 2.h),
+                                        child: Text(
+                                          "Week",
+                                          style: EvieTextStyles.ctaSmall,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
-                              Text(
-                                "Month",
-                                style: EvieTextStyles.ctaSmall,
+                              Tab(
+                                child: Container(
+                                  height: double.infinity,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 2.h),
+                                        child: Text(
+                                          "Month",
+                                          style: EvieTextStyles.ctaSmall,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
-                              Text(
-                                "Year",
-                                style: EvieTextStyles.ctaSmall,
+                              Tab(
+                                child: Container(
+                                  height: double.infinity,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 2.h),
+                                        child: Text(
+                                          "Year",
+                                          style: EvieTextStyles.ctaSmall,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
                             ],
                           ),

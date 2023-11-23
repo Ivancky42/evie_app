@@ -88,6 +88,8 @@ class _ThreatMapState extends State<ThreatMap> {
 
   LinkedHashMap currentThreatRoutesLists = LinkedHashMap<String, ThreatRoutesModel>();
 
+  bool isShowGPSLost = false;
+
 
   @override
   void initState() {
@@ -203,10 +205,10 @@ class _ThreatMapState extends State<ThreatMap> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Container(
-            height: 120.h,
+            height: Platform.isIOS ? 120.h : 90.h,
             color: EvieColors.lightBlack,
             child: Padding(
-              padding: EdgeInsets.only(left: 17.w, top: 50.h, bottom: 0, right:10.w),
+              padding: EdgeInsets.only(left: 17.w, top: Platform.isIOS ? 50.h : 30.h, bottom: 0, right:10.w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -369,6 +371,47 @@ class _ThreatMapState extends State<ThreatMap> {
                         ),
                       ),
                     ),
+
+                    isShowGPSLost ?
+                    Positioned(
+                      top: 20.h,
+                      left: 20.w,
+                      child: GestureDetector(
+                        onTap: () {
+                          showGPSNotFound();
+                        },
+                        child: Container(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 10.h),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/icons/notification_alert.svg",
+                                ),
+                                SizedBox(width: 10.w,),
+                                Text(
+                                  'Lost GPS location.',
+                                  style: EvieTextStyles.body14,
+                                )
+                              ],
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                            color: EvieColors.thumbColorTrue,
+                            borderRadius: BorderRadius.circular(10.w),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color(0xFF7A7A79).withOpacity(0.15), // Hex color with opacity
+                                offset: Offset(0, 8), // X and Y offset
+                                blurRadius: 16, // Blur radius
+                                spreadRadius: 0, // Spread radius
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ) : Container(),
                   ],
              ),
           ),
@@ -403,6 +446,18 @@ class _ThreatMapState extends State<ThreatMap> {
     if(currentAnnotationManager != null){
       await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager as BaseAnnotationManager);
       currentAnnotationManager = null;
+    }
+
+    ThreatRoutesModel threatRoutesModel = _bikeProvider.threatRoutesLists.values.elementAt(0);
+    if (threatRoutesModel.geopoint?.latitude == 0 && threatRoutesModel.geopoint?.longitude == 0) {
+      setState(() {
+        isShowGPSLost = true;
+      });
+    }
+    else {
+      setState(() {
+        isShowGPSLost = false;
+      });
     }
 
     await mapboxMap?.annotations.createPointAnnotationManager().then((pointAnnotationManager) async {

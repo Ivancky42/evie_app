@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
@@ -19,11 +21,13 @@ import 'package:timelines/timelines.dart';
 
 import '../../../../api/colours.dart';
 import '../../../../api/function.dart';
+import '../../../../api/model/threat_routes_model.dart';
 import '../../../../api/navigator.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/provider/bluetooth_provider.dart';
 import '../../../../api/provider/location_provider.dart';
 import '../../../../widgets/evie_radio_button.dart';
+import '../../../../widgets/evie_single_button_dialog.dart';
 import '../../../../widgets/evie_switch.dart';
 import '../home_element/location.dart';
 import '../home_element/threat_unlocking_system.dart';
@@ -77,10 +81,10 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                height: 120.h,
+                height: Platform.isIOS ? 120.h : 90.h,
                 color: EvieColors.lightBlack,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 17.w, top: 50.h, bottom: 0, right:17.w),
+                  padding: EdgeInsets.only(left: 17.w, top: Platform.isIOS ? 50.h : 30.h, bottom: 0, right:17.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -140,12 +144,12 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
                           shrinkWrap: true,
                           builder: TimelineTileBuilder(
                             itemCount: _bikeProvider.threatRoutesLists.length,
-                            //contentsAlign: ContentsAlign.alternating, ///Right left
                             contentsAlign: ContentsAlign.basic,
                             startConnectorBuilder: (context, index) {
                               if(index == 0){
                                 return const TransparentConnector();
-                              }else{
+                              }
+                              else{
                                 return const DashedLineConnector(thickness: 1.2, color: EvieColors.lightGrayish);
                               }
                             },
@@ -157,60 +161,131 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
                               }
                             },
                             indicatorBuilder: (context, index) {
-                              if(index == 0){
-                                return SvgPicture.asset(
-                                  "assets/icons/vector.svg",
-                                  height: 20,
-                                );
-                              }else{
-                                return const DotIndicator(color: EvieColors.veryLightRed);
+                              ThreatRoutesModel threatRoutesModel =_bikeProvider.threatRoutesLists.values.elementAt(index);
+                              if (index == 0) {
+                                if (threatRoutesModel.geopoint?.latitude != 0 &&
+                                    threatRoutesModel.geopoint?.longitude !=
+                                        0) {
+                                  return SvgPicture.asset(
+                                    "assets/icons/vector.svg",
+                                    width: 21.74.w,
+                                    height: 29.h,
+                                  );
+                                }
+                                else {
+                                  return SvgPicture.asset(
+                                    "assets/icons/notification_alert.svg",
+                                  );
+                                }
+                              }
+                              else {
+                                if (threatRoutesModel.geopoint?.latitude != 0 &&
+                                    threatRoutesModel.geopoint?.longitude !=
+                                        0) {
+                                  return Container(
+                                    width: 22.5.w,
+                                    height: 20.h,
+                                    //color: Colors.green,
+                                    child: DotIndicator(
+                                      color: EvieColors.veryLightRed,),
+                                  );
+                                }
+                                else {
+                                  return SvgPicture.asset(
+                                    "assets/icons/notification_alert.svg",
+                                  );
+                                }
                               }
                             },
                             oppositeContentsBuilder: (context, index){
                               return Container();
                             },
                             contentsBuilder: (context, index) {
-                              return Padding(
-                                padding:  EdgeInsets.fromLTRB(18.h,18.h,18.h,0),
-                                child: Column(
+                              ThreatRoutesModel threatRoutesModel =_bikeProvider.threatRoutesLists.values.elementAt(index);
+                              if (threatRoutesModel.geopoint?.latitude != 0 && threatRoutesModel.geopoint?.longitude != 0) {
+                                return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    _bikeProvider.threatRoutesLists.values.elementAt(index) == null ? const Text('Error')
-                                        : _bikeProvider.threatRoutesLists.values.elementAt(index).address != null && _bikeProvider.threatRoutesLists.values.elementAt(index).address != 'null'
-                                        ? Text(_bikeProvider.threatRoutesLists.values.elementAt(index).address, style: EvieTextStyles.body18,)
-                                        :  FutureBuilder<dynamic>(
-                                        future: _locationProvider.returnPlaceMarksString(
-                                            _bikeProvider.threatRoutesLists.values.elementAt(index).geopoint.latitude,
-                                            _bikeProvider.threatRoutesLists.values.elementAt(index).geopoint.longitude
-                                        ),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            _bikeProvider.uploadThreatRoutesAddressToFirestore(
-                                                _bikeProvider.currentBikeModel!.location!.eventId!,
-                                                _bikeProvider.threatRoutesLists.keys.elementAt(index),
-                                                snapshot.data.toString());
-                                            return Text(
-                                              snapshot.data.toString(),
-                                              style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
-                                            );
-                                          }else{
-                                            return Text(
-                                              "loading",
-                                              style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
-                                            );
-                                          }
-                                        }
+                                    Padding(
+                                      padding:  EdgeInsets.fromLTRB(18.h, 12.h, 18.h, 12.h),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          _bikeProvider.threatRoutesLists.values.elementAt(index) == null ? const Text('Error')
+                                              : _bikeProvider.threatRoutesLists.values.elementAt(index).address != null && _bikeProvider.threatRoutesLists.values.elementAt(index).address != 'null'
+                                              ? Text(_bikeProvider.threatRoutesLists.values.elementAt(index).address, style: EvieTextStyles.body18,)
+                                              :  FutureBuilder<dynamic>(
+                                              future: _locationProvider.returnPlaceMarksString(
+                                                  _bikeProvider.threatRoutesLists.values.elementAt(index).geopoint.latitude,
+                                                  _bikeProvider.threatRoutesLists.values.elementAt(index).geopoint.longitude
+                                              ),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  _bikeProvider.uploadThreatRoutesAddressToFirestore(
+                                                      _bikeProvider.currentBikeModel!.location!.eventId!,
+                                                      _bikeProvider.threatRoutesLists.keys.elementAt(index),
+                                                      snapshot.data.toString());
+                                                  return Text(
+                                                    snapshot.data.toString(),
+                                                    style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                                                  );
+                                                }
+                                                else{
+                                                  return Text(
+                                                    "loading",
+                                                    style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                                                  );
+                                                }
+                                              }
+                                          ),
+
+                                          Text("${"Theft Attempt"} • ${calculateTimeAgoWithTime(
+                                              _bikeProvider.threatRoutesLists.values.elementAt(index).created.toDate())}",
+                                            style: EvieTextStyles.body12,),
+                                        ],
+                                      ),
                                     ),
-
-                                    Text("${"Theft Attempt"} • ${calculateTimeAgoWithTime(
-                                        _bikeProvider.threatRoutesLists.values.elementAt(index).created.toDate())}",
-                                      style: EvieTextStyles.body12,),
-
-                                    SizedBox(height: 12.h,),
-                                    EvieDivider(),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 18.h),
+                                      child: EvieDivider(thickness: 0.15.h,),
+                                    )
                                   ],
-                                ),
-                              );
+                                );
+                              }
+                              else {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:  EdgeInsets.fromLTRB(18.h, 12.h, 18.h, 12.h),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Location not found',
+                                            style: EvieTextStyles.body18.copyWith( color: EvieColors.mediumLightBlack),
+                                          ),
+
+                                          RichText(
+                                            text: TextSpan(
+                                              text: "Why did this happen?",
+                                              style: EvieTextStyles.body14.copyWith(color: Colors.black, fontFamily: 'Avenir', decoration: TextDecoration.underline),
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () {
+                                                  showGPSNotFound();
+                                                  },
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 18.h),
+                                      child: EvieDivider(thickness: 0.15.h,),
+                                    )
+                                  ],
+                                );
+                              }
                             },
                           ),
                         ),

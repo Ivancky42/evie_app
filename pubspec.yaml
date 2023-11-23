@@ -96,8 +96,8 @@ dependencies:
   flutter_slidable: ^2.0.0
   dropdown_button2: ^2.0.0
   flutter_datetime_picker_plus: ^2.0.1
-  syncfusion_flutter_charts: ^20.4.52
-  syncfusion_flutter_datepicker: ^20.4.52
+  syncfusion_flutter_charts: ^23.2.4
+  syncfusion_flutter_datepicker: ^23.2.4
 #  mapbox_maps_flutter: ^0.4.4
   mapbox_maps_flutter: ^0.4.5
   device_info_plus: ^9.0.3

@@ -43,7 +43,7 @@ class _YearStatusState extends State<YearStatus> {
           color: EvieColors.dividerWhite,
           width: double.infinity,
           child: Padding(
-            padding:  EdgeInsets.only(top: 10.h, left: 16.w, right: 16.w),
+            padding:  EdgeInsets.only(top: 10.h, left: 16.w, right: 16.w, bottom: 10.h),
             child: Text("${widget.pickedData.year} Summary", style: EvieTextStyles.h4),
           ),
         ),
