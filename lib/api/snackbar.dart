@@ -72,6 +72,11 @@ showConnectionStatusToast(
       case DeviceConnectResult.disconnecting:
         // TODO: Handle this case.
         break;
+      case DeviceConnectResult.switchBike:
+        Future.delayed(Duration.zero).then((value) {
+          _navigator.removeCurrentSnackBar();
+        });
+        break;
     }
 }
 
@@ -271,6 +276,7 @@ showDisconnectedToast(context) {
 }
 
 showToLockBikeInstructionToast(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -352,6 +358,7 @@ showToLockBikeInstructionToast(context) {
 // }
 
 showUpgradePlanToast(context, SettingProvider settingProvider,[bool? isPop]){
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -412,6 +419,7 @@ showUpgradePlanToast(context, SettingProvider settingProvider,[bool? isPop]){
 
 
 showControlAdmissionToast(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -446,6 +454,7 @@ showControlAdmissionToast(context) {
 }
 
 showOnlyForProToast(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -482,6 +491,7 @@ showOnlyForProToast(context) {
 }
 
 showAccNoPermissionToast(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -516,6 +526,7 @@ showAccNoPermissionToast(context) {
 }
 
 showResentEmailFailedToast(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -547,6 +558,7 @@ showResentEmailFailedToast(context) {
 }
 
 showBikeAddSuccessfulToast(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -580,6 +592,7 @@ showBikeAddSuccessfulToast(context) {
 }
 
 showEVRemovedToast(context, String keyName) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,

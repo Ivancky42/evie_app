@@ -41,12 +41,12 @@ class EvieDoubleButtonDialog extends StatelessWidget{
           elevation: 0.0,
           backgroundColor: EvieColors.grayishWhite,
           child: Container(
-            padding:  EdgeInsets.only(
-              left: 17.w,
-              right: 17.w,
-              top: 16.w,
-                bottom: 16.w
-            ),
+            // padding:  EdgeInsets.only(
+            //   left: 17.w,
+            //   right: 17.w,
+            //   top: 16.w,
+            //     bottom: 16.w
+            // ),
 
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,24 +54,24 @@ class EvieDoubleButtonDialog extends StatelessWidget{
               children: [
 
                 Padding(
-                  padding:  EdgeInsets.only(bottom: 8.h),
+                  padding:  EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h),
                   child: Text(title, style:EvieTextStyles.h2,),
                 ),
-                Padding(
-                  padding:  EdgeInsets.only(bottom: 11.h),
-                  child: Divider(
-                    thickness: 0.5.h,
-                    color: EvieColors.darkWhite,
-                    height: 0,
-                  ),
+                Divider(
+                  thickness: 0.5.h,
+                  color: EvieColors.darkWhite,
+                  height: 0,
                 ),
 
                 SizedBox(height: 8.h,),
 
-                childContent,
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 9.h, 16.w, 10.h),
+                  child: childContent,
+                ),
 
                 Padding(
-                  padding: EdgeInsets.only(top: 9.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

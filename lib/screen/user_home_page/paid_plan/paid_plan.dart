@@ -121,30 +121,43 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
-                                                _bikeProvider.currentBikeModel?.bikeIMG == ''
-                                                    ? Padding(
-                                                  padding: const EdgeInsets.only(left: 15.0),
-                                                      child: Image(
-                                                  image: const AssetImage("assets/buttons/bike_left_pic.png"),
-                                                  width: 56.h,
-                                                  height: 56.h,
-                                                ),)
-                                                    : Padding(
-                                                  padding: const EdgeInsets.only(left: 15.0),
-                                                  child: _bikeProvider.currentBikeModel != null ?
-                                                  _bikeProvider.currentBikeModel!.bikeIMG != null ?
-                                                  ClipOval(
-                                                    child: CachedNetworkImage(
-                                                      //imageUrl: document['profileIMG'],
-                                                      imageUrl: _bikeProvider.currentBikeModel!.bikeIMG!,
-                                                      placeholder: (context, url) => const CircularProgressIndicator(color: EvieColors.primaryColor,),
-                                                      errorWidget: (context, url, error) => Icon(Icons.error),
-                                                      width: 56.h,
-                                                      height: 56.h,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ) : Container() : Container()
+                                                Padding(
+                                                  padding: EdgeInsets.only(left: 15.w),
+                                                  child: _bikeProvider.currentBikeModel?.model == 'S1' ?
+                                                  Image(
+                                                    image: const AssetImage("assets/buttons/bike_default_S1.png"),
+                                                    width: 56.h,
+                                                    height: 56.h,
+                                                  ) :
+                                                  Image(
+                                                    image: const AssetImage("assets/buttons/bike_default_T1.png"),
+                                                    width: 56.h,
+                                                    height: 56.h,
+                                                  ),
                                                 ),
+                                                // _bikeProvider.currentBikeModel?.bikeIMG == ''
+                                                //     ? Padding(
+                                                //   padding: const EdgeInsets.only(left: 15.0),
+                                                //       child: Image(
+                                                //   image: const AssetImage("assets/buttons/bike_left_pic.png"),
+                                                //   width: 56.h,
+                                                //   height: 56.h,
+                                                // ),)
+                                                //     : Padding(
+                                                //   padding: const EdgeInsets.only(left: 15.0),
+                                                //   child: _bikeProvider.currentBikeModel != null ?
+                                                //   _bikeProvider.currentBikeModel!.bikeIMG != null ?
+                                                //   ClipOval(
+                                                //     child: CachedNetworkImage(
+                                                //       //imageUrl: document['profileIMG'],
+                                                //       imageUrl: _bikeProvider.currentBikeModel!.bikeIMG!,
+                                                //       placeholder: (context, url) => const CircularProgressIndicator(color: EvieColors.primaryColor,),
+                                                //       errorWidget: (context, url, error) => Icon(Icons.error),
+                                                //       width: 56.h,
+                                                //       height: 56.h,
+                                                //       fit: BoxFit.cover,
+                                                //     ),
+                                                //   ) : Container() : Container()
                                                 Padding(
                                                   padding:  EdgeInsets.only(left: 12.w),
                                                   child: Column(

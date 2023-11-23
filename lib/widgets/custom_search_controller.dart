@@ -1,3 +1,4 @@
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -19,12 +20,14 @@ class CustomSearchController extends StatelessWidget {
           primary: EvieColors.primaryColor,
         ),
       ),
-      child: TextFormField(
-        controller: searchController,
-        onChanged: onChanged,
-        style: TextStyle(fontSize: 16.sp),
-        cursorColor: EvieColors.primaryColor,
-        decoration: InputDecoration(
+      child: Container(
+        height: 40.h,
+        child: TextFormField(
+          controller: searchController,
+          onChanged: onChanged,
+          style: EvieTextStyles.body16,
+          cursorColor: EvieColors.primaryColor,
+          decoration: InputDecoration(
             filled: true,
             fillColor: EvieColors.greyFill.withOpacity(0.1),
             focusColor: Colors.white,
@@ -35,15 +38,26 @@ class CustomSearchController extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(color: EvieColors.primaryColor)),
-            prefixIcon: const Icon(Icons.search),
-            prefixIconColor: EvieColors.greyFill,
+            prefixIcon: Container(
+              width: 50.w,
+              height: 50.w,
+              child: Padding(
+                padding: EdgeInsets.all(12),
+                child: SvgPicture.asset(
+                  "assets/icons/search.svg",
+                  width: 24.w,
+                  height: 24.w,
+                ),
+              )
+            ),
+            prefixIconColor: EvieColors.darkGrayish,
             suffixIcon: suffixIcon,
-            suffixIconColor: EvieColors.greyFill,
+            suffixIconColor: EvieColors.darkGrayish,
             hintText: "Search",
-            hintStyle: TextStyle(
-              fontSize: 16.sp,
-            )),
-      ),
+            hintStyle: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayish),
+          ),
+        ),
+      )
     );
   }
 }

@@ -101,29 +101,43 @@ class _FreePlanState extends State<FreePlan> {
                                               children: [
                                                 Row(
                                                   children: [
-                                                    _bikeProvider.currentBikeModel?.bikeIMG == ''
-                                                        ? Padding(
+                                                    Padding(
                                                       padding: EdgeInsets.only(left: 15.w),
-                                                      child: Image(
-                                                        image: const AssetImage("assets/buttons/bike_left_pic.png"),
+                                                      child: _bikeProvider.currentBikeModel?.model == 'S1' ?
+                                                      Image(
+                                                        image: const AssetImage("assets/buttons/bike_default_S1.png"),
+                                                        width: 56.h,
+                                                        height: 56.h,
+                                                      ) :
+                                                      Image(
+                                                        image: const AssetImage("assets/buttons/bike_default_T1.png"),
                                                         width: 56.h,
                                                         height: 56.h,
                                                       ),
-                                                    )
-                                                        : Container(
-                                                      padding: EdgeInsets.only(left: 15.w),
-                                                      child: ClipOval(
-                                                        child: CachedNetworkImage(
-                                                          //imageUrl: document['profileIMG'],
-                                                          imageUrl: _bikeProvider.currentBikeModel!.bikeIMG!,
-                                                          placeholder: (context, url) => CircularProgressIndicator( color: EvieColors.primaryColor,),
-                                                          errorWidget: (context, url, error) => Icon(Icons.error),
-                                                          width: 56.h,
-                                                          height: 56.h,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
                                                     ),
+                                                    // _bikeProvider.currentBikeModel?.bikeIMG == ''
+                                                    //     ? Padding(
+                                                    //   padding: EdgeInsets.only(left: 15.w),
+                                                    //   child: Image(
+                                                    //     image: const AssetImage("assets/buttons/bike_left_pic.png"),
+                                                    //     width: 56.h,
+                                                    //     height: 56.h,
+                                                    //   ),
+                                                    // )
+                                                    //     : Container(
+                                                    //   padding: EdgeInsets.only(left: 15.w),
+                                                    //   child: ClipOval(
+                                                    //     child: CachedNetworkImage(
+                                                    //       //imageUrl: document['profileIMG'],
+                                                    //       imageUrl: _bikeProvider.currentBikeModel!.bikeIMG!,
+                                                    //       placeholder: (context, url) => CircularProgressIndicator( color: EvieColors.primaryColor,),
+                                                    //       errorWidget: (context, url, error) => Icon(Icons.error),
+                                                    //       width: 56.h,
+                                                    //       height: 56.h,
+                                                    //       fit: BoxFit.cover,
+                                                    //     ),
+                                                    //   ),
+                                                    // ),
                                                     Padding(
                                                       padding:  EdgeInsets.only(left: 12.w),
                                                       child: Column(

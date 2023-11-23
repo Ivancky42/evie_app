@@ -19,6 +19,7 @@ class EvieTextFormField extends StatefulWidget {
   final Widget? suffixIcon;
   final FormFieldValidator<String>? validator;
   final List<TextInputFormatter>? inputFormatter;
+  final FocusNode? focusNode;
 
   const EvieTextFormField({
     Key? key,
@@ -31,6 +32,7 @@ class EvieTextFormField extends StatefulWidget {
     this.suffixIcon,
     this.validator,
     this.inputFormatter,
+    this.focusNode,
 
   }) : super(key: key);
 
@@ -39,37 +41,47 @@ class EvieTextFormField extends StatefulWidget {
 }
 
 class _EvieTextFormFieldState extends State<EvieTextFormField> {
-  late FocusNode focusNode;
+  late FocusNode thisFocusNode;
   Color borderColor = Colors.grey;
 
   @override
   void initState() {
-    focusNode = FocusNode();
-    focusNode.addListener(() {
-      setState(() {
-        borderColor = focusNode.hasFocus ? EvieColors.primaryColor : Colors.grey;
+    if (widget.focusNode != null) {
+      thisFocusNode = widget.focusNode!;
+      thisFocusNode.addListener(() {
+        setState(() {
+          borderColor = thisFocusNode.hasFocus ? EvieColors.primaryColor : Colors.grey;
+        });
       });
-    });
+    }
+    else {
+      thisFocusNode = FocusNode();
+      thisFocusNode.addListener(() {
+        setState(() {
+          borderColor = thisFocusNode.hasFocus ? EvieColors.primaryColor : Colors.grey;
+        });
+      });
+    }
     super.initState();
   }
 
   @override
   void dispose() {
-    focusNode.dispose();
+    thisFocusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-
         child:Container(
           child: TextFormField(
               inputFormatters: widget.inputFormatter,
-              focusNode: focusNode,
+              focusNode: thisFocusNode,
               controller: widget.controller,
               keyboardType: widget.keyboardType,
               obscureText: widget.obscureText!,
+              //cursorColor: EvieColors.primaryColor,
 
               decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
@@ -84,7 +96,7 @@ class _EvieTextFormFieldState extends State<EvieTextFormField> {
                       color: Theme.of(context).errorColor, // or any other color
                     ),
                     //fillColor: widget.focusNode!.hasFocus ? Colors.red : ThemeChangeNotifier().isDarkMode(context) ?  Color(0xff3F3F3F) : Color(0xffDFE0E0),
-                    fillColor: focusNode.hasFocus ? EvieColors.thumbColorTrue : SettingProvider().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.lightGrayishCyan,
+                    fillColor: thisFocusNode.hasFocus ? EvieColors.thumbColorTrue : SettingProvider().isDarkMode(context) ?  EvieColors.darkGray : EvieColors.lightGrayishCyan,
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           width: 0.1,
@@ -96,8 +108,7 @@ class _EvieTextFormFieldState extends State<EvieTextFormField> {
 
                     focusedBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
-                        width: 1.5,
-                        color: Color(0xff6A51CA),), //<-- SEE HERE
+                        width: 1.5, color: Color(0xff6A51CA),), //<-- SEE HERE
                       borderRadius: BorderRadius.circular(10.0),
                     ),
 

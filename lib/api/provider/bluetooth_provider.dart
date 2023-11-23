@@ -428,7 +428,6 @@ class BluetoothProvider extends ChangeNotifier {
         notifyListeners();
       }
     }
-
     clearBluetoothStatus();
     notifyListeners();
   }
@@ -532,6 +531,11 @@ class BluetoothProvider extends ChangeNotifier {
 
   void clearDeviceConnectStatus() {
     deviceConnectResult = null;
+    notifyListeners();
+  }
+
+  void switchBikeDetected() {
+    deviceConnectResult = DeviceConnectResult.switchBike;
     notifyListeners();
   }
 

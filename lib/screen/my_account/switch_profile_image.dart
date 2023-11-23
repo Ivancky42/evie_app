@@ -97,32 +97,32 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
                 image: "assets/buttons/camera.svg",
                 content: "Take a Photo",),
               const AccountPageDivider(),
-              ChangeImageContainer(
-                onPress: () async {
-                  final result = await deleteImage(
-                      _currentUserProvider.currentUserModel!.email,
-                      _currentUserProvider);
-                  if (result == false) {
-                    SmartDialog.show(
-                        widget: EvieSingleButtonDialog(
-                            title: "Error",
-                            content: "Please try again",
-                            rightContent: "OK",
-                            onPressedRight: () {
-                              SmartDialog.dismiss();
-                            }));
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Deleted')),
-                    );
-                    SmartDialog.dismiss(status: SmartStatus.loading);
-                  }
-                },
-                image: "assets/buttons/delete.svg",
-                content: "Remove Current Picture",),
-
-              //V comment:end of 3 options for profile pic
-              const AccountPageDivider(),
+              // ChangeImageContainer(
+              //   onPress: () async {
+              //     final result = await deleteImage(
+              //         _currentUserProvider.currentUserModel!.email,
+              //         _currentUserProvider);
+              //     if (result == false) {
+              //       SmartDialog.show(
+              //           widget: EvieSingleButtonDialog(
+              //               title: "Error",
+              //               content: "Please try again",
+              //               rightContent: "OK",
+              //               onPressedRight: () {
+              //                 SmartDialog.dismiss();
+              //               }));
+              //     } else {
+              //       ScaffoldMessenger.of(context).showSnackBar(
+              //         const SnackBar(content: Text('Deleted')),
+              //       );
+              //       SmartDialog.dismiss(status: SmartStatus.loading);
+              //     }
+              //   },
+              //   image: "assets/buttons/delete.svg",
+              //   content: "Remove Current Picture",),
+              //
+              // //V comment:end of 3 options for profile pic
+              // const AccountPageDivider(),
               SizedBox(height: 38.h)
             ],
           ),

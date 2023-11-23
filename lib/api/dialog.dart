@@ -322,7 +322,28 @@ showConnectDialog(BluetoothProvider bluetoothProvider, BikeProvider bikeProvider
   );
 }
 
-showEditBikeNameDialog(_formKey, _bikeNameController, _bikeProvider) {
+showEditBikeNameDialog(_formKey, _bikeNameController, BikeProvider _bikeProvider) {
+  bool isFirst = true;
+
+  _bikeNameController = TextEditingController(text: _bikeProvider.currentBikeModel?.deviceName);
+
+  FocusNode _nameFocusNode = FocusNode();
+  _nameFocusNode.requestFocus();
+
+  _bikeNameController.addListener(() {
+    if (_bikeNameController.selection.baseOffset != _bikeNameController.selection.extentOffset) {
+      // Text is selected
+      //print('Text selected: ${_nameController.text.substring(_nameController.selection.baseOffset, _nameController.selection.extentOffset)}');
+    } else {
+      // Cursor is moved
+      if (isFirst) {
+        isFirst = false;
+        _bikeNameController.selection = TextSelection(
+            baseOffset: 0, extentOffset: _bikeNameController.text.length);
+      }
+    }
+  });
+
   SmartDialog.show(
       widget: Form(
         key: _formKey,
@@ -336,6 +357,7 @@ showEditBikeNameDialog(_formKey, _bikeNameController, _bikeProvider) {
                     padding:  EdgeInsets.fromLTRB(0.h, 12.h, 0.h, 8.h),
                     child: EvieTextFormField(
                       controller: _bikeNameController,
+                      focusNode: _nameFocusNode,
                       obscureText: false,
                       keyboardType: TextInputType.name,
                       hintText: _bikeProvider.currentBikeModel?.deviceName ?? "Bike Name",

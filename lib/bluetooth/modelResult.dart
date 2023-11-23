@@ -15,6 +15,7 @@ enum DeviceConnectResult {
   disconnected,
   connectError,
   deviceFound,
+  switchBike,
 }
 
 enum CommandResult {

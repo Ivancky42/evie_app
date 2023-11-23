@@ -261,52 +261,64 @@ class _BikeSettingState extends State<BikeSetting> {
                           EdgeInsets.fromLTRB(21.w, 16.h, 6.w, 16.h),
                           child: Stack(
                             children: [
-                              _bikeProvider.currentBikeModel?.bikeIMG == '' ? Image(
-                                image: const AssetImage("assets/buttons/bike_left_pic.png"),
+                              _bikeProvider.currentBikeModel?.model == 'S1' ?
+                              Image(
+                                image: const AssetImage("assets/buttons/bike_default_S1.png"),
                                 width: 49.h,
                                 height: 49.h,
-                              ) : ClipOval(
-                                  child: CachedNetworkImage(
-                                  //imageUrl: document['profileIMG'],
-                                  imageUrl:
-                                  _bikeProvider.currentBikeModel!.bikeIMG!,
-                                    placeholder: (context, url) =>
-                                    const CircularProgressIndicator(color: EvieColors.primaryColor,),
-                                    errorWidget: (context, url, error) => Icon(Icons.error),
-                                    width: 49.h,
-                                    height: 49.h,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                              ) :
+                              Image(
+                                image: const AssetImage("assets/buttons/bike_default_T1.png"),
+                                width: 49.h,
+                                height: 49.h,
+                              ),
+
+                              // _bikeProvider.currentBikeModel?.bikeIMG == '' ? Image(
+                              //   image: const AssetImage("assets/buttons/bike_left_pic.png"),
+                              //   width: 49.h,
+                              //   height: 49.h,
+                              // ) : ClipOval(
+                              //     child: CachedNetworkImage(
+                              //     //imageUrl: document['profileIMG'],
+                              //     imageUrl:
+                              //     _bikeProvider.currentBikeModel!.bikeIMG!,
+                              //       placeholder: (context, url) =>
+                              //       const CircularProgressIndicator(color: EvieColors.primaryColor,),
+                              //       errorWidget: (context, url, error) => Icon(Icons.error),
+                              //       width: 49.h,
+                              //       height: 49.h,
+                              //       fit: BoxFit.cover,
+                              //     ),
+                              //   ),
 
                               //second widget in row, stacked onto first widget
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: Align(
-                                  alignment: Alignment.bottomRight,
-                                  //onTap camera pic
-                                  child: GestureDetector(
-                                    onTap: () {
-
-                                      showCupertinoModalBottomSheet(
-                                        expand: false,
-                                        useRootNavigator: true,
-                                        context: context,
-                                        builder: (context) {
-                                          return SwitchBikeImage();
-                                        },
-                                      );
-
-                                    },
-                                    child: SvgPicture.asset(
-                                      "assets/buttons/camera_bike_pic.svg",
-                                      width: 24,
-                                      height: 24,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              // Positioned(
+                              //   bottom: 0,
+                              //   right: 0,
+                              //   child: Align(
+                              //     alignment: Alignment.bottomRight,
+                              //     //onTap camera pic
+                              //     child: GestureDetector(
+                              //       onTap: () {
+                              //
+                              //         showCupertinoModalBottomSheet(
+                              //           expand: false,
+                              //           useRootNavigator: true,
+                              //           context: context,
+                              //           builder: (context) {
+                              //             return SwitchBikeImage();
+                              //           },
+                              //         );
+                              //
+                              //       },
+                              //       child: SvgPicture.asset(
+                              //         "assets/buttons/camera_bike_pic.svg",
+                              //         width: 24,
+                              //         height: 24,
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                                 // ),
                             ],
                           )
@@ -328,8 +340,8 @@ class _BikeSettingState extends State<BikeSetting> {
                           visible: _bikeProvider.isPlanSubscript ?? false,
                           child: SvgPicture.asset(
                             "assets/icons/batch_tick.svg",
-                            height: 25.h,
-                            width: 25.w,
+                            height: 30.w,
+                            width: 30.w,
                           ),)
                       ],
                     ),

@@ -81,6 +81,7 @@ class _BikeContainerState extends State<BikeContainer> {
               await _bluetoothProvider.stopScan();
               await _bluetoothProvider.connectSubscription?.cancel();
               await _bluetoothProvider.disconnectDevice();
+              _bluetoothProvider.switchBikeDetected();
               _bluetoothProvider.startScanTimer?.cancel();
               await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
               Navigator.pop(context);

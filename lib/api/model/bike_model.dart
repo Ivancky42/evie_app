@@ -48,6 +48,7 @@ class BikeModel {
   String? type;
   String? bikeIMG;
   NotificationSettingModel? notificationSettings;
+  String? model;
 
   ///about bike mileage get from firestore
   /// If it is (10) means 1km , (20) means 2km, 2 means 0.2km. and miles
@@ -84,6 +85,7 @@ class BikeModel {
     this.bikeIMG,
     this.mileage,
     this.notificationSettings,
+    this.model,
   });
 
   Map<String, dynamic> toJson() => {
@@ -122,6 +124,7 @@ class BikeModel {
       serialNumber: json['serialNumber'] ?? '',
       type: json['type'] ?? '',
       bikeIMG: json['bikeIMG'] ??'',
+      model: json['serialNumber'].substring(0, 2),
 
       ///about bike mileage get from firestore
       /// If it is (10) means 1km , (20) means 2km, 2 means 0.2km. and miles

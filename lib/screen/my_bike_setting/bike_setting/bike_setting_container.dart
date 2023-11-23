@@ -90,7 +90,14 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
           children: [
             GestureDetector(
               behavior: HitTestBehavior.translucent,
-              onTap: () {},
+              onTap: () {
+                if(_bikeProvider.isOwner == true){
+
+                }
+                else{
+                  showAccNoPermissionToast(context);
+                }
+              },
               child: Container(
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 10.h),
@@ -201,7 +208,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                                 style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                               ),
                               deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
-                                "assets/icons/bluetooth_disconnect_filled.svg",
+                                "assets/icons/bluetooth.svg",
                                 height: 15.h,
                                 width: 15.w,
                               ) : SvgPicture.asset(
@@ -264,7 +271,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                   else if (deviceConnectResult == DeviceConnectResult.connected) {
                     _settingProvider.changeSheetElement(SheetList.motionSensitivity);
                   }
-                }else{
+                }
+                else{
                   showAccNoPermissionToast(context);
                 }
 
@@ -288,7 +296,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                                 style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                               ),
                               deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
-                                "assets/icons/bluetooth_disconnect_filled.svg",
+                                "assets/icons/bluetooth.svg",
                                 height: 15.h,
                                 width: 15.w,
                               ) : SvgPicture.asset(
@@ -304,11 +312,12 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                           )
                         ],
                       ),
+                      _bikeProvider.isOwner == true ?
                       SvgPicture.asset(
                         "assets/buttons/next.svg",
                         height: 24.h,
                         width: 24.w,
-                      ),
+                      ) : Container(),
                     ],
                   ),
                 ),
@@ -376,8 +385,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                               SizedBox(width: 8.17.w,),
                               SvgPicture.asset(
                                 "assets/icons/batch_tick.svg",
-                                height: 20.h,
-                                width: 20.w,
+                                width: 24.w,
+                                height: 24.w,
                               ),
                             ],
                           ),
@@ -476,8 +485,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                                 SizedBox(width: 8.17.w,),
                                 SvgPicture.asset(
                                   "assets/icons/batch_tick.svg",
-                                  height: 20.h,
-                                  width: 20.w,
+                                  width: 24.w,
+                                  height: 24.w,
                                 ),
                               ],
                             ),
@@ -549,6 +558,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                               SizedBox(width: 8.17.w,),
                               SvgPicture.asset(
                                 "assets/icons/batch_tick.svg",
+                                width: 24.w,
+                                height: 24.w,
                               ),
                             ],
                           ),
@@ -774,7 +785,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                                 ),
                                 deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
-                                  "assets/icons/bluetooth_disconnect_filled.svg",
+                                  "assets/icons/bluetooth.svg",
                                   height: 15.h,
                                   width: 15.w,
                                 ) : SvgPicture.asset(
@@ -807,11 +818,12 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                             )
                           ],
                         ),
+                        _bikeProvider.isOwner == true ?
                         SvgPicture.asset(
                           "assets/buttons/next.svg",
                           height: 24.h,
                           width: 24.w,
-                        ),
+                        ) : Container(),
                       ],
                     ),
                   ),
@@ -856,7 +868,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                           ],
                         ),
                         SvgPicture.asset(
-                          "assets/buttons/next.svg",
+                          "assets/buttons/external_link.svg",
                         ),
                       ],
                     )

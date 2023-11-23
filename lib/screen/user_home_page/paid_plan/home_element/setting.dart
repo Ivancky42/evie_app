@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -30,10 +31,23 @@ class _SettingState extends State<Setting> {
     _settingProvider = Provider.of<SettingProvider>(context);
 
     return EvieCard(
-      onPress: (){
+      onPress: () async {
         _settingProvider.changeSheetElement(SheetList.bikeSetting);
         showSheetNavigate(context, 'Home');
-        //showBikeSettingContentSheet(context, BikeSettingList.bikeSetting, 'Home');
+
+        // String lockModulePath = "lockModules/LM01062300254";
+        //
+        // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        //     .collection('inventory')
+        //     .doc("bikes")
+        //     .collection('serialNumber')
+        //     .where("lockRef", isEqualTo: FirebaseFirestore.instance.doc(lockModulePath))
+        //     .get();
+        //
+        // // Process the querySnapshot here
+        // querySnapshot.docs.forEach((doc) {
+        //   print(doc.data()); // Access document data
+        // });
       },
       title: "Setting",
       child: Expanded(
