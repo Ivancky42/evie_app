@@ -335,6 +335,86 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             ),
           ],
         );
+      case "Recovery Mode":
+        return Column(
+          children: [
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () async {
+
+                if(_bikeProvider.isOwner == true){
+                  if (deviceConnectResult == null
+                      || deviceConnectResult == DeviceConnectResult.disconnected
+                      || deviceConnectResult == DeviceConnectResult.scanTimeout
+                      || deviceConnectResult == DeviceConnectResult.connectError
+                      || deviceConnectResult == DeviceConnectResult.scanError
+                      || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
+                  ) {
+                    showConnectBluetoothDialog(context, _bluetoothProvider, _bikeProvider);
+
+                    // SmartDialog.showLoading(msg: 'Entering Recovery Mode....');
+                    // _bluetoothProvider.cableUnlock();
+                    // await Future.delayed(Duration(seconds: 2));
+                    // showRecoveringModeToast(context);
+                    // SmartDialog.dismiss();
+                  }
+                  else if (deviceConnectResult == DeviceConnectResult.connected) {
+                    SmartDialog.showLoading(msg: 'Entering Recovery Mode....');
+                    _bluetoothProvider.cableUnlock();
+                    await Future.delayed(Duration(seconds: 2));
+                    showRecoveringModeToast(context);
+                    SmartDialog.dismiss();
+                  }
+                }
+                else{
+                  showAccNoPermissionToast(context);
+                }
+
+              },
+              child: Container(
+                child: Padding(
+                    padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              label!,
+                              style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                            ),
+                            SizedBox(width: 8.17.w,),
+                            deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
+                              "assets/icons/bluetooth.svg",
+                              height: 15.h,
+                              width: 15.w,
+                            ) : SvgPicture.asset(
+                              "assets/icons/bluetooth_disconnect.svg",
+                              height: 15.h,
+                              width: 15.w,
+                            ),
+                          ],
+                        ),
+                        SvgPicture.asset(
+                          "assets/buttons/next.svg",
+                        ),
+                      ],
+                    )
+                ),
+              ),
+            ),
+            Container(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
+            ),
+          ],
+        );
       case "EV+":
         return Column(
           children: [

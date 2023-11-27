@@ -99,6 +99,7 @@ enum MeasurementSetting{
 enum ActionableBarItem{
   none,
   registerEVKey,
+  bikeUpdate,
 }
 
 enum BikeStatus{

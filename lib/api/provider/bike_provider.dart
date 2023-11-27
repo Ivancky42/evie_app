@@ -301,16 +301,29 @@ class BikeProvider extends ChangeNotifier {
             try {
               Map<String, dynamic>? obj = event.data();
               if (obj != null) {
-                currentBikeModel = BikeModel.fromJson(obj);
-                prefs.setString('currentBikeImei', imei!);
+                BikeModel temp = BikeModel.fromJson(obj);
+                if (currentBikeModel?.deviceIMEI == temp.deviceIMEI) {
+                  currentBikeModel = BikeModel.fromJson(obj);
+                  prefs.setString('currentBikeImei', imei!);
+                  ///Switch case
+                  switchBikeResult = SwitchBikeResult.success;
+                  switchBikeResultListener.add(switchBikeResult);
+                  notifyListeners();
+                }
+                else {
+                  currentBikeModel = BikeModel.fromJson(obj);
+                  prefs.setString('currentBikeImei', imei!);
 
-                ///Switch case
-                switchBikeResult = SwitchBikeResult.success;
-                switchBikeResultListener.add(switchBikeResult);
-                getCurrentPlanSubscript();
-                getThreatRoutes();
+                  ///Switch case
+                  switchBikeResult = SwitchBikeResult.success;
+                  switchBikeResultListener.add(switchBikeResult);
+                  getCurrentPlanSubscript();
+                  getThreatRoutes();
+                  getRFIDList();
+                  getBikeUserList();
 
-                notifyListeners();
+                  notifyListeners();
+                }
               }
               else {
                 currentBikeModel = null;
@@ -323,8 +336,6 @@ class BikeProvider extends ChangeNotifier {
               switchBikeResult = SwitchBikeResult.failure;
               switchBikeResultListener.add(switchBikeResult);
             }
-            getRFIDList();
-            getBikeUserList();
       });
     }
     else {
@@ -1695,10 +1706,11 @@ class BikeProvider extends ChangeNotifier {
           rfidList.clear();
         }
 
-        if (rfidList.length == 0) {
-          changeIsActionableBar(ActionableBarItem.registerEVKey);
+
+        if (rfidList.isEmpty) {
+          //changeIsActionableBar(ActionableBarItem.registerEVKey);
         } else {
-          changeIsActionableBar(ActionableBarItem.none);
+          //changeIsActionableBar(ActionableBarItem.none);
         }
 
       });

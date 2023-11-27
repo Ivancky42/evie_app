@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/threat_unlocking_system.dart';
@@ -36,6 +37,7 @@ import '../switch_bike.dart';
 import 'package:location/location.dart';
 import 'home_element/actionable_bar.dart';
 import 'home_element/battery.dart';
+import 'home_element/loading_map.dart';
 import 'home_element/orbital_anti_theft.dart';
 import 'home_element/rides.dart';
 import 'home_element/setting.dart';
@@ -51,9 +53,11 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
   late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
+  late FirmwareProvider _firmwareProvider;
   bool isActionBarAppear = false;
   DeviceConnectResult? deviceConnectResult;
   Widget arrowDirection = SvgPicture.asset("assets/buttons/down_white.svg",);
+  ActionableBarItem actionableBarItem = ActionableBarItem.none;
 
   @override
   void initState() {
@@ -72,8 +76,29 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    _firmwareProvider = Provider.of<FirmwareProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
+
+    if (_firmwareProvider.currentFirmVer != _firmwareProvider.latestFirmVer) {
+      print(_firmwareProvider.latestFirmVer);
+      print(_firmwareProvider.currentFirmVer);
+      setState(() {
+        actionableBarItem = ActionableBarItem.bikeUpdate;
+      });
+    }
+    else {
+      if (_bikeProvider.rfidList.isEmpty) {
+        setState(() {
+          actionableBarItem = ActionableBarItem.registerEVKey;
+        });
+      }
+      else {
+        setState(() {
+          actionableBarItem = ActionableBarItem.none;
+        });
+      }
+    }
 
     return WillPopScope(
       onWillPop: () async {
@@ -296,7 +321,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                     ),
 
                     ///No Actionable Bar
-                    _bikeProvider.actionableBarItem == ActionableBarItem.none ?
+                    actionableBarItem == ActionableBarItem.none ?
                     Expanded(
                       child: SingleChildScrollView(
                         physics: BouncingScrollPhysics(),
@@ -310,8 +335,14 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                 child: Container(
                                     height: 250.h,
                                     child: OrbitalAntiTheft())
-                            ) : Container(),
-
+                            ) :
+                            Padding(
+                                padding: EdgeInsets.fromLTRB(19.w, 19.42.h, 19.w, 16.w),
+                                //  padding: EdgeInsets.fromLTRB(19.w, 16.42.h, 19.w, 16.w),
+                                child: Container(
+                                    height: 255.h,
+                                    child: LoadingMap())
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -372,17 +403,25 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Padding(
-                              padding: _bikeProvider.actionableBarItem == ActionableBarItem.none ?
+                              padding: actionableBarItem == ActionableBarItem.none ?
                               EdgeInsets.zero : EdgeInsets.fromLTRB(19.w, 16.42.h, 19.w, 16.w),
-                              child: ActionableBarHome(),
+                              child: ActionableBarHome(actionableBarItem: actionableBarItem,),
                             ),
 
+                            _bikeProvider.currentBikeModel?.location != null ?
                             Padding(
                               padding: EdgeInsets.fromLTRB(19.w, 0.h, 19.w, 16.w),
                               //  padding: EdgeInsets.fromLTRB(19.w, 16.42.h, 19.w, 16.w),
                               child: Container(
                                   height: 240.h,
                                   child: OrbitalAntiTheft()),
+                            ) :
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(19.w, 0.h, 19.w, 16.w),
+                              child: Container(
+                                height: 255.h,
+                                child: LoadingMap(),
+                              ),
                             ),
 
                             Row(

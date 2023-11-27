@@ -32,6 +32,7 @@ class EvieCard2 extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
+              //color: Colors.yellow,
               padding: EdgeInsets.fromLTRB(16.w, 12.h, 0, 0),
               child: Text(
                 'Orbital Anti-theft',

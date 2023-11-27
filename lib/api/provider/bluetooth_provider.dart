@@ -1019,10 +1019,7 @@ class BluetoothProvider extends ChangeNotifier {
           break;
         case BluetoothCommand.requestBikeInfo:
           bikeInfoResult = BikeInfoResult(decodedData);
-
-          if(num.parse(bikeInfoResult?.batteryLevel ?? "0") != (currentBikeModel?.batteryModel?.percentage ?? "0")){
-            updateBattery(num.parse(bikeInfoResult?.batteryLevel ?? "0"));
-          }
+          updateBattery(num.parse(bikeInfoResult?.batteryLevel ?? "0"));
 
           notifyListeners();
           break;

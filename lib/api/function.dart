@@ -79,15 +79,14 @@ calculateTimeAgo(DateTime dateTime){
     String timeAgo;
     if (diff.inMinutes > 0 && diff.inMinutes < 60){
       timeAgo = "${diff.inMinutes} ${diff.inMinutes == 1 ? "min" : "mins"} ago";
-    }else if(diff.inHours > 0 && diff.inHours < 24){
+    }
+    else if(diff.inHours > 0 && diff.inHours < 24){
       timeAgo = "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
     }
-
     ///For current minute
     else if(dateTime.second > 0 && diff.inMinutes < 60){
       timeAgo = "1 min ago";
     }
-
     else{
       timeAgo = "${dateTime.day.toString()} ${monthsInYear[dateTime.month]}";
     }

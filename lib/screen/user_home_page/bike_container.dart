@@ -132,21 +132,16 @@ class _BikeContainerState extends State<BikeContainer> {
                           width: 2.5.w,
                         ),
                       ),
-                      child: widget.bikeModel.bikeIMG == ''
-                          ? Image(
-                        image: const AssetImage("assets/buttons/bike_left_pic.png"),
-                        width: 64.h,
-                        height: 64.h,
-                      )
-                          : ClipOval(
-                        child: CachedNetworkImage(
-                          imageUrl: widget.bikeModel.bikeIMG!,
-                          placeholder: (context, url) => const CircularProgressIndicator(color: EvieColors.primaryColor,),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
-                          width: 64.h,
-                          height: 64.h,
-                          fit: BoxFit.cover,
-                        ),
+                      child: widget.bikeModel.model == 'S1' ?
+                      Image(
+                        image: const AssetImage("assets/buttons/bike_default_S1.png"),
+                        width: 56.h,
+                        height: 56.h,
+                      ) :
+                      Image(
+                        image: const AssetImage("assets/buttons/bike_default_T1.png"),
+                        width: 56.h,
+                        height: 56.h,
                       ),
                     ),
                     SizedBox(width: 16.w,),

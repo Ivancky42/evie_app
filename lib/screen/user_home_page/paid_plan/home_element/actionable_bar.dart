@@ -20,8 +20,9 @@ import '../../home_page_widget.dart';
 
 
 class ActionableBarHome extends StatefulWidget {
+  final ActionableBarItem actionableBarItem;
   ActionableBarHome({
-    Key? key
+    Key? key, required this.actionableBarItem
   }) : super(key: key);
 
   @override
@@ -56,12 +57,17 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
                 _settingProvider.changeSheetElement(SheetList.evKey);
                 showSheetNavigate(context);
               break;
+            case "bikeUpdate":
+              pageNavigate = null;
+              _settingProvider.changeSheetElement(SheetList.firmwareInformation);
+              showSheetNavigate(context);
+              break;
           }
         }
       });
     }
 
-    switch(_bikeProvider.actionableBarItem){
+    switch(widget.actionableBarItem){
       case ActionableBarItem.none:
         return SizedBox.shrink();
 
@@ -90,6 +96,34 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
             else if (deviceConnectResult == DeviceConnectResult.connected) {
                 _settingProvider.changeSheetElement(SheetList.evKey);
                 showSheetNavigate(context);
+            }
+          },
+        );
+      case ActionableBarItem.bikeUpdate:
+        return EvieActionableBar(
+          icon:   SvgPicture.asset(
+            "assets/icons/bike_update.svg",
+          ),
+          title: 'Bike Software Update',
+          text: 'Update your bike for smooth riding experience.',
+          backgroundColor: EvieColors.primaryColor,
+          onTap: () {
+            if (deviceConnectResult == null
+                || deviceConnectResult == DeviceConnectResult.disconnected
+                || deviceConnectResult == DeviceConnectResult.scanTimeout
+                || deviceConnectResult == DeviceConnectResult.connectError
+                || deviceConnectResult == DeviceConnectResult.scanError
+                || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
+            ) {
+              setState(() {
+                pageNavigate = 'bikeUpdate';
+              });
+              showConnectBluetoothDialog(context, _bluetoothProvider, _bikeProvider);
+              // showEvieActionableBarDialog(context, _bluetoothProvider, _bikeProvider);
+            }
+            else if (deviceConnectResult == DeviceConnectResult.connected) {
+              _settingProvider.changeSheetElement(SheetList.firmwareInformation);
+              showSheetNavigate(context);
             }
           },
         );

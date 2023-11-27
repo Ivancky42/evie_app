@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
+import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/widgets/evie-unlocking-button.dart';
@@ -37,7 +38,9 @@ class _FreePlanState extends State<FreePlan> {
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late SettingProvider _settingProvider;
+  late FirmwareProvider _firmwareProvider;
   DeviceConnectResult? deviceConnectResult;
+  ActionableBarItem actionableBarItem = ActionableBarItem.none;
 
   @override
   void initState() {
@@ -56,8 +59,29 @@ class _FreePlanState extends State<FreePlan> {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
      _settingProvider = Provider.of<SettingProvider>(context);
+     _firmwareProvider = Provider.of<FirmwareProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
+
+    if (_firmwareProvider.currentFirmVer != _firmwareProvider.latestFirmVer) {
+      print(_firmwareProvider.latestFirmVer);
+      print(_firmwareProvider.currentFirmVer);
+      setState(() {
+        actionableBarItem = ActionableBarItem.bikeUpdate;
+      });
+    }
+    else {
+      if (_bikeProvider.rfidList.isEmpty) {
+        setState(() {
+          actionableBarItem = ActionableBarItem.registerEVKey;
+        });
+      }
+      else {
+        setState(() {
+          actionableBarItem = ActionableBarItem.none;
+        });
+      }
+    }
 
     return WillPopScope(
       onWillPop: () async {
@@ -226,7 +250,7 @@ class _FreePlanState extends State<FreePlan> {
 
 
                       ///No Actionable Bar
-                      _bikeProvider.actionableBarItem == ActionableBarItem.none ?
+                      actionableBarItem == ActionableBarItem.none ?
                      Expanded(
                        child: Column(
                          children: [
@@ -418,9 +442,9 @@ class _FreePlanState extends State<FreePlan> {
                           child: Column(
                             children: [
                               Padding(
-                                padding: _bikeProvider.actionableBarItem == ActionableBarItem.none ?
+                                padding: actionableBarItem == ActionableBarItem.none ?
                                 EdgeInsets.zero : EdgeInsets.fromLTRB(19.w, 16.42.h, 19.w, 16.w),
-                                child: ActionableBarHome(),
+                                child: ActionableBarHome(actionableBarItem: actionableBarItem,),
                               ),
 
                               Padding(
