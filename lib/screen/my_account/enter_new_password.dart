@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/edit_profile.dart';
@@ -40,13 +41,43 @@ class _EnterNewPasswordState extends State<EnterNewPassword> {
   late CurrentUserProvider _currentUserProvider;
   late AuthProvider _authProvider;
 
+  //For user input password visibility true/false
+  bool _isObscure = true;
+
+  //Create form for form validation
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordValid = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _passwordController.addListener(_onPasswordChanged);
+  }
+
+  void _onPasswordChanged() {
+    setState(() {
+      _isPasswordValid = _passwordController.text.length >= 8;
+    });
+  }
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  bool containsLettersAndNumbers(String value) {
+    ///check for letters and numbers
+    final RegExp alphanumeric = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d).+$');
+    return alphanumeric.hasMatch(value);
+  }
+
   @override
   Widget build(BuildContext context) {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
-
-    final TextEditingController _passwordController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: PageAppbar(
@@ -68,7 +99,7 @@ class _EnterNewPasswordState extends State<EnterNewPassword> {
                   padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 1.h),
                   child: Text(
                     "Create New Password",
-                    style: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.w500),
+                    style: EvieTextStyles.h2,
                   ),
                 ),
                 Padding(
@@ -82,18 +113,92 @@ class _EnterNewPasswordState extends State<EnterNewPassword> {
                   padding: EdgeInsets.fromLTRB(16.w, 17.h, 16.w, 0.h),
                   child: EvieTextFormField(
                     controller: _passwordController,
-                    obscureText: false,
-                    //     keyboardType: TextInputType.name,
+                    obscureText: _isObscure,
                     hintText: "Type in new password",
                     labelText: "Password",
+                    suffixIcon:  IconButton(
+                        icon:   _isObscure ?
+                        SvgPicture.asset(
+                          "assets/buttons/view_off.svg",
+                        ):
+                        SvgPicture.asset(
+                          "assets/buttons/view_on.svg",
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure;
+                          });
+                        }),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
+                      }
+                      if (value.length < 8) {
+                        return 'Password must have at least 8 characters';
                       }
                       return null;
                     },
                   ),
                 ),
+
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 4.h,
+                      ),
+
+                      Text("Password must include:",
+                          style: EvieTextStyles.body14),
+
+                      SizedBox(
+                        height: 7.5.h,
+                      ),
+
+                      /// Change image in real time if length is more than 8
+                      Row(
+                        children: [
+                          if (_passwordController.text.length >= 8) ...{
+                            SvgPicture.asset(
+                              "assets/icons/check.svg",
+                            ),
+                          } else ...{
+                            SvgPicture.asset(
+                              "assets/icons/grey_tick.svg",
+                            ),
+                          },
+
+                          Text(
+                            "At least 8 characters.",
+                            style: EvieTextStyles.body14,
+                          ),
+                        ],
+                      ),
+
+                      /// Change image in real time if password has letters and numbers
+                      Row(
+                        children: [
+                          if (containsLettersAndNumbers(_passwordController.text))...{
+                            SvgPicture.asset(
+                              "assets/icons/check.svg",
+                            ),
+                          } else...{
+                            SvgPicture.asset(
+                              "assets/icons/grey_tick.svg",
+                            ),
+                          },
+                          Text(
+                            "Contain letters and numbers.",
+                            style: EvieTextStyles.body14,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
@@ -122,7 +227,7 @@ class _EnterNewPasswordState extends State<EnterNewPassword> {
 
                           result == true ?
                           {
-                            changeToEditProfile(context),
+                            changeToEditProfileReplace(context),
                             showUpdatedPasswordToast(context),
                           } :
                           SmartDialog.show(

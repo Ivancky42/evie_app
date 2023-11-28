@@ -90,6 +90,7 @@ class _EditProfileState extends State<EditProfile> {
           title: 'Personal Information',
           onPressed: () {
             back(context, EditProfile());
+            //changeToMyAccount(context, EditProfile());
           },
         ),
         body: Column(

@@ -532,3 +532,127 @@ class EvieTwoButtonDialog extends StatelessWidget{
   }
 }
 
+class EvieConnectingDialog extends StatelessWidget{
+  final Widget? title;
+  final bool? havePic;
+  final Widget childContent;
+  final SvgPicture? svgpicture;
+  final Widget? lottie;
+  final String? upContent;
+  final String? downContent;
+  final VoidCallback? onPressedDown;
+  final VoidCallback? onPressedUp;
+  final Widget? customButtonUp;
+  final Widget? customButtonDown;
+
+
+  const EvieConnectingDialog({
+    Key? key,
+    this.title,
+    this.havePic,
+    required this.childContent,
+    this.svgpicture,
+    this.upContent,
+    this.downContent,
+    this.onPressedDown,
+    this.onPressedUp,
+    this.customButtonUp,
+    this.customButtonDown, this.lottie,
+
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Dialog(
+        insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        elevation: 0.0,
+        backgroundColor: EvieColors.grayishWhite2,
+        child: Container(
+          padding:  EdgeInsets.only(
+              left: 17.w,
+              right: 17.w,
+              // top: 16.w,
+              bottom: 16.w
+          ),
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Stack(
+                children: [
+                  lottie != null ?
+                  Center(
+                    child: lottie,
+                  ) : Container(),
+
+                  Padding(
+                    padding: EdgeInsets.only(top: 250.h),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 325.w,
+                          child: Padding(
+                            padding:  EdgeInsets.only(bottom: 16.h),
+                            child: title,
+                          ),
+                        ),
+
+                        Container(child: childContent),
+
+                        Padding(
+                          padding: EdgeInsets.only(top: 37.h),
+                          child: Column(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+
+                                child: Padding(
+                                  padding: EdgeInsets.only(bottom: 4.h),
+                                  child: customButtonUp ?? EvieButton(
+                                      width: double.infinity,
+                                      height: 48.h,
+                                      child: Text(
+                                        upContent ?? '',
+                                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                                      ),
+                                      onPressed: onPressedUp
+                                  ),
+                                ),
+                              ),
+
+
+                              Flexible(
+                                child:  Padding(
+                                  padding: EdgeInsets.only(top: 4.h),
+                                  child: customButtonDown ?? EvieButton_ReversedColor(
+                                    width: double.infinity,
+                                    height: 48.h,
+                                    child: Text(
+                                      downContent ?? '',
+                                      style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
+                                    ),
+                                    onPressed: onPressedDown,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        )
+    );
+  }
+}
+

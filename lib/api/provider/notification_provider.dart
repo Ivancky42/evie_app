@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/notification_model.dart';
@@ -32,6 +33,11 @@ class NotificationProvider extends ChangeNotifier {
 
   DateTime? targetActionableBarTime;
   bool isTimeArrive = true;
+  PermissionStatus? permissionStatus;
+
+  NotificationProvider() {
+    checkNotificationPermission();
+  }
 
   Future<void> init(UserModel? currentUserModel) async {
     ///Subscribe to user uid for notification
@@ -47,6 +53,13 @@ class NotificationProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  checkNotificationPermission() async {
+    PermissionStatus status = await Permission.notification.status;
+    permissionStatus = status;
+    notifyListeners();
+  }
+
 
   ///Get fcm token
   void firebaseCloudMessaging_Listeners() {

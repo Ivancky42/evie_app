@@ -48,7 +48,7 @@ class _DisplaySettingState extends State<DisplaySetting> {
       appBar: PageAppbar(
         title: 'Display Setting',
         onPressed: () {
-          changeToMyAccount(context, DisplaySetting());
+          back(context, DisplaySetting());
         },
       ),
       body: Column(
@@ -60,7 +60,7 @@ class _DisplaySettingState extends State<DisplaySetting> {
           GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: (){
-              showMeasurementUnit(_settingProvider);
+              showMeasurementUnit(_settingProvider, context);
             },
             child: Container(
               height: 54.h,
@@ -80,6 +80,7 @@ class _DisplaySettingState extends State<DisplaySetting> {
                           splitCapitalString(capitalizeFirstCharacter(_settingProvider.currentMeasurementSetting.toString().split('.').last)),
                           style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayish),
                         ),
+                        SizedBox(width: 6.w,),
                         SvgPicture.asset(
                           "assets/buttons/next.svg",
                           height: 24.h,
@@ -93,7 +94,14 @@ class _DisplaySettingState extends State<DisplaySetting> {
             ),
           ),
 
-          const EvieDivider(),
+          Padding(
+            padding: EdgeInsets.only(left: 16.w),
+            child: Divider(
+              thickness: 0.2.h,
+              color: EvieColors.darkWhite,
+              height: 0,
+            ),
+          ),
 
         ],
       ),);

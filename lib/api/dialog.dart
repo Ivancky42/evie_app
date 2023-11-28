@@ -1172,7 +1172,7 @@ showExitOrbitalAntiTheft(BuildContext context){
           ));
 }
 
-showMeasurementUnit(SettingProvider settingProvider){
+showMeasurementUnit(SettingProvider settingProvider, context){
 
   int _selectedRadio = 0;
 
@@ -1185,8 +1185,9 @@ showMeasurementUnit(SettingProvider settingProvider){
   }
   SmartDialog.show(
       keepSingle: true,
-      widget: EvieSingleButtonDialog
-        (title: "Measurement Unit",
+      widget: EvieSingleButtonDialog(
+        isReversed: true,
+          title: "Measurement Unit",
          widget: Column(
            children: [
              EvieRadioButton(
@@ -1195,6 +1196,7 @@ showMeasurementUnit(SettingProvider settingProvider){
                  groupValue: _selectedRadio,
                  onChanged: (value){
                    settingProvider.changeMeasurement(MeasurementSetting.metricSystem);
+                   showUpdateMetric(context, "Metric System.");
                    SmartDialog.dismiss();
                  }),
 
@@ -1206,6 +1208,7 @@ showMeasurementUnit(SettingProvider settingProvider){
                  groupValue: _selectedRadio,
                  onChanged: (value){
                    settingProvider.changeMeasurement(MeasurementSetting.imperialSystem);
+                   showUpdateMetric(context, "Imperial System.");
                    SmartDialog.dismiss();
                  }),
 
@@ -1732,11 +1735,12 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
   );
 
+  _bikeProvider.blockConnectingToast(true);
+
   SmartDialog.show(
     keepSingle: true,
     backDismiss: false,
     clickBgDismissTemp: false,
-
     widget:  Consumer<BluetoothProvider>(
         builder: (context, bluetoothProvider, child) {
           return StatefulBuilder(
@@ -1752,6 +1756,7 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                     width: 52.w,
                     height: 50.h,
                   );
+                  _bikeProvider.blockConnectingToast(false);
                   SmartDialog.dismiss();
                 }  else if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
                     _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
@@ -1773,9 +1778,11 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                 }
                 else if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.disconnected) {
                   buttonImage = Text('Connect Bike', style: EvieTextStyles.body18,);
+                  _bikeProvider.blockConnectingToast(false);
                   SmartDialog.dismiss();
                 }
                 else if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanTimeout) {
+                  _bikeProvider.blockConnectingToast(false);
                   SmartDialog.dismiss();
                 }
                 else {
@@ -1783,7 +1790,7 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                 }
 
 
-                return EvieTwoButtonDialog(
+                return EvieConnectingDialog(
                     title: Text("Connect Your Bike",
                       style: EvieTextStyles.h2,
                       textAlign: TextAlign.center,
@@ -1792,17 +1799,15 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                       "Ready for the next step? Simply connect with your bike to unlock and experience the next stage of this process.",
                       textAlign: TextAlign.center,
                       style: EvieTextStyles.body18,),
-                    svgpicture: SvgPicture.asset(
-                      "assets/images/connect_your_bike.svg",
-                    ),
-                    // havePic: false,
-                    // lottie: Container(
-                    //   // width: 296.77.w,
-                    //   //height: 131.24.h,
-                    //   padding: EdgeInsets.zero,
-                    //   //color: Colors.red,
-                    //   child: Lottie.asset('assets/images/connect-to-bike.json', repeat: false),
+                    // svgpicture: SvgPicture.asset(
+                    //   "assets/images/connect_your_bike.svg",
                     // ),
+                    havePic: false,
+                    lottie: Container(
+                      padding: EdgeInsets.zero,
+                      //color: Colors.red,
+                      child: Lottie.asset('assets/images/connect-to-bike.json', repeat: false),
+                    ),
                     customButtonUp: EvieButton(
                         backgroundColor: _bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
                             _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
@@ -1829,8 +1834,13 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                           _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
                           _bluetoothProvider.deviceConnectResult == DeviceConnectResult.partialConnected) {
 
-                        showDontConnectBike(context, _bikeProvider, _bluetoothProvider);
+                        await _bluetoothProvider.stopScan();
+                        await _bluetoothProvider.connectSubscription?.cancel();
+                        await _bluetoothProvider.disconnectDevice();
+                        _bluetoothProvider.switchBikeDetected();
+                        _bluetoothProvider.startScanTimer?.cancel();
                       }
+                      _bikeProvider.blockConnectingToast(false);
                       SmartDialog.dismiss();
                     });
               }
@@ -1856,7 +1866,7 @@ showResetPasswordDialog(BuildContext context, AuthProvider _authProvider){
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
-          "assets/images/people_search.svg",
+          "assets/images/lost_your_password.svg",
         ),
         customButtonUp: EvieButton(
             backgroundColor: EvieColors.primaryColor,

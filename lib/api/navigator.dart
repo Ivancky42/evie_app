@@ -545,12 +545,17 @@ void changeToProPlanScreen(BuildContext context) {
 }
 
 void changeToMyAccount(BuildContext context, Widget child) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.leftToRight,
-      child: UserHomePage(2),
-      duration: const Duration(milliseconds: 300),
-    ),
+  // Navigator.pushReplacement(context,
+  //   PageTransition(
+  //     type: PageTransitionType.leftToRight,
+  //     child: MaterialWithModalsPageRoute(
+  //       builder: (context) => const UserHomePage(2),
+  //     duration: const Duration(milliseconds: 300),
+  //   ),
+  // );
+
+  Navigator.of(context).pushReplacement(MaterialWithModalsPageRoute(
+      builder: (context) => const UserHomePage(2))
   );
 }
 
@@ -560,6 +565,16 @@ void changeToEditProfile(BuildContext context) {
       return EditProfile();
     },
   ));
+}
+
+void changeToEditProfileReplace(BuildContext context) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.leftToRight,
+      child: EditProfile(),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
 }
 
 
@@ -721,7 +736,7 @@ void changeToThreatTimeLine(BuildContext context, [PageTransitionType? pageTrans
 }
 
 void changeToVerifyPassword(BuildContext context) {
-  Navigator.of(context).push(CupertinoPageRoute(
+  Navigator.of(context).pushReplacement(CupertinoPageRoute(
     builder: (context) {
       return VerifyPassword();
     },
@@ -729,7 +744,7 @@ void changeToVerifyPassword(BuildContext context) {
 }
 
 void changeToEnterNewPassword(BuildContext context) {
-  Navigator.of(context).push(CupertinoPageRoute(
+  Navigator.of(context).pushReplacement(CupertinoPageRoute(
     builder: (context) {
       return EnterNewPassword();
     },

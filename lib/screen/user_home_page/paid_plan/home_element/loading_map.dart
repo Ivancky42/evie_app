@@ -172,7 +172,10 @@ class _LoadingMapState extends State<LoadingMap> {
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.w),
-          border: returnBorderColour(_locationProvider),
+          border: Border.all(
+            color: EvieColors.transparent,
+            width: 2.8.w,
+          ),
           boxShadow: [
             BoxShadow(
               color: Color(0xFF7A7A79).withOpacity(0.15), // Hex color with opacity

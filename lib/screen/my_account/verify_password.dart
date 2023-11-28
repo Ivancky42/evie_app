@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/edit_profile.dart';
@@ -6,6 +7,7 @@ import 'package:evie_test/screen/my_account/my_account_widget.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
@@ -38,20 +40,68 @@ class VerifyPassword extends StatefulWidget {
 class _VerifyPasswordState extends State<VerifyPassword> {
   late CurrentUserProvider _currentUserProvider;
   late AuthProvider _authProvider;
+  late FocusNode _nameFocusNode;
+  //For user input password visibility true/false
+  bool _isObscure = true;
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    _nameFocusNode = FocusNode();
+    _nameFocusNode.requestFocus();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    //_nameFocusNode.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildPasswordFormField() {
+    return EvieTextFormField(
+      controller: _passwordController,
+      obscureText: _isObscure,
+      focusNode: _nameFocusNode,
+      hintText: "Your login password",
+      labelText: "Password",
+      suffixIcon: IconButton(
+        icon: _isObscure
+            ? SvgPicture.asset("assets/buttons/view_off.svg")
+            : SvgPicture.asset("assets/buttons/view_on.svg"),
+        onPressed: _toggleObscure,
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your password';
+        }
+        return null;
+      },
+    );
+  }
+
+  void _toggleObscure() {
+    setState(() {
+      _isObscure = !_isObscure;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
 
-    final TextEditingController _passwordController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
 
-    return Scaffold(
+    return Scaffold (
       appBar: PageAppbar(
         title: 'Update Password',
         onPressed: () {
-          back(context, EditProfile());
+          //back(context, EditProfile());
+          //_nameFocusNode.dispose();
+          changeToEditProfileReplace(context);
         },
       ),
       body: Column(
@@ -67,7 +117,7 @@ class _VerifyPasswordState extends State<VerifyPassword> {
                   padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 1.h),
                   child: Text(
                     "Verify Password",
-                    style: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.w500),
+                    style: EvieTextStyles.h2,
                   ),
                 ),
                 Padding(
@@ -79,18 +129,7 @@ class _VerifyPasswordState extends State<VerifyPassword> {
                 ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 17.h, 16.w, 0.h),
-                  child: EvieTextFormField(
-                    controller: _passwordController,
-                    obscureText: false,
-                    hintText: "Your login password",
-                    labelText: "Password",
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
-                      }
-                      return null;
-                    },
-                  ),
+                  child: _buildPasswordFormField(),
                 ),
               ],
             ),
@@ -132,15 +171,16 @@ class _VerifyPasswordState extends State<VerifyPassword> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 7.h),
-                    child: GestureDetector(
-                      child: Text(
-                        "Forgot Password",
-                        style: TextStyle(fontSize: 14.sp, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),
+                    padding: EdgeInsets.only(top: 12.h),
+                    child: RichText(
+                      text: TextSpan(
+                        text:  "Forgot Password",
+                        style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: EvieColors.primaryColor, decoration: TextDecoration.underline, fontFamily: 'Avenir'),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            showResetPasswordDialog(context, _authProvider);
+                          },
                       ),
-                      onTap: () {
-                        showResetPasswordDialog(context, _authProvider);
-                      },
                     ),
                   )
                 ],

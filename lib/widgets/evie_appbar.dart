@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -70,17 +72,21 @@ class PageAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return enable == null || enable == true ?
-      AppBar(
-      systemOverlayStyle: SystemUiOverlayStyle.dark,
-      leading: IconButton(
-        icon: SvgPicture.asset('assets/buttons/back_big.svg',),
-        onPressed: onPressed,
-      ),
-        centerTitle: true,
-        title: Text(
-          title, style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack),
+      Padding(
+        padding: Platform.isIOS ? EdgeInsets.zero : EdgeInsets.only(top: 10.h),
+        child: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          leading: IconButton(
+            icon: SvgPicture.asset('assets/buttons/back_big.svg',),
+            onPressed: onPressed,
+          ),
+          centerTitle: true,
+          title: Text(
+            title, style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack),
+          ),
         ),
-    ) : Container();
+      ) :
+    Container();
   }
 
   @override

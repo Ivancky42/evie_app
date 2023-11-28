@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../bluetooth/modelResult.dart';
 import 'colours.dart';
 import 'enumerate.dart';
@@ -745,6 +746,82 @@ showRecoveringModeToast(context) {
               SizedBox(width: 4.w,),
               Text(
                 "Successfully entered recovery mode.",
+                style: EvieTextStyles.toast,
+              ),
+            ],
+          ),
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
+showPermissionNeeded(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          openAppSettings();
+        },
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    "Your device notifications are off. Turn on notifications to ensure you don’t miss any updates. ",
+                    style: EvieTextStyles.toast,
+                  ),
+                ),
+              ],
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Text(
+                "OPEN SETTINGS",
+                style: EvieTextStyles.body16.copyWith(color: EvieColors.primaryColor, fontWeight: FontWeight.w800),
+              ),
+            )
+          ],
+        )
+      ),
+      duration: const Duration(seconds: 3),
+    ),
+  );
+}
+
+showUpdateMetric(context, settingName) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SvgPicture.asset("assets/icons/check.svg"),
+              SizedBox(width: 4.w,),
+              Text(
+                "Updated to " + settingName,
                 style: EvieTextStyles.toast,
               ),
             ],

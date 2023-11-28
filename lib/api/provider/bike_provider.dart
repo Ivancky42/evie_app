@@ -100,7 +100,7 @@ class BikeProvider extends ChangeNotifier {
   DateTime? threatFilterDate1;
   DateTime? threatFilterDate2;
   bool isUpdateThreat = false;
-
+  bool isBlockToast = false;
   StreamSubscription? bikeListSubscription;
   StreamSubscription? currentBikeSubscription;
   StreamSubscription? currentThreatRoutesSubscription;
@@ -1892,6 +1892,11 @@ class BikeProvider extends ChangeNotifier {
 
   calculateIsWithinDistance(String? distanceBetweenNum){
     double? distanceBetween = double.tryParse(distanceBetweenNum ?? "0") ?? 0;
+  }
+
+  blockConnectingToast(bool isBlock) {
+    isBlockToast = isBlock;
+    notifyListeners();
   }
 
 

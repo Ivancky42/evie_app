@@ -23,6 +23,7 @@ class EvieSingleButtonDialog extends StatelessWidget{
   final Widget? widget;
   final String rightContent;
   final VoidCallback onPressedRight;
+  final bool? isReversed;
 
   const EvieSingleButtonDialog({
     Key? key,
@@ -31,7 +32,7 @@ class EvieSingleButtonDialog extends StatelessWidget{
     this.content,
     this.widget,
     required this.rightContent,
-    required this.onPressedRight
+    required this.onPressedRight, this.isReversed,
   }) : super(key: key);
 
   @override
@@ -44,12 +45,12 @@ class EvieSingleButtonDialog extends StatelessWidget{
         elevation: 0.0,
         backgroundColor: EvieColors.grayishWhite,
         child: Container(
-          padding:  EdgeInsets.only(
-              left: 17.w,
-              right: 17.w,
-              top: 16.w,
-              bottom: 16.w
-          ),
+          // padding:  EdgeInsets.only(
+          //     left: 17.w,
+          //     right: 17.w,
+          //     top: 16.w,
+          //     bottom: 16.w
+          // ),
 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +58,7 @@ class EvieSingleButtonDialog extends StatelessWidget{
             children: [
 
               Padding(
-                padding:  EdgeInsets.only(bottom: 8.h),
+                padding:  EdgeInsets.only(bottom: 8.h, left: 17.w, right: 17.w, top: 16.w),
                 child: Text(title, style:EvieTextStyles.h2,),
               ),
               Padding(
@@ -69,22 +70,28 @@ class EvieSingleButtonDialog extends StatelessWidget{
                 ),
               ),
 
-              content != null? Text(
-                content ?? "" ,
-                textAlign: TextAlign.start,
-                style: EvieTextStyles.body18,
-              ) : Container(),
-
-              widget != null ? widget! : SizedBox(),
+              Padding(
+                padding:  EdgeInsets.only(left: 17.w, right: 17.w),
+                child: content != null? Text(
+                  content ?? "" ,
+                  textAlign: TextAlign.start,
+                  style: EvieTextStyles.body18,
+                ) : Container(),
+              ),
 
               Padding(
-                padding: EdgeInsets.only(top: 9.h),
+                padding: EdgeInsets.only(left: 17.w, right: 17.w),
+                child: widget != null ? widget! : SizedBox(),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(top: 9.h, bottom: 16.h, left: 17.w, right: 17.w),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-
                     Expanded(
                       child:
+                     isReversed == null ?
                       EvieButton(
                           width: double.infinity,
                           height: 48.h,
@@ -93,7 +100,16 @@ class EvieSingleButtonDialog extends StatelessWidget{
                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                           ),
                           onPressed: onPressedRight
-                      ),
+                      ) :
+                      EvieButton_ReversedColor(
+                          width: double.infinity,
+                          height: 48.h,
+                          child: Text(
+                            rightContent,
+                            style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
+                          ),
+                          onPressed: onPressedRight
+                      )
                     ),
                   ],
                 ),

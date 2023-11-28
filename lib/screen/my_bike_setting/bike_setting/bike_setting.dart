@@ -117,16 +117,22 @@ class _BikeSettingState extends State<BikeSetting> {
       print("BLE Connected : " + _bluetoothProvider.currentConnectedDevice!);
       print("Current Bike : " + _bikeProvider.currentBikeModel!.macAddr!);
       if (!isFirstTimeConnected) {
-        showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, context, _navigator);
-        isFirstTimeConnected = true;
+        if (!_bikeProvider.isBlockToast) {
+          showConnectionStatusToast(
+              _bluetoothProvider, isFirstTimeConnected, context, _navigator);
+          isFirstTimeConnected = true;
+        }
       }
     }
     else if (deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice != _bikeProvider.currentBikeModel?.macAddr) {
         isFirstTimeConnected = false;
     }
     else {
-      isFirstTimeConnected = false;
-      showConnectionStatusToast(_bluetoothProvider, isFirstTimeConnected, context, _navigator);
+      if (!_bikeProvider.isBlockToast) {
+        isFirstTimeConnected = false;
+        showConnectionStatusToast(
+            _bluetoothProvider, isFirstTimeConnected, context, _navigator);
+      }
     }
 
     return WillPopScope(
