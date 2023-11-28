@@ -1665,7 +1665,7 @@ showFullResetDialog (BuildContext context ,SettingProvider _settingProvider){
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
-          "assets/images/people_search.svg",
+          "assets/images/full_reset_your_bike.svg",
         ),
         upContent: "Full Reset",
         downContent: "Cancel",
@@ -1710,7 +1710,7 @@ showUnlinkBikeDialog (BuildContext context, SettingProvider _settingProvider){
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
-          "assets/images/people_search.svg",
+          "assets/images/unlink_your_bike.svg",
         ),
         upContent: "Unlink Bike",
         downContent: "Cancel",

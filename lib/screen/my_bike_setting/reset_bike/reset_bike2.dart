@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/enumerate.dart';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -63,32 +64,34 @@ class _ResetBike2State extends State<ResetBike2> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
-                GestureDetector(
-                  onTap: () {
-                    _settingProvider.changeSheetElement(SheetList.unlinkBike);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(16.w, 6.h, 16.w, 2.h),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              "Unlink Bike",
-                              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0.h, 2.h, 16.h, 12.h),
-                          child: Row(
+                Padding(
+                  padding: EdgeInsets.only(top: 8.h) ,
+                  child: GestureDetector(
+                    onTap: () {
+                      _settingProvider.changeSheetElement(SheetList.unlinkBike);
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Expanded(
-                                child: Text(
-                                  "Disconnect the bike from your account",
-                                  style: TextStyle(fontSize: 14.sp, color: EvieColors.darkGrayishCyan),
-                                ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Unlink Bike",
+                                    style: EvieTextStyles.body18,
+                                  ),
+                                  Text(
+                                    "Disconnect the bike from your account",
+                                    style:EvieTextStyles.body14.copyWith(color:  EvieColors.darkGrayishCyan),
+                                  ),
+                                ],
                               ),
                               Padding(
                                 padding: EdgeInsets.only(left: 8.0),
@@ -98,6 +101,89 @@ class _ResetBike2State extends State<ResetBike2> {
                               ),
                             ],
                           ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.only(left: 16.w),
+                  child: Divider(height: 1.h,color: EvieColors.darkWhite,),
+                ),
+
+
+                GestureDetector(
+                  onTap: () {
+                    if (deviceConnectResult == DeviceConnectResult.connected &&
+                        _bluetoothProvider.currentConnectedDevice ==
+                            _bikeProvider.currentBikeModel?.macAddr){
+
+                    _settingProvider.changeSheetElement(SheetList.fullReset);
+                    } else {
+                      showConnectBluetoothDialog (context, _bluetoothProvider, _bikeProvider);
+
+                    }
+                    },
+                  child: Container(
+                    color: Colors.transparent,
+                    padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  "Full Reset",
+                                  style: EvieTextStyles.body18,
+                                ),
+
+                                SizedBox(width: 3.0),
+
+                                if (deviceConnectResult == DeviceConnectResult.connected &&
+                                    _bluetoothProvider.currentConnectedDevice ==
+                                        _bikeProvider.currentBikeModel?.macAddr)...{
+                                  SvgPicture.asset(
+                                    "assets/icons/bluetooth_connected.svg",
+                                    height: 18.0,
+                                    width: 18.0,
+                                  ),
+                                } else...{
+                                  SvgPicture.asset(
+                                    "assets/icons/bluetooth_disconnect.svg",
+                                    height: 18.0,
+                                    width: 18.0,
+                                  ),
+                                },
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Completely reset and disconnect the bike from",
+                                  style: EvieTextStyles.body14.copyWith(color:  EvieColors.darkGrayishCyan),
+                                ),
+                                Text(
+                                  "your account",
+                                  style: EvieTextStyles.body14.copyWith(color:  EvieColors.darkGrayishCyan),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 3.w),
+                          child: SvgPicture.asset(
+                            "assets/buttons/next.svg",
+                            height: 24.0,
+                            width: 24.0,
+                          ),
                         ),
                       ],
                     ),
@@ -105,91 +191,7 @@ class _ResetBike2State extends State<ResetBike2> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(top: 12.h, bottom: 6.h),
-                  child: Divider(height: 1.h,color: EvieColors.darkWhite,),
-                ),
-
-
-        GestureDetector(
-          onTap: () {
-
-            if (deviceConnectResult == DeviceConnectResult.connected &&
-                _bluetoothProvider.currentConnectedDevice ==
-                    _bikeProvider.currentBikeModel?.macAddr){
-
-            _settingProvider.changeSheetElement(SheetList.fullReset);
-            } else {
-              showConnectBluetoothDialog (context, _bluetoothProvider, _bikeProvider);
-
-            }
-
-          },
-          child: Container(
-            padding: EdgeInsets.fromLTRB(16.w, 6.h, 16.w, 2.0.h),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      "Full Reset",
-                      style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
-                    ),
-
-                    SizedBox(width: 3.0),
-
-                    if (deviceConnectResult == DeviceConnectResult.connected &&
-                        _bluetoothProvider.currentConnectedDevice ==
-                        _bikeProvider.currentBikeModel?.macAddr)...{
-                      SvgPicture.asset(
-                        "assets/icons/bluetooth_connected.svg",
-                        height: 18.0,
-                        width: 18.0,
-                      ),
-                    } else...{
-                      SvgPicture.asset(
-                        "assets/icons/bluetooth_disconnect.svg",
-                        height: 18.0,
-                        width: 18.0,
-                      ),
-                         },
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0.w, 2.h, 16.w, 12.h),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Wrap(
-                          children: [
-                            Text(
-                              "Completely reset and disconnect the bike from",
-                              style: TextStyle(fontSize: 14.sp, color: EvieColors.darkGrayishCyan),
-                            ),
-                            Text(
-                              " your account",
-                              style: TextStyle(fontSize: 14.sp, color: EvieColors.darkGrayishCyan),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 3.w),
-                        child: SvgPicture.asset(
-                          "assets/buttons/next.svg",
-                          height: 24.0,
-                          width: 24.0,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-
-            Padding(
-                  padding: EdgeInsets.only(top: 12.h, bottom: 12.h),
+                  padding: EdgeInsets.only(left: 16.w),
                   child: Divider(height: 1.h,color: EvieColors.darkWhite,),
                 ),
 

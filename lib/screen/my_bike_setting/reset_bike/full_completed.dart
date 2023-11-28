@@ -38,14 +38,10 @@ class _FullCompletedState extends State<FullCompleted>{
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(16.w, 82.h, 16.w, 2.h),
+                padding: EdgeInsets.fromLTRB(16.w, 72.h, 16.w, 2.h),
                 child: Text(
                   "Full Reset Completed!!",
-                  style: TextStyle(
-                    fontSize: 26.sp,
-                    color: EvieColors.mediumBlack,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: EvieTextStyles.h2,
                 ),
               ),
               Padding(
@@ -54,7 +50,7 @@ class _FullCompletedState extends State<FullCompleted>{
                   "Great news! Your bike has been successfully reset. "
                       "Get ready for a revitalised ride with all-fresh settings."
                       " Have a fantastic ride!",
-                  style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
+                  style: EvieTextStyles.body18.copyWith(height: 1.4),
                   ),
                 ),
             ],
@@ -63,7 +59,7 @@ class _FullCompletedState extends State<FullCompleted>{
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w,97.h,16.w, EvieLength.buttonWord_ButtonBottom),
+            padding: EdgeInsets.fromLTRB(16.w,97.h,16.w, EvieLength.screen_bottom + 58.h),
             child: EvieButton(
               width: double.infinity,
               height: 48.h,
@@ -88,7 +84,7 @@ class _FullCompletedState extends State<FullCompleted>{
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w,4.h,16.w, EvieLength.button_Bottom),
+            padding: EdgeInsets.fromLTRB(16.w,4.h,16.w, EvieLength.screen_bottom),
             child: EvieButton(
               width: double.infinity,
               height: 48.h,

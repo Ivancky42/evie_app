@@ -50,10 +50,10 @@ class _FullResetState extends State<FullReset>{
                       children: [
 
                         Padding(
-                          padding:EdgeInsets.fromLTRB(16.w, 32.5.h, 16.w, 2.h),
+                          padding:EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 2.h),
                           child: Text(
                             "Start Over?",
-                            style: TextStyle(fontSize: 26.sp, color: EvieColors.mediumBlack, fontWeight: FontWeight.w500),
+                            style: EvieTextStyles.h2,
                           ),
                         ),
 
@@ -64,7 +64,7 @@ class _FullResetState extends State<FullReset>{
                                 "All connections will be reset to their original settings, "
                                 "but don't worry, your bike's info under \"About Bike\" will still be saved."
                           " Get ready to start your great adventure all over again!",
-                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
+                            style: EvieTextStyles.body18.copyWith(height: 1.4),
                           ),
                         ),
                       ],
@@ -73,7 +73,7 @@ class _FullResetState extends State<FullReset>{
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
+                        padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.screen_bottom),
                         child: EvieButton(
                           width: double.infinity,
                           height: 48.h,

@@ -52,7 +52,7 @@ class _UnlinkBikeState extends State<UnlinkBike>{
                       children: [
 
                         Padding(
-                          padding: EdgeInsets.fromLTRB(16.w, 32.5.h, 16.w, 2.h),
+                          padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 4.h),
                           child: Text(
                             _bikeProvider.currentBikeModel?.pedalPalsModel != null ?
                             "Farewell, ${_bikeProvider.currentBikeModel?.deviceName ?? ''} "
@@ -92,7 +92,7 @@ class _UnlinkBikeState extends State<UnlinkBike>{
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
+                        padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.screen_bottom),
                         child: EvieButton(
                           width: double.infinity,
                           height: 48.h,

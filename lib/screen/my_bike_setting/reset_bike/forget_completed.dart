@@ -58,7 +58,7 @@ class _ForgetCompletedState extends State<ForgetCompleted>{
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w,97.h,16.w,EvieLength.buttonWord_ButtonBottom),
+            padding: EdgeInsets.fromLTRB(16.w,97.h,16.w, 58.h + EvieLength.screen_bottom),
             child: EvieButton(
               width: double.infinity,
               height: 48.h,
@@ -83,7 +83,7 @@ class _ForgetCompletedState extends State<ForgetCompleted>{
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w,4.h,16.w, EvieLength.button_Bottom),
+            padding: EdgeInsets.fromLTRB(16.w,4.h,16.w, EvieLength.screen_bottom),
             child: EvieButton(
               width: double.infinity,
               height: 48.h,
