@@ -16,6 +16,7 @@ class SharedPreferenceProvider with ChangeNotifier {
   late SharedPreferences prefs;
 
   static const userId = "uid";
+  static const isFirstLocationRequest = 'location';
 
   static const generalTopic = '~general';
   static const promoTopic = '~promo';
@@ -23,6 +24,9 @@ class SharedPreferenceProvider with ChangeNotifier {
 
   String? _uid;
   String? get uid => _uid;
+
+  String? _location;
+  String? get location => _location;
 
 
   UserModel? currentUserModel;
@@ -32,10 +36,12 @@ class SharedPreferenceProvider with ChangeNotifier {
 
   void init() async {
     prefs = await sharedPreferences;
+    await getFirstLocationRequest();
   }
 
   Future<void> update(UserModel? userModel, NotificationSettingModel? notificationSettings, userBikeDetails) async {
     prefs = await sharedPreferences;
+    await getFirstLocationRequest();
     if (userModel != null) {
       if (currentUserModel != userModel) {
         if (currentUserModel?.uid != userModel.uid) {
@@ -184,6 +190,18 @@ class SharedPreferenceProvider with ChangeNotifier {
       unsubscribeFromTopic(uid);
       unsubscribeFromTopic('abc');
     }
+  }
+
+  Future<void> setIsFirstLocationRequest(String result) async {
+    await prefs.setString(isFirstLocationRequest, result);
+    _location = result;
+    notifyListeners();
+  }
+
+  Future<String?> getFirstLocationRequest() async {
+    _location = prefs.getString(isFirstLocationRequest).toString();
+    notifyListeners();
+    return _location;
   }
 
   ///Subscribe function block

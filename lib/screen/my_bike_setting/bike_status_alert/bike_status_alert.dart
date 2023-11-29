@@ -72,7 +72,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
               children: [
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 25.h, 16.w, 0.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 25.h, 16.w, 21.h),
                   child: Text(
                     "Anti-theft Alert will show push notification to your phone. Select based on your reference.",
                     style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
@@ -80,7 +80,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 21.h, 16.w,4.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 16.w,4.h),
                   child: EvieSwitch(
                     height: 82.h,
                     activeColor: _bikeProvider.isOwner == true ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
@@ -111,7 +111,10 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
                     },
                   )
                 ),
-                const EvieDivider(),
+                Padding(
+                  padding: EdgeInsets.only(left: 16.w),
+                  child: EvieDivider(),
+                ),
                 Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
                     child: EvieSwitch(
@@ -145,7 +148,10 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
                       },
                     )
                 ),
-                const EvieDivider(),
+                Padding(
+                  padding: EdgeInsets.only(left: 16.w),
+                  child: EvieDivider(),
+                ),
                 Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
                     child: EvieSwitch(
@@ -178,7 +184,10 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
                       },
                     )
                 ),
-                const EvieDivider(),
+                Padding(
+                  padding: EdgeInsets.only(left: 16.w),
+                  child: EvieDivider(),
+                ),
                 Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
                     child: EvieSwitch(
@@ -211,7 +220,10 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
                       },
                     )
                 ),
-                const EvieDivider(),
+                Padding(
+                  padding: EdgeInsets.only(left: 16.w),
+                  child: EvieDivider(),
+                ),
                 // Padding(
                 //     padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
                 //     child: EvieSwitch(

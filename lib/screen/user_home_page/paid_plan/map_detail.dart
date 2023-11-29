@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:evie_test/api/enumerate.dart';
+import 'package:evie_test/api/provider/shared_pref_provider.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
 import 'package:evie_test/widgets/evie-unlocking-button.dart';
 import 'package:evie_test/widgets/evie_card.dart';
@@ -19,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel2/sliding_up_panel2.dart';
@@ -57,6 +59,7 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
   late BluetoothProvider _bluetoothProvider;
   late LocationProvider _locationProvider;
   late SettingProvider _settingProvider;
+  late SharedPreferenceProvider _sharedPreferenceProvider;
   Timer? timer;
 
   int? snapshotLength;
@@ -83,12 +86,24 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
   final tooltipController = JustTheController();
   final _controller = SuperTooltipController();
 
+  String? isFirstLocationRequest;
+
   @override
   void initState() {
     super.initState();
      WidgetsBinding.instance.addObserver(this);
+    _sharedPreferenceProvider = context.read<SharedPreferenceProvider>();
+    isFirstLocationRequest = _sharedPreferenceProvider.location;
     _locationProvider = Provider.of<LocationProvider>(context, listen: false);
     _locationProvider.addListener(locationListener);
+    if (Platform.isAndroid) {
+      if (isFirstLocationRequest == 'null') {
+        _sharedPreferenceProvider.setIsFirstLocationRequest('done');
+        Future.delayed(Duration.zero).then((value) {
+          showEvieAllowOrbitalDialog(_locationProvider);
+        });
+      }
+    }
     Future.delayed(const Duration(seconds: 1), () {
       _controller.showTooltip();
     });
@@ -97,7 +112,7 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      //_locationProvider.checkLocationPermissionStatus();
+      _locationProvider.checkLocationPermissionStatus();
     }
   }
 
@@ -241,7 +256,7 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
 
                     _locationProvider.hasLocationPermission == true ?
                     Padding(
-                      padding:  EdgeInsets.only(bottom:240.h),
+                      padding:  EdgeInsets.only(bottom:260.h),
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
@@ -271,8 +286,15 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: GestureDetector(
-                          onTap: () {
-                            showEvieAllowOrbitalDialog(_locationProvider);
+                          onTap: () async {
+                            PermissionStatus status = await Permission.location.status;
+                            if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
+
+                            }
+                            else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
+                              showLocationServiceDisable();
+                            }
+                            _locationProvider.checkLocationPermissionStatus();
                           },
                           child: SuperTooltip(
                             onShow: () async {
@@ -295,15 +317,28 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
                             child: GestureDetector(
                               child: Container(
                                 //color: Colors.red,
-                                padding: EdgeInsets.only(top: 20.h),
-                                width: 70.w,
-                                height: 70.w,
+                                padding: EdgeInsets.only(right: 8.h),
+                                width: 74.w,
+                                height: 74.w,
                                 child: SvgPicture.asset(
                                   "assets/buttons/location_unavailable.svg",
                                 ),
                               ),
-                              onTap: () {
-                                showEvieAllowOrbitalDialog(_locationProvider);
+                              onTap: () async {
+                                PermissionStatus status = await Permission.location.status;
+                                if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
+
+                                }
+                                else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
+                                  // if (Platform.isIOS) {
+                                  //   OpenSettings.openLocationSourceSetting();
+                                  // }
+                                  // else {
+                                  //   openAppSettings();
+                                  // }
+                                  showLocationServiceDisable();
+                                }
+                                _locationProvider.checkLocationPermissionStatus();
                               },
                             )
                           ),
@@ -448,22 +483,25 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
   }
 
   Future<void> updateUserPositionAndBearing(bool isFirstTime) async {
-    Layer? layer;
-    if (Platform.isAndroid) {
-      layer =
-      await mapboxMap?.style.getLayer("mapbox-location-indicator-layer");
-    } else {
-      layer = await mapboxMap?.style.getLayer("puck");
-    }
+    if (_locationProvider.hasLocationPermission) {
+      Layer? layer;
+      if (Platform.isAndroid) {
+        layer =
+        await mapboxMap?.style.getLayer("mapbox-location-indicator-layer");
+      } else {
+        layer = await mapboxMap?.style.getLayer("puck");
+      }
 
-    var location = (layer as LocationIndicatorLayer)?.location;
-    userPosition = Position(location![1]!, location[0]!);
-    num? latitude = userPosition[1];
-    num? longitude = userPosition[0];
-    _locationProvider.setUserPosition(GeoPoint(latitude!.toDouble(), longitude!.toDouble()));
+      var location = (layer as LocationIndicatorLayer)?.location;
+      userPosition = Position(location![1]!, location[0]!);
+      num? latitude = userPosition[1];
+      num? longitude = userPosition[0];
+      _locationProvider.setUserPosition(
+          GeoPoint(latitude!.toDouble(), longitude!.toDouble()));
 
-    if (isFirstTime) {
-      pointBounce3(mapboxMap, _locationProvider, userPosition);
+      if (isFirstTime) {
+        pointBounce3(mapboxMap, _locationProvider, userPosition);
+      }
     }
   }
 }

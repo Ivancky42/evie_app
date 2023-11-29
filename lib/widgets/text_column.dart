@@ -22,7 +22,8 @@ class TextColumn extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title,style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray)),
+        Text(title,style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan)),
+        SizedBox(height: 2.h,),
         Text(body,style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),),
       ],
     );

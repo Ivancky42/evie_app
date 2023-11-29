@@ -187,7 +187,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                         return Slidable(
                           enabled: isOwner && _bikeProvider.bikeUserList.keys.elementAt(index) != _currentUserProvider.currentUserModel!.uid,
                           endActionPane:  ActionPane(
-                            extentRatio: 0.3,
+                            extentRatio: 0.18,
                             motion: const ScrollMotion(),
                             children: [
                               SlidableAction(
@@ -250,7 +250,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                 },
                                 backgroundColor: EvieColors.red,
                                 foregroundColor: Colors.white,
-                                icon: Icons.delete,
+                                icon: Icons.delete_outline,
                               ),
                             ],
                           ),

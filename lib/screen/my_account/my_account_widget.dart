@@ -57,10 +57,13 @@ class AccountPageDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Divider(
-      thickness: 0.1.h,
-      color: const Color(0xff8E8E8E),
-      height: height ?? 0,
+    return Padding(
+      padding: EdgeInsets.only(left: 16.w),
+      child: Divider(
+        thickness: 0.2.h,
+        color: EvieColors.darkWhite,
+        height: height ?? 0,
+      ),
     );
   }
 }

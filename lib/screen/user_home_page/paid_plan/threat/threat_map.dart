@@ -22,7 +22,9 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:open_settings/open_settings.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel2/sliding_up_panel2.dart';
 import 'package:timelines/timelines.dart';
@@ -50,7 +52,7 @@ class ThreatMap extends StatefulWidget {
   State<ThreatMap> createState() => _ThreatMapState();
 }
 
-class _ThreatMapState extends State<ThreatMap> {
+class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
 
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
@@ -96,6 +98,7 @@ class _ThreatMapState extends State<ThreatMap> {
     scrollController = ScrollController();
     panelController = PanelController();
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _bluetoothProvider = context.read<BluetoothProvider>();
     _fabHeight = _initFabHeight;
     Future.delayed(Duration.zero).then((value) {
@@ -121,12 +124,20 @@ class _ThreatMapState extends State<ThreatMap> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _locationProvider.checkLocationPermissionStatus();
+    }
+  }
+
+  @override
   Future<void> dispose() async {
     super.dispose();
     _locationProvider.removeListener(locationListener);
     userLocationSubscription?.cancel();
     options.clear();
     timer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
 
     // if(currentAnnotationManager != null){
     //   await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager as BaseAnnotationManager);
@@ -358,9 +369,20 @@ class _ThreatMapState extends State<ThreatMap> {
                       bottom: _fabHeight - 20.h,
                       child: GestureDetector(
                         onTap: () async {
-                          _locationProvider.hasLocationPermission == true ?
-                          pointBounce3(mapboxMap, _locationProvider, userPosition) :
-                          showEvieAllowOrbitalDialog(_locationProvider);
+                          if (_locationProvider.hasLocationPermission) {
+                            pointBounce3(mapboxMap, _locationProvider, userPosition);
+                          }
+                          else {
+                            if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
+
+                            }
+                            else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
+                              if (Platform.isIOS) {
+                                OpenSettings.openLocationSourceSetting();
+                              }
+                            }
+                            _locationProvider.checkLocationPermissionStatus();
+                          }
                         },
                         child: Container(
                             width: 64.w,

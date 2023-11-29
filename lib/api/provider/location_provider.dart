@@ -360,7 +360,7 @@ class LocationProvider extends ChangeNotifier {
   }
 
   locations() async{
-    await checkLocationPermissionStatus();
+    //await checkLocationPermissionStatus();
     if (hasLocationPermission) {
 
     }

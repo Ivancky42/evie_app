@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:evie_test/api/fonts.dart';
+import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -11,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../api/colours.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../api/dialog.dart';
 import '../api/provider/bike_provider.dart';
 import 'evie_button.dart';
 
@@ -306,6 +308,7 @@ class Evie4OneButtonDialog extends StatefulWidget {
 class _Evie4OneButtonDialogState extends State<Evie4OneButtonDialog> {
 
   bool isFirst = true;
+  PermissionStatus? permissionStatus;
 
   Widget buildWidget() {
     return
@@ -521,6 +524,30 @@ class _Evie4OneButtonDialogState extends State<Evie4OneButtonDialog> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkPermission();
+  }
+
+  Future<void> checkPermission() async {
+    PermissionStatus status = await Permission.bluetoothConnect.status;
+    if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
+      setState(() {
+        permissionStatus = status;
+      });
+    }
+    else {
+      PermissionStatus status = await Permission.bluetoothScan.status;
+      if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
+        setState(() {
+          permissionStatus = status;
+        });
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Dialog(
         insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
@@ -582,7 +609,7 @@ class _Evie4OneButtonDialogState extends State<Evie4OneButtonDialog> {
                           width: double.infinity,
                           height: 48.h,
                           child: Text(
-                            isFirst ? 'Allow Bluetooth' : 'Done',
+                              getButtonText(),
                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                           ),
                           onPressed: () async {
@@ -599,7 +626,7 @@ class _Evie4OneButtonDialogState extends State<Evie4OneButtonDialog> {
                                 setState(() {
                                   isFirst = false;
                                 });
-                                OpenSettings.openBluetoothSetting();
+                                //OpenSettings.openBluetoothSetting();
                               }
                             }
                             else {
@@ -615,6 +642,31 @@ class _Evie4OneButtonDialogState extends State<Evie4OneButtonDialog> {
           ),
         )
     );
+  }
+
+  String getButtonText() {
+    if (Platform.isAndroid) {
+      if (isFirst) {
+        if (permissionStatus == PermissionStatus.denied ||
+            permissionStatus == PermissionStatus.permanentlyDenied) {
+          return 'Allow Bluetooth';
+        }
+        else {
+          return 'Next';
+        }
+      }
+      else {
+        return 'Done';
+      }
+    }
+    else {
+      if (isFirst) {
+        return 'Next';
+      }
+      else {
+        return 'Done';
+      }
+    }
   }
 }
 

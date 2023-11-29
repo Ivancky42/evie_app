@@ -95,7 +95,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                     child: EvieTextFormField(
                       controller: _emailController,
                       obscureText: false,
-                      hintText: "Email Address",
+                      hintText: "rideremail@sample.com",
                       labelText: "Email Address",
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -116,7 +116,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom),
+                padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.screen_bottom + 56.h),
                 child: EvieButton(
                   width: double.infinity,
                   height: 48.h,
@@ -230,7 +230,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(0.w,25.h,0.w,EvieLength.buttonWord_WordBottom),
+                padding: EdgeInsets.fromLTRB(0.w,25.h,0.w,EvieLength.screen_bottom),
                 child: SizedBox(
                   width: double.infinity,
                   child: TextButton(

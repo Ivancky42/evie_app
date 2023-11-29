@@ -1,4 +1,5 @@
 import 'package:evie_test/api/enumerate.dart';
+import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -44,7 +45,7 @@ class _FirmwareUpdateCompletedState extends State<FirmwareUpdateCompleted> {
                         padding: EdgeInsets.fromLTRB(16.w,76.h,16.w,4.h),
                         child: Text(
                           "Upgrade completed!",
-                          style: TextStyle(fontSize: 24.sp),
+                          style: EvieTextStyles.h2,
                         ),
                       ),
 

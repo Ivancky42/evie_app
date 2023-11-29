@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
+import '../../../api/colours.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
@@ -58,10 +59,24 @@ class _InvitationSentState extends State<InvitationSent> {
                       Padding(
                         padding: EdgeInsets.fromLTRB(16.w,4.h,16.w,4.h),
                         child: Container(
-                          child: Text(
-                          //  "Hooray! EVIE have sent invitation to ${widget.email}. Let's enjoy the ride together",
-                            "Hooray! EVIE have sent the invitation to ${_settingProvider.stringPassing}. Let's enjoy the ride together",
-                            style: EvieTextStyles.body18,
+                          child: Text.rich(
+                            TextSpan(
+                              text: "Hooray! EVIE have sent the invitation to ",
+                              style: EvieTextStyles.body18,
+                              children: [
+                                TextSpan(
+                                  text: _settingProvider.stringPassing,
+                                  style: TextStyle(
+                                    color: EvieColors.primaryColor, // Set your desired color
+                                    // Other styles if needed
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: ". Let's enjoy the ride together.",
+                                  style: EvieTextStyles.body18,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -80,7 +95,7 @@ class _InvitationSentState extends State<InvitationSent> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
+                    padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.screen_bottom),
                     child: EvieButton(
                       width: double.infinity,
                       height: 48.h,

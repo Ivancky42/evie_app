@@ -43,7 +43,7 @@ class _BikeEraseLeaveState extends State<BikeEraseLeave>{
       StreamSubscription? currentSubscription;
 
       currentSubscription = _bikeProvider.leaveSharedBike(
-          _bikeProvider.currentUserModel!.uid, '').listen((uploadStatus) {
+          _bikeProvider.currentUserModel!.uid, _bikeProvider.currentBikeModel!.deviceIMEI!).listen((uploadStatus) {
 
         if(uploadStatus == UploadFirestoreResult.success){
 

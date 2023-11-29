@@ -21,6 +21,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -32,7 +33,7 @@ import 'fonts.dart';
 import 'model/bike_model.dart';
 import 'package:latlong2/latlong.dart';
 
-checkBleStatusAndConnectDevice(BluetoothProvider _bluetoothProvider, BikeProvider _bikeProvider) {
+checkBleStatusAndConnectDevice(BluetoothProvider _bluetoothProvider, BikeProvider _bikeProvider) async {
   BleStatus? bleStatus = _bluetoothProvider.bleStatus;
   switch (bleStatus) {
     case BleStatus.poweredOff:
@@ -42,8 +43,23 @@ checkBleStatusAndConnectDevice(BluetoothProvider _bluetoothProvider, BikeProvide
       showBluetoothNotSupport();
       break;
     case BleStatus.unauthorized:
-      //showBluetoothNotAuthorized();
-      _bluetoothProvider.handlePermission2();
+      // showBluetoothNotAuthorized();
+      // _bluetoothProvider.handlePermission2();
+      if (Platform.isIOS) {
+        showBluetoothNotAuthorized();
+      }
+      else {
+        PermissionStatus status = await Permission.bluetoothConnect.request();
+        if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
+          showBluetoothNotAuthorized();
+        }
+        else {
+          PermissionStatus status = await Permission.bluetoothScan.request();
+          if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
+            showBluetoothNotAuthorized();
+          }
+        }
+      }
       break;
     case BleStatus.locationServicesDisabled:
       showLocationServiceDisable();

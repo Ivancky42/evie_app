@@ -249,8 +249,13 @@ showBluetoothNotAuthorized() {
           rightContent: "OK",
           onPressedRight: () {
             SmartDialog.dismiss();
-            //OpenSettings.openBluetoothSetting();
-            openAppSettings();
+            if (Platform.isAndroid) {
+              openAppSettings();
+            }
+            else {
+              OpenSettings.openBluetoothSetting();
+            }
+            //openAppSettings();
            ///Redirect user to enable bluetooth permission.
           }));
 }
@@ -261,12 +266,17 @@ showLocationServiceDisable() {
       keepSingle:
       true,
       widget: EvieSingleButtonDialog(
-          title: "Disable",
+          title: "Error",
           content: "Location service is disabled, please enable your location service in settings",
           rightContent: "OK",
           onPressedRight: () {
             SmartDialog.dismiss();
-            openAppSettings();
+            if (Platform.isAndroid) {
+              openAppSettings();
+            }
+            else {
+              OpenSettings.openLocationSourceSetting();
+            }
           }));
 }
 
@@ -560,26 +570,57 @@ showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscriptio
   );
 }
 
-showFirmwareUpdateQuit(context, StreamSubscription? stream){
-  SmartDialog.show(
-      keepSingle: true,
-      backDismiss: false,
-      widget: EvieDoubleButtonDialog(
-          title: "Exit Update?",
-          childContent: Text("App need to be stay open to complete upgrade."
-              " Any changes made during the update may not be saved if exit update."),
-          leftContent: "Cancel Update",
-          rightContent: "Stay Updating",
-          onPressedLeft: (){
-            SystemNavigator.pop();
-            SmartDialog.dismiss();
+// showFirmwareUpdateQuit(context, StreamSubscription? stream){
+//   SmartDialog.show(
+//       keepSingle: true,
+//       backDismiss: false,
+//       widget: EvieDoubleButtonDialog(
+//           title: "Exit Update?",
+//           childContent: Text("App need to be stay open to complete upgrade."
+//               " Any changes made during the update may not be saved if exit update."),
+//           leftContent: "Cancel Update",
+//           rightContent: "Stay Updating",
+//           onPressedLeft: (){
+//             SystemNavigator.pop();
+//             SmartDialog.dismiss();
+//
+//             showBikeSettingSheet(context);
+//             stream?.cancel();
+//           },
+//           onPressedRight: (){
+//             SmartDialog.dismiss();
+//           }));
+// }
 
-            showBikeSettingSheet(context);
-            stream?.cancel();
-          },
-          onPressedRight: (){
-            SmartDialog.dismiss();
-          }));
+showFirmwareUpdateQuit(context, StreamSubscription? stream, _settingProvider, BluetoothProvider _bluetoothProvider) async {
+  await showDialog<void>(
+      context: context,
+      builder: (BuildContext context) =>
+          EvieTwoButtonDialog(
+              title: Text("Exit Update?",
+                style:EvieTextStyles.h2,
+                textAlign: TextAlign.center,
+              ),
+              childContent: Text("App need to be stay open to complete upgrade."
+                  " Any changes made during the update may not be saved if exit update.",
+                textAlign: TextAlign.center,
+                style: EvieTextStyles.body18,),
+              svgpicture: SvgPicture.asset(
+                "assets/images/people_search.svg",
+              ),
+              upContent: "Stay Updating",
+              downContent: "Cancel Update",
+              onPressedUp: () {
+                Navigator.of(context).pop();
+              },
+              onPressedDown: () {
+                ///Dismiss dialog here
+                stream?.cancel();
+                _bluetoothProvider.disconnectDevice();
+                Navigator.of(context).pop();
+                _settingProvider.changeSheetElement(SheetList.bikeSetting);
+              })
+  );
 }
 
 showCannotUnlockBike(){
@@ -1549,10 +1590,11 @@ showEvieAllowOrbitalDialog(LocationProvider _locationProvider){
           content2:"Monitor your bike’s location remotely. Be notified when your bike move beyond its GPS Geofence." ,
           middleContent: "Allow Location",
           onPressedMiddle: () async {
+            //SmartDialog.dismiss();
             if (await Permission.location.request().isGranted && await Permission.locationWhenInUse.request().isGranted) {
 
             }else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
-              OpenSettings.openLocationSourceSetting();
+              //OpenSettings.openLocationSourceSetting();
             }
             _locationProvider.checkLocationPermissionStatus();
             SmartDialog.dismiss();
@@ -2642,6 +2684,59 @@ showClearFeed(NotificationProvider _notificationProvider){
           SmartDialog.dismiss(status: SmartStatus.loading);
           // Dismiss the SmartDialog after the loop finishes
 
+        }),
+  );
+}
+
+showSoftwareUpdate(BuildContext context, FirmwareProvider firmwareProvider, StreamSubscription? stream, BluetoothProvider bluetoothProvider, SettingProvider settingProvider) {
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Better Bike Software Update",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Get more out of your EVIE bike with the latest software update. Charge your bike and ensure stable Wi-Fi connection before updating. Tip: Stay connected during update.",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/better_bike_software_update.svg",
+        ),
+        upContent: "Update Now",
+        downContent: "Cancel",
+        onPressedUp: () async {
+          SmartDialog.dismiss();
+          SmartDialog.showLoading(backDismiss: false);
+
+          Reference ref = FirebaseStorage.instance.refFromURL(firmwareProvider.latestFirmwareModel!.url);
+          File file = await firmwareProvider.downloadFile(ref);
+
+          stream = bluetoothProvider.firmwareUpgradeListener.stream.listen((firmwareUpgradeResult) {
+            if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.startUpgrade) {
+            }
+            else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgrading) {
+              SmartDialog.dismiss();
+              Future.delayed(Duration.zero, () {
+                firmwareProvider.changeIsUpdating(true);
+              });
+            }
+            else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeSuccessfully) {
+              ///go to success page
+              firmwareProvider.changeIsUpdating(false);
+              stream?.cancel();
+              firmwareProvider.uploadFirmVerToFirestore("57_V${firmwareProvider.latestFirmVer!}");
+              settingProvider.changeSheetElement(SheetList.firmwareUpdateCompleted);
+            }
+            else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeFailed) {
+              firmwareProvider.changeIsUpdating(false);
+              stream?.cancel();
+              settingProvider.changeSheetElement(SheetList.firmwareUpdateFailed);
+            }else{}
+          });
+
+          bluetoothProvider.startUpgradeFirmware(file);
+        },
+        onPressedDown: () {
+          SmartDialog.dismiss();
         }),
   );
 }

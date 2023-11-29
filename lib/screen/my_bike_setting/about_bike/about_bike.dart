@@ -77,52 +77,76 @@ class _AboutBikeState extends State<AboutBike> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
-                  child:TextColumn(
-                      title: "Model Name",
-                      body: "EVIE S series"),
+                  padding: EdgeInsets.fromLTRB(16.w, 26.h, 16.w, 0),
+                  child: Container(
+                    //color: Colors.red,
+                    padding: EdgeInsets.only(bottom: 10.h, top: 10.h),
+                    child: TextColumn(
+                        title: "Model Name",
+                        body: _bikeProvider.currentBikeModel!.model!),
+                  ),
                 ),
                 const AccountPageDivider(),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
-                  child:TextColumn(
-                      title: "Serial Number",
-                      body: _bikeProvider.currentBikeModel?.serialNumber ?? "-"),
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
+                  child: Container(
+                    //color: Colors.red,
+                    padding: EdgeInsets.only(bottom: 10.h, top: 10.h),
+                    child: TextColumn(
+                        title: "Serial Number",
+                        body: _bikeProvider.currentBikeModel?.serialNumber ?? "-"),
+                  ),
                 ),
                 const AccountPageDivider(),
 
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
-                  child:TextColumn(
-                      title: "Bluetooth Name",
-                      body: _bikeProvider.currentBikeModel?.bleName ?? "-"),
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
+                  child: Container(
+                    //color: Colors.red,
+                    padding: EdgeInsets.only(bottom: 10.h, top: 10.h),
+                    child: TextColumn(
+                        title: "Bluetooth Name",
+                        body: _bikeProvider.currentBikeModel?.bleName ?? "-"),
+                  ),
                 ),
                 const AccountPageDivider(),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
-                  child:TextColumn(
-                      title: "Bluetooth Mac Address",
-                      body: _bikeProvider.currentBikeModel?.macAddr ?? "-"),
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
+                  child: Container(
+                    //color: Colors.red,
+                    padding: EdgeInsets.only(bottom: 10.h, top: 10.h),
+                    child: TextColumn(
+                        title: "Bluetooth Mac Address",
+                        body: _bikeProvider.currentBikeModel?.macAddr ?? "-"),
+                  ),
                 ),
                 const AccountPageDivider(),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
-                  child:TextColumn(
-                      title: "IMEI",
-                      body: _bikeProvider.currentBikeModel?.deviceIMEI ?? ""),
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
+                  child: Container(
+                    //color: Colors.red,
+                    padding: EdgeInsets.only(bottom: 10.h, top: 10.h),
+                    child: TextColumn(
+                        title: "Device IMEI",
+                        body: _bikeProvider.currentBikeModel?.deviceIMEI ?? ""),
+                  ),
                 ),
                 const AccountPageDivider(),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w,4.h),
-                  child:TextColumn(
-                      title: "Total Distance",
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
+                  child: Container(
+                    //color: Colors.red,
+                    padding: EdgeInsets.only(bottom: 10.h, top: 10.h),
+                    child: TextColumn(
+                      title: "Total Mileage",
 
-                    ///Use bikeModel mileage
-                    ///If it is (10) means 1km , (20) means 2km, 2 means 0.2km. and miles
+                      ///Use bikeModel mileage
+                      ///If it is (10) means 1km , (20) means 2km, 2 means 0.2km. and miles
                       body: _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem?
                       "${(_bikeProvider.currentBikeModel?.mileage ?? 0)} km":
                       "${_settingProvider.convertKiloMeterToMilesInString(_bikeProvider.currentBikeModel?.mileage != null ? _bikeProvider.currentBikeModel?.mileage!.toDouble() : 0)} miles",
-                ),
+                    ),
+                  ),
                 ),
                 const AccountPageDivider(),
               ],
