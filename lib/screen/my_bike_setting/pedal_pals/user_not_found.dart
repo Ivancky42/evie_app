@@ -179,9 +179,9 @@ class _UserNotFoundState extends State<UserNotFound> {
 
                         try{
                           await Share.share('Hello there, you could download EVIE app from: \n $urlPreview');
-                          print("Success");
+                          //print("Success");
                         }catch(e){
-                          print("Share fail");
+                          //print("Share fail");
                         }
 
 

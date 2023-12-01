@@ -617,17 +617,18 @@ class AuthProvider extends ChangeNotifier {
     final _rideProvider = context.read<RideProvider>();
     final _sharedPrefProvider = context.read<SharedPreferenceProvider>();
 
+
+    await _notificationProvider.clear(_uid!);
+
+    await _auth.signOut();
     await _currentUserProvider.clear();
     await _bikeProvider.clear();
     await _bluetoothProvider.disconnectDevice();
     await _firmwareProvider.clear();
     await _locationProvider.clear();
-    await _notificationProvider.clear(_uid!);
     await _planProvider.clear();
     await _rideProvider.clear();
     await _sharedPrefProvider.clear();
-
-    await _auth.signOut();
 
     if(userChangeSubscription != null){
       userChangeSubscription?.cancel();

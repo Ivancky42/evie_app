@@ -81,8 +81,8 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
     if (_firmwareProvider.currentFirmVer != _firmwareProvider.latestFirmVer) {
-      print(_firmwareProvider.latestFirmVer);
-      print(_firmwareProvider.currentFirmVer);
+      //print(_firmwareProvider.latestFirmVer);
+      //print(_firmwareProvider.currentFirmVer);
       setState(() {
         actionableBarItem = ActionableBarItem.bikeUpdate;
       });

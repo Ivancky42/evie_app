@@ -102,7 +102,7 @@ class ErrorPromptResult {
     data[6] == 3 ? ErrorMessage.wrongComKey :
     data[6] == 4 ? ErrorMessage.transportMode :
     ErrorMessage.unknown;
-    print(errorMessage);
+    //print(errorMessage);
   }
 }
 
@@ -160,10 +160,10 @@ class ChangeBleKeyResult {
       const asciiDecoder = AsciiDecoder();
       bleKey = asciiDecoder.convert(data.sublist(7, 15));
       //bleKey = const HexCodec().encode(data.sublist(7, 15));
-      print(bleKey);
+      //print(bleKey);
     }
     else {
-      print(bleKey);
+      //print(bleKey);
     }
   }
 }
@@ -181,10 +181,10 @@ class ChangeBleNameResult {
     if (result == CommandResult.success) {
       const asciiDecoder = AsciiDecoder();
       bleKey = asciiDecoder.convert(data.sublist(7, 13));
-      print(bleKey);
+      //print(bleKey);
     }
     else {
-      print(bleKey);
+      //print(bleKey);
     }
   }
 }
@@ -212,10 +212,10 @@ class AddRFIDCardResult{
     }
 
     List<int> rfidData = [data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14]];
-    print("RFID State : " + addRFIDState.name.toString());
-    print("RFID Byte Data: " + rfidData.toString());
+    //print("RFID State : " + addRFIDState.name.toString());
+    //print("RFID Byte Data: " + rfidData.toString());
     rfidNumber = const HexCodec().encode(rfidData);
-    print(rfidNumber);
+    //print(rfidNumber);
   }
 }
 
@@ -227,9 +227,9 @@ class QueryRFIDCardResult{
 
   QueryRFIDCardResult(List<int> data) {
     List<int> rfidData = [data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13]];
-    print("RFID Byte Data: " + rfidData.toString());
+    //("RFID Byte Data: " + rfidData.toString());
     rfidNumber = const HexCodec().encode(rfidData);
-    print(rfidNumber);
+    //print(rfidNumber);
   }
 }
 
@@ -243,7 +243,7 @@ class DeleteRFIDCardResult{
     /// 1: Failed
 
     result = data[6] == 0 ? CommandResult.failed : CommandResult.success;
-    print(result);
+    //print(result);
   }
 }
 
@@ -290,7 +290,7 @@ class MovementSettingResult {
   CommandResult result = CommandResult.unknown;
   MovementSettingResult(List<int> data) {
     result = data[6] == 0 ? CommandResult.success : CommandResult.failed;
-    print(result);
+    //print(result);
   }
 }
 
@@ -299,7 +299,7 @@ class FactoryResetResult {
   CommandResult result = CommandResult.unknown;
   FactoryResetResult(List<int> data) {
     result = data[6] == 0 ? CommandResult.success : CommandResult.failed;
-    print(result);
+    //print(result);
   }
 }
 
@@ -381,6 +381,6 @@ class TransportModeResult{
 
   TransportModeResult(List<int> data) {
     result = data[6] == 1 ? CommandResult.failed : CommandResult.success;
-    print(result);
+    //print(result);
   }
 }

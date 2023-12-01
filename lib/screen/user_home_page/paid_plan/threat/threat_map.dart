@@ -592,8 +592,8 @@ class MyPointAnnotationClickListener extends OnPointAnnotationClickListener {
 
   @override
    onPointAnnotationClick(PointAnnotation annotation) {
-    print('Point annotation clicked: ${annotation.id}');
-    print('Point Geometry: ' + annotation.geometry!['coordinates'].toString());
+    //print('Point annotation clicked: ${annotation.id}');
+    //print('Point Geometry: ' + annotation.geometry!['coordinates'].toString());
     currentClickedAnnotation = annotation;
     _locationProvider.setSelectedAnnotation(currentClickedAnnotation!);
   }

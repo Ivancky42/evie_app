@@ -28,8 +28,11 @@ class PlanProvider extends ChangeNotifier {
     }
 
     if (bikeModel != null) {
-      currentBikeModel = bikeModel;
-      notifyListeners();
+      if (bikeModel.deviceIMEI != currentBikeModel?.deviceIMEI) {
+        getPlanList();
+        currentBikeModel = bikeModel;
+        notifyListeners();
+      }
     }
   }
 

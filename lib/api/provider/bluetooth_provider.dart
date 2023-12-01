@@ -174,7 +174,7 @@ class BluetoothProvider extends ChangeNotifier {
     bleStatusSubscription = flutterReactiveBle.statusStream.listen((status) async {
       bleStatus = status;
       bleStatusListener.add(status);
-      printLog("BLE Status", bleStatus.toString());
+      //printLog("BLE Status", bleStatus.toString());
 
       switch (bleStatus) {
         case BleStatus.unknown:
@@ -190,7 +190,7 @@ class BluetoothProvider extends ChangeNotifier {
         // TODO: Handle this case.
           break;
         case BleStatus.locationServicesDisabled:
-          debugPrint("checkBLEstatus location service disabled");
+          //debugPrint("checkBLEstatus location service disabled");
           showLocationServiceDisable();
         // TODO: Handle this case.
           break;
@@ -209,7 +209,7 @@ class BluetoothProvider extends ChangeNotifier {
   startScanCountTimer() {
     startScanTimer?.cancel();
     startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
-      print("Scan RSSI Timer: " + timer.tick.toString() + "s");
+      //print("Scan RSSI Timer: " + timer.tick.toString() + "s");
       if (timer.tick == 10) {
         await stopScan();
         scanSubscription?.cancel();
@@ -241,7 +241,7 @@ class BluetoothProvider extends ChangeNotifier {
         deviceFoundTimer?.cancel();
 
         deviceFoundTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
-          print("Scan RSSI Timer: " + timer.tick.toString() + "s");
+          //print("Scan RSSI Timer: " + timer.tick.toString() + "s");
           if (timer.tick == 3) {
             startScanCountTimer();
             notifyListeners();
@@ -267,7 +267,7 @@ class BluetoothProvider extends ChangeNotifier {
         } else {
           deviceRssiProgress = 0.0;
         }
-        print('RSSISSSISISIISISII : ' + deviceRssi.toString());
+        //print('RSSISSSISISIISISII : ' + deviceRssi.toString());
         notifyListeners();
       }
     }, onError: (error) {
@@ -298,7 +298,7 @@ class BluetoothProvider extends ChangeNotifier {
   Stream<DeviceConnectResult> startScanAndConnect() {
       startScanTimer?.cancel();
       startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-        print("Scan Timer: " + timer.tick.toString() + "s");
+        //print("Scan Timer: " + timer.tick.toString() + "s");
         if (timer.tick == 12) {
           deviceConnectStream.add(DeviceConnectResult.scanTimeout);
           deviceConnectResult = DeviceConnectResult.scanTimeout;
@@ -314,7 +314,7 @@ class BluetoothProvider extends ChangeNotifier {
           notifyListeners();
         }
         if (device.name == currentBikeModel?.bleName) {
-          print("Connecting.... cancelling timer");
+          //print("Connecting.... cancelling timer");
           startScanTimer?.cancel();
           connectDevice(device.id);
         }
@@ -340,9 +340,9 @@ class BluetoothProvider extends ChangeNotifier {
     connectSubscription = flutterReactiveBle.connectToDevice(id: selectedDeviceId!, connectionTimeout: const Duration(seconds: 6),).listen((event) {
       connectionStateUpdate = event;
 
-      printLog("Connect State", connectionStateUpdate!.deviceId);
-      printLog("Connect State", connectionStateUpdate!.connectionState.name);
-      printLog("Connect State", connectionStateUpdate!.failure.toString());
+      //printLog("Connect State", connectionStateUpdate!.deviceId);
+      //printLog("Connect State", connectionStateUpdate!.connectionState.name);
+      //printLog("Connect State", connectionStateUpdate!.failure.toString());
 
       switch (connectionStateUpdate?.connectionState) {
         case DeviceConnectionState.connecting:
@@ -401,7 +401,7 @@ class BluetoothProvider extends ChangeNotifier {
     }, onError: (error) {
       deviceConnectStream.add(DeviceConnectResult.connectError);
       deviceConnectResult = DeviceConnectResult.connectError;
-      printLog("Connect Error", error.toString());
+      //printLog("Connect Error", error.toString());
       connectSubscription?.cancel();
     });
   }
@@ -424,7 +424,7 @@ class BluetoothProvider extends ChangeNotifier {
         deviceConnectStream.add(DeviceConnectResult.disconnected);
         deviceConnectResult = DeviceConnectResult.disconnected;
 
-        print(deviceConnectResult);
+        //print(deviceConnectResult);
         notifyListeners();
       }
     }
@@ -463,10 +463,10 @@ class BluetoothProvider extends ChangeNotifier {
     notifySubscription = flutterReactiveBle
         .subscribeToCharacteristic(notifyCharacteristic)
         .listen((data) async {
-      printLog("Notify Value", connectionStateUpdate!.deviceId + " " + HexCodec().encode(data));
+      //printLog("Notify Value", connectionStateUpdate!.deviceId + " " + HexCodec().encode(data));
       handleNotifyData(data);
     }, onError: (dynamic error) {
-      printLog("Notify Error", error.toString());
+      //printLog("Notify Error", error.toString());
     });
 
     /// Get communication key from device.
@@ -493,7 +493,7 @@ class BluetoothProvider extends ChangeNotifier {
       }
     }
     catch(error) {
-      print(error.toString());
+      //print(error.toString());
       return false;
     }
   }
@@ -1086,7 +1086,7 @@ class BluetoothProvider extends ChangeNotifier {
       List<int> sublist = data.sublist(4, 20);
       bool containsValue196 = sublist.contains(196);
       if (!containsValue196) {
-        print('Filter data: ' + sublist.toString());
+        //print('Filter data: ' + sublist.toString());
         iotInfoString = iotInfoString + asciiDecoder.convert(data.sublist(4, 20)); ///Partial IOTInfo String
       }
       //iotInfoString = iotInfoString + asciiDecoder.convert(data.sublist(4, 20)); ///Partial IOTInfo String
@@ -1094,7 +1094,7 @@ class BluetoothProvider extends ChangeNotifier {
       iotDataIndex++;
       ///send command to get next bikeDataIndex Packet Data.
       sendCommand(bluetoothCommand.getPacketDataByIndex(iotDataIndex, requestComKeyResult!.communicationKey));
-      printLog("IOT INFO ", iotInfoString);
+      //printLog("IOT INFO ", iotInfoString);
     }
     /// Check if iotDataIndex is last index
     else if (iotDataIndex == totalIotPacketData) {
@@ -1112,15 +1112,15 @@ class BluetoothProvider extends ChangeNotifier {
   void getIotInfo2(data) {
     ///if iotDataIndex is lesser than totalBikePacketData
     if (iotDataIndex < totalIotPacketData) {
-      print('IOT index : ' + iotDataIndex.toString());
-      print('Total Packet: ' + totalIotPacketData.toString());
+      //print('IOT index : ' + iotDataIndex.toString());
+      //print('Total Packet: ' + totalIotPacketData.toString());
       List<int> sublist = data.sublist(4, 20);
       String convertedString = '';
       for (int value in sublist) {
         try {
           convertedString += String.fromCharCode(value);
         } catch (e) {
-          print('Invalid value: $value');
+          //print('Invalid value: $value');
           // Handle the invalid value, such as skipping or replacing it
         }
       }
@@ -1129,7 +1129,7 @@ class BluetoothProvider extends ChangeNotifier {
       iotDataIndex++;
       ///send command to get next bikeDataIndex Packet Data.
       sendCommand(bluetoothCommand.getPacketDataByIndex(iotDataIndex, requestComKeyResult!.communicationKey));
-      printLog("IOT INFO ", iotInfoString);
+      //printLog("IOT INFO ", iotInfoString);
     }
     /// Check if iotDataIndex is last index
     else if (iotDataIndex == totalIotPacketData) {
@@ -1139,13 +1139,13 @@ class BluetoothProvider extends ChangeNotifier {
         try {
           convertedString += String.fromCharCode(value);
         } catch (e) {
-          print('Invalid value: $value');
+          //print('Invalid value: $value');
           // Handle the invalid value, such as skipping or replacing it
         }
       }
       iotInfoString += convertedString;
       iotInfoModel = IotInfoModel(iotInfoString);
-      print('IOT FINAL FINAL STRING: ' + iotInfoString);
+      //print('IOT FINAL FINAL STRING: ' + iotInfoString);
       iotInfoModelListener.add(iotInfoModel!);
       exitNotifyIotInfoState();
       sendCommand(bluetoothCommand.getBikeInfo(requestComKeyResult!.communicationKey));
@@ -1166,9 +1166,9 @@ class BluetoothProvider extends ChangeNotifier {
   /// Update IoT Data Function  ///
   /// ************************* ///
   void getUpdateIotData(data) {
-    printLog("Original C", HexCodec().encode(data));
+    //printLog("Original C", HexCodec().encode(data));
     List<int> decodedData = bluetoothCommand.decodeData(data);
-    printLog("Decode C", HexCodec().encode(decodedData));//Decode data and get actual data
+    //printLog("Decode C", HexCodec().encode(decodedData));//Decode data and get actual data
     if (decodedData.isEmpty) {
       /// CRC value not valid. Failed decoded. Ignore invalid data.
     }
@@ -1201,7 +1201,7 @@ class BluetoothProvider extends ChangeNotifier {
     totalPacketOfIotData = totalIotDataPacket;
     List<int> remainingList = List<int>.filled((16 * totalIotDataPacket) - iotDataBytes.length, 0, growable: true);
     iotDataFullBytes.insertAll(iotDataBytes.length, remainingList);
-    print("IOT Data: " + iotDataFullBytes.toString());
+    //print("IOT Data: " + iotDataFullBytes.toString());
     notifyDataState = NotifyDataState.updateIotInfo;
 
     List<int> totalPacketByte = bluetoothCommand.integerTo16bytes(totalIotDataPacket);
@@ -1216,7 +1216,7 @@ class BluetoothProvider extends ChangeNotifier {
 
     ///Convert data Index to Integer for further calculation
     iotDataIndex = bluetoothCommand.hexToInt(packetIndexBytes);
-    printLog("Current Index", iotDataIndex.toString());
+    //printLog("Current Index", iotDataIndex.toString());
 
     /// Current Iot data
     List<int> iotDataBytes = utf8.encode(iotData!);
@@ -1413,7 +1413,7 @@ class BluetoothProvider extends ChangeNotifier {
 
       result = true;
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       result = false;
     }
     return result;

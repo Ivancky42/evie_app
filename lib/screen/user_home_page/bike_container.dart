@@ -229,8 +229,8 @@ class _BikeContainerState extends State<BikeContainer> {
                               SmartDialog.show(
                                   widget: EvieSingleButtonDialog(
                                       title: "Error",
-                                      content: "Cannot change bike, please try again.",
-                                      rightContent: "OK",
+                                      content: "Unable to switch bike, Please try again.",
+                                      rightContent: "Retry",
                                       onPressedRight: () {
                                         SmartDialog.dismiss();
                                       }));

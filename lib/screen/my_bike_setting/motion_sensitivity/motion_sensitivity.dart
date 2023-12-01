@@ -123,8 +123,8 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                               subscription?.cancel();
                               SmartDialog.show(widget: EvieSingleButtonDialog(
                                   title: "Error",
-                                  content: "Error change motion sensitivity",
-                                  rightContent: "Ok",
+                                  content: "Error occurred when changing motion sensitivity level.",
+                                  rightContent: "Retry",
                                   onPressedRight: (){SmartDialog.dismiss();}));
                             }
 
@@ -133,7 +133,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                         }else{
                           SmartDialog.show(widget: EvieSingleButtonDialog(
                               title: "Error",
-                              content: "Error update motion sensitivity",
+                              content: "Error occurred when changing motion sensitivity level.",
                               rightContent: "Ok",
                               onPressedRight: (){SmartDialog.dismiss();}));
                         }

@@ -26,7 +26,6 @@ import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_double_button_dialog.dart';
 import '../../my_account/switch_profile_image.dart';
-import '../my_bike_function.dart';
 import 'bike_setting_container.dart';
 import 'bike_setting_model.dart';
 import 'bike_setting_search_container.dart';
@@ -114,8 +113,8 @@ class _BikeSettingState extends State<BikeSetting> {
     setButtonImage();
 
     if (deviceConnectResult == DeviceConnectResult.connected && _bluetoothProvider.currentConnectedDevice == _bikeProvider.currentBikeModel?.macAddr) {
-      print("BLE Connected : " + _bluetoothProvider.currentConnectedDevice!);
-      print("Current Bike : " + _bikeProvider.currentBikeModel!.macAddr!);
+      //print("BLE Connected : " + _bluetoothProvider.currentConnectedDevice!);
+      //print("Current Bike : " + _bikeProvider.currentBikeModel!.macAddr!);
       if (!isFirstTimeConnected) {
         if (!_bikeProvider.isBlockToast) {
           showConnectionStatusToast(

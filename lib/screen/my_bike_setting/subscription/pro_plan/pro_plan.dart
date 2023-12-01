@@ -40,7 +40,7 @@ class _ProPlanState extends State<ProPlan> {
     _planProvider = Provider.of<PlanProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
-    print(_bikeProvider.isPlanSubscript);
+    //print(_bikeProvider.isPlanSubscript);
     return WillPopScope(
       onWillPop: () async {
         //_settingProvider.changeSheetElement(SheetList.currentPlan);

@@ -347,7 +347,7 @@ class LocationProvider extends ChangeNotifier {
 
   void setSelectedAnnotation(PointAnnotation pointAnnotation) {
     selectedPointAnnotation = pointAnnotation;
-    print(pointAnnotation.geometry!['coordinates'].toString());
+    //print(pointAnnotation.geometry!['coordinates'].toString());
 
     Object? coordinatesList = pointAnnotation.geometry!['coordinates'];
 

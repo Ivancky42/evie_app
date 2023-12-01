@@ -1,5 +1,6 @@
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -17,6 +18,7 @@ class RevokingAccount extends StatefulWidget {
 
 class _RevokingAccountState extends State<RevokingAccount> {
   late AuthProvider _authProvider;
+  late CurrentUserProvider _currentUserProvider;
 
   @override
   void initState() {
@@ -27,10 +29,15 @@ class _RevokingAccountState extends State<RevokingAccount> {
 
   Future<void> _init() async {
     _authProvider = context.read<AuthProvider>();
+    String? currentUid = _authProvider.getUid;
+    _currentUserProvider = context.read<CurrentUserProvider>();
     await _authProvider.deactivateAccount();
-    await _authProvider.signOut(context);
-    await Future.delayed(const Duration(seconds: 3));
-    changeToRevokedAccount(context);
+    final result = await _currentUserProvider.listenIsDeactivated(currentUid!);
+    if (result == 'Success') {
+      await _authProvider.signOut(context);
+      await Future.delayed(const Duration(seconds: 3));
+      changeToRevokedAccount(context);
+    }
   }
   @override
   Widget build(BuildContext context) {

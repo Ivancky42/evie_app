@@ -50,7 +50,7 @@ class _EditProfileState extends State<EditProfile> {
     _nameController.addListener(() {
       if (_nameController.selection.baseOffset != _nameController.selection.extentOffset) {
         // Text is selected
-        print('Text selected: ${_nameController.text.substring(_nameController.selection.baseOffset, _nameController.selection.extentOffset)}');
+        //print('Text selected: ${_nameController.text.substring(_nameController.selection.baseOffset, _nameController.selection.extentOffset)}');
       } else {
         // Cursor is moved
         if (isFirst) {
@@ -204,13 +204,13 @@ class _EditProfileState extends State<EditProfile> {
                                   SmartDialog.dismiss();
                                   final result = await _currentUserProvider.updateUserName(_nameController.text.trim());
                                   result == true ?
-                                  SmartDialog.show(widget: EvieSingleButtonDialog(
+                                  SmartDialog.show(widget: EvieSingleButtonDialogOld(
                                       title: "Success",
                                       content: "Uploaded",
                                       rightContent: "OK",
                                       onPressedRight: (){SmartDialog.dismiss();}))
                                       :
-                                  SmartDialog.show(widget: EvieSingleButtonDialog(
+                                  SmartDialog.show(widget: EvieSingleButtonDialogOld(
                                       title: "Error",
                                       content: "Please try again",
                                       rightContent: "OK",

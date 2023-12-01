@@ -41,16 +41,17 @@ class NotificationProvider extends ChangeNotifier {
 
   Future<void> init(UserModel? currentUserModel) async {
     ///Subscribe to user uid for notification
-    notificationList.clear();
     if (currentUserModel == null) {
 
     }
     else {
-      this.currentUserModel = currentUserModel;
-      isReadAll = true;
-      getNotification(this.currentUserModel!.uid);
-      compareActionableBarTime();
-      notifyListeners();
+      if (currentUserModel.uid != this.currentUserModel?.uid) {
+        this.currentUserModel = currentUserModel;
+        isReadAll = true;
+        getNotification(this.currentUserModel!.uid);
+        compareActionableBarTime();
+        notifyListeners();
+      }
     }
   }
 
@@ -64,7 +65,7 @@ class NotificationProvider extends ChangeNotifier {
   ///Get fcm token
   void firebaseCloudMessaging_Listeners() {
     messaging.getToken().then((newToken) {
-      print("FCM toke: $newToken");
+      //print("FCM toke: $newToken");
     });
   }
 
@@ -88,10 +89,8 @@ class NotificationProvider extends ChangeNotifier {
 
   Future<void> getNotification(String? uid) async {
     try {
-
-      if(notificationListSubscription != null){
-        notificationListSubscription?.cancel();
-      }
+      notificationList.clear();
+      notificationListSubscription?.cancel();
 
       notificationListSubscription = FirebaseFirestore.instance
           .collection(usersCollection)

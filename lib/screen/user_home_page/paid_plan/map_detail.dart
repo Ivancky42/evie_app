@@ -43,7 +43,7 @@ import 'home_element/status.dart';
 class MyPointAnnotationClickListener extends OnPointAnnotationClickListener {
   @override
   void onPointAnnotationClick(PointAnnotation annotation) {
-    print('Point annotation clicked: ${annotation.id}');
+    //print('Point annotation clicked: ${annotation.id}');
   }
 }
 

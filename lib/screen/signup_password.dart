@@ -306,7 +306,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                                   }
                                   else {
                                     SmartDialog.show(
-                                      widget: EvieSingleButtonDialog(
+                                      widget: EvieSingleButtonDialogOld(
                                           title: "Error",
                                           content: "Try again",
                                           rightContent: "Ok",

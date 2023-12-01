@@ -204,7 +204,7 @@ class _NameEVState extends State<NameEV> {
     final result = await _bikeProvider.uploadRFIDtoFireStore(_settingProvider.stringPassing!, rfidName);
     if (result == true) {
       SmartDialog.show(
-          widget: EvieSingleButtonDialog(
+          widget: EvieSingleButtonDialogOld(
               title: "Success",
               content: "Card added",
               rightContent: "OK",
@@ -216,7 +216,7 @@ class _NameEVState extends State<NameEV> {
               }));
     } else {
       SmartDialog.show(
-          widget: EvieSingleButtonDialog(
+          widget: EvieSingleButtonDialogOld(
               title: "Error",
               content: "Error upload rfid to firestore",
               rightContent: "OK",

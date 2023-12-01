@@ -296,7 +296,7 @@ class _TestBleState extends State<TestBle> {
                         await bluetoothProvider.stopScan();
                         await connectSubscription?.cancel();
                         connectSubscription = bluetoothProvider.startScanAndConnect().listen((deviceConnectStatus) {
-                          print(deviceConnectStatus.name);
+                          //print(deviceConnectStatus.name);
                           switch (deviceConnectStatus) {
                             case DeviceConnectResult.scanning:
                             // TODO: Handle this case.
@@ -547,19 +547,17 @@ class _TestBleState extends State<TestBle> {
                         File file = File(result.files.single.path!);
                         bluetoothProvider.firmwareUpgradeListener.stream.listen((firmwareUpgradeResult) {
                           if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.startUpgrade) {
-                            print("Start Upgrade Firmware");
+                            //print("Start Upgrade Firmware");
                           }
                           else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgrading) {
-                            print("Upgrading firmware: " +
-                                (firmwareUpgradeResult.progress * 100)
-                                    .toString() + "%");
+                            //print("Upgrading firmware: " + (firmwareUpgradeResult.progress * 100).toString() + "%");
                           }
                           else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeSuccessfully) {
                             ///go to success page
-                            print("OTA State: " + firmwareUpgradeResult.firmwareUpgradeState.toString());
+                            //print("OTA State: " + firmwareUpgradeResult.firmwareUpgradeState.toString());
                           }
                           else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeFailed) {
-                            print("OTA State: " + firmwareUpgradeResult.firmwareUpgradeState.toString());
+                            //print("OTA State: " + firmwareUpgradeResult.firmwareUpgradeState.toString());
                           }
                         });
 
@@ -1108,10 +1106,10 @@ class _TestBleState extends State<TestBle> {
                       SmartDialog.dismiss(status: SmartStatus.loading);
                       subscription?.cancel();
                       if (unlockResult.result == CommandResult.success) {
-                        print("unlock success");
+                        //print("unlock success");
                       }
                       else {
-                        print("unlock not success");
+                        //print("unlock not success");
                       }
                     }, onError: (error) {
                       SmartDialog.dismiss(status: SmartStatus.loading);

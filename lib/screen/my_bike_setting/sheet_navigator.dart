@@ -78,7 +78,7 @@ class _SheetNavigatorState extends State<SheetNavigator> {
 
     _settingProvider = Provider.of<SettingProvider>(context);
 
-    print(_settingProvider.currentSheetList);
+    //print(_settingProvider.currentSheetList);
 
     switch(_settingProvider.currentSheetList){
       case SheetList.mapDetails:

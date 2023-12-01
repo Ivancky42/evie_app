@@ -84,8 +84,8 @@ class _UnlockingButtonState extends State<UnlockingButton> {
                       SmartDialog.show(
                           widget: EvieSingleButtonDialog(
                               title: "Error",
-                              content: "Cannot unlock bike, please place the phone near the bike and try again.",
-                              rightContent: "OK",
+                              content: "Unable to unlock bike, Please place the phone near to the bike and try again.",
+                              rightContent: "Retry",
                               onPressedRight: () {
                                 SmartDialog.dismiss();
                               }));

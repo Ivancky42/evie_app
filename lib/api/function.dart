@@ -1217,7 +1217,7 @@ decline(int index, BikeProvider _bikeProvider, NotificationProvider _notificatio
               SmartDialog.dismiss(status: SmartStatus.loading);
               SmartDialog.show(
                   keepSingle: true,
-                  widget: EvieSingleButtonDialog(
+                  widget: EvieSingleButtonDialogOld(
                       title: "Success",
                       content: "You declined the invitation",
                       rightContent: "Close",
@@ -1227,7 +1227,7 @@ decline(int index, BikeProvider _bikeProvider, NotificationProvider _notificatio
             } else if(cancelStatus == UploadFirestoreResult.failed) {
               SmartDialog.dismiss();
               SmartDialog.show(
-                  widget: EvieSingleButtonDialog(
+                  widget: EvieSingleButtonDialogOld(
                       title: "Not success",
                       content: "Try again",
                       rightContent: "Close",

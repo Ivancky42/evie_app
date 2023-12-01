@@ -232,7 +232,7 @@ class BluetoothCommand {
     data[5] = deleteRFIDCmd; /// cmd : 0x86
 
     List<int> rfidBytes = HexDecoder().convert(rfidID);
-    print(rfidBytes.toString());
+    //print(rfidBytes.toString());
     data[6] = rfidBytes[0];
     data[7] = rfidBytes[1];
     data[8] = rfidBytes[2];
@@ -356,7 +356,7 @@ class BluetoothCommand {
     data[10] = 0x01;
 
     var hexValue = const HexCodec().encode(data);
-    print("Original: " + hexValue);//For debugging purpose
+    //print("Original: " + hexValue);//For debugging purpose
 
     return encodeData(dataSize, data);
   }
@@ -407,7 +407,7 @@ class BluetoothCommand {
     data[15] = 0x35;
 
     var hexValue = const HexCodec().encode(data);
-    print("Original A " + hexValue);
+    //print("Original A " + hexValue);
     return encodeData(dataSize, data);
   }
 
@@ -417,7 +417,7 @@ class BluetoothCommand {
     dataBeforeCrc[1] = indexPacket[1];
     dataBeforeCrc.insertAll(2, dataPacket);
     var hexValue = const HexCodec().encode(dataBeforeCrc);
-    print("Original D " + hexValue);
+    //print("Original D " + hexValue);
 
     List<int> dataWithCrc = List<int>.filled(2, 0, growable: true);
     CrcValue crc = Crc16Modbus().convert(dataBeforeCrc);
@@ -427,7 +427,7 @@ class BluetoothCommand {
     dataWithCrc[1] = fileCrcByte[0];
     dataWithCrc.insertAll(2, dataBeforeCrc);
     var hexValue2 = const HexCodec().encode(dataWithCrc);
-    print("With CRC D " + hexValue2);
+    //print("With CRC D " + hexValue2);
 
     return dataWithCrc;
   }
@@ -523,18 +523,18 @@ class BluetoothCommand {
   List<int> encodeData(int dataSize, List<int> data) {
     for (var i = 0; i < dataSize + 2; i++) {
       data[i + 4] = data[i + 4] ^ data[3]; /// device key
-      print(data[i + 4].toString());
+      //print(data[i + 4].toString());
     }
 
     int rand = (data[3] + 0x32) & 0xFF;
     data[3] = rand;
 
     CrcValue crc = Crc8Maxim().convert(data);
-    print("CRC :" + crc.toString());
+    //print("CRC :" + crc.toString());
     data.add(int.parse(crc.toString()));
 
     var hexValue = const HexCodec().encode(data);
-    print("Encoded data: " + hexValue);//For debugging purpose
+    //print("Encoded data: " + hexValue);//For debugging purpose
 
     return data;
   }
@@ -590,7 +590,7 @@ class BluetoothCommand {
     for (var i = 0; i < length; i++) {
       sb.write("0" + random.nextInt(16).toRadixString(16));
     }
-    print(sb.toString());
+    //print(sb.toString());
     return sb.toString();
   }
 

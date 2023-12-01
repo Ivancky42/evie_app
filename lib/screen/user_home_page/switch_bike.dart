@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/bike_container.dart';
 import 'package:evie_test/widgets/evie_button.dart';
@@ -9,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
+import '../../api/model/bike_model.dart';
 import '../../api/navigator.dart';
 import '../../api/provider/bike_provider.dart';
 
@@ -21,9 +24,12 @@ class SwitchBike extends StatefulWidget {
 
 class _SwitchBikeState extends State<SwitchBike> {
 
+  LinkedHashMap currentUserBikeDetails = LinkedHashMap<String, BikeModel>();
+
   @override
   Widget build(BuildContext context) {
     BikeProvider _bikeProvider = Provider.of<BikeProvider>(context);
+    currentUserBikeDetails = _bikeProvider.userBikeDetails;
 
     return Wrap(
       children: [

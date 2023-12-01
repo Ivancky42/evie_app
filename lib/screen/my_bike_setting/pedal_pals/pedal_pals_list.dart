@@ -144,14 +144,14 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                           final result = await _bikeProvider.updateTeamName(_nameController.text.trim());
 
                                           result == true ?
-                                          SmartDialog.show(widget: EvieSingleButtonDialog(
+                                          SmartDialog.show(widget: EvieSingleButtonDialogOld(
                                               title: "Success",
                                               content: "Team name uploaded",
                                               rightContent: "OK",
                                               onPressedRight: (){
                                                 SmartDialog.dismiss();}))
                                               :
-                                          SmartDialog.show(widget: EvieSingleButtonDialog(
+                                          SmartDialog.show(widget: EvieSingleButtonDialogOld(
                                               title: "Error",
                                               content: "Please try again",
                                               rightContent: "OK",
@@ -211,7 +211,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                         else if(uploadStatus == UploadFirestoreResult.failed) {
                                           SmartDialog.dismiss();
                                           SmartDialog.show(
-                                              widget: EvieSingleButtonDialog(
+                                              widget: EvieSingleButtonDialogOld(
                                                   title: "Not success",
                                                   content: "Try again",
                                                   rightContent: "Close",
@@ -235,7 +235,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                         else if(uploadStatus == UploadFirestoreResult.failed) {
                                           SmartDialog.dismiss();
                                           SmartDialog.show(
-                                              widget: EvieSingleButtonDialog(
+                                              widget: EvieSingleButtonDialogOld(
                                                   title: "Not success",
                                                   content: "Try again",
                                                   rightContent: "Close",
@@ -330,7 +330,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                               _settingProvider.changeSheetElement(SheetList.shareBikeInvitation);
                             }else{
                               SmartDialog.show(widget: EvieSingleButtonDialog(
-                                  title: "Exist Limit",
+                                  title: "Exceed Limit",
                                   content: "Only 5 user are allowed",
                                   rightContent: "OK",
                                   onPressedRight: (){SmartDialog.dismiss();}));

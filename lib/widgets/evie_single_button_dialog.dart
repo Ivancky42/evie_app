@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -26,6 +27,12 @@ class EvieSingleButtonDialog extends StatelessWidget{
   final String rightContent;
   final VoidCallback onPressedRight;
   final bool? isReversed;
+  final bool? havePic;
+  final SvgPicture? svgpicture;
+  final Widget? customButton;
+  final String? middleContent;
+  final VoidCallback? onPressedMiddle;
+  final Widget? lottie;
 
   const EvieSingleButtonDialog({
     Key? key,
@@ -34,12 +41,103 @@ class EvieSingleButtonDialog extends StatelessWidget{
     this.content,
     this.widget,
     required this.rightContent,
-    required this.onPressedRight, this.isReversed,
+    required this.onPressedRight, this.isReversed, this.havePic, this.svgpicture, this.customButton, this.middleContent, this.onPressedMiddle, this.lottie,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
+        insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        elevation: 0.0,
+        backgroundColor: EvieColors.grayishWhite,
+        child: Container(
+          padding:  EdgeInsets.only(
+              left: 17.w,
+              right: 17.w,
+              //top: 16.w,
+              bottom: 16.w
+          ),
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
+              Stack(
+                children: [
+                  Center(
+                    child: Container(
+                      //color: Colors.red,
+                      //width: 300.w,
+                      child: Transform.translate(
+                        offset: Offset(0.0, -30.0), // Move the Lottie animation up by 50.0 units
+                        child: Lottie.asset(
+                          'assets/images/error-animate.json',
+                          repeat: false,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.only(top: 240.h),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 325.w,
+                          child: Padding(
+                            padding:  EdgeInsets.only(bottom: 16.h),
+                            child: Text(title!,
+                              style:EvieTextStyles.h2,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+
+                        content != null ? Container(
+                          width: 326.w,
+                          child: Text(
+                            content ?? "" ,
+                            textAlign: TextAlign.center,
+                            style: EvieTextStyles.body18,
+                          ),
+                        ) : const SizedBox.shrink(),
+
+                        widget != null ? widget! : const SizedBox.shrink(),
+
+                        Padding(
+                          padding: EdgeInsets.only(top: 37.h, bottom: 16.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child:
+                                customButton ?? EvieButton(
+                                    width: double.infinity,
+                                    height: 48.h,
+                                    child: Text(
+                                      middleContent ?? "Ok",
+                                      style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                                    ),
+                                    onPressed: onPressedRight
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        )
+    );
+      Dialog(
         insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -112,6 +210,119 @@ class EvieSingleButtonDialog extends StatelessWidget{
                           ),
                           onPressed: onPressedRight
                       )
+                    ),
+                  ],
+                ),
+              )
+
+            ],
+          ),
+        )
+    );
+
+  }
+}
+
+class EvieSingleButtonDialogOld extends StatelessWidget{
+  // final String buttonNumber;
+  final String title;
+  final String? content;
+  final Widget? widget;
+  final String rightContent;
+  final VoidCallback onPressedRight;
+  final bool? isReversed;
+  final bool? havePic;
+  final SvgPicture? svgpicture;
+  final Widget? customButton;
+  final String? middleContent;
+  final VoidCallback? onPressedMiddle;
+  final Widget? lottie;
+
+  const EvieSingleButtonDialogOld({
+    Key? key,
+    //required this.buttonNumber,
+    required this.title,
+    this.content,
+    this.widget,
+    required this.rightContent,
+    required this.onPressedRight, this.isReversed, this.havePic, this.svgpicture, this.customButton, this.middleContent, this.onPressedMiddle, this.lottie,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+        insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        elevation: 0.0,
+        backgroundColor: EvieColors.grayishWhite,
+        child: Container(
+          // padding:  EdgeInsets.only(
+          //     left: 17.w,
+          //     right: 17.w,
+          //     top: 16.w,
+          //     bottom: 16.w
+          // ),
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
+              Padding(
+                padding:  EdgeInsets.only(bottom: 8.h, left: 17.w, right: 17.w, top: 16.w),
+                child: Text(title, style:EvieTextStyles.h2,),
+              ),
+              Padding(
+                padding:  EdgeInsets.only(bottom: 11.h),
+                child: Divider(
+                  thickness: 0.5.h,
+                  color: EvieColors.darkWhite,
+                  height: 0,
+                ),
+              ),
+
+              Padding(
+                padding:  EdgeInsets.only(left: 17.w, right: 17.w),
+                child: content != null? Text(
+                  content ?? "" ,
+                  textAlign: TextAlign.start,
+                  style: EvieTextStyles.body18,
+                ) : Container(),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(left: 17.w, right: 17.w),
+                child: widget != null ? widget! : SizedBox(),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(top: 9.h, bottom: 16.h, left: 17.w, right: 17.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                        child:
+                        isReversed == null ?
+                        EvieButton(
+                            width: double.infinity,
+                            height: 48.h,
+                            child: Text(
+                              rightContent,
+                              style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                            ),
+                            onPressed: onPressedRight
+                        ) :
+                        EvieButton_ReversedColor(
+                            width: double.infinity,
+                            height: 48.h,
+                            child: Text(
+                              rightContent,
+                              style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
+                            ),
+                            onPressed: onPressedRight
+                        )
                     ),
                   ],
                 ),
@@ -294,7 +505,6 @@ class EvieOneButtonDialog extends StatelessWidget{
           ),
         )
     );
-
   }
 }
 

@@ -53,7 +53,7 @@ class _BikeEraseLeaveState extends State<BikeEraseLeave>{
         } else if(uploadStatus == UploadFirestoreResult.failed) {
           SmartDialog.dismiss();
           SmartDialog.show(
-              widget: EvieSingleButtonDialog(
+              widget: EvieSingleButtonDialogOld(
                   title: "Not success",
                   content: "Try again",
                   rightContent: "Close",

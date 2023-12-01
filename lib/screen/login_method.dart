@@ -131,7 +131,7 @@ class _SignInMethodState extends State<SignInMethod> {
                                   widget: EvieSingleButtonDialog(
                                       title: "Error",
                                       content: result[SignInStatus.error],
-                                      rightContent: "Ok",
+                                      rightContent: "Retry",
                                       onPressedRight: () {
                                         SmartDialog.dismiss();
                                       }));
@@ -141,7 +141,7 @@ class _SignInMethodState extends State<SignInMethod> {
                                   widget: EvieSingleButtonDialog(
                                       title: "Error",
                                       content: result[SignInStatus.failed],
-                                      rightContent: "Ok",
+                                      rightContent: "Retry",
                                       onPressedRight: () {
                                         SmartDialog.dismiss();
                                       }));
@@ -188,7 +188,7 @@ class _SignInMethodState extends State<SignInMethod> {
                               widget: EvieSingleButtonDialog(
                                   title: "Error",
                                   content: result[SignInStatus.error],
-                                  rightContent: "Ok",
+                                  rightContent: "Retry",
                                   onPressedRight: () {
                                     SmartDialog.dismiss();
                                   }));
@@ -198,7 +198,7 @@ class _SignInMethodState extends State<SignInMethod> {
                               widget: EvieSingleButtonDialog(
                                   title: "Error",
                                   content: result[SignInStatus.failed],
-                                  rightContent: "Ok",
+                                  rightContent: "Retry",
                                   onPressedRight: () {
                                     SmartDialog.dismiss();
                                   }));
@@ -242,7 +242,7 @@ class _SignInMethodState extends State<SignInMethod> {
                               widget: EvieSingleButtonDialog(
                                   title: "Error",
                                   content: loginStatus[SignInStatus.error],
-                                  rightContent: "Ok",
+                                  rightContent: "Retry",
                                   onPressedRight: () {
                                     SmartDialog.dismiss();
                                   }));
@@ -252,7 +252,7 @@ class _SignInMethodState extends State<SignInMethod> {
                               widget: EvieSingleButtonDialog(
                                   title: "Error",
                                   content: loginStatus[SignInStatus.failed],
-                                  rightContent: "Ok",
+                                  rightContent: "Retry",
                                   onPressedRight: () {
                                     SmartDialog.dismiss();
                                   }));

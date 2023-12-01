@@ -231,7 +231,7 @@ class _EVKeyListState extends State<EVKeyList> {
                                               result == true ?
                                               showAddEVKeyNameSuccess(context)
                                                   : SmartDialog.show(
-                                                  widget: EvieSingleButtonDialog(
+                                                  widget: EvieSingleButtonDialogOld(
                                                       title: "Error",
                                                       content:
                                                       "Please try again",

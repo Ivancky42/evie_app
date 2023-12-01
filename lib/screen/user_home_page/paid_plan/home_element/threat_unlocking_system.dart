@@ -117,7 +117,7 @@ class _ThreatUnlockingSystemState extends State<ThreatUnlockingSystem> {
                             else if (_bluetoothProvider.bleStatus == BleStatus.poweredOff || _bluetoothProvider.bleStatus == BleStatus.unauthorized) {
                               showBluetoothNotTurnOn();
                             }
-                            print(_bluetoothProvider.bleStatus.toString());
+                            //print(_bluetoothProvider.bleStatus.toString());
                           }
 
                         },

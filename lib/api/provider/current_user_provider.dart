@@ -33,8 +33,10 @@ class CurrentUserProvider extends ChangeNotifier {
 
   StreamSubscription? currentUserSubscription;
   StreamSubscription? checkUserAccountSub;
+  StreamSubscription? isDeactivateSub;
 
   late Completer<String?> getUserCompleter;
+  late Completer<String?> listenIsDeactivateCompleter;
 
   CurrentUserProvider() {
     init();
@@ -212,6 +214,7 @@ class CurrentUserProvider extends ChangeNotifier {
     // if( currentUserModel?.notificationSettings?.general == true ){
     //   await NotificationProvider().unsubscribeFromTopic("~general");
     // }
+    currentUserModel = null;
     currentUserSubscription?.cancel();
     checkUserAccountSub?.cancel();
     notifyListeners();
@@ -281,6 +284,27 @@ class CurrentUserProvider extends ChangeNotifier {
     });
   }
 
+  Future<String?> listenIsDeactivated(String currentUid) {
+    listenIsDeactivateCompleter = Completer<String?>();
+    isDeactivateSub?.cancel();
+    isDeactivateSub = FirebaseFirestore.instance
+        .collection(usersCollection)
+        .doc(currentUid)
+        .snapshots().listen((event) {
+      Map<String, dynamic>? obj = event.data();
+      UserModel userModel = UserModel.fromJson(obj!);
+      if (userModel.isDeactivated) {
+        isDeactivateSub?.cancel();
+        listenIsDeactivateCompleter.complete('Success');
+      }
+      else {
+
+      }
+    });
+
+    return listenIsDeactivateCompleter.future;
+  }
+
   compareUserLocation() async {
     try {
       Position position = await Geolocator.getCurrentPosition(
@@ -295,7 +319,7 @@ class CurrentUserProvider extends ChangeNotifier {
           currentUserModel?.lastLogin?.country == "" ||
           currentUserModel?.lastLogin?.country != place.country) {
         debugPrint("User country not match database info");
-        print(currentUserModel?.lastLogin?.country);
+        //print(currentUserModel?.lastLogin?.country);
 
         Map<String, dynamic> deviceData = {
           'country': place.country,

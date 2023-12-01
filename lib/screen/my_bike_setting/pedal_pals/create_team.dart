@@ -113,9 +113,9 @@ class _CreateTeamState extends State<CreateTeam> {
                               SmartDialog.show(
                                   backDismiss: false,
                                   widget: EvieSingleButtonDialog(
-                                      title: "Create team fail",
-                                      content: "Please try again",
-                                      rightContent: "Close",
+                                      title: "Failed to create team",
+                                      content: "Please try again.",
+                                      rightContent: "Retry",
                                       onPressedRight: () {
                                         SmartDialog.dismiss();
                                       }
@@ -148,9 +148,9 @@ class _CreateTeamState extends State<CreateTeam> {
                           SmartDialog.show(
                               backDismiss: false,
                               widget: EvieSingleButtonDialog(
-                                  title: "Create team fail",
-                                  content: "Please try again",
-                                  rightContent: "Close",
+                                  title: "Failed to create team",
+                                  content: "Please try again.",
+                                  rightContent: "Retry",
                                   onPressedRight: () {
                                     SmartDialog.dismiss();
                                   }

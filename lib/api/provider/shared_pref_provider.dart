@@ -82,7 +82,7 @@ class SharedPreferenceProvider with ChangeNotifier {
         if (differentKeys.isNotEmpty) {
           for (var key in differentKeys) {
             await removeValueFromSharedPreferencesList('currentUserBikeListKeys', key);
-            print('Removed : ' + key);
+            //print('Removed : ' + key);
             handleSubTopic("$key~connection-lost", false);
             handleSubTopic("$key~movement-detect", false);
             handleSubTopic("$key~theft-attempt", false);
@@ -91,7 +91,7 @@ class SharedPreferenceProvider with ChangeNotifier {
             handleSubTopic("$key~evkey", false);
           }
         } else {
-          print("All keys are the same");
+          //print("All keys are the same");
         }
 
 

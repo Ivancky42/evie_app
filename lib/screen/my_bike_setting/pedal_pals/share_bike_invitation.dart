@@ -131,7 +131,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                   if (result == null) {
                                     SmartDialog.show(
                                         backDismiss: false,
-                                        widget: EvieSingleButtonDialog(
+                                        widget: EvieSingleButtonDialogOld(
                                             title: "User not found",
                                             content: "Email not register in database",
                                             rightContent: "Close",
@@ -167,7 +167,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                               then((update) {
                                                 if (update == true) {
                                                   SmartDialog.show(
-                                                      widget: EvieSingleButtonDialog(
+                                                      widget: EvieSingleButtonDialogOld(
                                                           title: "Success",
                                                           content: "Shared bike with ${_emailController.text.trim()}",
                                                           rightContent: "Close",
@@ -180,7 +180,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                                 }
                                                 else {
                                                   SmartDialog.show(
-                                                      widget: EvieSingleButtonDialog(
+                                                      widget: EvieSingleButtonDialogOld(
                                                           title: "Not success",
                                                           content: "Try again",
                                                           rightContent: "Close",
@@ -196,7 +196,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                                     else {
                                       SmartDialog.show(
                                           backDismiss: false,
-                                          widget: EvieSingleButtonDialog(
+                                          widget: EvieSingleButtonDialogOld(
                                               title: "User already exist",
                                               content: "The target user owned the bike",
                                               rightContent: "Close",
@@ -211,7 +211,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                           debugPrint(e.toString());
                           SmartDialog.show(
                               backDismiss: false,
-                              widget: EvieSingleButtonDialog(
+                              widget: EvieSingleButtonDialogOld(
                                   title: "Error",
                                   content: "Please try again",
                                   rightContent: "Close",

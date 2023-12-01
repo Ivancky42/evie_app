@@ -145,7 +145,7 @@ class BikeProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       return false;
     }
   }
@@ -187,6 +187,7 @@ class BikeProvider extends ChangeNotifier {
   Future<void> getBikeList(String? uid) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     currentBikeModel = null;
+    userBikeList.clear();
     await bikeListSubscription?.cancel();
     try {
       ///read doc change
@@ -282,7 +283,7 @@ class BikeProvider extends ChangeNotifier {
 
       });
     } on Exception catch (exception) {
-      debugPrint(exception.toString());
+      //debugPrint(exception.toString());
     } catch (_) {
       return;
     }
@@ -331,7 +332,7 @@ class BikeProvider extends ChangeNotifier {
             } on Exception catch (exception) {
               switchBikeResult = SwitchBikeResult.failure;
               switchBikeResultListener.add(switchBikeResult);
-              debugPrint(exception.toString());
+              //debugPrint(exception.toString());
             } catch (_) {
               switchBikeResult = SwitchBikeResult.failure;
               switchBikeResultListener.add(switchBikeResult);
@@ -579,7 +580,7 @@ class BikeProvider extends ChangeNotifier {
 
       result = true;
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       result = false;
     }
     return result;
@@ -602,7 +603,7 @@ class BikeProvider extends ChangeNotifier {
 
       result = true;
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       result = false;
     }
     return result;
@@ -644,7 +645,7 @@ class BikeProvider extends ChangeNotifier {
 
       result = true;
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       result = false;
     }
     return result;
@@ -696,7 +697,7 @@ class BikeProvider extends ChangeNotifier {
 
     } catch (e) {
       currentSubscription?.cancel();
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       firestoreStatusListener.add(UploadFirestoreResult.failed);
     }
 
@@ -814,7 +815,7 @@ class BikeProvider extends ChangeNotifier {
 
     } catch (e) {
       currentSubscription?.cancel();
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       firestoreStatusListener.add(UploadFirestoreResult.failed);
     }
 
@@ -862,7 +863,7 @@ class BikeProvider extends ChangeNotifier {
 
     } catch (e) {
       currentSubscription?.cancel();
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       firestoreStatusListener.add(UploadFirestoreResult.failed);
     }
 
@@ -999,7 +1000,7 @@ class BikeProvider extends ChangeNotifier {
 
     } catch (e) {
       currentSubscription?.cancel();
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       firestoreStatusListener.add(UploadFirestoreResult.failed);
     }
 
@@ -1046,7 +1047,7 @@ class BikeProvider extends ChangeNotifier {
 
     } catch (e) {
       currentSubscription?.cancel();
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       firestoreStatusListener.add(UploadFirestoreResult.failed);
     }
 
@@ -1087,7 +1088,7 @@ class BikeProvider extends ChangeNotifier {
 
       result = true;
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       result = false;
     }
     return result;
@@ -1136,7 +1137,7 @@ class BikeProvider extends ChangeNotifier {
         checkIsOwner();
       });
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
     }
   }
 
@@ -1162,7 +1163,7 @@ class BikeProvider extends ChangeNotifier {
         }
       });
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
     }
   }
 
@@ -1273,7 +1274,7 @@ class BikeProvider extends ChangeNotifier {
 
       });
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
     }
   }
 
@@ -1402,7 +1403,7 @@ class BikeProvider extends ChangeNotifier {
 
       return true;
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       return false;
     }
   }
@@ -1457,7 +1458,7 @@ class BikeProvider extends ChangeNotifier {
 
       return true;
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       scanQRCodeResult = ScanQRCodeResult.userUploadFailure;
       notifyListeners();
       return false;
@@ -1466,7 +1467,7 @@ class BikeProvider extends ChangeNotifier {
 
   Future uploadPlaceMarkAddressToFirestore(String deviceIMEI, String eventID, String address) async {
     if (address == 'Location not found') {
-      print('hello');
+      //print('hello');
     }
     else {
       if (EvieFilter.isNullOrBlank(address) == false) {
@@ -1480,7 +1481,7 @@ class BikeProvider extends ChangeNotifier {
             'address': address,
           }, SetOptions(merge: true));
         } catch (e) {
-          debugPrint(e.toString());
+          //debugPrint(e.toString());
         }
       }
     }
@@ -1488,7 +1489,7 @@ class BikeProvider extends ChangeNotifier {
 
   Future uploadThreatRoutesAddressToFirestore(String eventID, String routeID, String address) async {
     if (address == 'Location not found') {
-       print('hello');
+       //print('hello');
     }
     else {
       if (EvieFilter.isNullOrBlank(address) == false) {
@@ -1504,7 +1505,7 @@ class BikeProvider extends ChangeNotifier {
             'address': address,
           }, SetOptions(merge: true));
         } catch (e) {
-          debugPrint(e.toString());
+          //debugPrint(e.toString());
         }
       }
     }
@@ -1521,7 +1522,7 @@ class BikeProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       return false;
     }
   }
@@ -1551,7 +1552,7 @@ class BikeProvider extends ChangeNotifier {
 
       return true;
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       return false;
     }
   }
@@ -1583,7 +1584,7 @@ class BikeProvider extends ChangeNotifier {
 
       return true;
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       return false;
     }
   }
@@ -1601,7 +1602,7 @@ class BikeProvider extends ChangeNotifier {
         'justUnlinkBike': true,
       }, SetOptions(merge: true));
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       firestoreStatusListener.add(UploadFirestoreResult.failed);
     }
 
@@ -1638,7 +1639,7 @@ class BikeProvider extends ChangeNotifier {
         'justFactoryReset': true,
       }, SetOptions(merge: true));
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       firestoreStatusListener.add(UploadFirestoreResult.failed);
     }
 
@@ -1744,7 +1745,7 @@ class BikeProvider extends ChangeNotifier {
       });
       return true;
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       return false;
     }
   }
@@ -1811,7 +1812,7 @@ class BikeProvider extends ChangeNotifier {
 
 
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
     }
   }
 
@@ -1831,7 +1832,7 @@ class BikeProvider extends ChangeNotifier {
 
       return true;
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       return false;
     }
   }
@@ -1849,7 +1850,7 @@ class BikeProvider extends ChangeNotifier {
       });
       return true;
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
       return false;
     }
   }
@@ -1875,7 +1876,7 @@ class BikeProvider extends ChangeNotifier {
 
         return true;
       } catch (e) {
-        debugPrint(e.toString());
+        //debugPrint(e.toString());
         return false;
       }
     });
@@ -2017,6 +2018,10 @@ class BikeProvider extends ChangeNotifier {
     bikePlanSubscription?.cancel();
     rfidListSubscription?.cancel();
     currentSubscription?.cancel();
+
+    userBikeList.forEach((key, value) async {
+      await currentUserBikeSubMap[key]?.cancel();
+    });
 
     userBikeList.clear();
     userBikeDetails.clear();

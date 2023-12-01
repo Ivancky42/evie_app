@@ -57,7 +57,7 @@ class _ThreatContainerState extends State<ThreatContainer> {
         _bluetoothProvider.startScanRSSI();
       }
       else {
-        print('AAAAAAA: ' + _bluetoothProvider.deviceConnectResult.toString());
+        //print('AAAAAAA: ' + _bluetoothProvider.deviceConnectResult.toString());
       }
     });
   }
@@ -72,7 +72,7 @@ class _ThreatContainerState extends State<ThreatContainer> {
   Widget build(BuildContext context) {
     _bluetoothProvider = context.watch<BluetoothProvider>();
     _bikeProvider = context.watch<BikeProvider>();
-    print('Hello : ' + _bluetoothProvider.deviceConnectResult.toString());
+    //print('Hello : ' + _bluetoothProvider.deviceConnectResult.toString());
 
     if (_bluetoothProvider.bleStatus == BleStatus.poweredOff || _bluetoothProvider.bleStatus == BleStatus.unauthorized) {
       SmartDialog.dismiss(tag: "threat");
@@ -466,7 +466,7 @@ class _ThreatContainerState extends State<ThreatContainer> {
         );
 
       default:
-        print('YAHOOOOOOOO: ' + _bluetoothProvider.deviceConnectResult.toString());
+        //print('YAHOOOOOOOO: ' + _bluetoothProvider.deviceConnectResult.toString());
         return Container(color: Colors.red,);
     }
   }

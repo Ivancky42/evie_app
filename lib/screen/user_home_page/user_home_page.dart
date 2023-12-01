@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 import '../../api/colours.dart';
 import '../../test/test.dart';
 import '../feeds/feeds.dart';
-import '../feeds/feeds2.dart';
 import '../my_account/account/my_account.dart';
 
 

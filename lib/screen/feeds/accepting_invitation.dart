@@ -42,6 +42,7 @@ class _AcceptingInvitationState extends State<AcceptingInvitation> {
       // for (var element in _bikeProvider.userBikeNotificationList) {
       //   await _notificationProvider.subscribeToTopic("${widget.deviceIMEI!}$element");
       // }
+      await Future.delayed(Duration(seconds: 3));
       showBikeAddSuccessfulToast(context);
       changeToUserHomePageScreen(context);
     }

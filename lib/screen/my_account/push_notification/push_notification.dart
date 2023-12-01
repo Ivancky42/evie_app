@@ -55,7 +55,7 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _notificationProvider.checkNotificationPermission();
-      print("App resumed");
+      //print("App resumed");
     }
   }
 
