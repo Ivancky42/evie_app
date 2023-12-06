@@ -132,7 +132,8 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> {
                                 "movementDetect", value!);
                             if (result == true) {
                               SmartDialog.dismiss();
-                            } else {
+                            }
+                            else {
                               SmartDialog.show(
                                   widget: EvieSingleButtonDialog(
                                       title: "Error",

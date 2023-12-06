@@ -508,6 +508,124 @@ class EvieOneButtonDialog extends StatelessWidget{
   }
 }
 
+class EvieOneButtonDialogWithConfetti extends StatelessWidget{
+  final String? title;
+  final String? content;
+  final bool? havePic;
+  final SvgPicture? svgpicture;
+  final Widget? widget;
+  final String? middleContent;
+  final VoidCallback? onPressedMiddle;
+  final Widget? customButton;
+
+  const EvieOneButtonDialogWithConfetti({
+    Key? key,
+    this.title,
+    this.content,
+    this.widget,
+    this.svgpicture,
+    this.havePic,
+    this.middleContent,
+    this.onPressedMiddle,
+    this.customButton,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Dialog(
+            insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            elevation: 0.0,
+            backgroundColor: EvieColors.grayishWhite,
+            child: Container(
+              padding:  EdgeInsets.only(
+                  left: 17.w,
+                  right: 17.w,
+                  top: 16.w,
+                  bottom: 16.w
+              ),
+
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+
+                  Center(
+                    child: havePic == false ? Container() : svgpicture == null? Container(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 32.h),
+                        child: SvgPicture.asset(
+                          "assets/images/people_search.svg",
+                          height: 150.h,
+                          width: 239.w,
+                        ),
+                      ),
+                    ): Padding(
+                      padding: EdgeInsets.only(top: 32.h),
+                      child: svgpicture!,
+                    ),
+                  ),
+
+                  title != null ?  Container(
+                    width: 325.w,
+                    child: Padding(
+                      padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
+                      child: Text(title!,
+                        style:EvieTextStyles.h2,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ) : SizedBox.shrink(),
+
+                  content != null ? Container(
+                    width: 326.w,
+                    child: Text(
+                      content ?? "" ,
+                      textAlign: TextAlign.center,
+                      style: EvieTextStyles.body18,
+                    ),
+                  ) : const SizedBox.shrink(),
+
+                  widget != null ? widget! : const SizedBox.shrink(),
+
+                  Padding(
+                    padding: EdgeInsets.only(top: 37.h, bottom: 16.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child:
+                          customButton ?? EvieButton(
+                              width: double.infinity,
+                              height: 48.h,
+                              child: Text(
+                                middleContent ?? "Ok",
+                                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                              ),
+                              onPressed: onPressedMiddle
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
+        ),
+        Lottie.asset(
+          'assets/animations/confetti.json',
+          repeat: false,
+        ),
+      ],
+    );
+  }
+}
+
 class Evie4OneButtonDialog extends StatefulWidget {
   const Evie4OneButtonDialog({Key? key}) : super(key: key);
 

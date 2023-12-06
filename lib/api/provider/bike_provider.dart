@@ -78,6 +78,7 @@ class BikeProvider extends ChangeNotifier {
   LinkedHashMap userBikeList = LinkedHashMap<String, UserBikeModel>();
   LinkedHashMap userBikeDetails = LinkedHashMap<String, BikeModel>();
   LinkedHashMap userBikePlans = LinkedHashMap<String, BikePlanModel?>();
+  LinkedHashMap bikesPlan = LinkedHashMap<String, bool>();
   LinkedHashMap rfidList = LinkedHashMap<String, RFIDModel>();
   LinkedHashMap threatRoutesLists = LinkedHashMap<String, ThreatRoutesModel>();
 
@@ -109,7 +110,7 @@ class BikeProvider extends ChangeNotifier {
   StreamSubscription? currentUserBikeSubscription;
   Map<String, StreamSubscription> currentUserBikeSubMap = {};
   StreamSubscription? currentBikePlanSubscription;
-  StreamSubscription? bikePlanSubscription;
+  Map<String, StreamSubscription> bikesPlanSubMap = {};
   StreamSubscription? rfidListSubscription;
   StreamSubscription? currentSubscription;
   StreamSubscription? acceptInvitationSub;
@@ -251,8 +252,8 @@ class BikeProvider extends ChangeNotifier {
 
         } else {
 
-          if(userBikePlans.isNotEmpty){
-            changeBikeUsingIMEI(userBikePlans.keys.first);
+          if(userBikeDetails.isNotEmpty){
+            changeBikeUsingIMEI(userBikeDetails.keys.first);
           }else{
             changeSharedPreference('currentBikeImei', '');
           }
@@ -318,7 +319,8 @@ class BikeProvider extends ChangeNotifier {
                   ///Switch case
                   switchBikeResult = SwitchBikeResult.success;
                   switchBikeResultListener.add(switchBikeResult);
-                  getCurrentPlanSubscript();
+                  //getCurrentPlanSubscript();
+                  getEVSecureSub();
                   getThreatRoutes();
                   getRFIDList();
                   getBikeUserList();
@@ -1191,88 +1193,91 @@ class BikeProvider extends ChangeNotifier {
             currentUserBikeSubMap[deviceIMEI]?.cancel();
           }
         }
-
-        // if (snapshot.data() != null) {
-        //   Map<String, dynamic>? obj = snapshot.data();
-        //
-        //   if (obj != null) {
-        //     userBikeDetails.update(snapshot.id, (value) => BikeModel.fromJson(obj), ifAbsent: () => BikeModel.fromJson(obj));
-        //     if (obj['ownerUid'] != null) {
-        //       getOwnerUid(deviceIMEI, obj['ownerUid']);
-        //     }
-        //     notifyListeners();
-        //   }
-        //   else if (obj == null) {
-        //     userBikeDetails.removeWhere((key, value) => key == obj?.keys);
-        //     notifyListeners();
-        //   }
-        // }
       });
 
-
-      await bikePlanSubscription?.cancel();
-      bikePlanSubscription = FirebaseFirestore.instance
+      await bikesPlanSubMap[deviceIMEI]?.cancel();
+      bikesPlanSubMap[deviceIMEI] = FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(deviceIMEI)
           .collection(plansCollection)
-          .limit(1)
+          .where('feature', isEqualTo: 'EV-Secure')
           .snapshots()
           .listen((snapshot) {
         if (snapshot.docs.isNotEmpty) {
-          for (var change in snapshot.docChanges) {
-            var docRef = change.doc.reference;
-            docRef.snapshots().listen((docSnapshot) {
-                  if (docSnapshot.data() != null) {
-                    Map<String, dynamic>? obj = docSnapshot.data();
-
-                    if (obj != null) {
-                      userBikePlans.update(deviceIMEI, (value) => BikePlanModel.fromJson(obj), ifAbsent: () => BikePlanModel.fromJson(obj));
-                      notifyListeners();
-
-                    } else if (obj == null) {
-                      userBikePlans.update(deviceIMEI, (value) => null, ifAbsent: () => null);
-                      notifyListeners();
-                    }
-                  }else{
-                    userBikePlans.update(deviceIMEI, (value) => null, ifAbsent: () => null);
-                  }
-            });
+          for (var docChange in snapshot.docChanges) {
+            switch (docChange.type) {
+              case DocumentChangeType.added:
+                Map<String, dynamic>? obj = docChange.doc.data();
+                BikePlanModel bikePlanModel = BikePlanModel.fromJson(obj!);
+                final result = calculateDateDifferenceFromNow(bikePlanModel!.expiredAt!.toDate());
+                if (result < 0) {
+                  bikesPlan.update(deviceIMEI, (value) => false, ifAbsent: () => false);
+                }
+                else {
+                  bikesPlan.update(deviceIMEI, (value) => true, ifAbsent: () => true);
+                }
+                notifyListeners();
+                break;
+              case DocumentChangeType.removed:
+                bikesPlan.update(deviceIMEI, (value) => false, ifAbsent: () => false);
+                notifyListeners();
+                break;
+              case DocumentChangeType.modified:
+                Map<String, dynamic>? obj = docChange.doc.data();
+                BikePlanModel bikePlanModel = BikePlanModel.fromJson(obj!);
+                final result = calculateDateDifferenceFromNow(bikePlanModel!.expiredAt!.toDate());
+                if (result < 0) {
+                  bikesPlan.update(deviceIMEI, (value) => false, ifAbsent: () => false);
+                }
+                else {
+                  bikesPlan.update(deviceIMEI, (value) => true, ifAbsent: () => true);
+                }
+                notifyListeners();
+                break;
+            }
           }
-        }else{
-          userBikePlans.update(deviceIMEI, (value) => null, ifAbsent: () => null);
+        }
+        else {
+          bikesPlan.update(deviceIMEI, (value) => false, ifAbsent: () => false);
           notifyListeners();
         }
-
-
-        // ///
-        // if (snapshot.docs.isNotEmpty) {
-        //   for (var docChange in snapshot.docChanges) {
-        //     switch (docChange.type) {
-        //       case DocumentChangeType.added:
-        //         Map<String, dynamic>? obj = docChange.doc.data();
-        //
-        //         ///Put in userBikeDetails as Model
-        //           //userBikeDetails[deviceIMEI].bikePlanModel = BikePlanModel.fromJson(obj!);
-        //         userBikePlans.putIfAbsent(deviceIMEI, () => BikePlanModel.fromJson(obj!));
-        //         notifyListeners();
-        //         break;
-        //       case DocumentChangeType.removed:
-        //         userBikePlans.putIfAbsent(deviceIMEI, () => null);
-        //         notifyListeners();
-        //         break;
-        //       case DocumentChangeType.modified:
-        //          Map<String, dynamic>? obj = docChange.doc.data();
-        //         userBikePlans.update(deviceIMEI, (value) => BikePlanModel.fromJson(obj!));
-        //         break;
-        //     }
-        //   }
-        // }else{
-        //   userBikePlans.putIfAbsent(deviceIMEI, () => null);
-        //   notifyListeners();
-        // }
-        // ///
-
       });
+
+
+      // await bikesPlanSubMap[deviceIMEI]?.cancel();
+      // bikesPlanSubMap[deviceIMEI] = FirebaseFirestore.instance
+      //     .collection(bikesCollection)
+      //     .doc(deviceIMEI)
+      //     .collection(plansCollection)
+      //     .limit(1)
+      //     .snapshots()
+      //     .listen((snapshot) {
+      //   if (snapshot.docs.isNotEmpty) {
+      //     for (var change in snapshot.docChanges) {
+      //       var docRef = change.doc.reference;
+      //       docRef.snapshots().listen((docSnapshot) {
+      //             if (docSnapshot.data() != null) {
+      //               Map<String, dynamic>? obj = docSnapshot.data();
+      //
+      //               if (obj != null) {
+      //                 userBikePlans.update(deviceIMEI, (value) => BikePlanModel.fromJson(obj), ifAbsent: () => BikePlanModel.fromJson(obj));
+      //                 notifyListeners();
+      //
+      //               } else if (obj == null) {
+      //                 userBikePlans.update(deviceIMEI, (value) => null, ifAbsent: () => null);
+      //                 notifyListeners();
+      //               }
+      //             }else{
+      //               userBikePlans.update(deviceIMEI, (value) => null, ifAbsent: () => null);
+      //             }
+      //       });
+      //     }
+      //   }
+      //   else{
+      //     userBikePlans.update(deviceIMEI, (value) => null, ifAbsent: () => null);
+      //     notifyListeners();
+      //   }
+      // });
     } catch (e) {
       //debugPrint(e.toString());
     }
@@ -1678,7 +1683,6 @@ class BikeProvider extends ChangeNotifier {
         .collection(plansCollection)
         .snapshots()
         .listen((snapshot) {
-      {
         if (snapshot.docs.isNotEmpty) {
           for (var docChange in snapshot.docChanges) {
             switch (docChange.type) {
@@ -1691,7 +1695,7 @@ class BikeProvider extends ChangeNotifier {
                   for(int i=0;i<snapshot.docs.length;i++){
                     currentBikePlanModel = BikePlanModel.fromJson(obj!);
                   }
-                  final result = calculateDateDifferenceFromNow(currentBikePlanModel!.periodEnd!.toDate());
+                  final result = calculateDateDifferenceFromNow(currentBikePlanModel!.expiredAt!.toDate());
                   if(result < 0){
                     isPlanSubscript = false;
                   }else{
@@ -1709,7 +1713,7 @@ class BikeProvider extends ChangeNotifier {
                 for(int i=0;i<snapshot.docs.length;i++){
                   currentBikePlanModel = BikePlanModel.fromJson(obj!);
                 }
-                final result = calculateDateDifferenceFromNow(currentBikePlanModel!.periodEnd!.toDate());
+                final result = calculateDateDifferenceFromNow(currentBikePlanModel!.expiredAt!.toDate());
                 if(result < 0){
                   isPlanSubscript = false;
                 }else{
@@ -1719,12 +1723,65 @@ class BikeProvider extends ChangeNotifier {
                 break;
             }
           }
-        }else{
+        }
+        else {
           currentBikePlanModel = null;
           isPlanSubscript = false;
           notifyListeners();
         }
-      }});
+      });
+  }
+
+  getEVSecureSub() async {
+    await currentBikePlanSubscription?.cancel();
+    currentBikePlanSubscription = FirebaseFirestore.instance
+        .collection(bikesCollection)
+        .doc(currentBikeModel!.deviceIMEI)
+        .collection(plansCollection)
+        .where('feature', isEqualTo: 'EV-Secure')
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        for (var docChange in snapshot.docChanges) {
+          switch (docChange.type) {
+            case DocumentChangeType.added:
+              Map<String, dynamic>? obj = docChange.doc.data();
+              currentBikePlanModel = BikePlanModel.fromJson(obj!);
+              final result = calculateDateDifferenceFromNow(currentBikePlanModel!.expiredAt!.toDate());
+              if (result < 0) {
+                isPlanSubscript = false;
+              }
+              else {
+                isPlanSubscript = true;
+              }
+              notifyListeners();
+              break;
+            case DocumentChangeType.removed:
+              currentBikePlanModel = null;
+              isPlanSubscript = false;
+              notifyListeners();
+              break;
+            case DocumentChangeType.modified:
+              Map<String, dynamic>? obj = docChange.doc.data();
+              currentBikePlanModel = BikePlanModel.fromJson(obj!);
+              final result = calculateDateDifferenceFromNow(currentBikePlanModel!.expiredAt!.toDate());
+              if(result < 0) {
+                isPlanSubscript = false;
+              }
+              else{
+                isPlanSubscript = true;
+              }
+              notifyListeners();
+              break;
+          }
+        }
+      }
+      else {
+        currentBikePlanModel = null;
+        isPlanSubscript = false;
+        notifyListeners();
+      }
+    });
   }
 
   updatePurchasedPlan(String deviceIMEI, PlanModel planModel) async {
@@ -2015,12 +2072,12 @@ class BikeProvider extends ChangeNotifier {
     currentBikeUserSubscription?.cancel();
     currentUserBikeSubscription?.cancel();
     currentBikePlanSubscription?.cancel();
-    bikePlanSubscription?.cancel();
     rfidListSubscription?.cancel();
     currentSubscription?.cancel();
 
     userBikeList.forEach((key, value) async {
       await currentUserBikeSubMap[key]?.cancel();
+      await bikesPlanSubMap[key]?.cancel();
     });
 
     userBikeList.clear();
@@ -2028,6 +2085,7 @@ class BikeProvider extends ChangeNotifier {
     bikeUserList.clear();
     bikeUserDetails.clear();
     userBikePlans.clear();
+    bikesPlan.clear();
     rfidList.clear();
     threatRoutesLists.clear();
 

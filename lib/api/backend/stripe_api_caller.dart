@@ -26,14 +26,39 @@ class StripeApiCaller {
       'success_url': 'https://evie-126a6.web.app/success.html',
       'cancel_url': 'https://evie-126a6.web.app/cancel.html',
       "customer" : customerId,
-      "client_reference_id": deviceIMEI + "," + planId,
+      "client_reference_id": deviceIMEI + "," + planId + "," + "EV-Secure",
     };
 
     var sessionId;
     await ServerApiBase.postRequest(auth, "https://api.stripe.com/v1/checkout/sessions", body, header).then((value) {
-      sessionId = value['id'];
+      if (value is String) {
+        if (value.contains('No such customer')) {
+          sessionId = 'NO_SUCH_CUSTOMER';
+        }
+      }
+      else {
+        sessionId = value['id'];
+      }
     });
     return sessionId;
+  }
+
+  static Future<String> createStripeCustomer(String email) async {
+    final auth = 'Bearer ' + secretKey;
+    const header = Headers.formUrlEncodedContentType;
+
+    final body = {
+      'email': email,
+    };
+
+    var result;
+    await ServerApiBase.postRequest(auth, "https://api.stripe.com/v1/customers", body, header).then((value) {
+      ///value[id]
+      ///https://dashboard.stripe.com/customers/cus_P6dzCPhhvPPu5h
+      ///Update to firebase
+      result = value['id'];
+    });
+    return result;
   }
 
   // /// $users > $subscriptions[0]id ----> currentSubId /// sub_1Lp1PjBjvoM881zMuyOFI50l

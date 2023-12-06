@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
@@ -108,21 +109,6 @@ calculateTimeAgo(DateTime dateTime){
     }
     return timeAgo;
 }
-
-
-// calculateTimeAgoWithTime(DateTime dateTime){
-//   Duration diff = DateTime.now().difference(dateTime);
-//
-//   String timeAgo;
-//   if (diff.inMinutes >= 0 && diff.inMinutes <= 60){
-//     timeAgo = "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
-//   }else if(diff.inHours >= 0 && diff.inHours <= 24){
-//     timeAgo = "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
-//   }else{
-//     timeAgo = "${monthsInYear[dateTime.month]} ${dateTime.day.toString()} ${dateTime.year.toString()}, at ${dateTime.hour}:${dateTime.minute}";
-//   }
-//   return timeAgo;
-// }
 
 String calculateTimeAgoWithTime(DateTime dateTime) {
   Duration diff = DateTime.now().difference(dateTime);
@@ -296,8 +282,6 @@ const Map<int,String> monthsInYear = {
   11: "Nov",
   12: "Dec",
 };
-
-
 
 capitalizeFirstCharacter(String sentence){
   List<String> words = sentence.split(' ');
@@ -502,165 +486,77 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
 }
 
 getCurrentBikeStatusTag(BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
-  if (bikeProvider.userBikePlans.isNotEmpty) {
-    for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
-      if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
-        if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
-          final result = calculateDateDifferenceFromNow(
-              bikeProvider.userBikePlans.values
-                  .elementAt(index)
-                  .periodEnd
-                  .toDate());
-          if (result < 0) {
-            return SizedBox.shrink();
-          } else {
-           return SvgPicture.asset(
-              "assets/icons/batch_tick.svg",
-              height: 20.h,
-            );
-          }
-        }else{
-          return SizedBox.shrink();
-        }
-      }
-    }
-  }else{
+  if (bikeProvider.bikesPlan[bikeModel.deviceIMEI]) {
+    return SvgPicture.asset(
+      "assets/icons/batch_tick.svg",
+      height: 20.h,
+    );
+  }
+  else {
     return SizedBox.shrink();
   }
 }
 
+getCurrentBikeStatusIcon(BikeModel bikeModel, LinkedHashMap bikesPlan, BluetoothProvider bluetoothProvider) {
 
-getCurrentBikeStatusImage(BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
-  if (bikeProvider.userBikePlans.isNotEmpty) {
-    for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
-      if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
-        if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
-          final result = calculateDateDifferenceFromNow(
-              bikeProvider.userBikePlans.values
-                  .elementAt(index)
-                  .periodEnd
-                  .toDate());
-          if (result < 0) {
-            return "assets/images/bike_HPStatus/bike_normal.png";
-          } else {
-            if (bikeModel.location?.isConnected == false) {
-              return "assets/images/bike_HPStatus/bike_warning.png";
-            } else {
-              switch (bikeModel.location!.status) {
-                case 'safe':
-                  {
-                    if (bluetoothProvider.deviceConnectResult ==
-                        DeviceConnectResult.connected) {
-                      if (bluetoothProvider.cableLockState?.lockState ==
-                          LockState.unlock) {
-                        return "assets/images/bike_HPStatus/bike_safe.png";
-                      } else {
-                        return "assets/images/bike_HPStatus/bike_safe.png";
-                      }
-                    }
-                    else {
-                      if (bikeModel.isLocked == false) {
-                        return "assets/images/bike_HPStatus/bike_safe.png";
-                      } else {
-                        return "assets/images/bike_HPStatus/bike_safe.png";
-                      }
-                    }
-                  }
-                case 'warning':
-                  return "assets/images/bike_HPStatus/bike_warning.png";
-
-                case 'danger':
-                  return "assets/images/bike_HPStatus/bike_danger.png";
-                case 'fall':
-                  return "assets/images/bike_HPStatus/bike_warning.png";
-                case 'crash':
-                  return "assets/images/bike_HPStatus/bike_danger.png";
-
-                default:
-                  return "assets/images/bike_HPStatus/bike_safe.png";
-              }
-            }
-          }
-        }else{
-          return "assets/images/bike_HPStatus/bike_normal.png";
-        }
+  if (bikesPlan[bikeModel.deviceIMEI] != null) {
+    if (bikesPlan[bikeModel.deviceIMEI]) {
+      if (bikeModel?.location?.isConnected == false) {
+        return "assets/buttons/bike_security_offline.svg";
       }
-    }
-  }else{
-    return "assets/images/bike_HPStatus/bike_normal.png";
-  }
-}
-
-getCurrentBikeStatusIcon(BikeModel? bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
-
-  if (bikeProvider.userBikePlans.isNotEmpty) {
-    for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
-      if (bikeModel?.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
-        if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
-          final result = calculateDateDifferenceFromNow(
-              bikeProvider.userBikePlans.values
-                  .elementAt(index)
-                  .periodEnd
-                  .toDate());
-          if (result < 0) {
-            if(bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected && bluetoothProvider.currentConnectedDevice == bikeModel?.macAddr) {
-              if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
-                return "assets/buttons/bike_security_unlock_black.svg";
+      else {
+        switch (bikeModel?.location?.status) {
+          case 'safe':
+            {
+              if (bluetoothProvider.deviceConnectResult ==
+                  DeviceConnectResult.connected) {
+                if (bluetoothProvider.cableLockState?.lockState ==
+                    LockState.unlock) {
+                  return "assets/buttons/bike_security_unlock_black.svg";
+                }
+                else {
+                  return "assets/buttons/bike_security_lock_and_secure_black.svg";
+                }
               }
               else {
-                return "assets/buttons/bike_security_lock_and_secure_black.svg";
-              }
-            }
-            else{
-              return "assets/buttons/bike_security_not_available.svg";
-            }
-          }
-          else {
-            if (bikeModel?.location?.isConnected == false) {
-              return "assets/buttons/bike_security_offline.svg";
-            }
-            else {
-              switch (bikeModel?.location?.status) {
-                case 'safe':
-                  {
-                    if(bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
-                      if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
-                        return "assets/buttons/bike_security_unlock_black.svg";
-                      }
-                      else {
-                        return "assets/buttons/bike_security_lock_and_secure_black.svg";
-                      }
-                    }
-                    else{
-                      if(bikeModel?.isLocked == false){
-                        return "assets/buttons/bike_security_unlock_black.svg";
-                      }else{
-                        return "assets/buttons/bike_security_lock_and_secure_black.svg";
-                      }
-                    }
-                  }
-                case 'warning':
-                  return "assets/buttons/bike_security_warning.svg";
-                case 'danger':
-                  return "assets/buttons/bike_security_danger.svg";
-                case 'fall':
-                  return "assets/buttons/bike_security_warning.svg";
-                case 'crash':
-                  return "assets/buttons/bike_security_danger.svg";
-
-                default:
+                if (bikeModel?.isLocked == false) {
+                  return "assets/buttons/bike_security_unlock_black.svg";
+                } else {
                   return "assets/buttons/bike_security_lock_and_secure_black.svg";
+                }
               }
             }
-          }
-        }
-        else {
-          return "assets/buttons/bike_security_not_available.svg";
+          case 'warning':
+            return "assets/buttons/bike_security_warning.svg";
+          case 'danger':
+            return "assets/buttons/bike_security_danger.svg";
+          case 'fall':
+            return "assets/buttons/bike_security_warning.svg";
+          case 'crash':
+            return "assets/buttons/bike_security_danger.svg";
+
+          default:
+            return "assets/buttons/bike_security_lock_and_secure_black.svg";
         }
       }
     }
+    else {
+      if (bluetoothProvider.deviceConnectResult ==
+          DeviceConnectResult.connected &&
+          bluetoothProvider.currentConnectedDevice == bikeModel?.macAddr) {
+        if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+          return "assets/buttons/bike_security_unlock_black.svg";
+        }
+        else {
+          return "assets/buttons/bike_security_lock_and_secure_black.svg";
+        }
+      }
+      else {
+        return "assets/buttons/bike_security_not_available.svg";
+      }
+    }
   }
-  else{
+  else {
     return "assets/buttons/bike_security_not_available.svg";
   }
 }
@@ -673,109 +569,54 @@ getCurrentBikeStatusIcon2(LockState? lockState) {
   }
 }
 
-getCurrentBikeStatusString(bool isLocked, BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
+getCurrentBikeStatusString(BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
 
-  if (bikeProvider.userBikePlans.isNotEmpty) {
-    for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
-      if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
-        if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
-          final result = calculateDateDifferenceFromNow(
-              bikeProvider.userBikePlans.values
-                  .elementAt(index)
-                  .periodEnd
-                  .toDate());
-          if (result < 0) {
-            if(bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected && bluetoothProvider.currentConnectedDevice == bikeModel.macAddr) {
+  if (bikeProvider.bikesPlan[bikeModel.deviceIMEI]) {
+    if (bikeModel.location?.isConnected == false) {
+      return "Connection Lost";
+    } else {
+      switch (bikeModel.location?.status) {
+        case 'safe':
+          {
+            if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
               if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
                 return "Unlocked";
-              }
-              else {
+              } else {
                 return "Locked & Secured";
               }
             }
-            else{
-              return "-";
-            }
-          } else {
-            if (bikeModel.location?.isConnected == false) {
-              return "Connection Lost";
-            } else {
-              switch (bikeModel.location?.status) {
-                case 'safe':
-                  {
-                    if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
-                      if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
-                        return "Unlocked";
-                      } else {
-                        return "Locked & Secured";
-                      }
-                    }
-                    else {
-                      if (bikeModel.isLocked == false) {
-                        return "Unlocked";
-                      } else {
-                        return "Locked & Secured";
-                      }
-                    }
-                  }
-                case 'warning':
-                  return "Movement Detected";
-                case 'danger':
-                  return "Theft Attempt";
-                case 'fall':
-                  return "Fall Detected";
-                case 'crash':
-                  return "Crash Alert";
-                default:
-                  return "-";
+            else {
+              if (bikeModel.isLocked == false) {
+                return "Unlocked";
+              } else {
+                return "Locked & Secured";
               }
             }
           }
-        }else{
+        case 'warning':
+          return "Movement Detected";
+        case 'danger':
+          return "Theft Attempt";
+        case 'fall':
+          return "Fall Detected";
+        case 'crash':
+          return "Crash Alert";
+        default:
           return "-";
-        }
       }
     }
-  }else{
-    return "-";
-  }
-}
-
-getCurrentBikeStatusString2(BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
-  if (bikeProvider.currentBikeModel!.location?.isConnected == false) {
-    return "Connection Lost";
   }
   else {
-    switch (bikeProvider.currentBikeModel!.location?.status) {
-      case 'safe':
-        {
-          if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
-            if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
-              return "Unlocked";
-            }
-            else {
-              return "Locked & Secured";
-            }
-          }
-          else {
-            if (bikeProvider.currentBikeModel!.isLocked == false) {
-              return "Unlocked";
-            }
-            else {
-              return "Locked & Secured";
-            }
-          }
-        }
-      case 'warning':
-        return "Movement Detected";
-      case 'danger':
-        return "Theft Attempt";
-      case 'fall':
-        return "Fall Detected";
-      case 'crash':
-        return "Crash Alert";
-      default:
-        return "-";
+    if(bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected && bluetoothProvider.currentConnectedDevice == bikeModel.macAddr) {
+      if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+        return "Unlocked";
+      }
+      else {
+        return "Locked & Secured";
+      }
+    }
+    else{
+      return "-";
     }
   }
 }
@@ -852,123 +693,58 @@ getCurrentBikeStatusString4(LockState? lockState) {
 
 getCurrentBikeStatusColour(bool isLocked, BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
 
-  if (bikeProvider.userBikePlans.isNotEmpty) {
-    for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
-      if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
-        if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
-          final result = calculateDateDifferenceFromNow(
-              bikeProvider.userBikePlans.values
-                  .elementAt(index)
-                  .periodEnd
-                  .toDate());
-          if (result < 0) {
-            return EvieColors.transparent;
-          } else {
-            if (bikeModel.location?.isConnected == false) {
-              return EvieColors.orange;
-            } else {
-              switch (bikeModel.location?.status) {
-                case 'safe':
-                  return EvieColors.transparent;
-                case 'warning':
-                  return EvieColors.orange;
-                case 'danger':
-                  return EvieColors.darkRed;
-                case 'fall':
-                  return EvieColors.orange;
-                case 'crash':
-                  return EvieColors.darkRed;
-                default:
-                  return EvieColors.transparent;
-              }
-            }
-          }
-        }else{
+  if (bikeProvider.bikesPlan[bikeModel.deviceIMEI]) {
+    if (bikeModel.location?.isConnected == false) {
+      return EvieColors.orange;
+    } else {
+      switch (bikeModel.location?.status) {
+        case 'safe':
           return EvieColors.transparent;
-        }
+        case 'warning':
+          return EvieColors.orange;
+        case 'danger':
+          return EvieColors.darkRed;
+        case 'fall':
+          return EvieColors.orange;
+        case 'crash':
+          return EvieColors.darkRed;
+        default:
+          return EvieColors.transparent;
       }
     }
-  }else{
+  }
+  else {
     return EvieColors.transparent;
   }
 }
 
 getCurrentBikeStatusColourText(bool isLocked, BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
 
-  if (bikeProvider.userBikePlans.isNotEmpty) {
-    for (var index = 0; index < bikeProvider.userBikePlans.length; index++) {
-      if (bikeModel.deviceIMEI == bikeProvider.userBikePlans.keys.elementAt(index)) {
-        if (bikeProvider.userBikePlans.values.elementAt(index) != null && bikeProvider.userBikePlans.values.elementAt(index).periodEnd.toDate() != null) {
-          final result = calculateDateDifferenceFromNow(
-              bikeProvider.userBikePlans.values
-                  .elementAt(index)
-                  .periodEnd
-                  .toDate());
-          if (result < 0) {
-            return EvieColors.darkGrayishCyan;
-          } else {
-            if (bikeModel.location?.isConnected == false) {
-              return EvieColors.orange;
-            } else {
-              switch (bikeModel.location?.status) {
-                case 'safe':
-                  return EvieColors.darkGrayishCyan;
-                case 'warning':
-                  return EvieColors.orange;
-                case 'danger':
-                  return EvieColors.darkRed;
-                case 'fall':
-                  return EvieColors.orange;
-                case 'crash':
-                  return EvieColors.darkRed;
-                default:
-                  return EvieColors.darkGrayishCyan;
-              }
-            }
-          }
-        }else{
+  if (bikeProvider.bikesPlan[bikeModel.deviceIMEI]) {
+    if (bikeModel.location?.isConnected == false) {
+      return EvieColors.orange;
+    }
+    else {
+      switch (bikeModel.location?.status) {
+        case 'safe':
           return EvieColors.darkGrayishCyan;
-        }
+        case 'warning':
+          return EvieColors.orange;
+        case 'danger':
+          return EvieColors.darkRed;
+        case 'fall':
+          return EvieColors.orange;
+        case 'crash':
+          return EvieColors.darkRed;
+        default:
+          return EvieColors.darkGrayishCyan;
       }
     }
-  }else{
+  }
+  else {
     return EvieColors.darkGrayishCyan;
   }
 }
-
-getCurrentBikeStatusIconSimple(BikeModel bikeModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider) {
-
-  if (bikeModel.location?.isConnected == false) {
-    return "assets/icons/warning_white.svg";
-  } else {
-    switch (bikeModel.location?.status) {
-      case 'safe':
-        {
-          if(bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
-            if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
-              return "assets/icons/bike_unlock_white.svg";
-            } else {
-              return "assets/icons/locked_lightpurple.svg";
-            }
-          }
-          else{
-            if(bikeModel.isLocked == false){
-              return "assets/icons/bike_unlock_white.svg";
-            }else{
-              return "assets/icons/locked_lightpurple.svg";
-            }
-          }
-        }
-      case 'warning':
-        return "assets/icons/warning_white.svg";
-      case 'fall':
-        return "assets/icons/warning_white.svg";
-      default:
-        return "assets/icons/unlock_lightpurple.svg";
-    }
-  }
-
-    }
 
 ///Load image according danger status
 loadMarkerImageString(String dangerStatus, bool isLocked){
@@ -1026,82 +802,6 @@ getSecurityTextWidget(String eventType) {
     default:
       return "empty";
   }
-}
-
-animateBounce(mapboxMap, longitude, latitude) {
-  mapboxMap?.flyTo(
-      CameraOptions(
-        center: Point(
-            coordinates: Position(
-                longitude,
-                latitude))
-            .toJson(),
-        zoom: 16,
-      ),
-      MapAnimationOptions(duration: 2000, startDelay: 0));
-
-}
-
-
-pointBounce(mapboxMap, LocationProvider locationProvider, userPosition) {
-
-  final LatLng southwest = LatLng(
-    min(locationProvider.locationModel?.geopoint!.latitude ?? 0, userPosition.lat.toDouble()),
-    min(locationProvider.locationModel?.geopoint!.longitude ?? 0, userPosition.lng.toDouble()),
-  );
-
-  final LatLng northeast = LatLng(
-    max(locationProvider.locationModel?.geopoint!.latitude ?? 0, userPosition.lat.toDouble()),
-    max(locationProvider.locationModel?.geopoint!.longitude ?? 0, userPosition.lng.toDouble()),
-  );
-  LatLngBounds latLngBounds = LatLngBounds(southwest, northeast);
-
-  mapboxMap?.flyTo(
-    CameraOptions(
-      padding: MbxEdgeInsets(top: 100.h, left: 170.w, bottom: 360.h, right: 170.w),
-      center: latLngBounds.center.toJson(),
-      //    zoom: _getZoomLevel(latLngBounds, 350.w ,750.h),
-
-    ),
-    MapAnimationOptions(duration: 2000, startDelay: 0),
-  );
-}
-
-pointBounce2(MapboxMap? mapboxMap, LocationProvider locationProvider, userPosition) async {
-
-  final LatLng southwest = LatLng(
-    min(locationProvider.locationModel?.geopoint!.latitude ?? 0, userPosition.lat.toDouble()),
-    min(locationProvider.locationModel?.geopoint!.longitude ?? 0, userPosition.lng.toDouble()),
-  );
-
-  final LatLng northeast = LatLng(
-    max(locationProvider.locationModel?.geopoint!.latitude ?? 0, userPosition.lat.toDouble()),
-    max(locationProvider.locationModel?.geopoint!.longitude ?? 0, userPosition.lng.toDouble()),
-  );
-
-  final CameraOptions cameraOpt = await mapboxMap!.cameraForCoordinateBounds(
-    CoordinateBounds(
-      northeast: Point(
-        coordinates: Position(northeast.longitude, northeast.latitude),
-      ).toJson(),
-      southwest: Point(
-          coordinates: Position(southwest.longitude, southwest.latitude)
-      ).toJson(),
-      infiniteBounds: true,
-    ),
-    MbxEdgeInsets(
-      // use whatever padding you need
-      left: 170.w,
-      top: 50.h,
-      bottom: 1000.h,
-      right: 170.w,
-    ),
-    null,
-    null,
-  );
-
-  mapboxMap.flyTo(cameraOpt, MapAnimationOptions(duration: 2000, startDelay: 0));
-
 }
 
 pointBounce3(MapboxMap? mapboxMap, LocationProvider locationProvider, userPosition) async {
@@ -1194,52 +894,6 @@ returnBorderColour(LocationProvider locationProvider){
       width: 2.8.w,
     );
   }
-}
-
-
-decline(int index, BikeProvider _bikeProvider, NotificationProvider _notificationProvider){
-  SmartDialog.show(
-      widget: EvieDoubleButtonDialog(
-        title: "Are you sure you want to decline?",
-        childContent: Text('Are you sure you want to decline?', style: EvieTextStyles.body16,),
-        leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
-        rightContent: "Yes",
-        onPressedRight: () async {
-          SmartDialog.dismiss();
-          SmartDialog.showLoading();
-          StreamSubscription? currentSubscription;
-
-          currentSubscription = _bikeProvider.declineSharedBike(
-              _notificationProvider.notificationList.values.elementAt(index).deviceIMEI!,
-              _notificationProvider.notificationList.values.elementAt(index).notificationId).listen((cancelStatus) {
-            if(cancelStatus == UploadFirestoreResult.success){
-
-              SmartDialog.dismiss(status: SmartStatus.loading);
-              SmartDialog.show(
-                  keepSingle: true,
-                  widget: EvieSingleButtonDialogOld(
-                      title: "Success",
-                      content: "You declined the invitation",
-                      rightContent: "Close",
-                      onPressedRight: () => SmartDialog.dismiss()
-                  ));
-              currentSubscription?.cancel();
-            } else if(cancelStatus == UploadFirestoreResult.failed) {
-              SmartDialog.dismiss();
-              SmartDialog.show(
-                  widget: EvieSingleButtonDialogOld(
-                      title: "Not success",
-                      content: "Try again",
-                      rightContent: "Close",
-                      onPressedRight: ()=>SmartDialog.dismiss()
-                  ));
-            }else{}
-
-          },
-          );
-
-        },
-      ));
 }
 
 Future<void> launch(Uri _url) async {

@@ -1667,12 +1667,15 @@ showFullResetDialog (BuildContext context ,SettingProvider _settingProvider){
 showWelcomeToEVClub (BuildContext context){
   /// icon not yet altered
   SmartDialog.show(
-      widget: EvieOneButtonDialog(
-          title: "Welcome to the EV+ Club!",
+      widget: EvieOneButtonDialogWithConfetti(
+          title: "Welcome to the EV+ \nClub!",
           content: "Are you ready for an adventure? "
               "Perks of having an EV+ subscription include having access rto exclusive features such as "
               "GPS Tracking, Theft Detection, Ride History and more!",
           middleContent: "Let's Go!",
+          svgpicture: SvgPicture.asset(
+            "assets/images/ev_club.svg",
+          ),
           onPressedMiddle: (){
             SmartDialog.dismiss();
           }));

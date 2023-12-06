@@ -15,7 +15,9 @@ class PlanProvider extends ChangeNotifier {
   StreamSubscription? planListSubscription;
   StreamSubscription? priceListSubscription;
   LinkedHashMap availablePlanList = LinkedHashMap<String, PlanModel>();
-  LinkedHashMap priceList = LinkedHashMap<String, PlanModel>();
+  LinkedHashMap priceList = LinkedHashMap<String, PriceModel>();
+  PlanModel? currentPlanModel;
+  PriceModel? currentPriceModel;
 
   PlanProvider() {
     getPlanList();
@@ -37,6 +39,7 @@ class PlanProvider extends ChangeNotifier {
   }
 
   Future<void> getPlanList() async {
+    availablePlanList.clear();
     planListSubscription?.cancel();
     planListSubscription = FirebaseFirestore.instance.collection("plans").snapshots().listen((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -44,9 +47,8 @@ class PlanProvider extends ChangeNotifier {
           switch (docChange.type) {
             case DocumentChangeType.added:
               Map<String, dynamic>? obj = docChange.doc.data();
-              if (obj!['active']) {
-                availablePlanList.putIfAbsent(docChange.doc.id, () =>
-                    PlanModel.fromJson(obj!, docChange.doc.id));
+              if (obj!['active'] == true && obj['stripe_metadata_feature'] == 'EV-Secure') {
+                availablePlanList.putIfAbsent(docChange.doc.id, () => PlanModel.fromJson(obj!, docChange.doc.id));
               }
               notifyListeners();
               break;
@@ -56,9 +58,8 @@ class PlanProvider extends ChangeNotifier {
               break;
             case DocumentChangeType.modified:
               Map<String, dynamic>? obj = docChange.doc.data();
-              if (obj!['active']) {
-                availablePlanList.putIfAbsent(docChange.doc.id, () =>
-                    PlanModel.fromJson(obj!, docChange.doc.id));
+              if (obj!['active'] == true && obj['stripe_metadata_feature'] == 'EV-Secure') {
+                availablePlanList.putIfAbsent(docChange.doc.id, () => PlanModel.fromJson(obj!, docChange.doc.id));
               }
               else {
                 availablePlanList.removeWhere((key, value) => key == docChange.doc.id);
@@ -67,6 +68,10 @@ class PlanProvider extends ChangeNotifier {
               break;
           }
         }
+
+        currentPlanModel = availablePlanList.values.elementAt(0);
+        getPriceList(currentPlanModel!.id!);
+        notifyListeners();
       }
       else {
         availablePlanList.clear();
@@ -75,18 +80,19 @@ class PlanProvider extends ChangeNotifier {
     });
   }
   
-  Future <PriceModel> getPrice(PlanModel planModel) async {
-    return FirebaseFirestore.instance
-        .collection("plans")
-        .doc(planModel.id)
-        .collection("prices")
-        .get().then((querySnapshot) {
-            Map<String, dynamic>? obj = querySnapshot.docs[0].data();
-            return PriceModel.fromJson(obj, querySnapshot.docs[0].id);
-        });
-  }
+  // Future <PriceModel> getPrice(PlanModel planModel) async {
+  //   return FirebaseFirestore.instance
+  //       .collection("plans")
+  //       .doc(planModel.id)
+  //       .collection("prices")
+  //       .get().then((querySnapshot) {
+  //           Map<String, dynamic>? obj = querySnapshot.docs[0].data();
+  //           return PriceModel.fromJson(obj, querySnapshot.docs[0].id);
+  //       });
+  // }
 
   Future<void> getPriceList(String planId) async {
+    priceList.clear();
     priceListSubscription?.cancel();
     priceListSubscription = FirebaseFirestore.instance.collection("plans").doc(planId)
             .collection("prices").snapshots()
@@ -96,7 +102,9 @@ class PlanProvider extends ChangeNotifier {
               switch (docChange.type) {
                 case DocumentChangeType.added:
                   Map<String, dynamic>? obj = docChange.doc.data();
-                  priceList.putIfAbsent(docChange.doc.id, () => PriceModel.fromJson(obj!, docChange.doc.id));
+                  if (obj!['active'] == true) {
+                    priceList.putIfAbsent(docChange.doc.id, () => PriceModel.fromJson(obj!, docChange.doc.id));
+                  }
                   notifyListeners();
                   break;
                 case DocumentChangeType.removed:
@@ -106,7 +114,15 @@ class PlanProvider extends ChangeNotifier {
                   break;
                 case DocumentChangeType.modified:
                   Map<String, dynamic>? obj = docChange.doc.data();
-                  priceList.update(docChange.doc.id, (value) => PriceModel.fromJson(obj!, docChange.doc.id));
+                  //priceList.update(docChange.doc.id, (value) => PriceModel.fromJson(obj!, docChange.doc.id));
+
+                  if (obj!['active'] == true) {
+                    priceList.putIfAbsent(docChange.doc.id, () => PriceModel.fromJson(obj!, docChange.doc.id));
+                  }
+                  else {
+                    priceList.removeWhere((key, value) => key == docChange.doc.id);
+                  }
+
                   notifyListeners();
                   break;
               }
@@ -119,9 +135,30 @@ class PlanProvider extends ChangeNotifier {
         });
   }
 
-  Future <String> purchasePlan(String deviceIMEI, String planId, String priceId) {
+  Future<String> purchasePlan(String deviceIMEI, String planId, String priceId) {
     return StripeApiCaller.redirectToCheckout(deviceIMEI, planId, priceId, currentUserModel!.stripeId!).then((value) {
-      return value;
+      if (value != null) {
+        if (value == 'NO_SUCH_CUSTOMER') {
+          return value;
+        }
+        else {
+          return value;
+        }
+      }
+      else {
+        return 'unknown';
+      }
+    });
+  }
+
+  Future<String> createAndUpdateStripeCustomer() async {
+    return StripeApiCaller.createStripeCustomer(currentUserModel!.email).then((customerId) {
+      return FirebaseFirestore.instance.collection("users").doc(currentUserModel!.uid).update({
+        'stripeId': customerId,
+        'stripeLink': 'https://dashboard.stripe.com/customers/' + customerId,
+      }).then((value) {
+        return 'success';
+      });
     });
   }
 
@@ -132,6 +169,8 @@ class PlanProvider extends ChangeNotifier {
     await priceListSubscription?.cancel();
     availablePlanList.clear();
     priceList.clear();
+    currentPlanModel = null;
+    currentPriceModel = null;
     notifyListeners();
   }
 }

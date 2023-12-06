@@ -113,15 +113,16 @@ class _MyGarageState extends State<MyGarage> {
                 itemBuilder: (context, index) {
 
 
-                  return listItem(
-                    _bikeProvider.userBikeList[_bikeProvider.userBikeList.keys.elementAt(index)],
-                    _bikeProvider.userBikeDetails[_bikeProvider.userBikeList.keys.elementAt(index)],
-                    _bikeProvider.userBikePlans.isNotEmpty ? _bikeProvider.userBikePlans[_bikeProvider.userBikeList.keys.elementAt(index)] : null,
-
-                    //   _bikeProvider.userBikeList.values.elementAt(index),
-                    //   _bikeProvider.userBikeDetails.values.elementAt(index),
-                    // _bikeProvider.userBikePlans.isNotEmpty ? _bikeProvider.userBikePlans.values.elementAt(index) : null,
-                  );
+                  return null;
+                  // return listItem(
+                  //   _bikeProvider.userBikeList[_bikeProvider.userBikeList.keys.elementAt(index)],
+                  //   _bikeProvider.userBikeDetails[_bikeProvider.userBikeList.keys.elementAt(index)],
+                  //   _bikeProvider.userBikePlans.isNotEmpty ? _bikeProvider.userBikePlans[_bikeProvider.userBikeList.keys.elementAt(index)] : null,
+                  //
+                  //   //   _bikeProvider.userBikeList.values.elementAt(index),
+                  //   //   _bikeProvider.userBikeDetails.values.elementAt(index),
+                  //   // _bikeProvider.userBikePlans.isNotEmpty ? _bikeProvider.userBikePlans.values.elementAt(index) : null,
+                  // );
                 },
                 separatorBuilder: (BuildContext context, int index) {
                   return Container();
@@ -156,7 +157,7 @@ class _MyGarageState extends State<MyGarage> {
     bool isPlanSubscript = false;
 
     if(userBikePlan != null){
-      final result = calculateDateDifferenceFromNow(userBikePlan!.periodEnd!.toDate());
+      final result = calculateDateDifferenceFromNow(userBikePlan!.expiredAt!.toDate());
       if(result < 0){
         isPlanSubscript = false;
       }else{
@@ -226,7 +227,7 @@ class _MyGarageState extends State<MyGarage> {
                                 style: EvieTextStyles.body18.copyWith(color: EvieColors.mediumLightBlack),
                               ),
                               Text(
-                                  isPlanSubscript ? "${monthsInYear[userBikePlan?.periodEnd!.toDate().month]} ${userBikePlan?.periodEnd!.toDate().day}, ${userBikePlan?.periodEnd!.toDate().year}"
+                                  isPlanSubscript ? "${monthsInYear[userBikePlan?.startAt!.toDate().month]} ${userBikePlan?.expiredAt!.toDate().day}, ${userBikePlan?.expiredAt!.toDate().year}"
                                       : "Free Forever",
                                 style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
                               ),

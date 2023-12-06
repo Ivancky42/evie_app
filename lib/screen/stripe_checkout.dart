@@ -67,10 +67,10 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
 
             changeToUserHomePageScreen(context);
             showWelcomeToEVClub(context);
-            NotificationProvider().showNotification(FlutterLocalNotificationsPlugin(),
-          'Welcome to EV+!',
-          'You’ve subscribed to EV-Secure! Now you can enjoy exclusive EV+ perks until '
-          '${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day}, ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}');
+          //   NotificationProvider().showNotification(FlutterLocalNotificationsPlugin(),
+          // 'Welcome to EV+!',
+          // 'You’ve subscribed to EV-Secure! Now you can enjoy exclusive EV+ perks until '
+          // '${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day}, ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}');
             // SmartDialog.show(widget:
             // EvieSingleButtonDialog(title: 'Successfully subscribed', content: 'Plan subscribed.', rightContent: 'View Plan', onPressedRight: () {SmartDialog.dismiss();},));
           } else if (request.url.startsWith('https://evie-126a6.web.app/cancel.html')) {

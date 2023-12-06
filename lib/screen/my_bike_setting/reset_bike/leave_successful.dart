@@ -70,8 +70,8 @@ class _LeaveSuccessfulState extends State<LeaveSuccessful>{
               ),
               onPressed: () async {
 
-                if(_bikeProvider.userBikePlans.length != 0){
-                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikePlans.keys.first);
+                if(_bikeProvider.userBikeDetails.isNotEmpty){
+                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.first);
                 }else{
                   await _bikeProvider.changeSharedPreference('currentBikeImei', '');
                 }
@@ -97,8 +97,8 @@ class _LeaveSuccessfulState extends State<LeaveSuccessful>{
               ),
               onPressed: () async {
 
-                if(_bikeProvider.userBikePlans.length != 0){
-                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikePlans.keys.first);
+                if(_bikeProvider.userBikeDetails.isNotEmpty){
+                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.first);
                 }else{
                   await _bikeProvider.changeSharedPreference('currentBikeImei', '');
                 }

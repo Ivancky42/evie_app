@@ -67,9 +67,10 @@ class _ForgetCompletedState extends State<ForgetCompleted>{
                   style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
               ),
               onPressed: () async {
-                if(_bikeProvider.userBikePlans.length != 0){
-                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikePlans.keys.first);
-                }else{
+                if(_bikeProvider.userBikeDetails.isNotEmpty) {
+                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.first);
+                }
+                else {
                   await _bikeProvider.changeSharedPreference('currentBikeImei', '');
                 }
 
@@ -95,9 +96,10 @@ class _ForgetCompletedState extends State<ForgetCompleted>{
               onPressed: () async {
                 Navigator.of(context, rootNavigator: true).pop();
 
-                if(_bikeProvider.userBikePlans.length != 0){
-                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikePlans.keys.first);
-                }else{
+                if (_bikeProvider.userBikeDetails.isNotEmpty) {
+                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.first);
+                }
+                else {
                   await _bikeProvider.changeSharedPreference('currentBikeImei', '');
                 }
 

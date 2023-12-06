@@ -51,7 +51,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
       },
       child: Scaffold(
         appBar: PageAppbar(
-          title: 'EV+ Subscription',
+          title: 'EV+ ',
           onPressed: () {
             _settingProvider.changeSheetElement(SheetList.bikeSetting);
           },
@@ -66,11 +66,11 @@ class _CurrentPlanState extends State<CurrentPlan> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(top:28.h),
-                    child: Text("Current Plan", style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),),
+                    child: Text("Current Plan", style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack),),
                   ),
                  Text(_bikeProvider.isPlanSubscript == false ? "No Subscription" : "EV-Secure", style: EvieTextStyles.headline.copyWith(color: EvieColors.lightBlack)),
-                  Text(_bikeProvider.isPlanSubscript == false ?"" : "${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodStart?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().year} - "
-                        "${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}",
+                  Text(_bikeProvider.isPlanSubscript == false ?"" : "${_bikeProvider.currentBikePlanModel!.startAt?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.startAt?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.startAt?.toDate().year} - "
+                        "${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().year}",
                         style: EvieTextStyles.body18.copyWith(color:EvieColors.darkGrayishCyan)),
                   SizedBox(height:11.h,),
 
@@ -93,10 +93,10 @@ class _CurrentPlanState extends State<CurrentPlan> {
                             ),
 
                             Visibility(
-                              visible: calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.periodEnd!.toDate()) >= 0 &&
-                                calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.periodEnd!.toDate()) <= 30,
+                              visible: calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.expiredAt!.toDate()) >= 0 &&
+                                calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.expiredAt!.toDate()) <= 30,
                               child: Text(
-                              "(Expiring in ${calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.periodEnd!.toDate())} Days)",
+                              " (Expiring in ${calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.expiredAt!.toDate())} Days)",
                               style: EvieTextStyles.body16.copyWith(color: EvieColors.green),
                             ),)
                           ],
@@ -105,11 +105,14 @@ class _CurrentPlanState extends State<CurrentPlan> {
                     ),
                   ),
 
-                  const EvieDivider(),
+                  Padding(
+                    padding: EdgeInsets.only(left: 0, top: 10.h),
+                    child: const EvieDivider(),
+                  ),
 
                   _bikeProvider.currentBikePlanModel != null ?
                   Visibility(
-                    visible: _bikeProvider.currentBikePlanModel != null && _bikeProvider.currentBikePlanModel?.periodEnd != null && _bikeProvider.isPlanSubscript == false,
+                    visible: _bikeProvider.currentBikePlanModel != null && _bikeProvider.currentBikePlanModel?.expiredAt != null && _bikeProvider.isPlanSubscript == false,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,8 +122,8 @@ class _CurrentPlanState extends State<CurrentPlan> {
                           child: Text("Previously on", style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack, letterSpacing: 0.1.w),),
                         ),
                         Text("EV-Secure", style: EvieTextStyles.headline.copyWith(color: EvieColors.lightBlack)),
-                        Text("${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodStart?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodStart?.toDate().year} - "
-                            "${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}",
+                        Text("${_bikeProvider.currentBikePlanModel!.startAt?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.startAt?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.startAt?.toDate().year} - "
+                            "${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().year}",
                             style: EvieTextStyles.body18.copyWith(color:EvieColors.darkGrayishCyan)),
                         Padding(
                           padding: EdgeInsets.only(top:19.h),
@@ -144,7 +147,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
+                padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.screen_bottom),
                 child:  EvieButton(
                   width: double.infinity,
                   height: 48.h,

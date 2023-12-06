@@ -60,7 +60,7 @@ class _SwitchBikeState extends State<SwitchBike> {
                 itemCount: _bikeProvider.userBikeDetails.length,
                 itemBuilder: (context, index) {
 
-                  return BikeContainer(bikeModel: _bikeProvider.userBikeDetails.values.elementAt(index));
+                  return BikeContainer(bikeModel: _bikeProvider.userBikeDetails.values.elementAt(index), bikesPlan: _bikeProvider.bikesPlan,);
                 },
               ),
 

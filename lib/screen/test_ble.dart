@@ -1217,11 +1217,11 @@ class _TestBleState extends State<TestBle> {
                         ),
                       ),
                       onPressed: () {
-                        _planProvider.getPrice(planModel).then((priceModel) {
-                          _planProvider.purchasePlan(_bikeProvider.currentBikeModel!.deviceIMEI!, planModel.id!, priceModel.id).then((value) {
-                            changeToStripeCheckoutScreen(context, value, _bikeProvider.currentBikeModel!, planModel, priceModel);
-                          });
-                        });
+                        // _planProvider.getPrice(planModel).then((priceModel) {
+                        //   _planProvider.purchasePlan(_bikeProvider.currentBikeModel!.deviceIMEI!, planModel.id!, priceModel.id).then((value) {
+                        //     changeToStripeCheckoutScreen(context, value, _bikeProvider.currentBikeModel!, planModel, priceModel);
+                        //   });
+                        // });
                       },
                     );
                   },

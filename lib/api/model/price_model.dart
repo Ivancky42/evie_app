@@ -22,7 +22,7 @@ class PriceModel {
         id: id ?? "",
         active: json['active'] ?? false,
         billingScheme: json['billing_scheme'] ?? "",
-        currency: json['currency'] ?? [],
+        currency: json['currency'] ?? "",
         description: json['description'] ?? "",
         type: json['type'] ?? "",
         unitAmount: json['unit_amount'] ?? 0

@@ -173,8 +173,10 @@ class SharedPreferenceProvider with ChangeNotifier {
 
   Future<void> setUid(String uid) async {
     await prefs.setString(userId, uid);
-    await subscribeToTopic(uid);
-    await subscribeToTopic('abc');
+    if (uid != '') {
+      await subscribeToTopic(uid);
+      await subscribeToTopic('abc');
+    }
   }
 
   Future<String?> getUid() async {

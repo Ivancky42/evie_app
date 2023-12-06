@@ -9,6 +9,7 @@ class PlanModel {
   String? name;
   String? role;
   String? taxCode;
+  String? feature;
 
   PlanModel({
     this.id,
@@ -18,6 +19,7 @@ class PlanModel {
     required this.name,
     required this.role,
     required this.taxCode,
+    this.feature,
   });
 
   factory PlanModel.fromJson(Map json, String id) {
@@ -28,7 +30,8 @@ class PlanModel {
         images: json['images'] ?? [],
         name: json['name'] ?? "",
         role: json['role'] ?? "",
-        taxCode: json['tax_code'] ?? ""
+        taxCode: json['tax_code'] ?? "",
+        feature: json['stripe_metadata_feature'] ?? ""
     );
   }
 }

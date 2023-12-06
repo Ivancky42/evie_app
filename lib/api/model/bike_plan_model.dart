@@ -4,16 +4,16 @@ class BikePlanModel {
   String? planId;
   String? name;
   DocumentReference? product;
-  Timestamp? periodStart;
-  Timestamp? periodEnd;
+  Timestamp? startAt;
+  Timestamp? expiredAt;
   Timestamp? created;
 
   BikePlanModel({
     this.planId,
     this.name,
     this.product,
-    this.periodStart,
-    this.periodEnd,
+    this.startAt,
+    this.expiredAt,
     this.created,
   });
 
@@ -26,8 +26,8 @@ class BikePlanModel {
       planId: json['eventId'] ?? '',
       name: json['name'] ?? '',
       product: json['product'] ?? null,
-      periodStart: timestampFromJson(json['periodStart']) ?? Timestamp.fromDate(DateTime.now().subtract(Duration(days: 365))),
-      periodEnd: timestampFromJson(json['periodEnd']) ??  Timestamp.fromDate(DateTime.now().subtract(Duration(days: 365))),
+      startAt: timestampFromJson(json['startAt']) ?? Timestamp.fromDate(DateTime.now().subtract(Duration(days: 365))),
+      expiredAt: timestampFromJson(json['expiredAt']) ??  Timestamp.fromDate(DateTime.now().subtract(Duration(days: 365))),
       created: timestampFromJson(json['created']),
     );
   }

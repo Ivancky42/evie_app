@@ -249,7 +249,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SvgPicture.asset(getCurrentBikeStatusIcon(bikeProvider.currentBikeModel!, bikeProvider, bluetoothProvider),),
+                            SvgPicture.asset(getCurrentBikeStatusIcon(bikeProvider.currentBikeModel!, bikeProvider.bikesPlan, bluetoothProvider),),
                             Text(getCurrentBikeStatusString3(
                                 bikeProvider, bluetoothProvider),
                               style: EvieTextStyles.headlineB.copyWith(
@@ -268,7 +268,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           bikeProvider.currentBikeModel != null ?
-                          SvgPicture.asset(getCurrentBikeStatusIcon(bikeProvider.currentBikeModel, bikeProvider, bluetoothProvider),) : Container(),
+                          SvgPicture.asset(getCurrentBikeStatusIcon(bikeProvider.currentBikeModel!, bikeProvider.bikesPlan, bluetoothProvider),) : Container(),
                           Text(getCurrentBikeStatusString3(
                               bikeProvider, bluetoothProvider),
                             style: EvieTextStyles.headlineB.copyWith(
@@ -393,6 +393,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                   showSheetNavigate(context);
                 }
               }
+              //showWelcomeToEVClub(context);
             },
             child: Expanded(
               child: Stack(

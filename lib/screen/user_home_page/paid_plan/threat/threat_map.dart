@@ -40,7 +40,6 @@ import 'package:latlong2/latlong.dart';
 
 import '../home_element/battery.dart';
 import '../home_element/location.dart';
-import '../home_element/status.dart';
 import '../home_element/threat_unlocking_system.dart';
 
 

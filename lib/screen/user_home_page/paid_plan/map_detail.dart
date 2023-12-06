@@ -38,7 +38,6 @@ import '../../../api/dialog.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../bluetooth/modelResult.dart';
 import 'home_element/location.dart';
-import 'home_element/status.dart';
 
 class MyPointAnnotationClickListener extends OnPointAnnotationClickListener {
   @override

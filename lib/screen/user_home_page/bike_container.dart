@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
@@ -25,7 +26,8 @@ import '../../bluetooth/modelResult.dart';
 
 class BikeContainer extends StatefulWidget {
   final BikeModel bikeModel;
-  const BikeContainer({Key? key, required this.bikeModel}) : super(key: key);
+  final LinkedHashMap bikesPlan;
+  const BikeContainer({Key? key, required this.bikeModel, required this.bikesPlan}) : super(key: key);
 
   @override
   State<BikeContainer> createState() => _BikeContainerState();
@@ -173,7 +175,7 @@ class _BikeContainerState extends State<BikeContainer> {
                                       Container(
                                         color: Colors.transparent,
                                         child: SvgPicture.asset(
-                                          getCurrentBikeStatusIcon(widget.bikeModel, _bikeProvider, _bluetoothProvider),
+                                          getCurrentBikeStatusIcon(widget.bikeModel, widget.bikesPlan, _bluetoothProvider),
                                           height: 24.h,
                                           width: 24.w,
                                         ),
@@ -183,7 +185,7 @@ class _BikeContainerState extends State<BikeContainer> {
                                         color: Colors.transparent,
                                         child: Padding(
                                           padding: EdgeInsets.only(top: 0),
-                                          child: Text(getCurrentBikeStatusString(deviceConnectResult == DeviceConnectResult.connected, widget.bikeModel, _bikeProvider,_bluetoothProvider),
+                                          child: Text(getCurrentBikeStatusString(widget.bikeModel, _bikeProvider,_bluetoothProvider),
                                             style: EvieTextStyles.body18.copyWith(color: getCurrentBikeStatusColourText(deviceConnectResult == DeviceConnectResult.connected, widget.bikeModel, _bikeProvider,_bluetoothProvider),
                                             ),
                                             softWrap: true,

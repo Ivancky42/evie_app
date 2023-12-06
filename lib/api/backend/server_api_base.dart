@@ -78,9 +78,15 @@ class ServerApiBase {
         );
         return result.data;
       } on DioError catch (e, s) {
-        var errorMessage = e.response?.data['error_description'];
-        showServerErrorMsg(errorMessage);
-        return errorMessage;
+        if (e.response?.data["error"]['message'] != null) {
+          String errorMessage = e.response?.data["error"]['message'];
+          return errorMessage;
+        }
+        else {
+          var errorMessage = e.response?.data['error_description'];
+          showServerErrorMsg(errorMessage);
+          return errorMessage;
+        }
       }
 
     } on TimeoutException catch (err) {

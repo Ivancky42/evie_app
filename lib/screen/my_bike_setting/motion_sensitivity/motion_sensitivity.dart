@@ -105,7 +105,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                         value: _bikeProvider.currentBikeModel?.movementSetting?.enabled ?? false,
                         activeColor:  EvieColors.primaryColor,
                         thumbColor: _thumbColor,
-                        trackColor: const Color(0xff6A51CA).withOpacity(0.5),
+                        trackColor: EvieColors.lightGrayishCyan,
                         onChanged: (value) async {
                         SmartDialog.showLoading(msg: "Changing");
                         final uploadResult = await _bikeProvider.updateMotionSensitivity(value!,
