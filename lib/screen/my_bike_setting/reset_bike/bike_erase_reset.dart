@@ -52,6 +52,7 @@ class _BikeEraseResetState extends State<BikeEraseReset>{
              // TODO: Handle this case.
                break;
              case UploadFirestoreResult.success:
+               _bluetoothProvider.disconnectDevice();
                _settingProvider.changeSheetElement(SheetList.fullCompleted);
                break;
            }
@@ -83,8 +84,7 @@ class _BikeEraseResetState extends State<BikeEraseReset>{
 
     return WillPopScope(
       onWillPop: () async {
-        bool? exitApp = await showCannotClose() as bool?;
-        return exitApp ?? false;
+        return false;
       },
       child: Scaffold(
         body: Container(

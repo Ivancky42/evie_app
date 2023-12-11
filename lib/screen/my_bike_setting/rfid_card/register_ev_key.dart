@@ -114,7 +114,7 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
           addRFIDStream.cancel();
           SmartDialog.dismiss(status: SmartStatus.loading);
 
-          final result = await _bikeProvider.uploadRFIDtoFireStore(addRFIDStatus.rfidNumber!, "EV-Key ${_bikeProvider.rfidList.isEmpty ? 1 : _bikeProvider.rfidList.length.toString()}");
+          final result = await _bikeProvider.uploadRFIDtoFireStore(addRFIDStatus.rfidNumber!, "EV-Key ${(_bikeProvider.rfidList.length + 1).toString()}");
           if (result == true) {
 
             _settingProvider.changeSheetElement(SheetList.nameEv, addRFIDStatus.rfidNumber!);

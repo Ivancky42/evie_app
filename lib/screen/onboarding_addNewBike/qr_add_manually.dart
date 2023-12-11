@@ -110,7 +110,7 @@ class _QRAddManuallyState extends State<QRAddManually> {
                         inputFormatter: [AddQRInputFormatter()],
                         controller: _serialNumberController,
                         obscureText: false,
-                        hintText: "T0AS01 0101 00001",
+                        hintText: "T0AS01 0101 000001",
                         labelText: "Serial Number",
                         validator: (value) {
                           if (value == null || value.isEmpty) {

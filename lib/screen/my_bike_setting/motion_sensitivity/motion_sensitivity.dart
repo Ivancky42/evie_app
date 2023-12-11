@@ -51,11 +51,20 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
   final Color _thumbColor = EvieColors.thumbColorTrue;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _bikeProvider = context.read<BikeProvider>();
+    _bluetoothProvider = context.read<BluetoothProvider>();
+    _settingProvider = context.read<SettingProvider>();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
-    _bikeProvider = Provider.of<BikeProvider>(context);
-    _bluetoothProvider = Provider.of<BluetoothProvider>(context);
-    _settingProvider = Provider.of<SettingProvider>(context);
+    _bikeProvider = context.watch<BikeProvider>();
+    _bluetoothProvider =  context.watch<BluetoothProvider>();
+    _settingProvider =  context.watch<SettingProvider>();
 
 
     return WillPopScope(
@@ -102,7 +111,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                     Padding(
                       padding: EdgeInsets.only(left: 8.w),
                       child: CupertinoSwitch(
-                        value: _bikeProvider.currentBikeModel?.movementSetting?.enabled ?? false,
+                        value: _bikeProvider.currentBikeModel!.movementSetting?.enabled ?? false,
                         activeColor:  EvieColors.primaryColor,
                         thumbColor: _thumbColor,
                         trackColor: EvieColors.lightGrayishCyan,

@@ -1078,17 +1078,15 @@ showRemoveEVKeyDialog (BuildContext context, RFIDModel rfidModel, BikeProvider _
               .deleteRFID(rfidModel.rfidID!)
               .listen((deleteRFIDStatus) {
 
-            SmartDialog.dismiss(status: SmartStatus.loading);
-
             if (deleteRFIDStatus.result == CommandResult.success) {
               deleteRFIDStream?.cancel();
               final result = _bikeProvider.deleteRFIDFirestore(rfidModel.rfidID!);
-              if (result == true) {
-                showTextToast("${rfidModel.rfidName} have been removed from your EV-Key list.");
-                SmartDialog.dismiss(status: SmartStatus.loading);
-              } else if (result == false){
-                showDeleteEVKeyFailed(context, "Error removing EV Card");
-              }
+              _bikeProvider.removeRFIDByID(rfidModel.rfidID!);
+              showTextToast("${rfidModel.rfidName} have been removed from your EV-Key list.");
+              SmartDialog.dismiss(status: SmartStatus.loading);
+            }
+            else {
+              print(deleteRFIDStatus.result);
             }
           }, onError: (error) {
             deleteRFIDStream?.cancel();
@@ -1120,13 +1118,17 @@ showRemoveAllEVKeyDialog (BuildContext context, BikeProvider  _bikeProvider, Blu
         onPressedUp: () async {
           SmartDialog.dismiss();
           SmartDialog.showLoading(msg: "Removing all EV-Key....");
-          List keysToDelete = _bikeProvider.rfidList.keys.toList();
-          for (var key in keysToDelete) {
-            final rfidModel = _bikeProvider.rfidList[key];
+
+          // Explicitly declare the type of the list
+          List<String> keysToDelete = _bikeProvider.rfidList.keys.cast<String>().toList();
+
+          await Future.forEach(keysToDelete, (String key) async {
             _bluetoothProvider.deleteRFID(key);
             await _bikeProvider.deleteRFIDFirestore(key);
-            await Future.delayed(Duration(seconds: 2));
-          }
+            _bikeProvider.removeRFIDByID(key);
+            await Future.delayed(Duration(seconds: 1));
+          });
+
           SmartDialog.dismiss(status: SmartStatus.loading);
           showTextToast('Successfully removed all the EV-Key from your bike.');
         },
@@ -1721,7 +1723,9 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
   );
 
-  _bikeProvider.blockConnectingToast(true);
+  Future.delayed(Duration.zero).then((value) {
+    _bikeProvider.blockConnectingToast(true);
+  });
 
   SmartDialog.show(
     keepSingle: true,
@@ -1742,7 +1746,9 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                     width: 52.w,
                     height: 50.h,
                   );
-                  _bikeProvider.blockConnectingToast(false);
+                  Future.delayed(Duration.zero).then((value) {
+                    _bikeProvider.blockConnectingToast(false);
+                  });
                   SmartDialog.dismiss();
                 }  else if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
                     _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
@@ -1764,7 +1770,9 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                 }
                 else if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.disconnected) {
                   buttonImage = Text('Connect Bike', style: EvieTextStyles.body18,);
-                  _bikeProvider.blockConnectingToast(false);
+                  Future.delayed(Duration.zero).then((value) {
+                    _bikeProvider.blockConnectingToast(false);
+                  });
                   SmartDialog.dismiss();
                 }
                 else if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanTimeout) {
@@ -1826,7 +1834,9 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                         _bluetoothProvider.switchBikeDetected();
                         _bluetoothProvider.startScanTimer?.cancel();
                       }
-                      _bikeProvider.blockConnectingToast(false);
+                      Future.delayed(Duration.zero).then((value) {
+                        _bikeProvider.blockConnectingToast(false);
+                      });
                       SmartDialog.dismiss();
                     });
               }

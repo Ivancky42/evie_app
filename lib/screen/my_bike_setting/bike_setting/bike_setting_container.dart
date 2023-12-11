@@ -427,6 +427,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
               behavior: HitTestBehavior.translucent,
               onTap: () {
                 _settingProvider.changeSheetElement(SheetList.currentPlan);
+                //_settingProvider.changeSheetElement(SheetList.proPlan);
               },
               child: Container(
                 child: Padding(

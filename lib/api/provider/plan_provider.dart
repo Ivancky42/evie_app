@@ -69,8 +69,10 @@ class PlanProvider extends ChangeNotifier {
           }
         }
 
-        currentPlanModel = availablePlanList.values.elementAt(0);
-        getPriceList(currentPlanModel!.id!);
+        if (availablePlanList.isNotEmpty) {
+          currentPlanModel = availablePlanList.values.elementAt(0);
+          getPriceList(currentPlanModel!.id!);
+        }
         notifyListeners();
       }
       else {

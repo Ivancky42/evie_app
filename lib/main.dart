@@ -227,6 +227,11 @@ class MyApp extends StatelessWidget {
     SettingProvider _settingProvider = Provider.of<SettingProvider>(context);
     //_settingProvider.init();
 
+    final AppcastConfiguration cfg = AppcastConfiguration(
+      url: 'https://your-appcast-url.com/appcast.xml', // Replace with your appcast URL
+      supportedOS: ['android', 'ios'],
+    );
+
     decideMainPage() {
       if (_authProvider.isLogin == true) {
         if (_authProvider.isEmailVerified == true) {
@@ -302,7 +307,6 @@ class MyApp extends StatelessWidget {
             "/editProfile": (context) => const EditProfile(),
             "/verifyPassword": (context) => const VerifyPassword(),
             "/enterNewPassword": (context) => const EnterNewPassword(),
-            "/detectionSensitivity": (context) => const DetectionSensitivity(),
             //"/signUpPassword": (context, name, email) => SignUpPassword(),
 
           },
@@ -311,14 +315,12 @@ class MyApp extends StatelessWidget {
           builder: FlutterSmartDialog.init(),
 
           ///For user version update
-          /*
           home: Scaffold(
               appBar: AppBar(title: Text('Upgrader Example')),
               body: UpgradeAlert(
                 upgrader: Upgrader(dialogStyle: UpgradeDialogStyle.cupertino, appcastConfig: cfg),
                 child: Center(child: Text('Checking...')),
               )),
-           */
         ),
       );
     });

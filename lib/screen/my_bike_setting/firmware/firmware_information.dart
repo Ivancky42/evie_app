@@ -115,24 +115,10 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                         Navigator.of(context).pop();
                         _settingProvider.changeSheetElement(SheetList.bikeSetting);
                       })
-                  // EvieDoubleButtonDialog(
-                  //     title: "Close this sheet?",
-                  //     childContent: Text("Are you sure you want to close this sheet? This will end the upgrade.",
-                  //       style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),),
-                  //     leftContent: "No",
-                  //     rightContent: "Yes",
-                  //     onPressedLeft: () {
-                  //       shouldClose = false;
-                  //       Navigator.of(context).pop();
-                  //     },
-                  //     onPressedRight: () {
-                  //       _bluetoothProvider.firmwareUpgradeListener.onCancel;
-                  //       shouldClose = true;
-                  //       Navigator.of(context).pop();
-                  //     })
         );
           return shouldClose;
-        }else{
+        }
+        else{
          //_settingProvider.changeSheetElement(SheetList.bikeSetting);
          return true;
         }

@@ -72,7 +72,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
                   Text(_bikeProvider.isPlanSubscript == false ?"" : "${_bikeProvider.currentBikePlanModel!.startAt?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.startAt?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.startAt?.toDate().year} - "
                         "${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().year}",
                         style: EvieTextStyles.body18.copyWith(color:EvieColors.darkGrayishCyan)),
-                  SizedBox(height:11.h,),
+                  _bikeProvider.isPlanSubscript == false ? Container() : SizedBox(height:11.h,),
 
                   Visibility(
                     visible: _bikeProvider.isPlanSubscript == true,
@@ -92,19 +92,23 @@ class _CurrentPlanState extends State<CurrentPlan> {
                               style: EvieTextStyles.body16.copyWith(color: EvieColors.green),
                             ),
 
+                            _bikeProvider.currentBikePlanModel != null ?
                             Visibility(
                               visible: calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.expiredAt!.toDate()) >= 0 &&
                                 calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.expiredAt!.toDate()) <= 30,
                               child: Text(
                               " (Expiring in ${calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.expiredAt!.toDate())} Days)",
                               style: EvieTextStyles.body16.copyWith(color: EvieColors.green),
-                            ),)
+                              ),
+                            ) : Container(),
                           ],
                         ),
                       ],
                     ),
                   ),
 
+                  _bikeProvider.isPlanSubscript == false ?
+                  Container() :
                   Padding(
                     padding: EdgeInsets.only(left: 0, top: 10.h),
                     child: const EvieDivider(),

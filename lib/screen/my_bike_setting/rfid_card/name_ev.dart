@@ -129,7 +129,7 @@ class _NameEVState extends State<NameEV> {
                       obscureText: false,
                       // keyboardType: TextInputType.name,
                       hintText: "EV-Key Label",
-                      labelText: "EV-Key 1",
+                      labelText: "EV-Key " + (_bikeProvider.rfidList.length).toString(),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter EV-Key Card name';
@@ -143,7 +143,7 @@ class _NameEVState extends State<NameEV> {
             ),
 
             Padding(
-              padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 28.h),
+              padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, EvieLength.screen_bottom),
               child: Column(
                 children: [
                   SizedBox(
@@ -171,7 +171,7 @@ class _NameEVState extends State<NameEV> {
                     ),
                   ),
 
-                  SizedBox(height: 21.h,),
+                  SizedBox(height: 14.h,),
 
                   SizedBox(
                     width: double.infinity,

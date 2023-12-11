@@ -53,7 +53,7 @@ class _AccountRegisteredState extends State<AccountRegistered> {
                               height: 1.h,
                             ),
                             Text(
-                              "Awesome! You're ready to go. Let's start by registering your bike so you can have a smooth and seamless riding experience.",
+                              "Awesome! ${_userProvider.currentUserModel?.name}! You're ready to go. Let's start by registering your bike so you can have a smooth and seamless riding experience.",
                               style: EvieTextStyles.body18,
                             ),
                           ],

@@ -480,27 +480,6 @@ void changeToMyGarageScreen(BuildContext context) {
 //   );
 // }
 
-void changeToMotionSensitivityScreen(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const MotionSensitivity(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
-
-
-void changeToDetectionSensitivityScreen(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const DetectionSensitivity(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
-
 
 void changeToBikeStatusAlertScreen(BuildContext context) {
   Navigator.pushReplacement(context,

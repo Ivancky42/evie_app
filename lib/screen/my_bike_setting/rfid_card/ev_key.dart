@@ -125,7 +125,7 @@ class _EVKeyState extends State<EVKey> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, 18.h),
+                padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.screen_bottom),
                 child: SizedBox(
                   height: 48.h,
                   width: double.infinity,

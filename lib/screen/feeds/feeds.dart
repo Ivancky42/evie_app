@@ -391,7 +391,7 @@ class _FeedsState extends State<Feeds> {
                                                   style: EvieTextStyles.body18.copyWith(color: EvieColors.grayishWhite, fontWeight: FontWeight.w800),
                                                 ),
                                                 height: 40.h,
-                                                width: 159.w,
+                                                width: 170.w,
                                               ),
                                             ],
                                           ),

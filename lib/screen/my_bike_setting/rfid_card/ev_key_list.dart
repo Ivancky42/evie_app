@@ -78,224 +78,232 @@ class _EVKeyListState extends State<EVKeyList> {
           },
         ),
         body: Padding(
-            padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w, 18.h),
+            padding: EdgeInsets.fromLTRB(0, 28.h, 0, EvieLength.screen_bottom),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ListView.separated(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  separatorBuilder: (context, index) {
-                    return Divider(height: 1.h, color: Colors.red,);
-                  },
-                  itemCount: _bikeProvider.rfidList.length,
-                  itemBuilder: (context, index) {
-                    return Slidable(
-                      key: UniqueKey(),
-                      endActionPane:  _bikeProvider.isOwner == true ? ActionPane(
-                        extentRatio: 0.18,
-                        motion: const StretchMotion(),
-                        children: [
-                          SlidableAction(
-                            spacing:10,
-                            onPressed: (context) async{
-                              RFIDModel rfidModel = _bikeProvider.rfidList.values.elementAt(index);
-                              showRemoveEVKeyDialog(context, rfidModel, _bikeProvider, _bluetoothProvider);
-                            },
-                            backgroundColor: EvieColors.red,
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
+                Column(
+                  children: [
+                    Column(
+                      children: [
+                        ListView.separated(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          separatorBuilder: (context, index) {
+                            return Container();
+                          },
+                          itemCount: _bikeProvider.rfidList.length,
+                          itemBuilder: (context, index) {
+                            return Slidable(
+                              key: UniqueKey(),
+                              endActionPane:  _bikeProvider.isOwner == true ? ActionPane(
+                                extentRatio: 0.18,
+                                motion: const StretchMotion(),
+                                children: [
+                                  SlidableAction(
+                                    spacing:10,
+                                    onPressed: (context) async{
+                                      RFIDModel rfidModel = _bikeProvider.rfidList.values.elementAt(index);
+                                      showRemoveEVKeyDialog(context, rfidModel, _bikeProvider, _bluetoothProvider);
+                                    },
+                                    backgroundColor: EvieColors.red,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.delete,
 
-                          ),
-                          // Container(
-                          //   width: 50.w,
-                          //   height: 50.h,
-                          //   color: Colors.red,
-                          // )
-                        ],
-                      ) : null,
-                      child: Column(
-                        children: [
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Padding(
-                              padding: EdgeInsets.fromLTRB(0.w, 0.h, 6.w, 0.h),
-                              child: SvgPicture.asset(
-                                "assets/icons/key.svg",
-                                height: 30.h,
-                                width: 30.w,
-                              ),
-                            ),
-                            title: Text(
-                              _bikeProvider.rfidList.values.elementAt(index).rfidName,
-                              //"EV-Key 1",
-                              style: EvieTextStyles.body18,
-                            ),
-                            // subtitle: Text(
-                            //   _bikeProvider.rfidList.keys.elementAt(index),
-                            //   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
-                            // ),
-                            trailing: isManageList ? Container(
-                              width: 107.w,
-                              height: 43.h,
-                              child: ElevatedButton(
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      "assets/icons/delete.svg",
-                                      height: 20.h,
-                                      width: 20.w,
-                                    ),
-                                    Text(
-                                      "Delete",
-                                      style: EvieTextStyles.body12.copyWith(color: EvieColors.grayishWhite),
-                                    ),
-                                  ],
-                                ),
-                                onPressed: () {
-                                  ///Remove all rfid key
-                                  //deleteSingleFRFID(index);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(20.w)),
-                                  elevation: 0.0,
-                                  backgroundColor: EvieColors.primaryColor,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 14.h, vertical: 14.h),
-                                ),
-                              ),
-                            )
-                                : IconButton(
-                              onPressed: () {
-                                SmartDialog.show(
-                                    widget: Form(
-                                      key: _formKey,
-                                      child: EvieDoubleButtonDialog(
-                                          title: "Name Your EV-Key",
-                                          childContent: Container(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Label your smart key similiar with the name you wrote on the key so that you can differentiate them easily.",
-                                                  style: EvieTextStyles.body16.copyWith(color:EvieColors.lightBlack),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0.h, 12.h, 0.h, 8.h),
-                                                  child: EvieTextFormField(
-                                                    controller:
-                                                    _rfidNameController,
-                                                    obscureText: false,
-                                                    keyboardType: TextInputType.name,
-                                                    hintText:
-                                                    "EV-Key 1 (pre-select texts)",
-                                                    labelText: "EV-Key Label",
-                                                    validator: (value) {
-                                                      if (value == null || value.isEmpty) {
-                                                        return 'Please enter RFID name';
-                                                      }
-                                                      return null;
-                                                    },
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "100 Maximum Character",
-                                                  style: EvieTextStyles.body12.copyWith(color:EvieColors.lightBlack),
-                                                ),
-                                              ],
-                                            ),
+                                  ),
+                                ],
+                              ) : null,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
+                                    child: ListTile(
+                                      contentPadding: EdgeInsets.zero,
+                                      leading: Padding(
+                                        padding: EdgeInsets.fromLTRB(0.w, 0.h, 6.w, 0.h),
+                                        child: SvgPicture.asset(
+                                          "assets/icons/key.svg",
+                                          height: 30.h,
+                                          width: 30.w,
+                                        ),
+                                      ),
+                                      title: Text(
+                                        _bikeProvider.rfidList.values.elementAt(index).rfidName,
+                                        //"EV-Key 1",
+                                        style: EvieTextStyles.body18,
+                                      ),
+                                      // subtitle: Text(
+                                      //   _bikeProvider.rfidList.keys.elementAt(index),
+                                      //   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                                      // ),
+                                      trailing: isManageList ? Container(
+                                        width: 107.w,
+                                        height: 43.h,
+                                        child: ElevatedButton(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              SvgPicture.asset(
+                                                "assets/icons/delete.svg",
+                                                height: 20.h,
+                                                width: 20.w,
+                                              ),
+                                              Text(
+                                                "Delete",
+                                                style: EvieTextStyles.body12.copyWith(color: EvieColors.grayishWhite),
+                                              ),
+                                            ],
                                           ),
-                                          leftContent: "Cancel",
-                                          rightContent: "Save",
-                                          onPressedLeft: () {
-                                            SmartDialog.dismiss();
+                                          onPressed: () {
+                                            ///Remove all rfid key
+                                            //deleteSingleFRFID(index);
                                           },
-                                          onPressedRight: () async {
-                                            if (_formKey.currentState!.validate()) {
+                                          style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(20.w)),
+                                            elevation: 0.0,
+                                            backgroundColor: EvieColors.primaryColor,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 14.h, vertical: 14.h),
+                                          ),
+                                        ),
+                                      ) :
+                                      IconButton(
+                                        onPressed: () {
+                                          SmartDialog.show(
+                                              widget: Form(
+                                                key: _formKey,
+                                                child: EvieDoubleButtonDialog(
+                                                    title: "Name Your EV-Key",
+                                                    childContent: Container(
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text(
+                                                            "Label your smart key similiar with the name you wrote on the key so that you can differentiate them easily.",
+                                                            style: EvieTextStyles.body16.copyWith(color:EvieColors.lightBlack),
+                                                          ),
+                                                          Padding(
+                                                            padding: EdgeInsets.fromLTRB(
+                                                                0.h, 12.h, 0.h, 8.h),
+                                                            child: EvieTextFormField(
+                                                              controller:
+                                                              _rfidNameController,
+                                                              obscureText: false,
+                                                              keyboardType: TextInputType.name,
+                                                              hintText:
+                                                              "EV-Key 1 (pre-select texts)",
+                                                              labelText: "EV-Key Label",
+                                                              validator: (value) {
+                                                                if (value == null || value.isEmpty) {
+                                                                  return 'Please enter RFID name';
+                                                                }
+                                                                return null;
+                                                              },
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            "100 Maximum Character",
+                                                            style: EvieTextStyles.body12.copyWith(color:EvieColors.lightBlack),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    leftContent: "Cancel",
+                                                    rightContent: "Save",
+                                                    onPressedLeft: () {
+                                                      SmartDialog.dismiss();
+                                                    },
+                                                    onPressedRight: () async {
+                                                      if (_formKey.currentState!.validate()) {
 
-                                              ///For keyboard un focus
-                                              FocusManager.instance.primaryFocus?.unfocus();
+                                                        ///For keyboard un focus
+                                                        FocusManager.instance.primaryFocus?.unfocus();
 
-                                              SmartDialog.dismiss();
-                                              final result = await _bikeProvider.updateRFIDCardName(
-                                                  _bikeProvider.rfidList.keys.elementAt(index),
-                                                  _rfidNameController.text.trim());
-
-                                              result == true ?
-                                              showAddEVKeyNameSuccess(context)
-                                                  : SmartDialog.show(
-                                                  widget: EvieSingleButtonDialogOld(
-                                                      title: "Error",
-                                                      content:
-                                                      "Please try again",
-                                                      rightContent:
-                                                      "OK",
-                                                      onPressedRight: () {
                                                         SmartDialog.dismiss();
-                                                      }));
-                                            }
-                                          }),
-                                    ));
-                              },
-                              icon: SvgPicture.asset(
-                                "assets/buttons/pen_edit.svg",
-                                height: 24.h,
-                                width: 24.w,
-                              ),
-                            ),
-                          ),
-                          Container(
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 52.w),
-                                child: Divider(
-                                  thickness: 0.2.h,
-                                  color: EvieColors.darkWhite,
-                                  height: 0,
-                                ),
-                              )
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                                                        final result = await _bikeProvider.updateRFIDCardName(
+                                                            _bikeProvider.rfidList.keys.elementAt(index),
+                                                            _rfidNameController.text.trim());
 
-                EvieButton(
-                  width: double.infinity,
-                  height: 48.h,
-                  child: Text(
-                    "Add EV-Key",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  onPressed: () {
-                    //changeToAddNewEVKey(context);
-                    // _settingProvider.changeSheetElement(SheetList.evKey);
-                    if (deviceConnectResult == null
-                        || deviceConnectResult == DeviceConnectResult.disconnected
-                        || deviceConnectResult == DeviceConnectResult.scanTimeout
-                        || deviceConnectResult == DeviceConnectResult.connectError
-                        || deviceConnectResult == DeviceConnectResult.scanError
-                        || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
-                    ) {
-                      _settingProvider.changeSheetElement(SheetList.registerEvKey);
-                      showConnectBluetoothDialog(context, _bluetoothProvider, _bikeProvider);
-                      //showConnectDialog(_bluetoothProvider, _bikeProvider);
-                    }
-                    else if (deviceConnectResult == DeviceConnectResult.connected) {
-                      _settingProvider.changeSheetElement(SheetList.registerEvKey);
-                    }
-                  },
+                                                        result == true ?
+                                                        showAddEVKeyNameSuccess(context)
+                                                            : SmartDialog.show(
+                                                            widget: EvieSingleButtonDialogOld(
+                                                                title: "Error",
+                                                                content:
+                                                                "Please try again",
+                                                                rightContent:
+                                                                "OK",
+                                                                onPressedRight: () {
+                                                                  SmartDialog.dismiss();
+                                                                }));
+                                                      }
+                                                    }),
+                                              ));
+                                        },
+                                        icon: SvgPicture.asset(
+                                          "assets/buttons/pen_edit.svg",
+                                          height: 24.h,
+                                          width: 24.w,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 70.w),
+                                        child: Divider(
+                                          thickness: 0.2.h,
+                                          color: EvieColors.darkWhite,
+                                          height: 0,
+                                        ),
+                                      )
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
+                  child: EvieButton(
+                    width: double.infinity,
+                    height: 48.h,
+                    child: Text(
+                      "Add EV-Key",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    onPressed: () {
+                      //changeToAddNewEVKey(context);
+                      // _settingProvider.changeSheetElement(SheetList.evKey);
+                      if (deviceConnectResult == null
+                          || deviceConnectResult == DeviceConnectResult.disconnected
+                          || deviceConnectResult == DeviceConnectResult.scanTimeout
+                          || deviceConnectResult == DeviceConnectResult.connectError
+                          || deviceConnectResult == DeviceConnectResult.scanError
+                          || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
+                      ) {
+                        _settingProvider.changeSheetElement(SheetList.registerEvKey);
+                        showConnectBluetoothDialog(context, _bluetoothProvider, _bikeProvider);
+                        //showConnectDialog(_bluetoothProvider, _bikeProvider);
+                      }
+                      else if (deviceConnectResult == DeviceConnectResult.connected) {
+                        _settingProvider.changeSheetElement(SheetList.registerEvKey);
+                      }
+                    },
+                  ),
+                )
               ],
             )
         )

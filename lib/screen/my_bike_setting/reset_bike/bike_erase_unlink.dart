@@ -12,6 +12,7 @@ import '../../../api/dialog.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/provider/bike_provider.dart';
+import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../widgets/evie_button.dart';
 
@@ -25,16 +26,15 @@ class _BikeEraseUnlinkState extends State<BikeEraseUnlink>{
 
   late BikeProvider _bikeProvider;
   late SettingProvider _settingProvider;
+  late BluetoothProvider _bluetoothProvider;
 
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
-      ///Listen provider data in init state
-      //_bikeProvider = Provider.of<BikeProvider>(context, listen: false);
       _bikeProvider = context.read<BikeProvider>();
+      _bluetoothProvider = context.read<BluetoothProvider>();
 
       _bikeProvider.unlinkBikeNew().listen((event) {
         switch(event){
@@ -48,6 +48,7 @@ class _BikeEraseUnlinkState extends State<BikeEraseUnlink>{
             // TODO: Handle this case.
             break;
           case UploadFirestoreResult.success:
+            _bluetoothProvider.disconnectDevice();
             _settingProvider.changeSheetElement(SheetList.forgetCompleted);
             break;
         }
@@ -69,8 +70,7 @@ class _BikeEraseUnlinkState extends State<BikeEraseUnlink>{
 
     return WillPopScope(
       onWillPop: () async {
-        bool? exitApp = await showCannotClose() as bool?;
-        return exitApp ?? false;
+        return false;
       },
       child: Scaffold(
         body: Container(

@@ -2051,6 +2051,11 @@ class BikeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  removeRFIDByID(String id) {
+    rfidList.removeWhere((key, value) => key == id);
+    notifyListeners();
+  }
+
 
 
   clear() async {

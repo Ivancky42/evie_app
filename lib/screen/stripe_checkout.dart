@@ -39,12 +39,14 @@ class StripeCheckoutScreen extends StatefulWidget {
 class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
   late WebViewController _webViewController;
   late BikeProvider _bikeProvider;
+  late NotificationProvider _notificationProvider;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _bikeProvider = context.read<BikeProvider>();
+    _notificationProvider = context.read<NotificationProvider>();
   }
 
   @override
@@ -64,15 +66,12 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
 
         navigationDelegate: (NavigationRequest request) {
           if (request.url.startsWith('https://evie-126a6.web.app/success.html')) {
-
+            // _notificationProvider.showNotification(FlutterLocalNotificationsPlugin(),
+            //     'You’ve Upgraded to EV-Secure!',
+            //     'You’ve subscribed to EV-Secure! Now you can enjoy exclusive EV+ perks until '
+            //         '${monthsInYear[_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().day}, ${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().year}');
             changeToUserHomePageScreen(context);
             showWelcomeToEVClub(context);
-          //   NotificationProvider().showNotification(FlutterLocalNotificationsPlugin(),
-          // 'Welcome to EV+!',
-          // 'You’ve subscribed to EV-Secure! Now you can enjoy exclusive EV+ perks until '
-          // '${monthsInYear[_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().day}, ${_bikeProvider.currentBikePlanModel!.periodEnd?.toDate().year}');
-            // SmartDialog.show(widget:
-            // EvieSingleButtonDialog(title: 'Successfully subscribed', content: 'Plan subscribed.', rightContent: 'View Plan', onPressedRight: () {SmartDialog.dismiss();},));
           } else if (request.url.startsWith('https://evie-126a6.web.app/cancel.html')) {
             // SmartDialog.show(widget:
             // EvieSingleButtonDialog(title: 'Operation failed', content: 'User cancelled the action', rightContent: 'BACK', onPressedRight: () {SmartDialog.dismiss();},));

@@ -25,8 +25,23 @@ import '../screen/user_home_page/paid_plan/threat/threat_history2.dart';
 import 'enumerate.dart';
 import 'model/trip_history_model.dart';
 
-void showSheetNavigate(BuildContext context, [String? source, String? strings]) {
-  showCupertinoSheet(context, SheetNavigator(source ?? 'Home', strings ?? ''));
+void showSheetNavigate(BuildContext context, [String? source, String? strings, SheetList? sheetList]) {
+  if (sheetList != null) {
+    if (sheetList == SheetList.bikeEraseUnlink || sheetList == SheetList.bikeEraseReset) {
+      showCupertinoSheet(
+          context,
+          SheetNavigator(source ?? 'Home', strings ?? ''),
+          enabledDrag: false,
+          isDismissible: false,
+      );
+    }
+  }
+  else {
+    showCupertinoSheet(
+        context,
+        SheetNavigator(source ?? 'Home', strings ?? '')
+    );
+  }
 }
 
 void showTripHistorySheet(BuildContext context) {
@@ -107,7 +122,7 @@ void showRideHistorySheet(BuildContext context, String tripId, TripHistoryModel 
   showCupertinoSheet(context, RideDetail(tripId, currentTripHistoryList));
 }
 
-void showCupertinoSheet(BuildContext context, Widget widget) {
+void showCupertinoSheet(BuildContext context, Widget widget, {bool? enabledDrag, bool? isDismissible}) {
   // Navigator.of(context).push(
   //   CupertinoSheetRoute<void>(
   //     builder: (BuildContext context) => EvieBottomSheet(widget: widget,),

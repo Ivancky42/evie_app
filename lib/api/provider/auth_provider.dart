@@ -487,13 +487,20 @@ class AuthProvider extends ChangeNotifier {
 
         String? userName = "";
 
-        if(nameInput == null || nameInput == ""){
+        if(nameInput == null || nameInput == "") {
           if(appleCredential.givenName != null){
             userName = appleCredential.givenName;
-          }else{
-            userName = "Evie User";
           }
-        }else{
+          else {
+            if (userCredential.user?.displayName != null) {
+              userName = userCredential.user?.displayName;
+            }
+            else {
+              userName = "Evie User";
+            }
+          }
+
+        } else{
           userName = nameInput;
         }
 
