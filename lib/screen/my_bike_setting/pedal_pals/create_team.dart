@@ -138,7 +138,7 @@ class _CreateTeamState extends State<CreateTeam> {
                     child: Text(
                       "Can't think of any name now",
                       softWrap: false,
-                      style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                      style: EvieTextStyles.body18_underline,
                     ),
                     onPressed: () {
                       _bikeProvider.createTeam("Team ${_currentUserProvider.currentUserModel!.name}").then((result) {

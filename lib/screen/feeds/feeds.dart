@@ -26,6 +26,7 @@ import '../../api/model/bike_model.dart';
 import '../../api/model/notification_model.dart';
 import '../../api/navigator.dart';
 import '../../api/provider/setting_provider.dart';
+import '../../api/provider/shared_pref_provider.dart';
 import '../../api/sheet.dart';
 import '../../api/snackbar.dart';
 import '../../bluetooth/modelResult.dart';
@@ -47,6 +48,8 @@ class _FeedsState extends State<Feeds> {
   late NotificationProvider _notificationProvider;
   late BluetoothProvider _bluetoothProvider;
   late SettingProvider _settingProvider;
+  late SharedPreferenceProvider _sharedPreferenceProvider;
+  String? isFirstFeedRequest;
 
   LinkedHashMap selectedBikeList = LinkedHashMap<String, BikeModel>();
 
@@ -54,7 +57,18 @@ class _FeedsState extends State<Feeds> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    requestNotificationPermission();
+    //requestNotificationPermission();
+    _sharedPreferenceProvider = context.read<SharedPreferenceProvider>();
+    isFirstFeedRequest = _sharedPreferenceProvider.feed;
+
+    if (isFirstFeedRequest == 'null') {
+      _sharedPreferenceProvider.setIsFirstFeedRequest('done');
+      Future.delayed(Duration.zero).then((value) {
+        SmartDialog.show(
+          widget: FeedFirstDialog(),
+        );
+      });
+    }
   }
 
   @override
@@ -75,8 +89,12 @@ class _FeedsState extends State<Feeds> {
       // Notification permission is granted
       //print('Notification permission is granted');
     } else {
-      // Notification permission is denied
-      //print('Notification permission is denied');
+      Future.delayed(Duration.zero).then((value) {
+        SmartDialog.show(
+          keepSingle: true,
+          widget: FeedFirstDialog(),
+        );
+      });
     }
   }
 
@@ -88,6 +106,8 @@ class _FeedsState extends State<Feeds> {
     _notificationProvider = Provider.of<NotificationProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
+
+    requestNotificationPermission();
 
     return WillPopScope(
       onWillPop: () async {

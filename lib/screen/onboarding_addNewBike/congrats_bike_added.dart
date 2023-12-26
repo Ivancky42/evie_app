@@ -71,10 +71,22 @@ class _CongratsBikeAddedState extends State<CongratsBikeAdded> {
 
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 87.h),
-                      child: Text(
-                        "You have successfully added ${widget.bikeName.toString().trim() ?? ""}. Get ready to track your rides, access all the fun features, and have an amazing time. \n \n"
-                            "If there's anything we can help with, just let us know. Happy riding!",
-                        style: EvieTextStyles.body18,
+                      child: RichText(
+                        text: TextSpan(
+                          text: "You have successfully added ",
+                          style: TextStyle(fontSize: 18.sp,  fontFamily: 'Avenir', color: EvieColors.lightBlack),
+                          children: [
+                            TextSpan(
+                              text: widget.bikeName.toString(),
+                              style: TextStyle(fontSize: 18.sp, color: EvieColors.primaryColor, fontFamily: 'Avenir'),
+                            ),
+                            TextSpan(
+                              text: ". Get ready to track your rides, access all the fun features, and have an amazing time. \n \n"
+                                  "If there's anything we can help with, just let us know. Happy riding!",
+                              style: TextStyle(fontSize: 18.sp,  fontFamily: 'Avenir', color: EvieColors.lightBlack),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
 

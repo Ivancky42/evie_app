@@ -73,7 +73,7 @@ class _SwitchBikeState extends State<SwitchBike> {
                       changeToTurnOnQRScannerScreen(context);
                     },
                     child: Text(
-                      "Add More Bike",
+                      "Add Bike",
                       style: TextStyle(
                           fontSize: 16.sp, fontWeight: FontWeight.w700),
                     ),

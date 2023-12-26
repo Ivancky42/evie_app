@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
 import 'package:evie_test/api/provider/ride_provider.dart';
@@ -9,26 +7,19 @@ import 'package:evie_test/api/provider/shared_pref_provider.dart';
 import 'package:evie_test/profile/user_profile.dart';
 import 'package:evie_test/screen/account_verified.dart';
 import 'package:evie_test/screen/input_name.dart';
-import 'package:evie_test/screen/login_method.dart';
 import 'package:evie_test/screen/my_account/edit_profile.dart';
 import 'package:evie_test/screen/my_account/enter_new_password.dart';
 import 'package:evie_test/screen/my_account/verify_password.dart';
-import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_sensitivity.dart';
-import 'package:evie_test/screen/my_bike_setting/reset_bike/bike_erase_unlink.dart';
 import 'package:evie_test/screen/onboarding_addNewBike/before_you_start.dart';
-import 'package:evie_test/screen/signup_method.dart';
-import 'package:evie_test/screen/signup_password.dart';
 import 'package:evie_test/screen/test_ble.dart';
 import 'package:evie_test/screen/user_change_password.dart';
 import 'package:evie_test/screen/verify_email.dart';
 import 'package:evie_test/screen/welcome_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:evie_test/screen/signup_page.dart';
 import 'package:evie_test/screen/login_page.dart';
 import 'package:evie_test/screen/forget_your_password.dart';
 import 'package:evie_test/theme/AppTheme.dart';
@@ -43,13 +34,11 @@ import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:upgrader/upgrader.dart';
 import 'api/colours.dart';
-import 'api/model/user_model.dart';
 import 'api/provider/auth_provider.dart';
 import 'api/provider/bike_provider.dart';
 import 'api/provider/firmware_provider.dart';
 import 'api/provider/location_provider.dart';
 import 'api/provider/notification_provider.dart';
-import 'api/provider/trip_provider.dart';
 
 
 ///Main function execution
@@ -227,10 +216,8 @@ class MyApp extends StatelessWidget {
     SettingProvider _settingProvider = Provider.of<SettingProvider>(context);
     //_settingProvider.init();
 
-    final AppcastConfiguration cfg = AppcastConfiguration(
-      url: 'https://your-appcast-url.com/appcast.xml', // Replace with your appcast URL
-      supportedOS: ['android', 'ios'],
-    );
+    // // Call the version check when the app starts
+    // WidgetsBinding.instance?.addPostFrameCallback((_) => checkAppVersion(context, _settingProvider.minRequiredVersion));
 
     decideMainPage() {
       if (_authProvider.isLogin == true) {
@@ -292,7 +279,7 @@ class MyApp extends StatelessWidget {
           routes: {
             "/welcome": (context) => const Welcome(),
             "/inputName": (context) => const InputName(),
-            "/signInMethod": (context) => const SignInMethod(),
+            // "/signInMethod": (context) => const SignInMethod(),
             "/verifyEmail": (context) => const VerifyEmail(),
             "/accountVerified": (context) => const AccountVerified(),
             "/letsGo": (context) => const BeforeYouStart(),
@@ -315,16 +302,33 @@ class MyApp extends StatelessWidget {
           builder: FlutterSmartDialog.init(),
 
           ///For user version update
-          home: Scaffold(
-              appBar: AppBar(title: Text('Upgrader Example')),
-              body: UpgradeAlert(
-                upgrader: Upgrader(dialogStyle: UpgradeDialogStyle.cupertino, appcastConfig: cfg),
-                child: Center(child: Text('Checking...')),
-              )),
         ),
       );
     });
   }
+
+  // Future<void> checkAppVersion(context, String? minRequiredVersion) async {
+  //   final packageInfo = await PackageInfo.fromPlatform();
+  //   final currentVersion = packageInfo.version;
+  //
+  //   if (minRequiredVersion != null) {
+  //     if (currentVersion.compareTo(minRequiredVersion) < 0) {
+  //       // Show a dialog or take appropriate action for an update required
+  //       SmartDialog.show(
+  //           widget: EvieDoubleButtonDialog(
+  //               title: "Update Required",
+  //               childContent: Text('Please update the app to the latest version.'),
+  //               leftContent: 'Cancel',
+  //               rightContent: 'Update Now',
+  //               onPressedLeft: () {},
+  //               onPressedRight: () {}
+  //           ),
+  //           clickBgDismissTemp: false,
+  //           backDismiss: false,
+  //       );
+  //     }
+  //   }
+  // }
 }
 
 /// CREATE A [AndroidNotificationChannel] FOR HEADS UP NOTIFICATIONS

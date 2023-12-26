@@ -15,6 +15,7 @@ import '../../api/navigator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../api/provider/bike_provider.dart';
+import '../../api/snackbar.dart';
 import '../../widgets/evie_progress_indicator.dart';
 import '../../widgets/evie_textform.dart';
 
@@ -30,12 +31,31 @@ class _NameBikeState extends State<NameBike> {
   late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
 
+  late final FocusNode _nameFocusNode;
+
+  _NameBikeState() : _nameFocusNode = FocusNode();
+  final TextEditingController _bikeNameController = TextEditingController();
+
+  bool enabled = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _nameFocusNode.requestFocus();
+  }
+
+  // @override
+  // void dispose() {
+  //   _nameFocusNode.dispose();
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
 
-    final TextEditingController _bikeNameController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
 
     return WillPopScope(
@@ -81,6 +101,8 @@ class _NameBikeState extends State<NameBike> {
                       keyboardType: TextInputType.name,
                       hintText: "give your bike a unique name",
                       labelText: "Bike Name",
+                      focusNode: _nameFocusNode,
+                      enabled: enabled,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your bike name';
@@ -104,23 +126,34 @@ class _NameBikeState extends State<NameBike> {
                     "Save",
                     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                   ),
-                  onPressed: () async {
+                  onPressed: enabled ? () async {
                     if (_formKey.currentState!.validate()) {
 
-                      ///For keyboard un focus
-                      FocusManager.instance.primaryFocus?.unfocus();
+                      setState(() {
+                        enabled = false;
+                      });
+
 
                       _bikeProvider.updateBikeName(_bikeNameController.text.trim()).then((result){
                         if(result == true){
                           /// if(bikeProvider.isAddBike == true) logic inside dialog
-                        showAddBikeNameSuccess(context, _bikeProvider, _bikeNameController.text.trim());
+                          showSucccessUpdateBikeName(context);
+                          Future.delayed(Duration(seconds: 4)).then((value) {
+                            if(_bikeProvider.isAddBike == true){
+                              _bikeProvider.setIsAddBike(false);
+                              changeToCongratsBikeAdded(context, _bikeNameController.text.toString());
+                            }else{
+                              // changeToTurnOnNotificationsScreen(context);
+                              changeToCongratsBikeAdded(context, _bikeNameController.text.toString());
+                            }
+                          });
 
                         } else{
-                        showAddBikeNameFailed();
+                          showFailUpdateBikeName(context);
                         }
                       });
                     }
-                  },
+                  } : null
                 ),
               ),
             ),
@@ -135,19 +168,34 @@ class _NameBikeState extends State<NameBike> {
                     child: Text(
                       "Can't think of any name now",
                       softWrap: false,
-                      style: TextStyle(fontSize: 14.sp, fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                      style: EvieTextStyles.body18_underline,
                     ),
-                    onPressed: () {
-
-                      _bikeProvider.updateBikeName("Evie Bike").then((result){
+                    onPressed: enabled ? () {
+                      setState(() {
+                        enabled = false;
+                      });
+                      _bikeProvider.updateBikeName("EVIE " + _bikeProvider.currentBikeModel!.model!).then((result){
                         if(result == true){
                           /// if(bikeProvider.isAddBike == true) logic inside dialog
-                          showAddBikeNameSuccess(context, _bikeProvider, "Evie Bike");
-                        } else{
-                          showAddBikeNameFailed();
+                          showSucccessUpdateBikeName(context);
+                          Future.delayed(Duration(seconds: 4)).then((value) {
+                            if(_bikeProvider.isAddBike == true){
+                              _bikeProvider.setIsAddBike(false);
+                              changeToCongratsBikeAdded(context, "EVIE " + _bikeProvider.currentBikeModel!.model!);
+                            }else{
+                              // changeToTurnOnNotificationsScreen(context);
+                              changeToCongratsBikeAdded(context, "EVIE " + _bikeProvider.currentBikeModel!.model!);
+                            }
+                          });
+                        } 
+                        else{
+                          setState(() {
+                            enabled = true;
+                          });
+                          showFailUpdateBikeName(context);
                         }
                       });
-                    },
+                    } : null,
                   ),
                 ),
               ),

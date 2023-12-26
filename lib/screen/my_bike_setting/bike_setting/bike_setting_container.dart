@@ -597,7 +597,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             ),
           ],
         );
-      case "Bike Status Alert":
+      case "Orbital Anti-theft":
         return Column(
           children: [
             GestureDetector(
@@ -820,7 +820,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             ),
           ],
         );
-      case "Firmware Version":
+      case "Bike Software":
         return Column(
           children: [
             GestureDetector(
@@ -971,67 +971,123 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
         );
 
       case "Reset Bike":
-        return Column(
-          children: [
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
+        if (_bikeProvider.isOwner == true) {
+          return Column(
+            children: [
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  if (_bikeProvider.isOwner == true) {
+                    _settingProvider.changeSheetElement(SheetList.resetBike2);
+                  } else {
+                    _settingProvider.changeSheetElement(SheetList.leaveTeam);
+                    //_settingProvider.changeSheetElement(SheetList.resetBike2);
+                  }
+                },
+                child: Container(
+                  child: Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
 
-                if (_bikeProvider.isOwner == true){
-                  _settingProvider.changeSheetElement(SheetList.resetBike2);
-                } else{
-                  _settingProvider.changeSheetElement(SheetList.leaveTeam);
-                  //_settingProvider.changeSheetElement(SheetList.resetBike2);
-                }
-
-              },
-              child: Container(
-                child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-
-                            if (_bikeProvider.isOwner == true)...{
-                              Text(
-                                "Reset",
-                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-                              ),
-                            } else...{
-                              Text(
-                                "Leave Team",
-                                style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-                              ),
-                            }
-                          ],
-                        ),
-                        SvgPicture.asset(
-                          "assets/buttons/next.svg",
-                        ),
-                      ],
-                    )
+                              if (_bikeProvider.isOwner == true)...{
+                                Text(
+                                  "Reset",
+                                  style: EvieTextStyles.body18.copyWith(
+                                      color: EvieColors.lightBlack),
+                                ),
+                              } else
+                                ...{
+                                  Text(
+                                    "Leave Team",
+                                    style: EvieTextStyles.body18.copyWith(
+                                        color: EvieColors.lightBlack),
+                                  ),
+                                }
+                            ],
+                          ),
+                          SvgPicture.asset(
+                            "assets/buttons/next.svg",
+                          ),
+                        ],
+                      )
+                  ),
                 ),
               ),
-            ),
-            Container(
-                color: Colors.transparent,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
-                  child: Divider(
-                    thickness: 0.2.h,
-                    color: EvieColors.darkWhite,
-                    height: 0,
+              Container(
+                  color: Colors.transparent,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                    child: Divider(
+                      thickness: 0.2.h,
+                      color: EvieColors.darkWhite,
+                      height: 0,
+                    ),
+                  )
+              ),
+              // Divider(
+              //   thickness: 11.h,
+              //   color: const Color(0xffF4F4F4),
+              // ),
+            ],
+          );
+        }
+        else {
+          return Container();
+        }
+
+      case "Leave Team":
+        if (_bikeProvider.isOwner == true) {
+          return Container();
+        }
+        else {
+          return Column(
+            children: [
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  _settingProvider.changeSheetElement(SheetList.leaveTeam);
+                },
+                child: Container(
+                  child: Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                "Leave Team",
+                                style: EvieTextStyles.body18.copyWith(
+                                    color: EvieColors.lightBlack),
+                              ),
+                            ],
+                          ),
+                          SvgPicture.asset(
+                            "assets/buttons/next.svg",
+                          ),
+                        ],
+                      )
                   ),
-                )
-            ),
-            // Divider(
-            //   thickness: 11.h,
-            //   color: const Color(0xffF4F4F4),
-            // ),
-          ],
-        );
+                ),
+              ),
+              Container(
+                  color: Colors.transparent,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                    child: Divider(
+                      thickness: 0.2.h,
+                      color: EvieColors.darkWhite,
+                      height: 0,
+                    ),
+                  )
+              ),
+            ],
+          );
+        }
       default:
         return Container();
     }

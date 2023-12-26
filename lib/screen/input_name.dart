@@ -19,8 +19,15 @@ class InputName extends StatefulWidget {
 
 class _InputNameState extends State<InputName> {
   final TextEditingController _nameController = TextEditingController();
-
+  final FocusNode _nameFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _nameFocusNode.requestFocus();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +38,7 @@ class _InputNameState extends State<InputName> {
           Form(
             key: _formKey,
             child:Padding(
-                padding: EdgeInsets.only(left: 16.w, right: 16.w, top:16.h, bottom: EvieLength.screen_bottom),
+                padding: EdgeInsets.only(left: 16.w, right: 16.w, top:16.h, bottom: EvieLength.target_reference_button_b),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -56,6 +63,7 @@ class _InputNameState extends State<InputName> {
                           keyboardType: TextInputType.name,
                           hintText: "Your first name or nickname",
                           labelText: "Name",
+                          focusNode: _nameFocusNode,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your name';

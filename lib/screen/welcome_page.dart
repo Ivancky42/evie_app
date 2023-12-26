@@ -159,20 +159,8 @@ class _WelcomeState extends State<Welcome> {
                                     changeToAccountRegisterScreen(context);
                                   }
                                   else if (result.containsKey(SignInStatus.registeredUser)) {
-                                    _currentUserProvider.getDeviceInfo();
-                                    final hasBike = await _bikeProvider.checkHasBike(_authProvider.getUid);
-                                    if (!hasBike) {
-                                      changeToBeforeYouStart(context);
-                                    }
-                                    else {
-                                      final hasBike = await _bikeProvider.checkHasBike(_authProvider.getUid);
-                                      if (!hasBike) {
-                                        changeToBeforeYouStart(context);
-                                      }
-                                      else {
-                                        changeToUserHomePageScreen(context);
-                                      }
-                                    }
+                                      _currentUserProvider.getDeviceInfo();
+                                      changeToUserHomePageScreen(context);
                                   }
                                   else if (result.containsKey(SignInStatus.error)) {
                                     SmartDialog.show(
@@ -229,13 +217,7 @@ class _WelcomeState extends State<Welcome> {
                               }
                               else if (loginStatus.containsKey(SignInStatus.registeredUser)) {
                                 _currentUserProvider.getDeviceInfo();
-                                final hasBike = await _bikeProvider.checkHasBike(_authProvider.getUid);
-                                if (!hasBike) {
-                                  changeToBeforeYouStart(context);
-                                }
-                                else {
-                                  changeToUserHomePageScreen(context);
-                                }
+                                changeToUserHomePageScreen(context);
                               }
                               else if (loginStatus.containsKey(SignInStatus.error)) {
                                 SmartDialog.show(
@@ -290,13 +272,7 @@ class _WelcomeState extends State<Welcome> {
                               }
                               else if (result.containsKey(SignInStatus.registeredUser)) {
                                 _currentUserProvider.getDeviceInfo();
-                                final hasBike = await _bikeProvider.checkHasBike(_authProvider.getUid);
-                                if (!hasBike) {
-                                  changeToBeforeYouStart(context);
-                                }
-                                else {
-                                  changeToUserHomePageScreen(context);
-                                }
+                                changeToUserHomePageScreen(context);
                               }
                               else if (result.containsKey(SignInStatus.error)) {
                                     SmartDialog.show(

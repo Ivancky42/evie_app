@@ -46,7 +46,7 @@ class _AccountVerifiedState extends State<AccountVerified> {
         body: Stack(
           children:[
             Padding(
-              padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, EvieLength.screen_bottom),
+              padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, EvieLength.target_reference_button_c),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -85,7 +85,7 @@ class _AccountVerifiedState extends State<AccountVerified> {
                         child: Text(
                           "Maybe Later",
                           softWrap: false,
-                          style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                          style: EvieTextStyles.body18_underline,
                         ),
                         onTap: () {
                           _authProvider.setIsFirstLogin(false);

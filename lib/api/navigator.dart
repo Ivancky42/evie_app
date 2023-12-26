@@ -26,7 +26,6 @@ import '../screen/account_verified.dart';
 import '../screen/check_your_email.dart';
 import '../screen/forget_your_password.dart';
 import '../screen/input_name.dart';
-import '../screen/login_method.dart';
 import '../screen/my_account/display_setting/display_setting.dart';
 import '../screen/my_account/enter_new_password.dart';
 import '../screen/my_account/push_notification/push_notification.dart';
@@ -142,21 +141,6 @@ void changeToVerifyEmailScreen(BuildContext context) {
     },
   ));
 }
-
-changeToSignInMethodScreen(BuildContext context) {
-  //Navigator.of(context).pushNamedAndRemoveUntil("/signInMethod", (route) => false);
-
-  Navigator.of(context).push(CupertinoPageRoute(
-    builder: (context) {
-      return SignInMethod();
-    },
-  ));
-}
-
-// void changeToSignUpPasswordScreen(BuildContext context) {
-//   Navigator.of(context).pushNamedAndRemoveUntil("/signUpPassword", (route) => false);
-// }
-
 
 void changeToSignInScreen(BuildContext context) {
   //Navigator.of(context).pushNamedAndRemoveUntil("/signIn", (route) => false);
@@ -350,11 +334,11 @@ void changeToBikeConnectSuccessScreen(BuildContext context) {
   );
 }
 
-void changeToRegisteringBikeScreen(BuildContext context, bool isSuccess) {
+void changeToRegisteringBikeScreen(BuildContext context, bool isSuccess, String? registeringDeviceIMEI) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: BikeRegistering(isSuccess: isSuccess,),
+      child: BikeRegistering(isSuccess: isSuccess, registeringDeviceIMEI: registeringDeviceIMEI),
       duration: const Duration(milliseconds: 300),
     ),
   );

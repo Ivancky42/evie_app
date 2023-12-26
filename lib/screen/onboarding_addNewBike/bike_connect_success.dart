@@ -27,6 +27,7 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
   bool isNext = true;
 
 
+
   @override
   Widget build(BuildContext context) {
 
@@ -79,7 +80,7 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(32.w, 0.h, 32.w, 4.h),
                         child: Text(
-                          "Evie Bike",
+                          "EVIE " + _bikeProvider.currentBikeModel!.model!.toUpperCase(),
                           style:  EvieTextStyles.body20,
                         ),
                       ),
@@ -89,7 +90,7 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                      child: Padding(
                        padding: EdgeInsets.fromLTRB(32.w, 4.h, 32.w, 32.h),
                        child:
-                       Text(_bikeProvider.currentBikeModel?.deviceIMEI ?? "",
+                       Text(_bikeProvider.currentBikeModel?.serialNumber ?? '',
                          style : EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan),),
                      ),
                   ),

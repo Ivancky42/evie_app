@@ -123,10 +123,10 @@ class _QRScanningState extends State<QRScanning> {
 
                         if (_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success) {
                           SmartDialog.dismiss(status: SmartStatus.loading);
-                          changeToRegisteringBikeScreen(context, true);
+                          changeToRegisteringBikeScreen(context, true, _bikeProvider.registeringDeviceIMEI);
                         } else {
                           SmartDialog.dismiss(status: SmartStatus.loading);
-                          changeToRegisteringBikeScreen(context, false);
+                          changeToRegisteringBikeScreen(context, false, null);
                         }
                       }
                     }
@@ -317,17 +317,13 @@ class _QRScanningState extends State<QRScanning> {
                 alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding:
-                  EdgeInsets.only(left: 16.0.w, right: 16.w, bottom:56.h),
+                  EdgeInsets.only(left: 16.0.w, right: 16.w, bottom: EvieLength.target_reference_button_a),
                   child:  EvieButton(
                     width: double.infinity,
                     height: 48.h,
                     child: Text(
                       "Add Manually",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w700
-                      ),
+                      style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                     ),
                     onPressed: () async {
                       changeToQRAddManuallyScreen(context);

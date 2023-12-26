@@ -1,9 +1,19 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../widgets/evie_double_button_dialog.dart';
 import '../enumerate.dart';
+import '../fonts.dart';
+import '../function.dart';
 
 class SettingProvider with ChangeNotifier {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -20,11 +30,16 @@ class SettingProvider with ChangeNotifier {
 
   PackageInfo? packageInfo;
 
+  StreamSubscription? currentAppSubscription;
+  String? minRequiredVersion;
+  String? currentVersion;
+
   SettingProvider() {
     init();
   }
 
   Future<void> init() async {
+    checkAppVersion();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     ///Measurement
     measurementString = prefs.getString('measurement') ?? "";
@@ -52,10 +67,82 @@ class SettingProvider with ChangeNotifier {
     // else{
     //   currentThemeMode = ThemeMode.system;
     // }
-
-    packageInfo = await PackageInfo.fromPlatform();
-
     notifyListeners();
+  }
+
+  checkAppVersion() async {
+    packageInfo = await PackageInfo.fromPlatform();
+    currentVersion = packageInfo?.version;
+    await currentAppSubscription?.cancel();
+    try {
+      currentAppSubscription = FirebaseFirestore.instance
+          .collection('releases')
+          .doc('app')
+          .snapshots()
+          .listen((snapshot) {
+        if (snapshot.data() != null) {
+          Map<String, dynamic>? obj = snapshot.data();
+          if (obj != null) {
+            if (Platform.isIOS) {
+              minRequiredVersion = obj['iosMinVersion'];
+            }
+            else if (Platform.isAndroid) {
+              minRequiredVersion = obj['andMinVersion'];
+            }
+            if (minRequiredVersion != null && currentVersion != null) {
+              Version minVersion = Version.parse(minRequiredVersion!);
+              Version curVersion = Version.parse(currentVersion!);
+              int hello = curVersion.compareTo(minVersion);
+              if (curVersion!.compareTo(minVersion) < 0) {
+                // Show a dialog or take appropriate action for an update required
+                SmartDialog.show(
+                  widget: EvieTwoButtonDialog(
+                      title: Text(obj['title'],
+                        style:EvieTextStyles.h2,
+                        textAlign: TextAlign.center,
+                      ),
+                      childContent: Text(obj['desc'],
+                        textAlign: TextAlign.center,
+                        style: EvieTextStyles.body18,),
+                      svgpicture: SvgPicture.asset(
+                        "assets/images/app_update.svg",
+                      ),
+                      upContent: obj['upContent'],
+                      downContent: obj['downContent'],
+                      customButtonDown: obj['isForce'] ? Container() : null,
+                      //downContent: "Maybe Later",
+                      onPressedUp: () async {
+                        if (Platform.isAndroid) {
+                          final url = obj['andLink'];
+                          final Uri _url = Uri.parse(url);
+                          launch(_url);
+                        }
+                        else if (Platform.isIOS) {
+                          final url = obj['iosLink'];
+                          final Uri _url = Uri.parse(url);
+                          launch(_url);
+                        }
+                        //SmartDialog.dismiss();
+                      },
+                      onPressedDown: () {
+                        SmartDialog.dismiss();
+                      }),
+                  backDismiss: !obj['isForce'],
+                  clickBgDismissTemp: !obj['isForce'],
+                  tag: 'app_update'
+                );
+              }
+              else {
+                int hello = curVersion.compareTo(minVersion);
+                SmartDialog.dismiss(tag: 'app_update');
+              }
+            }
+          }
+        }
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   ///Measurement

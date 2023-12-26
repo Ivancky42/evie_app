@@ -17,6 +17,7 @@ class SharedPreferenceProvider with ChangeNotifier {
 
   static const userId = "uid";
   static const isFirstLocationRequest = 'location';
+  static const isFirstFeedRequest = 'feed';
 
   static const generalTopic = '~general';
   static const promoTopic = '~promo';
@@ -28,6 +29,9 @@ class SharedPreferenceProvider with ChangeNotifier {
   String? _location;
   String? get location => _location;
 
+  String? _feed;
+  String? get feed => _feed;
+
 
   UserModel? currentUserModel;
   NotificationSettingModel? currentNotificationSettings;
@@ -37,11 +41,13 @@ class SharedPreferenceProvider with ChangeNotifier {
   void init() async {
     prefs = await sharedPreferences;
     await getFirstLocationRequest();
+    await getFirstFeedRequest();
   }
 
   Future<void> update(UserModel? userModel, NotificationSettingModel? notificationSettings, userBikeDetails) async {
     prefs = await sharedPreferences;
     await getFirstLocationRequest();
+    await getFirstFeedRequest();
     if (userModel != null) {
       if (currentUserModel != userModel) {
         if (currentUserModel?.uid != userModel.uid) {
@@ -204,6 +210,18 @@ class SharedPreferenceProvider with ChangeNotifier {
     _location = prefs.getString(isFirstLocationRequest).toString();
     notifyListeners();
     return _location;
+  }
+
+  Future<void> setIsFirstFeedRequest(String result) async {
+    await prefs.setString(isFirstFeedRequest, result);
+    _feed = result;
+    notifyListeners();
+  }
+
+  Future<String?> getFirstFeedRequest() async {
+    _feed = prefs.getString(isFirstFeedRequest).toString();
+    notifyListeners();
+    return _feed;
   }
 
   ///Subscribe function block

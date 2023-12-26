@@ -133,7 +133,17 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
                       final Uri _url = Uri.parse(url);
                       launch(_url);
                     },
-                    child: Text("Get Help", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)))
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Get Help", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)),
+                        SvgPicture.asset(
+                          "assets/buttons/external_link_purple.svg",
+                          color: EvieColors.primaryColor,
+                        ),
+                      ],
+                    ),
+                ),
             ),
           ),
 
@@ -145,9 +155,9 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
                   width: double.infinity,
                   child: TextButton(
                     child: Text(
-                      "Skip bike registration",
+                      "Exit bike registration",
                       softWrap: false,
-                      style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w800, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                      style: EvieTextStyles.body18_underline,
                     ),
                     onPressed: () {
                         _authProvider.setIsFirstLogin(false);

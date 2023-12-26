@@ -42,6 +42,17 @@ class _QRAddManuallyState extends State<QRAddManually> {
 
   int currentPageNumber = 4;
 
+  late final FocusNode _nameFocusNode;
+
+  _QRAddManuallyState() : _nameFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _nameFocusNode.requestFocus();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +123,7 @@ class _QRAddManuallyState extends State<QRAddManually> {
                         obscureText: false,
                         hintText: "T0AS01 0101 000001",
                         labelText: "Serial Number",
+                        focusNode: _nameFocusNode,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter serial number';

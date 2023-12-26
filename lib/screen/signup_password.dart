@@ -48,6 +48,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
   bool _isObscure2 = true;
   bool isCheckTermsCondition = false;
   bool _isPasswordValid = false;
+  final FocusNode _nameFocusNode = FocusNode();
 
 
   ///Create form for later form validation
@@ -62,6 +63,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
   @override
   void initState() {
     super.initState();
+    _nameFocusNode.requestFocus();
     _passwordController.addListener(_onPasswordChanged);
   }
 
@@ -97,7 +99,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
               Form(
                 key: _formKey,
                 child: Padding(
-                    padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h, bottom: EvieLength.screen_bottom),
+                    padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h, bottom: EvieLength.target_reference_button_a),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -121,6 +123,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                               obscureText: _isObscure,
                               labelText: "Password",
                               hintText: "Enter a password",
+                              focusNode: _nameFocusNode,
                               suffixIcon: IconButton(
                                 icon: _isObscure ? SvgPicture.asset(
                                   "assets/buttons/view_off.svg",

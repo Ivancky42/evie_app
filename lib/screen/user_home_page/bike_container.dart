@@ -158,7 +158,7 @@ class _BikeContainerState extends State<BikeContainer> {
                               children: [
                                 Text(
                                   widget.bikeModel.deviceName!,
-                                  style: EvieTextStyles.body19.copyWith(fontWeight: FontWeight.bold, color: EvieColors.mediumLightBlack),
+                                  style: EvieTextStyles.target_reference_h3,
                                 ),
                                 getCurrentBikeStatusTag(widget.bikeModel, _bikeProvider, _bluetoothProvider)
                               ],

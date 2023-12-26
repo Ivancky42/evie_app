@@ -106,7 +106,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
         appBar: EvieAppbar_Back(onPressed: () {showBackToLogin(context, _bikeProvider, _authProvider) as bool?;}),
         body: Stack(children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, EvieLength.screen_bottom),
+            padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, EvieLength.target_reference_button_c),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -194,7 +194,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                               ),
                               onTap: () async {
                                 startCountDownTimer();
-                                showResentEmailSuccess(_currentUserProvider);
+                                showEvieResendDialog(context, _currentUserProvider.currentUserModel!.email);
                               },
                             ) :
                             GestureDetector(
@@ -204,7 +204,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                               ),
                               onTap: () async {
                                 startCountDownTimer();
-                                showResentEmailSuccess(_currentUserProvider);
+                                showEvieResendDialog(context, _currentUserProvider.currentUserModel!.email);
                               },
                             )
                           ],

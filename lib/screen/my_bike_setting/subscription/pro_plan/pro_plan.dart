@@ -201,7 +201,7 @@ class _ProPlanState extends State<ProPlan> {
 
                               String testPlanId = "prod_NYoaq2Ij02Tm9H";
                               String testPriceId = 'price_1MoLATIXKqdv4F5CxoQLwFhf';
-                              _planProvider.purchasePlan(_bikeProvider.currentBikeModel!.deviceIMEI!, testPlanId!, testPriceId).then((value) {
+                              _planProvider.purchasePlan(_bikeProvider.currentBikeModel!.deviceIMEI!, planModel.id!, priceModel.id).then((value) {
                               // _planProvider.purchasePlan(_bikeProvider.currentBikeModel!.deviceIMEI!, planModel.id!, priceModel.id).then((value) {
                                   if (value == 'NO_SUCH_CUSTOMER') {
                                     _planProvider.createAndUpdateStripeCustomer()

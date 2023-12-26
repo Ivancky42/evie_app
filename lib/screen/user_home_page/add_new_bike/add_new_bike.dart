@@ -142,7 +142,7 @@ class _AddNewBikeState extends State<AddNewBike> {
                                     children: [
                                       Text(
                                         "My Bike",
-                                        style: EvieTextStyles.h1.copyWith(fontWeight: FontWeight.w800, color: EvieColors.grayishWhite),
+                                        style: EvieTextStyles.target_reference_h1.copyWith(color: EvieColors.grayishWhite),
                                       ),
                                     ],
                                   ),
@@ -190,12 +190,11 @@ class _AddNewBikeState extends State<AddNewBike> {
                               ),
 
                               Padding(
-                                padding: EdgeInsets.only(top: 55.h, bottom: 24.h, left: 17.w, right: 14.w),
+                                padding: EdgeInsets.only(top: 67.h, bottom: 0, left: 17.w, right: 14.w),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
-
                                       child: EvieButton_ReversedColor(
                                         width: double.infinity,
                                         height: 48.h,

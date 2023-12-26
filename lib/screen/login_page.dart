@@ -67,6 +67,7 @@ class _LoginScreenState extends State<Login> {
 
   //For user input password visibility true/false
   bool _isObscure = true;
+  bool isFirst = true;
 
   //Create form for form validation
   final _formKey = GlobalKey<FormState>();
@@ -110,7 +111,7 @@ class _LoginScreenState extends State<Login> {
       body: Form(
         key: _formKey,
         child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, EvieLength.screen_bottom),
+            padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, EvieLength.target_reference_button_b),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -135,10 +136,13 @@ class _LoginScreenState extends State<Login> {
                       labelText: "Email Address",
                       hintText: "Enter your email address",
                       validator: (value) {
+                        setState(() {
+                          isFirst = false;
+                        });
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
+                          return '';
                         }else if(!value.contains("@")){
-                          return 'Looks like you entered the wrong email. The correct format for email address ad follow "sample@youremail.com". ';
+                          return '';
                         }
                         return null;
                       },
@@ -165,11 +169,14 @@ class _LoginScreenState extends State<Login> {
                             });
                           }),
                       validator: (value) {
+                        setState(() {
+                          isFirst = false;
+                        });
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
+                          return '';
                         }
                         if (value.length < 8) {
-                          return 'Password must have at least 8 characters';
+                          return '';
                         }
                         return null;
                       },
@@ -186,41 +193,107 @@ class _LoginScreenState extends State<Login> {
                     ),
 
                     /// Change image in real time if length is more than 8
-                    Row(
-                      children: [
-                        if (_passwordController.text.length >= 8) ...{
-                          SvgPicture.asset(
-                            "assets/icons/check.svg",
-                          ),
-                        } else ...{
-                          SvgPicture.asset(
-                            "assets/icons/grey_tick.svg",
-                          ),
-                        },
+                    Container(
+                      //color: Colors.green,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // if (isFirst) ... {
+                          //   SvgPicture.asset(
+                          //     "assets/icons/grey_tick.svg",
+                          //   ),
+                          // }
+                          // else ...{
+                          //   if (_passwordController.text.length >= 8) ...{
+                          //     SvgPicture.asset(
+                          //       "assets/icons/check.svg",
+                          //     ),
+                          //   }
+                          //   else ...{
+                          //     SvgPicture.asset(
+                          //       "assets/icons/fail.svg",
+                          //     ),
+                          //   },
+                          // },
 
-                        Text(
-                          "At least 8 characters.",
-                          style: EvieTextStyles.body14,
-                        ),
-                      ],
+                          if (_passwordController.text.length >= 8) ...{
+                            SvgPicture.asset(
+                              "assets/icons/check.svg",
+                            ),
+                          }
+                          else ...{
+                            SvgPicture.asset(
+                              "assets/icons/fail.svg",
+                            ),
+                          },
+
+                          Padding(
+                            padding: EdgeInsets.only(top: 3),
+                            child: Text(
+                              "At least 8 characters.",
+                              style: EvieTextStyles.body14,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
 
                     /// Change image in real time if password has letters and numbers
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        //
+                        // if (isFirst) ... {
+                        //   SvgPicture.asset(
+                        //     "assets/icons/grey_tick.svg",
+                        //   ),
+                        // }
+                        // else ...{
+                        //   if (containsLettersAndNumbers(_passwordController.text))...{
+                        //     SvgPicture.asset(
+                        //       "assets/icons/check.svg",
+                        //     ),
+                        //   }
+                        //   else ...{
+                        //     SvgPicture.asset(
+                        //       "assets/icons/fail.svg",
+                        //     ),
+                        //   },
+                        // },
+
                         if (containsLettersAndNumbers(_passwordController.text))...{
                           SvgPicture.asset(
                             "assets/icons/check.svg",
                           ),
-                        } else...{
+                        }
+                        else ...{
                           SvgPicture.asset(
-                            "assets/icons/grey_tick.svg",
+                            "assets/icons/fail.svg",
                           ),
                         },
-                        Text(
-                          "Contain letters and numbers.",
-                          style: EvieTextStyles.body14,
-                        ),
+
+                        // if (containsLettersAndNumbers(_passwordController.text))...{
+                        //   SvgPicture.asset(
+                        //     "assets/icons/check.svg",
+                        //   ),
+                        // }
+                        // else if (isFirst)... {
+                        //   SvgPicture.asset(
+                        //     "assets/icons/grey_tick.svg",
+                        //   ),
+                        // }
+                        // else...{
+                        //   SvgPicture.asset(
+                        //     "assets/icons/fail.svg",
+                        //   ),
+                        // },
+                        Padding(
+                          padding: EdgeInsets.only(top: 3),
+                          child: Text(
+                            "Contain letters and numbers.",
+                            style: EvieTextStyles.body14,
+                          ),
+                        )
                       ],
                     ),
                     SizedBox(
@@ -250,6 +323,9 @@ class _LoginScreenState extends State<Login> {
                         style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                       ),
                       onPressed: () async {
+                        setState(() {
+                          isFirst = false;
+                        });
                         if (_formKey.currentState!.validate()) {
 
                           ///For keyboard un focus
@@ -263,13 +339,7 @@ class _LoginScreenState extends State<Login> {
                             if (result.toString() == "Verified") {
                               _currentUserProvider.getDeviceInfo();
                               final hasBike = await _bikeProvider.checkHasBike(_authProvider.getUid);
-
-                              if (!hasBike) {
-                                changeToBeforeYouStart(context);
-                              }
-                              else {
-                                changeToUserHomePageScreen(context);
-                              }
+                              changeToUserHomePageScreen(context);
 
                             } else if (result.toString() == "Not yet verify") {
                               // ScaffoldMessenger.of(context).showSnackBar(
@@ -292,17 +362,17 @@ class _LoginScreenState extends State<Login> {
 
                       },
                     ),
-                    SizedBox(height: 12.h,),
-                    RichText(
-                      text: TextSpan(
-                        text: "I don't have an account yet",
-                        style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: EvieColors.primaryColor, decoration: TextDecoration.underline, fontFamily: 'Avenir'),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            changeToInputNameScreen(context);
-                          },
-                      ),
-                    ),
+                    // SizedBox(height: 12.h,),
+                    // RichText(
+                    //   text: TextSpan(
+                    //     text: "I don't have an account yet",
+                    //     style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: EvieColors.primaryColor, decoration: TextDecoration.underline, fontFamily: 'Avenir'),
+                    //     recognizer: TapGestureRecognizer()
+                    //       ..onTap = () {
+                    //         changeToInputNameScreen(context);
+                    //       },
+                    //   ),
+                    // ),
                   ],
                 )
               ],

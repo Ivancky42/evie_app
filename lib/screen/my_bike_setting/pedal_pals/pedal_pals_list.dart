@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:collection';
+import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/fonts.dart';
@@ -24,6 +26,8 @@ import '../../../api/dialog.dart';
 import '../../../api/enumerate.dart';
 import '../../../api/function.dart';
 import '../../../api/length.dart';
+import '../../../api/model/bike_user_model.dart';
+import '../../../api/model/user_model.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/current_user_provider.dart';
 import '../../../api/provider/setting_provider.dart';
@@ -193,47 +197,74 @@ class _PedalPalsListState extends State<PedalPalsList> {
                               SlidableAction(
                                 spacing:10,
                                 onPressed: (context) async {
-                                  final result = await showDeleteShareBikeUser(_bikeProvider, index);
-                                  if (result == "action") {
-                                    SmartDialog.showLoading(msg:"Removing " + _bikeProvider.bikeUserDetails.values.elementAt(index).name! + " ....");
+                                  final result = await showDeleteShareBikeUser( _bikeProvider.bikeUserList.values.elementAt(index), checkUid(_bikeProvider.bikeUserList.values.elementAt(index), _bikeProvider.bikeUserDetails), _bikeProvider.currentBikeModel!.pedalPalsModel!);
+                                  Map<String, dynamic> jsonData = json.decode(result);
+                                  // Accessing individual fields
+                                  String uid = jsonData['uid'];
+                                  String name = jsonData['name'];
+                                  String teamName = jsonData['teamName'];
+                                  String status = jsonData['status'];
+                                  String notificationId = jsonData['notificationId'];
+                                  String resulted = jsonData['result'];
+
+                                  if (resulted == "action") {
+                                    SmartDialog.showLoading(msg:"Removing " + name + " ....");
                                     StreamSubscription? currentSubscription;
                                     ///Cancel user invitation
-                                    if(_bikeProvider.bikeUserList.values.elementAt(index).status == "pending"){
-                                      currentSubscription = _bikeProvider.cancelSharedBike(
-                                          _bikeProvider.bikeUserList.values.elementAt(index).uid,
-                                          _bikeProvider.bikeUserList.values.elementAt(index).notificationId!).listen((uploadStatus) {
+                                    if(status == "pending"){
+                                      print(notificationId);
+                                      if (notificationId != '') {
+                                        currentSubscription = _bikeProvider.cancelSharedBike(
+                                            uid,
+                                            notificationId).listen((uploadStatus) {
 
-                                        if(uploadStatus == UploadFirestoreResult.success){
-                                          SmartDialog.dismiss(status: SmartStatus.loading);
-                                          showTextToast(_bikeProvider.bikeUserDetails.values.elementAt(index).name + " have been removed from " + _bikeProvider.currentBikeModel?.pedalPalsModel?.name + '.');
-                                          currentSubscription?.cancel();
-                                        }
-                                        else if(uploadStatus == UploadFirestoreResult.failed) {
+                                          if(uploadStatus == UploadFirestoreResult.success){
+                                            SmartDialog.dismiss(status: SmartStatus.loading);
+                                            showTextToast(name + " have been removed from " + teamName + '.');
+                                            currentSubscription?.cancel();
+                                          }
+                                          else if(uploadStatus == UploadFirestoreResult.failed) {
+                                            SmartDialog.dismiss();
+                                            currentSubscription?.cancel();
+                                            SmartDialog.show(
+                                                widget: EvieSingleButtonDialogOld(
+                                                    title: "Not success",
+                                                    content: "Try again",
+                                                    rightContent: "Close",
+                                                    onPressedRight: ()=>SmartDialog.dismiss()
+                                                ));
+
+                                          }
+                                        },);
+                                      }
+                                      else {
+                                        Future.delayed(Duration(seconds: 3)).then((value) {
                                           SmartDialog.dismiss();
+                                          currentSubscription?.cancel();
                                           SmartDialog.show(
                                               widget: EvieSingleButtonDialogOld(
-                                                  title: "Not success",
-                                                  content: "Try again",
+                                                  title: "Unable to remove user",
+                                                  content: "Please try again later",
                                                   rightContent: "Close",
                                                   onPressedRight: ()=>SmartDialog.dismiss()
                                               ));
-                                        }
-                                      },
-                                      );
+                                        });
+                                      }
                                     }
                                     else{
                                       ///Remove user
                                       currentSubscription = _bikeProvider.removedSharedBike(
-                                          _bikeProvider.bikeUserList.values.elementAt(index).uid,
-                                          _bikeProvider.bikeUserList.values.elementAt(index).notificationId!).listen((uploadStatus) {
+                                          uid,
+                                          notificationId).listen((uploadStatus) {
 
                                         if(uploadStatus == UploadFirestoreResult.success){
                                           SmartDialog.dismiss(status: SmartStatus.loading);
-                                          showTextToast(_bikeProvider.bikeUserDetails.values.elementAt(index).name + " have been removed from " + _bikeProvider.currentBikeModel?.pedalPalsModel?.name + '.');
+                                          showTextToast(name + " have been removed from " + teamName + '.');
                                           currentSubscription?.cancel();
                                         }
                                         else if(uploadStatus == UploadFirestoreResult.failed) {
                                           SmartDialog.dismiss();
+                                          currentSubscription?.cancel();
                                           SmartDialog.show(
                                               widget: EvieSingleButtonDialogOld(
                                                   title: "Not success",
@@ -246,7 +277,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                       );
                                     }
                                   }
-                                  showRemoveUserToast(context, result);
+                                  //showRemoveUserToast(context, result);
                                 },
                                 backgroundColor: EvieColors.red,
                                 foregroundColor: Colors.white,
@@ -259,7 +290,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                               leading: ClipOval(
                                 child: CachedNetworkImage(
                                   //imageUrl: document['profileIMG'],
-                                  imageUrl: _bikeProvider.bikeUserDetails.values.elementAt(index).profileIMG,
+                                  imageUrl: checkUid(_bikeProvider.bikeUserList.values.elementAt(index), _bikeProvider.bikeUserDetails) != null ? checkUid(_bikeProvider.bikeUserList.values.elementAt(index), _bikeProvider.bikeUserDetails)!.profileIMG : '',
                                   placeholder: (context, url) =>
                                   const CircularProgressIndicator(color: EvieColors.primaryColor,),
                                   errorWidget: (context, url, error) =>
@@ -273,11 +304,11 @@ class _PedalPalsListState extends State<PedalPalsList> {
                               title: Row(
                                 children: [
                                   Text(
-                                      _bikeProvider.bikeUserDetails.values.elementAt(index).name,
+                                      checkUid(_bikeProvider.bikeUserList.values.elementAt(index), _bikeProvider.bikeUserDetails) != null ? checkUid(_bikeProvider.bikeUserList.values.elementAt(index), _bikeProvider.bikeUserDetails)!.name! : '',
                                       style: EvieTextStyles.body18),
 
                                   Visibility(
-                                    visible: _currentUserProvider.currentUserModel!.name == _bikeProvider.bikeUserDetails.values.elementAt(index).name,
+                                    visible: _currentUserProvider.currentUserModel!.name == (checkUid(_bikeProvider.bikeUserList.values.elementAt(index), _bikeProvider.bikeUserDetails) != null ? checkUid(_bikeProvider.bikeUserList.values.elementAt(index), _bikeProvider.bikeUserDetails)!.name! : ''),
                                     child: Text(
                                         " (You)",
                                         style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan)),
@@ -285,7 +316,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                 ],
                               ),
                               subtitle: Text(
-                                  "${_bikeProvider.bikeUserDetails.values.elementAt(index).email}",
+                                  checkUid(_bikeProvider.bikeUserList.values.elementAt(index), _bikeProvider.bikeUserDetails) != null ? checkUid(_bikeProvider.bikeUserList.values.elementAt(index), _bikeProvider.bikeUserDetails)!.email! : '',
                                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish)),
 
                               trailing: isOwner == true && isManageList && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
@@ -347,6 +378,25 @@ class _PedalPalsListState extends State<PedalPalsList> {
         )
       ),
     );
+  }
+
+  UserModel? checkUid(BikeUserModel bikeUserModel, LinkedHashMap<dynamic, dynamic> bikeUserDetails) {
+    String uidToCheck = bikeUserModel.uid;
+
+    String? keyContainingUid;
+    for (var entry in bikeUserDetails.entries) {
+      if (entry.key == uidToCheck) {
+        keyContainingUid = entry.key;
+        break; // Exit the loop once the key is found
+      }
+    }
+
+    if (keyContainingUid != null) {
+      return bikeUserDetails[keyContainingUid];
+    }
+    else {
+      return null;
+    }
   }
 
 }

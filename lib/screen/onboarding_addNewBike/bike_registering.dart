@@ -1,5 +1,8 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:evie_test/api/navigator.dart';
+import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
@@ -9,14 +12,17 @@ import 'package:provider/provider.dart';
 
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import '../../animation/ripple_pulse_animation.dart';
+import '../../api/backend/server_api_base.dart';
 import '../../api/colours.dart';
 import '../../api/fonts.dart';
+import '../../api/model/bike_model.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../widgets/evie_progress_indicator.dart';
 
 class BikeRegistering extends StatefulWidget {
   final bool isSuccess;
-  const BikeRegistering({Key? key, required this.isSuccess}) : super(key: key);
+  final String? registeringDeviceIMEI;
+  const BikeRegistering({Key? key, required this.isSuccess, this.registeringDeviceIMEI}) : super(key: key);
 
   @override
   _BikeRegisteringState createState() => _BikeRegisteringState();
@@ -24,18 +30,102 @@ class BikeRegistering extends StatefulWidget {
 
 class _BikeRegisteringState extends State<BikeRegistering> {
 
+  late AuthProvider _authProvider;
+  late BikeProvider _bikeProvider;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(seconds: 3), (){
-      if (widget.isSuccess) {
-        changeToBikeConnectSuccessScreen(context);
-      }
-      else {
-        changeToBikeConnectFailedScreen(context);
-      }
-    });
+    _authProvider = context.read<AuthProvider>();
+    _bikeProvider = context.read<BikeProvider>();
+    String? registeringDeviceIMEI = widget.registeringDeviceIMEI;
+    if (registeringDeviceIMEI != null) {
+      FirebaseFirestore.instance.collection('bikes').doc(registeringDeviceIMEI).get().then((doc) {
+        if (doc.exists){
+          Map<String, dynamic>? obj = doc.data();
+          BikeModel bikeModel = BikeModel.fromJson(obj!);
+          if (bikeModel.pendingActivateEVSecure != null) {
+            if (bikeModel.pendingActivateEVSecure!.enabled!) {
+              _authProvider.getIdToken().then((idToken) {
+                if (idToken != null) {
+                  String auth = idToken;
+                  const header = Headers.jsonContentType;
+                  final body = {
+                    "productId": "prod_P6emdafBd0FyB0",
+                    "deviceIMEI": bikeModel.deviceIMEI,
+                    "created": (DateTime.now().millisecondsSinceEpoch / 1000).floor(),
+                    "feature": 'EV-Secure',
+                    "orderId": bikeModel.pendingActivateEVSecure!.orderId,
+                  };
+
+                  String base_url = 'https://us-central1-evie-126a6.cloudfunctions.net/shopify_evsecure/activateEVSecure';
+                  ServerApiBase.postRequest(auth, base_url, body, header).then((value) {
+                    //print(value);
+                    if (widget.isSuccess) {
+                      changeToBikeConnectSuccessScreen(context);
+                    }
+                    else {
+                      changeToBikeConnectFailedScreen(context);
+                    }
+                  });
+                }
+                else {
+                  Future.delayed(const Duration(seconds: 3), (){
+                    if (widget.isSuccess) {
+                      changeToBikeConnectSuccessScreen(context);
+                    }
+                    else {
+                      changeToBikeConnectFailedScreen(context);
+                    }
+                  });
+                }
+              });
+            }
+            else {
+              Future.delayed(const Duration(seconds: 3), (){
+                if (widget.isSuccess) {
+                  changeToBikeConnectSuccessScreen(context);
+                }
+                else {
+                  changeToBikeConnectFailedScreen(context);
+                }
+              });
+            }
+          }
+          else {
+            Future.delayed(const Duration(seconds: 3), (){
+              if (widget.isSuccess) {
+                changeToBikeConnectSuccessScreen(context);
+              }
+              else {
+                changeToBikeConnectFailedScreen(context);
+              }
+            });
+          }
+        }
+        else {
+          Future.delayed(const Duration(seconds: 3), (){
+            if (widget.isSuccess) {
+              changeToBikeConnectSuccessScreen(context);
+            }
+            else {
+              changeToBikeConnectFailedScreen(context);
+            }
+          });
+        }
+      });
+    }
+    else {
+      Future.delayed(const Duration(seconds: 3), (){
+        if (widget.isSuccess) {
+          changeToBikeConnectSuccessScreen(context);
+        }
+        else {
+          changeToBikeConnectFailedScreen(context);
+        }
+      });
+    }
   }
 
   @override
@@ -49,7 +139,7 @@ class _BikeRegisteringState extends State<BikeRegistering> {
       child: Scaffold(
           body: Stack(
               children:[
-              Column(
+                Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -73,8 +163,6 @@ class _BikeRegisteringState extends State<BikeRegistering> {
                       ),
                     ],
                   ),
-
-
                 Padding(
                   padding: EdgeInsets.only(top: 127.h),
                   child: Align(

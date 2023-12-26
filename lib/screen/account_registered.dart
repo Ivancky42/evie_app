@@ -76,7 +76,7 @@ class _AccountRegisteredState extends State<AccountRegistered> {
                               child: Text(
                                 "Maybe Later",
                                 softWrap: false,
-                                style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                                style: EvieTextStyles.body18_underline,
                               ),
                               onTap: () {
                                 _authProvider.setIsFirstLogin(false);

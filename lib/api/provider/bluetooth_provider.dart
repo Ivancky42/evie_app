@@ -209,13 +209,15 @@ class BluetoothProvider extends ChangeNotifier {
   startScanCountTimer() {
     startScanTimer?.cancel();
     startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
-      //print("Scan RSSI Timer: " + timer.tick.toString() + "s");
+      print("Scan RSSI Timer: " + timer.tick.toString() + "s");
       if (timer.tick == 10) {
         await stopScan();
         scanSubscription?.cancel();
         startScanTimer?.cancel();
-        deviceConnectStream.add(DeviceConnectResult.scanTimeout);
-        deviceConnectResult = DeviceConnectResult.scanTimeout;
+        if (deviceConnectResult != DeviceConnectResult.connected) {
+          deviceConnectStream.add(DeviceConnectResult.scanTimeout);
+          deviceConnectResult = DeviceConnectResult.scanTimeout;
+        }
         timer.cancel();
         notifyListeners();
       }
@@ -223,6 +225,7 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   Stream<DeviceConnectResult> startScanRSSI() {
+    startScanTimer?.cancel();
     scanSubscription?.cancel();
     deviceRssi = 0;
     deviceRssiProgress = 0.0;
@@ -271,6 +274,8 @@ class BluetoothProvider extends ChangeNotifier {
         notifyListeners();
       }
     }, onError: (error) {
+      startScanTimer?.cancel();
+      scanSubscription?.cancel();
       deviceConnectStream.add(DeviceConnectResult.scanError);
       deviceConnectResult = DeviceConnectResult.scanError;
       deviceFoundTimer?.cancel();
@@ -296,6 +301,7 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   Stream<DeviceConnectResult> startScanAndConnect() {
+      deviceFoundTimer?.cancel();
       startScanTimer?.cancel();
       startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) {
         //print("Scan Timer: " + timer.tick.toString() + "s");

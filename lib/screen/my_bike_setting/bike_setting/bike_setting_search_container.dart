@@ -129,9 +129,7 @@ class _BikeSettingSearchContainerState extends State<BikeSettingSearchContainer>
       //   );
       default:
         return Container(
-          child: const Center(
-            child: Text("APA LU MAU"),
-          ),
+          child: const Center(),
         );
     }
   }

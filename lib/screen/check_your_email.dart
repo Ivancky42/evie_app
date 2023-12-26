@@ -92,7 +92,7 @@ class _CheckYourEmailState extends State<CheckYourEmail> {
         body: Stack (
             children:[
               Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, EvieLength.screen_bottom),
+                  padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, EvieLength.target_reference_button_c),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -166,7 +166,7 @@ class _CheckYourEmailState extends State<CheckYourEmail> {
                                       }
                                       else if(isCountDownOver == true){
                                         await _authProvider.resetPassword(_authProvider.getEmail);
-                                        showResentEmailSuccess(_currentUserProvider);
+                                        showEvieResendDialog(context, _currentUserProvider.currentUserModel!.email);
                                         setState(() {
                                           isCountDownOver = false;
                                           resetTimer();

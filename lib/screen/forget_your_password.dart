@@ -56,7 +56,7 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
           child: Stack(
               children:[
                 Padding(
-                    padding:  EdgeInsets.fromLTRB(16.w, 16.h, 16.w, EvieLength.screen_bottom),
+                    padding:  EdgeInsets.fromLTRB(16.w, 16.h, 16.w, EvieLength.target_reference_button_c),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -119,11 +119,11 @@ class _ForgetYourPasswordScreenState extends State<ForgetYourPasswordScreen> {
                                 }
                               },
                             ),
-                            SizedBox(height: 13.h,),
+                            SizedBox(height: 12.h,),
                             GestureDetector(
                               child: Text(
                                 "I don't have an account yet",
-                                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: EvieColors.primaryColor, decoration: TextDecoration.underline,),
+                                style: EvieTextStyles.body18_underline,
                               ),
                               onTap: () {
                                 changeToInputNameScreen(context);

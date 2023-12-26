@@ -57,6 +57,8 @@ class AuthProvider extends ChangeNotifier {
   bool? isFirstLogin = false;
   bool? isEmailVerified;
 
+  String? idToken;
+
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   StreamSubscription? userChangeSubscription;
@@ -551,6 +553,25 @@ class AuthProvider extends ChangeNotifier {
     return digest.toString();
   }
 
+  Future <String?> getIdToken() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        idToken = await user.getIdToken();
+        //print('ID Token: $idToken');
+        notifyListeners();
+        return idToken;
+      } else {
+        //print('User is not signed in.');
+        return null;
+      }
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+
   ///ReAuthentication
   Future<bool> reauthentication(String originalPassword) async {
     var firebaseUser = _auth.currentUser!;
@@ -596,8 +617,6 @@ class AuthProvider extends ChangeNotifier {
 
     return userModel;
   }
-
-
 
   Future<void> resetPassword(email) async {
     await _auth

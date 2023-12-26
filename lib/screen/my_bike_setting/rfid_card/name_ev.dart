@@ -179,7 +179,7 @@ class _NameEVState extends State<NameEV> {
                       child: Text(
                         "Can't think of any name now",
                         softWrap: false,
-                        style: EvieTextStyles.body16.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                        style: EvieTextStyles.body18_underline,
                       ),
                       onPressed: () {
                         _settingProvider.changeSheetElement(SheetList.evKeyList);

@@ -25,7 +25,7 @@
   },
   {
     "id":5,
-    "label":"Bike Status Alert",
+    "label":"Orbital Anti-theft",
     "second_level_label": [
       "Connection Lost",
       "Movement Detection",
@@ -52,7 +52,7 @@
   },
   {
     "id": 9,
-    "label": "Firmware Version"
+    "label": "Bike Software"
   },
   {
     "id": 10,
@@ -61,5 +61,9 @@
   {
     "id": 11,
     "label": "Reset Bike"
+  },
+  {
+    "id": 12,
+    "label": "Leave Team"
   }
 ]

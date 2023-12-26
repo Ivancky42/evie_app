@@ -101,9 +101,12 @@ showConnectedToast(context) {
             children: [
               SvgPicture.asset("assets/icons/check.svg"),
               SizedBox(width: 4.w,),
-              Text(
-                "Bike Connected.",
-                style: EvieTextStyles.toast,
+              Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                child: Text(
+                  "Bike connected.",
+                  style: EvieTextStyles.toast,
+                ),
               ),
             ],
           ),
@@ -126,19 +129,27 @@ showConnectingToast(context) {
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
-        child:Row(
-          children: [
-            SizedBox(
-              width: 24.w,
-              height: 24.w,
-              child: Lottie.asset('assets/animations/loading-button-grey.json', repeat: true),
-            ),
-            SizedBox(width: 4.w,),
-            Text(
-              "Connecting bike.",
-              style: EvieTextStyles.toast,
-            ),
-          ],
+        child: Container(
+          alignment: Alignment.center,
+          //color: Colors.green,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 30.w,
+                height: 30.w,
+                child: Lottie.asset('assets/animations/loading-button-grey.json', repeat: true),
+              ),
+              SizedBox(width: 4.w,),
+              Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Text(
+                    "Connecting bike.",
+                    style: EvieTextStyles.toast,
+                  ),
+              )
+            ],
+          ),
         ),
       ),
       duration: const Duration(seconds: 12),
@@ -168,7 +179,7 @@ showScanTimeoutToast(context) {
             SizedBox(width: 4.w,),
             Flexible(
               child: Text(
-                "Scan timeout. Please stay close to your bike and connect again.",
+                "We couldn’t connect to your bike. Stay close and reconnect.",
                 style: EvieTextStyles.toast,
               ),
             ),
@@ -262,12 +273,15 @@ showDisconnectedToast(context) {
           children: [
             SvgPicture.asset("assets/icons/fail.svg"),
             SizedBox(width: 4.w,),
-            Flexible(
-              child: Text(
-                "Bike Disconnected.",
-                style: EvieTextStyles.toast,
+            Padding(
+              padding: EdgeInsets.only(bottom: 4),
+              child: Flexible(
+                child: Text(
+                  "Bike disconnected.",
+                  style: EvieTextStyles.toast,
+                ),
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -291,19 +305,15 @@ showToLockBikeInstructionToast(context) {
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              Container(
-                width: 300.w,
-                child: Text(
-                  "Bike is unlocked. To lock bike, pull the lock handle on the bike.",
-                  style: EvieTextStyles.toast,
-                ),
-              )
-            ],
-          ),
+        child: Row(
+          children: [
+            Flexible(
+              child: Text(
+                "Bike is unlocked. To lock bike, pull the lock handle on the bike.",
+                style: EvieTextStyles.toast,
+              ),
+            ),
+          ],
         ),
       ),
       duration: const Duration(seconds: 5),
@@ -373,43 +383,43 @@ showUpgradePlanToast(context, SettingProvider settingProvider,[bool? isPop]){
         onTap: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(12.w,0.h,12.w,12.h),
-              child: Container(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(12.w, 2, 12.w, 2),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
                 width: double.infinity,
                 child: Text(
                   "Limited access. Upgrade your plan to access this feature.",
                   style: EvieTextStyles.toast,
                 ),
-
               ),
-            ),
-            Container(
-              //width: 170.w,
-              alignment: Alignment.bottomRight,
-              child: GestureDetector(
-                onTap: () {
-                  if(isPop == true){
-                    settingProvider.changeSheetElement(SheetList.proPlan);
-                    showSheetNavigate(context);
-                  }else{
-                    settingProvider.changeSheetElement(SheetList.proPlan);
-                  }
-                },
-                child: Text(
-                  "UNLOCK FEATURE NOW",
-                  style: EvieTextStyles.body16.copyWith(
-                    color: EvieColors.strongPurple,
-                    fontWeight: FontWeight.w500,
+              SizedBox(height: 4.h,),
+              Container(
+                //width: 170.w,
+                alignment: Alignment.bottomRight,
+                child: GestureDetector(
+                  onTap: () {
+                    if(isPop == true){
+                      settingProvider.changeSheetElement(SheetList.proPlan);
+                      showSheetNavigate(context);
+                    }else{
+                      settingProvider.changeSheetElement(SheetList.proPlan);
+                    }
+                  },
+                  child: Text(
+                    "UNLOCK FEATURE NOW",
+                    style: EvieTextStyles.body16.copyWith(
+                      color: EvieColors.strongPurple,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        )
       ),
       duration: const Duration(seconds: 2),
     ),
@@ -511,9 +521,9 @@ showAccNoPermissionToast(context) {
           child: Row(
             children: [
               Container(
-                width: 300.w,
+                width: 315.w,
                 child: Text(
-                  "Your account doesn't have the permission to control this setting.",
+                  "Apologies, pal, you don't have the permission to manage this setting.",
                   style: EvieTextStyles.toast,
                 ),
               )
@@ -788,7 +798,10 @@ showPermissionNeeded(context) {
               alignment: Alignment.bottomRight,
               child: Text(
                 "OPEN SETTINGS",
-                style: EvieTextStyles.body16.copyWith(color: EvieColors.primaryColor, fontWeight: FontWeight.w800),
+                style: EvieTextStyles.body16.copyWith(
+                  color: EvieColors.strongPurple,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             )
           ],
@@ -860,6 +873,77 @@ showEVSuccess(context, message) {
               ),
             ],
           ),
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
+showSucccessUpdateBikeName(context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          //Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SvgPicture.asset("assets/icons/check.svg"),
+              SizedBox(width: 4.w,),
+              Padding(
+                padding: EdgeInsets.only(bottom: 4),
+                child: Text(
+                  "Name Updated!",
+                  style: EvieTextStyles.toast,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      duration: const Duration(seconds: 4),
+    ),
+  );
+}
+
+showFailUpdateBikeName(context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        },
+        child: Row(
+          children: [
+            SvgPicture.asset("assets/icons/fail.svg"),
+            SizedBox(width: 4.w,),
+            Padding(
+              padding: EdgeInsets.only(bottom: 4),
+              child: Flexible(
+                child: Text(
+                  "Failed to update bike name. Please try again later.",
+                  style: EvieTextStyles.toast,
+                ),
+              ),
+            )
+          ],
         ),
       ),
       duration: const Duration(seconds: 2),

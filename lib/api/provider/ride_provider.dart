@@ -323,6 +323,7 @@ class RideProvider extends ChangeNotifier {
   setRideDataType(RideDataType rideDataType, List<TripHistoryModel> tripHistoryList, RideFormat rideFormat,) {
     if (rideDataType == RideDataType.mileage) {
       rideDataTypeString = 'Mileage';
+      this.rideDataType = rideDataType;
       if (measurementSetting == MeasurementSetting.metricSystem) {
         if (rideFormat == RideFormat.day) {
           rideDataDayString = (tripHistoryList.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()) / 1000).toStringAsFixed(2);

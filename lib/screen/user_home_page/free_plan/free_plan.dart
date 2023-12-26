@@ -21,6 +21,7 @@ import '../../../api/fonts.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../api/snackbar.dart' as SnackBar;
+import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../paid_plan/home_element/actionable_bar.dart';
 import '../paid_plan/home_element/battery.dart';
@@ -305,7 +306,7 @@ class _FreePlanState extends State<FreePlan> {
                                                    child: Container(
                                                      width: 180.h,
                                                      child: Text("Your bike will never be out of sight.",
-                                                         style: EvieTextStyles.headlineB2.copyWith(height: 1.2.h)),
+                                                         style: EvieTextStyles.target_reference_headlineB),
                                                    ),
                                                  ),
 
@@ -347,7 +348,9 @@ class _FreePlanState extends State<FreePlan> {
                                  child: Padding(
                                      padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 16.h),
                                      child: EvieCard(
-                                       onPress: (){    SnackBar.showUpgradePlanToast(context, _settingProvider, true);},
+                                       onPress: () {
+                                         showUpgradePlanToast(context, _settingProvider, true);
+                                         },
                                        color: EvieColors.grayishWhite,
                                        title: "Rides",
                                        decoration: BoxDecoration(
@@ -498,7 +501,7 @@ class _FreePlanState extends State<FreePlan> {
                                                       child: Container(
                                                         width: 180.h,
                                                         child: Text("Your bike will never be out of sight.",
-                                                            style: EvieTextStyles.headlineB2.copyWith(height: 1.2.h)),
+                                                            style: EvieTextStyles.target_reference_headlineB),
                                                       ),
                                                     ),
                                                     Padding(
@@ -538,6 +541,10 @@ class _FreePlanState extends State<FreePlan> {
                                       child: Padding(
                                           padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 16.h),
                                           child: EvieCard(
+                                            onPress: () {
+                                              //showUpgradePlanToast(context, _settingProvider, true);
+                                              showWelcomeToEVClub(context);
+                                            },
                                             color: EvieColors.grayishWhite,
                                             title: "Rides",
                                             decoration: BoxDecoration(

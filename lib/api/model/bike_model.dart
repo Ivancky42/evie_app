@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/movement_setting_model.dart';
 import 'package:evie_test/api/model/notification_setting_model.dart';
 import 'package:evie_test/api/model/pedal_pals_model.dart';
+import 'package:evie_test/api/model/pending_activate_evsecure_model.dart';
 import 'package:evie_test/api/model/plan_model.dart';
 import 'package:evie_test/api/model/simcard_model.dart';
 import 'package:evie_test/api/model/trip_history_model.dart';
@@ -49,6 +50,7 @@ class BikeModel {
   String? bikeIMG;
   NotificationSettingModel? notificationSettings;
   String? model;
+  PendingActivateEVSecure? pendingActivateEVSecure;
 
   ///about bike mileage get from firestore
   /// If it is (10) means 1km , (20) means 2km, 2 means 0.2km. and miles
@@ -86,6 +88,7 @@ class BikeModel {
     this.mileage,
     this.notificationSettings,
     this.model,
+    this.pendingActivateEVSecure,
   });
 
   Map<String, dynamic> toJson() => {
@@ -108,6 +111,7 @@ class BikeModel {
       errorCode: json['errorCode']?? 0,
       isCharging:   json['isCharging']?? false,
       isLocked:   json['isLocked']?? false,
+      pendingActivateEVSecure: json['pendingActivateEVSecure'] != null ? PendingActivateEVSecure.fromJson(json['pendingActivateEVSecure'] as Map<String, dynamic>) : null,
       lastUpdated:    timestampFromJson(json['lastUpdated']),
       location:   json['location'] != null ? LocationModel.fromJson(json['location'] as Map<String, dynamic>) : null,
       //tripHistoryModel:   TripHistoryModel.fromJson(json['tripHistory'] as Map<String, dynamic>),
@@ -121,7 +125,7 @@ class BikeModel {
       protVersion: json['protVersion']?? '',
       firmVer: json['firmVer']?? '',
       registered:    timestampFromJson(json['registered']),
-      serialNumber: json['serialNumber'] ?? '',
+      serialNumber: (json['serialNumber'].substring(0, 6) + " " + json['serialNumber'].substring(6, 10) + " " + json['serialNumber'].substring(10)) ?? '',
       type: json['type'] ?? '',
       bikeIMG: json['bikeIMG'] ??'',
       model: json['serialNumber'].substring(0, 2),

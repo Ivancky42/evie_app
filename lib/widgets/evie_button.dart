@@ -28,7 +28,7 @@ class EvieButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? 48.h,
+      height: height ?? 52.h,
       width: width ?? double.infinity,
       child: ElevatedButton(
         child: child,
@@ -37,7 +37,9 @@ class EvieButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.w)),
             elevation: 0.0,
-            backgroundColor: backgroundColor ?? EvieColors.primaryColor,
+            backgroundColor:onPressed != null
+                ? backgroundColor ?? EvieColors.primaryColor
+                : EvieColors.primaryColor.withOpacity(0.3),
             disabledBackgroundColor: EvieColors.primaryColor.withOpacity(0.3),
         ),
       ),

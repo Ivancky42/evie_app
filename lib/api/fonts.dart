@@ -7,7 +7,9 @@ import 'colours.dart';
 
 class EvieTextStyles {
  static double lineHeight = 1.4;
+ static double letterSpacing = 0.8;
  static TextStyle h1 = TextStyle(fontSize: 30.sp, fontWeight: FontWeight.w900, height: lineHeight, letterSpacing: 0.3);
+ static TextStyle target_reference_h1 = TextStyle(fontSize: 30.sp, fontWeight: FontWeight.w900, height: lineHeight, letterSpacing: letterSpacing);
  static TextStyle h2 = TextStyle(fontSize: 26.sp, fontWeight: FontWeight.w500, color:EvieColors.mediumBlack, height: lineHeight, letterSpacing: 0.26);
  static TextStyle h3 = TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w900, height: lineHeight);
  static TextStyle h4 = TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w500, height: lineHeight);
@@ -18,22 +20,27 @@ class EvieTextStyles {
  static TextStyle headline = TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500,);
  static TextStyle headlineB = TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w900, color: EvieColors.darkGray, height: lineHeight);
  static TextStyle headlineB2 = TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w800, color: EvieColors.darkGray, height: lineHeight);
+ static TextStyle target_reference_headlineB = TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w800, color: EvieColors.darkGray, height: lineHeight, letterSpacing: letterSpacing);
  static TextStyle subHeadline = TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500,);
 
  static TextStyle ctaSmall = TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w900, height: lineHeight);
- static TextStyle ctaBig = TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w900, height: lineHeight);
+ static TextStyle ctaBig = TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w900, height: lineHeight, letterSpacing: letterSpacing);
 
  static TextStyle body12 = TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400, height: lineHeight);
  static TextStyle body14 = TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400, height: lineHeight);
  static TextStyle body16 = TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400, height: lineHeight);
  static TextStyle body18 = TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400, height: lineHeight);
+ static TextStyle body18_underline = TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w900, height: lineHeight, decoration: TextDecoration.underline, color: EvieColors.primaryColor);
  static TextStyle body19 = TextStyle(fontSize: 19.sp, fontWeight: FontWeight.w400, height: lineHeight);
  static TextStyle body20 = TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500, height: lineHeight);
+
+ static TextStyle target_reference_h3 = TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold, height: lineHeight, color: EvieColors.mediumLightBlack, letterSpacing: letterSpacing);
 
  static TextStyle caption = TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400, height: lineHeight);
 
  static TextStyle title = TextStyle(fontSize: 30.sp, fontWeight: FontWeight.w800, height: lineHeight);
  static TextStyle miniTitle = TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w800, height: lineHeight);
+ static TextStyle target_reference_body = TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w800, height: lineHeight, letterSpacing: letterSpacing);
 
  static TextStyle toast = TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400, color: EvieColors.grayishWhite, height: lineHeight);
 

@@ -128,6 +128,8 @@ class BikeProvider extends ChangeNotifier {
   LinkedHashMap? get getThreatRoutesLists => threatRoutesLists;
 
   ActionableBarItem actionableBarItem = ActionableBarItem.none;
+  String? registeringDeviceIMEI;
+
   ///User update bike profile
   Future updateUserBikeImage(String imageURL) async {
     try {
@@ -1125,7 +1127,7 @@ class BikeProvider extends ChangeNotifier {
                 break;
               case DocumentChangeType.removed:
                 bikeUserList.removeWhere((key, value) => key == docChange.doc.id);
-
+                bikeUserDetails.removeWhere((key, value) => key == docChange.doc.id);
                 notifyListeners();
                 break;
               case DocumentChangeType.modified:
@@ -1325,6 +1327,7 @@ class BikeProvider extends ChangeNotifier {
   /// Command for connect bike
 
   handleBarcodeData(String code) async {
+    registeringDeviceIMEI = null;
     if(code.contains(',')){
       List<String> splitCode = code.split(',');
       String serialNumber = splitCode[0].split(':').last;
@@ -1456,6 +1459,7 @@ class BikeProvider extends ChangeNotifier {
         },
       }, SetOptions(merge: true));
 
+      registeringDeviceIMEI = selectedDeviceId;
       scanQRCodeResult = ScanQRCodeResult.success;
       notifyListeners();
 
@@ -2106,6 +2110,7 @@ class BikeProvider extends ChangeNotifier {
     currentBikePlanModel = null;
     currentRFIDModel = null;
     currentBikeList = 0;
+    registeringDeviceIMEI = null;
     notifyListeners();
   }
 }
