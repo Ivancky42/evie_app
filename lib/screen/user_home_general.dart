@@ -5,6 +5,7 @@ import 'package:evie_test/api/provider/shared_pref_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/screen/user_home_page/add_new_bike/add_new_bike.dart';
+import 'package:evie_test/screen/user_home_page/bike_loading.dart';
 import 'package:evie_test/screen/user_home_page/free_plan/free_plan.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/paid_plan.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/paid_plan.dart';
@@ -315,7 +316,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
       }
       else{
         ///For not become unlimited Circular
-        return const Center(child: CircularProgressIndicator(color: EvieColors.primaryColor,));
+        return Center(child: BikeLoading());
       }
     }
   }

@@ -346,6 +346,17 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
             .doc(_bikeProvider.currentBikeModel?.deviceIMEI)
             .collection("events")
             .orderBy("created", descending: true),
+        onEmpty: Column(
+          children: [
+            SizedBox(height: 22.h,),
+            SvgPicture.asset("assets/images/ev-secure.svg",),
+            SizedBox(height: 10.h,),
+            Text(
+              'Ride to fill this space with your adventures!',
+              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+            )
+          ],
+        )
       ),
     ];
 
@@ -353,6 +364,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.w),
         border: returnBorderColour(_locationProvider),
+        color: EvieColors.dividerWhite,
         boxShadow: [
           BoxShadow(
             color: Color(0xFF7A7A79).withOpacity(0.15), // Hex color with opacity

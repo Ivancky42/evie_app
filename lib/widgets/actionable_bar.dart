@@ -61,7 +61,7 @@ class EvieActionableBar extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: EvieTextStyles.body20.copyWith(color: EvieColors.grayishWhite, fontWeight: FontWeight.w800)),
+                    Text(title, style: EvieTextStyles.target_reference_headlineB.copyWith(color: EvieColors.grayishWhite)),
                     Text(text, style: EvieTextStyles.body16.copyWith(color: EvieColors.grayishWhite, fontWeight: FontWeight.w400,)),
                   ],
                 ),

@@ -95,13 +95,11 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
     isFirstLocationRequest = _sharedPreferenceProvider.location;
     _locationProvider = Provider.of<LocationProvider>(context, listen: false);
     _locationProvider.addListener(locationListener);
-    if (Platform.isAndroid) {
-      if (isFirstLocationRequest == 'null') {
-        _sharedPreferenceProvider.setIsFirstLocationRequest('done');
-        Future.delayed(Duration.zero).then((value) {
-          showEvieAllowOrbitalDialog(_locationProvider);
-        });
-      }
+    if (isFirstLocationRequest == 'null') {
+      _sharedPreferenceProvider.setIsFirstLocationRequest('done');
+      Future.delayed(Duration.zero).then((value) {
+        showEvieAllowOrbitalDialog(_locationProvider);
+      });
     }
     Future.delayed(const Duration(seconds: 1), () {
       _controller.showTooltip();
@@ -146,23 +144,26 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
     IMG.Image resized = IMG.copyResize(img!, width: 20.w.toInt(), height:20.w.toInt());
     Uint8List resizedImg = Uint8List.fromList(IMG.encodePng(resized));
 
-    await mapboxMap.location.updateSettings(
-        LocationComponentSettings(
-            pulsingColor: 6967754,
-            enabled: true,
-            //pulsingEnabled: true,
-            //puckBearingEnabled: true,
-            //accuracyRingColor: 6967754,
-            //accuracyRingBorderColor: 6967754,
-            puckBearingSource: PuckBearingSource.HEADING,
-            locationPuck: LocationPuck(
-                locationPuck2D: LocationPuck2D(
-                  topImage: list2,
-                  bearingImage: list,
-                  //shadowImage: list3,
-                )
-            )
-        ));
+    if (_locationProvider.hasLocationPermission) {
+      await mapboxMap.location.updateSettings(
+          LocationComponentSettings(
+              pulsingColor: 6967754,
+              enabled: true,
+              //pulsingEnabled: true,
+              //puckBearingEnabled: true,
+              //accuracyRingColor: 6967754,
+              //accuracyRingBorderColor: 6967754,
+              puckBearingSource: PuckBearingSource.HEADING,
+              locationPuck: LocationPuck(
+                  locationPuck2D: LocationPuck2D(
+                    topImage: list2,
+                    bearingImage: list,
+                    //shadowImage: list3,
+                  )
+              )
+          ));
+    }
+
     await Future.delayed(Duration(seconds: 1));
     await updateUserPositionAndBearing(true);
 
@@ -198,7 +199,7 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
                   Padding(
                     padding: EdgeInsets.only(left: 17.w, top: 0.h, bottom: 6.h),
                     child: Text(
-                      "Orbital Anti-Theft",
+                      "EV-Secure",
                       style: EvieTextStyles.h1,
                     ),
                   ),
@@ -366,7 +367,7 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
                                 aspectRatio: 1,
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(6, 2, 16, 8),
-                                  child: EvieCard(
+                                  child: EvieCard3(
                                     child: UnlockingButton(),
                                   )
                                 ),
@@ -484,22 +485,56 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
   Future<void> updateUserPositionAndBearing(bool isFirstTime) async {
     if (_locationProvider.hasLocationPermission) {
       Layer? layer;
-      if (Platform.isAndroid) {
-        layer =
-        await mapboxMap?.style.getLayer("mapbox-location-indicator-layer");
-      } else {
-        layer = await mapboxMap?.style.getLayer("puck");
+      try {
+        if (Platform.isAndroid) {
+          layer = await mapboxMap?.style.getLayer("mapbox-location-indicator-layer");
+        }
+        else {
+          layer = await mapboxMap?.style.getLayer("puck");
+        }
+
+        var location = (layer as LocationIndicatorLayer)?.location;
+        userPosition = Position(location![1]!, location[0]!);
+        num? latitude = userPosition[1];
+        num? longitude = userPosition[0];
+        _locationProvider.setUserPosition(
+            GeoPoint(latitude!.toDouble(), longitude!.toDouble()));
+
+        if (isFirstTime) {
+          pointBounce3(mapboxMap, _locationProvider, userPosition);
+        }
       }
+      catch(error) {
+        ///User location
+        final ByteData bytes = await rootBundle.load("assets/icons/security/user_location_icon.png");
+        final Uint8List list = bytes.buffer.asUint8List();
 
-      var location = (layer as LocationIndicatorLayer)?.location;
-      userPosition = Position(location![1]!, location[0]!);
-      num? latitude = userPosition[1];
-      num? longitude = userPosition[0];
-      _locationProvider.setUserPosition(
-          GeoPoint(latitude!.toDouble(), longitude!.toDouble()));
+        final ByteData bytes2 = await rootBundle.load("assets/icons/security/top_location.png");
+        final Uint8List list2 = bytes2.buffer.asUint8List();
 
-      if (isFirstTime) {
-        pointBounce3(mapboxMap, _locationProvider, userPosition);
+        final ByteData bytes3 = await rootBundle.load("assets/icons/security/shadow.png");
+        final Uint8List list3 = bytes3.buffer.asUint8List();
+
+        IMG.Image? img = IMG.decodeImage(list);
+        IMG.Image resized = IMG.copyResize(img!, width: 20.w.toInt(), height:20.w.toInt());
+        Uint8List resizedImg = Uint8List.fromList(IMG.encodePng(resized));
+        await mapboxMap?.location.updateSettings(
+            LocationComponentSettings(
+                pulsingColor: 6967754,
+                enabled: true,
+                //pulsingEnabled: true,
+                //puckBearingEnabled: true,
+                //accuracyRingColor: 6967754,
+                //accuracyRingBorderColor: 6967754,
+                puckBearingSource: PuckBearingSource.HEADING,
+                locationPuck: LocationPuck(
+                    locationPuck2D: LocationPuck2D(
+                      topImage: list2,
+                      bearingImage: list,
+                      //shadowImage: list3,
+                    )
+                )
+            ));
       }
     }
   }

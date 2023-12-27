@@ -135,7 +135,7 @@ class _LocationState extends State<Location> {
         List<AvailableMap> availableMaps = await MapLauncher.installedMaps;
         _showActionSheet(context, availableMaps);
       },
-      child: EvieCard(
+      child: EvieCard3(
           child: Padding(
             padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
             child: Column(

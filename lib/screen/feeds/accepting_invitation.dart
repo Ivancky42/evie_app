@@ -60,20 +60,18 @@ class _AcceptingInvitationState extends State<AcceptingInvitation> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              height: 157.h,
-              width: 279.h,
-              child: Lottie.asset(
-                'assets/animations/add-bike.json',
+              //color: Colors.red,
+              child: LottieBuilder.asset(
+                'assets/animations/loading.json',
+                height: 260.h, // Adjust the height to your desired value
+                width: 400.w,  // Adjust the width to your desired value
                 repeat: true,
-                height: 157.h,
-                width: 279.h,
                 fit: BoxFit.cover,
               ),
             ),
-            SizedBox(height: 60.h,),
             Text(
-              "Accepting invitation and adding bike...",
-              style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGray),
+              "Confirming the invitation and adding bike...",
+              style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
             )
           ],
         ),

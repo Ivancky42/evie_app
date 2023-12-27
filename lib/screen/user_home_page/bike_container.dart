@@ -95,7 +95,7 @@ class _BikeContainerState extends State<BikeContainer> {
 
         },
         child: Container(
-          height: 88.h,
+          height: 96.h,
           width: double.infinity,
           decoration:  BoxDecoration(
             color:EvieColors.dividerWhite,

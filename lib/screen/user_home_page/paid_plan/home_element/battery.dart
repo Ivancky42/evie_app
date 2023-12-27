@@ -118,7 +118,7 @@ class _BatteryState extends State<Battery> {
               padding: EdgeInsets.only(bottom: 16.h, top: 12.h),
               child: Text(
                 calculateTimeAgo(_bikeProvider.currentBikeModel?.batteryModel?.lastUpdated?.toDate() ?? DateTime.now()),
-                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),
+                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
               ),),
            ],
         ),

@@ -53,7 +53,7 @@ class _DeactivateTheftAlertState extends State<DeactivateTheftAlert> {
 
     return Material(
       child: Container(
-        height: 100.h,
+        height: 260.h,
         decoration: const BoxDecoration(
           color: EvieColors.grayishWhite,
           borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
@@ -61,49 +61,115 @@ class _DeactivateTheftAlertState extends State<DeactivateTheftAlert> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-
             Padding(
-              padding:
-              EdgeInsets.only(left: 0.w, top: 0.h, bottom: 0.h),
+              padding: EdgeInsets.zero,
               child: GestureDetector(
-
                 onTap: (){
                   Navigator.pop(context);
                   showDeactivateTheftDialog(context, _bikeProvider);
                 },
                 child: Container(
-                  height: 100.h,
-                  child: ListTile(
-                    contentPadding: EdgeInsets.only(left: 18.w, right: 8.w),
-                    leading:  SvgPicture.asset(
-                      "assets/icons/alert_black.svg",
-                    ),
-
-                    title: Padding(
-                      padding: EdgeInsets.only(top:10.h),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Deactivate Theft Alert",
-                            style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.bold, color: EvieColors.mediumLightBlack),
-                          ),
-
-                        ],
-                      ),
-                    ),
-                    subtitle: Wrap(
+                  //color: EvieColors.red,
+                  height: 130.h,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(16, 14, 16, 14),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                        "Clear the Theft Attempt Mode and revert your bike to its default state until it is triggered again.",
-                        style: EvieTextStyles.body14.copyWith(fontWeight: FontWeight.bold, color: EvieColors.darkGrayishCyan),
-                      ),
-                      ]
-                    ),
-                    trailing: SvgPicture.asset(
-                      "assets/buttons/next.svg",
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              "assets/icons/info.svg",
+                            ),
+                            SizedBox(width: 12.w),
+                            Container(
+                              width: 263.w,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "What Should I Do?",
+                                    style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.bold, color: EvieColors.mediumLightBlack),
+                                  ),
+                                  Flexible(
+                                    child: Text(
+                                      "Stay composed, take a breather. There's a list of suggested actions you might find helpful. Check it out!",
+                                      style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: SvgPicture.asset(
+                            "assets/buttons/next.svg",
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 )
+              ),
+            ),
+
+            Padding(
+              padding: EdgeInsets.zero,
+              child: GestureDetector(
+                  onTap: (){
+                    Navigator.pop(context);
+                    showDeactivateTheftDialog(context, _bikeProvider);
+                  },
+                  child: Container(
+                    //color: EvieColors.red,
+                    height: 130.h,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(16, 14, 16, 14),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              SvgPicture.asset(
+                                "assets/icons/alert_black.svg",
+                              ),
+                              SizedBox(width: 12.w),
+                              Container(
+                                width: 263.w,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "False Alarm?",
+                                      style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.bold, color: EvieColors.mediumLightBlack),
+                                    ),
+                                    Flexible(
+                                      child: Text(
+                                        "Disable Theft Attempt Mode and revert your bike back to safe mode until it’s triggered again.",
+                                        style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: SvgPicture.asset(
+                              "assets/buttons/next.svg",
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
               ),
             ),
           ],

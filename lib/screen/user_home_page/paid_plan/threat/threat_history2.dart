@@ -99,7 +99,7 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                 Padding(
                   padding: EdgeInsets.only(left: 17.w, top: 0.h, bottom: 0.h),
                   child: Text(
-                    "Orbital Anti-Theft",
+                    "EV-Secure",
                     style: EvieTextStyles.h1,
                   ),
                 ),
@@ -129,7 +129,7 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                 Padding(
                   padding: EdgeInsets.only(left: 17.w, top: 0.h, bottom: 0.h),
                   child: Text(
-                    "Orbital Anti-Theft",
+                    "EV-Secure",
                     style: EvieTextStyles.h1,
                   ),
                 ),
@@ -282,20 +282,6 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
               padding: EdgeInsets.only(top: 9.h),
               child: NotificationListener<ScrollNotification> (
                 onNotification: (scrollNotification) {
-                  // print(scrollNotification.metrics);
-                  // if (scrollNotification is ScrollStartNotification) {
-                  //   // The user has started scrolling.
-                  //   setState(() {
-                  //     isScrolling = true;
-                  //   });
-                  // } else if (scrollNotification is ScrollEndNotification) {
-                  //   // Scroll has ended, check if it has returned to the original position.
-                  //   if (scrollNotification.metrics.pixels == 0.0) {
-                  //     setState(() {
-                  //       isScrolling = false;
-                  //     });
-                  //   }
-                  // }
                   return true; // Continue to bubble the notification.
                 },
                 child: Scrollbar(
@@ -394,6 +380,24 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                       listeners: [
                         refreshChangeListener,
                       ],
+                      onEmpty: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 177.h,),
+                            Container(
+                              width: 200.w,
+                              height: 181.h,
+                              child: SvgPicture.asset("assets/images/ev-secure.svg",),
+                            ),
+                            SizedBox(height: 18.h,),
+                            Text(
+                              'Ride to fill this space with your adventures!',
+                              style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                     onRefresh: () async {
                       refreshChangeListener.refreshed = true;

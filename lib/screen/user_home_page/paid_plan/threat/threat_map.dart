@@ -231,7 +231,7 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
                         "assets/buttons/close.svg",
                       )),
                   Text(
-                    "Orbital Anti-theft",
+                    "EV-Secure",
                     style: EvieTextStyles.h2.copyWith(color: EvieColors.grayishWhite),
                    ),
 

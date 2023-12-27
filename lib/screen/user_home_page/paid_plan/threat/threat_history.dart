@@ -68,7 +68,7 @@ class _ThreatHistoryState extends State<ThreatHistory> {
               Padding(
                 padding: EdgeInsets.only(left: 17.w, top: 0.h, bottom: 0.h),
                 child: Text(
-                  "Orbital Anti-Theft",
+                  "EV-Secure",
                   style: EvieTextStyles.h1,
                 ),
               ),

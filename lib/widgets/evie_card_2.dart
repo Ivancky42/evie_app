@@ -35,25 +35,25 @@ class EvieCard2 extends StatelessWidget {
               //color: Colors.yellow,
               padding: EdgeInsets.fromLTRB(16.w, 12.h, 0, 0),
               child: Text(
-                'Orbital Anti-theft',
+                'EV-Secure',
                 style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
               ),
             ),
             child!,
           ],
         ),
-        decoration: decoration ?? BoxDecoration(
-          color: color ?? EvieColors.dividerWhite,
-          borderRadius: BorderRadius.circular(10.w),
-          boxShadow: [
-            BoxShadow(
-              color: Color(0xFF7A7A79).withOpacity(0.15), // Hex color with opacity
-              offset: Offset(0, 8), // X and Y offset
-              blurRadius: 16, // Blur radius
-              spreadRadius: 0, // Spread radius
-            ),
-          ],
-        ),
+        // decoration: decoration ?? BoxDecoration(
+        //   color: color ?? EvieColors.dividerWhite,
+        //   borderRadius: BorderRadius.circular(10.w),
+        //   boxShadow: [
+        //     BoxShadow(
+        //       color: Color(0xFF7A7A79).withOpacity(0.15), // Hex color with opacity
+        //       offset: Offset(0, 8), // X and Y offset
+        //       blurRadius: 16, // Blur radius
+        //       spreadRadius: 0, // Spread radius
+        //     ),
+        //   ],
+        // ),
       ),
     );
   }

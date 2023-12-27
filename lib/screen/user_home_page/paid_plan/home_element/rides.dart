@@ -72,7 +72,7 @@ class _RidesState extends State<Rides> {
                     children: [
                       Text(_rideProvider.weekCardData ?? '-', style: EvieTextStyles.display,),
                       Padding(
-                        padding: EdgeInsets.only(top: 6.h),
+                        padding: EdgeInsets.only(top: 8.h),
                         child: Text(_rideProvider.weekCardDataUnit ?? '', style: EvieTextStyles.headlineB.copyWith(color: EvieColors.darkGray,)),
                       )
                     ],

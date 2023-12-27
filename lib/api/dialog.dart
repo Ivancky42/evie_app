@@ -272,21 +272,34 @@ showBluetoothNotAuthorized() {
 showLocationServiceDisable() {
   SmartDialog.dismiss();
   SmartDialog.show(
-      keepSingle:
-      true,
-      widget: EvieSingleButtonDialogOld(
-          title: "Error",
-          content: "Location service is disabled, please enable your location service in settings.",
-          rightContent: "OK",
-          onPressedRight: () {
+      widget: EvieTwoButtonDialog(
+          title: Text("Location Services Disabled",
+            style:EvieTextStyles.h2,
+            textAlign: TextAlign.center,
+          ),
+          childContent: Text(
+            "Enable location services in your settings to elevate your experience. Tap on Always or While Using.",
+            style: TextStyle(fontSize: 16.sp,
+                fontWeight: FontWeight.w400),),
+          downContent: "No, Thanks",
+          upContent: "Go to Setting",
+          svgpicture: SvgPicture.asset(
+            "assets/images/location_required.svg",
+          ),
+          onPressedDown: () async {
+            SmartDialog.dismiss();
+          },
+          onPressedUp: ()async {
             SmartDialog.dismiss();
             if (Platform.isAndroid) {
               openAppSettings();
             }
             else {
               OpenSettings.openLocationSourceSetting();
+              //AppSettings.openAppSettings(type: AppSettingsType.bluetooth);
             }
-          }));
+          })
+  );
 }
 
 showCameraDisable() {
@@ -1322,27 +1335,31 @@ showWrongPasswordDialog(BuildContext context){
 
 showDeactivateTheftDialog (BuildContext context, BikeProvider _bikeProvider){
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
-        title: Text("Deactivate Theft Alert?",
-          style:EvieTextStyles.h2,
-          textAlign: TextAlign.center,
-        ),
-        childContent: Text("Are you sure that this is a false alarm? "
-            "By turning off Theft Attempt mode, your app will revert to its default state until it is triggered again.",
-          textAlign: TextAlign.center,
-          style: EvieTextStyles.body18,),
-        svgpicture: SvgPicture.asset(
-          "assets/images/deactivate_theft_alert.svg",
-        ),
-        upContent: "Cancel",
-        downContent: "Confirm Deactivate",
-        onPressedUp: () {
-          SmartDialog.dismiss();
-        },
-        onPressedDown: () {
-          _bikeProvider.updateBikeStatus('safe');
-          SmartDialog.dismiss();
-        }),
+    widget: Builder(
+      builder: (BuildContext buildContext) {
+        return EvieTwoButtonDialog(
+            title: Text("Dismiss Theft Alert?",
+              style:EvieTextStyles.h2,
+              textAlign: TextAlign.center,
+            ),
+            childContent: Text("Are you certain this is a false alarm? By turning off Theft Attempt mode, your bike will restore back to safe mode until the next trigger. ",
+              textAlign: TextAlign.center,
+              style: EvieTextStyles.body18,),
+            svgpicture: SvgPicture.asset(
+              "assets/images/deactivate_theft_alert.svg",
+            ),
+            upContent: "Cancel",
+            downContent: "Confirm Dismiss",
+            onPressedUp: () {
+              SmartDialog.dismiss();
+            },
+            onPressedDown: () {
+              _bikeProvider.updateBikeStatus('safe');
+              showTheftDismiss(buildContext);
+              SmartDialog.dismiss();
+            });
+      },
+    )
   );
 }
 
@@ -1586,6 +1603,8 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
   );
 
+  Widget? animation = Lottie.asset('assets/images/connect-to-bike.json', repeat: true, animate: false);
+
   Future.delayed(Duration.zero).then((value) {
     _bikeProvider.blockConnectingToast(true);
   });
@@ -1598,8 +1617,6 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
         builder: (context, bluetoothProvider, child) {
           return StatefulBuilder(
               builder: (context, setState) {
-
-
                 ///Set button image
                 if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected &&
                     _bluetoothProvider.currentConnectedDevice ==
@@ -1609,6 +1626,7 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                     width: 52.w,
                     height: 50.h,
                   );
+                  animation = Lottie.asset('assets/images/connect-to-bike.json', repeat: true, animate: false);
                   Future.delayed(Duration.zero).then((value) {
                     _bikeProvider.blockConnectingToast(false);
                   });
@@ -1616,6 +1634,7 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                 }  else if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
                     _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
                     _bluetoothProvider.deviceConnectResult == DeviceConnectResult.partialConnected) {
+                  animation = Lottie.asset('assets/images/connect-to-bike.json', repeat: true, animate: true);
                   buttonImage =
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -1627,25 +1646,27 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                             height: 50.h,
                               repeat: true
                           ),
-                          Text('Connecting Bike', style: EvieTextStyles.body18,)
+                          Text('Connecting Bike', style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),)
                         ],
                       );
                 }
                 else if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.disconnected) {
-                  buttonImage = Text('Connect Bike', style: EvieTextStyles.body18,);
+                  buttonImage = Text('Connect Bike', style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),);
+                  animation = Lottie.asset('assets/images/connect-to-bike.json', repeat: true, animate: false);
                   Future.delayed(Duration.zero).then((value) {
                     _bikeProvider.blockConnectingToast(false);
                   });
                   SmartDialog.dismiss();
                 }
                 else if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanTimeout) {
+                  animation = Lottie.asset('assets/images/connect-to-bike.json', repeat: true, animate: false);
                   _bikeProvider.blockConnectingToast(false);
                   SmartDialog.dismiss();
                 }
                 else {
-                  buttonImage = Text('Connect Bike', style: EvieTextStyles.body18,);
+                  animation = Lottie.asset('assets/images/connect-to-bike.json', repeat: true, animate: false);
+                  buttonImage = Text('Connect Bike', style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),);
                 }
-
 
                 return EvieConnectingDialog(
                     title: Text("Connect Your Bike",
@@ -1663,7 +1684,7 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                     lottie: Container(
                       padding: EdgeInsets.zero,
                       //color: Colors.red,
-                      child: Lottie.asset('assets/images/connect-to-bike.json', repeat: false),
+                      child: animation
                     ),
                     customButtonUp: EvieButton(
                         backgroundColor: _bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
@@ -1912,15 +1933,15 @@ showThreatConnectBikeDialog(BuildContext context, setState, BluetoothProvider _b
                       //   height: 50.h,
                       //     repeat: true
                       // ),
-                      Text('Connecting Bike', style: EvieTextStyles.body18,)
+                      Text('Connecting Bike', style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),)
                     ],
                   );
             }
             else if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.disconnected) {
-              buttonImage = Text('Connect Bike', style: EvieTextStyles.body18,);
+              buttonImage = Text('Connect Bike', style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),);
             }
             else {
-              buttonImage = Text('Connect Bike', style: EvieTextStyles.body18,);
+              buttonImage = Text('Connect Bike', style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),);
             }
 
           if(valueOfRSSI == 0){

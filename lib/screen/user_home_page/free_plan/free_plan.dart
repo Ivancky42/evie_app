@@ -42,6 +42,7 @@ class _FreePlanState extends State<FreePlan> {
   late FirmwareProvider _firmwareProvider;
   DeviceConnectResult? deviceConnectResult;
   ActionableBarItem actionableBarItem = ActionableBarItem.none;
+  Widget arrowDirection = SvgPicture.asset("assets/buttons/down_white.svg",);
 
   @override
   void initState() {
@@ -177,7 +178,7 @@ class _FreePlanState extends State<FreePlan> {
                                                               children: [
                                                                 Text(
                                                                   _bikeProvider.currentBikeModel?.deviceName ?? "loading",
-                                                                  style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite, height: 1.2),
+                                                                  style: EvieTextStyles.target_reference_h1.copyWith(color: EvieColors.grayishWhite),
                                                                 ),
                                                               ],
                                                             ),
@@ -218,16 +219,26 @@ class _FreePlanState extends State<FreePlan> {
                                                 Padding(
                                                   padding: EdgeInsets.only(right: 22.5.w),
                                                   child: IconButton(
-                                                      onPressed: (){
-                                                        showCupertinoModalBottomSheet(
-                                                            expand: false,
-                                                            useRootNavigator: true,
-                                                            context: context,
-                                                            builder: (context) {
-                                                              return SwitchBike();
-                                                            });
-                                                  },
-                                                      icon: SvgPicture.asset("assets/buttons/down_white.svg",)),
+                                                    onPressed: (){
+
+                                                      setState(() {
+                                                        arrowDirection = SvgPicture.asset("assets/buttons/up_white.svg",);
+                                                      });
+
+                                                      showCupertinoModalBottomSheet(
+                                                          expand: false,
+                                                          useRootNavigator: true,
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return SwitchBike();
+                                                          }).then((value) {
+                                                        setState(() {
+                                                          arrowDirection = SvgPicture.asset("assets/buttons/down_white.svg",);
+                                                        });
+                                                      });
+                                                    },
+                                                    icon: arrowDirection,
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -258,30 +269,18 @@ class _FreePlanState extends State<FreePlan> {
                            Expanded(
                              child: Padding(
                                padding: EdgeInsets.fromLTRB(19.w, 19.42.h, 19.w, 16.w),
-                               child: Container(
-                                   decoration: BoxDecoration(
-                                     borderRadius: BorderRadius.circular(10.w),
-                                     boxShadow: [
-                                       BoxShadow(
-                                         color: Color(0xFF7A7A79).withOpacity(0.15), // Hex color with opacity
-                                         offset: Offset(0, 8), // X and Y offset
-                                         blurRadius: 16, // Blur radius
-                                         spreadRadius: 0, // Spread radius
-                                       ),
-                                     ],
-                                   ),
-                                 child: EvieCard(
-                                   onPress: (){
-                                     _settingProvider.changeSheetElement(SheetList.proPlan);
-                                     showSheetNavigate(context);
-                                   },
-                                   height: double.infinity,
-                                   width: double.infinity,
-                                   child: Container(
-                                     child: Stack(
-                                       alignment: Alignment.centerLeft,
-                                       children: [
-                                         Padding(
+                               child: EvieCard(
+                                 onPress: (){
+                                   _settingProvider.changeSheetElement(SheetList.proPlan);
+                                   showSheetNavigate(context);
+                                 },
+                                 height: double.infinity,
+                                 width: double.infinity,
+                                 child: Container(
+                                   child: Stack(
+                                     alignment: Alignment.centerLeft,
+                                     children: [
+                                       Padding(
                                            padding: EdgeInsets.only(left: 16.w, top: 18.h, bottom: 17.58.h, right: 59.79.w),
                                            child: Container(
                                              //color:Colors.red,
@@ -291,39 +290,38 @@ class _FreePlanState extends State<FreePlan> {
                                                // height: 196.42.h,
                                              ),
                                            )
-                                         ),
+                                       ),
 
-                                         Align(
-                                           alignment: Alignment.centerRight,
-                                           child: Padding(
-                                             padding: EdgeInsets.only(top: 100.h),
-                                             child: Column(
-                                               mainAxisAlignment: MainAxisAlignment.start,
-                                               crossAxisAlignment: CrossAxisAlignment.start,
-                                               children: [
-                                                 Padding(
-                                                   padding: EdgeInsets.only(top: 0.h, left: 185.w, right: 15.w),
-                                                   child: Container(
-                                                     width: 180.h,
-                                                     child: Text("Your bike will never be out of sight.",
-                                                         style: EvieTextStyles.target_reference_headlineB),
-                                                   ),
+                                       Align(
+                                         alignment: Alignment.centerRight,
+                                         child: Padding(
+                                           padding: EdgeInsets.only(top: 100.h),
+                                           child: Column(
+                                             mainAxisAlignment: MainAxisAlignment.start,
+                                             crossAxisAlignment: CrossAxisAlignment.start,
+                                             children: [
+                                               Padding(
+                                                 padding: EdgeInsets.only(top: 0.h, left: 185.w, right: 15.w),
+                                                 child: Container(
+                                                   width: 180.h,
+                                                   child: Text("Your bike will never be out of sight.",
+                                                       style: EvieTextStyles.target_reference_headlineB),
                                                  ),
+                                               ),
 
-                                                 Padding(
-                                                   padding: EdgeInsets.only(top: 0.h, left: 185.w, right: 15.w),
-                                                   child:SvgPicture.asset(
-                                                     "assets/buttons/EVIE+.svg",
-                                                   ),
-                                                 )
-                                               ],
-                                             ),
+                                               Padding(
+                                                 padding: EdgeInsets.only(top: 0.h, left: 185.w, right: 15.w),
+                                                 child:SvgPicture.asset(
+                                                   "assets/buttons/EVIE+.svg",
+                                                 ),
+                                               )
+                                             ],
                                            ),
                                          ),
-                                       ],
-                                     ),
+                                       ),
+                                     ],
                                    ),
-                                 )
+                                 ),
                                ),
                              ),
                            ),
@@ -454,69 +452,56 @@ class _FreePlanState extends State<FreePlan> {
                                 padding: EdgeInsets.fromLTRB(19.w, 0.h, 19.w, 16.w),
                                 child: Container(
                                   height: 232.h,
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10.w),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0xFF7A7A79).withOpacity(0.15), // Hex color with opacity
-                                            offset: Offset(0, 8), // X and Y offset
-                                            blurRadius: 16, // Blur radius
-                                            spreadRadius: 0, // Spread radius
+                                  child: EvieCard(
+                                    onPress: (){
+                                      _settingProvider.changeSheetElement(SheetList.proPlan);
+                                      showSheetNavigate(context);
+                                    },
+                                    height: double.infinity,
+                                    width: double.infinity,
+
+                                    child: Stack(
+                                      alignment: Alignment.centerLeft,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 16.w, top: 18.h, bottom: 17.58.h,
+                                              right: 59.79.w
                                           ),
-                                        ],
-                                      ),
-                                      child: EvieCard(
-                                        onPress: (){
-                                          _settingProvider.changeSheetElement(SheetList.proPlan);
-                                          showSheetNavigate(context);
-                                        },
-                                        height: double.infinity,
-                                        width: double.infinity,
-
-                                        child: Stack(
-                                          alignment: Alignment.centerLeft,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.only(left: 16.w, top: 18.h, bottom: 17.58.h,
-                                                  right: 59.79.w
-                                              ),
-                                              child: SvgPicture.asset(
-                                                "assets/images/bike_illustration.svg",
-                                                width: 295.21.w,
-                                                height: 196.42.h,
-                                              ),
-                                            ),
-
-                                            Align(
-                                              alignment: Alignment.bottomRight,
-                                              child: Padding(
-                                                padding: EdgeInsets.only(top: 93.h),
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding: EdgeInsets.only(top: 0.h, left: 185.w, right: 15.w),
-                                                      child: Container(
-                                                        width: 180.h,
-                                                        child: Text("Your bike will never be out of sight.",
-                                                            style: EvieTextStyles.target_reference_headlineB),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(top: 0.h, left: 185.w, right: 15.w),
-                                                      child: SvgPicture.asset(
-                                                        "assets/buttons/EVIE+.svg",
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
+                                          child: SvgPicture.asset(
+                                            "assets/images/bike_illustration.svg",
+                                            width: 295.21.w,
+                                            height: 196.42.h,
+                                          ),
                                         ),
-                                      )
+
+                                        Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: Padding(
+                                            padding: EdgeInsets.only(top: 93.h),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(top: 0.h, left: 185.w, right: 15.w),
+                                                  child: Container(
+                                                    width: 180.h,
+                                                    child: Text("Your bike will never be out of sight.",
+                                                        style: EvieTextStyles.target_reference_headlineB),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(top: 0.h, left: 185.w, right: 15.w),
+                                                  child: SvgPicture.asset(
+                                                    "assets/buttons/EVIE+.svg",
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
