@@ -66,10 +66,10 @@ class _DeactivateTheftAlertState extends State<DeactivateTheftAlert> {
               child: GestureDetector(
                 onTap: (){
                   Navigator.pop(context);
-                  showDeactivateTheftDialog(context, _bikeProvider);
+                  showWhatToDoDialog(context);
                 },
                 child: Container(
-                  //color: EvieColors.red,
+                  color: EvieColors.grayishWhite,
                   height: 130.h,
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(16, 14, 16, 14),

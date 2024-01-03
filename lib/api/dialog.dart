@@ -1333,6 +1333,176 @@ showWrongPasswordDialog(BuildContext context){
   );
 }
 
+showWhatToDoDialog(BuildContext context) {
+  SmartDialog.show(
+    widget: Dialog(
+        insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        elevation: 0.0,
+        backgroundColor: EvieColors.grayishWhite2,
+        child: Container(
+          padding:  EdgeInsets.only(
+              left: 17.w,
+              right: 17.w,
+              top: 16.w,
+              bottom: 16.w
+          ),
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 32.h),
+                    child:  SvgPicture.asset(
+                      "assets/images/wsid.svg",
+                    ),
+                  ),
+              ),
+
+              Container(
+                width: 325.w,
+                child: Padding(
+                  padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
+                  child: Text("What Should I Do??",
+                    style:EvieTextStyles.h2,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+
+              Column(
+                children: [
+                  Text("Take deep breaths and stay calm. We've compiled a list of actions you can take:",
+                    style:EvieTextStyles.body18,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 20.h,),
+
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("1.  ",
+                    style:EvieTextStyles.body18,
+                    textAlign: TextAlign.center,
+                  ),
+                  Flexible(
+                    child: RichText(
+                      text: TextSpan(
+                        style: EvieTextStyles.body18,
+                        children: [
+                          TextSpan(
+                            text: "Report to authorities: ",
+                            style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.w800, color: EvieColors.lightBlack, fontFamily: 'Avenir'),
+                          ),
+                          TextSpan(
+                            text: "Immediately contact your local police to file a theft report with the EV-Secure tracking list.",
+                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, fontFamily: 'Avenir'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+
+              SizedBox(height: 6.h,),
+
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("2.  ",
+                    style:EvieTextStyles.body18,
+                    textAlign: TextAlign.center,
+                  ),
+                  Flexible(
+                    child: RichText(
+                      text: TextSpan(
+                        style: EvieTextStyles.body18,
+                        children: [
+                          TextSpan(
+                            text: "Spread the word: ",
+                            style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.w800, color: EvieColors.lightBlack, fontFamily: 'Avenir'),
+                          ),
+                          TextSpan(
+                            text: "Post about the incident on social media, share pictures of your bike, and update the tracking pathway with friends and family. Ask them to keep a lookout.",
+                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, fontFamily: 'Avenir'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+
+              SizedBox(height: 6.h,),
+
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("3.  ",
+                    style:EvieTextStyles.body18,
+                    textAlign: TextAlign.center,
+                  ),
+                  Flexible(
+                    child: RichText(
+                      text: TextSpan(
+                        style: EvieTextStyles.body18,
+                        children: [
+                          TextSpan(
+                            text: "Stay vigilant: ",
+                            style: EvieTextStyles.body18.copyWith(fontWeight: FontWeight.w800, color: EvieColors.lightBlack, fontFamily: 'Avenir'),
+                          ),
+                          TextSpan(
+                            text: "Keep an eye out for your bike, both in person and on online platforms. ",
+                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, fontFamily: 'Avenir'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+
+
+              Padding(
+                padding: EdgeInsets.only(top: 37.h),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 4.h),
+                        child: EvieButton(
+                            width: double.infinity,
+                            height: 48.h,
+                            child: Text(
+                              'Done',
+                              style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                            ),
+                            onPressed: () {
+                              SmartDialog.dismiss();
+                            }
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+
+            ],
+          ),
+        )
+    )
+  );
+}
+
 showDeactivateTheftDialog (BuildContext context, BikeProvider _bikeProvider){
   SmartDialog.show(
     widget: Builder(

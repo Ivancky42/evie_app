@@ -239,39 +239,46 @@ class BluetoothProvider extends ChangeNotifier {
         deviceConnectStream.add(DeviceConnectResult.scanning);
         notifyListeners();
       }
-      if (discoveredDevice.name == currentBikeModel?.bleName) {
-        startScanTimer?.cancel();
-        deviceFoundTimer?.cancel();
 
-        deviceFoundTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
-          //print("Scan RSSI Timer: " + timer.tick.toString() + "s");
-          if (timer.tick == 3) {
-            startScanCountTimer();
-            notifyListeners();
+      String manufacturerData = HexCodec().encode(discoveredDevice.manufacturerData);
+      if (manufacturerData.length == 26) {
+        String macAddress = formatToMacAddress(
+            manufacturerData.substring(4, 16));
+        print(macAddress);
+        if (macAddress == currentBikeModel?.macAddr) {
+          startScanTimer?.cancel();
+          deviceFoundTimer?.cancel();
+
+          deviceFoundTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
+            //print("Scan RSSI Timer: " + timer.tick.toString() + "s");
+            if (timer.tick == 3) {
+              startScanCountTimer();
+              notifyListeners();
+            }
+          });
+
+          deviceConnectResult = DeviceConnectResult.deviceFound;
+          deviceConnectStream.add(DeviceConnectResult.deviceFound);
+          discoverDevice = discoveredDevice;
+          deviceRssi = discoverDevice!.rssi.abs();
+          realRssi = discoveredDevice!.rssi.abs();
+          deviceRssi = 1 + (((deviceRssi - 60) * (99))/40).toInt();
+
+          if (deviceRssi <= 0) {
+            deviceRssi = 1;
           }
-        });
+          else if (deviceRssi >= 100) {
+            deviceRssi = 100;
+          }
 
-        deviceConnectResult = DeviceConnectResult.deviceFound;
-        deviceConnectStream.add(DeviceConnectResult.deviceFound);
-        discoverDevice = discoveredDevice;
-        deviceRssi = discoverDevice!.rssi.abs();
-        realRssi = discoveredDevice!.rssi.abs();
-        deviceRssi = 1 + (((deviceRssi - 60) * (99))/40).toInt();
-
-        if (deviceRssi <= 0) {
-          deviceRssi = 1;
+          if (deviceRssi.abs() > 0 && deviceRssi.abs() < 100) {
+            deviceRssiProgress = 1.0 - (deviceRssi.abs() / 100.0);
+          } else {
+            deviceRssiProgress = 0.0;
+          }
+          //print('RSSISSSISISIISISII : ' + deviceRssi.toString());
+          notifyListeners();
         }
-        else if (deviceRssi >= 100) {
-          deviceRssi = 100;
-        }
-
-        if (deviceRssi.abs() > 0 && deviceRssi.abs() < 100) {
-          deviceRssiProgress = 1.0 - (deviceRssi.abs() / 100.0);
-        } else {
-          deviceRssiProgress = 0.0;
-        }
-        //print('RSSISSSISISIISISII : ' + deviceRssi.toString());
-        notifyListeners();
       }
     }, onError: (error) {
       startScanTimer?.cancel();
@@ -319,10 +326,16 @@ class BluetoothProvider extends ChangeNotifier {
           deviceConnectStream.add(DeviceConnectResult.scanning);
           notifyListeners();
         }
-        if (device.name == currentBikeModel?.bleName) {
-          //print("Connecting.... cancelling timer");
-          startScanTimer?.cancel();
-          connectDevice(device.id);
+        String manufacturerData = HexCodec().encode(device.manufacturerData);
+        if (manufacturerData.length == 26) {
+          String macAddress = formatToMacAddress(
+              manufacturerData.substring(4, 16));
+          print(macAddress);
+          if (macAddress == currentBikeModel?.macAddr) {
+            //print("Connecting.... cancelling timer");
+            startScanTimer?.cancel();
+            connectDevice(device.id);
+          }
         }
 
       }, onError: (error) {
@@ -1402,6 +1415,13 @@ class BluetoothProvider extends ChangeNotifier {
     deviceFoundTimer?.cancel();
     bleScanSub?.cancel();
     notifyListeners();
+  }
+
+  String formatToMacAddress(String input) {
+    final regex = RegExp(r".{2}");
+    final matches = regex.allMatches(input.toUpperCase());
+    final macBytes = matches.map((match) => match.group(0)).toList();
+    return macBytes.join(':');
   }
 
   Future updateBattery(num batteryLevel) async {
