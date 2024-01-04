@@ -364,6 +364,23 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
                     ),
 
                     Positioned(
+                      right: 15.w,
+                      top: 67.h,
+                      child: GestureDetector(
+                        onTap: () async {
+                          showWhatToDoDialog(context);
+                        },
+                        child: Container(
+                          width: 42.w,
+                          height: 42.w,
+                          child: SvgPicture.asset(
+                            "assets/buttons/info-black.svg",
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Positioned(
                       right: 10.w,
                       bottom: _fabHeight - 20.h,
                       child: GestureDetector(

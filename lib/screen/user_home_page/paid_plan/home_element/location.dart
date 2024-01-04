@@ -60,7 +60,7 @@ class _LocationState extends State<Location> {
           ),
           SizedBox(height: 3.h,),
           Text(
-            "Select Navigation App ",
+            "Navigation to my bike location with",
             style: TextStyle(fontSize: 13.sp),
           ),
         ],

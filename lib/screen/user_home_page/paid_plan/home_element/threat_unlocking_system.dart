@@ -71,13 +71,17 @@ class _ThreatUnlockingSystemState extends State<ThreatUnlockingSystem> {
         children: [
           Align(
             alignment: Alignment.topRight,
-            child: Padding(
-              padding: EdgeInsets.only(right:8.w, top: 8.h),
-              child: SvgPicture.asset(
-                "assets/buttons/info_grey.svg",
-
+            child: GestureDetector(
+              child: Padding(
+                padding: EdgeInsets.only(right:8.w, top: 8.h),
+                child: SvgPicture.asset(
+                  "assets/buttons/info_grey.svg",
+                ),
               ),
-            ),
+              onTap: () {
+                showLookingForYourBikeDialog(context);
+              },
+            )
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

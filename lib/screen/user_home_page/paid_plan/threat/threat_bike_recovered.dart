@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -45,63 +46,66 @@ class _ThreatBikeRecoveredState extends State<ThreatBikeRecovered> {
 
       child: Scaffold(
           body: Stack(
-              children:[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+            children: [
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children:[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
 
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 67.h, 16.w,4.h),
-                      child: Text(
-                        "Bike Recovered!",
-                        style: EvieTextStyles.h2,
-                      ),
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 87.h),
-                      child: Text(
-                        "Your bike in back in your possession after a theft attempt. "
-                            "Ensure ${_bikeProvider.currentBikeModel!.deviceName}'s security and enjoy it once again.",
-                        style: EvieTextStyles.body18,
-                      ),
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(0.w, 0.h, 45.2.w,0.h),
-                      child: Center(
-                        child: SvgPicture.asset(
-                          "assets/images/bike_champion.svg",
-                          height: 242.34.h,
-                          width: 252.17.w,
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(16.w, 120.h, 16.w,4.h),
+                          child: Text(
+                            "Bike Recovered!",
+                            style: EvieTextStyles.h2,
+                          ),
                         ),
+
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 153.h),
+                          child: Text(
+                            "Your bike in back in your possession after a theft attempt. "
+                                "Ensure ${_bikeProvider.currentBikeModel!.deviceName}'s security and enjoy it once again.",
+                            style: EvieTextStyles.body18,
+                          ),
+                        ),
+
+                        Center(
+                          child: SvgPicture.asset(
+                            "assets/images/bike_champion.svg",
+                            height: 242.34.h,
+                            width: 252.17.w,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: EvieLength.target_reference_button_a),
+                      child:  EvieButton(
+                        width: double.infinity,
+                        height: 48.h,
+                        child: Text(
+                          "Hooray!",
+                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                        ),
+
+                        onPressed: (){
+
+                          changeToUserHomePageScreen(context);
+                        },
                       ),
                     ),
-                  ],
-                ),
-
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.button_Bottom),
-                    child:  EvieButton(
-                      width: double.infinity,
-                      height: 48.h,
-                      child: Text(
-                        "Hooray!",
-                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                      ),
-
-                      onPressed: (){
-
-                        changeToUserHomePageScreen(context);
-                      },
-                    ),
-                  ),
-                ),
-              ]
-          )
+                  ]
+              ),
+              Lottie.asset(
+                'assets/animations/confetti.json',
+                repeat: false,
+              ),
+            ],
+          ),
       ),
     );
   }

@@ -297,7 +297,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
         child: Scaffold(
             //backgroundColor: EvieColors.lightBlack,
             appBar: EmptyAppbar(),
-            body: isLoading ? Center(child: CircularProgressIndicator(color: EvieColors.primaryColor,)) :
+            body: isLoading ? Center(child: BikeLoading()) :
             _buildChild(userBikeList),
         )
     );

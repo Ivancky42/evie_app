@@ -22,14 +22,11 @@ class _ThreatDialogState extends State<ThreatDialog> {
         ),
         elevation: 0.0,
         backgroundColor: EvieColors.grayishWhite,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(16.w, 32.h, 16.w, 16.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ThreatContainer(context: widget.contextS,),
-            ],
+        child: Container(
+          height: 700.h,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16.w, 32.h, 16.w, 16.h),
+            child: ThreatContainer(context: widget.contextS,),
           ),
         )
     );
