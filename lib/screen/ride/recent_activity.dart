@@ -20,8 +20,9 @@ import '../../api/sheet.dart';
 
 class RecentActivity extends StatefulWidget{
   final RideFormat format;
+  final RideDataType rideDataType;
   final bool isDataEmpty;
-  const RecentActivity(this.format, this.isDataEmpty, { Key? key }) : super(key: key);
+  const RecentActivity(this.format, this.isDataEmpty, this.rideDataType, { Key? key }) : super(key: key);
   @override
   _RecentActivityState createState() => _RecentActivityState();
 }
@@ -42,6 +43,7 @@ class _RecentActivityState extends State<RecentActivity> {
   late SettingProvider _settingProvider;
 
   List<TripHistoryModel> tripList = [];
+  String noRecordText = 'No rides on this day';
 
 
   @override
@@ -52,12 +54,15 @@ class _RecentActivityState extends State<RecentActivity> {
 
     if (widget.format == RideFormat.day) {
       tripList = _rideProvider.dayRideHistoryList;
+      noRecordText = 'No rides on this day';
     }
     else if (widget.format == RideFormat.week) {
       tripList = _rideProvider.weekRideHistoryList;
+      noRecordText = 'Zero rides for the week';
     }
     else if (widget.format == RideFormat.month) {
       tripList = _rideProvider.monthRideHistoryList;
+      noRecordText = 'No rides logged this month.';
     }
 
     return  Column(
@@ -78,7 +83,7 @@ class _RecentActivityState extends State<RecentActivity> {
             visible: widget.isDataEmpty,
             child: Padding(
               padding: EdgeInsets.only(left: 16.w, top: 10.h),
-              child: Text("No records",style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
+              child: Text(noRecordText,style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),),
             )
         ),
 
@@ -157,7 +162,10 @@ class _RecentActivityState extends State<RecentActivity> {
                     ),
                   ),
                 ),
-                const EvieDivider(),
+                Padding(
+                  padding: EdgeInsets.only(left: 16.w),
+                  child: EvieDivider(),
+                )
               ],
             );
           },

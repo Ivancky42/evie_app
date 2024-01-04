@@ -104,7 +104,7 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(left: 16.w, right: 16.w),
+            padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 4.h),
             child: Text("TOTAL", style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan),),
           ),
           Padding(
@@ -113,20 +113,26 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
               children: [
                 Row(
                   children: [
-                    Text(
-                      widget.format == RideFormat.day ?
-                      _rideProvider.rideDataDayString :
-                      widget.format == RideFormat.week ?
-                      _rideProvider.rideDataWeekString :
-                      widget.format == RideFormat.month ?
-                      _rideProvider.rideDataMonthString :
-                      widget.format == RideFormat.year ?
-                      _rideProvider.rideDataYearString :
-                      _rideProvider.rideDataString,
-                      style: EvieTextStyles.measurement,
+                    Container(
+                      child: Text(
+                        widget.format == RideFormat.day ?
+                        _rideProvider.rideDataDayString :
+                        widget.format == RideFormat.week ?
+                        _rideProvider.rideDataWeekString :
+                        widget.format == RideFormat.month ?
+                        _rideProvider.rideDataMonthString :
+                        widget.format == RideFormat.year ?
+                        _rideProvider.rideDataYearString :
+                        _rideProvider.rideDataString,
+                        style: EvieTextStyles.measurement.copyWith(height: 1.0),
+                      ),
+                      //color: Colors.red,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 8.h),
+                    Container(
+                      //color: Colors.green,
+                      // padding: EdgeInsets.zero,
+                      // margin: EdgeInsets.zero,
+                      alignment: Alignment.center,
                       child: Text(_rideProvider.rideDataUnit, style: EvieTextStyles.unit),
                     )
                   ],
@@ -173,7 +179,7 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                 Container(
                   //color: Colors.green,
                   child: EvieButton_PickDate(
-                    width: 50.w,
+                    width: 40.w,
                     showColour: false,
                     onPressed: () async {
                       if (widget.format == RideFormat.day) {
@@ -357,8 +363,8 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                       name: _rideProvider.weekTimeChartData.toString(),
                       color: EvieColors.primaryColor,
                       borderRadius: const BorderRadius.only(
-                        topRight:  Radius.circular(10),
-                        topLeft: Radius.circular(10),
+                        topRight:  Radius.circular(20),
+                        topLeft: Radius.circular(20),
                       ),
                     ),
                   ] :
@@ -522,12 +528,12 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
           else...{
             RideFormat.day == widget.format ?
             /// ΣY = 0
-            RecentActivity(widget.format, _rideProvider.dayTimeChartData.fold<double>(0, (prev, element) => prev + element.y!.toDouble()) == 0 ? true : false) :
+            RecentActivity(widget.format, _rideProvider.dayTimeChartData.fold<double>(0, (prev, element) => prev + element.y!.toDouble()) == 0 ? true : false, _rideProvider.rideDataType) :
             RideFormat.week == widget.format ?
-            RecentActivity(widget.format,_rideProvider.weekTimeChartData.fold<double>(0, (prev, element) => prev + element.y!.toDouble()) == 0 ? true : false ) :
+            RecentActivity(widget.format,_rideProvider.weekTimeChartData.fold<double>(0, (prev, element) => prev + element.y!.toDouble()) == 0 ? true : false, _rideProvider.rideDataType ) :
             RideFormat.month == widget.format ?
-            RecentActivity(widget.format,_rideProvider.monthTimeChartData.fold<double>(0, (prev, element) => prev + element.y!.toDouble()) == 0 ? true : false ) :
-            RecentActivity(widget.format,_rideProvider.chartData.fold<double>(0, (prev, element) => prev + element.y!.toDouble()) == 0 ? true : false )
+            RecentActivity(widget.format,_rideProvider.monthTimeChartData.fold<double>(0, (prev, element) => prev + element.y!.toDouble()) == 0 ? true : false, _rideProvider.rideDataType ) :
+            RecentActivity(widget.format,_rideProvider.chartData.fold<double>(0, (prev, element) => prev + element.y!.toDouble()) == 0 ? true : false, _rideProvider.rideDataType )
           }
         ],
       ),

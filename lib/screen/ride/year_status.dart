@@ -70,7 +70,10 @@ class _YearStatusState extends State<YearStatus> {
           ),
         ),
 
-        const EvieDivider(),
+        Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: EvieDivider(),
+        ),
 
         Container(
           height: 77.h,
@@ -95,7 +98,10 @@ class _YearStatusState extends State<YearStatus> {
           ),
         ),
 
-        const EvieDivider(),
+        Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: EvieDivider(),
+        ),
 
         Container(
           height: 77.h,
@@ -118,7 +124,10 @@ class _YearStatusState extends State<YearStatus> {
           ),
         ),
 
-        const EvieDivider(),
+        Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: EvieDivider(),
+        ),
 
         // Average Speed per Ride = Total Distance / Total Time per Ride
         // Total Time = End Time - Start Time
@@ -145,7 +154,10 @@ class _YearStatusState extends State<YearStatus> {
           ),
         ),
 
-        const EvieDivider(),
+        Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: EvieDivider(),
+        ),
 
         // Average Duration = Total Time / Number of Rides
         // Total Time = End Time - Start Time
@@ -170,7 +182,10 @@ class _YearStatusState extends State<YearStatus> {
           ),
         ),
 
-        const EvieDivider(),
+        Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: EvieDivider(),
+        ),
       ],);
   }
 

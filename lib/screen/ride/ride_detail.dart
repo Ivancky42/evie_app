@@ -122,10 +122,18 @@ class _RideDetailState extends State<RideDetail> {
                 //Divider(thickness: 0.5, height: 5, color: EvieColors.darkWhite,),
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w,4.h),
-                  child: Text(
-                      calculateDateAgo(widget.currentTripHistoryList.startTime!.toDate(),widget.currentTripHistoryList.endTime!.toDate()),
-                    style: EvieTextStyles.body18,
-                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        calculateDateOnly(widget.currentTripHistoryList.startTime!.toDate(),widget.currentTripHistoryList.endTime!.toDate()),
+                        style: EvieTextStyles.body18,
+                      ),
+                      Text(
+                        calculateTimeOnly(widget.currentTripHistoryList.startTime!.toDate(),widget.currentTripHistoryList.endTime!.toDate()),
+                        style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan, height: 1.6),
+                      ),
+                    ],
+                  )
                 ),
 
                 Padding(
@@ -136,7 +144,7 @@ class _RideDetailState extends State<RideDetail> {
                         thousandFormatting(widget.currentTripHistoryList.carbonPrint ?? 0),
                         style: EvieTextStyles.display,
                       ),
-                      Text("  g",style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan)),
+                      Text("  g",style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGrayishCyan, height: 3)),
                     ],
                   ),
                 ),
@@ -468,6 +476,8 @@ class _RideDetailState extends State<RideDetail> {
     ///Disable scaleBar on top left corner
     await this.mapboxMap?.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
     await this.mapboxMap?.compass.updateSettings(CompassSettings(enabled: false));
+    await this.mapboxMap?.logo.updateSettings(LogoSettings(marginLeft: -200));
+    await this.mapboxMap?.attribution.updateSettings(AttributionSettings(marginRight: -200));
 
     loadMarkerNew();
   }

@@ -527,8 +527,8 @@ class _FreePlanState extends State<FreePlan> {
                                           padding: EdgeInsets.fromLTRB(8.w, 0, 19.w, 16.h),
                                           child: EvieCard(
                                             onPress: () {
-                                              //showUpgradePlanToast(context, _settingProvider, true);
-                                              showWelcomeToEVClub(context);
+                                              showUpgradePlanToast(context, _settingProvider, true);
+                                              //showWelcomeToEVClub(context);
                                             },
                                             color: EvieColors.grayishWhite,
                                             title: "Rides",

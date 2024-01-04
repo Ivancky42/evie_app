@@ -66,10 +66,7 @@ class _BatteryDetailsState extends State<BatteryDetails> {
         },
 
         child: Container(
-          decoration: const BoxDecoration(
-            color: EvieColors.grayishWhite,
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-          ),
+          color: EvieColors.grayishWhite,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -82,7 +79,7 @@ class _BatteryDetailsState extends State<BatteryDetails> {
                     EdgeInsets.only(left: 17.w, top: 0.h, bottom: 11.h),
                     child: Text(
                       "Battery",
-                      style: EvieTextStyles.h1,
+                      style: EvieTextStyles.target_reference_h1,
                     ),
                   ),
 
@@ -95,7 +92,11 @@ class _BatteryDetailsState extends State<BatteryDetails> {
               SizedBox(height: 30.h,),
               Stack(
                 children: [
-                  Image.asset("assets/images/battery_wave.png", height: 180.h, fit: BoxFit.fill,),
+                  Container(
+                    height: 220.h,
+                    width: double.infinity,
+                    child: WavedCurvesAnimation(),
+                  ),
                   Container(
                     height: EvieLength.battery_curved_bottom - 35.h,
                     //color: Colors.green,

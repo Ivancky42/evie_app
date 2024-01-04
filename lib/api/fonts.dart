@@ -44,8 +44,8 @@ class EvieTextStyles {
 
  static TextStyle toast = TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400, color: EvieColors.grayishWhite, height: lineHeight);
 
- static TextStyle measurement = TextStyle(fontSize: 40.sp, fontWeight: FontWeight.w900,color: EvieColors.lightBlack, height: lineHeight);
- static TextStyle unit = TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w900, color: EvieColors.darkGrayishCyan, height: lineHeight);
+ static TextStyle measurement = TextStyle(fontSize: 40.sp, fontWeight: FontWeight.w900,color: EvieColors.lightBlack);
+ static TextStyle unit = TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w900, color: EvieColors.darkGrayishCyan);
 
 }
 

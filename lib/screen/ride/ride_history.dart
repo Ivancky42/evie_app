@@ -60,7 +60,7 @@ class _RideHistoryState extends State<RideHistory> with SingleTickerProviderStat
                       child: Container(
                         child: Text(
                           "Ride History",
-                          style: EvieTextStyles.h1.copyWith(color: EvieColors.mediumBlack),
+                          style: EvieTextStyles.target_reference_h1,
                         ),
                       ),
                     ),

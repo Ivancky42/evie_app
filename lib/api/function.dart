@@ -145,8 +145,32 @@ String calculateDateAgo(DateTime startDateTime, DateTime endDateTime) {
   }
   // For all other cases
   else {
-    return "${weekdayNameFull[startDateTime.weekday]}, ${monthNameHalf[startDateTime.month]} ${startDateTime.day}, ${startDateTime.year}, ${startDateTime.hour.toString().padLeft(2, '0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2, '0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
+    return "${weekdayNameFull[startDateTime.weekday]}, ${monthNameHalf[startDateTime.month]} ${startDateTime.day}, ${startDateTime.year} ${startDateTime.hour.toString().padLeft(2, '0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2, '0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
   }
+}
+
+String calculateDateOnly(DateTime startDateTime, DateTime endDateTime) {
+  DateTime now = DateTime.now();
+
+  // Check if it's today by comparing year, month, and day
+  if (startDateTime.year == now.year &&
+      startDateTime.month == now.month &&
+      startDateTime.day == now.day) {
+    return "Today ";
+  }
+  // Check if it's yesterday
+  else if (startDateTime.isAfter(now.subtract(Duration(days: 1)))){
+    return "Yesterday ";
+  }
+  // For all other cases
+  else {
+    return "${weekdayNameFull[startDateTime.weekday]}, ${monthNameHalf[startDateTime.month]} ${startDateTime.day}, ${startDateTime.year}";
+  }
+}
+
+///Return today/yesterday/Thursday, Aug 20  16.00 - 16.14
+String calculateTimeOnly(DateTime startDateTime, DateTime endDateTime) {
+  return " ${startDateTime.hour.toString().padLeft(2, '0')}:${startDateTime.minute.toString().padLeft(2, '0')} - ${endDateTime.hour.toString().padLeft(2, '0')}:${endDateTime.minute.toString().padLeft(2, '0')}";
 }
 
 int calculateDurationInMinutes(DateTime startDateTime, DateTime endDateTime) {

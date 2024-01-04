@@ -402,6 +402,7 @@ showUpgradePlanToast(context, SettingProvider settingProvider,[bool? isPop]){
                 child: GestureDetector(
                   onTap: () {
                     if(isPop == true){
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
                       settingProvider.changeSheetElement(SheetList.proPlan);
                       showSheetNavigate(context);
                     }else{
