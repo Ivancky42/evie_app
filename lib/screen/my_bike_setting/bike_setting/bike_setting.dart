@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../../api/backend/debouncer.dart';
 import '../../../api/colours.dart';
@@ -21,6 +22,7 @@ import '../../../api/fonts.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
+import '../../../api/provider/notification_provider.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
@@ -82,6 +84,7 @@ class _BikeSettingState extends State<BikeSetting> {
     _navigator = ScaffoldMessenger.of(context);
     super.didChangeDependencies();
   }
+
 
   @override
   void dispose() {
@@ -162,7 +165,7 @@ class _BikeSettingState extends State<BikeSetting> {
                           EdgeInsets.only(left: 17.w, top: 0, bottom: 0),
                           child: Text(
                             "My Bike Settings",
-                            style: EvieTextStyles.h1,
+                            style: EvieTextStyles.target_reference_h1,
                           ),
                         ),
                       ),
@@ -360,7 +363,7 @@ class _BikeSettingState extends State<BikeSetting> {
                       padding: EdgeInsets.only(right: 0),
                       child: Container(
                         // width: 148.w,
-                        height: 36.h,
+                        height: 40.h,
                         child: OutlinedButton(
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -386,7 +389,7 @@ class _BikeSettingState extends State<BikeSetting> {
                       padding: EdgeInsets.only(right: 0),
                       child: Container(
                         // width:90.w,
-                        height: 36.h,
+                        height: 40.h,
                         child: ElevatedButton(
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,

@@ -1,3 +1,4 @@
+import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -15,7 +16,9 @@ class AcceptingInvitation extends StatefulWidget {
   final String deviceIMEI;
   final String currentUid;
   final String notificationId;
-  const AcceptingInvitation({Key? key, required this.deviceIMEI, required this.currentUid, required this.notificationId}) : super(key: key);
+  final String palName;
+  final String teamName;
+  const AcceptingInvitation({Key? key, required this.deviceIMEI, required this.currentUid, required this.notificationId, required this.palName, required this.teamName}) : super(key: key);
 
   @override
   State<AcceptingInvitation> createState() => _AcceptingInvitationState();
@@ -43,7 +46,7 @@ class _AcceptingInvitationState extends State<AcceptingInvitation> {
       //   await _notificationProvider.subscribeToTopic("${widget.deviceIMEI!}$element");
       // }
       await Future.delayed(Duration(seconds: 3));
-      showBikeAddSuccessfulToast(context);
+      showWelcomeToJoinTeam(context, widget.palName, widget.teamName);
       changeToUserHomePageScreen(context);
     }
   }

@@ -74,37 +74,6 @@ class _QRScanningState extends State<QRScanning> {
       child: Scaffold(
         body: Stack(
             children:[
-
-
-              // Visibility(
-              //   visible: isCameraEnable,
-              //   child: MobileScanner(
-              //       fit: BoxFit.cover,
-              //       scanWindow: scanWindow,
-              //       controller: cameraController,
-              //       onDetect: (BarcodeCapture barcode) async {
-              //
-              //         for (var element in barcode.barcodes) {
-              //           cameraController.stop();
-              //           final String code = element.rawValue!;
-              //           debugPrint('Barcode found, $code');
-              //
-              //           SmartDialog.showLoading();
-              //
-              //           await _bikeProvider.handleBarcodeData(code);
-              //
-              //           if (_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success) {
-              //             SmartDialog.dismiss(status: SmartStatus.loading);
-              //             changeToBikeConnectSuccessScreen(context);
-              //           } else {
-              //             SmartDialog.dismiss(status: SmartStatus.loading);
-              //             changeToBikeConnectFailedScreen(context);
-              //           }
-              //         }
-              //       }
-              //   ),
-              // ),
-
               if (isCameraEnable)...{
                 MobileScanner(
                     fit: BoxFit.cover,
@@ -117,7 +86,7 @@ class _QRScanningState extends State<QRScanning> {
                         final String code = element.rawValue!;
                         debugPrint('Barcode found, $code');
 
-                        SmartDialog.showLoading();
+                        showCustomLightLoading();
 
                         await _bikeProvider.handleBarcodeData(code);
 

@@ -20,6 +20,7 @@ import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
+import '../../../api/snackbar.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../../../widgets/evie_textform.dart';
@@ -44,6 +45,14 @@ class _NameEVState extends State<NameEV> {
 
   final TextEditingController _rfidNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final FocusNode _nameFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _nameFocusNode.requestFocus();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,178 +61,139 @@ class _NameEVState extends State<NameEV> {
     _settingProvider = Provider.of<SettingProvider>(context);
 
 
-    return WillPopScope(
-      onWillPop: () async {
-        // SmartDialog.show(
-        //     widget: EvieDoubleButtonDialog(
-        //         title: "Are you sure you want to quit adding RFID?",
-        //         childContent: const Text("?"),
-        //         leftContent: "Cancel",
-        //         rightContent: "Yes",
-        //         onPressedLeft: () {
-        //           SmartDialog.dismiss();
-        //         },
-        //         onPressedRight: () async {
-        //           SmartDialog.dismiss();
-        //           await _bikeProvider.deleteRFIDFirestore(_settingProvider.stringPassing!);
-        //           _bluetoothProvider.deleteRFID(_settingProvider.stringPassing!);
-        //           _settingProvider.changeSheetElement(SheetList.bikeSetting);
-        //         }));
-        return true;
-      },
-      child: Scaffold(
-        appBar: PageAppbar(
-          title: 'New EV-Key',
-          onPressed: () {
-            // SmartDialog.show(
-            //     widget: EvieDoubleButtonDialog(
-            //         title: "Are you sure you want to quit adding RFID?",
-            //         childContent: const Text("?"),
-            //         leftContent: "Cancel",
-            //         rightContent: "Yes",
-            //         onPressedLeft: () {
-            //           SmartDialog.dismiss();
-            //         },
-            //         onPressedRight: () {
-            //           SmartDialog.dismiss();
-            //           _bikeProvider.deleteRFIDFirestore(_settingProvider.stringPassing!);
-            //           _bluetoothProvider.deleteRFID(_settingProvider.stringPassing!);
-            //           _settingProvider.changeSheetElement(SheetList.bikeSetting);
-            //         }));
-
-            if(_bikeProvider.rfidList.length >0){
-              _settingProvider.changeSheetElement(SheetList.evKeyList);
-            }else{
-              _settingProvider.changeSheetElement(SheetList.bikeSetting);
-            }
-          },
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      height: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w, 2.h),
+                    padding: EdgeInsets.only(top: 18.h),
+                    child: Container(
+                      width: 25.w,
+                      height: 4.h,
+                      decoration: BoxDecoration(
+                        color: EvieColors.progressBarGrey,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 6.w),
+                  Padding(
+                    padding: EdgeInsets.only(top: 18.h),
+                    child: Container(
+                      width: 25.w,
+                      height: 4.h,
+                      decoration: BoxDecoration(
+                        color: EvieColors.primaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w, 2.h),
+                child: Text(
+                  "Label your EV-Key",
+                  style: TextStyle(
+                      fontSize: 24.sp, fontWeight: FontWeight.w500),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 11.h),
+                child: Text(
+                  "Personalize your EV-Key with a unique name that sets it apart from the rest.",
+                  style: TextStyle(fontSize: 16.sp, height: 1.5.h),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
+                child: EvieTextFormField(
+                  controller: _rfidNameController,
+                  obscureText: false,
+                  focusNode: _nameFocusNode,
+                  // keyboardType: TextInputType.name,
+                  hintText: "Name your EV-Key",
+                  labelText: "EV-Key Label",
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter EV-Key name';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ],
+          ),
+
+          Padding(
+            padding: EdgeInsets.fromLTRB(16.w, 140.h, 16.w, EvieLength.buttonWord_WordBottom),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 48.h,
+                  width: double.infinity,
+                  child: EvieButton(
+                    width: double.infinity,
                     child: Text(
-                      "Label your EV-Key",
+                      "Save",
                       style: TextStyle(
-                          fontSize: 24.sp, fontWeight: FontWeight.w500),
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w700),
                     ),
+                    onPressed: () async {
+                      ///For keyboard un focus
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      addRFIDtoFireStore(_rfidNameController.text.trim());
+                      _settingProvider.changeSheetElement(SheetList.evKeyList);
+                    },
                   ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 11.h),
+                ),
+
+                SizedBox(height: 15.h,),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
                     child: Text(
-                      "Label your EV-Key similar with the name you wrote on the Key so that you can differentiate them easily. ",
-                      style: TextStyle(fontSize: 16.sp, height: 1.5.h),
+                      "Can't think of any name now",
+                      softWrap: false,
+                      style: EvieTextStyles.body18_underline,
                     ),
+                    onPressed: () {
+                      _settingProvider.changeSheetElement(SheetList.evKeyList);
+                      // if(_bikeProvider.rfidList.length >0){
+                      //   _settingProvider.changeSheetElement(SheetList.evKeyList);
+                      // }else{
+                      //   showBikeSettingSheet(context);
+                      // }
+                    },
                   ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
-                    child: EvieTextFormField(
-                      controller: _rfidNameController,
-                      obscureText: false,
-                      // keyboardType: TextInputType.name,
-                      hintText: "EV-Key Label",
-                      labelText: "EV-Key " + (_bikeProvider.rfidList.length).toString(),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter EV-Key Card name';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-
-            Padding(
-              padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, EvieLength.screen_bottom),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 48.h,
-                    width: double.infinity,
-                    child: EvieButton(
-                      width: double.infinity,
-                      child: Text(
-                        "Save",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-
-                          ///For keyboard un focus
-                          FocusManager.instance.primaryFocus?.unfocus();
-
-                          addRFIDtoFireStore(_rfidNameController.text.trim());
-
-                        }
-                      },
-                    ),
-                  ),
-
-                  SizedBox(height: 14.h,),
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextButton(
-                      child: Text(
-                        "Can't think of any name now",
-                        softWrap: false,
-                        style: EvieTextStyles.body18_underline,
-                      ),
-                      onPressed: () {
-                        _settingProvider.changeSheetElement(SheetList.evKeyList);
-                        // if(_bikeProvider.rfidList.length >0){
-                        //   _settingProvider.changeSheetElement(SheetList.evKeyList);
-                        // }else{
-                        //   showBikeSettingSheet(context);
-                        // }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
+      //color: Colors.red,
     );
   }
 
   void addRFIDtoFireStore(String rfidName) async {
     final result = await _bikeProvider.uploadRFIDtoFireStore(_settingProvider.stringPassing!, rfidName);
     if (result == true) {
-      SmartDialog.show(
-          widget: EvieSingleButtonDialogOld(
-              title: "Success",
-              content: "Card added",
-              rightContent: "OK",
-              onPressedRight: () {
-                SmartDialog.dismiss();
-
-                ///Change to rfid list
-                _settingProvider.changeSheetElement(SheetList.evKeyList);
-              }));
+      showSuccessAddEVKey(context);
     } else {
-      SmartDialog.show(
-          widget: EvieSingleButtonDialogOld(
-              title: "Error",
-              content: "Error upload rfid to firestore",
-              rightContent: "OK",
-              onPressedRight: () {
-                SmartDialog.dismiss();
-                _settingProvider.changeSheetElement(SheetList.evAddFailed);
-              }));
+      showFailAddEVKey(context);
     }
   }
 }

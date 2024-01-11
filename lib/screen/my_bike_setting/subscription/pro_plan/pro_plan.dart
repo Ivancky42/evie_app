@@ -149,7 +149,7 @@ class _ProPlanState extends State<ProPlan> {
 
                           SizedBox(height: 16.h),
                           Padding(
-                            padding: EdgeInsets.only(left:16.w, right:16.w),
+                            padding: EdgeInsets.only(right:16.w),
                             child: Text("Monitor your bike status remotely and receive security alerts.",
                               style: EvieTextStyles.body18.copyWith(
                                 color: EvieColors.lightBlack,

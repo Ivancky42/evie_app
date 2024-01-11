@@ -110,8 +110,7 @@ class _PedalPalsState extends State<PedalPals> {
                       style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                   ),
                   onPressed: () {
-
-                    _settingProvider.changeSheetElement(SheetList.pedalPalsList);
+                    _settingProvider.changeSheetElement(SheetList.createTeam);
                   },
                 ),
               ),

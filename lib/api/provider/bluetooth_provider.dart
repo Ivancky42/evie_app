@@ -778,7 +778,7 @@ class BluetoothProvider extends ChangeNotifier {
           bluetoothCommand.addRFID(requestComKeyResult!.communicationKey));
       if (isConnected) {
         return addRFIDCardResultListener.stream
-            .timeout(const Duration(seconds: 30), onTimeout: (sink) {
+            .timeout(const Duration(seconds: 15), onTimeout: (sink) {
           sink.addError("Operation timeout");
         });
       } else {

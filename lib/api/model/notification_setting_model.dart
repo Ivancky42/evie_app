@@ -5,6 +5,7 @@ class NotificationSettingModel {
   bool? crash;
   bool? fallDetect;
   bool? lock;
+  bool? unlock;
   bool? lowBattery;
   bool? movementDetect;
   bool? planReminder;
@@ -19,6 +20,7 @@ class NotificationSettingModel {
     this.crash,
     this.fallDetect,
     this.lock,
+    this.unlock,
     this.lowBattery,
     this.movementDetect,
     this.planReminder,
@@ -37,6 +39,7 @@ class NotificationSettingModel {
         connectionLost == other.connectionLost &&
         crash == other.crash &&
         fallDetect == other.fallDetect &&
+        unlock == other.unlock &&
         lock == other.lock &&
         lowBattery == other.lowBattery &&
         movementDetect == other.movementDetect &&
@@ -54,6 +57,7 @@ class NotificationSettingModel {
     crash.hashCode ^
     fallDetect.hashCode ^
     lock.hashCode ^
+    unlock.hashCode ^
     lowBattery.hashCode ^
     movementDetect.hashCode ^
     planReminder.hashCode ^
@@ -69,6 +73,7 @@ class NotificationSettingModel {
       connectionLost: json['connectionLost'] ?? false,
       crash:          json['crash'] ?? false,
       fallDetect:     json['fallDetect'] ?? false,
+      unlock:         json['unlock'] ?? false,
       lock:           json['lock'] ?? false,
       lowBattery:     json['lowBattery'] ?? false,
       movementDetect: json['movementDetect'] ?? false,

@@ -94,8 +94,6 @@ class _LoadingMapState extends State<LoadingMap> {
           Padding(
             padding: EdgeInsets.only(left: 23.w,),
             child: Container(
-              //color: Colors.green,
-              //height: 300.h,
               width: 150.w,
               child: Lottie.asset('assets/animations/loading-bike-status.json'),
             ),
@@ -171,11 +169,8 @@ class _LoadingMapState extends State<LoadingMap> {
 
     return Container(
         decoration: BoxDecoration(
+          color: EvieColors.dividerWhite,
           borderRadius: BorderRadius.circular(10.w),
-          border: Border.all(
-            color: EvieColors.transparent,
-            width: 2.8.w,
-          ),
           boxShadow: [
             BoxShadow(
               color: Color(0xFF7A7A79).withOpacity(0.15), // Hex color with opacity

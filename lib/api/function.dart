@@ -453,49 +453,6 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
 
           ///Change sheet instead of showing dialog
           widget.settingProvider.changeSheetElement(SheetList.leaveTeam);
-          // SmartDialog.show(
-          //     widget: EvieDoubleButtonDialog(
-          //       title: "Are you sure you want to leave",
-          //       childContent: Text('Are you sure you want to leave'),
-          //       leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
-          //       rightContent: "Yes",
-          //       onPressedRight: () async {
-          //         SmartDialog.dismiss();
-          //         SmartDialog.showLoading();
-          //         StreamSubscription? currentSubscription;
-          //
-          //         currentSubscription = widget.bikeProvider.leaveSharedBike(
-          //             widget.bikeProvider.bikeUserList.values.elementAt(widget.index).uid,
-          //             widget.bikeProvider.bikeUserList.values.elementAt(widget.index).notificationId!).listen((uploadStatus) {
-          //
-          //           if(uploadStatus == UploadFirestoreResult.success){
-          //             SmartDialog.dismiss(status: SmartStatus.loading);
-          //             SmartDialog.show(
-          //                 keepSingle: true,
-          //                 widget: EvieSingleButtonDialog(
-          //                     title: "Success",
-          //                     content: "You leave",
-          //                     rightContent: "Close",
-          //                     onPressedRight: () {
-          //                       SmartDialog.dismiss();
-          //                       Navigator.of(context, rootNavigator: true).pop();
-          //                     }
-          //                 ));
-          //             currentSubscription?.cancel();
-          //           } else if(uploadStatus == UploadFirestoreResult.failed) {
-          //             SmartDialog.dismiss();
-          //             SmartDialog.show(
-          //                 widget: EvieSingleButtonDialog(
-          //                     title: "Not success",
-          //                     content: "Try again",
-          //                     rightContent: "Close",
-          //                     onPressedRight: ()=>SmartDialog.dismiss()
-          //                 ));
-          //           }else{};
-          //         },
-          //         );
-          //       },
-          //     ));
         },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(

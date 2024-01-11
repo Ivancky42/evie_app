@@ -62,6 +62,35 @@ class _EVAddFailedState extends State<EVAddFailed> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 18.h),
+                      child: Container(
+                        width: 25.w,
+                        height: 4.h,
+                        decoration: BoxDecoration(
+                          color: EvieColors.progressBarGrey,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 6.w),
+                    Padding(
+                      padding: EdgeInsets.only(top: 18.h),
+                      child: Container(
+                        width: 25.w,
+                        height: 4.h,
+                        decoration: BoxDecoration(
+                          color: EvieColors.primaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 0),
                   child: Text(
@@ -133,6 +162,7 @@ class _EVAddFailedState extends State<EVAddFailed> {
                           Text("Get Help", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)),
                           SvgPicture.asset(
                             "assets/buttons/external_link.svg",
+                            color: EvieColors.primaryColor,
                           ),
                         ],
                       )
@@ -150,13 +180,13 @@ class _EVAddFailedState extends State<EVAddFailed> {
                     child: Text(
                       "Cancel register EV-Key",
                       softWrap: false,
-                      style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w900, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
+                      style: EvieTextStyles.body18.copyWith(fontWeight:FontWeight.w800, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                     ),
                     onPressed: () {
-                      if(_bikeProvider.rfidList.length >0){
+                      if(_bikeProvider.rfidList.isNotEmpty){
                         _settingProvider.changeSheetElement(SheetList.evKeyList);
                       }else{
-                        showBikeSettingSheet(context);
+                        _settingProvider.changeSheetElement(SheetList.bikeSetting);
                       }
                     },
                   ),

@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 
 
 import '../api/backend/stripe_api_caller.dart';
+import '../api/dialog.dart';
 import '../api/model/plan_model.dart';
 import '../api/navigator.dart';
 import '../api/provider/auth_provider.dart';
@@ -1281,7 +1282,7 @@ class _TestBleState extends State<TestBle> {
                     ),
                   ),
                   onPressed: () async {
-                    SmartDialog.showLoading();
+                    showCustomLightLoading();
                     try {
                       await _authProvider.signOut(context).then((result) async {
                         if (result == true) {

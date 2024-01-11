@@ -41,13 +41,6 @@ class EvieDoubleButtonDialog extends StatelessWidget{
           elevation: 0.0,
           backgroundColor: EvieColors.grayishWhite,
           child: Container(
-            // padding:  EdgeInsets.only(
-            //   left: 17.w,
-            //   right: 17.w,
-            //   top: 16.w,
-            //     bottom: 16.w
-            // ),
-
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -63,7 +56,7 @@ class EvieDoubleButtonDialog extends StatelessWidget{
                   height: 0,
                 ),
 
-                SizedBox(height: 8.h,),
+                //SizedBox(height: 9.h,),
 
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 9.h, 16.w, 10.h),

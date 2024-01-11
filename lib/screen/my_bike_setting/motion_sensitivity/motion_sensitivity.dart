@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 
 
 import '../../../api/colours.dart';
+import '../../../api/dialog.dart';
 import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
@@ -116,36 +117,60 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                         thumbColor: _thumbColor,
                         trackColor: EvieColors.lightGrayishCyan,
                         onChanged: (value) async {
-                        SmartDialog.showLoading(msg: "Changing");
-                        final uploadResult = await _bikeProvider.updateMotionSensitivity(value!,
-                            _bikeProvider.currentBikeModel?.movementSetting?.sensitivity.toString() ?? MovementSensitivity.medium.toString());
-                        if(uploadResult == true){
-                          StreamSubscription? subscription;
-                          subscription = _bluetoothProvider.changeMovementSetting(value,
-                              _bikeProvider.currentBikeModel?.movementSetting?.sensitivity == "low" ? MovementSensitivity.low : _bikeProvider.currentBikeModel?.movementSetting?.sensitivity == "medium" ? MovementSensitivity.medium : MovementSensitivity.high).listen((changeMovementResult) {
-                            if (changeMovementResult.result == CommandResult.success) {
-                              SmartDialog.dismiss(status: SmartStatus.loading);
-                              subscription?.cancel();
-
+                          if (value) {
+                            showCustomLightLoading('Changing...');
+                            final uploadResult = await _bikeProvider
+                                .updateMotionSensitivity(value!,
+                                _bikeProvider.currentBikeModel?.movementSetting
+                                    ?.sensitivity.toString() ??
+                                    MovementSensitivity.medium.toString());
+                            if (uploadResult == true) {
+                              StreamSubscription? subscription;
+                              subscription =
+                                  _bluetoothProvider.changeMovementSetting(
+                                      value,
+                                      _bikeProvider.currentBikeModel
+                                          ?.movementSetting?.sensitivity ==
+                                          "low"
+                                          ? MovementSensitivity.low
+                                          : _bikeProvider.currentBikeModel
+                                          ?.movementSetting?.sensitivity ==
+                                          "medium"
+                                          ? MovementSensitivity.medium
+                                          : MovementSensitivity.high).listen((
+                                      changeMovementResult) {
+                                    if (changeMovementResult.result ==
+                                        CommandResult.success) {
+                                      SmartDialog.dismiss(
+                                          status: SmartStatus.loading);
+                                      subscription?.cancel();
+                                    } else {
+                                      SmartDialog.dismiss(
+                                          status: SmartStatus.loading);
+                                      subscription?.cancel();
+                                      SmartDialog.show(
+                                          widget: EvieSingleButtonDialog(
+                                              title: "Error",
+                                              content: "Error occurred when changing motion sensitivity level.",
+                                              rightContent: "Retry",
+                                              onPressedRight: () {
+                                                SmartDialog.dismiss();
+                                              }));
+                                    }
+                                  });
                             } else {
-                              SmartDialog.dismiss(status: SmartStatus.loading);
-                              subscription?.cancel();
                               SmartDialog.show(widget: EvieSingleButtonDialog(
                                   title: "Error",
                                   content: "Error occurred when changing motion sensitivity level.",
-                                  rightContent: "Retry",
-                                  onPressedRight: (){SmartDialog.dismiss();}));
+                                  rightContent: "Ok",
+                                  onPressedRight: () {
+                                    SmartDialog.dismiss();
+                                  }));
                             }
-
-                          });
-
-                        }else{
-                          SmartDialog.show(widget: EvieSingleButtonDialog(
-                              title: "Error",
-                              content: "Error occurred when changing motion sensitivity level.",
-                              rightContent: "Ok",
-                              onPressedRight: (){SmartDialog.dismiss();}));
-                        }
+                          }
+                          else {
+                            showOffMotionSensitivity(context, _bikeProvider, value!, _bluetoothProvider);
+                          }
                       },
                       ),
                     ),

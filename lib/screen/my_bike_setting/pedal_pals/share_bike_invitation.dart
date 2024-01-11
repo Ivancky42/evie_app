@@ -34,7 +34,8 @@ import '../../my_account/my_account_widget.dart';
 ///User profile page with user account information
 
 class ShareBikeInvitation extends StatefulWidget{
-  const ShareBikeInvitation({ Key? key }) : super(key: key);
+  final int totalSteps;
+  const ShareBikeInvitation({ Key? key, required this.totalSteps }) : super(key: key);
   @override
   _ShareBikeInvitationState createState() => _ShareBikeInvitationState();
 }
@@ -47,7 +48,15 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
   late CurrentUserProvider _currentUserProvider;
 
   final TextEditingController _emailController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _focusNode.requestFocus();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +82,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(bottom: 21.h),
-                    child: EvieProgressIndicator(currentPageNumber: 1, totalSteps: 3,),
+                    child: EvieProgressIndicator(currentPageNumber: widget.totalSteps == 2 ? 0 : 1, totalSteps: widget.totalSteps,),
                   ),
 
                   Padding(
@@ -97,12 +106,13 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                       obscureText: false,
                       hintText: "rideremail@sample.com",
                       labelText: "Email Address",
+                      focusNode: _focusNode,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter email address';
                         }
                         else if (value == _currentUserProvider.currentUserModel?.email) {
-                          return 'This is your email address. You are not allow to invite yourself';
+                          return 'This is your email. You’re already a member of the team.';
                         }
                         return null;
                       },
@@ -129,69 +139,30 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                         try {
                                 await _authProvider.checkIfFirestoreUserExist(_emailController.text.trim()).then((result) async {
                                   if (result == null) {
-                                    SmartDialog.show(
-                                        backDismiss: false,
-                                        widget: EvieSingleButtonDialogOld(
-                                            title: "User not found",
-                                            content: "Email not register in database",
-                                            rightContent: "Close",
-                                            onPressedRight: () {
-                                              SmartDialog.dismiss();
-
-                                              _settingProvider.changeSheetElement(SheetList.userNotFound, _emailController.text.trim());
-                                              //_settingProvider.changeSheetElement(SheetList.userNotFound);
-
-                                            }
-                                        ));
+                                    _settingProvider.changeSheetElement(SheetList.userNotFound, _emailController.text.trim());
                                     return;
                                   }
                                   else {
                                     ///check bike user list if the user already own this bike
                                     var existResult = await _bikeProvider.checkIsUserExist(_emailController.text.trim());
                                     if (existResult == false) {
-                                      SmartDialog.show(
-                                          widget: EvieDoubleButtonDialog(
-                                            title: "Share Bike",
-                                            childContent: Text("Share ${_bikeProvider
-                                                .currentBikeModel!.deviceName}"
-                                                " with ${_emailController.text
-                                                .trim()} ?"),
-
-                                            leftContent: "Cancel",
-                                            onPressedLeft: () =>
-                                                SmartDialog.dismiss(),
-                                            rightContent: "Share",
-                                            onPressedRight: () async {
-                                              SmartDialog.dismiss();
-                                              await _bikeProvider.updateSharedBike(result).
-                                              then((update) {
-                                                if (update == true) {
-                                                  SmartDialog.show(
-                                                      widget: EvieSingleButtonDialogOld(
-                                                          title: "Success",
-                                                          content: "Shared bike with ${_emailController.text.trim()}",
-                                                          rightContent: "Close",
-                                                          onPressedRight: () {
-                                                            SmartDialog.dismiss();
-                                                            _settingProvider.changeSheetElement(SheetList.invitationSent, _emailController.text.trim());
-
-                                                          }
-                                                      ));
-                                                }
-                                                else {
-                                                  SmartDialog.show(
-                                                      widget: EvieSingleButtonDialogOld(
-                                                          title: "Not success",
-                                                          content: "Try again",
-                                                          rightContent: "Close",
-                                                          onPressedRight: () =>
-                                                              SmartDialog
-                                                                  .dismiss()
-                                                      ));
-                                                }
-                                              });
-                                            },
-                                          ));
+                                      await _bikeProvider.updateSharedBike(result).
+                                      then((update) {
+                                        if (update == true) {
+                                          _settingProvider.changeSheetElement(SheetList.invitationSent, _emailController.text.trim());
+                                        }
+                                        else {
+                                          SmartDialog.show(
+                                              widget: EvieSingleButtonDialogOld(
+                                                  title: "Not success",
+                                                  content: "Try again",
+                                                  rightContent: "Close",
+                                                  onPressedRight: () =>
+                                                      SmartDialog
+                                                          .dismiss()
+                                              ));
+                                        }
+                                      });
                                     }
                                     else {
                                       SmartDialog.show(

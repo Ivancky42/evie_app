@@ -95,7 +95,7 @@ class _InvitationSentState extends State<InvitationSent> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.screen_bottom),
+                    padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.target_reference_button_a),
                     child: EvieButton(
                       width: double.infinity,
                       height: 48.h,

@@ -427,9 +427,6 @@ showUpgradePlanToast(context, SettingProvider settingProvider,[bool? isPop]){
   );
 }
 
-
-
-
 showControlAdmissionToast(context) {
   ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
@@ -592,6 +589,74 @@ showBikeAddSuccessfulToast(context) {
               SizedBox(width: 4.w,),
               Text(
                 "Bike added successfully!",
+                style: EvieTextStyles.toast,
+              ),
+            ],
+          ),
+        ),
+      ),
+      duration: const Duration(seconds: 3),
+    ),
+  );
+}
+
+showEditBikeNameSuccess(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SvgPicture.asset("assets/icons/check.svg"),
+              SizedBox(width: 4.w,),
+              Text(
+                "Bike name updated.",
+                style: EvieTextStyles.toast,
+              ),
+            ],
+          ),
+        ),
+      ),
+      duration: const Duration(seconds: 3),
+    ),
+  );
+}
+
+showEditBikeNameFailed(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SvgPicture.asset("assets/icons/fail.svg"),
+              SizedBox(width: 4.w,),
+              Text(
+                "Failed to update bike name.",
                 style: EvieTextStyles.toast,
               ),
             ],
@@ -813,6 +878,51 @@ showPermissionNeeded(context) {
   );
 }
 
+showPermissionNeededForEVSecure(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+          onTap: () {
+            openAppSettings();
+          },
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      "You have disabled your device notifications. Enable notifications to ensure you receive EV-Secure alerts.",
+                      style: EvieTextStyles.toast,
+                    ),
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Text(
+                  "OPEN SETTINGS",
+                  style: EvieTextStyles.body16.copyWith(
+                    color: EvieColors.strongPurple,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              )
+            ],
+          )
+      ),
+      duration: const Duration(seconds: 3),
+    ),
+  );
+}
+
 showUpdateMetric(context, settingName) {
   ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
@@ -980,6 +1090,324 @@ showTheftDismiss(context) {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
+showSuccessAddEVKey(context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          //Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SvgPicture.asset("assets/icons/check.svg"),
+              SizedBox(width: 4.w,),
+              Padding(
+                padding: EdgeInsets.only(bottom: 4),
+                child: Text(
+                  "New EV-Key Added.",
+                  style: EvieTextStyles.toast,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      duration: const Duration(seconds: 4),
+    ),
+  );
+}
+
+showFailAddEVKey(context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        },
+        child: Row(
+          children: [
+            SvgPicture.asset("assets/icons/fail.svg"),
+            SizedBox(width: 4.w,),
+            Padding(
+              padding: EdgeInsets.only(bottom: 4),
+              child: Flexible(
+                child: Text(
+                  "Failed to add EV-Key. Please try again later.",
+                  style: EvieTextStyles.toast,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
+showSuccessUpdateEVKey(context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          //Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SvgPicture.asset("assets/icons/check.svg"),
+              SizedBox(width: 4.w,),
+              Padding(
+                padding: EdgeInsets.only(bottom: 4),
+                child: Text(
+                  "EV-Key name updated.",
+                  style: EvieTextStyles.toast,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      duration: const Duration(seconds: 4),
+    ),
+  );
+}
+
+showFailUpdateEVKey(context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        },
+        child: Row(
+          children: [
+            SvgPicture.asset("assets/icons/fail.svg"),
+            SizedBox(width: 4.w,),
+            Padding(
+              padding: EdgeInsets.only(bottom: 4),
+              child: Flexible(
+                child: Text(
+                  "Failed to update EV-Key. Please try again later.",
+                  style: EvieTextStyles.toast,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
+showSuccessUpdateMotionSetting(context, String sensitivity) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          //Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SvgPicture.asset("assets/icons/check.svg"),
+              SizedBox(width: 4.w,),
+              Padding(
+                padding: EdgeInsets.only(bottom: 4),
+                child: Text(
+                  "Motion sensitivity updated to " + sensitivity + '.',
+                  style: EvieTextStyles.toast,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
+showFailUpdateMotionSetting(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        },
+        child: Row(
+          children: [
+            SvgPicture.asset("assets/icons/fail.svg"),
+            SizedBox(width: 4.w,),
+            Padding(
+              padding: EdgeInsets.only(bottom: 4),
+              child: Flexible(
+                child: Text(
+                  "Failed to update motion sensitivity. Please try again later.",
+                  style: EvieTextStyles.toast,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
+showTeamNameUpdated(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          //Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SvgPicture.asset("assets/icons/check.svg"),
+              SizedBox(width: 4.w,),
+              Padding(
+                padding: EdgeInsets.only(bottom: 4),
+                child: Text(
+                  "Team name updated.",
+                  style: EvieTextStyles.toast,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
+showTeamNameUpdateFailed(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        },
+        child: Row(
+          children: [
+            SvgPicture.asset("assets/icons/fail.svg"),
+            SizedBox(width: 4.w,),
+            Padding(
+              padding: EdgeInsets.only(bottom: 4),
+              child: Flexible(
+                child: Text(
+                  "Failed to update team name. Please try again later.",
+                  style: EvieTextStyles.toast,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
+showExceedLimit(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        },
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 4),
+          child: Flexible(
+            child: Text(
+              "We love your enthusiasm to share the joy! Just a heads up, our limit for sharing is up to 4 riders.",
+              style: EvieTextStyles.toast,
+            ),
           ),
         ),
       ),

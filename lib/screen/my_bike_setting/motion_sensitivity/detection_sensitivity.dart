@@ -23,6 +23,7 @@ import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/setting_provider.dart';
+import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
@@ -76,15 +77,14 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
         ),
         body: Stack(
           children: [
-
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 35.5.h, 16.w, 12.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 35.5.h, 16.w, 0),
                   child: Text(
-                    "Alarm in bike will be trigger when motion is detected.",
+                    "The bike alarm will be triggered when motion is detected.",
                     style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                   ),
                 ),
@@ -102,8 +102,8 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
                       ),
                       child: EvieSlider(
                         value: currentSliderValue,
-                        division: 2,
-                        max: 2,
+                        min: 0,
+                        max: 1,
                           label: _bikeProvider.currentBikeModel!.movementSetting?.sensitivity ?? "medium",
                           onChanged: (value) {
                             setState(() {
@@ -114,17 +114,18 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
                           onChangedEnd: (value)async{
                             if(value == 0 || value == 1 || value == 2){
                               MovementSensitivity sensitivity = MovementSensitivity.medium;
+                              MovementSensitivity firebaseSensitivity = MovementSensitivity.medium;
 
                               if(value == 0 ){
                                 sensitivity = MovementSensitivity.low;
+                                firebaseSensitivity = MovementSensitivity.low;
                               }else if(value == 1){
                                 sensitivity = MovementSensitivity.medium;
-                              }else if(value == 2){
-                                sensitivity = MovementSensitivity.high;
+                                firebaseSensitivity = MovementSensitivity.high;
                               }
 
-                              SmartDialog.showLoading(msg: "Changing");
-                              final uploadResult = await _bikeProvider.updateMotionSensitivity(true, sensitivity.toString().split(".").last);
+                              showCustomLightLoading("Changing...");
+                              final uploadResult = await _bikeProvider.updateMotionSensitivity(true, firebaseSensitivity.toString().split(".").last);
                               if(uploadResult == true){
 
                                 StreamSubscription? subscription;
@@ -132,16 +133,17 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
                                   if (changeMovementResult.result == CommandResult.success) {
                                     SmartDialog.dismiss(status: SmartStatus.loading);
                                     subscription?.cancel();
+                                    showSuccessUpdateMotionSetting(context, firebaseSensitivity.toString().split(".").last);
                                   } else {
                                     SmartDialog.dismiss(status: SmartStatus.loading);
                                     subscription?.cancel();
 
-                                    showErrorChangeDetectionSensitivity();
+                                    showFailUpdateMotionSetting(context);
                                   }
                                 }
                                 );
                               }else{
-                                showErrorChangeDetectionSensitivity();
+                                showFailUpdateMotionSetting(context);
                               }
                             }
                           },
@@ -150,7 +152,7 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
                     ),
 
                     Text(
-                      capitalizeFirstCharacter(_bikeProvider.currentBikeModel!.movementSetting?.sensitivity ?? "Medium"),
+                      capitalizeFirstCharacter(_bikeProvider.currentBikeModel!.movementSetting?.sensitivity ?? "High"),
                       style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayish),
                     ),
                     ],
@@ -161,16 +163,8 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
 
                 Stack(
                   children: [
-                    // Padding(
-                    //   padding: EdgeInsets.only(top: 15.w),
-                    //   child: Divider(
-                    //     thickness: 38.h,
-                    //     color: const Color(0xffF4F4F4),
-                    //   ),
-                    // ),
-
                     Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 0.h),
+                      padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
                       child: Text("Give your bike a push to test on the motion sensor sensitivity level.",
                         style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),),
                     ),
@@ -183,7 +177,7 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
               padding: EdgeInsets.only(top: 142.h),
               child: Align(
                 alignment: Alignment.center,
-                child: Lottie.asset('assets/animations/motion-sensitivity.json'),
+                child: Lottie.asset('assets/animations/motion-sensitivity-R1.json'),
               ),
             ),
           ],
@@ -195,10 +189,8 @@ class _DetectionSensitivityState extends State<DetectionSensitivity> {
   getCurrentSliderValue(String sensitivity) {
     if(sensitivity == "low" ){
       return 0.0;
-    }else if(sensitivity == "medium"){
-      return 1.0;
     }else if(sensitivity == "high"){
-      return 2.0;
+      return 1.0;
     }else{
       return 1.0;
     }

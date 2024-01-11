@@ -83,7 +83,7 @@ class _AboutBikeState extends State<AboutBike> {
                     padding: EdgeInsets.only(bottom: 10.h, top: 10.h),
                     child: TextColumn(
                         title: "Model Name",
-                        body: _bikeProvider.currentBikeModel!.model!),
+                        body: 'EVIE ' + _bikeProvider.currentBikeModel!.model!),
                   ),
                 ),
                 const AccountPageDivider(),

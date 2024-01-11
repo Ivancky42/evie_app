@@ -151,16 +151,16 @@ class _ThreatContainerState extends State<ThreatContainer> {
                         "assets/icons/no_bike.svg",
                       ),
 
-                      Positioned(
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: EvieColors.grayishWhite,
-                            ),
-                            height: 48.h,
-                            width: 48.w,
-                          )
-                      ),
+                      // Positioned(
+                      //     child: Container(
+                      //       decoration: const BoxDecoration(
+                      //         shape: BoxShape.circle,
+                      //         color: EvieColors.grayishWhite,
+                      //       ),
+                      //       height: 48.h,
+                      //       width: 48.w,
+                      //     )
+                      // ),
                     ],
                   ),
                 ),
@@ -534,6 +534,17 @@ class _ThreatContainerState extends State<ThreatContainer> {
                               SvgPicture.asset(
                                 "assets/images/slide_unlock.svg",
                               ),
+                              // Positioned(
+                              //   top: (MediaQuery.of(context).size.height - 60.w) / 2,
+                              //   left: (MediaQuery.of(context).size.width - 60.w) / 2,
+                              //   child: SizedBox(
+                              //     width: 60.w,
+                              //     height: 60.w,
+                              //     child: Lottie.asset(
+                              //       "assets/animations/slide-to-unlock.json",
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           );
                         });

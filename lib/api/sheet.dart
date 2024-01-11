@@ -39,7 +39,10 @@ void showSheetNavigate(BuildContext context, [String? source, String? strings, S
   else {
     showCupertinoSheet(
         context,
-        SheetNavigator(source ?? 'Home', strings ?? '')
+        Container(
+          //color: Colors.green,
+          child: SheetNavigator(source ?? 'Home', strings ?? ''),
+        )
     );
   }
 }
@@ -92,10 +95,6 @@ void showProPlanSheet(BuildContext context) {
 
 void showShareBikeUserListSheet(BuildContext context) {
   showCupertinoSheet(context, const PedalPalsList());
-}
-
-void showShareBikeInvitationSheet(BuildContext context) {
-  showCupertinoSheet(context, const ShareBikeInvitation());
 }
 
 void showThreatHistorySheet(BuildContext context) {

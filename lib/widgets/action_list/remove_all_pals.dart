@@ -55,7 +55,7 @@ class _RemoveAllPalsState extends State<RemoveAllPals> {
             Navigator.pop(context);
             final result = await showRemoveAllPals(context, _bikeProvider.currentBikeModel?.pedalPalsModel?.name ?? "None");
             if (result == "action") {
-              SmartDialog.showLoading(msg: "Removing all Pedal Pals...");
+              showCustomLightLoading("Removing all Pedal Pals...");
               final result = await _bikeProvider.removeAllPedalPals();
               if (result == 'Success') {
                 showTextToast("Successfully removed all the PedalPals from your team.");

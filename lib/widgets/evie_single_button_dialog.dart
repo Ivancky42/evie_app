@@ -1047,387 +1047,548 @@ class _EvieClubDialogState extends State<EvieClubDialog> {
     );
   }
 }
-//
-//
-// class EvieOneButtonDialogWithConfetti extends StatelessWidget{
-//   final String? title;
-//   final String? content;
-//   final bool? havePic;
-//   final SvgPicture? svgpicture;
-//   final Widget? widget;
-//   final String? middleContent;
-//   final VoidCallback? onPressedMiddle;
-//   final Widget? customButton;
-//   final int screenIndex;
-//
-//   const EvieOneButtonDialogWithConfetti({
-//     Key? key,
-//     this.title,
-//     this.content,
-//     this.widget,
-//     this.svgpicture,
-//     this.havePic,
-//     this.middleContent,
-//     this.onPressedMiddle,
-//     this.customButton,
-//     required this.screenIndex,
-//   }) : super(key: key);
-//
-//   Widget buildWidget() {
-//     return
-//       screenIndex == 0 ?
-//       Column(
-//         children: [
-//           Center(
-//             child: havePic == false ? Container() : svgpicture == null? Container(
-//               alignment: Alignment.center,
-//               child: Padding(
-//                 padding: EdgeInsets.only(top: 32.h),
-//                 child: SvgPicture.asset(
-//                   "assets/images/people_search.svg",
-//                   height: 150.h,
-//                   width: 239.w,
-//                 ),
-//               ),
-//             ): Padding(
-//               padding: EdgeInsets.only(top: 32.h),
-//               child: svgpicture!,
-//             ),
-//           ),
-//
-//           title != null ?  Container(
-//             width: 325.w,
-//             child: Padding(
-//               padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
-//               child: Text(title!,
-//                 style:EvieTextStyles.h2,
-//                 textAlign: TextAlign.center,
-//               ),
-//             ),
-//           ) : SizedBox.shrink(),
-//
-//           content != null ? Container(
-//             width: 326.w,
-//             child: Text(
-//               content ?? "" ,
-//               textAlign: TextAlign.center,
-//               style: EvieTextStyles.body18,
-//             ),
-//           ) : const SizedBox.shrink(),
-//
-//           widget != null ? widget! : const SizedBox.shrink(),
-//
-//           Padding(
-//             padding: EdgeInsets.only(top: 37.h, bottom: 16.h),
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Expanded(
-//                   child:
-//                   customButton ?? EvieButton(
-//                       width: double.infinity,
-//                       height: 48.h,
-//                       child: Text(
-//                         middleContent ?? "Ok",
-//                         style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-//                       ),
-//                       onPressed: onPressedMiddle
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ) :
-//       screenIndex == 1 ?
-//       Padding(
-//         padding: EdgeInsets.only(bottom: 140.h),
-//         child: Column(
-//           children: [
-//             Padding(
-//               padding: EdgeInsets.only(top: 28.h),
-//               child: SvgPicture.asset(
-//                 "assets/images/sync.svg",),
-//             ),
-//
-//             Container(
-//               width: 325.w,
-//               child: Padding(
-//                 padding:  EdgeInsets.only(bottom: 24.h, top: 31.76.h),
-//                 child: Text('Sync. Ride. Thrive.',
-//                   style:EvieTextStyles.target_reference_h1,
-//                   textAlign: TextAlign.center,
-//                 ),
-//               ),
-//             ),
-//
-//             Row(
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//                 Padding(
-//                   padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 0),
-//                   child: SvgPicture.asset(
-//                     "assets/icons/bluetooth_connected.svg",
-//                     height: 36.h,
-//                     width: 36.w,
-//                   ),
-//                 ),
-//                 Flexible(
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Text(
-//                         'Stay Connected',
-//                         style: EvieTextStyles.target_reference_body,
-//                       ),
-//                       Padding(
-//                         padding: EdgeInsets.only(bottom: 16.h),
-//                         child: Text(
-//                           'Seamlessly sync your bike and stay in control with Bluetooth connectivity.',
-//                           textAlign: TextAlign.left,
-//                           style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//
-//             Row(
-//               children: [
-//                 Padding(
-//                   padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 0),
-//                   child: SvgPicture.asset(
-//                     "assets/icons/lock_safe.svg",
-//                     height: 36.h,
-//                     width: 36.w,
-//                   ),
-//                 ),
-//
-//                 Flexible(
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Text(
-//                         'One-Tap Unlock',
-//                         style: EvieTextStyles.target_reference_body,
-//                       ),
-//
-//                       Text(
-//                         'Security has never been this convenient with EVIE\'s built-in locking system.',
-//                         textAlign: TextAlign.left,
-//                         style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ) :
-//       Padding(
-//         padding: EdgeInsets.only(bottom: 30.h),
-//         child: Column(
-//           children: [
-//             Padding(
-//               padding: EdgeInsets.only(top: 28.h),
-//               child: SvgPicture.asset(
-//                 "assets/images/master_your_ride.svg",),
-//             ),
-//
-//             Container(
-//               width: 325.w,
-//               child: Padding(
-//                 padding:  EdgeInsets.only(bottom: 24.h, top: 31.76.h),
-//                 child: Text('Master Your Ride',
-//                   style:EvieTextStyles.target_reference_h1,
-//                   textAlign: TextAlign.center,
-//                 ),
-//               ),
-//             ),
-//
-//             Row(
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//                 Padding(
-//                   padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 0),
-//                   child: SvgPicture.asset(
-//                     "assets/icons/setting.svg",
-//                     height: 36.h,
-//                     width: 36.w,
-//                   ),
-//                 ),
-//                 Flexible(
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Text(
-//                         'Bike Setting',
-//                         style: EvieTextStyles.target_reference_body,
-//                       ),
-//                       Padding(
-//                         padding: EdgeInsets.only(bottom: 16.h),
-//                         child: Text(
-//                           'Tailor your ride to perfection with Bike Setting. Fine-tune your preferences, optimize performance, and create your ultimate cycling experience.',
-//                           textAlign: TextAlign.left,
-//                           style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan, height: 1.3),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//
-//             Row(
-//               children: [
-//                 Padding(
-//                   padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 0),
-//                   child: SvgPicture.asset(
-//                     "assets/icons/battery.svg",
-//                     height: 36.h,
-//                     width: 36.w,
-//                   ),
-//                 ),
-//
-//                 Flexible(
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Text(
-//                         'Battery Life',
-//                         style: EvieTextStyles.target_reference_body,
-//                       ),
-//
-//                       Padding(
-//                         padding: EdgeInsets.only(bottom: 16.h),
-//                         child:  Text(
-//                           'Check your bike’s battery life before it needs its next charge.',
-//                           textAlign: TextAlign.left,
-//                           style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan, height: 1.3),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//
-//             Row(
-//               children: [
-//                 Padding(
-//                   padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 0),
-//                   child: SvgPicture.asset(
-//                     "assets/icons/bike_outline.svg",
-//                     height: 36.h,
-//                     width: 36.w,
-//                   ),
-//                 ),
-//
-//                 Flexible(
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Text(
-//                         'Multiple Bikes',
-//                         style: EvieTextStyles.target_reference_body,
-//                       ),
-//
-//                       Text(
-//                         'See all your bikes’ details and switch between each other easily.',
-//                         textAlign: TextAlign.left,
-//                         style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan, height: 1.3),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       );
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Stack(
-//       children: [
-//         Dialog(
-//             insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
-//             shape: RoundedRectangleBorder(
-//               borderRadius: BorderRadius.circular(10),
-//             ),
-//             elevation: 0.0,
-//             backgroundColor: EvieColors.grayishWhite,
-//             child: Container(
-//               padding:  EdgeInsets.only(
-//                   left: 17.w,
-//                   right: 17.w,
-//                   top: 16.w,
-//                   bottom: 16.w
-//               ),
-//
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.center,
-//                 mainAxisSize: MainAxisSize.min,
-//                 children: [
-//
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       Padding(
-//                         padding: EdgeInsets.only(top: 18.h),
-//                         child: Container(
-//                           width: 25.w,
-//                           height: 4.h,
-//                           decoration: BoxDecoration(
-//                             color: screenIndex == 0 ? EvieColors.primaryColor : EvieColors.progressBarGrey,
-//                             borderRadius: BorderRadius.circular(10),
-//                           ),
-//                         ),
-//                       ),
-//                       SizedBox(width: 6.w),
-//                       Padding(
-//                         padding: EdgeInsets.only(top: 18.h),
-//                         child: Container(
-//                           width: 25.w,
-//                           height: 4.h,
-//                           decoration: BoxDecoration(
-//                             color: screenIndex == 1 ? EvieColors.primaryColor : EvieColors.progressBarGrey,
-//                             borderRadius: BorderRadius.circular(10),
-//                           ),
-//                         ),
-//                       ),
-//                       SizedBox(width: 6.w),
-//                       Padding(
-//                         padding: EdgeInsets.only(top: 18.h),
-//                         child: Container(
-//                           width: 25.w,
-//                           height: 4.h,
-//                           decoration: BoxDecoration(
-//                             color: screenIndex == 2 ? EvieColors.primaryColor : EvieColors.progressBarGrey,
-//                             borderRadius: BorderRadius.circular(10),
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//
-//                   buildWidget(),
-//                 ],
-//               ),
-//             )
-//         ),
-//         Lottie.asset(
-//           'assets/animations/confetti.json',
-//           repeat: false,
-//         ),
-//       ],
-//     );
-//   }
-// }
+
+
+class WelcomeJoinTeam extends StatefulWidget {
+  final String palName;
+  final String teamName;
+  const WelcomeJoinTeam({Key? key, required this.palName, required this.teamName, }) : super(key: key);
+
+  @override
+  State<WelcomeJoinTeam> createState() => _WelcomeJoinTeamState();
+}
+
+class _WelcomeJoinTeamState extends State<WelcomeJoinTeam> {
+
+  int screenIndex = 0;
+  PermissionStatus? permissionStatus;
+
+  Widget buildWidget() {
+    return screenIndex == 0 ?
+    Column(
+      children: [
+        Center(
+            child: Container(
+              height: 150.h,
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: 32.h),
+                child: SvgPicture.asset(
+                  "assets/images/ev_club.svg",
+                  height: 150.h,
+                  width: 239.w,
+                ),
+              ),
+            )
+        ),
+
+        Container(
+          width: 325.w,
+          child: Padding(
+            padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
+            child: Text('Welcome ' + widget.palName + ', to ' + widget.teamName  ,
+              style:EvieTextStyles.h2,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+
+        Container(
+          width: 326.w,
+          child: Text(
+            "Are you ready for an adventure? Perks of being a PedalPal include having access to exclusive features such as GPS Tracking, Security Alerts, Ride History and more!" ,
+            textAlign: TextAlign.center,
+            style: EvieTextStyles.body18,
+          ),
+        ),
+
+        Padding(
+          padding: EdgeInsets.only(top: 37.h, bottom: 16.h),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: EvieButton(
+                    height: 48.h,
+                    child: Text(
+                      "Let's Go!",
+                      style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        screenIndex = 1;
+                      });
+                    }
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    ) :
+    screenIndex == 1 ?
+    Padding(
+      padding: EdgeInsets.only(bottom: 0),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 28.h),
+            child: SvgPicture.asset(
+              "assets/images/sync.svg",),
+          ),
+
+          Container(
+            width: 325.w,
+            child: Padding(
+              padding:  EdgeInsets.only(bottom: 24.h, top: 31.76.h),
+              child: Text('Sync. Ride. Thrive.',
+                style:EvieTextStyles.target_reference_h1,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 0),
+                child: SvgPicture.asset(
+                  "assets/icons/bluetooth_connected.svg",
+                  height: 36.h,
+                  width: 36.w,
+                ),
+              ),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Stay Connected',
+                      style: EvieTextStyles.target_reference_body,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.h),
+                      child: Text(
+                        'Seamlessly sync your bike and stay in control with Bluetooth connectivity.',
+                        textAlign: TextAlign.left,
+                        style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 0),
+                child: SvgPicture.asset(
+                  "assets/icons/lock_safe.svg",
+                  height: 36.h,
+                  width: 36.w,
+                ),
+              ),
+
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'One-Tap Unlock',
+                      style: EvieTextStyles.target_reference_body,
+                    ),
+
+                    Text(
+                      'Security has never been this convenient with EVIE\'s built-in locking system.',
+                      textAlign: TextAlign.left,
+                      style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          SizedBox(height: 16.h,),
+
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 0),
+                child: SvgPicture.asset(
+                  "assets/icons/bar_chart.svg",
+                  height: 36.h,
+                  width: 36.w,
+                ),
+              ),
+
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'Ride History',
+                          style: EvieTextStyles.target_reference_body,
+                        ),
+
+                        SvgPicture.asset(
+                          "assets/icons/batch_tick.svg",
+                          width: 24.w,
+                          height: 24.w,
+                        ),
+                      ],
+                    ),
+
+                    Text(
+                      'Security has never been this convenient with EVIE\'s built-in locking system.',
+                      textAlign: TextAlign.left,
+                      style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          Padding(
+            padding: EdgeInsets.only(top: 37.h, bottom: 16.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child:
+                  EvieButton(
+                      width: double.infinity,
+                      height: 48.h,
+                      child: Text(
+                        getButtonText(),
+                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                      ),
+                      onPressed: () async {
+                        if (screenIndex == 1) {
+                          if (Platform.isAndroid) {
+                            await Permission.bluetoothConnect.request();
+                            await Permission.bluetoothScan.request();
+                            setState(() {
+                              screenIndex = 2;
+                            });
+                          }
+                          else {
+                            //openAppSettings();
+                            setState(() {
+                              screenIndex = 2;
+                            });
+                            //OpenSettings.openBluetoothSetting();
+                          }
+                        }
+                        else {
+                          SmartDialog.dismiss();
+                        }
+                      }
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+        ],
+      ),
+    ) :
+    Padding(
+      padding: EdgeInsets.only(bottom: 0),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 28.h),
+            child: SvgPicture.asset(
+              "assets/images/master_your_ride.svg",),
+          ),
+
+          Container(
+            width: 325.w,
+            child: Padding(
+              padding:  EdgeInsets.only(bottom: 24.h, top: 31.76.h),
+              child: Text('Master Your Ride',
+                style:EvieTextStyles.target_reference_h1,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 0),
+                child: SvgPicture.asset(
+                  "assets/icons/setting.svg",
+                  height: 36.h,
+                  width: 36.w,
+                ),
+              ),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Bike Setting',
+                      style: EvieTextStyles.target_reference_body,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.h),
+                      child: Text(
+                        'Tailor your ride to perfection with Bike Setting. Fine-tune your preferences, optimize performance, and create your ultimate cycling experience.',
+                        textAlign: TextAlign.left,
+                        style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan, height: 1.3),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 0),
+                child: SvgPicture.asset(
+                  "assets/icons/battery.svg",
+                  height: 36.h,
+                  width: 36.w,
+                ),
+              ),
+
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Battery Life',
+                      style: EvieTextStyles.target_reference_body,
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.h),
+                      child:  Text(
+                        'Check your bike’s battery life before it needs its next charge.',
+                        textAlign: TextAlign.left,
+                        style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan, height: 1.3),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 0),
+                child: SvgPicture.asset(
+                  "assets/icons/bike_outline.svg",
+                  height: 36.h,
+                  width: 36.w,
+                ),
+              ),
+
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Multiple Bikes',
+                      style: EvieTextStyles.target_reference_body,
+                    ),
+
+                    Text(
+                      'See all your bikes’ details and switch between each other easily.',
+                      textAlign: TextAlign.left,
+                      style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan, height: 1.3),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          Padding(
+            padding: EdgeInsets.only(top: 37.h, bottom: 16.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child:
+                  EvieButton(
+                      width: double.infinity,
+                      height: 48.h,
+                      child: Text(
+                        getButtonText(),
+                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                      ),
+                      onPressed: () async {
+                        if (screenIndex == 1) {
+                          if (Platform.isAndroid) {
+                            await Permission.bluetoothConnect.request();
+                            await Permission.bluetoothScan.request();
+                            setState(() {
+                              screenIndex = 2;
+                            });
+                          }
+                          else {
+                            //openAppSettings();
+                            setState(() {
+                              screenIndex = 2;
+                            });
+                            //OpenSettings.openBluetoothSetting();
+                          }
+                        }
+                        else {
+                          SmartDialog.dismiss();
+                        }
+                      }
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkPermission();
+  }
+
+  Future<void> checkPermission() async {
+    PermissionStatus status = await Permission.bluetoothConnect.status;
+    if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
+      setState(() {
+        permissionStatus = status;
+      });
+    }
+    else {
+      PermissionStatus status = await Permission.bluetoothScan.status;
+      if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
+        setState(() {
+          permissionStatus = status;
+        });
+      }
+    }
+  }
+
+  String getButtonText() {
+    if (Platform.isAndroid) {
+      if (screenIndex == 1) {
+        if (permissionStatus == PermissionStatus.denied ||
+            permissionStatus == PermissionStatus.permanentlyDenied) {
+          return 'Allow Bluetooth';
+        }
+        else {
+          return 'Next';
+        }
+      }
+      else {
+        return 'Done';
+      }
+    }
+    else {
+      if (screenIndex == 1) {
+        return 'Next';
+      }
+      else {
+        return 'Done';
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Dialog(
+            insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            elevation: 0.0,
+            backgroundColor: EvieColors.grayishWhite,
+            child: Container(
+              padding:  EdgeInsets.only(
+                  left: 17.w,
+                  right: 17.w,
+                  top: 16.w,
+                  bottom: 16.w
+              ),
+
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 18.h),
+                        child: Container(
+                          width: 25.w,
+                          height: 4.h,
+                          decoration: BoxDecoration(
+                            color: screenIndex == 0 ? EvieColors.primaryColor : EvieColors.progressBarGrey,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 6.w),
+                      Padding(
+                        padding: EdgeInsets.only(top: 18.h),
+                        child: Container(
+                          width: 25.w,
+                          height: 4.h,
+                          decoration: BoxDecoration(
+                            color: screenIndex == 1 ? EvieColors.primaryColor : EvieColors.progressBarGrey,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 6.w),
+                      Padding(
+                        padding: EdgeInsets.only(top: 18.h),
+                        child: Container(
+                          width: 25.w,
+                          height: 4.h,
+                          decoration: BoxDecoration(
+                            color: screenIndex == 2 ? EvieColors.primaryColor : EvieColors.progressBarGrey,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  buildWidget(),
+                ],
+              ),
+            )
+        ),
+
+        Lottie.asset(
+          'assets/animations/confetti.json',
+          repeat: false,
+        ),
+      ],
+    );
+  }
+}
 
 class Evie4OneButtonDialog extends StatefulWidget {
   const Evie4OneButtonDialog({Key? key}) : super(key: key);

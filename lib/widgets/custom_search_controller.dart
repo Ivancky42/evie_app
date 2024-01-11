@@ -45,8 +45,8 @@ class CustomSearchController extends StatelessWidget {
                 padding: EdgeInsets.all(12),
                 child: SvgPicture.asset(
                   "assets/icons/search.svg",
-                  width: 24.w,
-                  height: 24.w,
+                  width: 31.2.w,
+                  height: 31.2.w,
                 ),
               )
             ),

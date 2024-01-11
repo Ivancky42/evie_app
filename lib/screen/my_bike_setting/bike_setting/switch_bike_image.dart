@@ -12,6 +12,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../../api/dialog.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../../my_account/my_account_widget.dart';
@@ -141,7 +142,7 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
     if(image != null){
       try {
         ///From widget function, show loading dialog screen
-        SmartDialog.showLoading(backDismiss: false);
+        showCustomLightLoading('Loading...', false);
         var picName = deviceIMEI;
         Reference ref =
         FirebaseStorage.instance.ref().child("BikePic/" + picName);
@@ -174,7 +175,7 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
     if(image != null){
       try {
         ///From widget function, show loading dialog screen
-        SmartDialog.showLoading(backDismiss: false);
+        showCustomLightLoading('Loading...', false);
         var picName = deviceIMEI!;
         Reference ref =
         FirebaseStorage.instance.ref().child("BikePic/" + picName);
@@ -203,7 +204,7 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
       String deviceIMEI, BikeProvider bikeProvider) async {
     try {
       ///From widget function, show loading dialog screen
-      SmartDialog.showLoading(backDismiss: false);
+      showCustomLightLoading('Loading...', false);
       String bikeIMG = dotenv.env['DEFAULT_BIKE_IMG'] ?? 'DBI not found';
       String? model = bikeProvider.currentBikeModel?.serialNumber?.substring(0, 2) ?? 'S1';
       if (model == 'S1') {

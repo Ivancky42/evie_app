@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:evie_test/api/colours.dart';
+import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -21,6 +22,7 @@ import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
+import '../../../widgets/evie_button.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 
 
@@ -37,6 +39,7 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
   late BikeProvider _bikeProvider;
   late SettingProvider _settingProvider;
   late StreamSubscription addRFIDStream;
+  bool isAnimate = false;
 
   @override
   void initState() {
@@ -62,50 +65,111 @@ class _RegisterEVKeyState extends State<RegisterEVKey> {
         return true;
       },
       child: Scaffold(
-        appBar: PageAppbar(
-          title: 'Register EV-Key',
-          onPressed: () {
-            addRFIDStream.cancel();
-            if(_bikeProvider.rfidList.length >0){
-              _settingProvider.changeSheetElement(SheetList.evKeyList);
-            }else{
-              _settingProvider.changeSheetElement(SheetList.bikeSetting);
-            }
-          },
-        ),
+        // appBar: PageAppbar(
+        //   title: 'Register EV-Key',
+        //   onPressed: () {
+        //     addRFIDStream.cancel();
+        //     if(_bikeProvider.rfidList.length >0){
+        //       _settingProvider.changeSheetElement(SheetList.evKeyList);
+        //     }else{
+        //       _settingProvider.changeSheetElement(SheetList.bikeSetting);
+        //     }
+        //   },
+        // ),
         body: Stack(
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 32.5.h, 16.w,4.h),
-                  child: Text(
-                    "Flash your EV-Key at the lock",
-                    style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack),
-                  ),
-                ),
+            Padding(
+              padding: EdgeInsets.only(bottom: EvieLength.target_reference_button_a),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 18.h),
+                            child: Container(
+                              width: 25.w,
+                              height: 4.h,
+                              decoration: BoxDecoration(
+                                color: EvieColors.primaryColor,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 6.w),
+                          Padding(
+                            padding: EdgeInsets.only(top: 18.h),
+                            child: Container(
+                              width: 25.w,
+                              height: 4.h,
+                              decoration: BoxDecoration(
+                                color: EvieColors.progressBarGrey,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(16.w, 32.5.h, 16.w,4.h),
+                        child: Text(
+                          "Flash your EV-Key at the lock",
+                          style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack),
+                        ),
+                      ),
 
-                Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0),
-                  child: Text(
-                    "Hold and place your EV-Key near the bike's lock.",
-                    style: EvieTextStyles.body18,
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 81.h),
+                        child: Text(
+                          "Hold and place your EV-Key near the bike's lock.",
+                          style: EvieTextStyles.body18,
+                        ),
+                      ),
+                      Center(
+                        child: Container(
+                          //color: Colors.red,
+                          width: 330.w,
+                          height: 330.w,
+                          child: Lottie.asset('assets/animations/RFID-card-register-R2.json', repeat: false, animate: isAnimate),
+                        )
+                      ),
+                    ],
                   ),
-                ),
-                Center(
-                  child: Lottie.asset('assets/animations/RFIDCardRegister.json'),
-                ),
-              ],
-            ),
+
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
+                    child: EvieButton_ReversedColor(
+                      width: double.infinity,
+                      onPressed: (){
+                        addRFIDStream.cancel();
+                        if(_bikeProvider.rfidList.length >0){
+                          _settingProvider.changeSheetElement(SheetList.evKeyList);
+                        }else{
+                          _settingProvider.changeSheetElement(SheetList.bikeSetting);
+                        }
+                      },
+                      child: Text("Exit EV-Key Registration", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)),
+                    ),
+                  )
+                ],
+              ),
+            )
           ],
-        ),),
+        ),
+      ),
     );
   }
 
   startScanRFIDCard(){
-    SmartDialog.showLoading(msg: "register RFID....");
+    showCustomLightLoading("Register EV-Key....");
+    setState(() {
+      isAnimate = true;
+    });
     addRFIDStream = _bluetoothProvider.addRFID().listen((addRFIDStatus)  async {
       SmartDialog.dismiss(status: SmartStatus.loading);
 

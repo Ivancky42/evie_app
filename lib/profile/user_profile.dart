@@ -15,6 +15,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
+import '../api/dialog.dart';
 import '../api/navigator.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/provider/setting_provider.dart';
@@ -326,7 +327,7 @@ class _UserProfileState extends State<UserProfile> {
                                         child: EvieButton(height: 12,
                                             width: double.infinity,
                                             onPressed: () async {
-                                          SmartDialog.showLoading();
+                                              showCustomLightLoading();
                                               try {
                                                 await _authProvider.signOut(context).then((result) async {
                                                   if(result == true){

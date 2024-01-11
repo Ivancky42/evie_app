@@ -118,7 +118,7 @@ showBackToLogin(context, BikeProvider _bikeProvider, AuthProvider _authProvider)
           onPressedLeft: (){SmartDialog.dismiss();},
           onPressedRight: () async {
             SmartDialog.dismiss();
-            SmartDialog.showLoading();
+            showCustomLightLoading();
             await _authProvider.signOut(context).then((result) async {
               if(result == true){
                 SmartDialog.dismiss(status: SmartStatus.loading);
@@ -357,59 +357,73 @@ showEditBikeNameDialog(_formKey, _bikeNameController, BikeProvider _bikeProvider
   });
 
   SmartDialog.show(
-      widget: Form(
-        key: _formKey,
-        child: EvieDoubleButtonDialog(
-            title: "Name Your Bike",
-            childContent: Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding:  EdgeInsets.fromLTRB(0.h, 12.h, 0.h, 8.h),
-                    child: EvieTextFormField(
-                      controller: _bikeNameController,
-                      focusNode: _nameFocusNode,
-                      obscureText: false,
-                      keyboardType: TextInputType.name,
-                      hintText: _bikeProvider.currentBikeModel?.deviceName ?? "Bike Name",
-                      labelText: "Bike Name",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter bike name';
-                        }
-                        return null;
-                      },
-                    ),
+      widget: Builder(
+        builder: (BuildContext context) {
+          return Form(
+            key: _formKey,
+            child: EvieDoubleButtonDialog(
+                title: "Name Your Bike",
+                childContent: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 6.h),
+                        child: Text(
+                          "Give your bike a unique name.",
+                          style: TextStyle(
+                            fontSize: 18.sp,color: EvieColors.lightBlack,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding:  EdgeInsets.fromLTRB(0.h, 6.h, 0.h, 8.h),
+                        child: EvieTextFormField(
+                          controller: _bikeNameController,
+                          focusNode: _nameFocusNode,
+                          obscureText: false,
+                          keyboardType: TextInputType.name,
+                          hintText: _bikeProvider.currentBikeModel?.deviceName ?? "Bike Name",
+                          labelText: "Bike Name",
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter bike name';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 0),
+                        child: Text("100 Maximum Character", style: TextStyle(fontSize: 12.sp, color: Color(0xff252526)),),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 25.h),
-                    child: Text("100 Maximum Character", style: TextStyle(fontSize: 12.sp, color: Color(0xff252526)),),
-                  ),
-                ],
-              ),
-            ),
-            leftContent: "Cancel",
-            rightContent: "Save",
-            onPressedLeft: (){SmartDialog.dismiss();},
-            onPressedRight: (){
-              if (_formKey.currentState!.validate()) {
+                ),
+                leftContent: "Cancel",
+                rightContent: "Save",
+                onPressedLeft: (){SmartDialog.dismiss();},
+                onPressedRight: (){
+                  if (_formKey.currentState!.validate()) {
 
-                ///For keyboard un focus
-                FocusManager.instance.primaryFocus?.unfocus();
+                    ///For keyboard un focus
+                    FocusManager.instance.primaryFocus?.unfocus();
 
-                _bikeProvider.updateBikeName(_bikeNameController.text.trim()).then((result){
-                  SmartDialog.dismiss();
-                  if(result == true){
-                    showUpdateSuccessDialog();
-                  } else{
-                    showUpdateFailedDialog();
+                    _bikeProvider.updateBikeName(_bikeNameController.text.trim()).then((result){
+                      SmartDialog.dismiss();
+                      if(result == true){
+                        showEditBikeNameSuccess(context);
+                      } else{
+                        showUpdateFailedDialog();
+                      }
+                    });
                   }
-                });
-              }
 
-            }),
-      ));
+                }),
+          );
+        }
+      ),
+  );
 }
 
 showUpdateSuccessDialog() {
@@ -448,9 +462,9 @@ Future<String> showDeleteShareBikeUser(BikeUserModel bikeUserModel, UserModel? u
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
-          "assets/images/people_search.svg",
+          "assets/images/dustbin.svg",
         ),
-        upContent: "Remove",
+        upContent: "Confirm",
         downContent: "Cancel",
         onPressedUp: () async {
           result = json.encode({
@@ -483,7 +497,7 @@ Future<String> showRemoveAllPals(BuildContext context, String teamName) async {
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
-          "assets/images/people_search.svg",
+          "assets/images/dustbin.svg",
         ),
         upContent: "Confirm",
         downContent: "Cancel",
@@ -547,7 +561,7 @@ showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscriptio
           onPressedRight: () async {
 
             SmartDialog.dismiss();
-            SmartDialog.showLoading(backDismiss: false);
+            showCustomLightLoading('Loading...', false);
 
             Reference ref = FirebaseStorage.instance.refFromURL(firmwareProvider.latestFirmwareModel!.url);
             File file = await firmwareProvider.downloadFile(ref);
@@ -1010,7 +1024,7 @@ showResetBike(BuildContext context, BikeProvider bikeProvider){
       onPressedLeft: (){SmartDialog.dismiss();},
       onPressedRight: () async {
         SmartDialog.dismiss();
-        SmartDialog.showLoading(backDismiss: false);
+        showCustomLightLoading('Loading...', false);
        var result =  await bikeProvider.resetBike(bikeProvider.currentBikeModel!.deviceIMEI!);
 
        if(result == true){
@@ -1091,12 +1105,13 @@ showRemoveEVKeyDialog (BuildContext context, RFIDModel rfidModel, BikeProvider _
         svgpicture: SvgPicture.asset(
           "assets/images/dustbin.svg",
         ),
-        upContent: "Remove",
+        upContent: "Confirm Remove",
         downContent: "Cancel",
         onPressedUp: () {
           SmartDialog.dismiss();
 
-          SmartDialog.showLoading(msg: "Removing EV Key....");
+          //SmartDialog.showLoading(msg: "Removing EV Key....");
+          showCustomLightLoading("Removing EV Key....");
           StreamSubscription? deleteRFIDStream;
           deleteRFIDStream = _bluetoothProvider
               .deleteRFID(rfidModel.rfidID!)
@@ -1110,7 +1125,11 @@ showRemoveEVKeyDialog (BuildContext context, RFIDModel rfidModel, BikeProvider _
               SmartDialog.dismiss(status: SmartStatus.loading);
             }
             else {
-              print(deleteRFIDStatus.result);
+              deleteRFIDStream?.cancel();
+              final result = _bikeProvider.deleteRFIDFirestore(rfidModel.rfidID!);
+              _bikeProvider.removeRFIDByID(rfidModel.rfidID!);
+              showTextToast("${rfidModel.rfidName} have been removed from your EV-Key list.");
+              SmartDialog.dismiss(status: SmartStatus.loading);
             }
           }, onError: (error) {
             deleteRFIDStream?.cancel();
@@ -1141,8 +1160,7 @@ showRemoveAllEVKeyDialog (BuildContext context, BikeProvider  _bikeProvider, Blu
         downContent: "Cancel",
         onPressedUp: () async {
           SmartDialog.dismiss();
-          SmartDialog.showLoading(msg: "Removing all EV-Key....");
-
+          showCustomLightLoading("Removing all EV-Key....");
           // Explicitly declare the type of the list
           List<String> keysToDelete = _bikeProvider.rfidList.keys.cast<String>().toList();
 
@@ -1797,24 +1815,15 @@ showWelcomeToEVClub (BuildContext context){
       keepSingle: true,
       widget: EvieClubDialog()
   );
-
-  // SmartDialog.show(
-  //     keepSingle: true,
-  //     widget: EvieClubDialog(
-  //         title: "Welcome to the EV+ \nClub!",
-  //         content: "Are you ready for an adventure? "
-  //             "Perks of having an EV+ subscription include having access rto exclusive features such as "
-  //             "GPS Tracking, Theft Detection, Ride History and more!",
-  //         middleContent: "Let's Go!",
-  //         svgpicture: SvgPicture.asset(
-  //           "assets/images/ev_club.svg",
-  //         ),
-  //         onPressedMiddle: (){
-  //           SmartDialog.dismiss();
-  //         })
-  // );
-
 }
+
+showWelcomeToJoinTeam(BuildContext context, String palName, String teamName) {
+  SmartDialog.show(
+    keepSingle: true,
+    widget: WelcomeJoinTeam(palName: palName, teamName: teamName,)
+  );
+}
+
 
 ///to unlink the bike
 showUnlinkBikeDialog (BuildContext context, SettingProvider _settingProvider){
@@ -2010,7 +2019,7 @@ showResetPasswordDialog(BuildContext context, AuthProvider _authProvider){
             ),
             onPressed: () async {
               SmartDialog.dismiss();
-              SmartDialog.showLoading();
+              showCustomLightLoading();
               await _authProvider.resetPassword(_authProvider.getEmail);
               SmartDialog.dismiss(status: SmartStatus.loading);
               changeToCheckYourEmail(context);
@@ -2050,7 +2059,7 @@ showLogoutDialog(BuildContext context, AuthProvider _authProvider){
             ),
             onPressed: () async {
               SmartDialog.dismiss();
-              SmartDialog.showLoading();
+              showCustomLightLoading();
               try {
                 await _authProvider.signOut(context).then((result) async {
                   if (result == true) {
@@ -2263,7 +2272,7 @@ showClearFeed(NotificationProvider _notificationProvider){
 
         onPressedDown: () async {
           SmartDialog.dismiss();
-          SmartDialog.showLoading();
+          showCustomLightLoading();
           // for (int i = 0; i < _notificationProvider.notificationList.length; i++) {
           //   print('indexLLLLLLLLLLLLL : ' + i.toString());
           //   var result = await _notificationProvider.deleteNotification(_notificationProvider.notificationList.keys.elementAt(i));
@@ -2276,6 +2285,51 @@ showClearFeed(NotificationProvider _notificationProvider){
           // Dismiss the SmartDialog after the loop finishes
 
         }),
+  );
+}
+
+showCustomLightLoading([String? msg, bool? backDismiss]) {
+  SmartDialog.showLoading(
+      backDismiss: backDismiss ?? true,
+      widget: Center(
+        child: Container(
+          //width: 120,
+          height: 120,
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.7),
+            borderRadius: BorderRadius.circular(10.w),
+          ),
+          //color: Colors.black,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                child: Lottie.asset(
+                  "assets/animations/loading-simple-R1-light.json",
+                ),
+              ),
+              if (msg != null)
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  child: Text(
+                    msg,
+                    style: EvieTextStyles.body14.copyWith(color: Colors.white),
+                  ),
+                )
+              else
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  child: Text(
+                    '     Loading...     ',
+                    style: EvieTextStyles.body14.copyWith(color: Colors.white),
+                  ),
+                )
+            ],
+          ),
+        ),
+      )
   );
 }
 
@@ -2296,7 +2350,7 @@ showSoftwareUpdate(BuildContext context, FirmwareProvider firmwareProvider, Stre
         downContent: "Cancel",
         onPressedUp: () async {
           SmartDialog.dismiss();
-          SmartDialog.showLoading(backDismiss: false);
+          showCustomLightLoading('Loading...', false);
 
           Reference ref = FirebaseStorage.instance.refFromURL(firmwareProvider.latestFirmwareModel!.url);
           File file = await firmwareProvider.downloadFile(ref);
@@ -2325,6 +2379,78 @@ showSoftwareUpdate(BuildContext context, FirmwareProvider firmwareProvider, Stre
           });
 
           bluetoothProvider.startUpgradeFirmware(file);
+        },
+        onPressedDown: () {
+          SmartDialog.dismiss();
+        }),
+  );
+}
+
+showOffMotionSensitivity (BuildContext context, BikeProvider _bikeProvider, value, BluetoothProvider _bluetoothProvider){
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Off Motion Sensitivity?",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Disable motion sensitivity will prevent the bike alarm from triggering with motion and to avoid receiving alerts for potential movements around your bike. Confirm your choice below.",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/deactivate_theft_alert.svg",
+        ),
+        upContent: "Confirm Disable",
+        downContent: "Stay Enabled",
+        onPressedUp: () async {
+          showCustomLightLoading('Changing...');
+          final uploadResult = await _bikeProvider
+              .updateMotionSensitivity(value!,
+              _bikeProvider.currentBikeModel?.movementSetting
+                  ?.sensitivity.toString() ??
+                  MovementSensitivity.medium.toString());
+          if (uploadResult == true) {
+            StreamSubscription? subscription;
+            subscription =
+                _bluetoothProvider.changeMovementSetting(
+                    value,
+                    _bikeProvider.currentBikeModel
+                        ?.movementSetting?.sensitivity ==
+                        "low"
+                        ? MovementSensitivity.low
+                        : _bikeProvider.currentBikeModel
+                        ?.movementSetting?.sensitivity ==
+                        "medium"
+                        ? MovementSensitivity.medium
+                        : MovementSensitivity.high).listen((
+                    changeMovementResult) {
+                  if (changeMovementResult.result ==
+                      CommandResult.success) {
+                    //SmartDialog.dismiss(status: SmartStatus.loading);
+                    SmartDialog.dismiss();
+                    subscription?.cancel();
+                  } else {
+                    SmartDialog.dismiss();
+                    subscription?.cancel();
+                    SmartDialog.show(
+                        widget: EvieSingleButtonDialog(
+                            title: "Error",
+                            content: "Error occurred when changing motion sensitivity level.",
+                            rightContent: "Retry",
+                            onPressedRight: () {
+                              SmartDialog.dismiss();
+                            }));
+                  }
+                });
+          } else {
+            SmartDialog.show(widget: EvieSingleButtonDialog(
+                title: "Error",
+                content: "Error occurred when changing motion sensitivity level.",
+                rightContent: "Ok",
+                onPressedRight: () {
+                  SmartDialog.dismiss();
+                }));
+          }
+          SmartDialog.dismiss();
         },
         onPressedDown: () {
           SmartDialog.dismiss();

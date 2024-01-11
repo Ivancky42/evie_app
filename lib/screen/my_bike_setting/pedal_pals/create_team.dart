@@ -32,7 +32,15 @@ class _CreateTeamState extends State<CreateTeam> {
   late SettingProvider _settingProvider;
 
   final TextEditingController _teamNameController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _focusNode.requestFocus();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,58 +53,57 @@ class _CreateTeamState extends State<CreateTeam> {
       //_settingProvider.changeSheetElement(SheetList.bikeSetting);
         return true;
       },
-      child: Scaffold(
-
-        body: Stack(
-          children: [
-            Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 21.h),
-                    child: EvieProgressIndicator(currentPageNumber: 0, totalSteps: 3,),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(bottom: 21.h),
+                  child: EvieProgressIndicator(currentPageNumber: 0, totalSteps: 3,),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 21.h, 16.w, 4.h),
+                  child: Text(
+                    "Name your team",
+                    style: EvieTextStyles.h2,
                   ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 21.h, 16.w, 4.h),
-                    child: Text(
-                      "Name your team",
-                      style: EvieTextStyles.h2,
-                    ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 15.h),
+                  child: Text(
+                    "Create an epic name for your team.",
+                    style: EvieTextStyles.body18,
                   ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 15.h),
-                    child: Text(
-                      "Create an epic name for your team.",
-                      style: EvieTextStyles.body18,
-                    ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
+                  child: EvieTextFormField(
+                    controller: _teamNameController,
+                    obscureText: false,
+                    focusNode: _focusNode,
+                    hintText: "Create an epic team name",
+                    labelText: "Team Name",
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a team name';
+                      }
+                      return null;
+                    },
                   ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
-                    child: EvieTextFormField(
-                      controller: _teamNameController,
-                      obscureText: false,
-//     keyboardType: TextInputType.name,
-                      hintText: "Create an epic team name",
-                      labelText: "Team Name",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a team name';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
+          ),
 
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.buttonWord_ButtonBottom),
+          Column(
+            children: [
+              Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 120.h, 16.w, 0),
                   child: EvieButton(
                       width: double.infinity,
                       height: 48.h,
@@ -108,7 +115,7 @@ class _CreateTeamState extends State<CreateTeam> {
                         if (_formKey.currentState!.validate()) {
                           _bikeProvider.createTeam(_teamNameController.text.trim()).then((result) {
                             if(result == true){
-                              _settingProvider.changeSheetElement(SheetList.shareBikeInvitation);
+                              _settingProvider.changeSheetElement(SheetList.shareBikeInvitation, '3');
                             }else{
                               SmartDialog.show(
                                   backDismiss: false,
@@ -126,12 +133,9 @@ class _CreateTeamState extends State<CreateTeam> {
                       }
                   )
               ),
-            ),
 
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(0.w,25.h,0.w,EvieLength.buttonWord_WordBottom),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 15.h,0,EvieLength.target_reference_button_b),
                 child: SizedBox(
                   width: double.infinity,
                   child: TextButton(
@@ -143,7 +147,7 @@ class _CreateTeamState extends State<CreateTeam> {
                     onPressed: () {
                       _bikeProvider.createTeam("Team ${_currentUserProvider.currentUserModel!.name}").then((result) {
                         if(result == true){
-                          _settingProvider.changeSheetElement(SheetList.shareBikeInvitation);
+                          _settingProvider.changeSheetElement(SheetList.shareBikeInvitation, '3');
                         }else{
                           SmartDialog.show(
                               backDismiss: false,
@@ -161,10 +165,9 @@ class _CreateTeamState extends State<CreateTeam> {
                   ),
                 ),
               ),
-            ),
-
-          ],
-        ),
+            ],
+          )
+        ],
       ),
     );
   }

@@ -12,6 +12,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../api/dialog.dart';
 import '../../widgets/evie_single_button_dialog.dart';
 import '../../widgets/widgets.dart';
 import 'my_account_widget.dart';
@@ -140,7 +141,7 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
     if(image != null){
       try {
         ///From widget function, show loading dialog screen
-        SmartDialog.showLoading(backDismiss: false);
+        showCustomLightLoading('Loading...', false);
         var picName = email;
         Reference ref =
         FirebaseStorage.instance.ref().child("UserProfilePic/" + picName);
@@ -173,7 +174,7 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
     if(image != null){
       try {
         ///From widget function, show loading dialog screen
-        SmartDialog.showLoading(backDismiss: false);
+        showCustomLightLoading('Loading...', false);
         var picName = email;
         Reference ref = FirebaseStorage.instance.ref().child("UserProfilePic/" + picName);
 
@@ -201,7 +202,7 @@ class _SwitchProfileImageState extends State<SwitchProfileImage> {
       String email, CurrentUserProvider currentUserProvider) async {
     try {
       ///From widget function, show loading dialog screen
-      SmartDialog.showLoading(backDismiss: false);
+      showCustomLightLoading('Loading...', false);
       String profileIMG = dotenv.env['DEFAULT_PROFILE_IMG'] ?? 'DPI not found';
       currentUserProvider.updateUserProfileImage(profileIMG);
 

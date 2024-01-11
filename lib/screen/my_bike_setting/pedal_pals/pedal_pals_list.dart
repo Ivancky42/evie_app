@@ -110,6 +110,28 @@ class _PedalPalsListState extends State<PedalPalsList> {
                         GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: (){
+
+                            FocusNode _nameFocusNode = FocusNode();
+                            _nameFocusNode.requestFocus();
+
+                            bool isFirst = true;
+
+                            _nameController.text = _bikeProvider.currentBikeModel?.pedalPalsModel?.name ?? '';
+
+                            _nameController.addListener(() {
+                              if (_nameController.selection.baseOffset != _nameController.selection.extentOffset) {
+                                // Text is selected
+                                //print('Text selected: ${_nameController.text.substring(_nameController.selection.baseOffset, _nameController.selection.extentOffset)}');
+                              } else {
+                                // Cursor is moved
+                                if (isFirst) {
+                                  isFirst = false;
+                                  _nameController.selection = TextSelection(
+                                      baseOffset: 0, extentOffset: _nameController.text.length);
+                                }
+                              }
+                            });
+
                             SmartDialog.show(
                                 widget: Form(
                                   key: _formKey,
@@ -128,6 +150,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                                 keyboardType: TextInputType.name,
                                                 hintText: "Create an epic team name",
                                                 labelText: "Team Name",
+                                                focusNode: _nameFocusNode,
                                                 validator: (value) {
                                                   if (value == null || value.isEmpty) {
                                                     return 'Please enter your name';
@@ -148,28 +171,17 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                           final result = await _bikeProvider.updateTeamName(_nameController.text.trim());
 
                                           result == true ?
-                                          SmartDialog.show(widget: EvieSingleButtonDialogOld(
-                                              title: "Success",
-                                              content: "Team name uploaded",
-                                              rightContent: "OK",
-                                              onPressedRight: (){
-                                                SmartDialog.dismiss();}))
+                                          showTeamNameUpdated(context)
                                               :
-                                          SmartDialog.show(widget: EvieSingleButtonDialogOld(
-                                              title: "Error",
-                                              content: "Please try again",
-                                              rightContent: "OK",
-                                              onPressedRight: (){
-                                                SmartDialog.dismiss();
-                                              }));
+                                          showTeamNameUpdateFailed(context);
                                         }
                                       }),
                                 ));
                           },
                           child: SvgPicture.asset(
                             "assets/buttons/pen_edit.svg",
-                            height: 24.h,
-                            width: 24.w,
+                            height: 31.h,
+                            width: 31.w,
                           ),
                         ),
                       ],
@@ -178,13 +190,49 @@ class _PedalPalsListState extends State<PedalPalsList> {
 
                   EvieDivider( thickness: 0.5,color: Color(0xFF8E8E8E),),
 
+                  _bikeProvider.bikeUserList.length == 1 ?
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w, 32.h),
+                        child: Text(
+                          "Invite up to 4 riders to share your EVIE bike. PedalPals get access to unlocking, anti-theft features, notifications, and trip history.",
+                          style: EvieTextStyles.body18,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(45.w, 0.h, 45.2.w,22.h),
+                        child: Center(
+                          child: SvgPicture.asset(
+                            "assets/images/share_bike.svg",
+                            height: 287.89.h,
+                            width: 262.07.w,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(16.w, 47.h, 16.w,0.h),
+                          child: Text(
+                            "No rider is currently sharing your bike.",
+                            style: TextStyle(fontSize: 16.sp,height: 1.5.h),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ) :
                   Padding(
                     padding: EdgeInsets.fromLTRB(0.w, 3.h, 0.w, 4.h),
                     child: ListView.separated(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
                       separatorBuilder: (context, index) {
-                        return Divider(height: 1.h);
+                        return Padding(
+                          padding: EdgeInsets.only(left: 84.w),
+                          child: Divider(height: 1.h),
+                        );
                       },
                       itemCount: _bikeProvider.bikeUserList.length,
                       itemBuilder: (context, index) {
@@ -208,7 +256,8 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                   String resulted = jsonData['result'];
 
                                   if (resulted == "action") {
-                                    SmartDialog.showLoading(msg:"Removing " + name + " ....");
+                                    //SmartDialog.showLoading(msg:"Removing " + name + " ....");
+                                    showCustomLightLoading("Removing " + name + " ....");
                                     StreamSubscription? currentSubscription;
                                     ///Cancel user invitation
                                     if(status == "pending"){
@@ -279,7 +328,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                   }
                                   //showRemoveUserToast(context, result);
                                 },
-                                backgroundColor: EvieColors.red,
+                                backgroundColor: EvieColors.lightRed,
                                 foregroundColor: Colors.white,
                                 icon: Icons.delete_outline,
                               ),
@@ -332,7 +381,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                 "assets/icons/pending_tag.svg",
                               )
                                   : Text(checkUserAndChangeText(_bikeProvider.bikeUserList.values.elementAt(index).role),
-                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),)
+                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish),),
                           ),
                         );
                       },
@@ -347,26 +396,23 @@ class _PedalPalsListState extends State<PedalPalsList> {
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, EvieLength.screen_bottom),
+                        padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, EvieLength.target_reference_button_a),
                         child: EvieButton(
                           width: double.infinity,
                           height: 48.h,
                           child: Text(
-                              "Invite Pal",
+                              "Invite PedalPal",
                               style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
                           ),
+                          backgroundColor: _bikeProvider.bikeUserList.length < 5 ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.3),
                           onPressed: () {
                             ///Check if bike already have 5 user
                             if(_bikeProvider.bikeUserList.length < 5 ){
-                              _settingProvider.changeSheetElement(SheetList.shareBikeInvitation);
+                              _settingProvider.changeSheetElement(SheetList.shareBikeInvitation, '2');
                             }else{
-                              SmartDialog.show(widget: EvieSingleButtonDialog(
-                                  title: "Exceed Limit",
-                                  content: "Only 5 user are allowed",
-                                  rightContent: "OK",
-                                  onPressedRight: (){SmartDialog.dismiss();}));
+                              showExceedLimit(context);
                             }
-                          },
+                          }
                         ),
                       ),
                     ),

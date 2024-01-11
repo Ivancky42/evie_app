@@ -1454,6 +1454,7 @@ class BikeProvider extends ChangeNotifier {
           'movementDetect': true,
           'theftAttempt': true,
           'lock': true,
+          'unlock': false,
           'planReminder': true,
           'evKey': true,
         },

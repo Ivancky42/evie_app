@@ -92,7 +92,8 @@ class SharedPreferenceProvider with ChangeNotifier {
             handleSubTopic("$key~connection-lost", false);
             handleSubTopic("$key~movement-detect", false);
             handleSubTopic("$key~theft-attempt", false);
-            handleSubTopic("$key~lock-reminder", false);
+            handleSubTopic("$key~lock", false);
+            handleSubTopic("$key~unlock", false);
             handleSubTopic("$key~plan-reminder", false);
             handleSubTopic("$key~evkey", false);
           }
@@ -113,21 +114,20 @@ class SharedPreferenceProvider with ChangeNotifier {
         for (int i = 0; i < currentUserBikeList.length; i++) {
           final key = keys[i];
           BikeModel bikeModel = values[i];
-          NotificationSettingModel? notificationSettings = bikeModel
-              .notificationSettings;
-          bool? connectionLost = notificationSettings?.connectionLost ??
-              false;
-          bool? movementDetect = notificationSettings?.movementDetect ??
-              false;
+          NotificationSettingModel? notificationSettings = bikeModel.notificationSettings;
+          bool? connectionLost = notificationSettings?.connectionLost ?? false;
+          bool? movementDetect = notificationSettings?.movementDetect ?? false;
           bool? theftAttempt = notificationSettings?.theftAttempt ?? false;
-          bool? lockReminder = notificationSettings?.lock ?? false;
+          bool? lock = notificationSettings?.lock ?? false;
+          bool? unlock = notificationSettings?.unlock ?? false;
           bool? planReminder = notificationSettings?.planReminder ?? true;
           bool? evKey = notificationSettings?.evKey ?? true;
 
           handleSubTopic("$key~connection-lost", connectionLost);
           handleSubTopic("$key~movement-detect", movementDetect);
           handleSubTopic("$key~theft-attempt", theftAttempt);
-          handleSubTopic("$key~lock-reminder", lockReminder);
+          handleSubTopic("$key~lock", lock);
+          handleSubTopic("$key~unlock", unlock);
           handleSubTopic("$key~plan-reminder", planReminder);
           handleSubTopic("$key~evkey", evKey);
         }
@@ -281,7 +281,8 @@ class SharedPreferenceProvider with ChangeNotifier {
       handleSubTopic("$key~connection-lost", false);
       handleSubTopic("$key~movement-detect", false);
       handleSubTopic("$key~theft-attempt", false);
-      handleSubTopic("$key~lock-reminder", false);
+      handleSubTopic("$key~lock", false);
+      handleSubTopic("$key~unlock", false);
       handleSubTopic("$key~plan-reminder", false);
       handleSubTopic("$key~evkey", false);
     }

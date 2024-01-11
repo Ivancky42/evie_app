@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
@@ -256,71 +257,15 @@ class _FeedsState extends State<Feeds> {
                                               EvieButton(
                                                 onPressed: () async {
                                                   await _bikeProvider.acceptInvitation(notificationModel.deviceIMEI!, _currentUserProvider.currentUserModel!.uid);
-                                                  changeToAcceptingInvitationScreen(context, notificationModel.deviceIMEI!, _currentUserProvider.currentUserModel!.uid, _notificationProvider.notificationList.keys.elementAt(index));
-                                                  // SmartDialog.show(
-                                                  //   backDismiss: false,
-                                                  //   widget: Container(
-                                                  //     color: EvieColors.grayishWhite,
-                                                  //     width: double.infinity,
-                                                  //     height: double.infinity,
-                                                  //     child: Column(
-                                                  //       mainAxisAlignment: MainAxisAlignment.center,
-                                                  //       crossAxisAlignment: CrossAxisAlignment.center,
-                                                  //       children: [
-                                                  //         Container(
-                                                  //           height: 157.h,
-                                                  //           width: 279.h,
-                                                  //           child: Lottie.asset(
-                                                  //             'assets/animations/add-bike.json',
-                                                  //             repeat: true,
-                                                  //             height: 157.h,
-                                                  //             width: 279.h,
-                                                  //             fit: BoxFit.cover,
-                                                  //           ),
-                                                  //         ),
-                                                  //         SizedBox(height: 60.h,),
-                                                  //         Text(
-                                                  //           "Accepting invitation and adding bike...",
-                                                  //           style: EvieTextStyles.body16.copyWith(color: EvieColors.darkGray),
-                                                  //         )
-                                                  //       ],
-                                                  //     ),
-                                                  //   ),
-                                                  // );
-                                                  //
-                                                  // StreamSubscription? currentSubscription;
-                                                  // currentSubscription = _bikeProvider.acceptSharedBike(
-                                                  //   notificationModel.deviceIMEI!,
-                                                  //   _currentUserProvider.currentUserModel!.uid,
-                                                  // ).listen((uploadStatus) async {
-                                                  //   if (uploadStatus == UploadFirestoreResult.success) {
-                                                  //     _bikeProvider.changeBikeUsingIMEI(notificationModel.deviceIMEI!);
-                                                  //     _notificationProvider.updateUserNotificationSharedBikeStatus(
-                                                  //         _notificationProvider.notificationList.keys.elementAt(index));
-                                                  //     for (var element in _bikeProvider.userBikeNotificationList) {
-                                                  //       print(element);
-                                                  //       await _notificationProvider.subscribeToTopic(
-                                                  //           "${notificationModel.deviceIMEI!}$element");
-                                                  //     }
-                                                  //     currentSubscription?.cancel();
-                                                  //     SmartDialog.dismiss();
-                                                  //     showBikeAddSuccessfulToast(context);
-                                                  //     changeToUserHomePageScreen(context);
-                                                  //   } else if (uploadStatus == UploadFirestoreResult.failed) {
-                                                  //     SmartDialog.dismiss();
-                                                  //     SmartDialog.show(
-                                                  //       backDismiss: false,
-                                                  //       widget: EvieSingleButtonDialog(
-                                                  //         title: "Error",
-                                                  //         content: "Try again",
-                                                  //         rightContent: "OK",
-                                                  //         onPressedRight: () async {
-                                                  //           SmartDialog.dismiss();
-                                                  //         },
-                                                  //       ),
-                                                  //     );
-                                                  //   } else {};
-                                                  // });
+
+                                                  FirebaseFirestore.instance
+                                                      .collection('bikes')
+                                                      .doc(notificationModel.deviceIMEI!)
+                                                      .get().then((doc) {
+                                                        Map<String, dynamic>? obj = doc.data();
+                                                        BikeModel bikeModel = BikeModel.fromJson(obj!);
+                                                        changeToAcceptingInvitationScreen(context, notificationModel.deviceIMEI!, _currentUserProvider.currentUserModel!.uid, _notificationProvider.notificationList.keys.elementAt(index), _currentUserProvider.currentUserModel?.name, bikeModel.pedalPalsModel?.name);
+                                                  });
                                                 },
                                                 child: Text(
                                                   "OK",
@@ -707,7 +652,7 @@ class _FeedsState extends State<Feeds> {
           rightContent: "Yes",
           onPressedRight: () async {
             SmartDialog.dismiss();
-            SmartDialog.showLoading();
+            showCustomLightLoading();
             StreamSubscription? currentSubscription;
             currentSubscription = _bikeProvider.declineSharedBike(
                 _notificationProvider.notificationList.values.elementAt(index).deviceIMEI!,

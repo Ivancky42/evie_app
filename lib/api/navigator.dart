@@ -616,32 +616,11 @@ void changeToFirmwareUpdateFailed(BuildContext context) {
   );
 }
 
-
-void changeToShareBikeScreen(BuildContext context) {
+void changeToAcceptingInvitationScreen(BuildContext context, deviceIMEI, currentUid, notificationId, String? palName, String? teamName) {
   Navigator.pushReplacement(context,
     PageTransition(
       type: PageTransitionType.rightToLeft,
-      child: const PedalPals(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
-
-void changeToShareBikeInvitationScreen(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const ShareBikeInvitation(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
-
-void changeToAcceptingInvitationScreen(BuildContext context, deviceIMEI, currentUid, notificationId) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: AcceptingInvitation(deviceIMEI: deviceIMEI, currentUid: currentUid, notificationId: notificationId),
+      child: AcceptingInvitation(deviceIMEI: deviceIMEI, currentUid: currentUid, notificationId: notificationId, palName: palName ?? '', teamName: teamName ?? '',),
       duration: const Duration(milliseconds: 300),
     ),
   );

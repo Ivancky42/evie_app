@@ -15,6 +15,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
@@ -94,12 +95,11 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                         style:EvieTextStyles.h2,
                         textAlign: TextAlign.center,
                       ),
-                      childContent: Text("App need to be stay open to complete upgrade."
-                          " Any changes made during the update may not be saved if exit update.",
+                      childContent: Text("The app needs to stay open to complete the upgrade. Any changes made during the update may not be saved if you exit the update.",
                         textAlign: TextAlign.center,
                         style: EvieTextStyles.body18,),
                       svgpicture: SvgPicture.asset(
-                        "assets/images/people_search.svg",
+                        "assets/images/exit_update.svg",
                       ),
                       upContent: "Stay Updating",
                       downContent: "Cancel Update",
@@ -191,16 +191,36 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                               children: [
                                 Row(
                                   children: [
+                                    // Expanded(
+                                    //   child: Padding(
+                                    //     padding: EdgeInsets.fromLTRB(16.w,0, 40.w, 0),
+                                    //     child: Text(
+                                    //       isExpanded
+                                    //           ? _firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "\n") ?? ''
+                                    //           : (_firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "\n")?.substring(0, 155) ?? ''),
+                                    //       softWrap: true,
+                                    //       style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+                                    //       overflow: TextOverflow.fade,
+                                    //     ),
+                                    //   ),
+                                    // ),
                                     Expanded(
                                       child: Padding(
-                                        padding: EdgeInsets.fromLTRB(16.w,0, 40.w, 0),
-                                        child: Text(
-                                          isExpanded
-                                              ? _firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "\n") ?? ''
-                                              : (_firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "\n")?.substring(0, 155) ?? ''),
-                                          softWrap: true,
-                                          style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-                                          overflow: TextOverflow.fade,
+                                        padding: EdgeInsets.fromLTRB(8.w,0, 40.w, 0),
+                                        child: Html(
+                                            data:  isExpanded ? _firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "<br>") ?? '' : _firmwareProvider.latestFirmwareModel?.desc.replaceAll("\\n", "<br>").substring(0, 155) ?? '',
+                                          style: {
+                                            "p": Style(
+                                              fontSize: FontSize(18.sp), // Set the font size for paragraphs
+                                              fontFamily: 'Avenir', // Set the font family for paragraphs
+                                              color: EvieColors.lightBlack
+                                            ),
+                                            "b": Style(
+                                              fontSize: FontSize(18.sp), // Set the font size for bold text
+                                              fontFamily: 'Avenir', // Set the font family for bold text
+                                                color: EvieColors.lightBlack
+                                            ),
+                                          },
                                         ),
                                       ),
                                     ),
@@ -218,7 +238,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                                       children: [
                                         Text(
                                           isExpanded ? 'View Less' : 'View More',
-                                          style: EvieTextStyles.body14.copyWith(fontWeight: FontWeight.w800, color: EvieColors.primaryColor),
+                                          style: EvieTextStyles.body14.copyWith(fontWeight: FontWeight.w800, color: EvieColors.primaryColor, letterSpacing: 1.1),
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(left: 5.w),
@@ -340,14 +360,21 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                               children: [
                                 Expanded(
                                   child: Padding(
-                                    padding: EdgeInsets.fromLTRB(16.w,0,40.w,0),
-                                    child: Text(
-                                      isExpanded
-                                          ? _firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "\n") ?? ''
-                                          : (_firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "\n")?.substring(0, 155) ?? ''),
-                                      softWrap: true,
-                                      style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-                                      overflow: TextOverflow.fade,
+                                    padding: EdgeInsets.fromLTRB(8.w,0, 40.w, 0),
+                                    child: Html(
+                                      data:  isExpanded ? _firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "<br>") ?? '' : _firmwareProvider.latestFirmwareModel?.desc.replaceAll("\\n", "<br>").substring(0, 155) ?? '',
+                                      style: {
+                                        "p": Style(
+                                            fontSize: FontSize(18.sp), // Set the font size for paragraphs
+                                            fontFamily: 'Avenir', // Set the font family for paragraphs
+                                            color: EvieColors.lightBlack
+                                        ),
+                                        "b": Style(
+                                            fontSize: FontSize(18.sp), // Set the font size for bold text
+                                            fontFamily: 'Avenir', // Set the font family for bold text
+                                            color: EvieColors.lightBlack
+                                        ),
+                                      },
                                     ),
                                   ),
                                 ),
@@ -405,7 +432,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                   ) :
                   !_firmwareProvider.isLatestFirmVer && _firmwareProvider.isUpdating == true ?
                   Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, EvieLength.screen_bottom),
+                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, EvieLength.target_reference_button_a),
                     child: EvieButton(
                       width: double.infinity,
                       height: 48.h,

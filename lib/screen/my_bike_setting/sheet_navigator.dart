@@ -94,7 +94,11 @@ class _SheetNavigatorState extends State<SheetNavigator> {
       case SheetList.evAddFailed:
         return EVAddFailed();
       case SheetList.nameEv:
-        return NameEV();
+        return Container(
+          height: double.infinity,
+          //color: Colors.yellow,
+          child: NameEV(),
+        );
       case SheetList.registerEvKey:
         return RegisterEVKey();
 
@@ -115,7 +119,7 @@ class _SheetNavigatorState extends State<SheetNavigator> {
       case SheetList.createTeam:
         return CreateTeam();
       case SheetList.shareBikeInvitation:
-        return ShareBikeInvitation();
+        return ShareBikeInvitation(totalSteps: int.parse(_settingProvider.stringPassing!),);
       case SheetList.invitationSent:
         return InvitationSent();
       case SheetList.userNotFound:

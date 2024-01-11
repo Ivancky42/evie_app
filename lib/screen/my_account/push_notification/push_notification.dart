@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../../api/colours.dart';
+import '../../../api/dialog.dart';
 import '../../../api/model/bike_user_model.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
@@ -135,13 +136,14 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
                   Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 10.h, 20.w, 0),
                     child: EvieSwitch(
+                      activeColor: hasPermission ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
                       height: 64.h,
                       text: "General Notification",
                       value: _currentUserProvider.currentUserModel?.notificationSettings?.general ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {
                       if (hasPermission) {
-                        SmartDialog.showLoading();
+                        showCustomLightLoading();
                         var result = await _bikeProvider
                             .updateFirestoreNotification("general", value!);
                         if (result) {
@@ -180,13 +182,14 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
                   Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 0, 20.w, 0),
                     child: EvieSwitch(
+                      activeColor: hasPermission ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
                       height: 64.h,
                       text: "Promo",
                       value: _currentUserProvider.currentUserModel?.notificationSettings?.promo ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {
                         if (hasPermission) {
-                          SmartDialog.showLoading();
+                          showCustomLightLoading();
                           var result = await _bikeProvider
                               .updateFirestoreNotification("promo", value!);
                           if (result == true) {
@@ -225,13 +228,14 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
                   Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 0, 20.w, 0),
                     child: EvieSwitch(
+                      activeColor: hasPermission ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
                       height: 64.h,
                       text: "Software Update",
                       value: _currentUserProvider.currentUserModel?.notificationSettings?.firmwareUpdate ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {
                         if (hasPermission) {
-                          SmartDialog.showLoading();
+                          showCustomLightLoading();
                           var result = await _bikeProvider
                               .updateFirestoreNotification("firmwareUpdate",
                               value!);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_xlider/flutter_xlider.dart';
 
 import '../api/colours.dart';
 
@@ -9,7 +10,7 @@ class EvieSlider extends StatelessWidget {
   final double value;
   final double max;
   final String label;
-  final int? division;
+  final double min;
 
 
   const EvieSlider({
@@ -19,23 +20,45 @@ class EvieSlider extends StatelessWidget {
     required this.value,
     required this.max,
     required this.label,
-    this.division,
+    required this.min,
 
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Slider(
-
-      value: value,
+    return FlutterSlider(
+      values: [value],
       max: max,
-      divisions: division,
-      activeColor: EvieColors.primaryColor,
-      inactiveColor: Color(0xffD4D4D4),
-      thumbColor: Color(0xffFAFAFA),
-      label: label,
-      onChanged: onChanged,
-      onChangeEnd: onChangedEnd,
+      min: min,
+      onDragging: (handlerIndex, lowerValue, upperValue) {
+        onChanged(lowerValue);
+      },
+      onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+        if (onChangedEnd != null) {
+          onChangedEnd!(lowerValue);
+        }
+      },
+      handler: FlutterSliderHandler(
+        decoration: BoxDecoration(),
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Container(
+            decoration: BoxDecoration(
+              color: EvieColors.thumbColorTrue,
+              shape: BoxShape.circle,
+            ),
+            width: 21,
+            height: 21,
+          ),
+        ),
+      ),
+      trackBar: FlutterSliderTrackBar(
+        inactiveTrackBar: BoxDecoration(color: Color(0xffD4D4D4), borderRadius: BorderRadius.circular(8.0)),
+        activeTrackBar: BoxDecoration(color: EvieColors.primaryColor, borderRadius: BorderRadius.circular(8.0)),
+          activeTrackBarHeight : 5.5,
+        inactiveTrackBarHeight: 5,
+      ),
+      tooltip: FlutterSliderTooltip(disabled: true), // Disable tooltips
     );
   }
 

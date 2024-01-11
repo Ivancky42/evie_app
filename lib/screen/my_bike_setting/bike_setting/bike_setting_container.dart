@@ -11,12 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/firmware_provider.dart';
+import '../../../api/provider/notification_provider.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../api/snackbar.dart';
@@ -31,19 +33,43 @@ class BikeSettingContainer extends StatefulWidget {
   State<BikeSettingContainer> createState() => _BikeSettingContainerState();
 }
 
-class _BikeSettingContainerState extends State<BikeSettingContainer> {
+class _BikeSettingContainerState extends State<BikeSettingContainer> with WidgetsBindingObserver{
 
   late BikeProvider _bikeProvider;
   late FirmwareProvider _firmwareProvider;
   late BluetoothProvider _bluetoothProvider;
   late SettingProvider _settingProvider;
+  late NotificationProvider _notificationProvider;
 
   DeviceConnectResult? deviceConnectResult;
   String? label;
   String? pageNavigate;
+  bool hasPermission = false;
 
   final TextEditingController _bikeNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _notificationProvider = context.read<NotificationProvider>();
+    _notificationProvider.checkNotificationPermission();
+    WidgetsBinding.instance?.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _notificationProvider.checkNotificationPermission();
+      //print("App resumed");
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +80,54 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
     _settingProvider = Provider.of<SettingProvider>(context);
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
+
+    switch(_notificationProvider.permissionStatus) {
+      case PermissionStatus.denied:
+        if (hasPermission) {
+          setState(() {
+            hasPermission = false;
+          });
+        }
+        break;
+      case PermissionStatus.granted:
+        if (!hasPermission) {
+          setState(() {
+            hasPermission = true;
+          });
+        }
+        break;
+      case PermissionStatus.restricted:
+        if (hasPermission) {
+          setState(() {
+            hasPermission = false;
+          });
+        }
+        break;
+      case PermissionStatus.limited:
+        if (!hasPermission) {
+          setState(() {
+            hasPermission = true;
+          });
+        }
+        break;
+      case PermissionStatus.permanentlyDenied:
+        if (hasPermission) {
+          setState(() {
+            hasPermission = false;
+          });
+        }
+        break;
+      case PermissionStatus.provisional:
+        if (hasPermission) {
+          setState(() {
+            hasPermission = false;
+          });
+        }
+        break;
+      case null:
+      // TODO: Handle this case.
+        break;
+    }
     
     if(deviceConnectResult == DeviceConnectResult.connected &&
         _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice){
@@ -100,7 +174,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
               },
               child: Container(
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 10.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 8.w, 10.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -140,8 +214,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                           },
                           icon:   SvgPicture.asset(
                             "assets/buttons/pen_edit.svg",
-                            height:20.h,
-                            width:20.w,
+                            height:26.h,
+                            width:26.w,
                           ),),
                       ),
                     ],
@@ -351,15 +425,10 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                       || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
                   ) {
                     showConnectBluetoothDialog(context, _bluetoothProvider, _bikeProvider);
-
-                    // SmartDialog.showLoading(msg: 'Entering Recovery Mode....');
-                    // _bluetoothProvider.cableUnlock();
-                    // await Future.delayed(Duration(seconds: 2));
-                    // showRecoveringModeToast(context);
-                    // SmartDialog.dismiss();
                   }
                   else if (deviceConnectResult == DeviceConnectResult.connected) {
-                    SmartDialog.showLoading(msg: 'Entering Recovery Mode....');
+                    //SmartDialog.showLoading(msg: 'Entering Recovery Mode....');
+                    showCustomLightLoading('Entering Recovery Mode....');
                     _bluetoothProvider.cableUnlock();
                     await Future.delayed(Duration(seconds: 2));
                     showRecoveringModeToast(context);
@@ -512,7 +581,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                   }
                   else {
                     if(_bikeProvider.currentBikeModel?.pedalPalsModel == null || _bikeProvider.currentBikeModel?.pedalPalsModel?.name == ""){
-                      _settingProvider.changeSheetElement(SheetList.createTeam);
+                      _settingProvider.changeSheetElement(SheetList.pedalPals);
                     }else{
                       _settingProvider.changeSheetElement(SheetList.pedalPalsList);
                     }
@@ -597,7 +666,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
             ),
           ],
         );
-      case "Orbital Anti-theft":
+      case "EV-Secure Alerts":
         return Column(
           children: [
             GestureDetector(
@@ -633,12 +702,18 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> {
                           Row(
                             children: [
                               Text(
-                                'Orbital Anti-theft',
+                                'EV-Secure Alerts',
                                 style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                               ),
                               SizedBox(width: 8.17.w,),
                               SvgPicture.asset(
                                 "assets/icons/batch_tick.svg",
+                                width: 24.w,
+                                height: 24.w,
+                              ),
+                              SizedBox(width: 4.w,),
+                              SvgPicture.asset(
+                                "assets/icons/notification_alert.svg",
                                 width: 24.w,
                                 height: 24.w,
                               ),
