@@ -13,6 +13,7 @@ import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/provider/shared_pref_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:geocoding/geocoding.dart';
@@ -131,10 +132,15 @@ class AuthProvider extends ChangeNotifier {
     User? firebaseUser;
     credentialProvider = "email";
 
-    //Assign default profile image for new register user
-    String profileIMG = dotenv.env['DEFAULT_PROFILE_IMG'] ?? 'DPI not found';
+    // //Assign default profile image for new register user
+    // String profileIMG = dotenv.env['DEFAULT_PROFILE_IMG'] ?? 'DPI not found';
 
     try {
+
+      final FirebaseStorage storage = FirebaseStorage.instance;
+      final Reference ref = storage.ref().child(checkNameSelectImage(name));
+      final String profileIMG = await ref.getDownloadURL();
+
       await _auth.createUserWithEmailAndPassword(email: email, password: password,).then((auth) {
         firebaseUser = auth.user!;
         if (firebaseUser != null) {
@@ -155,6 +161,26 @@ class AuthProvider extends ChangeNotifier {
         return "Unknown exception";
       }
     }
+  }
+
+  String checkNameSelectImage(String name) {
+    final result = containsLowerCase(name[0].toLowerCase());
+    if (result) {
+      ///random return either 'dark or light'
+      final theme = Random().nextBool() ? 'dark' : 'light';
+      return 'defaultProfile/' + theme + '-' + name[0].toLowerCase() + '.png';
+    }
+    else {
+      return 'defaultProfile/rider.png';
+    }
+  }
+
+  bool containsLowerCase(String character) {
+    // Define a regular expression to match lowercase letters
+    RegExp regExp = RegExp(r'[a-z]');
+
+    // Use the hasMatch method to check if the character contains a lowercase letter
+    return regExp.hasMatch(character);
   }
 
   sendFirestoreVerifyEmail(){
@@ -275,6 +301,10 @@ class AuthProvider extends ChangeNotifier {
           _uid = userCredential.user!.uid;
           _email = userCredential.user!.email!;
 
+          final FirebaseStorage storage = FirebaseStorage.instance;
+          final Reference ref = storage.ref().child(checkNameSelectImage(userCredential.user?.displayName.toString() ?? ''));
+          final String profileIMG = await ref.getDownloadURL();
+
           if (nameInput != '') {
             ///Firestore
             createFirestoreUser(
@@ -282,7 +312,7 @@ class AuthProvider extends ChangeNotifier {
                 _email,
                 nameInput, //Name
                 userPhoneNo, //Phone no
-                userCredential.user?.photoURL.toString(),
+                profileIMG,
                 credentialProvider,
                 ''//Profile image
             );
@@ -293,7 +323,7 @@ class AuthProvider extends ChangeNotifier {
                 _email,
                 userCredential.user?.displayName.toString(), //Name
                 userPhoneNo, //Phone no
-                userCredential.user?.photoURL.toString(),
+                profileIMG,
                 credentialProvider,
                 ''
             );
@@ -343,6 +373,10 @@ class AuthProvider extends ChangeNotifier {
         _uid = userCredential.user!.uid;
         _email = userCredential.user!.email!;
 
+        final FirebaseStorage storage = FirebaseStorage.instance;
+        final Reference ref = storage.ref().child(checkNameSelectImage(userCredential.user?.displayName.toString() ?? ''));
+        final String profileIMG = await ref.getDownloadURL();
+
         if (nameInput != '') {
           ///Firestore
           createFirestoreUser(
@@ -350,7 +384,7 @@ class AuthProvider extends ChangeNotifier {
               _email,
               nameInput,
               userPhoneNo, //Phone no
-              userCredential.user?.photoURL.toString(),
+              profileIMG,
               credentialProvider,
               ''
           );
@@ -361,7 +395,7 @@ class AuthProvider extends ChangeNotifier {
               _email,
               userCredential.user?.displayName.toString(),
               userPhoneNo, //Phone no
-              userCredential.user?.photoURL.toString(),
+              profileIMG,
               credentialProvider,
               ''
           );
@@ -509,6 +543,10 @@ class AuthProvider extends ChangeNotifier {
         _uid = userCredential.user!.uid;
         _email = userCredential.user!.email!;
 
+        final FirebaseStorage storage = FirebaseStorage.instance;
+        final Reference ref = storage.ref().child(checkNameSelectImage(userName ?? ''));
+        final String profileIMG = await ref.getDownloadURL();
+
         ///Firestore
         createFirestoreUser(
             _uid,
@@ -516,7 +554,7 @@ class AuthProvider extends ChangeNotifier {
             userName,//Name
             userPhoneNo, //Phone no
             //userCredential.user?.photoURL.toString(), ///Cannot get profile image from apple id when first time login, need approval from user
-            dotenv.env['DEFAULT_PROFILE_IMG'] ?? 'DPI not found',  //profileimg
+            profileIMG,  //profileimg
             credentialProvider,
             ''
             );

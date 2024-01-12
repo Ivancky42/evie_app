@@ -196,7 +196,9 @@ class _ResetBike2State extends State<ResetBike2> {
                 ),
 
           ],
-        ),]),
+        ),
+          ]
+        ),
     ));
   }
 

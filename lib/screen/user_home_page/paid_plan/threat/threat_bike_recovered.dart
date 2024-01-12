@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
+import 'package:evie_test/api/provider/shared_pref_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -29,10 +30,29 @@ class ThreatBikeRecovered extends StatefulWidget {
   _ThreatBikeRecoveredState createState() => _ThreatBikeRecoveredState();
 }
 
-class _ThreatBikeRecoveredState extends State<ThreatBikeRecovered> {
+class _ThreatBikeRecoveredState extends State<ThreatBikeRecovered> with WidgetsBindingObserver {
 
   late AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
+  late SharedPreferenceProvider _sharedPreferenceProvider;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _sharedPreferenceProvider = context.read<SharedPreferenceProvider>();
+    _bikeProvider = context.read<BikeProvider>();
+    String deviceIMEI = _bikeProvider.currentBikeModel!.deviceIMEI!;
+    _sharedPreferenceProvider.handleSubTopic("$deviceIMEI~unlock", false);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    String deviceIMEI = _bikeProvider.currentBikeModel!.deviceIMEI!;
+    _sharedPreferenceProvider.handleSubTopic("$deviceIMEI~unlock", true);
+  }
 
   @override
   Widget build(BuildContext context) {

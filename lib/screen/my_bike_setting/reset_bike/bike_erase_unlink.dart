@@ -15,6 +15,7 @@ import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../widgets/evie_button.dart';
+import '../../../widgets/evie_single_button_dialog.dart';
 
 class BikeEraseUnlink extends StatefulWidget{
   const BikeEraseUnlink({Key?key}) : super(key:key);
@@ -70,7 +71,21 @@ class _BikeEraseUnlinkState extends State<BikeEraseUnlink>{
 
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        bool shouldClose = true;
+        await showDialog<void>(
+            context: context,
+            builder: (BuildContext context) =>
+                EvieOneDialog(
+                    title: "Stay with Us",
+                    content1: "We're handling the progress for you. It won't take long. Please stay on this page until we're done. Your understanding is valued!",
+                    middleContent: "Understood",
+                    svgpicture: SvgPicture.asset("assets/images/stay.svg"),
+                    onPressedMiddle: () {
+                      shouldClose = false;
+                      Navigator.of(context).pop();
+                    })
+        );
+        return shouldClose;
       },
       child: Scaffold(
         body: Container(
@@ -84,8 +99,8 @@ class _BikeEraseUnlinkState extends State<BikeEraseUnlink>{
               //Lottie.asset('assets/animations/account-verify.json'),
               Lottie.asset('assets/animations/erase_bike.json',
 
-                height: 157.64.h,
-                width: 279.49.w,
+                height: 236.46.h,
+                width: 419.235.w,
 
               ),
             ],

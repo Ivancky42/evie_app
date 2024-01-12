@@ -79,7 +79,6 @@ class _EvieTextFormFieldState extends State<EvieTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.controller!.text.trim());
     return SizedBox(
         child:Stack(
           children: [

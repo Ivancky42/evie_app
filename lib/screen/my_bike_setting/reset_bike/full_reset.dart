@@ -31,20 +31,18 @@ class _FullResetState extends State<FullReset>{
 
     return WillPopScope(
       onWillPop: () async {
-       // _settingProvider.changeSheetElement(SheetList.resetBike2);
         return true;
       },
       child: Scaffold(
-              appBar: PageAppbar(
+          appBar: PageAppbar(
                 title: 'Full Reset',
                 onPressed:(){
                   _settingProvider.changeSheetElement(SheetList.resetBike2);
                 },
               ),
-
-              body: Stack(
-                  children: [
-                    Column(
+          body: Stack(
+              children: [
+                Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -69,11 +67,10 @@ class _FullResetState extends State<FullReset>{
                         ),
                       ],
                     ),
-
-                    Align(
+                Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.screen_bottom),
+                        padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.target_reference_button_a),
                         child: EvieButton(
                           width: double.infinity,
                           height: 48.h,
@@ -89,9 +86,9 @@ class _FullResetState extends State<FullReset>{
                         ),
                       ),
                     ),
-                  ]
-              )
-          )
+              ]
+          ),
+      )
     );
   }
 }

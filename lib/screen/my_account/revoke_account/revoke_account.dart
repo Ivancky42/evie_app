@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/fonts.dart';
+import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
@@ -58,7 +59,7 @@ class _RevokeAccountState extends State<RevokeAccount> {
         },
       ),
       body: Padding(
-          padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w, 28.h),
+          padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w, EvieLength.target_reference_button_a),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

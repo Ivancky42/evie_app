@@ -69,15 +69,15 @@ showQuitApp(){
           }));
 }
 
-showCannotClose(){
+showCannotClose(BuildContext context) {
   SmartDialog.show(
-      widget: EvieSingleButtonDialog(
-          title: "Opps!",
-          content: "This page cannot be close",
-          rightContent: "Ok",
-          onPressedRight: () {
+      widget: EvieOneDialog(
+          title: "Stay with Us",
+          content1: "We're handling the progress for you. It won't take long. Please stay on this page until we're done. Your understanding is valued!",
+          middleContent: "Understood",
+          svgpicture: SvgPicture.asset("assets/images/stay.svg"),
+          onPressedMiddle: () {
             SmartDialog.dismiss();
-            // SystemNavigator.pop();
           }));
 }
 
@@ -622,7 +622,7 @@ showFirmwareUpdateQuit(context, StreamSubscription? stream, _settingProvider, Bl
       context: context,
       builder: (BuildContext context) =>
           EvieTwoButtonDialog(
-              title: Text("Exit Update?",
+              title: Text("Stay for Optimisation",
                 style:EvieTextStyles.h2,
                 textAlign: TextAlign.center,
               ),
@@ -631,7 +631,7 @@ showFirmwareUpdateQuit(context, StreamSubscription? stream, _settingProvider, Bl
                 textAlign: TextAlign.center,
                 style: EvieTextStyles.body18,),
               svgpicture: SvgPicture.asset(
-                "assets/images/people_search.svg",
+                "assets/images/stay.svg",
               ),
               upContent: "Stay Updating",
               downContent: "Cancel Update",
@@ -1297,6 +1297,18 @@ showBatteryInfoDialog(BuildContext context) {
           }));
 }
 
+showTeamNotAvailableDialog(BuildContext context) {
+  SmartDialog.show(
+      widget: EvieOneDialog(
+          title: "Team Unavailable",
+          content1: "Oops! The team no longer exists. It may have been disbanded or removed.",
+          middleContent: "Done",
+          svgpicture: SvgPicture.asset('assets/images/bike_fix.svg'),
+          onPressedMiddle: () {
+            SmartDialog.dismiss();
+          }));
+}
+
 showErrorLoginDialog (BuildContext context){
   SmartDialog.show(
     widget: EvieTwoButtonDialog(
@@ -1795,7 +1807,7 @@ showFullResetDialog (BuildContext context ,SettingProvider _settingProvider){
         svgpicture: SvgPicture.asset(
           "assets/images/full_reset_your_bike.svg",
         ),
-        upContent: "Full Reset",
+        upContent: "Confirm",
         downContent: "Cancel",
         onPressedUp: () {
           SmartDialog.dismiss();
@@ -1833,15 +1845,13 @@ showUnlinkBikeDialog (BuildContext context, SettingProvider _settingProvider){
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
         ),
-        childContent: Text("Are you sure that you want to unlink your bike? "
-            "Your bike will be removed from the app, and its settings will be "
-            "forgotten until you sync your bike with the app again.",
+        childContent: Text("Are you certain about unlinking your bike? It will be taken off your account until you sync it back.",
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
           "assets/images/unlink_your_bike.svg",
         ),
-        upContent: "Unlink Bike",
+        upContent: "Confirm",
         downContent: "Cancel",
         onPressedUp: () {
           SmartDialog.dismiss();
@@ -2106,7 +2116,7 @@ showRevokeAccountDialog(BuildContext context, AuthProvider _authProvider){
             width: double.infinity,
             height: 48.h,
             child: Text(
-              'Revoke Account',
+              'Confirm',
               style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
             ),
             onPressed: () async {
@@ -2261,7 +2271,7 @@ showClearFeed(NotificationProvider _notificationProvider){
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
-          "assets/images/people_search.svg",
+          "assets/images/dustbin.svg",
         ),
         upContent: "Cancel",
         downContent: "Confirm",

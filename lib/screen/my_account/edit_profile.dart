@@ -23,6 +23,7 @@ import 'package:evie_test/widgets/evie_button.dart';
 import '../../api/colours.dart';
 import '../../api/fonts.dart';
 import '../../api/navigator.dart';
+import '../../api/snackbar.dart';
 import '../../widgets/evie_appbar.dart';
 import '../../widgets/evie_textform.dart';
 
@@ -204,19 +205,9 @@ class _EditProfileState extends State<EditProfile> {
                                   SmartDialog.dismiss();
                                   final result = await _currentUserProvider.updateUserName(_nameController.text.trim());
                                   result == true ?
-                                  SmartDialog.show(widget: EvieSingleButtonDialogOld(
-                                      title: "Success",
-                                      content: "Uploaded",
-                                      rightContent: "OK",
-                                      onPressedRight: (){SmartDialog.dismiss();}))
+                                  showNameUpdated(context)
                                       :
-                                  SmartDialog.show(widget: EvieSingleButtonDialogOld(
-                                      title: "Error",
-                                      content: "Please try again",
-                                      rightContent: "OK",
-                                      onPressedRight: (){
-                                        SmartDialog.dismiss();
-                                      }));
+                                  showNameUpdateFailed(context);
                                 }
                               }),
                         ));
@@ -258,8 +249,8 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                           SvgPicture.asset(
                             "assets/buttons/pen_edit.svg",
-                            height: 24.h,
-                            width: 24.w,
+                            height: 31.h,
+                            width: 31.w,
                           ),
                         ],
                       ),

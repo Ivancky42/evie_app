@@ -69,20 +69,18 @@ class _UnlinkBikeState extends State<UnlinkBike>{
                             style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
                           ),
                         ),
-
+                        _bikeProvider.currentBikeModel?.pedalPalsModel != null ?
                         Padding(
                           padding: EdgeInsets.fromLTRB(16.w,0.h, 16.w, 0.h),
                           child:Text(
-                            "Click this option to unlink your bike from the EVIE app. "
-                                "Don’t worry, your bike will remember its settings if you choose to return!\n",
+                            "Select this option to unlink your bike from your account. Don’t worry, your bike will remember its settings if you choose to return! Keep in mind, [team name] will be disbanded.\n",
                             style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
                           ),
-                        ),
-
+                        ) :
                         Padding(
-                          padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 4.h),
+                          padding: EdgeInsets.fromLTRB(16.w,0.h, 16.w, 0.h),
                           child:Text(
-                            "The team you’ve created will be removed from the app as well. ",
+                            "Select this option to unlink your bike from your account. Don’t worry, your bike will remember its settings if you choose to return!\n",
                             style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
                           ),
                         ),
@@ -92,7 +90,7 @@ class _UnlinkBikeState extends State<UnlinkBike>{
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.screen_bottom),
+                        padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.target_reference_button_a),
                         child: EvieButton(
                           width: double.infinity,
                           height: 48.h,

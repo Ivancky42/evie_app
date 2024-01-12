@@ -91,7 +91,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
               context: context,
               builder: (BuildContext context) =>
                   EvieTwoButtonDialog(
-                      title: Text("Exit Update?",
+                      title: Text("Stay for Optimisation",
                         style:EvieTextStyles.h2,
                         textAlign: TextAlign.center,
                       ),
@@ -99,7 +99,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                         textAlign: TextAlign.center,
                         style: EvieTextStyles.body18,),
                       svgpicture: SvgPicture.asset(
-                        "assets/images/exit_update.svg",
+                        "assets/images/stay.svg",
                       ),
                       upContent: "Stay Updating",
                       downContent: "Cancel Update",

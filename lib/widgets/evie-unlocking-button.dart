@@ -12,6 +12,7 @@ import 'package:lottie/lottie.dart' as lottie;
 import '../api/colours.dart';
 import '../api/fonts.dart';
 import '../api/function.dart';
+import '../api/provider/setting_provider.dart';
 import '../api/snackbar.dart';
 import 'evie_single_button_dialog.dart';
 
@@ -26,15 +27,18 @@ class _UnlockingButtonState extends State<UnlockingButton> {
 
   late BluetoothProvider bluetoothProvider;
   late BikeProvider bikeProvider;
+  late SettingProvider settingProvider;
   DeviceConnectResult? deviceConnectResult;
   CableLockResult? cableLockState;
   StreamSubscription? unlockSub;
   Widget? buttonImage;
+  int unlockCount = 0;
 
   @override
   void initState() {
     bluetoothProvider = context.read<BluetoothProvider>();
     bikeProvider = context.read<BikeProvider>();
+    settingProvider = context.read<SettingProvider>();
     super.initState();
   }
 
@@ -48,6 +52,7 @@ class _UnlockingButtonState extends State<UnlockingButton> {
   Widget build(BuildContext context) {
     bluetoothProvider = context.watch<BluetoothProvider>();
     bikeProvider = context.watch<BikeProvider>();
+    settingProvider = context.watch<SettingProvider>();
     deviceConnectResult = bluetoothProvider.deviceConnectResult;
     cableLockState = bluetoothProvider.cableLockState;
     setButtonImage();
@@ -64,10 +69,8 @@ class _UnlockingButtonState extends State<UnlockingButton> {
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(cableLockState
                 ?.lockState == LockState.unlock ? EvieColors.softPurple : EvieColors.primaryColor,),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(55.w), // Adjust the border radius as needed
-              ),
+            shape: MaterialStateProperty.all<CircleBorder>(
+              CircleBorder(),
             ),
             elevation: MaterialStateProperty.all(0),
             padding: MaterialStateProperty.all(EdgeInsets.zero), // This removes padding
@@ -75,6 +78,9 @@ class _UnlockingButtonState extends State<UnlockingButton> {
           onPressed:() {
             if (deviceConnectResult == DeviceConnectResult.connected && bluetoothProvider.currentConnectedDevice == bikeProvider.currentBikeModel?.macAddr) {
               if (cableLockState?.lockState == LockState.lock) {
+                setState(() {
+                  unlockCount = 0;
+                });
                 bluetoothProvider.setIsUnlocking(true);
                 unlockSub =
                     bluetoothProvider.cableUnlock().listen((unlockResult) {
@@ -90,12 +96,21 @@ class _UnlockingButtonState extends State<UnlockingButton> {
                                 SmartDialog.dismiss();
                               }));
                     });
-              }
-              else {
-                showToLockBikeInstructionToast(context);
-              }
+                }
+                else {
+                  unlockCount++;
+                  if (unlockCount >= 3) {
+                    showTroubleshootLock(context, settingProvider);
+                  }
+                  else {
+                    showToLockBikeInstructionToast(context);
+                  }
+                }
             }
             else {
+              setState(() {
+                unlockCount = 0;
+              });
               checkBleStatusAndConnectDevice(bluetoothProvider, bikeProvider);
             }
           },
@@ -150,7 +165,7 @@ class _UnlockingButtonState extends State<UnlockingButton> {
           child: SvgPicture.asset(
             "assets/buttons/lock_unlock.svg",
             width: 52.w,
-            height: 50.h,
+            height: 52.w,
           ),
         );
       }
@@ -167,7 +182,7 @@ class _UnlockingButtonState extends State<UnlockingButton> {
         buttonImage = SvgPicture.asset(
           "assets/buttons/lock_lock.svg",
           width: 52.w,
-          height: 50.h,);
+          height: 52.w,);
       }
     }
     else if (cableLockState?.lockState == LockState.unknown) {
@@ -184,14 +199,14 @@ class _UnlockingButtonState extends State<UnlockingButton> {
       buttonImage = SvgPicture.asset(
         "assets/buttons/bluetooth_not_connected.svg",
         width: 52.w,
-        height: 50.h,
+        height: 52.w,
       );
     }
     else {
       buttonImage = SvgPicture.asset(
         "assets/buttons/bluetooth_not_connected.svg",
         width: 52.w,
-        height: 50.h,
+        height: 52.w,
       );
     }
   }

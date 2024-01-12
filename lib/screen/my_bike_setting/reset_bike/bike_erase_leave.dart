@@ -77,27 +77,38 @@ class _BikeEraseLeaveState extends State<BikeEraseLeave>{
 
     return WillPopScope(
       onWillPop: () async {
-        bool? exitApp = await showCannotClose() as bool?;
-        return exitApp ?? false;
+        bool shouldClose = true;
+        await showDialog<void>(
+            context: context,
+            builder: (BuildContext context) =>
+                EvieOneDialog(
+                    title: "Stay with Us",
+                    content1: "We're handling the progress for you. It won't take long. Please stay on this page until we're done. Your understanding is valued!",
+                    middleContent: "Understood",
+                    svgpicture: SvgPicture.asset("assets/images/stay.svg"),
+                    onPressedMiddle: () {
+                      shouldClose = false;
+                      Navigator.of(context).pop();
+                    })
+        );
+        return shouldClose;
       },
-      child: Scaffold(
-        body: Container(
-          color: EvieColors.grayishWhite,
-          width: double.infinity,
-          height: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              //Lottie.asset('assets/animations/account-verify.json'),
-              Lottie.asset('assets/animations/erase_bike.json',
+      child: Container(
+        color: EvieColors.grayishWhite,
+        width: double.infinity,
+        height: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            //Lottie.asset('assets/animations/account-verify.json'),
+            Lottie.asset('assets/animations/erase_bike.json',
 
-                height: 157.64.h,
-                width: 279.49.w,
+              height: 236.46.h,
+              width: 419.235.w,
 
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

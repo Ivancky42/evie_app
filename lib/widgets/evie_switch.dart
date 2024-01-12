@@ -10,7 +10,7 @@ import 'evie_textform.dart';
 class EvieSwitch extends StatelessWidget {
   final ValueChanged<bool?> onChanged;
   final String? title;
-  final String text;
+  final String? text;
   final bool value;
   final Color thumbColor;
   final Color? activeColor;
@@ -20,7 +20,7 @@ class EvieSwitch extends StatelessWidget {
     Key? key,
     required this.onChanged,
     this.title,
-    required this.text,
+    this.text,
     required this.value,
     required this.thumbColor,
     this.activeColor,
@@ -34,8 +34,8 @@ class EvieSwitch extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          title != null
-              ? Expanded(
+          title != null && text != null ?
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -45,13 +45,18 @@ class EvieSwitch extends StatelessWidget {
                 ),
 
                 Text(
-                  text,
+                  text ?? "",
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
               ],
             ),
-          )
-              : Text(text, style: TextStyle(fontSize: 16.sp),),
+          ) :
+          title != null && text == null ?
+          Text(
+            title ?? "",
+            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, fontWeight: FontWeight.w400),
+          ) :
+          Text(text ?? "", style: TextStyle(fontSize: 16.sp),),
 
           Padding(
             padding: EdgeInsets.only(left: 8.w),

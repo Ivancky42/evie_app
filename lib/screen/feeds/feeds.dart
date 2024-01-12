@@ -252,7 +252,7 @@ class _FeedsState extends State<Feeds> {
                                                   style: EvieTextStyles.body18.copyWith(color: EvieColors.primaryColor, fontWeight: FontWeight.w800),
                                                 ),
                                                 height: 40.h,
-                                                width: 159.w,
+                                                width: 180.w,
                                               ),
                                               EvieButton(
                                                 onPressed: () async {
@@ -268,11 +268,11 @@ class _FeedsState extends State<Feeds> {
                                                   });
                                                 },
                                                 child: Text(
-                                                  "OK",
+                                                  "Accept",
                                                   style: EvieTextStyles.body18.copyWith(color: EvieColors.grayishWhite, fontWeight: FontWeight.w800),
                                                 ),
                                                 height: 40.h,
-                                                width: 159.w,
+                                                width: 180.w,
                                               ),
                                             ],
                                           ),
@@ -348,11 +348,17 @@ class _FeedsState extends State<Feeds> {
                                             children: [
                                               EvieButton(
                                                 onPressed: () async {
-                                                  _settingProvider.changeSheetElement(SheetList.pedalPalsList);
-                                                  showSheetNavigate(context);
+                                                  if (_bikeProvider.userBikeList.containsKey(notificationModel.deviceIMEI)) {
+                                                    _settingProvider.changeSheetElement(SheetList.pedalPalsList);
+                                                    showSheetNavigate(context);
+                                                  }
+                                                  else {
+                                                    showTeamNotAvailableDialog(context);
+                                                  }
+
                                                 },
                                                 child: Text(
-                                                  "See Your Team",
+                                                  "See My Team",
                                                   style: EvieTextStyles.body18.copyWith(color: EvieColors.grayishWhite, fontWeight: FontWeight.w800),
                                                 ),
                                                 height: 40.h,

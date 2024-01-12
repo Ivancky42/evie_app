@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
+import 'package:evie_test/api/provider/shared_pref_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
@@ -56,6 +57,7 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
   late BikeProvider _bikeProvider;
   late BluetoothProvider _bluetoothProvider;
   late LocationProvider _locationProvider;
+  late SharedPreferenceProvider _sharedPreferenceProvider;
 
   MapboxMap? mapboxMap;
   OnMapScrollListener? onMapScrollListener;
@@ -99,6 +101,8 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _bluetoothProvider = context.read<BluetoothProvider>();
+    _bikeProvider = context.read<BikeProvider>();
+    _sharedPreferenceProvider = context.read<SharedPreferenceProvider>();
     _fabHeight = _initFabHeight;
     Future.delayed(Duration.zero).then((value) {
       _locationProvider = Provider.of<LocationProvider>(context, listen: false);
@@ -120,30 +124,35 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
         }
       }
     });
+
+    ///Unsub here
+    String deviceIMEI = _bikeProvider.currentBikeModel!.deviceIMEI!;
+    _sharedPreferenceProvider.handleSubTopic("$deviceIMEI~theft-attempt", false);
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      String deviceIMEI = _bikeProvider.currentBikeModel!.deviceIMEI!;
+      _sharedPreferenceProvider.handleSubTopic("$deviceIMEI~theft-attempt", false);
       _locationProvider.checkLocationPermissionStatus();
+    }
+    else if (state == AppLifecycleState.inactive) {
+      String deviceIMEI = _bikeProvider.currentBikeModel!.deviceIMEI!;
+      _sharedPreferenceProvider.handleSubTopic("$deviceIMEI~theft-attempt", true);
     }
   }
 
   @override
   Future<void> dispose() async {
     super.dispose();
+    String deviceIMEI = _bikeProvider.currentBikeModel!.deviceIMEI!;
+    _sharedPreferenceProvider.handleSubTopic("$deviceIMEI~theft-attempt", true);
     _locationProvider.removeListener(locationListener);
     userLocationSubscription?.cancel();
     options.clear();
     timer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
-
-    // if(currentAnnotationManager != null){
-    //   await mapboxMap?.annotations.removeAnnotationManager(currentAnnotationManager as BaseAnnotationManager);
-    //   currentAnnotationManager = null;
-    // }
-
-
   }
 
   _onMapCreated(MapboxMap mapboxMap) async {

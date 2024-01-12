@@ -4,7 +4,6 @@ import 'package:evie_test/api/provider/plan_provider.dart';
 import 'package:evie_test/api/provider/ride_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/provider/shared_pref_provider.dart';
-import 'package:evie_test/profile/user_profile.dart';
 import 'package:evie_test/screen/account_verified.dart';
 import 'package:evie_test/screen/input_name.dart';
 import 'package:evie_test/screen/my_account/edit_profile.dart';
@@ -285,7 +284,6 @@ class MyApp extends StatelessWidget {
             "/letsGo": (context) => const BeforeYouStart(),
             "/signIn": (context) => const SignIn(),
             "/forgetPassword": (context) => const ForgetYourPassword(),
-            "/userProfile": (context) => const UserProfile(),
             "/userHomePage": (context) => const UserHomePage(0),
             "/account": (context) => const UserHomePage(2),
             "/userChangePassword": (context) => const UserChangePassword(),

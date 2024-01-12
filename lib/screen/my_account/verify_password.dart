@@ -94,6 +94,8 @@ class _VerifyPasswordState extends State<VerifyPassword> {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _authProvider = Provider.of<AuthProvider>(context);
 
+    final bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+
 
     return Scaffold (
       appBar: PageAppbar(
@@ -134,57 +136,59 @@ class _VerifyPasswordState extends State<VerifyPassword> {
               ],
             ),
           ),
+
           Padding(
-              padding: EdgeInsets.fromLTRB(16.w,0,16.w,32.h),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 48.h,
+            padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, isKeyboardVisible ? 12.h : EvieLength.target_reference_button_c),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 48.h,
+                  width: double.infinity,
+                  child: EvieButton(
                     width: double.infinity,
-                    child: EvieButton(
-                      width: double.infinity,
-                      child: Text(
-                        "Continue",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w700
-                        ),
+                    child: Text(
+                      "Continue",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w700
                       ),
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          final result = await _authProvider.reauthentication(_passwordController.text.trim());
-                          result == true ?
-                          changeToEnterNewPassword(context)
-                              :
-                          SmartDialog.show(widget: EvieSingleButtonDialog(
-                              title: "Error",
-                              content: "Wrong password",
-                              rightContent: "OK",
-                              onPressedRight: (){
-                                SmartDialog.dismiss();
-                              }));
-                        }
-                      },
                     ),
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        final result = await _authProvider.reauthentication(_passwordController.text.trim());
+                        result == true ?
+                        changeToEnterNewPassword(context)
+                            :
+                        SmartDialog.show(widget: EvieSingleButtonDialog(
+                            title: "Error",
+                            content: "Wrong password",
+                            rightContent: "OK",
+                            onPressedRight: (){
+                              SmartDialog.dismiss();
+                            }));
+                      }
+                    },
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 12.h),
-                    child: RichText(
-                      text: TextSpan(
-                        text:  "Forgot Password",
-                        style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: EvieColors.primaryColor, decoration: TextDecoration.underline, fontFamily: 'Avenir'),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            showResetPasswordDialog(context, _authProvider);
-                          },
-                      ),
+                ),
+
+                SizedBox(height: 15.h,),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    child: Text(
+                      "Forget Password",
+                      softWrap: false,
+                      style: EvieTextStyles.body18_underline,
                     ),
-                  )
-                ],
-              )
+                    onPressed: () {
+                      showResetPasswordDialog(context, _authProvider);
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),);

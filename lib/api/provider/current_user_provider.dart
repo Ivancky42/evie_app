@@ -182,31 +182,6 @@ class CurrentUserProvider extends ChangeNotifier {
     }
   }
 
-
-  ///User update user profile
-  void updateUserProfile(imageURL, name, phoneNo) async {
-    try {
-      ///Get current user id, might get from provider
-      final FirebaseAuth auth = FirebaseAuth.instance;
-      final User? user = auth.currentUser;
-      final uid = user?.uid;
-
-      //Update
-      var docUser = FirebaseFirestore.instance.collection(usersCollection);
-      docUser
-          .doc(uid)
-          .update({
-        'name': name,
-        'profileIMG': imageURL,
-        'phoneNumber': phoneNo,
-        'updated': Timestamp.now(),
-      });
-      notifyListeners();
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
-
   clear() async {
     // if(currentUserModel?.notificationSettings?.firmwareUpdate == true ){
     //   await NotificationProvider().unsubscribeFromTopic("~firmware-update");

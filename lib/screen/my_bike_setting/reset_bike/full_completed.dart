@@ -28,9 +28,8 @@ class _FullCompletedState extends State<FullCompleted>{
     _bikeProvider = Provider.of<BikeProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
-
-
-    return Stack(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
           child: Column(
@@ -48,7 +47,7 @@ class _FullCompletedState extends State<FullCompleted>{
                 padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 300.h),
                 child: Text(
                   "Great news! Your bike has been successfully reset. "
-                      "Get ready for a revitalised ride with all-fresh settings."
+                      "Get ready for a revitalised ride with \nall-fresh settings."
                       " Have a fantastic ride!",
                   style: EvieTextStyles.body18.copyWith(height: 1.4),
                   ),
@@ -56,58 +55,56 @@ class _FullCompletedState extends State<FullCompleted>{
             ],
           ),
         ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w,97.h,16.w, EvieLength.screen_bottom + 58.h),
-            child: EvieButton(
-              width: double.infinity,
-              height: 48.h,
-              child: Text(
-                "Add Bike",
-                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-              ),
-              onPressed: () async {
-                if(_bikeProvider.userBikeDetails.isNotEmpty){
-                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.first);
-                }else{
-                  await _bikeProvider.changeSharedPreference('currentBikeImei', '');
-                }
 
-                Navigator.of(context, rootNavigator: true).pop();
-                changeToBeforeYouStart(context);
-              },
-            ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, EvieLength.target_reference_button_a),
+          child: Column(
+            children: [
+              EvieButton(
+                width: double.infinity,
+                height: 48.h,
+                child: Text(
+                  "Add Bike",
+                  style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                ),
+                onPressed: () async {
+                  if(_bikeProvider.userBikeDetails.isNotEmpty){
+                    await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.first);
+                  }else{
+                    await _bikeProvider.changeSharedPreference('currentBikeImei', '');
+                  }
+
+                  Navigator.of(context, rootNavigator: true).pop();
+                  changeToBeforeYouStart(context);
+                },
+              ),
+              SizedBox(
+                height: 8.h,
+              ),
+
+              EvieButton(
+                width: double.infinity,
+                height: 48.h,
+                backgroundColor: EvieColors.lightGrayishCyan,
+                child: Text(
+                  "Done",
+                  style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
+                ),
+                onPressed: () async {
+                  Navigator.of(context, rootNavigator: true).pop();
+
+                  if(_bikeProvider.userBikeDetails.isNotEmpty){
+                    await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.first);
+                  }else{
+                    await _bikeProvider.changeSharedPreference('currentBikeImei', '');
+                  }
+
+                  changeToUserHomePageScreen(context);
+                },
+              ),
+            ],
           ),
         ),
-
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w,4.h,16.w, EvieLength.screen_bottom),
-            child: EvieButton(
-              width: double.infinity,
-              height: 48.h,
-              backgroundColor: EvieColors.lightGrayishCyan,
-              child: Text(
-                "Done",
-                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
-              ),
-              onPressed: () async {
-                Navigator.of(context, rootNavigator: true).pop();
-
-                if(_bikeProvider.userBikeDetails.isNotEmpty){
-                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.first);
-                }else{
-                  await _bikeProvider.changeSharedPreference('currentBikeImei', '');
-                }
-
-                changeToUserHomePageScreen(context);
-              },
-            ),
-          ),
-        ),
-
       ],
     );
   }

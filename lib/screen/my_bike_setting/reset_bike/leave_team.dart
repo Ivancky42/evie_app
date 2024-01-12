@@ -43,36 +43,36 @@ class _LeaveTeamState extends State<LeaveTeam>{
               },
             ),
 
-            body: Stack(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-
-                      Padding(
-                        padding:EdgeInsets.fromLTRB(16.w, 32.5.h, 16.w, 2.h),
-                        child: Text(
-                          "Farewell, Team",
-                          style: TextStyle(fontSize: 26.sp, color: EvieColors.mediumBlack, fontWeight: FontWeight.w500),
+            body: Padding(
+              padding: EdgeInsets.only(bottom: EvieLength.target_reference_button_a),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding:EdgeInsets.fromLTRB(16.w, 32.5.h, 16.w, 2.h),
+                          child: Text(
+                            "Farewell, Team",
+                            style: TextStyle(fontSize: 26.sp, color: EvieColors.mediumBlack, fontWeight: FontWeight.w500),
+                          ),
                         ),
-                      ),
 
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 12.h),
-                        child:Text(
-                          "Are you ready to say goodbye to this bike-sharing team? "
-                              "This action will remove your access to this bike and its related settings.",
-                          style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(16.w, 2.h, 16.w, 12.h),
+                          child:Text(
+                            "Are you ready to say goodbye to this bike-sharing team? "
+                                "This action will remove your access to this bike and its related settings.",
+                            style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack, height: 1.3),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
 
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(16.w,127.84.h,16.w, EvieLength.button_Bottom),
+                    Padding(
+                      padding: EdgeInsets.only(left: 16.w, right: 16.w),
                       child: EvieButton(
                         width: double.infinity,
                         height: 48.h,
@@ -81,17 +81,14 @@ class _LeaveTeamState extends State<LeaveTeam>{
                           style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                         ),
                         onPressed: () {
-
                           _settingProvider.changeSheetElement(SheetList.bikeEraseLeave);
-
-
                           // Navigator.of(context, rootNavigator: true).pop();
                           // showLeaveUnsuccessfulSheet(context);
                         },
                       ),
-                    ),
-                  ),
-                ]
+                    )
+                  ]
+              ),
             )
         )
     );

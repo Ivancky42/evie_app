@@ -214,8 +214,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> with Widget
                           },
                           icon:   SvgPicture.asset(
                             "assets/buttons/pen_edit.svg",
-                            height:26.h,
-                            width:26.w,
+                            height: 31.h,
+                            width: 31.w,
                           ),),
                       ),
                     ],
@@ -409,81 +409,81 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> with Widget
             ),
           ],
         );
-      case "Recovery Mode":
-        return Column(
-          children: [
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () async {
-
-                if(_bikeProvider.isOwner == true){
-                  if (deviceConnectResult == null
-                      || deviceConnectResult == DeviceConnectResult.disconnected
-                      || deviceConnectResult == DeviceConnectResult.scanTimeout
-                      || deviceConnectResult == DeviceConnectResult.connectError
-                      || deviceConnectResult == DeviceConnectResult.scanError
-                      || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
-                  ) {
-                    showConnectBluetoothDialog(context, _bluetoothProvider, _bikeProvider);
-                  }
-                  else if (deviceConnectResult == DeviceConnectResult.connected) {
-                    //SmartDialog.showLoading(msg: 'Entering Recovery Mode....');
-                    showCustomLightLoading('Entering Recovery Mode....');
-                    _bluetoothProvider.cableUnlock();
-                    await Future.delayed(Duration(seconds: 2));
-                    showRecoveringModeToast(context);
-                    SmartDialog.dismiss();
-                  }
-                }
-                else{
-                  showAccNoPermissionToast(context);
-                }
-
-              },
-              child: Container(
-                child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              label!,
-                              style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-                            ),
-                            SizedBox(width: 8.17.w,),
-                            deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
-                              "assets/icons/bluetooth.svg",
-                              height: 15.h,
-                              width: 15.w,
-                            ) : SvgPicture.asset(
-                              "assets/icons/bluetooth_disconnect.svg",
-                              height: 15.h,
-                              width: 15.w,
-                            ),
-                          ],
-                        ),
-                        SvgPicture.asset(
-                          "assets/buttons/next.svg",
-                        ),
-                      ],
-                    )
-                ),
-              ),
-            ),
-            Container(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
-                  child: Divider(
-                    thickness: 0.2.h,
-                    color: EvieColors.darkWhite,
-                    height: 0,
-                  ),
-                )
-            ),
-          ],
-        );
+      // case "Recovery Mode":
+      //   return Column(
+      //     children: [
+      //       GestureDetector(
+      //         behavior: HitTestBehavior.translucent,
+      //         onTap: () async {
+      //
+      //           if(_bikeProvider.isOwner == true){
+      //             if (deviceConnectResult == null
+      //                 || deviceConnectResult == DeviceConnectResult.disconnected
+      //                 || deviceConnectResult == DeviceConnectResult.scanTimeout
+      //                 || deviceConnectResult == DeviceConnectResult.connectError
+      //                 || deviceConnectResult == DeviceConnectResult.scanError
+      //                 || _bikeProvider.currentBikeModel?.macAddr != _bluetoothProvider.currentConnectedDevice
+      //             ) {
+      //               showConnectBluetoothDialog(context, _bluetoothProvider, _bikeProvider);
+      //             }
+      //             else if (deviceConnectResult == DeviceConnectResult.connected) {
+      //               //SmartDialog.showLoading(msg: 'Entering Recovery Mode....');
+      //               showCustomLightLoading('Entering Recovery Mode....');
+      //               _bluetoothProvider.cableUnlock();
+      //               await Future.delayed(Duration(seconds: 2));
+      //               showRecoveringModeToast(context);
+      //               SmartDialog.dismiss();
+      //             }
+      //           }
+      //           else{
+      //             showAccNoPermissionToast(context);
+      //           }
+      //
+      //         },
+      //         child: Container(
+      //           child: Padding(
+      //               padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
+      //               child: Row(
+      //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                 children: [
+      //                   Row(
+      //                     children: [
+      //                       Text(
+      //                         label!,
+      //                         style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
+      //                       ),
+      //                       SizedBox(width: 8.17.w,),
+      //                       deviceConnectResult == DeviceConnectResult.connected && _bikeProvider.currentBikeModel?.macAddr == _bluetoothProvider.currentConnectedDevice ? SvgPicture.asset(
+      //                         "assets/icons/bluetooth.svg",
+      //                         height: 15.h,
+      //                         width: 15.w,
+      //                       ) : SvgPicture.asset(
+      //                         "assets/icons/bluetooth_disconnect.svg",
+      //                         height: 15.h,
+      //                         width: 15.w,
+      //                       ),
+      //                     ],
+      //                   ),
+      //                   SvgPicture.asset(
+      //                     "assets/buttons/next.svg",
+      //                   ),
+      //                 ],
+      //               )
+      //           ),
+      //         ),
+      //       ),
+      //       Container(
+      //           child: Padding(
+      //             padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+      //             child: Divider(
+      //               thickness: 0.2.h,
+      //               color: EvieColors.darkWhite,
+      //               height: 0,
+      //             ),
+      //           )
+      //       ),
+      //     ],
+      //   );
       case "EV+":
         return Column(
           children: [
@@ -712,6 +712,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> with Widget
                                 height: 24.w,
                               ),
                               SizedBox(width: 4.w,),
+                              hasPermission ?
+                              Container() :
                               SvgPicture.asset(
                                 "assets/icons/notification_alert.svg",
                                 width: 24.w,
@@ -1044,7 +1046,50 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> with Widget
             ),
           ],
         );
-
+      case "Troubleshoot" :
+        return Column(
+          children: [
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                _settingProvider.changeSheetElement(SheetList.troubleshoot);
+              },
+              child: Container(
+                child: Padding(
+                    padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "Troubleshoot",
+                              style: EvieTextStyles.body18.copyWith(
+                                  color: EvieColors.lightBlack),
+                            ),
+                          ],
+                        ),
+                        SvgPicture.asset(
+                          "assets/buttons/next.svg",
+                        ),
+                      ],
+                    )
+                ),
+              ),
+            ),
+            Container(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                  child: Divider(
+                    thickness: 0.2.h,
+                    color: EvieColors.darkWhite,
+                    height: 0,
+                  ),
+                )
+            ),
+          ],
+        );
       case "Reset Bike":
         if (_bikeProvider.isOwner == true) {
           return Column(

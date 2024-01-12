@@ -213,7 +213,8 @@ class _BikeContainerState extends State<BikeContainer> {
                           _notificationProvider.compareActionableBarTime();
                           Navigator.pop(context);
 
-                        }else{
+                        }
+                        else{
                           await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
                           StreamSubscription? subscription;
                           subscription = _bikeProvider.switchBike().listen((result) {
@@ -239,7 +240,8 @@ class _BikeContainerState extends State<BikeContainer> {
                             }else{}
                           });
                         }
-                      }else{
+                      }
+                      else{
                         await _bluetoothProvider.disconnectDevice();
                       }
                     },

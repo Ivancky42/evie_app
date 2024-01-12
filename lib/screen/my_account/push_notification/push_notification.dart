@@ -138,7 +138,7 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
                     child: EvieSwitch(
                       activeColor: hasPermission ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
                       height: 64.h,
-                      text: "General Notification",
+                      title: "General Notification",
                       value: _currentUserProvider.currentUserModel?.notificationSettings?.general ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {
@@ -184,7 +184,7 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
                     child: EvieSwitch(
                       activeColor: hasPermission ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
                       height: 64.h,
-                      text: "Promo",
+                      title: "Promo",
                       value: _currentUserProvider.currentUserModel?.notificationSettings?.promo ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {
@@ -230,7 +230,7 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
                     child: EvieSwitch(
                       activeColor: hasPermission ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
                       height: 64.h,
-                      text: "Software Update",
+                      title: "Software Update",
                       value: _currentUserProvider.currentUserModel?.notificationSettings?.firmwareUpdate ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {

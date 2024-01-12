@@ -275,11 +275,9 @@ showDisconnectedToast(context) {
             SizedBox(width: 4.w,),
             Padding(
               padding: EdgeInsets.only(bottom: 4),
-              child: Flexible(
-                child: Text(
-                  "Bike disconnected.",
-                  style: EvieTextStyles.toast,
-                ),
+              child: Text(
+                "Bike disconnected.",
+                style: EvieTextStyles.toast,
               ),
             )
           ],
@@ -821,7 +819,7 @@ showRecoveringModeToast(context) {
               SvgPicture.asset("assets/icons/check.svg"),
               SizedBox(width: 4.w,),
               Text(
-                "Successfully entered recovery mode.",
+                "Bike lock restored.",
                 style: EvieTextStyles.toast,
               ),
             ],
@@ -909,6 +907,53 @@ showPermissionNeededForEVSecure(context) {
                 alignment: Alignment.bottomRight,
                 child: Text(
                   "OPEN SETTINGS",
+                  style: EvieTextStyles.body16.copyWith(
+                    color: EvieColors.strongPurple,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              )
+            ],
+          )
+      ),
+      duration: const Duration(seconds: 3),
+    ),
+  );
+}
+
+showTroubleshootLock(context, SettingProvider _settingProvider) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+          onTap: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            _settingProvider.changeSheetElement(SheetList.troubleshoot);
+            showSheetNavigate(context);
+          },
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      "Having trouble with bike lock?",
+                      style: EvieTextStyles.toast,
+                    ),
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Text(
+                  "GO TO TROUBLESHOOT",
                   style: EvieTextStyles.body16.copyWith(
                     color: EvieColors.strongPurple,
                     fontWeight: FontWeight.w500,
@@ -1313,6 +1358,43 @@ showFailUpdateMotionSetting(context) {
   );
 }
 
+showNameUpdated(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          //Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SvgPicture.asset("assets/icons/check.svg"),
+              SizedBox(width: 4.w,),
+              Padding(
+                padding: EdgeInsets.only(bottom: 4),
+                child: Text(
+                  "Your name has been updated.",
+                  style: EvieTextStyles.toast,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
 showTeamNameUpdated(context) {
   ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
@@ -1343,6 +1425,42 @@ showTeamNameUpdated(context) {
               ),
             ],
           ),
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
+showNameUpdateFailed(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        },
+        child: Row(
+          children: [
+            SvgPicture.asset("assets/icons/fail.svg"),
+            SizedBox(width: 4.w,),
+            Padding(
+              padding: EdgeInsets.only(bottom: 4),
+              child: Flexible(
+                child: Text(
+                  "Failed to update name. Please try again later.",
+                  style: EvieTextStyles.toast,
+                ),
+              ),
+            )
+          ],
         ),
       ),
       duration: const Duration(seconds: 2),

@@ -30,7 +30,8 @@ class _LeaveSuccessfulState extends State<LeaveSuccessful>{
     _bikeProvider = Provider.of<BikeProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
-    return Stack(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
           child: Column(
@@ -57,56 +58,51 @@ class _LeaveSuccessfulState extends State<LeaveSuccessful>{
           ),
         ),
 
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w,97.h,16.w,EvieLength.buttonWord_ButtonBottom),
-            child: EvieButton(
-              width: double.infinity,
-              height: 48.h,
-              child: Text(
-                  "Add Bike",
-                  style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
+        Padding(
+          padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, EvieLength.target_reference_button_a),
+          child: Column(
+            children: [
+              EvieButton(
+                width: double.infinity,
+                height: 48.h,
+                child: Text(
+                    "Add Bike",
+                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
+                ),
+                onPressed: () async {
+
+                  if(_bikeProvider.userBikeDetails.isNotEmpty){
+                    await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.first);
+                  }else{
+                    await _bikeProvider.changeSharedPreference('currentBikeImei', '');
+                  }
+
+                  Navigator.of(context, rootNavigator: true).pop();
+                  changeToBeforeYouStart(context);
+                },
               ),
-              onPressed: () async {
+              SizedBox(height: 8.h,),
+              EvieButton(
+                width: double.infinity,
+                height: 48.h,
+                backgroundColor: EvieColors.lightGrayishCyan,
+                child: Text(
+                  "Done",
+                  style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
+                ),
+                onPressed: () async {
 
-                if(_bikeProvider.userBikeDetails.isNotEmpty){
-                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.first);
-                }else{
-                  await _bikeProvider.changeSharedPreference('currentBikeImei', '');
-                }
+                  if(_bikeProvider.userBikeDetails.isNotEmpty){
+                    await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.first);
+                  }else{
+                    await _bikeProvider.changeSharedPreference('currentBikeImei', '');
+                  }
 
-                Navigator.of(context, rootNavigator: true).pop();
-                changeToBeforeYouStart(context);
-              },
-            ),
-          ),
-        ),
-
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w,8.h,16.w, EvieLength.button_Bottom),
-            child: EvieButton(
-              width: double.infinity,
-              height: 48.h,
-              backgroundColor: EvieColors.lightGrayishCyan,
-              child: Text(
-                "Done",
-                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
+                  Navigator.of(context, rootNavigator: true).pop();
+                  changeToUserHomePageScreen(context);
+                },
               ),
-              onPressed: () async {
-
-                if(_bikeProvider.userBikeDetails.isNotEmpty){
-                  await _bikeProvider.changeBikeUsingIMEI(_bikeProvider.userBikeDetails.keys.first);
-                }else{
-                  await _bikeProvider.changeSharedPreference('currentBikeImei', '');
-                }
-
-                Navigator.of(context, rootNavigator: true).pop();
-                changeToUserHomePageScreen(context);
-              },
-            ),
+            ],
           ),
         ),
 

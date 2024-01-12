@@ -37,6 +37,8 @@ enum SheetList{
 
   userManual,
 
+  troubleshoot,
+
   resetBike,
   resetBike2,
 

@@ -36,6 +36,7 @@ import 'package:evie_test/screen/my_bike_setting/rfid_card/register_ev_key.dart'
 import 'package:evie_test/screen/my_bike_setting/subscription/current_plan.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/current_plan.dart';
+import 'package:evie_test/screen/my_bike_setting/troubleshoot/troubleshoot.dart';
 import 'package:evie_test/screen/my_bike_setting/user_manual/user_manual.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/threat/threat_history.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/threat/threat_map.dart';
@@ -148,7 +149,8 @@ class _SheetNavigatorState extends State<SheetNavigator> {
 
       case SheetList.userManual:
         return UserManual();
-
+      case SheetList.troubleshoot:
+        return TroubleshootScreen();
       case SheetList.resetBike:
         return ResetBike();
       case SheetList.resetBike2:
