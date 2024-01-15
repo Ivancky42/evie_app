@@ -455,12 +455,49 @@ class BluetoothProvider extends ChangeNotifier {
 
     var firmVerTrim = firmVer.split("V").last;
 
-     if(currentBikeModel != null &&
-        currentBikeModel?.firmVer == '' ||
-        int.parse(currentBikeModel!.firmVer!.split("V").last.replaceAll('.', '')) != int.parse(firmVerTrim.replaceAll('.', ''))) {
+     if(currentBikeModel != null && currentBikeModel?.firmVer == '' || int.parse(currentBikeModel!.firmVer!.split("V").last.replaceAll('.', '')) != int.parse(firmVerTrim.replaceAll('.', ''))) {
       FirmwareProvider().uploadFirmVerToFirestore(firmVer, currentBikeModel!.deviceIMEI);
     }else{ }
+  }
 
+  checkSimICCID (IotInfoModel iotInfoModel) {
+    if (currentBikeModel != null) {
+      if (currentBikeModel?.simSetting != null) {
+        if (currentBikeModel!.simSetting!.iccid != iotInfoModel.iccid) {
+          ///Update simSetting here
+          FirebaseFirestore.instance.collection('bikes')
+              .doc(currentBikeModel!.deviceIMEI)
+              .update({
+            'simSetting': {
+              'apn': iotInfoModel.apnName ?? '',
+              'iccid': iotInfoModel.iccid,
+              'updated': Timestamp.now(),
+              'created': currentBikeModel!.simSetting!.created,
+              'isSimActivated': currentBikeModel!.simSetting!.isSimActivated,
+              'isSimEventUpdated': currentBikeModel!.simSetting!.isSimEventUpdated,
+            }
+          });
+        }
+        else {
+          ///Do Nothing
+        }
+      }
+      else {
+        ///Update simSetting here
+        FirebaseFirestore.instance.collection('bikes')
+            .doc(currentBikeModel!.deviceIMEI)
+            .update({
+          'simSetting': {
+            'apn': iotInfoModel.apnName ?? '',
+            'iccid': iotInfoModel.iccid,
+            'updated': Timestamp.now(),
+            'created': currentBikeModel!.simSetting!.created,
+            'isSimActivated': currentBikeModel!.simSetting!.isSimActivated,
+            'isSimEventUpdated': currentBikeModel!.simSetting!.isSimEventUpdated,
+          }
+        });
+      }
+    }
   }
 
   void setIsPairedResult(bool result) {
@@ -1017,6 +1054,10 @@ class BluetoothProvider extends ChangeNotifier {
           ///Compare bluetooth firmware version and firestore bike firmware version
           if(iotInfoModel != null && iotInfoModel?.firmwareVer != null){
             checkIsCurrentVersion(iotInfoModel!.firmwareVer!);
+          }
+
+          if (iotInfoModel != null && iotInfoModel?.iccid != null) {
+            checkSimICCID(iotInfoModel!);
           }
 
           deviceConnectStream.add(DeviceConnectResult.connected);

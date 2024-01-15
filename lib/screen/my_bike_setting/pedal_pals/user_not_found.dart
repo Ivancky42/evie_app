@@ -226,7 +226,7 @@ class _UserNotFoundState extends State<UserNotFound> {
                         if(_bikeProvider.currentBikeModel?.pedalPalsModel == null || _bikeProvider.currentBikeModel?.pedalPalsModel?.name == ""){
                           _settingProvider.changeSheetElement(SheetList.pedalPals);
                         }else{
-                          _settingProvider.changeSheetElement(SheetList.pedalPalsList);
+                          _settingProvider.changeSheetElement(SheetList.pedalPalsList, _bikeProvider.currentBikeModel?.deviceIMEI);
                         }
                       },
                     ),

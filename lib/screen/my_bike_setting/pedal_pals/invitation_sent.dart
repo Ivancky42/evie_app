@@ -11,6 +11,7 @@ import '../../../api/colours.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
+import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../widgets/evie_progress_indicator.dart';
@@ -25,11 +26,13 @@ class InvitationSent extends StatefulWidget{
 class _InvitationSentState extends State<InvitationSent> {
 
   late SettingProvider _settingProvider;
+  late BikeProvider _bikeProvider;
 
   @override
   Widget build(BuildContext context) {
 
     _settingProvider = Provider.of<SettingProvider>(context);
+    _bikeProvider = Provider.of<BikeProvider>(context);
 
     return WillPopScope(
         onWillPop: () async {
@@ -107,7 +110,7 @@ class _InvitationSentState extends State<InvitationSent> {
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
-                        _settingProvider.changeSheetElement(SheetList.pedalPalsList);
+                        _settingProvider.changeSheetElement(SheetList.pedalPalsList, _bikeProvider.currentBikeModel?.deviceIMEI);
                       },
                     ),
                   ),

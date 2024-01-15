@@ -89,14 +89,6 @@ void showProPlanSheet(BuildContext context) {
   showCupertinoSheet(context, const ProPlan());
 }
 
-// void showEssentialPlanSheet(BuildContext context) {
-//   showCupertinoSheet(context, const EssentialPlan());
-// }
-
-void showShareBikeUserListSheet(BuildContext context) {
-  showCupertinoSheet(context, const PedalPalsList());
-}
-
 void showThreatHistorySheet(BuildContext context) {
   showCupertinoSheet(context, ThreatHistory());
   //showCupertinoSheet(context, ThreatHistory2());

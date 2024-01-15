@@ -583,7 +583,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> with Widget
                     if(_bikeProvider.currentBikeModel?.pedalPalsModel == null || _bikeProvider.currentBikeModel?.pedalPalsModel?.name == ""){
                       _settingProvider.changeSheetElement(SheetList.pedalPals);
                     }else{
-                      _settingProvider.changeSheetElement(SheetList.pedalPalsList);
+                      _settingProvider.changeSheetElement(SheetList.pedalPalsList, _bikeProvider.currentBikeModel?.deviceIMEI);
                     }
 
                     // Navigator.of(context).pop();

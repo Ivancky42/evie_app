@@ -41,7 +41,8 @@ import '../../../widgets/evie_textform.dart';
 ///User profile page with user account information
 
 class PedalPalsList extends StatefulWidget {
-  const PedalPalsList({Key? key}) : super(key: key);
+  final String deviceIMEI;
+  const PedalPalsList({Key? key, required this.deviceIMEI}) : super(key: key);
 
   @override
   _PedalPalsListState createState() => _PedalPalsListState();
@@ -62,12 +63,23 @@ class _PedalPalsListState extends State<PedalPalsList> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _bikeProvider = context.read<BikeProvider>();
+    switchBike(widget.deviceIMEI);
+  }
+
+  Future switchBike(String deviceIMEI) async {
+    await _bikeProvider.changeBikeUsingIMEI(deviceIMEI);
+  }
+
+  @override
   Widget build(BuildContext context) {
     _bikeProvider = Provider.of<BikeProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
-
     isOwner = _bikeProvider.isOwner!;
 
     return WillPopScope(

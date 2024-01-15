@@ -126,7 +126,7 @@ class _SheetNavigatorState extends State<SheetNavigator> {
       case SheetList.userNotFound:
         return UserNotFound();
       case SheetList.pedalPalsList:
-        return PedalPalsList();
+        return PedalPalsList(deviceIMEI: _settingProvider.stringPassing!,);
 
       case SheetList.orbitalAntiThefts:
         return BikeStatusAlert();

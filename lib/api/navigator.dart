@@ -646,16 +646,6 @@ void changeToAcceptingInvitationScreen(BuildContext context, deviceIMEI, current
 //   );
 // }
 
-void changeToShareBikeUserListScreen(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const PedalPalsList(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
-
 void changeToThreatMap(BuildContext context, isTriggerConnect, [PageTransitionType? pageTransitionType]) {
   Navigator.pushReplacement(context,
     PageTransition(

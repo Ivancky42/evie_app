@@ -212,7 +212,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                     ),
                     onPressed: () {
 
-                      _settingProvider.changeSheetElement(SheetList.pedalPalsList);
+                      _settingProvider.changeSheetElement(SheetList.pedalPalsList, _bikeProvider.currentBikeModel?.deviceIMEI);
 
                     },
                   ),

@@ -349,7 +349,7 @@ class _FeedsState extends State<Feeds> {
                                               EvieButton(
                                                 onPressed: () async {
                                                   if (_bikeProvider.userBikeList.containsKey(notificationModel.deviceIMEI)) {
-                                                    _settingProvider.changeSheetElement(SheetList.pedalPalsList);
+                                                    _settingProvider.changeSheetElement(SheetList.pedalPalsList, notificationModel.deviceIMEI);
                                                     showSheetNavigate(context);
                                                   }
                                                   else {
