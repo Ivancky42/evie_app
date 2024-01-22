@@ -308,7 +308,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
         shrinkWrap: true,
         padding: EdgeInsets.only(left: 16.w),
         itemsPerPage: 3,
-        isLive: false,
+        isLive: true,
         bottomLoader: const Center(
           child: Padding(
             padding: EdgeInsets.only(top: 16, bottom: 24),
