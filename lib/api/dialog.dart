@@ -278,11 +278,11 @@ showLocationServiceDisable() {
             textAlign: TextAlign.center,
           ),
           childContent: Text(
-            "Enable location services in your settings to elevate your experience. Tap on Always or While Using.",
+            "Enable location services in your phone settings. Tap on ‘Always’ or ‘While Using’.",
             style: TextStyle(fontSize: 16.sp,
                 fontWeight: FontWeight.w400),),
-          downContent: "No, Thanks",
-          upContent: "Go to Setting",
+          downContent: "No Thanks",
+          upContent: "Go to Settings",
           svgpicture: SvgPicture.asset(
             "assets/images/location_required.svg",
           ),
@@ -1181,23 +1181,6 @@ showRemoveAllEVKeyDialog (BuildContext context, BikeProvider  _bikeProvider, Blu
 }
 
 
-showExitOrbitalAntiTheft(BuildContext context){
-  SmartDialog.show(
-      widget: EvieDoubleButtonDialog(
-          title: "Exit EV-Secure?",
-          childContent: Text("Are you sure you would like to exit EV-Secure page?",style: EvieTextStyles.body18,),
-          leftContent: "Cancel",
-          rightContent: "OK",
-        onPressedLeft: (){
-            SmartDialog.dismiss();
-        },
-          onPressedRight: () {
-            SmartDialog.dismiss();
-            changeToUserHomePageScreen(context);
-          },
-          ));
-}
-
 showMeasurementUnit(SettingProvider settingProvider, context){
 
   int _selectedRadio = 0;
@@ -1289,7 +1272,7 @@ showBatteryInfoDialog(BuildContext context) {
   SmartDialog.show(
       widget: EvieOneDialog(
           title: "Battery info",
-          content1: "Please note that the battery info displayed is based on the last time your device was connected to your bike, and may not reflect real-time data.",
+          content1: "Battery information is based on the last time your device was connected to your bike, and may not reflect real-time data. ",
           middleContent: "Done",
           svgpicture: SvgPicture.asset('assets/images/battery_info.svg'),
           onPressedMiddle: () {
@@ -1624,14 +1607,14 @@ showDeactivateTheftDialog (BuildContext context, BikeProvider _bikeProvider){
               style:EvieTextStyles.h2,
               textAlign: TextAlign.center,
             ),
-            childContent: Text("Are you certain this is a false alarm? By turning off Theft Attempt mode, your bike will restore back to safe mode until the next trigger. ",
+            childContent: Text("Are you certain this is a false alarm? By turning off Theft Attempt mode, your bike will be restored to ‘Lock and Secured’ until it’s triggered again. ",
               textAlign: TextAlign.center,
               style: EvieTextStyles.body18,),
             svgpicture: SvgPicture.asset(
               "assets/images/deactivate_theft_alert.svg",
             ),
             upContent: "Cancel",
-            downContent: "Confirm Dismiss",
+            downContent: "Dismiss Theft Alert",
             onPressedUp: () {
               SmartDialog.dismiss();
             },
@@ -1684,13 +1667,13 @@ showEvieCameraSettingDialog(BuildContext context) {
         textAlign: TextAlign.center,
       ),
       childContent: Text(
-        "EVIE app needs access to your camera roll for scanning QR codes.",
+        "We need access to your camera roll for scanning QR codes.",
         textAlign: TextAlign.center,
         style: EvieTextStyles.body18,
       ),
       svgpicture: SvgPicture.asset("assets/images/enable_camera.svg"),
-      upContent: "Go to Setting",
-      downContent: "No, Thanks",
+      upContent: "Go to Settings",
+      downContent: "No Thanks",
       onPressedUp: () {
         SmartDialog.dismiss();
         openAppSettings();
@@ -1745,11 +1728,11 @@ showSyncRideThrive3(){
 showEvieAllowOrbitalDialog(LocationProvider _locationProvider){
   SmartDialog.show(
       widget:Evie2IconBatchOneButtonDialog(
-          title: "Worry-free with \n EV-Secure",
+          title: "Secure your ride",
           miniTitle1: "Orbital Anti-theft",
           miniTitle2: "GPS Tracking",
           content1:"Built-in theft detection. Receive instant security alerts when a theft attempt is detected." ,
-          content2:"Monitor your bike’s location remotely. Be notified when your bike move beyond its GPS Geofence." ,
+          content2:"Monitor your bike’s location remotely. Be notified and track your bike when your bike moves from it’s parked location." ,
           middleContent: "Allow Location",
           onPressedMiddle: () async {
             //SmartDialog.dismiss();
@@ -1768,17 +1751,17 @@ showEvieExitOrbitalDialog(BuildContext context) {
   SmartDialog.show(
     widget: EvieTwoButtonDialog(
       title: Text(
-        "Exit EV-Secure Page?",
+        "Exit EV-Secure?",
         style: EvieTextStyles.h2,
         textAlign: TextAlign.center,
       ),
       childContent: Text(
-        "Are you sure you would like to exit EV-Secure page?",
+        "Are you sure you would like to exit EV-Secure?",
         textAlign: TextAlign.center,
         style: EvieTextStyles.body18,
       ),
       svgpicture: SvgPicture.asset("assets/images/exit_anti_theft.svg"),
-      upContent: "Exit EV-Secure Page",
+      upContent: "Exit EV-Secure",
       downContent: "Cancel",
       onPressedUp: () {
         SmartDialog.dismiss();
@@ -1945,7 +1928,7 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                       textAlign: TextAlign.center,
                     ),
                     childContent: Text(
-                      "Ready for the next step? Simply connect with your bike to unlock and experience the next stage of this process.",
+                      "Ready for the next step? Simply connect your bike to continue.",
                       textAlign: TextAlign.center,
                       style: EvieTextStyles.body18,),
                     // svgpicture: SvgPicture.asset(

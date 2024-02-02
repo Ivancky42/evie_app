@@ -49,7 +49,7 @@ class RideProvider extends ChangeNotifier {
 
   /// * Homepage Ride Card (Week) *****
   RideDataType weekCardDateType = RideDataType.mileage;
-  String? weekCardDataTypeString = 'Mileage';
+  String? weekCardDataTypeString = 'Distance';
   String? weekCardData;
   String? weekCardDataUnit;
   ///**********************************
@@ -174,7 +174,7 @@ class RideProvider extends ChangeNotifier {
   /// *********************************
   setWeekData(RideDataType rideDataType) {
     if (rideDataType == RideDataType.mileage) {
-      weekCardDataTypeString = 'Mileage';
+      weekCardDataTypeString = 'Distance';
       if (measurementSetting == MeasurementSetting.metricSystem) {
         weekCardData = (weekRideHistoryList.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()) / 1000).toStringAsFixed(2);
         weekCardDataUnit = " km";
@@ -192,7 +192,7 @@ class RideProvider extends ChangeNotifier {
       weekCardDataUnit = " rides ";
     }
     else if (rideDataType == RideDataType.carbonFootprint) {
-      weekCardDataTypeString = 'CO2 Saved';
+      weekCardDataTypeString = 'CO₂ Saved';
       weekCardDateType = rideDataType;
       weekCardData = thousandFormatting((weekRideHistoryList.fold<int>(0, (prev, element) => prev + element.carbonPrint!)));
       weekCardDataUnit = " g";
@@ -322,7 +322,7 @@ class RideProvider extends ChangeNotifier {
 
   setRideDataType(RideDataType rideDataType, List<TripHistoryModel> tripHistoryList, RideFormat rideFormat,) {
     if (rideDataType == RideDataType.mileage) {
-      rideDataTypeString = 'Mileage';
+      rideDataTypeString = 'Distance';
       this.rideDataType = rideDataType;
       if (measurementSetting == MeasurementSetting.metricSystem) {
         if (rideFormat == RideFormat.day) {
@@ -374,7 +374,7 @@ class RideProvider extends ChangeNotifier {
       rideDataUnit = " rides ";
     }
     else if (rideDataType == RideDataType.carbonFootprint) {
-      rideDataTypeString = 'CO2 Saved';
+      rideDataTypeString = 'CO₂ Saved';
       this.rideDataType = rideDataType;
       if (rideFormat == RideFormat.day) {
         rideDataDayString = thousandFormatting((tripHistoryList.fold<int>(0, (prev, element) => prev + element.carbonPrint!)));
@@ -395,7 +395,7 @@ class RideProvider extends ChangeNotifier {
 
   setWeekRideDataType(RideDataType rideDataType) {
     if (rideDataType == RideDataType.mileage) {
-      rideDataTypeString = 'Mileage';
+      rideDataTypeString = 'Distance';
       if (measurementSetting == MeasurementSetting.metricSystem) {
         rideDataString = (weekRideHistoryList.fold<double>(0, (prev, element) => prev + element.distance!.toDouble()) / 1000).toStringAsFixed(2);
         rideDataUnit = " km";
@@ -413,7 +413,7 @@ class RideProvider extends ChangeNotifier {
       rideDataUnit = " rides ";
     }
     else if (rideDataType == RideDataType.carbonFootprint) {
-      rideDataTypeString = 'CO2 Saved';
+      rideDataTypeString = 'CO₂ Saved';
       this.rideDataType = rideDataType;
       rideDataString = thousandFormatting((weekRideHistoryList.fold<int>(0, (prev, element) => prev + element.carbonPrint!)));
       rideDataUnit = " g";

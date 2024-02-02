@@ -95,7 +95,7 @@ class _DeactivateTheftAlertState extends State<DeactivateTheftAlert> {
                                   ),
                                   Flexible(
                                     child: Text(
-                                      "Stay composed, take a breather. There's a list of suggested actions you might find helpful. Check it out!",
+                                      "Stay composed, take a breather. Here’s a list of suggested actions you might find helpful. Check it out!",
                                       style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                                     ),
                                   ),
@@ -151,7 +151,7 @@ class _DeactivateTheftAlertState extends State<DeactivateTheftAlert> {
                                     ),
                                     Flexible(
                                       child: Text(
-                                        "Disable Theft Attempt Mode and revert your bike back to safe mode until it’s triggered again.",
+                                        "Disable ‘Theft Attempt’ and revert your bike back to ‘Locked and Secured’ until it’s triggered again.",
                                         style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                                       ),
                                     ),

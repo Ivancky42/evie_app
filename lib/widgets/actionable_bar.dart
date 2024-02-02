@@ -148,7 +148,7 @@ Widget stackActionableBar(context, BikeProvider bikeProvider, NotificationProvid
     visible: bikeProvider.rfidList.length == 0 && notificationProvider.isTimeArrive,
     child: EvieActionableBarOld(
         title: "Register EV-Key",
-        text: "Add EV-Key to unlock your bike without app assistance.",
+        text: "Add an EV-Key to unlock your bike without using the app.",
         buttonLeft: EvieButton_DropDown(
             onChanged: (value) async {
               if(value.toString() == items.elementAt(0)){

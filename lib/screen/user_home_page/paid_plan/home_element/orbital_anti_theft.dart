@@ -352,7 +352,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
             SvgPicture.asset("assets/images/ev-secure.svg",),
             SizedBox(height: 10.h,),
             Text(
-              'Ride to fill this space with your adventures!',
+              'Start riding to fill this space with your adventures!',
               style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
             )
           ],

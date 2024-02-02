@@ -120,7 +120,7 @@
 //                                 style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
 //                               ),
 //                               Text(
-//                                 "${thousandFormatting(_tripProvider.currentTripHistoryLists.values.elementAt(index).carbonPrint)}g CO2 Saved",
+//                                 "${thousandFormatting(_tripProvider.currentTripHistoryLists.values.elementAt(index).carbonPrint)}g CO₂ Saved",
 //                                 style: EvieTextStyles.body14,
 //                               ),
 //                             ],

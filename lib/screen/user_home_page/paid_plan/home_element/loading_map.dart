@@ -122,49 +122,6 @@ class _LoadingMapState extends State<LoadingMap> {
           ),
         ],
       ),
-      // PaginateFirestore(
-      //   shrinkWrap: true,
-      //   padding: EdgeInsets.only(left: 16.w),
-      //   itemsPerPage: 3,
-      //   isLive: false,
-      //   bottomLoader: const Center(
-      //     child: Padding(
-      //       padding: EdgeInsets.only(top: 16, bottom: 24),
-      //       child: SizedBox(
-      //         height: 16,
-      //         width: 16,
-      //         child: CircularProgressIndicator(
-      //           color: EvieColors.primaryColor,
-      //           strokeWidth: 2,
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      //   itemBuilderType: PaginateBuilderType.listView,
-      //   itemBuilder: (context, documentSnapshots, index) {
-      //     // Check if there is data at the given index
-      //     if (index < documentSnapshots.length) {
-      //       DocumentSnapshot snapshot = documentSnapshots[index];
-      //       Map<String, dynamic>? obj = snapshot.data() as Map<String, dynamic>?;
-      //       if (obj != null) {
-      //         EventModel eventModel = EventModel.fromJson(snapshot.id, obj);
-      //         if (eventModel.type != 'lost') {
-      //           return OrbitalListContainer(eventModel: eventModel);
-      //         }
-      //         else {
-      //           return Container();
-      //         }
-      //       }
-      //     }
-      //
-      //     // Return a placeholder or an empty widget if there's no data to display
-      //     return Container();
-      //   },
-      //   query: FirebaseFirestore.instance.collection("bikes")
-      //       .doc(_bikeProvider.currentBikeModel?.deviceIMEI)
-      //       .collection("events")
-      //       .orderBy("created", descending: true),
-      // ),
     ];
 
     return Container(

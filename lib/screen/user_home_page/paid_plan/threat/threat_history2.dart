@@ -392,7 +392,7 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                             ),
                             SizedBox(height: 18.h,),
                             Text(
-                              'Ride to fill this space with your adventures!',
+                              'Start riding to fill this space with your adventures!',
                               style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                             )
                           ],

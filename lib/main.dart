@@ -278,7 +278,6 @@ class MyApp extends StatelessWidget {
           routes: {
             "/welcome": (context) => const Welcome(),
             "/inputName": (context) => const InputName(),
-            // "/signInMethod": (context) => const SignInMethod(),
             "/verifyEmail": (context) => const VerifyEmail(),
             "/accountVerified": (context) => const AccountVerified(),
             "/letsGo": (context) => const BeforeYouStart(),
@@ -288,12 +287,9 @@ class MyApp extends StatelessWidget {
             "/account": (context) => const UserHomePage(2),
             "/userChangePassword": (context) => const UserChangePassword(),
             "/testBle": (context) => const TestBle(),
-            //    "/notification": (context) => const UserNotification(),
             "/editProfile": (context) => const EditProfile(),
             "/verifyPassword": (context) => const VerifyPassword(),
             "/enterNewPassword": (context) => const EnterNewPassword(),
-            //"/signUpPassword": (context, name, email) => SignUpPassword(),
-
           },
 
           navigatorObservers: [FlutterSmartDialog.observer],

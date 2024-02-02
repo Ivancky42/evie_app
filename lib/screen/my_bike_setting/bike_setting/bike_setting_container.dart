@@ -629,7 +629,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> with Widget
                               children: [
                                 Text(
                                   _bikeProvider.bikeUserList.length == 1 ? "None Shared" :
-                                  "${_bikeProvider.bikeUserList.length} Sharing Pal",
+                                  "Shared with ${_bikeProvider.bikeUserList.length - 1} ",
                                   style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                                 ),
                                 SizedBox(width: 8.17.w,),

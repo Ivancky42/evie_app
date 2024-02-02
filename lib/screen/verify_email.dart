@@ -157,7 +157,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                     EvieButton_ReversedColor(
                       width: double.infinity,
                       child: Text(
-                        "Return to Log In",
+                        "Return to Login",
                         style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
                       ),
                       onPressed: () async {
@@ -184,12 +184,12 @@ class _VerifyEmailState extends State<VerifyEmail> {
                             countdownTimer != null ?
                             counting != null ?
                             Text(
-                              "resend email after " + counting! + 's.',
+                              "resending the email after " + counting! + 's.',
                               style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w800, color: EvieColors.lightGrayish,),
                             ) :
                             GestureDetector(
                               child: Text(
-                                "resend email.",
+                                "resending the email.",
                                 style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w800, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                               ),
                               onTap: () async {
@@ -199,7 +199,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                             ) :
                             GestureDetector(
                               child: Text(
-                                "resend email.",
+                                "resending the email.",
                                 style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w800, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                               ),
                               onTap: () async {

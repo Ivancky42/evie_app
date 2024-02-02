@@ -90,7 +90,7 @@ class _PedalPalsState extends State<PedalPals> {
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,0.h),
                     child: Text(
-                  "No rider is currently sharing your bike.",
+                  "No pal is currently sharing your bike.",
                     style: TextStyle(fontSize: 16.sp,height: 1.5.h),
                   ),
                   ),

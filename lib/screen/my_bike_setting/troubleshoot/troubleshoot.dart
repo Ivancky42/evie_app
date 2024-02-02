@@ -57,7 +57,7 @@ class _TroubleshootScreenState extends State<TroubleshootScreen> {
                   Padding(
                     padding: EdgeInsets.only(left: 16.w, right: 16.w),
                     child: Text(
-                      "Encountering problems with your bike? Explore our Troubleshoot Center to identify and troubleshoot common bike issues. Let's get you rolling smoothly!",
+                      "Encountering problems with your bike? You’ve come to the right place! Identify and troubleshoot common bike issues here.",
                       style: EvieTextStyles.body18,
                     ),
                   ),
@@ -76,7 +76,7 @@ class _TroubleshootScreenState extends State<TroubleshootScreen> {
                             ),
                             SizedBox(height: 4.h,),
                             Text(
-                              "Your bike is currently locked, and you're unable to unlock it on the home page.",
+                              "Restores bike lock if you’re unable to unlock it from the home page or with an EV-Key.",
                               style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                             ),
                             Align(
@@ -151,7 +151,7 @@ class _TroubleshootScreenState extends State<TroubleshootScreen> {
                                     ),
                                     SizedBox(height: 4.h,),
                                     Text(
-                                      "Unable to locate the solution you're seeking? \nExplore our FAQ site.",
+                                      "Need more information? Explore our FAQ pages \nand self-help articles.",
                                       style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                                     ),
                                   ],

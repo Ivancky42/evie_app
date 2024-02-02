@@ -77,7 +77,7 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
             "assets/icons/register_evKey.svg",
           ),
           title: 'Register EV-Key',
-          text: 'Add EV-Key to unlock your bike without app assistance.',
+          text: 'Add an EV-Key to unlock your bike without using the app.',
           backgroundColor: EvieColors.primaryColor,
           onTap: () {
             if (deviceConnectResult == null
@@ -104,8 +104,8 @@ class _ActionableBarHomeState extends State<ActionableBarHome> {
           icon:   SvgPicture.asset(
             "assets/icons/bike_update.svg",
           ),
-          title: 'Bike Software Update',
-          text: 'Update your bike for smooth riding experience.',
+          title: 'Software Update Available',
+          text: 'Update your bike for an elevated riding experience. ',
           backgroundColor: EvieColors.primaryColor,
           onTap: () {
             if (deviceConnectResult == null

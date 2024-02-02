@@ -160,7 +160,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> with WidgetsBindingOb
                       height: 82.h,
                       activeColor: hasPermission ? (_bikeProvider.isOwner == true ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4)) : EvieColors.primaryColor.withOpacity(0.4),
                       title: "Lock",
-                      text: "You'll get a notification whenever you lock your bike.",
+                      text: "Receive a notification whenever you lock your bike.",
                       value: currentNotificationSettings?.lock ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {
@@ -204,7 +204,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> with WidgetsBindingOb
                       height: 82.h,
                       activeColor: hasPermission ? (_bikeProvider.isOwner == true ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4)) : EvieColors.primaryColor.withOpacity(0.4),
                       title: "Unlock",
-                      text: "Get a notification whenever your bike is unlocked.",
+                      text: "Receive a notification whenever your bike is unlocked.",
                       value: currentNotificationSettings?.unlock ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {
@@ -249,7 +249,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> with WidgetsBindingOb
                     height: 82.h,
                     activeColor: hasPermission ? (_bikeProvider.isOwner == true ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4)) : EvieColors.primaryColor.withOpacity(0.4),
                     title: "Connection Lost",
-                    text: "Receive push notifications when your bike has lost connection for more than 10mins",
+                    text: "Receive a notification when your bike has lost connection for more than 10mins",
                     value: currentNotificationSettings?.connectionLost ?? false,
                     thumbColor: _thumbColor,
                     onChanged: (value) async {
@@ -294,7 +294,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> with WidgetsBindingOb
                       height: 82.h,
                       activeColor: hasPermission ? (_bikeProvider.isOwner == true ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4)) : EvieColors.primaryColor.withOpacity(0.4),
                       title: "Movement Detection",
-                      text: "Receive push notifications whenever movement is detected.",
+                      text: "Receive a notification when movement is detected while your bike is locked.",
                       value: currentNotificationSettings?.movementDetect ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {
@@ -337,7 +337,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> with WidgetsBindingOb
                       height: 82.h,
                       activeColor: hasPermission ? (_bikeProvider.isOwner == true ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4)) : EvieColors.primaryColor.withOpacity(0.4),
                       title: "Theft Attempt",
-                      text: "The theft attempt alert will be triggered when your bike is moved beyond a 30m radius.",
+                      text: "Receive a theft attempt alert when your bike is moved beyond a 50m radius while locked.",
                       value:  currentNotificationSettings?.theftAttempt ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {

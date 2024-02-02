@@ -29,7 +29,7 @@ class RecentActivity extends StatefulWidget{
 
 class _RecentActivityState extends State<RecentActivity> {
 
-  List<String> totalData = ["Mileage", "No of Ride", "Carbon Footprint"];
+  List<String> totalData = ["Distance", "No of Ride", "Carbon Footprint"];
   late String currentData;
 
   late List<ChartData> chartData = [];
@@ -149,7 +149,7 @@ class _RecentActivityState extends State<RecentActivity> {
                                       style: EvieTextStyles.body14.copyWith(color: EvieColors.lightBlack, fontFamily: 'Avenir', fontWeight: FontWeight.w400, height: EvieTextStyles.lineHeight)
                                     ),
                                     TextSpan(
-                                      text: " g CO2 Saved",
+                                      text: " g CO₂ Saved",
                                       style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan, fontFamily: 'Avenir', fontWeight: FontWeight.w400, height: EvieTextStyles.lineHeight)
                                     ),
                                   ],

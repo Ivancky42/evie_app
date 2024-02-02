@@ -109,7 +109,7 @@ class _AccountContainerState extends State<AccountContainer> {
             ),
           ],
         );
-      case "Push Notification":
+      case "Push Notifications":
         return Column(
           children: [
             SizedBox(
@@ -411,7 +411,7 @@ class _AccountContainerState extends State<AccountContainer> {
                       style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                     ),
                     Text(
-                      "© 2023 EVIE Bikes ApS",
+                      "Copyright 2024 by EVIE Bikes ApS",
                       style: EvieTextStyles.body12.copyWith(color:EvieColors.darkWhite),
                     ),
                   ],

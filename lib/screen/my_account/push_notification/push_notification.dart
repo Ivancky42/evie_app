@@ -122,7 +122,7 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
 
     return Scaffold(
       appBar: PageAppbar(
-        title: 'Push Notification',
+        title: 'Push Notifications',
         onPressed: () {
           back(context, PushNotification());
         },
@@ -138,7 +138,7 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
                     child: EvieSwitch(
                       activeColor: hasPermission ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
                       height: 64.h,
-                      title: "General Notification",
+                      title: "General Notifications",
                       value: _currentUserProvider.currentUserModel?.notificationSettings?.general ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {
@@ -184,7 +184,7 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
                     child: EvieSwitch(
                       activeColor: hasPermission ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
                       height: 64.h,
-                      title: "Promo",
+                      title: "Promotions",
                       value: _currentUserProvider.currentUserModel?.notificationSettings?.promo ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {
@@ -230,7 +230,7 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
                     child: EvieSwitch(
                       activeColor: hasPermission ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4),
                       height: 64.h,
-                      title: "Software Update",
+                      title: "Software Updates",
                       value: _currentUserProvider.currentUserModel?.notificationSettings?.firmwareUpdate ?? false,
                       thumbColor: _thumbColor,
                       onChanged: (value) async {

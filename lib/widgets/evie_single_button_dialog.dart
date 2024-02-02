@@ -794,13 +794,13 @@ class _EvieClubDialogState extends State<EvieClubDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Bike Setting',
+                        'Bike Settings',
                         style: EvieTextStyles.target_reference_body,
                       ),
                       Padding(
                         padding: EdgeInsets.only(bottom: 16.h),
                         child: Text(
-                          'Tailor your ride to perfection with Bike Setting. Fine-tune your preferences, optimize performance, and create your ultimate cycling experience.',
+                          'Tailor your ride to perfection, fine-tune your preferences, optimize performance, and create your ultimate cycling experience.',
                           textAlign: TextAlign.left,
                           style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan, height: 1.3),
                         ),
@@ -866,7 +866,7 @@ class _EvieClubDialogState extends State<EvieClubDialog> {
                       ),
 
                       Text(
-                        'See all your bikes’ details and switch between each other easily.',
+                        'See all your bikes’ details and switch seamlessly between them.',
                         textAlign: TextAlign.left,
                         style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan, height: 1.3),
                       ),
@@ -1336,13 +1336,13 @@ class _WelcomeJoinTeamState extends State<WelcomeJoinTeam> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Bike Setting',
+                      'Bike Settings',
                       style: EvieTextStyles.target_reference_body,
                     ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 16.h),
                       child: Text(
-                        'Tailor your ride to perfection with Bike Setting. Fine-tune your preferences, optimize performance, and create your ultimate cycling experience.',
+                        'Tailor your ride to perfection, fine-tune your preferences, optimize performance, and create your ultimate cycling experience.',
                         textAlign: TextAlign.left,
                         style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan, height: 1.3),
                       ),
@@ -1408,7 +1408,7 @@ class _WelcomeJoinTeamState extends State<WelcomeJoinTeam> {
                     ),
 
                     Text(
-                      'See all your bikes’ details and switch between each other easily.',
+                      'See all your bikes’ details and switch seamlessly between them.',
                       textAlign: TextAlign.left,
                       style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan, height: 1.3),
                     ),
@@ -1729,13 +1729,13 @@ class _Evie4OneButtonDialogState extends State<Evie4OneButtonDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Bike Setting',
+                      'Bike Settings',
                       style: EvieTextStyles.target_reference_body,
                     ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 16.h),
                       child: Text(
-                        'Tailor your ride to perfection with Bike Setting. Fine-tune your preferences, optimize performance, and create your ultimate cycling experience.',
+                        'Tailor your ride to perfection, fine-tune your preferences, optimize performance, and create your ultimate cycling experience.',
                         textAlign: TextAlign.left,
                         style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan, height: 1.3),
                       ),
@@ -1801,7 +1801,7 @@ class _Evie4OneButtonDialogState extends State<Evie4OneButtonDialog> {
                     ),
 
                     Text(
-                      'See all your bikes’ details and switch between each other easily.',
+                      'See all your bikes’ details and switch seamlessly between them.',
                       textAlign: TextAlign.left,
                       style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan, height: 1.3),
                     ),

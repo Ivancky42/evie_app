@@ -139,7 +139,7 @@ class _RideHistoryState extends State<RideHistory> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 12.h),
                   child: Text(
-                    "CO2 Saved",
+                    "CO₂ Saved",
                     style: EvieTextStyles.body18.copyWith(color: EvieColors.darkGrayishCyan),
                   ),
                 ),
@@ -152,7 +152,7 @@ class _RideHistoryState extends State<RideHistory> {
                      Column(
                        crossAxisAlignment: CrossAxisAlignment.start,
                        children: [
-                         Text("Mileage", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),),
+                         Text("Distance", style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),),
 
                          _settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem ?
                          Row(

@@ -172,7 +172,7 @@ class _TripHistoryDataState extends State<TripHistoryData> {
 
                 SizedBox(width: 4.w,),
                 EvieOvalGray(
-                  buttonText: _tripProvider.currentData == "Carbon Footprint" ? "CO2 Saved" : _tripProvider.currentData == "No of Ride" ? "No. of Rides"  : _tripProvider.currentData == "Mileage" ? "Mileage" :_tripProvider.currentData,
+                  buttonText: _tripProvider.currentData == "Carbon Footprint" ? "CO₂ Saved" : _tripProvider.currentData == "No of Ride" ? "No. of Rides"  : _tripProvider.currentData == "Distance" ? "Distance" :_tripProvider.currentData,
                   onPressed: (){
                     if(_tripProvider.currentData == _tripProvider.dataType.first){
                       _tripProvider.setCurrentData(_tripProvider.dataType.elementAt(1));

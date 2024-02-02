@@ -132,7 +132,7 @@ class _CheckYourEmailState extends State<CheckYourEmail> {
                           EvieButton_ReversedColor(
                             width: double.infinity,
                             child: Text(
-                              "Return to Log In",
+                              "Return to Login",
                               style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
                             ),
                             onPressed: () async {
@@ -157,7 +157,7 @@ class _CheckYourEmailState extends State<CheckYourEmail> {
                                   ),
                                   GestureDetector(
                                     child: Text(
-                                      "resend email.",
+                                      "resending the email.",
                                       style: EvieTextStyles.body14.copyWith(fontWeight:FontWeight.w800, color: EvieColors.primaryColor,decoration: TextDecoration.underline,),
                                     ),
                                     onTap: () async {

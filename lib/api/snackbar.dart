@@ -179,7 +179,7 @@ showScanTimeoutToast(context) {
             SizedBox(width: 4.w,),
             Flexible(
               child: Text(
-                "We couldn’t connect to your bike. Stay close and reconnect.",
+                "We couldn’t connect to your bike. Try moving closer.",
                 style: EvieTextStyles.toast,
               ),
             ),
@@ -307,7 +307,7 @@ showToLockBikeInstructionToast(context) {
           children: [
             Flexible(
               child: Text(
-                "Bike is unlocked. To lock bike, pull the lock handle on the bike.",
+                "Bike is unlocked. Pull the lock handle to lock the bike.",
                 style: EvieTextStyles.toast,
               ),
             ),
@@ -519,7 +519,7 @@ showAccNoPermissionToast(context) {
               Container(
                 width: 315.w,
                 child: Text(
-                  "Apologies, pal, you don't have the permission to manage this setting.",
+                  "Sorry pal, you don't have permission to manage this setting.",
                   style: EvieTextStyles.toast,
                 ),
               )
@@ -944,7 +944,7 @@ showTroubleshootLock(context, SettingProvider _settingProvider) {
                 children: [
                   Flexible(
                     child: Text(
-                      "Having trouble with bike lock?",
+                      "Having trouble with the lock?",
                       style: EvieTextStyles.toast,
                     ),
                   ),
@@ -953,7 +953,7 @@ showTroubleshootLock(context, SettingProvider _settingProvider) {
               Align(
                 alignment: Alignment.bottomRight,
                 child: Text(
-                  "GO TO TROUBLESHOOT",
+                  "TROUBLESHOOT",
                   style: EvieTextStyles.body16.copyWith(
                     color: EvieColors.strongPurple,
                     fontWeight: FontWeight.w500,
@@ -1523,7 +1523,7 @@ showExceedLimit(context) {
           padding: EdgeInsets.only(bottom: 4),
           child: Flexible(
             child: Text(
-              "We love your enthusiasm to share the joy! Just a heads up, our limit for sharing is up to 4 riders.",
+              "We love your enthusiasm to share the joy! Just a heads up, our limit for sharing is up to 4 pals.",
               style: EvieTextStyles.toast,
             ),
           ),

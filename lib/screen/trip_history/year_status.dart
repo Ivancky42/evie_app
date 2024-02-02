@@ -64,7 +64,7 @@ class _YearStatusState extends State<YearStatus> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "CO2 Saved",
+                  "CO₂ Saved",
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
                 Text(
@@ -88,7 +88,7 @@ class _YearStatusState extends State<YearStatus> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Mileage",
+                  "Total Distance",
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
                 Text(
@@ -113,7 +113,7 @@ class _YearStatusState extends State<YearStatus> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "No. of Rides",
+                  "Rides",
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
                 Text(
@@ -165,7 +165,7 @@ class _YearStatusState extends State<YearStatus> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Duration",
+                  "Total Duration",
                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
                 ),
                 Text(

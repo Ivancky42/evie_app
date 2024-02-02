@@ -33,7 +33,7 @@ class TripProvider extends ChangeNotifier {
   TripHistoryModel? currentTripHistoryModel;
   BikeModel? currentBikeModel;
 
-  List<String> dataType = ["Mileage", "No of Ride", "Carbon Footprint"];
+  List<String> dataType = ["Distance", "No of Ride", "Carbon Footprint"];
   late String currentData;
 
   late List<ChartData> chartData = [];
