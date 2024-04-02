@@ -61,7 +61,7 @@ class EvieCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title!, style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),),
+                  Text(title!,textScaleFactor: 1, style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),),
                   child ?? Container(),
                 ],
               ),

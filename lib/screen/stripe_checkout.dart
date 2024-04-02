@@ -71,11 +71,17 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
             //     'You’ve subscribed to EV-Secure! Now you can enjoy exclusive EV+ perks until '
             //         '${monthsInYear[_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().day}, ${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().year}');
             changeToUserHomePageScreen(context);
-            showWelcomeToEVClub(context);
+            if (_bikeProvider.isPlanSubscript == true) {
+              showThankyouDialog(context);
+            }
+            else {
+              showWelcomeToEVClub(context);
+            }
           } else if (request.url.startsWith('https://evie-126a6.web.app/cancel.html')) {
             // SmartDialog.show(widget:
             // EvieSingleButtonDialog(title: 'Operation failed', content: 'User cancelled the action', rightContent: 'BACK', onPressedRight: () {SmartDialog.dismiss();},));
-            changeToUserHomePageScreen(context);
+            //changeToUserHomePageScreen(context);
+            Navigator.pop(context);
           }
           return NavigationDecision.navigate;
         },

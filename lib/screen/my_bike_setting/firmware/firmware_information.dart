@@ -119,7 +119,6 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
           return shouldClose;
         }
         else{
-         //_settingProvider.changeSheetElement(SheetList.bikeSetting);
          return true;
         }
       },
@@ -127,9 +126,6 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
         appBar: PageAppbar(
           title: 'Bike Software',
           onPressed: () async {
-            // if(_firmwareProvider.isUpdating == true){
-            //   showFirmwareUpdateQuit(context, stream);
-            // }
             if(_firmwareProvider.isUpdating == true){
               showFirmwareUpdateQuit(context, stream, _settingProvider, _bluetoothProvider);
             }
@@ -149,20 +145,181 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      _currentUserProvider.currentUserModel!.isBetaUser ?
+                      GestureDetector(
+                        onTap: () {
+                          if (_firmwareProvider.isUpdating == true) {
+                            showFirmwareUpdateQuit(context, stream, _settingProvider, _bluetoothProvider);
+                          }
+                          else {
+                            _settingProvider.changeSheetElement(
+                                SheetList.betaFirmwareInformation);
+                          }
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Beta Updates",
+                                              style: EvieTextStyles.body18,
+                                            ),
+                                            SizedBox(width: 4.w,),
+                                            Visibility(
+                                                visible: _firmwareProvider.isBetaVersionAvailable,
+                                                child: Container(
+                                                  decoration: const BoxDecoration(
+                                                      color: EvieColors.primaryColor,
+                                                      borderRadius: BorderRadius.all(Radius.circular(5))
+                                                  ),
+                                                  child: Padding(
+                                                    padding:EdgeInsets.fromLTRB(6.w,4.h,6.w,4.h),
+                                                    child: Text("Beta Available",  style: EvieTextStyles.body12.copyWith(color: EvieColors.white),),
+                                                  ),
+                                                )
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Center(
+                                      child: SvgPicture.asset(
+                                        "assets/buttons/next.svg",
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 16.w),
+                                    child: Divider(
+                                      thickness: 0.2.h,
+                                      color: EvieColors.darkWhite,
+                                      height: 0,
+                                    ),
+                                  )
+                              ),
+                            ],
+                          ),
+                        )
+                      ) :
+                      Container(),
                       if(_firmwareProvider.isLatestFirmVer == true)...{
                         Padding(
                           padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w,13.h),
                           child: Text(
-                            "Your bike software is up to date.",
+                            _firmwareProvider.isBetaVersion ? "You're currently exploring beta software." : "Your bike software is up to date.",
                             style: EvieTextStyles.h2,
+                          ),
+                        ),
+
+                        Visibility(
+                          visible: _firmwareProvider.isUpdating,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(8.w, 0.h, 16.w,13.h),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SvgPicture.asset(
+                                      "assets/buttons/bike_security_warning.svg",
+                                      height: 24.h,
+                                      width: 24.w,
+                                    ),
+                                    SizedBox(width: 8.w,),
+                                    Expanded(
+                                      child: Text(
+                                          "Stay close to your bike and keep app open to complete firmware update.",
+                                          style: EvieTextStyles.body18
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 20.h),
+                                  child: Column(
+                                    children: [
+                                      LinearPercentIndicator(
+                                        padding: EdgeInsets.zero,
+                                        width: 355.w,
+                                        animation: false,
+                                        lineHeight: 4.h,
+                                        animationDuration: 0,
+                                        percent: _bluetoothProvider.fwUpgradeProgress,
+                                        progressColor: EvieColors.primaryColor,
+                                        backgroundColor: EvieColors.lightGray,
+                                      ),
+
+                                      Visibility(
+                                        visible: _firmwareProvider.isUpdating,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left:0, right: 4.w, top :4.h),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("Time remaining: ${intToTimeLeft(((_bluetoothProvider.fwUpgradeProgress * 100)*
+                                                  (totalSeconds/100)-totalSeconds).abs().toInt())}",
+                                                  style: EvieTextStyles.body12.copyWith(color: EvieColors.mediumBlack)
+
+                                              ),
+
+                                              Text(
+                                                  (_bluetoothProvider.fwUpgradeProgress * 100).toStringAsFixed(0) + "%",
+                                                  style: EvieTextStyles.body12.copyWith(color: EvieColors.mediumBlack)
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                              ),
+                            ],
                           ),
                         ),
 
                         Padding(
                           padding: EdgeInsets.fromLTRB(16.w, 13.h, 16.w,4.h),
-                          child:TextColumn(
-                              title: "Current Version",
-                              body: _firmwareProvider.currentFirmVer ?? "Not available"),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Current Version',style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan)),
+                              SizedBox(height: 2.h,),
+                              Row(
+                                children: [
+                                  Text(_firmwareProvider.currentFirmVer ?? "None",style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),),
+                                  SizedBox(width: 4.w,),
+                                  Visibility(
+                                      visible: _firmwareProvider.isBetaVersion,
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                            color: EvieColors.lightBlack,
+                                            borderRadius: BorderRadius.all(Radius.circular(5))
+                                        ),
+                                        child: Padding(
+                                          padding:EdgeInsets.fromLTRB(6.w,4.h,6.w,4.h),
+                                          child: Text("Beta Version",  style: EvieTextStyles.body12.copyWith(color: EvieColors.white),),
+                                        ),
+                                      )
+                                  ),
+                                ],
+                              )
+                            ],
+                          )
                         ),
 
                         const AccountPageDivider(),
@@ -191,33 +348,20 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                               children: [
                                 Row(
                                   children: [
-                                    // Expanded(
-                                    //   child: Padding(
-                                    //     padding: EdgeInsets.fromLTRB(16.w,0, 40.w, 0),
-                                    //     child: Text(
-                                    //       isExpanded
-                                    //           ? _firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "\n") ?? ''
-                                    //           : (_firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "\n")?.substring(0, 155) ?? ''),
-                                    //       softWrap: true,
-                                    //       style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
-                                    //       overflow: TextOverflow.fade,
-                                    //     ),
-                                    //   ),
-                                    // ),
                                     Expanded(
                                       child: Padding(
                                         padding: EdgeInsets.fromLTRB(8.w,0, 40.w, 0),
                                         child: Html(
-                                            data:  isExpanded ? _firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "<br>") ?? '' : _firmwareProvider.latestFirmwareModel?.desc.replaceAll("\\n", "<br>").substring(0, 155) ?? '',
+                                          data:  isExpanded ? _firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "<br>") ?? '' : _firmwareProvider.latestFirmwareModel?.desc.replaceAll("\\n", "<br>").substring(0, 155) ?? '',
                                           style: {
                                             "p": Style(
-                                              fontSize: FontSize(18.sp), // Set the font size for paragraphs
-                                              fontFamily: 'Avenir', // Set the font family for paragraphs
-                                              color: EvieColors.lightBlack
+                                                fontSize: FontSize(18.sp), // Set the font size for paragraphs
+                                                fontFamily: 'Avenir', // Set the font family for paragraphs
+                                                color: EvieColors.lightBlack
                                             ),
                                             "b": Style(
-                                              fontSize: FontSize(18.sp), // Set the font size for bold text
-                                              fontFamily: 'Avenir', // Set the font family for bold text
+                                                fontSize: FontSize(18.sp), // Set the font size for bold text
+                                                fontFamily: 'Avenir', // Set the font family for bold text
                                                 color: EvieColors.lightBlack
                                             ),
                                           },
@@ -258,7 +402,6 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
 
                         const AccountPageDivider(),
                       }
-
                       else...{
 
                         Padding(
@@ -410,63 +553,106 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                         const AccountPageDivider(),
                       },
                       SizedBox(
-                        height: 170.h,
+                        height: _currentUserProvider.currentUserModel!.isBetaUser ? _firmwareProvider.isBetaVersion ? _firmwareProvider.isUpdating ? 50.h : 170.h : _firmwareProvider.isUpdating ? 80.h : _firmwareProvider.isBetaVersionAvailable ? 140.h : 140.h : _firmwareProvider.isUpdating ? 120.h : 180.h,
                       )
                     ],
                   ),
-                  !_firmwareProvider.isLatestFirmVer && _firmwareProvider.isUpdating == false ?
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, EvieLength.screen_bottom),
-                    child: EvieButton(
-                      width: double.infinity,
-                      height: 48.h,
-                      child: Text(
-                          "Download and Update",
-                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
-                      ),
-                      onPressed: () {
-                        //showFirmwareUpdate(context, _firmwareProvider, stream, _bluetoothProvider, _settingProvider);
-                        showSoftwareUpdate(context, _firmwareProvider, stream, _bluetoothProvider, _settingProvider);
-                      },
-                    ),
-                  ) :
-                  !_firmwareProvider.isLatestFirmVer && _firmwareProvider.isUpdating == true ?
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, EvieLength.target_reference_button_a),
-                    child: EvieButton(
-                      width: double.infinity,
-                      height: 48.h,
-                      backgroundColor: EvieColors.lightPurple,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/buttons/update_loading.svg',
-                            width: 24.w,
-                            height: 24.h,
-                            //color: EvieColors.green,
+                  Column(
+                    children: [
+                      Visibility(
+                        visible: !_firmwareProvider.isLatestFirmVer && _firmwareProvider.isUpdating == false,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 8.h),
+                          child: EvieButton(
+                            width: double.infinity,
+                            height: 48.h,
+                            child: Text(
+                                "Download and Update",
+                                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
+                            ),
+                            onPressed: () {
+                              //showFirmwareUpdate(context, _firmwareProvider, stream, _bluetoothProvider, _settingProvider);
+                              showSoftwareUpdate(context, _firmwareProvider, stream, _bluetoothProvider, _settingProvider);
+                            },
                           ),
-                          Text(
-                            "Updating",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ],
+                        ),
                       ),
-
-                      onPressed: () {
-                        _settingProvider.changeSheetElement(SheetList.bikeSetting);
-                      },
-                    ),
-                  ) :
-                  Container(),
+                      Visibility(
+                        visible: _firmwareProvider.isBetaVersion && _firmwareProvider.isUpdating == false,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 8.h),
+                          child: EvieButton(
+                            width: double.infinity,
+                            height: 48.h,
+                            child: Text(
+                                "Return to Stable Version",
+                                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
+                            ),
+                            onPressed: () {
+                              //showFirmwareUpdate(context, _firmwareProvider, stream, _bluetoothProvider, _settingProvider);
+                              showSoftwareUpdate(context, _firmwareProvider, stream, _bluetoothProvider, _settingProvider);
+                            },
+                          ),
+                        ),
+                      ),
+                      // Visibility(
+                      //     visible: _firmwareProvider.isBetaVersionAvailable && _firmwareProvider.isUpdating == false,
+                      //     child: Padding(
+                      //       padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 8.h),
+                      //       child: EvieButton(
+                      //         width: double.infinity,
+                      //         height: 48.h,
+                      //         child: Text(
+                      //             "Update to Beta Version",
+                      //             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
+                      //         ),
+                      //         onPressed: () {
+                      //           //showFirmwareUpdate(context, _firmwareProvider, stream, _bluetoothProvider, _settingProvider);
+                      //           showBetaSoftwareUpdate(context, _firmwareProvider, stream, _bluetoothProvider, _settingProvider);
+                      //         },
+                      //       ),
+                      //     )
+                      // ),
+                      Visibility(
+                          visible: _firmwareProvider.isUpdating == true,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 8.h),
+                            child: EvieButton(
+                              width: double.infinity,
+                              height: 48.h,
+                              backgroundColor: EvieColors.lightPurple,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/buttons/update_loading.svg',
+                                    width: 24.w,
+                                    height: 24.h,
+                                    //color: EvieColors.green,
+                                  ),
+                                  Text(
+                                    "Updating",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ],
+                              ),
+                              onPressed: () {
+                                _settingProvider.changeSheetElement(SheetList.bikeSetting);
+                              },
+                            ),
+                          )
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
           ],
-        ),),
+        ),
+      ),
     );
   }
 

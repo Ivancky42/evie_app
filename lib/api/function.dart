@@ -16,6 +16,7 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -50,14 +51,23 @@ checkBleStatusAndConnectDevice(BluetoothProvider _bluetoothProvider, BikeProvide
         showBluetoothNotAuthorized();
       }
       else {
-        PermissionStatus status = await Permission.bluetoothConnect.request();
-        if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
-          showBluetoothNotAuthorized();
+
+        PermissionStatus locationPermission = await Permission.location.request();
+        if (locationPermission == PermissionStatus.permanentlyDenied || locationPermission == PermissionStatus.denied) {
+          showLocationServiceDisable();
         }
         else {
-          PermissionStatus status = await Permission.bluetoothScan.request();
-          if (status == PermissionStatus.permanentlyDenied || status == PermissionStatus.denied) {
+          PermissionStatus status = await Permission.bluetoothConnect.request();
+          if (status == PermissionStatus.permanentlyDenied ||
+              status == PermissionStatus.denied) {
             showBluetoothNotAuthorized();
+          }
+          else {
+            PermissionStatus status = await Permission.bluetoothScan.request();
+            if (status == PermissionStatus.permanentlyDenied ||
+                status == PermissionStatus.denied) {
+              showBluetoothNotAuthorized();
+            }
           }
         }
       }

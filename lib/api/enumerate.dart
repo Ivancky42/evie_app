@@ -18,7 +18,9 @@ enum SheetList{
   currentPlan,
   managePlan,
   essentialPlan,
+  addPlan,
   proPlan,
+  activateEVWithCode,
 
   pedalPals,
   createTeam,
@@ -32,6 +34,7 @@ enum SheetList{
   aboutBike,
 
   firmwareInformation,
+  betaFirmwareInformation,
   firmwareUpdateCompleted,
   firmwareUpdateFailed,
 

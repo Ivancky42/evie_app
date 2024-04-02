@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter/services.dart';

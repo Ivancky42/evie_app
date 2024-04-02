@@ -6,6 +6,7 @@ import 'package:evie_test/widgets/evie_textform.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:evie_test/api/provider/auth_provider.dart' as EvieAuthProvider;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
@@ -40,7 +41,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
   final TextEditingController _passwordController = TextEditingController();
   //final TextEditingController _passwordConfirmController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  late AuthProvider _authProvider;
+  late EvieAuthProvider.AuthProvider _authProvider;
   late CurrentUserProvider _currentUserProvider;
 
   //For user input password visibility true/false
@@ -82,7 +83,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
 
   @override
   Widget build(BuildContext context) {
-    _authProvider = Provider.of<AuthProvider>(context);
+    _authProvider = Provider.of<EvieAuthProvider.AuthProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
     return Scaffold(

@@ -532,6 +532,41 @@ showAccNoPermissionToast(context) {
   );
 }
 
+showNoPermissionForEVSecureToast(context) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Container(
+                width: 315.w,
+                child: Text(
+                  "Sorry pal, you don't have permission to perform the upgrade.",
+                  style: EvieTextStyles.toast,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+      duration: const Duration(seconds: 5),
+    ),
+  );
+}
+
 showResentEmailFailedToast(context) {
   ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
@@ -1526,6 +1561,42 @@ showExceedLimit(context) {
               "We love your enthusiasm to share the joy! Just a heads up, our limit for sharing is up to 4 pals.",
               style: EvieTextStyles.toast,
             ),
+          ),
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
+showEVSecureActivated(context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.all(Radius.circular(10)
+          )
+      ),
+      elevation: 0,
+      content: GestureDetector(
+        onTap: () {
+          Future.delayed(Duration.zero).then((value) => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SvgPicture.asset("assets/icons/check.svg"),
+              SizedBox(width: 4.w,),
+              Padding(
+                padding: EdgeInsets.only(bottom: 4),
+                child: Text(
+                  "EV-Secure Activated!",
+                  style: EvieTextStyles.toast,
+                ),
+              ),
+            ],
           ),
         ),
       ),

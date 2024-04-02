@@ -2463,5 +2463,109 @@ class Evie2IconBatchOneButtonDialog extends StatelessWidget{
   }
 }
 
+class ThanksStickingToEVSecure extends StatefulWidget {
+  const ThanksStickingToEVSecure({Key? key, }) : super(key: key);
+
+  @override
+  State<ThanksStickingToEVSecure> createState() => _ThanksStickingToEVSecureState();
+}
+
+class _ThanksStickingToEVSecureState extends State<ThanksStickingToEVSecure> {
+
+  Widget buildWidget() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Center(
+            child: Container(
+              height: 150.h,
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.only(top: 32.h),
+                child: SvgPicture.asset(
+                  "assets/images/thank_you.svg",
+                  height: 150.h,
+                  width: 239.w,
+                ),
+              ),
+            )
+        ),
+
+        Container(
+          width: 325.w,
+          child: Padding(
+            padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
+            child: Text('Thanks for Sticking \nwith EV-Secure',
+              style:EvieTextStyles.h2,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+
+        Container(
+          width: 326.w,
+          child: Text(
+            "Your security matters. Your trust fuels our commitment. Grateful for your support in riding secure journeys." ,
+            textAlign: TextAlign.center,
+            style: EvieTextStyles.body18,
+          ),
+        ),
+
+        Padding(
+          padding: EdgeInsets.only(top: 37.h, bottom: 16.h),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: EvieButton(
+                    height: 48.h,
+                    child: Text(
+                      "Let's Go!",
+                      style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                    ),
+                    onPressed: () {
+                      SmartDialog.dismiss();
+                    }
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Dialog(
+            insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            elevation: 0.0,
+            backgroundColor: EvieColors.grayishWhite,
+            child: Container(
+              padding:  EdgeInsets.only(
+                  left: 17.w,
+                  right: 17.w,
+                  top: 16.w,
+                  bottom: 16.w
+              ),
+              child: buildWidget()
+              ),
+            )
+      ],
+    );
+  }
+}
+
 
 

@@ -204,58 +204,61 @@ class _BikeContainerState extends State<BikeContainer> {
                     ),
                   ],
                 ),
-                IconButton(
-                    iconSize: 40,
-                    onPressed: () async {
-                      if(!isSpecificDeviceConnected){
-                        if(widget.bikeModel.deviceIMEI == _bikeProvider.currentBikeModel!.deviceIMEI){
-                          checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
-                          _notificationProvider.compareActionableBarTime();
-                          Navigator.pop(context);
+                Material(
+                  color: Colors.transparent,
+                  child: IconButton(
+                      iconSize: 50.w,
+                      onPressed: () async {
+                        if(!isSpecificDeviceConnected){
+                          if(widget.bikeModel.deviceIMEI == _bikeProvider.currentBikeModel!.deviceIMEI){
+                            checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
+                            _notificationProvider.compareActionableBarTime();
+                            Navigator.pop(context);
 
+                          }
+                          else{
+                            await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
+                            StreamSubscription? subscription;
+                            subscription = _bikeProvider.switchBike().listen((result) {
+                              if(result == SwitchBikeResult.success){
+                                ///set auto connect flag on bluetooth provider,
+                                ///once bluetooth provider received new current bike model,
+                                ///it will connect follow by the flag.
+                                _bluetoothProvider.setAutoConnect();
+                                subscription?.cancel();
+                                _notificationProvider.compareActionableBarTime();
+                                Navigator.pop(context);
+                              }
+                              else if(result == SwitchBikeResult.failure){
+                                subscription?.cancel();
+                                SmartDialog.show(
+                                    widget: EvieSingleButtonDialog(
+                                        title: "Error",
+                                        content: "Unable to switch bike, Please try again.",
+                                        rightContent: "Retry",
+                                        onPressedRight: () {
+                                          SmartDialog.dismiss();
+                                        }));
+                              }else{}
+                            });
+                          }
                         }
                         else{
-                          await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
-                          StreamSubscription? subscription;
-                          subscription = _bikeProvider.switchBike().listen((result) {
-                            if(result == SwitchBikeResult.success){
-                              ///set auto connect flag on bluetooth provider,
-                              ///once bluetooth provider received new current bike model,
-                              ///it will connect follow by the flag.
-                              _bluetoothProvider.setAutoConnect();
-                              subscription?.cancel();
-                              _notificationProvider.compareActionableBarTime();
-                              Navigator.pop(context);
-                            }
-                            else if(result == SwitchBikeResult.failure){
-                              subscription?.cancel();
-                              SmartDialog.show(
-                                  widget: EvieSingleButtonDialog(
-                                      title: "Error",
-                                      content: "Unable to switch bike, Please try again.",
-                                      rightContent: "Retry",
-                                      onPressedRight: () {
-                                        SmartDialog.dismiss();
-                                      }));
-                            }else{}
-                          });
+                          await _bluetoothProvider.disconnectDevice();
                         }
-                      }
-                      else{
-                        await _bluetoothProvider.disconnectDevice();
-                      }
-                    },
-                    icon: isSpecificDeviceConnected ?
-                    SvgPicture.asset(
-                      "assets/buttons/ble_button_connect.svg",
-                      height: 50.h,
-                      width: 50.w,
-                    ) :
-                    SvgPicture.asset(
-                      "assets/buttons/ble_button_disconnect.svg",
-                      height: 50.h,
-                      width: 50.w,
-                    )
+                      },
+                      icon: isSpecificDeviceConnected ?
+                      SvgPicture.asset(
+                        "assets/buttons/ble_button_connect.svg",
+                        height: 50.h,
+                        width: 50.w,
+                      ) :
+                      SvgPicture.asset(
+                        "assets/buttons/ble_button_disconnect.svg",
+                        height: 50.h,
+                        width: 50.w,
+                      )
+                  ),
                 )
               ],
             ),

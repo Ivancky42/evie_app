@@ -12,6 +12,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../widgets/evie_single_button_dialog.dart';
 import '../model/firmware_model.dart';
+import '../model/user_model.dart';
 
 class FirmwareProvider extends ChangeNotifier {
   String usersCollection = dotenv.env['DB_COLLECTION_USERS'] ?? 'DB not found';
@@ -22,11 +23,15 @@ class FirmwareProvider extends ChangeNotifier {
   FirmwareModel? latestFirmwareModel;
 
   String? latestFirmVer;
+  String? latestBetaFirmVer;
   String? currentFirmVer;
 
   bool isLatestFirmVer = false;
+  bool isBetaVersionAvailable = false;
+  bool isBetaVersion = false;
   bool isUpdating = false;
   BikeModel? currentBikeModel;
+  UserModel? currentUserModel;
 
   StreamSubscription? currentFirmwareSubscription;
 
@@ -39,7 +44,8 @@ class FirmwareProvider extends ChangeNotifier {
      getFirmwareDetails();
   }
 
-  Future<void> update(BikeModel? currentBikeModel) async {
+  Future<void> update(UserModel? currentUserModel, BikeModel? currentBikeModel) async {
+    this.currentUserModel = currentUserModel;
     this.currentBikeModel = currentBikeModel;
 
     if(currentBikeModel?.deviceIMEI != null && currentBikeModel?.firmVer == null || currentBikeModel?.firmVer == ''){
@@ -79,15 +85,65 @@ class FirmwareProvider extends ChangeNotifier {
 
   ///Compare latest version in firestore release and firestore bike model
    getIsCurrentVersion() async {
-    if(latestFirmwareModel != null && currentBikeModel != null && currentBikeModel?.firmVer != ''){
-      latestFirmVer = latestFirmwareModel!.ver.split("V").last;
-      currentFirmVer = currentBikeModel!.firmVer!.split("V").last;
+    if(latestFirmwareModel != null && currentBikeModel != null && currentBikeModel?.firmVer != '' && currentUserModel != null) {
+      if (currentUserModel?.isBetaUser != null) {
+        if (currentUserModel!.isBetaUser) {
+          ///Handle beta user
+          latestBetaFirmVer = latestFirmwareModel!.betaVer.split("V").last;
+          currentFirmVer = currentBikeModel!.firmVer!.split("V").last;
+          latestFirmVer = latestFirmwareModel!.ver.split("V").last;
+
+          if (int.parse(currentFirmVer!.replaceAll('.', '')) >=
+              int.parse(latestBetaFirmVer!.replaceAll('.', ''))) {
+            isBetaVersionAvailable = false;
+          } else {
+            isBetaVersionAvailable = true;
+          }
+
+          if (int.parse(currentFirmVer!.replaceAll('.', '')) ==
+              int.parse(latestBetaFirmVer!.replaceAll('.', ''))) {
+            isBetaVersion = true;
+          } else {
+            isBetaVersion = false;
+          }
+
+          if (int.parse(currentFirmVer!.replaceAll('.', '')) >=
+              int.parse(latestFirmVer!.replaceAll('.', ''))) {
+            isLatestFirmVer = true;
+          } else {
+            isLatestFirmVer = false;
+          }
+        }
+        else {
+          latestFirmVer = latestFirmwareModel!
+              .ver
+              .split("V")
+              .last;
+          currentFirmVer = currentBikeModel!.firmVer!.split("V").last;
 
 
-      if(int.parse(currentFirmVer!.replaceAll('.', '')) >= int.parse(latestFirmVer!.replaceAll('.', ''))){
-        isLatestFirmVer = true;
-      }else{
-        isLatestFirmVer = false;
+          if (int.parse(currentFirmVer!.replaceAll('.', '')) >=
+              int.parse(latestFirmVer!.replaceAll('.', ''))) {
+            isLatestFirmVer = true;
+          } else {
+            isLatestFirmVer = false;
+          }
+        }
+      }
+      else {
+        latestFirmVer = latestFirmwareModel!
+            .ver
+            .split("V")
+            .last;
+        currentFirmVer = currentBikeModel!.firmVer!.split("V").last;
+
+
+        if (int.parse(currentFirmVer!.replaceAll('.', '')) >=
+            int.parse(latestFirmVer!.replaceAll('.', ''))) {
+          isLatestFirmVer = true;
+        } else {
+          isLatestFirmVer = false;
+        }
       }
     }else{
       currentFirmVer = null;
@@ -126,6 +182,12 @@ class FirmwareProvider extends ChangeNotifier {
 
   clear() async {
     currentFirmwareSubscription?.cancel();
+    isLatestFirmVer = false;
+    isBetaVersionAvailable = false;
+    isBetaVersion = false;
+    isUpdating = false;
+    currentBikeModel = null;
+    currentUserModel = null;
     notifyListeners();
   }
 }

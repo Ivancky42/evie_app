@@ -156,12 +156,12 @@ class AppProviders extends StatelessWidget {
                   ..update(bikeProvider.currentBikeModel?.location, bikeProvider.getThreatRoutesLists);
               }
           ),
-          ChangeNotifierProxyProvider<BikeProvider, FirmwareProvider>(
+          ChangeNotifierProxyProvider2<CurrentUserProvider, BikeProvider, FirmwareProvider>(
               lazy: false,
               create: (_) => FirmwareProvider(),
-              update: (_, bikeProvider, firmwareProvider) {
+              update: (_,currentUserProvider,  bikeProvider, firmwareProvider) {
                 return firmwareProvider!
-                  ..update(bikeProvider.currentBikeModel);
+                  ..update(currentUserProvider.currentUserModel, bikeProvider.currentBikeModel);
               }
           ),
           // ChangeNotifierProxyProvider<BikeProvider, TripProvider>(
@@ -245,6 +245,15 @@ class MyApp extends StatelessWidget {
         ),
 
         child: MaterialApp(
+          builder: (context, child) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: FlutterSmartDialog.init()(
+                context,
+                child,
+              ),
+            );
+          },
           title: 'Evie Bike',
           themeMode: _settingProvider.currentThemeMode,
 
@@ -291,9 +300,7 @@ class MyApp extends StatelessWidget {
             "/verifyPassword": (context) => const VerifyPassword(),
             "/enterNewPassword": (context) => const EnterNewPassword(),
           },
-
           navigatorObservers: [FlutterSmartDialog.observer],
-          builder: FlutterSmartDialog.init(),
 
           ///For user version update
         ),

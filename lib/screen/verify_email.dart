@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:evie_test/api/length.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
+import 'package:evie_test/api/provider/auth_provider.dart' as EvieAuthProvider;
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/welcome_page.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
@@ -19,6 +19,7 @@ import '../api/colours.dart';
 import '../api/dialog.dart';
 import '../api/fonts.dart';
 import '../api/navigator.dart';
+import '../api/provider/auth_provider.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/snackbar.dart';
 import '../widgets/evie_appbar.dart';
@@ -39,7 +40,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   Timer? countdownTimer;
   bool isEmailVerified = false;
 
-  late AuthProvider _authProvider;
+  late EvieAuthProvider.AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
   late CurrentUserProvider _currentUserProvider;
   String? counting;
@@ -48,22 +49,24 @@ class _VerifyEmailState extends State<VerifyEmail> {
   void initState() {
     super.initState();
 
-    _authProvider = context.read<AuthProvider>();
+    _authProvider = context.read<EvieAuthProvider.AuthProvider>();
     _currentUserProvider = context.read<CurrentUserProvider>();
     startCountDownTimer();
 
     ///Loop timer 5 every 5 second and detect isVerified condition
     timer = Timer.periodic(const Duration(seconds: 3), (Timer t) {
-      AuthProvider().checkIsVerify().then((value) {
-        setState(() {
-          isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-        });
+      EvieAuthProvider.AuthProvider().checkIsVerify().then((value) {
+        if (FirebaseAuth.instance.currentUser != null) {
+          setState(() {
+            isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+          });
 
-        if (value == true) {
-          timer?.cancel();
-          changeToAccountVerifiedScreen(context);
-
-      }});
+          if (value == true) {
+            timer?.cancel();
+            changeToAccountVerifiedScreen(context);
+          }
+        }
+      });
     });
   }
 
@@ -94,7 +97,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
   @override
   Widget build(BuildContext context) {
-    _authProvider = Provider.of<AuthProvider>(context);
+    _authProvider = Provider.of<EvieAuthProvider.AuthProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
 
     return WillPopScope(

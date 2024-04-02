@@ -15,6 +15,7 @@ import '../../api/navigator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../api/provider/bike_provider.dart';
+import '../../api/provider/plan_provider.dart';
 import '../../api/snackbar.dart';
 import '../../widgets/evie_progress_indicator.dart';
 import '../../widgets/evie_textform.dart';
@@ -30,6 +31,7 @@ class _NameBikeState extends State<NameBike> {
 
   late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
+  late PlanProvider _planProvider;
 
   late final FocusNode _nameFocusNode;
 
@@ -37,12 +39,14 @@ class _NameBikeState extends State<NameBike> {
   final TextEditingController _bikeNameController = TextEditingController();
 
   bool enabled = true;
+  bool hasPlan = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _nameFocusNode.requestFocus();
+    _planProvider = context.read<PlanProvider>();
   }
 
   // @override
@@ -55,6 +59,9 @@ class _NameBikeState extends State<NameBike> {
   Widget build(BuildContext context) {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
+    _planProvider = Provider.of<PlanProvider>(context);
+
+    hasPlan = _bikeProvider.currentBikePlanModel != null ? true : false;
 
     final _formKey = GlobalKey<FormState>();
 
@@ -77,7 +84,7 @@ class _NameBikeState extends State<NameBike> {
                     SizedBox(
                       height: 5.h,
                     ),
-                    const EvieProgressIndicator(currentPageNumber: 3, totalSteps: 5,),
+                    const EvieProgressIndicator(currentPageNumber: 3, totalSteps: 6,),
 
                     Text(
                       "Name your bike",
@@ -141,10 +148,21 @@ class _NameBikeState extends State<NameBike> {
                           Future.delayed(Duration(seconds: 4)).then((value) {
                             if(_bikeProvider.isAddBike == true){
                               _bikeProvider.setIsAddBike(false);
-                              changeToCongratsBikeAdded(context, _bikeNameController.text.toString());
+                              if (!hasPlan) {
+                                changeToActivateEVSecureScreen(context,
+                                    _bikeNameController.text.toString());
+                              }
+                              else {
+                                changeToCongratsBikeAdded(context, _bikeNameController.text.toString());
+                              }
                             }else{
-                              // changeToTurnOnNotificationsScreen(context);
-                              changeToCongratsBikeAdded(context, _bikeNameController.text.toString());
+                              if (!hasPlan) {
+                                changeToActivateEVSecureScreen(context,
+                                    _bikeNameController.text.toString());
+                              }
+                              else {
+                                changeToCongratsBikeAdded(context, _bikeNameController.text.toString());
+                              }
                             }
                           });
 
@@ -181,10 +199,21 @@ class _NameBikeState extends State<NameBike> {
                           Future.delayed(Duration(seconds: 4)).then((value) {
                             if(_bikeProvider.isAddBike == true){
                               _bikeProvider.setIsAddBike(false);
-                              changeToCongratsBikeAdded(context, "EVIE " + _bikeProvider.currentBikeModel!.model!);
+                              if (!hasPlan) {
+                                changeToActivateEVSecureScreen(context,
+                                    _bikeNameController.text.toString());
+                              }
+                              else {
+                                changeToCongratsBikeAdded(context,  _bikeProvider.currentBikeModel!.model!);
+                              }
                             }else{
-                              // changeToTurnOnNotificationsScreen(context);
-                              changeToCongratsBikeAdded(context, "EVIE " + _bikeProvider.currentBikeModel!.model!);
+                              if (!hasPlan) {
+                                changeToActivateEVSecureScreen(context,
+                                    _bikeNameController.text.toString());
+                              }
+                              else {
+                                changeToCongratsBikeAdded(context,  _bikeProvider.currentBikeModel!.model!);
+                              }
                             }
                           });
                         } 

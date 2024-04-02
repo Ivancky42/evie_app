@@ -1,5 +1,6 @@
 import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/fonts.dart';
+import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -23,11 +24,13 @@ class FirmwareUpdateCompleted extends StatefulWidget{
 class _FirmwareUpdateCompletedState extends State<FirmwareUpdateCompleted> {
 
   late SettingProvider _settingProvider;
+  late BluetoothProvider _bluetoothProvider;
 
   @override
   Widget build(BuildContext context) {
 
     _settingProvider = Provider.of<SettingProvider>(context);
+    _bluetoothProvider = Provider.of<BluetoothProvider>(context);
 
     return WillPopScope(
         onWillPop: () async {
@@ -87,7 +90,8 @@ class _FirmwareUpdateCompletedState extends State<FirmwareUpdateCompleted> {
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w700),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
+                        await _bluetoothProvider.disconnectDevice();
                        _settingProvider.changeSheetElement(SheetList.bikeSetting);
                       },
                     ),

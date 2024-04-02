@@ -164,6 +164,39 @@ class PlanProvider extends ChangeNotifier {
     });
   }
 
+  Future<LinkedHashMap<String, String>> redeemEVSecureCode(String code) {
+      return FirebaseFirestore.instance.collection("codes").where('code', isEqualTo: code).get().then((querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          String docId = querySnapshot.docs[0].id;
+          Map<String, dynamic> data = querySnapshot.docs[0].data() as Map<String, dynamic>;
+          print('Document Data: $data');
+          int orderId = data['orderId'];
+          String sentEmail = data['sentEmail'];
+          bool available = data['available'];
+
+          if (available) {
+            return LinkedHashMap.from({
+              'result': 'CODE_AVAILABLE',
+              'orderId': orderId.toString(),
+              'sentEmail': sentEmail,
+              'docId': docId,
+            });
+          }
+          else {
+            return LinkedHashMap.from({
+              'result': 'CODE_REDEEMED',
+              'orderId': orderId.toString(),
+              'sentEmail': sentEmail,
+              'docId': docId,
+            });
+          }
+        }
+        else {
+          return LinkedHashMap.from({'result': 'CODE_NOT_FOUND'});
+        }
+      });
+  }
+
   clear() async {
     currentUserModel = null;
     currentBikeModel = null;

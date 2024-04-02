@@ -94,8 +94,7 @@ class _CurrentPlanState extends State<CurrentPlan> {
 
                             _bikeProvider.currentBikePlanModel != null ?
                             Visibility(
-                              visible: calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.expiredAt!.toDate()) >= 0 &&
-                                calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.expiredAt!.toDate()) <= 30,
+                              visible: calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.expiredAt!.toDate()) >= 0 && calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.expiredAt!.toDate()) <= 30,
                               child: Text(
                               " (Expiring in ${calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.expiredAt!.toDate())} Days)",
                               style: EvieTextStyles.body16.copyWith(color: EvieColors.green),

@@ -271,7 +271,7 @@ class _FreePlanState extends State<FreePlan> {
                                padding: EdgeInsets.fromLTRB(19.w, 19.42.h, 19.w, 16.w),
                                child: EvieCard(
                                  onPress: (){
-                                   _settingProvider.changeSheetElement(SheetList.proPlan);
+                                   _settingProvider.changeSheetElement(SheetList.currentPlan);
                                    showSheetNavigate(context);
                                  },
                                  height: double.infinity,
@@ -454,7 +454,7 @@ class _FreePlanState extends State<FreePlan> {
                                   height: 232.h,
                                   child: EvieCard(
                                     onPress: (){
-                                      _settingProvider.changeSheetElement(SheetList.proPlan);
+                                      _settingProvider.changeSheetElement(SheetList.currentPlan);
                                       showSheetNavigate(context);
                                     },
                                     height: double.infinity,

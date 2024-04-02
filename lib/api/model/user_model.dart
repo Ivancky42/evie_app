@@ -18,6 +18,7 @@ class UserModel {
   LastLoginModel? lastLogin;
   bool isDeactivated;
   String? birthday;
+  bool isBetaUser;
 
   UserModel({
     required this.uid,
@@ -34,6 +35,7 @@ class UserModel {
     this.lastLogin,
     this.birthday,
     required this.isDeactivated,
+    required this.isBetaUser,
   });
 
   factory UserModel.fromJson(Map json) {
@@ -51,7 +53,8 @@ class UserModel {
       notificationSettings:  json['notificationSettings'] != null ? NotificationSettingModel.fromJson(json['notificationSettings'] as Map<String, dynamic>) : null,
       lastLogin:  json['lastLogin'] != null ? LastLoginModel.fromJson(json['lastLogin'] as Map<String, dynamic>) : null,
       isDeactivated: json['isDeactivated'] ?? false,
-        birthday: json['birthday'] ?? ''
+        birthday: json['birthday'] ?? '',
+      isBetaUser: json['isBetaUser']?? false,
     );
   }
 

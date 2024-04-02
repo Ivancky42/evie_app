@@ -38,6 +38,7 @@ import '../screen/my_bike_setting/pedal_pals/pedal_pals.dart';
 import '../screen/my_bike_setting/pedal_pals/pedal_pals_list.dart';
 import '../screen/my_bike_setting/pedal_pals/share_bike_invitation.dart';
 import '../screen/my_bike_setting/reset_bike/reset_bike.dart';
+import '../screen/onboarding_addNewBike/activate-evsecure.dart';
 import '../screen/onboarding_addNewBike/bike_connect_failed.dart';
 import '../screen/onboarding_addNewBike/bike_connect_success.dart';
 import '../screen/onboarding_addNewBike/bike_registering.dart';
@@ -365,6 +366,16 @@ void changeToEmailPreferenceControlScreen(BuildContext context) {
   );
 }
 
+void changeToActivateEVSecureScreen(BuildContext context, String bikeName) {
+  Navigator.pushReplacement(context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: ActivateEVSecureScreen(bikeName: bikeName,),
+      duration: const Duration(milliseconds: 300),
+    ),
+  );
+}
+
 void changeToCongratsBikeAdded(BuildContext context, String bikeName) {
   Navigator.pushReplacement(context,
     PageTransition(
@@ -583,18 +594,6 @@ void changeToAboutBike(BuildContext context) {
     ),
   );
 }
-
-
-void changeToFirmwareInformation(BuildContext context) {
-  Navigator.pushReplacement(context,
-    PageTransition(
-      type: PageTransitionType.rightToLeft,
-      child: const FirmwareInformation(),
-      duration: const Duration(milliseconds: 300),
-    ),
-  );
-}
-
 
 void changeToFirmwareUpdateCompleted(BuildContext context) {
   Navigator.pushReplacement(context,

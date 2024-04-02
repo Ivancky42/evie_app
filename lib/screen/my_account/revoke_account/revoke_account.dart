@@ -2,9 +2,8 @@ import 'dart:io';
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/length.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/my_account/my_account_widget.dart';
+import 'package:evie_test/api/provider/auth_provider.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/screen/my_account/switch_profile_image.dart';
@@ -16,7 +15,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/widgets/widgets.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';

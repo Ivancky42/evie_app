@@ -39,93 +39,102 @@ class _BikeRegisteringState extends State<BikeRegistering> {
     super.initState();
     _authProvider = context.read<AuthProvider>();
     _bikeProvider = context.read<BikeProvider>();
-    String? registeringDeviceIMEI = widget.registeringDeviceIMEI;
-    if (registeringDeviceIMEI != null) {
-      FirebaseFirestore.instance.collection('bikes').doc(registeringDeviceIMEI).get().then((doc) {
-        if (doc.exists){
-          Map<String, dynamic>? obj = doc.data();
-          BikeModel bikeModel = BikeModel.fromJson(obj!);
-          if (bikeModel.pendingActivateEVSecure != null) {
-            if (bikeModel.pendingActivateEVSecure!.enabled!) {
-              _authProvider.getIdToken().then((idToken) {
-                if (idToken != null) {
-                  String auth = idToken;
-                  const header = Headers.jsonContentType;
-                  final body = {
-                    "productId": "prod_P6emdafBd0FyB0",
-                    "deviceIMEI": bikeModel.deviceIMEI,
-                    "created": (DateTime.now().millisecondsSinceEpoch / 1000).floor(),
-                    "feature": 'EV-Secure',
-                    "orderId": bikeModel.pendingActivateEVSecure!.orderId,
-                  };
+    // String? registeringDeviceIMEI = widget.registeringDeviceIMEI;
+    // if (registeringDeviceIMEI != null) {
+    //   FirebaseFirestore.instance.collection('bikes').doc(registeringDeviceIMEI).get().then((doc) {
+    //     if (doc.exists){
+    //       Map<String, dynamic>? obj = doc.data();
+    //       BikeModel bikeModel = BikeModel.fromJson(obj!);
+    //       if (bikeModel.pendingActivateEVSecure != null) {
+    //         if (bikeModel.pendingActivateEVSecure!.enabled!) {
+    //           _authProvider.getIdToken().then((idToken) {
+    //             if (idToken != null) {
+    //               String auth = idToken;
+    //               const header = Headers.jsonContentType;
+    //               final body = {
+    //                 "productId": "prod_P6emdafBd0FyB0",
+    //                 "deviceIMEI": bikeModel.deviceIMEI,
+    //                 "created": (DateTime.now().millisecondsSinceEpoch / 1000).floor(),
+    //                 "feature": 'EV-Secure',
+    //                 "orderId": bikeModel.pendingActivateEVSecure!.orderId,
+    //               };
+    //
+    //               String base_url = 'https://us-central1-evie-126a6.cloudfunctions.net/shopify_evsecure/activateEVSecure';
+    //               ServerApiBase.postRequest(auth, base_url, body, header).then((value) {
+    //                 //print(value);
+    //                 if (widget.isSuccess) {
+    //                   changeToBikeConnectSuccessScreen(context);
+    //                 }
+    //                 else {
+    //                   changeToBikeConnectFailedScreen(context);
+    //                 }
+    //               });
+    //             }
+    //             else {
+    //               Future.delayed(const Duration(seconds: 3), (){
+    //                 if (widget.isSuccess) {
+    //                   changeToBikeConnectSuccessScreen(context);
+    //                 }
+    //                 else {
+    //                   changeToBikeConnectFailedScreen(context);
+    //                 }
+    //               });
+    //             }
+    //           });
+    //         }
+    //         else {
+    //           Future.delayed(const Duration(seconds: 3), (){
+    //             if (widget.isSuccess) {
+    //               changeToBikeConnectSuccessScreen(context);
+    //             }
+    //             else {
+    //               changeToBikeConnectFailedScreen(context);
+    //             }
+    //           });
+    //         }
+    //       }
+    //       else {
+    //         Future.delayed(const Duration(seconds: 3), (){
+    //           if (widget.isSuccess) {
+    //             changeToBikeConnectSuccessScreen(context);
+    //           }
+    //           else {
+    //             changeToBikeConnectFailedScreen(context);
+    //           }
+    //         });
+    //       }
+    //     }
+    //     else {
+    //       Future.delayed(const Duration(seconds: 3), (){
+    //         if (widget.isSuccess) {
+    //           changeToBikeConnectSuccessScreen(context);
+    //         }
+    //         else {
+    //           changeToBikeConnectFailedScreen(context);
+    //         }
+    //       });
+    //     }
+    //   });
+    // }
+    // else {
+    //   Future.delayed(const Duration(seconds: 3), (){
+    //     if (widget.isSuccess) {
+    //       changeToBikeConnectSuccessScreen(context);
+    //     }
+    //     else {
+    //       changeToBikeConnectFailedScreen(context);
+    //     }
+    //   });
+    // }
 
-                  String base_url = 'https://us-central1-evie-126a6.cloudfunctions.net/shopify_evsecure/activateEVSecure';
-                  ServerApiBase.postRequest(auth, base_url, body, header).then((value) {
-                    //print(value);
-                    if (widget.isSuccess) {
-                      changeToBikeConnectSuccessScreen(context);
-                    }
-                    else {
-                      changeToBikeConnectFailedScreen(context);
-                    }
-                  });
-                }
-                else {
-                  Future.delayed(const Duration(seconds: 3), (){
-                    if (widget.isSuccess) {
-                      changeToBikeConnectSuccessScreen(context);
-                    }
-                    else {
-                      changeToBikeConnectFailedScreen(context);
-                    }
-                  });
-                }
-              });
-            }
-            else {
-              Future.delayed(const Duration(seconds: 3), (){
-                if (widget.isSuccess) {
-                  changeToBikeConnectSuccessScreen(context);
-                }
-                else {
-                  changeToBikeConnectFailedScreen(context);
-                }
-              });
-            }
-          }
-          else {
-            Future.delayed(const Duration(seconds: 3), (){
-              if (widget.isSuccess) {
-                changeToBikeConnectSuccessScreen(context);
-              }
-              else {
-                changeToBikeConnectFailedScreen(context);
-              }
-            });
-          }
-        }
-        else {
-          Future.delayed(const Duration(seconds: 3), (){
-            if (widget.isSuccess) {
-              changeToBikeConnectSuccessScreen(context);
-            }
-            else {
-              changeToBikeConnectFailedScreen(context);
-            }
-          });
-        }
-      });
-    }
-    else {
-      Future.delayed(const Duration(seconds: 3), (){
-        if (widget.isSuccess) {
-          changeToBikeConnectSuccessScreen(context);
-        }
-        else {
-          changeToBikeConnectFailedScreen(context);
-        }
-      });
-    }
+    Future.delayed(const Duration(seconds: 3), (){
+      if (widget.isSuccess) {
+        changeToBikeConnectSuccessScreen(context);
+      }
+      else {
+        changeToBikeConnectFailedScreen(context);
+      }
+    });
   }
 
   @override
@@ -144,7 +153,7 @@ class _BikeRegisteringState extends State<BikeRegistering> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      const EvieProgressIndicator(currentPageNumber: 1, totalSteps: 5,),
+                      const EvieProgressIndicator(currentPageNumber: 1, totalSteps: 6,),
 
                       Padding(
                         padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),

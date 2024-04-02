@@ -3,6 +3,7 @@ import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/function.dart';
+import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/setting.dart';
@@ -35,6 +36,7 @@ class BikeSettingContainer extends StatefulWidget {
 
 class _BikeSettingContainerState extends State<BikeSettingContainer> with WidgetsBindingObserver{
 
+  late CurrentUserProvider _currentUserProvider;
   late BikeProvider _bikeProvider;
   late FirmwareProvider _firmwareProvider;
   late BluetoothProvider _bluetoothProvider;
@@ -74,6 +76,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> with Widget
   @override
   Widget build(BuildContext context) {
     label = widget.bikeSettingModel.label;
+    _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
     _firmwareProvider = Provider.of<FirmwareProvider>(context);
     _bluetoothProvider = Provider.of<BluetoothProvider>(context);
@@ -148,7 +151,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> with Widget
               _settingProvider.changeSheetElement(SheetList.motionSensitivity);
 
               break;
-            case "Firmware Version":
+            case "Bike Software":
               pageNavigate = null;
               _settingProvider.changeSheetElement(SheetList.firmwareInformation);
               break;
@@ -971,7 +974,36 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> with Widget
                                         padding:EdgeInsets.fromLTRB(6.w,4.h,6.w,4.h),
                                         child: Text("Update Available",  style: EvieTextStyles.body12.copyWith(color: EvieColors.grayishWhite),),
                                       ),
-                                    )),
+                                    )
+                                ),
+                                SizedBox(width: 4.w,),
+                                // Visibility(
+                                //     visible: _currentUserProvider.currentUserModel!.isBetaUser && _firmwareProvider.isBetaVersionAvailable,
+                                //     child: Container(
+                                //       decoration: const BoxDecoration(
+                                //           color: EvieColors.primaryColor,
+                                //           borderRadius: BorderRadius.all(Radius.circular(5))
+                                //       ),
+                                //       child: Padding(
+                                //         padding:EdgeInsets.fromLTRB(6.w,4.h,6.w,4.h),
+                                //         child: Text("Beta Update Available",  style: EvieTextStyles.body12.copyWith(color: EvieColors.grayishWhite),),
+                                //       ),
+                                //     )
+                                // ),
+                                // SizedBox(width: 4.w,),
+                                Visibility(
+                                    visible: _currentUserProvider.currentUserModel!.isBetaUser && _firmwareProvider.isBetaVersion,
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                          color: EvieColors.lightBlack,
+                                          borderRadius: BorderRadius.all(Radius.circular(5))
+                                      ),
+                                      child: Padding(
+                                        padding:EdgeInsets.fromLTRB(6.w,4.h,6.w,4.h),
+                                        child: Text("Beta Version",  style: EvieTextStyles.body12.copyWith(color: EvieColors.grayishWhite),),
+                                      ),
+                                    )
+                                ),
                               ],
                             )
                           ],

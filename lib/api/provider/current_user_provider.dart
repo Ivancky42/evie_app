@@ -91,11 +91,16 @@ class CurrentUserProvider extends ChangeNotifier {
         Map<String, dynamic>? obj = doc.data();
         if (obj != null) {
           currentUserModel = UserModel.fromJson(obj);
-          if (currentUserModel!.isDeactivated) {
-            getUserCompleter.complete('INVALID_USER');
+          if (obj['uid'] != null) {
+            if (currentUserModel!.isDeactivated) {
+              getUserCompleter.complete('INVALID_USER');
+            }
+            else {
+              getUserCompleter.complete('VALID_USER');
+            }
           }
           else {
-            getUserCompleter.complete('VALID_USER');
+            getUserCompleter.complete('MISSING_DATA_USER');
           }
         }
         else {

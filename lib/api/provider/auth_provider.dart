@@ -89,6 +89,67 @@ class AuthProvider extends ChangeNotifier {
     });
   }
 
+  Future<void> restoreUserData(context) async {
+    userChangeSubscription?.cancel();
+    userChangeSubscription = FirebaseAuth.instance.userChanges().listen((user) {
+      if (user != null) {
+              if (user.displayName != null) {
+                final FirebaseStorage storage = FirebaseStorage.instance;
+                final Reference ref = storage.ref().child(
+                    checkNameSelectImage(user.displayName!));
+                ref.getDownloadURL().then((value) =>
+                    updateFirestoreUser(
+                        user.uid,
+                        user.email,
+                        user.displayName,
+                        '',
+                        value,
+                        credentialProvider,
+                        ''));
+                _uid = user.uid;
+                _email = user.email!;
+                isLogin = true;
+                if (user.providerData[0].providerId == 'password') {
+                  isEmailVerified = user.emailVerified;
+                }
+                else {
+                  isEmailVerified = true;
+                }
+                getIsFirstLogin();
+                notifyListeners();
+              }
+              else {
+                final FirebaseStorage storage = FirebaseStorage.instance;
+                final Reference ref = storage.ref().child(
+                    'defaultProfile/rider.png');
+                ref.getDownloadURL().then((value) =>
+                    updateFirestoreUser(
+                        user.uid,
+                        user.email,
+                        'Evie User',
+                        '',
+                        value,
+                        credentialProvider,
+                        ''));
+                _uid = user.uid;
+                _email = user.email!;
+                isLogin = true;
+                if (user.providerData[0].providerId == 'password') {
+                  isEmailVerified = user.emailVerified;
+                }
+                else {
+                  isEmailVerified = true;
+                }
+                getIsFirstLogin();
+                notifyListeners();
+              }
+      }
+      else {
+        print('hello');
+      }
+    });
+  }
+
   ///User login function
   Future login(String email, String password) async {
     //User Provider
@@ -146,7 +207,7 @@ class AuthProvider extends ChangeNotifier {
         if (firebaseUser != null) {
           firebaseUser?.updateDisplayName(name).then((value) {
             createFirestoreUser(firebaseUser?.uid, firebaseUser?.email, name, phoneNo, profileIMG, credentialProvider, '');
-            sendFirestoreVerifyEmail();
+            //sendFirestoreVerifyEmail();
           });
         }
       });
@@ -187,7 +248,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       User? firebaseUser;
       firebaseUser = _auth.currentUser;
-      firebaseUser!.sendEmailVerification();
+      firebaseUser?.sendEmailVerification();
     }
     catch(error) {
       print(error);
@@ -254,7 +315,31 @@ class AuthProvider extends ChangeNotifier {
             created: Timestamp.now(),
             updated: Timestamp.now(),
             isDeactivated: false,
+            isBetaUser:false,
           ).toJson());
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future updateFirestoreUser(uid, email, name, phoneNo, profileIMG, credentialProvider, birthday) async {
+    try {
+      FirebaseFirestore.instance
+          .collection(usersCollection)
+          .doc(uid)
+          .update(UserModel(
+        uid: uid,
+        email: email,
+        name: name,
+        phoneNumber: phoneNo,
+        //Assign default profile image
+        profileIMG: profileIMG,
+        credentialProvider: credentialProvider,
+        created: Timestamp.now(),
+        updated: Timestamp.now(),
+        isDeactivated: false,
+        isBetaUser:false,
+      ).toJson());
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -360,57 +445,66 @@ class AuthProvider extends ChangeNotifier {
     }
     else if (loginResult.status == LoginStatus.success) {
       final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+      try {
+        UserCredential userCredential = await _auth.signInWithCredential(
+            facebookAuthCredential);
 
-      UserCredential userCredential = await _auth.signInWithCredential(facebookAuthCredential);
+        credentialProvider = "facebook";
+        notifyListeners();
 
-      credentialProvider = "facebook";
-      notifyListeners();
+        if (userCredential.additionalUserInfo!.isNewUser) {
+          String? userPhoneNo;
 
-      if (userCredential.additionalUserInfo!.isNewUser) {
-        String? userPhoneNo;
+          userPhoneNo = "empty";
+          _uid = userCredential.user!.uid;
+          _email = userCredential.user!.email!;
 
-        userPhoneNo = "empty";
-        _uid = userCredential.user!.uid;
-        _email = userCredential.user!.email!;
+          final FirebaseStorage storage = FirebaseStorage.instance;
+          final Reference ref = storage.ref().child(checkNameSelectImage(
+              userCredential.user?.displayName.toString() ?? ''));
+          final String profileIMG = await ref.getDownloadURL();
 
-        final FirebaseStorage storage = FirebaseStorage.instance;
-        final Reference ref = storage.ref().child(checkNameSelectImage(userCredential.user?.displayName.toString() ?? ''));
-        final String profileIMG = await ref.getDownloadURL();
+          if (nameInput != '') {
+            ///Firestore
+            createFirestoreUser(
+                _uid,
+                _email,
+                nameInput,
+                userPhoneNo,
+                //Phone no
+                profileIMG,
+                credentialProvider,
+                ''
+            );
+          }
+          else {
+            createFirestoreUser(
+                _uid,
+                _email,
+                userCredential.user?.displayName.toString(),
+                userPhoneNo,
+                //Phone no
+                profileIMG,
+                credentialProvider,
+                ''
+            );
+          }
 
-        if (nameInput != '') {
-          ///Firestore
-          createFirestoreUser(
-              _uid,
-              _email,
-              nameInput,
-              userPhoneNo, //Phone no
-              profileIMG,
-              credentialProvider,
-              ''
-          );
+          setIsFirstLogin(true);
+          notifyListeners();
+          return {SignInStatus.isNewUser: 'Success'};
         }
         else {
-          createFirestoreUser(
-              _uid,
-              _email,
-              userCredential.user?.displayName.toString(),
-              userPhoneNo, //Phone no
-              profileIMG,
-              credentialProvider,
-              ''
-          );
+          _uid = userCredential.user!.uid;
+          _email = userCredential.user!.email!;
+
+          notifyListeners();
+          return {SignInStatus.registeredUser: 'Success'};
         }
-
-        setIsFirstLogin(true);
-        notifyListeners();
-        return {SignInStatus.isNewUser: 'Success'};
       }
-      else {
-        _uid = userCredential.user!.uid;
-        _email = userCredential.user!.email!;
-
-        notifyListeners();
-        return {SignInStatus.registeredUser: 'Success'};
+      on FirebaseAuthException catch (e) {
+        debugPrint(e.toString());
+        return {SignInStatus.error: e.message!};
       }
     }
     else {

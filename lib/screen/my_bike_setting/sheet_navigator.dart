@@ -1,5 +1,6 @@
 import 'package:evie_test/screen/my_bike_setting/about_bike/about_bike.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_status_alert/bike_status_alert.dart';
+import 'package:evie_test/screen/my_bike_setting/firmware/beta_firmware_information.dart';
 import 'package:evie_test/screen/my_bike_setting/firmware/firmware_information.dart';
 import 'package:evie_test/screen/my_bike_setting/firmware/firmware_update_completed.dart';
 import 'package:evie_test/screen/my_bike_setting/firmware/firmware_update_failed.dart';
@@ -33,9 +34,13 @@ import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_key.dart';
 import 'package:evie_test/screen/my_bike_setting/rfid_card/ev_key_list.dart';
 import 'package:evie_test/screen/my_bike_setting/rfid_card/name_ev.dart';
 import 'package:evie_test/screen/my_bike_setting/rfid_card/register_ev_key.dart';
+import 'package:evie_test/screen/my_bike_setting/subscription/activateEVWithCode.dart';
+import 'package:evie_test/screen/my_bike_setting/subscription/add_plan.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/current_plan.dart';
+import 'package:evie_test/screen/my_bike_setting/subscription/current_plan_2.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/current_plan.dart';
+import 'package:evie_test/screen/my_bike_setting/subscription/pro_plan/pro_plan2.dart';
 import 'package:evie_test/screen/my_bike_setting/troubleshoot/troubleshoot.dart';
 import 'package:evie_test/screen/my_bike_setting/user_manual/user_manual.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/threat/threat_history.dart';
@@ -60,11 +65,12 @@ class SheetNavigator extends StatefulWidget {
 
   final String source;
   final String stringPassing;
+  final BuildContext? context;
 
    const SheetNavigator(
       this.source,
       this.stringPassing,
-      {Key? key}) : super(key: key);
+      {Key? key, this.context}) : super(key: key);
 
   @override
   State<SheetNavigator> createState() => _SheetNavigatorState();
@@ -109,11 +115,13 @@ class _SheetNavigatorState extends State<SheetNavigator> {
         return DetectionSensitivity();
 
       case SheetList.currentPlan:
-        return CurrentPlan();
-      // case SheetList.essentialPlan:
-      //   return EssentialPlan2();
+        return CurrentPlan2();
+      case SheetList.addPlan:
+        return AddPlan();
       case SheetList.proPlan:
-        return ProPlan();
+        return ProPlan2();
+      case SheetList.activateEVWithCode:
+        return ActivateEVWithCode(bContext: widget.context!,);
 
       case SheetList.pedalPals:
         return PedalPals();
@@ -133,9 +141,10 @@ class _SheetNavigatorState extends State<SheetNavigator> {
 
       case SheetList.aboutBike:
         return AboutBike();
-
       case SheetList.firmwareInformation:
         return FirmwareInformation();
+      case SheetList.betaFirmwareInformation:
+        return BetaFirmwareInformation();
       case SheetList.firmwareUpdateCompleted:
         return FirmwareUpdateCompleted();
       case SheetList.firmwareUpdateFailed:

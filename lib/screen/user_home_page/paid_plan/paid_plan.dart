@@ -8,7 +8,6 @@ import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/home_element/threat_unlocking_system.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
 import 'package:evie_test/widgets/actionable_bar.dart';
 import 'package:evie_test/widgets/evie-unlocking-button.dart';
 import 'package:flutter/material.dart';
@@ -80,9 +79,7 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
 
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
-    if (_firmwareProvider.currentFirmVer != _firmwareProvider.latestFirmVer) {
-      //print(_firmwareProvider.latestFirmVer);
-      //print(_firmwareProvider.currentFirmVer);
+    if (!_firmwareProvider.isLatestFirmVer || _firmwareProvider.isBetaVersionAvailable) {
       setState(() {
         actionableBarItem = ActionableBarItem.bikeUpdate;
       });

@@ -1,24 +1,16 @@
 import 'dart:async';
-
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:open_mail_app/open_mail_app.dart';
-import 'package:open_settings/open_settings.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
 import '../../api/dialog.dart';
 import '../../api/fonts.dart';
 import '../../api/navigator.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../api/provider/bluetooth_provider.dart';
@@ -59,7 +51,7 @@ class _CongratsBikeAddedState extends State<CongratsBikeAdded> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
 
-                    const EvieProgressIndicator(currentPageNumber: 4, totalSteps: 5,),
+                    const EvieProgressIndicator(currentPageNumber: 5, totalSteps: 6,),
 
                     Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),

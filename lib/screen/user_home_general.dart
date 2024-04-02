@@ -166,6 +166,10 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
         isLoading = false;
       });
     }
+    else if (result == 'MISSING_DATA_USER') {
+      await _authProvider.restoreUserData(context);
+      fetchData(_authProvider, _currentUserProvider, context);
+    }
   }
 
   @override

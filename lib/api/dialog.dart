@@ -37,6 +37,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:open_mail_app/open_mail_app.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -196,6 +197,19 @@ showBluetoothNotTurnOn() {
       widget: EvieSingleButtonDialog(
           title: "Bluetooth Error",
           content: "Uh-oh! Bluetooth is off. Turn it on for connection.",
+          rightContent: "OK",
+          onPressedRight: () {
+            SmartDialog.dismiss();
+          }));
+}
+
+showNoInternetConnection() {
+  SmartDialog.dismiss();
+  SmartDialog.show(
+      keepSingle: true,
+      widget: EvieSingleButtonDialog(
+          title: "No Internet Connection",
+          content: "Uh-oh! No internet connection. Please enable your mobile data or connect with wifi to perform next action.",
           rightContent: "OK",
           onPressedRight: () {
             SmartDialog.dismiss();
@@ -1812,6 +1826,13 @@ showWelcomeToEVClub (BuildContext context){
   );
 }
 
+showThankyouDialog(BuildContext context) {
+  SmartDialog.show(
+    keepSingle: true,
+    widget: ThanksStickingToEVSecure()
+  );
+}
+
 showWelcomeToJoinTeam(BuildContext context, String palName, String teamName) {
   SmartDialog.show(
     keepSingle: true,
@@ -2379,6 +2400,59 @@ showSoftwareUpdate(BuildContext context, FirmwareProvider firmwareProvider, Stre
   );
 }
 
+showBetaSoftwareUpdate(BuildContext context, FirmwareProvider firmwareProvider, StreamSubscription? stream, BluetoothProvider bluetoothProvider, SettingProvider settingProvider) {
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+        title: Text("Better Bike Software Update",
+          style:EvieTextStyles.h2,
+          textAlign: TextAlign.center,
+        ),
+        childContent: Text("Get more out of your EVIE bike with the latest software update. Charge your bike and ensure stable Wi-Fi connection before updating. Tip: Stay connected during update.",
+          textAlign: TextAlign.center,
+          style: EvieTextStyles.body18,),
+        svgpicture: SvgPicture.asset(
+          "assets/images/better_bike_software_update.svg",
+        ),
+        upContent: "Update Now",
+        downContent: "Cancel",
+        onPressedUp: () async {
+          SmartDialog.dismiss();
+          showCustomLightLoading('Loading...', false);
+
+          Reference ref = FirebaseStorage.instance.refFromURL(firmwareProvider.latestFirmwareModel!.betaUrl);
+          File file = await firmwareProvider.downloadFile(ref);
+
+          stream = bluetoothProvider.firmwareUpgradeListener.stream.listen((firmwareUpgradeResult) {
+            if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.startUpgrade) {
+            }
+            else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgrading) {
+              SmartDialog.dismiss();
+              Future.delayed(Duration.zero, () {
+                firmwareProvider.changeIsUpdating(true);
+              });
+            }
+            else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeSuccessfully) {
+              ///go to success page
+              firmwareProvider.changeIsUpdating(false);
+              stream?.cancel();
+              firmwareProvider.uploadFirmVerToFirestore("57_V${firmwareProvider.latestBetaFirmVer!}");
+              settingProvider.changeSheetElement(SheetList.firmwareUpdateCompleted);
+            }
+            else if (firmwareUpgradeResult.firmwareUpgradeState == FirmwareUpgradeState.upgradeFailed) {
+              firmwareProvider.changeIsUpdating(false);
+              stream?.cancel();
+              settingProvider.changeSheetElement(SheetList.firmwareUpdateFailed);
+            }else{}
+          });
+
+          bluetoothProvider.startUpgradeFirmware(file);
+        },
+        onPressedDown: () {
+          SmartDialog.dismiss();
+        }),
+  );
+}
+
 showOffMotionSensitivity (BuildContext context, BikeProvider _bikeProvider, value, BluetoothProvider _bluetoothProvider){
   SmartDialog.show(
     widget: EvieTwoButtonDialog(
@@ -2451,3 +2525,90 @@ showOffMotionSensitivity (BuildContext context, BikeProvider _bikeProvider, valu
   );
 }
 
+showWhereToFindEVSecureCode(BuildContext context) {
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+      title: Text(
+        "Where do I Find My EV-Secure code?",
+        style: EvieTextStyles.h2,
+        textAlign: TextAlign.center,
+      ),
+      childContent: Text(
+        "If you purchased EV-Secure on our web store, you will have received an email titled “xxx” containing your unique EV-Secure code.",
+        textAlign: TextAlign.center,
+        style: EvieTextStyles.body18,
+      ),
+      svgpicture: SvgPicture.asset("assets/images/email.svg"),
+      upContent: "Open Email Inbox",
+      downContent: "Done",
+      onPressedUp: () async {
+        SmartDialog.dismiss();
+        await OpenMailApp.openMailApp();
+      },
+      onPressedDown: () {
+        SmartDialog.dismiss();
+      },
+    ),
+  );
+}
+
+showInvalidEVSecureCode() {
+  SmartDialog.dismiss();
+  SmartDialog.show(
+      keepSingle: true,
+      widget: EvieSingleButtonDialog(
+          title: "Oops! Invalid EV-Secure Code",
+          content: "Uh-oh! We couldn't find your EV-Secure Code. Double-check your digits and give it another shot.",
+          rightContent: "Retry",
+          svgpicture: SvgPicture.asset('assets/images/bike_fix.svg'),
+          onPressedRight: () {
+            SmartDialog.dismiss();
+          }));
+}
+
+
+showCodeRedeemedDialog(BuildContext context) {
+  SmartDialog.show(
+    widget: EvieTwoButtonDialog(
+      title: Text(
+        "EV-Secure Code Activated",
+        style: EvieTextStyles.h2,
+        textAlign: TextAlign.center,
+      ),
+      childContent: Text(
+        "Oh no! It appears that the EV-Secure Code you entered has already been activated. Please enter a new code or reach out to our dedicated customer support team for assistance.",
+        textAlign: TextAlign.center,
+        style: EvieTextStyles.body18,
+      ),
+      svgpicture: SvgPicture.asset('assets/images/bike_fix.svg'),
+      upContent: "Retry",
+      //downContent: "Get Support",
+      onPressedUp: () async {
+        SmartDialog.dismiss();
+      },
+      // onPressedDown: () {
+      //   const url = 'https://eviebikes.com/pages/downloads';
+      //   final Uri _url = Uri.parse(url);
+      //   launch(_url);
+      // },
+      customButtonDown: EvieButton_ReversedColor(
+          width: double.infinity,
+          onPressed: (){
+            const url = 'https://support.eviebikes.com/en-US';
+            final Uri _url = Uri.parse(url);
+            launch(_url);
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Get Support", style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor)),
+              SvgPicture.asset(
+                "assets/buttons/external_link.svg",
+                color: EvieColors.primaryColor,
+              ),
+            ],
+          )
+      ),
+    ),
+  );
+}

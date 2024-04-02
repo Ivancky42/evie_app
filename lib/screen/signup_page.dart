@@ -4,18 +4,17 @@ import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/screen/input_name.dart';
 import 'package:evie_test/widgets/evie_checkbox.dart';
 import 'package:evie_test/widgets/evie_textform.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
+
 import '../api/fonts.dart';
 import '../api/length.dart';
 import '../api/navigator.dart';
-import '../api/provider/auth_provider.dart';
+import '../api/provider/auth_provider.dart' as EvieAuthProvider;
 import '../widgets/evie_appbar.dart';
 import '../widgets/evie_single_button_dialog.dart';
 
@@ -34,7 +33,7 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   //To read data from user input
   final TextEditingController _emailController = TextEditingController();
-  late AuthProvider _authProvider;
+  late EvieAuthProvider.AuthProvider _authProvider;
   late CurrentUserProvider _currentUserProvider;
   bool isCheckTermsCondition = false;
   final FocusNode _nameFocusNode = FocusNode();
@@ -51,7 +50,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    _authProvider = Provider.of<AuthProvider>(context);
+    _authProvider = Provider.of<EvieAuthProvider.AuthProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
     return Scaffold(

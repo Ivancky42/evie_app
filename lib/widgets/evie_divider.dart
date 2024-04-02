@@ -17,6 +17,7 @@ class EvieDivider extends StatelessWidget {
       thickness: thickness ?? 0.1.h,
       color: color ?? EvieColors.darkWhite,
       height: height ?? 0,
+
     );
   }
 }

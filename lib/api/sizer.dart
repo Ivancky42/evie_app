@@ -1,8 +1,10 @@
 import 'dart:io' show Platform;
 
+import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 extension Sizer on num {
+
   double get h => Platform.isAndroid ? this / 844 * SizerUtil.height : this / 928.4 * SizerUtil.height;
 
   ///Calculate for bottom navigation bar padding size.

@@ -49,7 +49,7 @@ class _TurnOnQRScannerState extends State<TurnOnQRScanner> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            EvieProgressIndicator(currentPageNumber: 0, totalSteps: 5,),
+                            EvieProgressIndicator(currentPageNumber: 0, totalSteps: 6,),
                             Text(
                               "First up, scan the QR Code",
                               style: EvieTextStyles.h2,

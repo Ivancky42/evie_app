@@ -58,7 +58,7 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      const EvieProgressIndicator(currentPageNumber: 2, totalSteps: 5,),
+                      const EvieProgressIndicator(currentPageNumber: 2, totalSteps: 6,),
 
                       Padding(
                         padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w,4.h),

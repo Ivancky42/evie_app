@@ -3,6 +3,7 @@ import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 
 import '../api/colours.dart';
@@ -21,6 +22,7 @@ class EvieTextFormField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatter;
   final FocusNode? focusNode;
   final bool? enabled;
+  final MaskTextInputFormatter? maskTextInputFormatter;
 
   const EvieTextFormField({
     Key? key,
@@ -35,6 +37,7 @@ class EvieTextFormField extends StatefulWidget {
     this.inputFormatter,
     this.focusNode,
     this.enabled,
+    this.maskTextInputFormatter,
 
   }) : super(key: key);
 
@@ -52,17 +55,23 @@ class _EvieTextFormFieldState extends State<EvieTextFormField> {
     if (widget.focusNode != null) {
       thisFocusNode = widget.focusNode!;
       thisFocusNode.addListener(() {
-        setState(() {
-          borderColor = thisFocusNode.hasFocus ? EvieColors.primaryColor : Colors.grey;
-        });
+        if (mounted) {
+          setState(() {
+            borderColor =
+            thisFocusNode.hasFocus ? EvieColors.primaryColor : Colors.grey;
+          });
+        }
       });
     }
     else {
       thisFocusNode = FocusNode();
       thisFocusNode.addListener(() {
-        setState(() {
-          borderColor = thisFocusNode.hasFocus ? EvieColors.primaryColor : Colors.grey;
-        });
+        if (mounted) {
+          setState(() {
+            borderColor =
+            thisFocusNode.hasFocus ? EvieColors.primaryColor : Colors.grey;
+          });
+        }
       });
     }
     super.initState();

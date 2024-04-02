@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/provider/shared_pref_provider.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
 import 'package:evie_test/widgets/evie-unlocking-button.dart';
 import 'package:evie_test/widgets/evie_card.dart';
 import 'package:image/image.dart' as IMG;

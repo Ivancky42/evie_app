@@ -8,7 +8,6 @@ import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/shared_pref_provider.dart';
 import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/home_element/unlocking_system.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:flutter/cupertino.dart';

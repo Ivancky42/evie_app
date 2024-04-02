@@ -30,7 +30,7 @@ void showSheetNavigate(BuildContext context, [String? source, String? strings, S
     if (sheetList == SheetList.bikeEraseUnlink || sheetList == SheetList.bikeEraseReset) {
       showCupertinoSheet(
           context,
-          SheetNavigator(source ?? 'Home', strings ?? ''),
+          SheetNavigator(source ?? 'Home', strings ?? '', context: context,),
           enabledDrag: false,
           isDismissible: false,
       );
@@ -41,7 +41,7 @@ void showSheetNavigate(BuildContext context, [String? source, String? strings, S
         context,
         Container(
           //color: Colors.green,
-          child: SheetNavigator(source ?? 'Home', strings ?? ''),
+          child: SheetNavigator(source ?? 'Home', strings ?? '', context: context,),
         )
     );
   }
