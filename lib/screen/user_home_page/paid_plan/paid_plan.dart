@@ -187,11 +187,13 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Container(
-                                                        //color: Colors.red,
+                                                        width: 230.w,
                                                         child: Row(
                                                           children: [
                                                             Container(
-                                                              width: 210.w,
+                                                              constraints: BoxConstraints(
+                                                                maxWidth: 200.w, // Set the maximum width here
+                                                              ),
                                                               child: Text(
                                                                 _bikeProvider.currentBikeModel?.deviceName ?? "loading",
                                                                 style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite, height: 1.2),

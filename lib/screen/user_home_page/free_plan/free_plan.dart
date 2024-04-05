@@ -173,13 +173,16 @@ class _FreePlanState extends State<FreePlan> {
 
                                                           Container(
                                                             padding: EdgeInsets.only(left: 2),
-                                                            //color: Colors.red,
                                                             child: Row(
                                                               children: [
-                                                                Text(
-                                                                  _bikeProvider.currentBikeModel?.deviceName ?? "loading",
-                                                                  style: EvieTextStyles.target_reference_h1.copyWith(color: EvieColors.grayishWhite),
-                                                                ),
+                                                                Container(
+                                                                  width: 230.w,
+                                                                  child: Text(
+                                                                    _bikeProvider.currentBikeModel?.deviceName ?? "loading",
+                                                                    style: EvieTextStyles.target_reference_h1.copyWith(color: EvieColors.grayishWhite),
+                                                                    overflow: TextOverflow.ellipsis,
+                                                                  ),
+                                                                )
                                                               ],
                                                             ),
                                                           ),

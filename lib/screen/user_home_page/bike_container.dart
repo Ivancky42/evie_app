@@ -154,18 +154,23 @@ class _BikeContainerState extends State<BikeContainer> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 160.w,
-                                  child: Text(
-                                    widget.bikeModel.deviceName!,
-                                    style: EvieTextStyles.target_reference_h3,
-                                    overflow: TextOverflow.ellipsis,
+                            Container(
+                              width: 180.w,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth: 150.w, // Set the maximum width here
+                                    ),
+                                    child: Text(
+                                      widget.bikeModel.deviceName!,
+                                      style: EvieTextStyles.target_reference_h3,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
-                                ),
-                                getCurrentBikeStatusTag(widget.bikeModel, _bikeProvider, _bluetoothProvider)
-                              ],
+                                  getCurrentBikeStatusTag(widget.bikeModel, _bikeProvider, _bluetoothProvider)
+                                ],
+                              ),
                             ),
                             Container(
                               color: Colors.transparent,

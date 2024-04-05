@@ -335,12 +335,17 @@ class _BikeSettingState extends State<BikeSetting> {
                         ///device name
                         Padding(
                           padding: EdgeInsets.only(left: 6.w),
-                          child: Text(
-                            _bikeProvider.currentBikeModel?.deviceName ?? "",
-                            style: EvieTextStyles.h3,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
+                          child: Container(
+                            constraints: BoxConstraints(
+                              maxWidth: _bikeProvider.isPlanSubscript != null ? _bikeProvider.isPlanSubscript! ? 180.w : 210.w : 180.w, // Set the maximum width here
+                            ),
+                            child: Text(
+                              _bikeProvider.currentBikeModel?.deviceName ?? "",
+                              style: EvieTextStyles.h3,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          )
                         ),
 
                         ///purple batch
