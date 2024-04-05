@@ -24,6 +24,7 @@ import '../../../widgets/evie_radio_button.dart';
 import '../../../widgets/evie_switch.dart';
 import '../../animation/waved_curves_animation.dart';
 import '../../api/length.dart';
+import '../../bluetooth/modelResult.dart';
 import 'home_page_widget.dart';
 
 class BatteryDetails extends StatefulWidget {
@@ -106,12 +107,20 @@ class _BatteryDetailsState extends State<BatteryDetails> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // Text(
+                          //   "${_bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0}%",
+                          //   style: EvieTextStyles.batteryPercent.copyWith(color: EvieColors.lightBlack),
+                          // ),
                           Text(
-                            "${_bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0}%",
+                            "${_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
+                            int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0") :
+                            _bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0}%",
                             style: EvieTextStyles.batteryPercent.copyWith(color: EvieColors.lightBlack),
                           ),
                           Text(
-                            "Estimate ${getEstDistance(_bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0, _settingProvider)} remaining",
+                            "Estimate ${getEstDistance(_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
+                            int.parse(_bluetoothProvider.bikeInfoResult?.batteryLevel ?? "0") :
+                            _bikeProvider.currentBikeModel?.batteryModel?.percentage ?? 0, _settingProvider)} remaining",
                             style: EvieTextStyles.body16,
                           ),
                         ],

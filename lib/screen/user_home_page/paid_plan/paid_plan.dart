@@ -190,9 +190,13 @@ class _PaidPlanState extends State<PaidPlan> with WidgetsBindingObserver{
                                                         //color: Colors.red,
                                                         child: Row(
                                                           children: [
-                                                            Text(
-                                                              _bikeProvider.currentBikeModel?.deviceName ?? "loading",
-                                                              style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite, height: 1.2),
+                                                            Container(
+                                                              width: 210.w,
+                                                              child: Text(
+                                                                _bikeProvider.currentBikeModel?.deviceName ?? "loading",
+                                                                style: EvieTextStyles.h1.copyWith(color: EvieColors.grayishWhite, height: 1.2),
+                                                                overflow: TextOverflow.ellipsis,
+                                                              ),
                                                             ),
                                                             SvgPicture.asset(
                                                               "assets/icons/batch_tick.svg",
