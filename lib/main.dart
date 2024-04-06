@@ -30,6 +30,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:upgrader/upgrader.dart';
 import 'api/colours.dart';
@@ -355,23 +356,112 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       // Include any other fields you need
     };
 
-    // Convert the map to a JSON string
-    String payloadJson = jsonEncode(payloadData);
+    // String payloadJson = jsonEncode(payloadData);
+    //
+    // flutterLocalNotificationsPlugin.show(
+    //   notification.hashCode,
+    //   notification.title,
+    //   notification.body,
+    //   NotificationDetails(
+    //     android: AndroidNotificationDetails(
+    //       channel.id,
+    //       channel.name,
+    //       channelDescription: channel.description,
+    //       icon: 'test_notification',
+    //     ),
+    //   ),
+    //   payload: payloadJson,
+    // );
 
-    flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
-      notification.title,
-      notification.body,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channelDescription: channel.description,
-          icon: 'test_notification',
+
+    String? deviceIMEI =  message.data['deviceIMEI'];
+
+    if (deviceIMEI != null) {
+      SharedPreferences sharedPreferences = await SharedPreferences
+          .getInstance();
+      List<String>? bikeListKey = sharedPreferences.getStringList(
+          'currentUserBikeListKeys');
+      if (bikeListKey != null) {
+        if (!bikeListKey.contains(deviceIMEI)) {
+          // String payloadJson = jsonEncode(payloadData);
+          // flutterLocalNotificationsPlugin.show(
+          //   notification.hashCode,
+          //   "Bike List not contain",
+          //   notification.body,
+          //   NotificationDetails(
+          //     android: AndroidNotificationDetails(
+          //       channel.id,
+          //       channel.name,
+          //       channelDescription: channel.description,
+          //       icon: 'test_notification',
+          //     ),
+          //   ),
+          //   payload: payloadJson,
+          // );
+          FirebaseMessaging messaging = FirebaseMessaging.instance;
+          await messaging.unsubscribeFromTopic("$deviceIMEI~connection-lost");
+          await messaging.unsubscribeFromTopic("$deviceIMEI~movement-detect");
+          await messaging.unsubscribeFromTopic("$deviceIMEI~theft-attempt");
+          await messaging.unsubscribeFromTopic("$deviceIMEI~lock");
+          await messaging.unsubscribeFromTopic("$deviceIMEI~unlock");
+          await messaging.unsubscribeFromTopic("$deviceIMEI~plan-reminder");
+          await messaging.unsubscribeFromTopic("$deviceIMEI~evkey");
+        }
+        else {
+          // Convert the map to a JSON string
+          String payloadJson = jsonEncode(payloadData);
+
+          flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channelDescription: channel.description,
+                icon: 'test_notification',
+              ),
+            ),
+            payload: payloadJson,
+          );
+        }
+      }
+      else {
+        // String payloadJson = jsonEncode(payloadData);
+        // flutterLocalNotificationsPlugin.show(
+        //   notification.hashCode,
+        //   "Bike List = null",
+        //   notification.body,
+        //   NotificationDetails(
+        //     android: AndroidNotificationDetails(
+        //       channel.id,
+        //       channel.name,
+        //       channelDescription: channel.description,
+        //       icon: 'test_notification',
+        //     ),
+        //   ),
+        //   payload: payloadJson,
+        // );
+      }
+    }
+    else {
+      String payloadJson = jsonEncode(payloadData);
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            icon: 'test_notification',
+          ),
         ),
-      ),
-      payload: payloadJson,
-    );
+        payload: payloadJson,
+      );
+    }
   }
 }
 

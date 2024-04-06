@@ -120,7 +120,7 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
 
 
     ///android Foreground message
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
 
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
@@ -133,23 +133,64 @@ class _UserHomeGeneralState extends State<UserHomeGeneral> {
           // Include any other fields you need
         };
 
-        // Convert the map to a JSON string
-        String payloadJson = jsonEncode(payloadData);
+        String? deviceIMEI =  message.data['deviceIMEI'];
+        if (deviceIMEI != null) {
+          List<String> bikeListKey = await _sharedPreferenceProvider
+              .loadCurrentUserBikeListKeysFromSharedPreferences();
 
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channelDescription: channel.description,
-              icon: 'test_notification',
+          if (!bikeListKey.contains(deviceIMEI)) {
+            _sharedPreferenceProvider.handleSubTopic(
+                "$deviceIMEI~connection-lost", false);
+            _sharedPreferenceProvider.handleSubTopic(
+                "$deviceIMEI~movement-detect", false);
+            _sharedPreferenceProvider.handleSubTopic(
+                "$deviceIMEI~theft-attempt", false);
+            _sharedPreferenceProvider.handleSubTopic("$deviceIMEI~lock", false);
+            _sharedPreferenceProvider.handleSubTopic(
+                "$deviceIMEI~unlock", false);
+            _sharedPreferenceProvider.handleSubTopic(
+                "$deviceIMEI~plan-reminder", false);
+            _sharedPreferenceProvider.handleSubTopic(
+                "$deviceIMEI~evkey", false);
+          }
+          else {
+            // Convert the map to a JSON string
+            String payloadJson = jsonEncode(payloadData);
+
+            flutterLocalNotificationsPlugin.show(
+              notification.hashCode,
+              notification.title,
+              notification.body,
+              NotificationDetails(
+                android: AndroidNotificationDetails(
+                  channel.id,
+                  channel.name,
+                  channelDescription: channel.description,
+                  icon: 'test_notification',
+                ),
+              ),
+              payload: payloadJson,
+            );
+          }
+        }
+        else {
+          String payloadJson = jsonEncode(payloadData);
+
+          flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channelDescription: channel.description,
+                icon: 'test_notification',
+              ),
             ),
-          ),
-          payload: payloadJson,
-        );
+            payload: payloadJson,
+          );
+        }
       }
     });
     super.initState();

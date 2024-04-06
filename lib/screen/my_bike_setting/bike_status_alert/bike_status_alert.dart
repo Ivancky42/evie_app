@@ -243,51 +243,51 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> with WidgetsBindingOb
                   child: EvieDivider(),
                 ),
 
-                Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
-                  child: EvieSwitch(
-                    height: 82.h,
-                    activeColor: hasPermission ? (_bikeProvider.isOwner == true ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4)) : EvieColors.primaryColor.withOpacity(0.4),
-                    title: "Connection Lost",
-                    text: "Receive a notification when your bike has lost connection for more than 10mins",
-                    value: currentNotificationSettings?.connectionLost ?? false,
-                    thumbColor: _thumbColor,
-                    onChanged: (value) async {
-
-                      if(_bikeProvider.isOwner == true){
-                        if (hasPermission) {
-                          showCustomLightLoading();
-                          var result = await _bikeProvider
-                              .updateBikeNotifySetting(
-                              "connectionLost", value!);
-                          if (result == true) {
-                            SmartDialog.dismiss();
-                          }
-                          else {
-                            SmartDialog.show(
-                                widget: EvieSingleButtonDialog(
-                                    title: "Error",
-                                    content: "Try again",
-                                    rightContent: "OK",
-                                    onPressedRight: () {
-                                      SmartDialog.dismiss();
-                                    }));
-                          }
-                        }
-                        else {
-                          showPermissionNeededForEVSecure(context);
-                        }
-                      }
-                      else{
-                        showAccNoPermissionToast(context);
-                      }
-                    },
-                  )
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 16.w),
-                  child: EvieDivider(),
-                ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
+                //   child: EvieSwitch(
+                //     height: 82.h,
+                //     activeColor: hasPermission ? (_bikeProvider.isOwner == true ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.4)) : EvieColors.primaryColor.withOpacity(0.4),
+                //     title: "Connection Lost",
+                //     text: "Receive a notification when your bike has lost connection for more than 10mins",
+                //     value: currentNotificationSettings?.connectionLost ?? false,
+                //     thumbColor: _thumbColor,
+                //     onChanged: (value) async {
+                //
+                //       if(_bikeProvider.isOwner == true){
+                //         if (hasPermission) {
+                //           showCustomLightLoading();
+                //           var result = await _bikeProvider
+                //               .updateBikeNotifySetting(
+                //               "connectionLost", value!);
+                //           if (result == true) {
+                //             SmartDialog.dismiss();
+                //           }
+                //           else {
+                //             SmartDialog.show(
+                //                 widget: EvieSingleButtonDialog(
+                //                     title: "Error",
+                //                     content: "Try again",
+                //                     rightContent: "OK",
+                //                     onPressedRight: () {
+                //                       SmartDialog.dismiss();
+                //                     }));
+                //           }
+                //         }
+                //         else {
+                //           showPermissionNeededForEVSecure(context);
+                //         }
+                //       }
+                //       else{
+                //         showAccNoPermissionToast(context);
+                //       }
+                //     },
+                //   )
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.only(left: 16.w),
+                //   child: EvieDivider(),
+                // ),
                 Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 28.h, 16.w,4.h),
                     child: EvieSwitch(

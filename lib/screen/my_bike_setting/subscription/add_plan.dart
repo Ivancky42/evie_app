@@ -191,51 +191,54 @@ class _AddPlanState extends State<AddPlan> {
                   });
                 }
               },
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Upgrade with App",
-                              style: EvieTextStyles.body18,
-                            ),
-                            SizedBox(height: 4.h,),
-                            Container(
-                              width: 318.w,
-                              child: Text(
-                                "Want to upgrade directly through app? Choose this option.",
-                                style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+              child: Container(
+                color: Colors.transparent,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Upgrade with App",
+                                style: EvieTextStyles.body18,
                               ),
-                            )
-                          ],
-                        ),
-                        Center(
-                          child: SvgPicture.asset(
-                            "assets/buttons/next.svg",
+                              SizedBox(height: 4.h,),
+                              Container(
+                                width: 318.w,
+                                child: Text(
+                                  "Want to upgrade directly through app? Choose this option.",
+                                  style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                                ),
+                              )
+                            ],
                           ),
-                        ),
-                      ],
+                          Center(
+                            child: SvgPicture.asset(
+                              "assets/buttons/next.svg",
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 16.w),
-                        child: Divider(
-                          thickness: 0.2.h,
-                          color: EvieColors.darkWhite,
-                          height: 0,
-                        ),
-                      )
-                  ),
-                ],
-              ),
+                    Container(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 16.w),
+                          child: Divider(
+                            thickness: 0.2.h,
+                            color: EvieColors.darkWhite,
+                            height: 0,
+                          ),
+                        )
+                    ),
+                  ],
+                ),
+              )
             )
           ],
         )
