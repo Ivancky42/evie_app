@@ -12,6 +12,7 @@ import '../../api/colours.dart';
 import '../../test/test.dart';
 import '../feeds/feeds.dart';
 import '../my_account/account/my_account.dart';
+import '../user_home_general_v2.dart';
 
 
 class UserHomePage extends StatefulWidget {
@@ -36,7 +37,8 @@ class _UserHomePageState extends State<UserHomePage> {
 
   ///Body Screen navigation by bottom navigation bar
   final screen = [
-    const UserHomeGeneral(),
+    //const UserHomeGeneral(),
+    const UserHomeGeneralV2(),
     const Feeds(),
     const MyAccount(),
   ];

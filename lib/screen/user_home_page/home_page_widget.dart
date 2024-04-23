@@ -200,6 +200,8 @@ Widget getFirestoreSecurityTextWidget(bool? isLocked, String status) {
         );
       }
       break;
+    case null:
+      // TODO: Handle this case.
   }
   return CircularProgressIndicator(color: EvieColors.primaryColor,);
 }

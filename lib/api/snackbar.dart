@@ -78,6 +78,10 @@ showConnectionStatusToast(
           _navigator.removeCurrentSnackBar();
         });
         break;
+      case null:
+        // TODO: Handle this case.
+      case DeviceConnectResult.deviceFound:
+        // TODO: Handle this case.
     }
 }
 

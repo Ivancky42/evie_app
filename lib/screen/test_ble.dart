@@ -354,6 +354,10 @@ class _TestBleState extends State<TestBle> {
                                 connectionStatus = deviceConnectStatus.name.toString();
                               });
                               break;
+                            case DeviceConnectResult.deviceFound:
+                              // TODO: Handle this case.
+                            case DeviceConnectResult.switchBike:
+                              // TODO: Handle this case.
                           }
                         });
                       }
