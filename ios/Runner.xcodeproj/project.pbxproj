@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
-		66AAE71C5E2D5E6A4E3D7B12 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AFDC8324F4484FA8F02B52E /* Pods_Runner.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
+		764B18392D13E11D6942C665 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB02769150F0BC234AEA5095 /* Pods_Runner.framework */; };
 		7EB753D7288FD034009245ED /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7EB753D6288FD033009245ED /* GoogleService-Info.plist */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -29,7 +29,6 @@
 		7EB523DA28A102EE00F400A9 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		7EB753D6288FD033009245ED /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7EC0E14029EFCF0600775A24 /* mapbox_maps_flutter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = mapbox_maps_flutter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8AFDC8324F4484FA8F02B52E /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B4298D18A40841A9F340085 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
@@ -38,6 +37,7 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BB02769150F0BC234AEA5095 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,7 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				66AAE71C5E2D5E6A4E3D7B12 /* Pods_Runner.framework in Frameworks */,
+				764B18392D13E11D6942C665 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,7 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				7EC0E14029EFCF0600775A24 /* mapbox_maps_flutter.framework */,
-				8AFDC8324F4484FA8F02B52E /* Pods_Runner.framework */,
+				BB02769150F0BC234AEA5095 /* Pods_Runner.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -132,6 +132,7 @@
 				97C146EC1CF9000F007C117D /* Resources */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				1F5F574B189D7CC8D4837C40 /* [CP] Embed Pods Frameworks */,
+				67179B0152E235EC01799AD0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -148,7 +149,7 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					97C146ED1CF9000F007C117D = {
@@ -249,6 +250,23 @@
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
 		};
+		67179B0152E235EC01799AD0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		9740EEB61CF901F6004384FC /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -340,8 +358,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/Mapbox/Core/Plugins/iOS/MapboxMobileEvents/include/";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -360,6 +380,86 @@
 				DEVELOPMENT_TEAM = JW3QN55CBA;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AppAuth\"",
+					"\"${PODS_ROOT}/Headers/Public/BoringSSL-GRPC\"",
+					"\"${PODS_ROOT}/Headers/Public/FMDB\"",
+					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseAppCheckInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseAuth\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseAuthInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseCore\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseCoreExtension\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseFirestore\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseFirestoreInternal\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseInstallations\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseMessaging\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseMessagingInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseStorage\"",
+					"\"${PODS_ROOT}/Headers/Public/GTMSessionFetcher\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleDataTransport\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleMLKit\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleSignIn\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleToolboxForMac\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleUtilities\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleUtilitiesComponents\"",
+					"\"${PODS_ROOT}/Headers/Public/MapboxMaps\"",
+					"\"${PODS_ROOT}/Headers/Public/PromisesObjC\"",
+					"\"${PODS_ROOT}/Headers/Public/Protobuf\"",
+					"\"${PODS_ROOT}/Headers/Public/RecaptchaInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"\"${PODS_ROOT}/Headers/Public/StripePayments\"",
+					"\"${PODS_ROOT}/Headers/Public/SwiftyGif\"",
+					"\"${PODS_ROOT}/Headers/Public/Toast\"",
+					"\"${PODS_ROOT}/Headers/Public/Turf\"",
+					"\"${PODS_ROOT}/Headers/Public/abseil\"",
+					"\"${PODS_ROOT}/Headers/Public/cloud_firestore\"",
+					"\"${PODS_ROOT}/Headers/Public/cloud_functions\"",
+					"\"${PODS_ROOT}/Headers/Public/connectivity_plus\"",
+					"\"${PODS_ROOT}/Headers/Public/device_info_plus\"",
+					"\"${PODS_ROOT}/Headers/Public/file_picker\"",
+					"\"${PODS_ROOT}/Headers/Public/firebase_auth\"",
+					"\"${PODS_ROOT}/Headers/Public/firebase_core\"",
+					"\"${PODS_ROOT}/Headers/Public/firebase_messaging\"",
+					"\"${PODS_ROOT}/Headers/Public/firebase_storage\"",
+					"\"${PODS_ROOT}/Headers/Public/flutter_compass\"",
+					"\"${PODS_ROOT}/Headers/Public/flutter_facebook_auth\"",
+					"\"${PODS_ROOT}/Headers/Public/flutter_local_notifications\"",
+					"\"${PODS_ROOT}/Headers/Public/flutter_native_splash\"",
+					"\"${PODS_ROOT}/Headers/Public/fluttertoast\"",
+					"\"${PODS_ROOT}/Headers/Public/gRPC-C++\"",
+					"\"${PODS_ROOT}/Headers/Public/gRPC-Core\"",
+					"\"${PODS_ROOT}/Headers/Public/geocoding_ios\"",
+					"\"${PODS_ROOT}/Headers/Public/geolocator_apple\"",
+					"\"${PODS_ROOT}/Headers/Public/google_sign_in_ios\"",
+					"\"${PODS_ROOT}/Headers/Public/image_picker_ios\"",
+					"\"${PODS_ROOT}/Headers/Public/integration_test\"",
+					"\"${PODS_ROOT}/Headers/Public/leveldb-library\"",
+					"\"${PODS_ROOT}/Headers/Public/location\"",
+					"\"${PODS_ROOT}/Headers/Public/map_launcher\"",
+					"\"${PODS_ROOT}/Headers/Public/mapbox_maps_flutter\"",
+					"\"${PODS_ROOT}/Headers/Public/nanopb\"",
+					"\"${PODS_ROOT}/Headers/Public/open_mail_app\"",
+					"\"${PODS_ROOT}/Headers/Public/open_settings\"",
+					"\"${PODS_ROOT}/Headers/Public/package_info_plus\"",
+					"\"${PODS_ROOT}/Headers/Public/permission_handler_apple\"",
+					"\"${PODS_ROOT}/Headers/Public/reactive_ble_mobile\"",
+					"\"${PODS_ROOT}/Headers/Public/share_plus\"",
+					"\"${PODS_ROOT}/Headers/Public/sign_in_with_apple\"",
+					"\"${PODS_ROOT}/Headers/Public/sqflite\"",
+					"\"${PODS_ROOT}/Headers/Public/stripe_ios\"",
+					"\"${PODS_ROOT}/Headers/Public/twitter_login\"",
+					"\"${PODS_ROOT}/Headers/Public/vibration\"",
+					"\"${PODS_ROOT}/Headers/Public/wakelock_plus\"",
+					"\"${PODS_ROOT}/Headers/Public/webview_flutter_wkwebview\"",
+					"$(inherited)",
+					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
+					"$(inherited)",
+					"${PODS_ROOT}/GoogleMLKit/MLKitCore/Sources",
+					"$(SRCROOT)/Libraries/Mapbox/Core/Plugins/iOS/MapboxMobileEvents/include/",
+				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "EVIE Bikes";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -368,7 +468,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.17;
+				MARKETING_VERSION = 1.0.18;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -654,6 +754,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/Mapbox/Core/Plugins/iOS/MapboxMobileEvents/include/";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -704,8 +805,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/Mapbox/Core/Plugins/iOS/MapboxMobileEvents/include/";
+				"HEADER_SEARCH_PATHS[arch=*]" = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -725,6 +829,86 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = JW3QN55CBA;
 				ENABLE_BITCODE = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AppAuth\"",
+					"\"${PODS_ROOT}/Headers/Public/BoringSSL-GRPC\"",
+					"\"${PODS_ROOT}/Headers/Public/FMDB\"",
+					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseAppCheckInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseAuth\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseAuthInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseCore\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseCoreExtension\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseFirestore\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseFirestoreInternal\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseInstallations\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseMessaging\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseMessagingInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseStorage\"",
+					"\"${PODS_ROOT}/Headers/Public/GTMSessionFetcher\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleDataTransport\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleMLKit\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleSignIn\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleToolboxForMac\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleUtilities\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleUtilitiesComponents\"",
+					"\"${PODS_ROOT}/Headers/Public/MapboxMaps\"",
+					"\"${PODS_ROOT}/Headers/Public/PromisesObjC\"",
+					"\"${PODS_ROOT}/Headers/Public/Protobuf\"",
+					"\"${PODS_ROOT}/Headers/Public/RecaptchaInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"\"${PODS_ROOT}/Headers/Public/StripePayments\"",
+					"\"${PODS_ROOT}/Headers/Public/SwiftyGif\"",
+					"\"${PODS_ROOT}/Headers/Public/Toast\"",
+					"\"${PODS_ROOT}/Headers/Public/Turf\"",
+					"\"${PODS_ROOT}/Headers/Public/abseil\"",
+					"\"${PODS_ROOT}/Headers/Public/cloud_firestore\"",
+					"\"${PODS_ROOT}/Headers/Public/cloud_functions\"",
+					"\"${PODS_ROOT}/Headers/Public/connectivity_plus\"",
+					"\"${PODS_ROOT}/Headers/Public/device_info_plus\"",
+					"\"${PODS_ROOT}/Headers/Public/file_picker\"",
+					"\"${PODS_ROOT}/Headers/Public/firebase_auth\"",
+					"\"${PODS_ROOT}/Headers/Public/firebase_core\"",
+					"\"${PODS_ROOT}/Headers/Public/firebase_messaging\"",
+					"\"${PODS_ROOT}/Headers/Public/firebase_storage\"",
+					"\"${PODS_ROOT}/Headers/Public/flutter_compass\"",
+					"\"${PODS_ROOT}/Headers/Public/flutter_facebook_auth\"",
+					"\"${PODS_ROOT}/Headers/Public/flutter_local_notifications\"",
+					"\"${PODS_ROOT}/Headers/Public/flutter_native_splash\"",
+					"\"${PODS_ROOT}/Headers/Public/fluttertoast\"",
+					"\"${PODS_ROOT}/Headers/Public/gRPC-C++\"",
+					"\"${PODS_ROOT}/Headers/Public/gRPC-Core\"",
+					"\"${PODS_ROOT}/Headers/Public/geocoding_ios\"",
+					"\"${PODS_ROOT}/Headers/Public/geolocator_apple\"",
+					"\"${PODS_ROOT}/Headers/Public/google_sign_in_ios\"",
+					"\"${PODS_ROOT}/Headers/Public/image_picker_ios\"",
+					"\"${PODS_ROOT}/Headers/Public/integration_test\"",
+					"\"${PODS_ROOT}/Headers/Public/leveldb-library\"",
+					"\"${PODS_ROOT}/Headers/Public/location\"",
+					"\"${PODS_ROOT}/Headers/Public/map_launcher\"",
+					"\"${PODS_ROOT}/Headers/Public/mapbox_maps_flutter\"",
+					"\"${PODS_ROOT}/Headers/Public/nanopb\"",
+					"\"${PODS_ROOT}/Headers/Public/open_mail_app\"",
+					"\"${PODS_ROOT}/Headers/Public/open_settings\"",
+					"\"${PODS_ROOT}/Headers/Public/package_info_plus\"",
+					"\"${PODS_ROOT}/Headers/Public/permission_handler_apple\"",
+					"\"${PODS_ROOT}/Headers/Public/reactive_ble_mobile\"",
+					"\"${PODS_ROOT}/Headers/Public/share_plus\"",
+					"\"${PODS_ROOT}/Headers/Public/sign_in_with_apple\"",
+					"\"${PODS_ROOT}/Headers/Public/sqflite\"",
+					"\"${PODS_ROOT}/Headers/Public/stripe_ios\"",
+					"\"${PODS_ROOT}/Headers/Public/twitter_login\"",
+					"\"${PODS_ROOT}/Headers/Public/vibration\"",
+					"\"${PODS_ROOT}/Headers/Public/wakelock_plus\"",
+					"\"${PODS_ROOT}/Headers/Public/webview_flutter_wkwebview\"",
+					"$(inherited)",
+					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
+					"$(inherited)",
+					"${PODS_ROOT}/GoogleMLKit/MLKitCore/Sources",
+					"$(SRCROOT)/Libraries/Mapbox/Core/Plugins/iOS/MapboxMobileEvents/include/",
+				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "EVIE Bikes";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -733,7 +917,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.17;
+				MARKETING_VERSION = 1.0.18;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -982,6 +1166,86 @@
 				DEVELOPMENT_TEAM = JW3QN55CBA;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AppAuth\"",
+					"\"${PODS_ROOT}/Headers/Public/BoringSSL-GRPC\"",
+					"\"${PODS_ROOT}/Headers/Public/FMDB\"",
+					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseAppCheckInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseAuth\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseAuthInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseCore\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseCoreExtension\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseFirestore\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseFirestoreInternal\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseInstallations\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseMessaging\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseMessagingInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/FirebaseStorage\"",
+					"\"${PODS_ROOT}/Headers/Public/GTMSessionFetcher\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleDataTransport\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleMLKit\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleSignIn\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleToolboxForMac\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleUtilities\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleUtilitiesComponents\"",
+					"\"${PODS_ROOT}/Headers/Public/MapboxMaps\"",
+					"\"${PODS_ROOT}/Headers/Public/PromisesObjC\"",
+					"\"${PODS_ROOT}/Headers/Public/Protobuf\"",
+					"\"${PODS_ROOT}/Headers/Public/RecaptchaInterop\"",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"\"${PODS_ROOT}/Headers/Public/StripePayments\"",
+					"\"${PODS_ROOT}/Headers/Public/SwiftyGif\"",
+					"\"${PODS_ROOT}/Headers/Public/Toast\"",
+					"\"${PODS_ROOT}/Headers/Public/Turf\"",
+					"\"${PODS_ROOT}/Headers/Public/abseil\"",
+					"\"${PODS_ROOT}/Headers/Public/cloud_firestore\"",
+					"\"${PODS_ROOT}/Headers/Public/cloud_functions\"",
+					"\"${PODS_ROOT}/Headers/Public/connectivity_plus\"",
+					"\"${PODS_ROOT}/Headers/Public/device_info_plus\"",
+					"\"${PODS_ROOT}/Headers/Public/file_picker\"",
+					"\"${PODS_ROOT}/Headers/Public/firebase_auth\"",
+					"\"${PODS_ROOT}/Headers/Public/firebase_core\"",
+					"\"${PODS_ROOT}/Headers/Public/firebase_messaging\"",
+					"\"${PODS_ROOT}/Headers/Public/firebase_storage\"",
+					"\"${PODS_ROOT}/Headers/Public/flutter_compass\"",
+					"\"${PODS_ROOT}/Headers/Public/flutter_facebook_auth\"",
+					"\"${PODS_ROOT}/Headers/Public/flutter_local_notifications\"",
+					"\"${PODS_ROOT}/Headers/Public/flutter_native_splash\"",
+					"\"${PODS_ROOT}/Headers/Public/fluttertoast\"",
+					"\"${PODS_ROOT}/Headers/Public/gRPC-C++\"",
+					"\"${PODS_ROOT}/Headers/Public/gRPC-Core\"",
+					"\"${PODS_ROOT}/Headers/Public/geocoding_ios\"",
+					"\"${PODS_ROOT}/Headers/Public/geolocator_apple\"",
+					"\"${PODS_ROOT}/Headers/Public/google_sign_in_ios\"",
+					"\"${PODS_ROOT}/Headers/Public/image_picker_ios\"",
+					"\"${PODS_ROOT}/Headers/Public/integration_test\"",
+					"\"${PODS_ROOT}/Headers/Public/leveldb-library\"",
+					"\"${PODS_ROOT}/Headers/Public/location\"",
+					"\"${PODS_ROOT}/Headers/Public/map_launcher\"",
+					"\"${PODS_ROOT}/Headers/Public/mapbox_maps_flutter\"",
+					"\"${PODS_ROOT}/Headers/Public/nanopb\"",
+					"\"${PODS_ROOT}/Headers/Public/open_mail_app\"",
+					"\"${PODS_ROOT}/Headers/Public/open_settings\"",
+					"\"${PODS_ROOT}/Headers/Public/package_info_plus\"",
+					"\"${PODS_ROOT}/Headers/Public/permission_handler_apple\"",
+					"\"${PODS_ROOT}/Headers/Public/reactive_ble_mobile\"",
+					"\"${PODS_ROOT}/Headers/Public/share_plus\"",
+					"\"${PODS_ROOT}/Headers/Public/sign_in_with_apple\"",
+					"\"${PODS_ROOT}/Headers/Public/sqflite\"",
+					"\"${PODS_ROOT}/Headers/Public/stripe_ios\"",
+					"\"${PODS_ROOT}/Headers/Public/twitter_login\"",
+					"\"${PODS_ROOT}/Headers/Public/vibration\"",
+					"\"${PODS_ROOT}/Headers/Public/wakelock_plus\"",
+					"\"${PODS_ROOT}/Headers/Public/webview_flutter_wkwebview\"",
+					"$(inherited)",
+					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
+					"$(inherited)",
+					"${PODS_ROOT}/GoogleMLKit/MLKitCore/Sources",
+					"$(SRCROOT)/Libraries/Mapbox/Core/Plugins/iOS/MapboxMobileEvents/include/",
+				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "EVIE Bikes";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -990,7 +1254,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.17;
+				MARKETING_VERSION = 1.0.18;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

@@ -102,7 +102,7 @@ class _BatteryState extends State<Battery> {
                             ),
                           ],
                         ),
-                      SizedBox(height: 0.h),
+                      SizedBox(height: 10.h),
                       Padding(
                           padding: EdgeInsets.only(left: 0.w, right: 15.w),
                           child: Text(

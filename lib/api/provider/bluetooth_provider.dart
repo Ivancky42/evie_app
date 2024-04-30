@@ -146,6 +146,7 @@ class BluetoothProvider extends ChangeNotifier {
   int realRssi = 0;
   double deviceRssiProgress = 0.0;
   bool shouldStopTimer = true;
+  StreamSubscription<BleStatus>? bleStatusSub;
 
 
   BluetoothProvider() {
@@ -356,7 +357,7 @@ class BluetoothProvider extends ChangeNotifier {
 
     selectedDeviceId = foundDeviceId;
 
-    connectSubscription = flutterReactiveBle.connectToDevice(id: selectedDeviceId!, connectionTimeout: const Duration(seconds: 6),).listen((event) {
+    connectSubscription = flutterReactiveBle.connectToDevice(id: selectedDeviceId!, connectionTimeout: const Duration(seconds: 6),).listen((event) async {
       connectionStateUpdate = event;
 
       //printLog("Connect State", connectionStateUpdate!.deviceId);
@@ -370,6 +371,9 @@ class BluetoothProvider extends ChangeNotifier {
         // TODO: Handle this case.
           break;
         case DeviceConnectionState.connected:
+          if (Platform.isAndroid) {
+            await flutterReactiveBle.clearGattCache(selectedDeviceId!);
+          }
           deviceConnectStream.add(DeviceConnectResult.partialConnected);
           deviceConnectResult = DeviceConnectResult.partialConnected;
           currentConnectedDevice = currentBikeModel?.macAddr;

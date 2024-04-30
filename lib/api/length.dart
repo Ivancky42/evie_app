@@ -10,8 +10,8 @@ class EvieLength {
 
   static var button_Bottom = 56.h;
 
-  static var bottom_bar_icon_height = 51.67.h;
-  static var bottom_bar_icon_offset = -10.h;
+  static var bottom_bar_icon_height = 20.h;
+  static var bottom_bar_icon_offset = -5.h;
 
   static var sheet_expand = .92;
 

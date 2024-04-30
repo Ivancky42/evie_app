@@ -39,13 +39,16 @@ import 'api/provider/bike_provider.dart';
 import 'api/provider/firmware_provider.dart';
 import 'api/provider/location_provider.dart';
 import 'api/provider/notification_provider.dart';
+import 'firebase_options.dart';
 
 
 ///Main function execution
 Future main() async {
   ///Firebase
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
@@ -259,6 +262,10 @@ class MyApp extends StatelessWidget {
           themeMode: _settingProvider.currentThemeMode,
 
           //Light theme data
+          // theme: ThemeData(
+          //   colorScheme: ColorScheme.fromSeed(seedColor: EvieColors.primaryColor),
+          //   useMaterial3: true,
+          // ),
           theme: AppTheme.lightTheme,
 
           //Change the app to dark theme when user's phone is set to dark mode

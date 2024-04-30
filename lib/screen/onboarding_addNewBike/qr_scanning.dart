@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -30,26 +32,88 @@ class QRScanning extends StatefulWidget {
   _QRScanningState createState() => _QRScanningState();
 }
 
-class _QRScanningState extends State<QRScanning> {
+class _QRScanningState extends State<QRScanning> with WidgetsBindingObserver {
 
-  late MobileScannerController cameraController;
+  final MobileScannerController cameraController = MobileScannerController(
+    // required options for the scanner
+  );
   late AuthProvider _authProvider;
   late BikeProvider _bikeProvider;
   bool onTorch = false;
+  StreamSubscription<Object?>? _subscription;
 
   @override
   void initState() {
-   cameraController = MobileScannerController();
     super.initState();
+    // Start listening to lifecycle changes.
+    WidgetsBinding.instance.addObserver(this);
+
+    // Start listening to the barcode events.
+    _subscription = cameraController.barcodes.listen(_handleBarcode);
+
+    // Finally, start the scanner itself.
+    unawaited(cameraController.start());
   }
 
   @override
-  void dispose() {
-    cameraController.dispose();
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.paused:
+        return;
+      case AppLifecycleState.resumed:
+      // Restart the scanner when the app is resumed.
+      // Don't forget to resume listening to the barcode events.
+        _subscription = cameraController.barcodes.listen(_handleBarcode);
+
+        unawaited(cameraController.start());
+      case AppLifecycleState.inactive:
+      // Stop the scanner when the app is paused.
+      // Also stop the barcode events subscription.
+        unawaited(_subscription?.cancel());
+        _subscription = null;
+        unawaited(cameraController.stop());
+    }
+  }
+
+
+  @override
+  Future<void> dispose() async {
+    // Stop listening to lifecycle changes.
+    WidgetsBinding.instance.removeObserver(this);
+    // Stop listening to the barcode events.
+    unawaited(_subscription?.cancel());
+    _subscription = null;
+    // Dispose the widget itself.
     super.dispose();
+    // Finally, dispose of the controller.
+    await cameraController.dispose();
   }
 
   bool isCameraEnable = false;
+
+  Future<void> _handleBarcode(BarcodeCapture barcode) async {
+    for (var element in barcode.barcodes) {
+      cameraController.stop();
+      final String code = element.rawValue!;
+      debugPrint('Barcode found, $code');
+
+      showCustomLightLoading();
+
+      await _bikeProvider.handleBarcodeData(code);
+
+      if (_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success) {
+        SmartDialog.dismiss(status: SmartStatus.loading);
+        changeToRegisteringBikeScreen(context, true, _bikeProvider.registeringDeviceIMEI);
+      } else {
+        SmartDialog.dismiss(status: SmartStatus.loading);
+        changeToRegisteringBikeScreen(context, false, null);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,26 +143,6 @@ class _QRScanningState extends State<QRScanning> {
                     fit: BoxFit.cover,
                     scanWindow: scanWindow,
                     controller: cameraController,
-                    onDetect: (BarcodeCapture barcode) async {
-
-                      for (var element in barcode.barcodes) {
-                        cameraController.stop();
-                        final String code = element.rawValue!;
-                        debugPrint('Barcode found, $code');
-
-                        showCustomLightLoading();
-
-                        await _bikeProvider.handleBarcodeData(code);
-
-                        if (_bikeProvider.scanQRCodeResult == ScanQRCodeResult.success) {
-                          SmartDialog.dismiss(status: SmartStatus.loading);
-                          changeToRegisteringBikeScreen(context, true, _bikeProvider.registeringDeviceIMEI);
-                        } else {
-                          SmartDialog.dismiss(status: SmartStatus.loading);
-                          changeToRegisteringBikeScreen(context, false, null);
-                        }
-                      }
-                    }
                 ),
               } else...{
                 Container(),

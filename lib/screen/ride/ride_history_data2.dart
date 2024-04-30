@@ -189,10 +189,24 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                           firstDate: DateTime(pickedDate!.year - 2),
                           lastDate: DateTime.now(),
                           builder: (context, child) {
-                            return Theme(data: Theme.of(context).copyWith(
-                              colorScheme: const ColorScheme.light(
-                                primary: EvieColors.primaryColor,
-                              ),), child: child!);
+                            return Theme(
+                              data: ThemeData(
+                                colorScheme: ColorScheme.light(
+                                  primary: EvieColors.primaryColor,  // Adjust primary color for headers
+                                  onPrimary: Colors.white, // Adjust text color on primary
+                                  onSurface: Colors.black, // Adjust text color on body
+                                  onSecondary: Colors.white,
+                                  secondary: EvieColors.primaryColor,
+                                  background: EvieColors.primaryColor,
+                                ),
+                                datePickerTheme: const DatePickerThemeData(
+                                  headerBackgroundColor: EvieColors.primaryColor,
+                                  headerForegroundColor: Colors.white,
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
+                              child: child!,
+                            );
                           },
                         );
                         filterDateByRideFormat(picked ?? pickedDate!);
@@ -210,7 +224,13 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                             return Theme(data: Theme.of(context).copyWith(
                               colorScheme: const ColorScheme.light(
                                 primary: EvieColors.primaryColor,
-                              ),), child: child!);
+                              ),
+                              datePickerTheme: const DatePickerThemeData(
+                                headerBackgroundColor: EvieColors.primaryColor,
+                                headerForegroundColor: Colors.white,
+                                backgroundColor: Colors.white,
+                              ),
+                            ), child: child!);
                           },
                         );
                         filterDateByRideFormat(picked ?? pickedDate!);

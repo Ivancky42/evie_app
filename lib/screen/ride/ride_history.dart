@@ -83,11 +83,13 @@ class _RideHistoryState extends State<RideHistory> with SingleTickerProviderStat
                             labelColor: EvieColors.primaryColor,
                             unselectedLabelColor: EvieColors.lightBlack,
                             indicator: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(24),
                                 color: EvieColors.dividerWhite),
+                            indicatorSize: TabBarIndicatorSize.tab,
                             tabs: [
                               Tab(
                                 child: Container(
+                                  //width: double.infinity,
                                   height: double.infinity,
                                   //color: Colors.red,
                                   child: Column(
@@ -106,6 +108,7 @@ class _RideHistoryState extends State<RideHistory> with SingleTickerProviderStat
                               ),
                               Tab(
                                 child: Container(
+                                  width: double.infinity,
                                   height: double.infinity,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -123,6 +126,7 @@ class _RideHistoryState extends State<RideHistory> with SingleTickerProviderStat
                               ),
                               Tab(
                                 child: Container(
+                                  width: double.infinity,
                                   height: double.infinity,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -140,6 +144,7 @@ class _RideHistoryState extends State<RideHistory> with SingleTickerProviderStat
                               ),
                               Tab(
                                 child: Container(
+                                  width: double.infinity,
                                   height: double.infinity,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,

@@ -32,6 +32,8 @@ target 'Runner' do
   use_modular_headers!
   pod 'Firebase/Core'
   pod 'FMDB'
+#   pod 'MLKitVision', :podspec => 'MLKitVision.podspec.json'
+#   pod 'MLKitCommon', :podspec => 'MLKitCommon.podspec.json'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end

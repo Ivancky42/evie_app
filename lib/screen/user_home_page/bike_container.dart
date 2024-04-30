@@ -191,6 +191,7 @@ class _BikeContainerState extends State<BikeContainer> {
                                       ),
                                       SizedBox(width: 4.w,),
                                       Container(
+                                        width: 150.w,
                                         color: Colors.transparent,
                                         child: Padding(
                                           padding: EdgeInsets.only(top: 0),
@@ -198,7 +199,7 @@ class _BikeContainerState extends State<BikeContainer> {
                                             style: EvieTextStyles.body18.copyWith(color: getCurrentBikeStatusColourText(deviceConnectResult == DeviceConnectResult.connected, widget.bikeModel, _bikeProvider,_bluetoothProvider),
                                             ),
                                             softWrap: true,
-                                            overflow:  TextOverflow.visible,
+                                            overflow:  TextOverflow.ellipsis,
                                           ),
                                         ),
                                       )
@@ -216,7 +217,7 @@ class _BikeContainerState extends State<BikeContainer> {
                 Material(
                   color: Colors.transparent,
                   child: IconButton(
-                      iconSize: 50.w,
+                      iconSize: 45.w,
                       onPressed: () async {
                         if(!isSpecificDeviceConnected){
                           if(widget.bikeModel.deviceIMEI == _bikeProvider.currentBikeModel!.deviceIMEI){
@@ -259,13 +260,13 @@ class _BikeContainerState extends State<BikeContainer> {
                       icon: isSpecificDeviceConnected ?
                       SvgPicture.asset(
                         "assets/buttons/ble_button_connect.svg",
-                        height: 50.h,
-                        width: 50.w,
+                        height: 45.w,
+                        width: 45.w,
                       ) :
                       SvgPicture.asset(
                         "assets/buttons/ble_button_disconnect.svg",
-                        height: 50.h,
-                        width: 50.w,
+                        height: 45.w,
+                        width: 45.w,
                       )
                   ),
                 )

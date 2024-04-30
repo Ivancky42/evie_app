@@ -8,16 +8,7 @@ class AppTheme{
 
   ///Light theme setting
   static final ThemeData lightTheme = ThemeData(
-    //Default font setting for the application is Raleway
-    //Font are store in assets/fonts
     fontFamily: 'Avenir',
-    // primaryColor: EvieColors.primaryColor,
-    //   textSelectionTheme: TextSelectionThemeData(
-    //       selectionColor: EvieColors.primaryColor),
-    // hoverColor: EvieColors.primaryColor,
-    // indicatorColor: EvieColors.primaryColor,
-
-    //Default font colour
     textTheme: const TextTheme(
       //This is for text field user input setting
       subtitle1: TextStyle(color: Colors.black),
@@ -46,16 +37,11 @@ class AppTheme{
       iconTheme: IconThemeData(color: Colors.black),
     ),
 
-    //Bottom app bar colours
-    bottomAppBarTheme: const BottomAppBarTheme(
-      color: Color(0xffffffff),
-    ),
-
     //Bottom navigation bar theme setting
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
       backgroundColor: EvieColors.transparent, elevation: 0.0,
-      selectedItemColor: Colors.blueAccent,
+      selectedItemColor: EvieColors.primaryColor,
       unselectedItemColor: Colors.grey,
     ),
 
@@ -64,9 +50,9 @@ class AppTheme{
       backgroundColor: EvieColors.transparent,
     ),
 
-      dialogTheme: DialogTheme(
-        backgroundColor: const Color(0xffF2F2F2).withOpacity(0.9),
-      ),
+    dialogTheme: DialogTheme(
+      backgroundColor: const Color(0xffF2F2F2).withOpacity(0.9),
+    ),
   //  brightness: Brightness.dark,
   );
 

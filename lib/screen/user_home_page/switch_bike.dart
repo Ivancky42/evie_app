@@ -75,7 +75,7 @@ class _SwitchBikeState extends State<SwitchBike> {
                     child: Text(
                       "Add Bike",
                       style: TextStyle(
-                          fontSize: 16.sp, fontWeight: FontWeight.w700),
+                          fontSize: 16.sp, fontWeight: FontWeight.w700, color: Colors.white),
                     ),
                 ),
               )
