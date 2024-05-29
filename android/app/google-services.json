@@ -38,6 +38,14 @@
           }
         },
         {
+          "client_id": "484859945311-r8uug1q2ae2l1ihpck5vbo7jho2ldl8r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.evie.app",
+            "certificate_hash": "de80a021be61122eee90b5c11b1ff7b45cc1b50e"
+          }
+        },
+        {
           "client_id": "484859945311-06sc3rro1sfhgr4tm4nn9shcdug5e09s.apps.googleusercontent.com",
           "client_type": 3
         }

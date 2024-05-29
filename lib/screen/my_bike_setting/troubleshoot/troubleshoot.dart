@@ -82,8 +82,8 @@ class _TroubleshootScreenState extends State<TroubleshootScreen> {
                             Align(
                               alignment: Alignment.bottomRight,
                               child: EvieButton(
-                                width: 120.w,
-                                height: 36.h,
+                                width: 140.w,
+                                height: 40.h,
                                 onPressed: () async {
                                   if (deviceConnectResult == null
                                       || deviceConnectResult == DeviceConnectResult.disconnected
@@ -150,10 +150,13 @@ class _TroubleshootScreenState extends State<TroubleshootScreen> {
                                       style: EvieTextStyles.body18,
                                     ),
                                     SizedBox(height: 4.h,),
-                                    Text(
-                                      "Need more information? Explore our FAQ pages \nand self-help articles.",
-                                      style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
-                                    ),
+                                    Container(
+                                      width: 300.w,
+                                      child: Text(
+                                        "Need more information? Explore our FAQ pages and self-help articles.",
+                                        style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayishCyan),
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),

@@ -107,9 +107,16 @@ class _ResetBike2State extends State<ResetBike2> {
                   ),
                 ),
 
-                Padding(
-                  padding: EdgeInsets.only(left: 16.w),
-                  child: Divider(height: 1.h,color: EvieColors.darkWhite,),
+                Container(
+                    color: Colors.transparent,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                      child: Divider(
+                        thickness: 0.2.h,
+                        color: EvieColors.darkWhite,
+                        height: 0,
+                      ),
+                    )
                 ),
 
 
@@ -190,9 +197,16 @@ class _ResetBike2State extends State<ResetBike2> {
                   ),
                 ),
 
-                Padding(
-                  padding: EdgeInsets.only(left: 16.w),
-                  child: Divider(height: 1.h,color: EvieColors.darkWhite,),
+                Container(
+                    color: Colors.transparent,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 0, 0, 0),
+                      child: Divider(
+                        thickness: 0.2.h,
+                        color: EvieColors.darkWhite,
+                        height: 0,
+                      ),
+                    )
                 ),
 
           ],

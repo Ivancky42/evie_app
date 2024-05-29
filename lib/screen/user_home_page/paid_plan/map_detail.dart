@@ -7,7 +7,6 @@ import 'package:evie_test/widgets/evie-unlocking-button.dart';
 import 'package:evie_test/widgets/evie_card.dart';
 import 'package:image/image.dart' as IMG;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/sizer.dart';
@@ -79,8 +78,6 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
   bool? isConnected;
   String? locationStatus;
   bool? isLocked;
-
-  final tooltipController = JustTheController();
   final _controller = SuperTooltipController();
 
   String? isFirstLocationRequest;

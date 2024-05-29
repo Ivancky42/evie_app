@@ -109,7 +109,7 @@ class _CreateTeamState extends State<CreateTeam> {
                       height: 48.h,
                       child: Text(
                         "Create Team",
-                        style: EvieTextStyles.ctaBig,
+                        style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                       ),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {

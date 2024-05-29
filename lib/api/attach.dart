@@ -318,7 +318,7 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               EvieButton_PickDate(
-                                  width: 155.w,
+                                width: 155.w,
                                 height: 48.h,
                                 onPressed: () async {
                                   if(_selectedRadio == 3){
@@ -330,11 +330,18 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                                       builder: (context, child) {
                                         return Theme(
                                           data: ThemeData(
-                                            primaryColor: EvieColors.primaryColor, // set the primary color of the theme
-                                            //accentColor: EvieColors.primaryColor, // set the accent color of the theme
-                                            colorScheme: ColorScheme.light(primary: EvieColors.primaryColor,), // set the color scheme
-                                            textTheme: TextTheme(
-                                              subtitle1: TextStyle(color: Colors.black), // set the text color of the top bar
+                                            colorScheme: ColorScheme.light(
+                                              primary: EvieColors.primaryColor,  // Adjust primary color for headers
+                                              onPrimary: Colors.white, // Adjust text color on primary
+                                              onSurface: Colors.black, // Adjust text color on body
+                                              onSecondary: Colors.white,
+                                              secondary: EvieColors.primaryColor,
+                                              background: EvieColors.primaryColor,
+                                            ),
+                                            datePickerTheme: const DatePickerThemeData(
+                                              rangePickerHeaderBackgroundColor: EvieColors.primaryColor,
+                                              rangePickerHeaderForegroundColor: Colors.white,
+                                              rangePickerBackgroundColor: Colors.white,
                                             ),
                                           ),
                                           child: child!,
@@ -372,6 +379,7 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                                 },
                                 child: Container(
                                   width: 170.w,
+                                  padding: EdgeInsets.all(6.w),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -397,7 +405,7 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                               ),
 
                               EvieButton_PickDate(
-                                width: 170.w,
+                                width: 155.w,
                                 height: 48.h,
                                 onPressed: () async {
                                   if(_selectedRadio == 3){
@@ -410,31 +418,27 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                                       builder: (context, child) {
                                         return Theme(
                                           data: ThemeData(
-                                            primaryColor: EvieColors.primaryColor, // set the primary color of the theme
-                                            //accentColor: EvieColors.primaryColor, // set the accent color of the theme
-                                            colorScheme: ColorScheme.light(primary: EvieColors.primaryColor,), // set the color scheme
-                                            textTheme: TextTheme(
-                                              subtitle1: TextStyle(color: Colors.black), // set the text color of the top bar
+                                            colorScheme: ColorScheme.light(
+                                              primary: EvieColors.primaryColor,  // Adjust primary color for headers
+                                              onPrimary: Colors.white, // Adjust text color on primary
+                                              onSurface: Colors.black, // Adjust text color on body
+                                              onSecondary: Colors.white,
+                                              secondary: EvieColors.primaryColor,
+                                              background: EvieColors.primaryColor,
+                                            ),
+                                            datePickerTheme: const DatePickerThemeData(
+                                              rangePickerHeaderBackgroundColor: EvieColors.primaryColor,
+                                              rangePickerHeaderForegroundColor: Colors.white,
+                                              rangePickerBackgroundColor: Colors.white,
                                             ),
                                           ),
-                                          child: child!,
+                                          child: Container(
+                                            width: 300.w,
+                                            child: child!,
+                                          ),
                                         );
                                       },
                                     );
-
-                                    // pickedDate2 = await showDatePicker(
-                                    //     context: context,
-                                    //     initialDate: bikeProvider.threatFilterDate2 ?? pickedDate1 ?? DateTime.now(),
-                                    //     firstDate: pickedDate1 ?? DateTime(DateTime.now().year-2),
-                                    //     lastDate: DateTime.now(),
-                                    //   builder: (context, child) {
-                                    //     return Theme(data: Theme.of(context).copyWith(
-                                    //       colorScheme: ColorScheme.light(
-                                    //         primary: EvieColors.primaryColor,
-                                    //
-                                    //       ), ), child: child!);
-                                    //   },
-                                    // );
 
                                     if(range != null){
                                       pickedDateRange = range;
@@ -447,24 +451,23 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                                       });
                                       //}
                                     }
-                                    // if (pickedDate2 != null) {
-                                    //   setState(() {
-                                    //     pickedDate2 = pickedDate2;
-                                    //   });
-                                    // }
                                   }
                                 },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(pickedDate2 != null ? "${monthsInYear[pickedDate2!.month]} ${pickedDate2!.day} ${pickedDate2!.year}": "-",
-                                      style: const TextStyle(color: EvieColors.darkGrayishCyan),),
-                                    SvgPicture.asset(
-                                      "assets/buttons/calendar.svg",
-                                      height: 24.h,
-                                      width: 24.w,
-                                    ),
-                                  ],
+                                child: Container(
+                                  width: 170.w,
+                                  padding: EdgeInsets.all(6.w),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(pickedDate2 != null ? "${monthsInYear[pickedDate2!.month]} ${pickedDate2!.day} ${pickedDate2!.year}": "-",
+                                        style: const TextStyle(color: EvieColors.darkGrayishCyan),),
+                                      SvgPicture.asset(
+                                        "assets/buttons/calendar.svg",
+                                        height: 24.h,
+                                        width: 24.w,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               )
                             ],),

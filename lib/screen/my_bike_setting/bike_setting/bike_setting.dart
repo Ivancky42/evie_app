@@ -275,12 +275,17 @@ class _BikeSettingState extends State<BikeSetting> {
                                 width: 49.h,
                                 height: 49.h,
                               ) :
+                              _bikeProvider.currentBikeModel?.model == 'T1' ?
                               Image(
                                 image: const AssetImage("assets/buttons/bike_default_T1.png"),
                                 width: 49.h,
                                 height: 49.h,
-                              ),
-
+                              ) :
+                              Image(
+                                image: const AssetImage("assets/buttons/bike_default_L1.png"),
+                                width: 49.h,
+                                height: 49.h,
+                              )
                               // _bikeProvider.currentBikeModel?.bikeIMG == '' ? Image(
                               //   image: const AssetImage("assets/buttons/bike_left_pic.png"),
                               //   width: 49.h,

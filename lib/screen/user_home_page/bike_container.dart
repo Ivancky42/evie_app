@@ -81,7 +81,7 @@ class _BikeContainerState extends State<BikeContainer> {
                 deviceConnectResult == DeviceConnectResult.partialConnected||
                 deviceConnectResult == DeviceConnectResult.disconnecting){
               await _bluetoothProvider.stopScan();
-              await _bluetoothProvider.connectSubscription?.cancel();
+              //await _bluetoothProvider.connectSubscription?.cancel();
               await _bluetoothProvider.disconnectDevice();
               _bluetoothProvider.switchBikeDetected();
               _bluetoothProvider.startScanTimer?.cancel();
@@ -140,11 +140,17 @@ class _BikeContainerState extends State<BikeContainer> {
                         width: 56.h,
                         height: 56.h,
                       ) :
+                      widget.bikeModel.model == 'T1' ?
                       Image(
                         image: const AssetImage("assets/buttons/bike_default_T1.png"),
                         width: 56.h,
                         height: 56.h,
-                      ),
+                      ) :
+                      Image(
+                        image: const AssetImage("assets/buttons/bike_default_L1.png"),
+                        width: 56.h,
+                        height: 56.h,
+                      )
                     ),
                     SizedBox(width: 16.w,),
                     Column(

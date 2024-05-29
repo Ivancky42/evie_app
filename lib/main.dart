@@ -27,6 +27,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
@@ -44,8 +45,8 @@ import 'firebase_options.dart';
 
 ///Main function execution
 Future main() async {
-  ///Firebase
   WidgetsFlutterBinding.ensureInitialized();
+  clearCache();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -98,6 +99,19 @@ Future main() async {
     child: MyApp(),
   )
   );
+}
+
+Future<void> clearCache() async {
+  try {
+    final cacheDir = await getTemporaryDirectory();
+
+    if (cacheDir.existsSync()) {
+      cacheDir.deleteSync(recursive: true);
+    }
+  } catch (e, s) {
+    //Sentry.captureException(e, stackTrace: s);
+    print('Error clearing cache: $e');
+  }
 }
 
 ///Multi provider setup

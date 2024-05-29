@@ -30,6 +30,7 @@ class EvieButton extends StatelessWidget {
     return Container(
       height: height ?? 52.h,
       width: width ?? double.infinity,
+      padding: EdgeInsets.all(2.w),
       child: ElevatedButton(
         child: child,
         onPressed: onPressed,

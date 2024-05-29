@@ -135,11 +135,17 @@ class _FreePlanState extends State<FreePlan> {
                                                         width: 56.h,
                                                         height: 56.h,
                                                       ) :
+                                                      _bikeProvider.currentBikeModel?.model == 'T1' ?
                                                       Image(
                                                         image: const AssetImage("assets/buttons/bike_default_T1.png"),
                                                         width: 56.h,
                                                         height: 56.h,
-                                                      ),
+                                                      ) :
+                                                      Image(
+                                                        image: const AssetImage("assets/buttons/bike_default_L1.png"),
+                                                        width: 56.h,
+                                                        height: 56.h,
+                                                      )
                                                     ),
                                                     // _bikeProvider.currentBikeModel?.bikeIMG == ''
                                                     //     ? Padding(

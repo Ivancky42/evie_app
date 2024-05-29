@@ -34,20 +34,6 @@ class _SettingState extends State<Setting> {
       onPress: () async {
         _settingProvider.changeSheetElement(SheetList.bikeSetting);
         showSheetNavigate(context, 'Home');
-
-        // String lockModulePath = "lockModules/LM01062300254";
-        //
-        // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        //     .collection('inventory')
-        //     .doc("bikes")
-        //     .collection('serialNumber')
-        //     .where("lockRef", isEqualTo: FirebaseFirestore.instance.doc(lockModulePath))
-        //     .get();
-        //
-        // // Process the querySnapshot here
-        // querySnapshot.docs.forEach((doc) {
-        //   print(doc.data()); // Access document data
-        // });
       },
       title: "Setting",
       child: Expanded(

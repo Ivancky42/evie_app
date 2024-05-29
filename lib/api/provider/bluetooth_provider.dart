@@ -1025,6 +1025,7 @@ class BluetoothProvider extends ChangeNotifier {
           errorPromptResult = ErrorPromptResult(decodedData);
           if (errorPromptResult?.errorMessage == ErrorMessage.transportMode) {
             isTransportMode = true;
+            setTransportMode(false);
           }
           notifyListeners();
           break;

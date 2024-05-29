@@ -132,7 +132,7 @@ class _ShareBikeInvitationState extends State<ShareBikeInvitation> {
                   height: 48.h,
                   child: Text(
                     "Send Invitation",
-                    style: EvieTextStyles.ctaBig,
+                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
                   ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {

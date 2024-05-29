@@ -148,7 +148,7 @@ class LocationProvider extends ChangeNotifier {
     currentPlaceMarkString = null;
 
     try {
-      List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude, localeIdentifier: "en");
+      List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude);
 
       if (placeMarks.isNotEmpty) {
         if (Platform.isAndroid) {
@@ -192,7 +192,7 @@ class LocationProvider extends ChangeNotifier {
     Placemark? placeMarkRenamed;
 
     try {
-      List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude, localeIdentifier: "en");
+      List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude);
 
       if (placeMarks.isNotEmpty) {
         if (Platform.isAndroid) {
@@ -233,7 +233,7 @@ class LocationProvider extends ChangeNotifier {
     try {
       if (latitude != 0.0 && longitude != 0.0) {
         List<Placemark> placeMarks = await placemarkFromCoordinates(
-            latitude, longitude, localeIdentifier: "en");
+            latitude, longitude);
 
         if (placeMarks.isNotEmpty) {
           if (Platform.isAndroid) {
@@ -276,7 +276,7 @@ class LocationProvider extends ChangeNotifier {
       String? placeMarkRenamed;
       try {
         List<Placemark> placeMarks = await placemarkFromCoordinates(
-            checkingGeopoint!.latitude, checkingGeopoint!.longitude, localeIdentifier: "en");
+            checkingGeopoint!.latitude, checkingGeopoint!.longitude);
 
         if (placeMarks.isNotEmpty) {
           if (Platform.isAndroid) {
