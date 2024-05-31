@@ -1,6 +1,8 @@
 # evie
 
 Evie Bike App
+IOS 1.0.18
+Android 1.0.18 (133)
 
 ## Getting Started
 
