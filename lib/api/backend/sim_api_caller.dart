@@ -22,20 +22,20 @@ class SimApiCaller {
     };
 
     var accessToken;
-    await ServerApiBase.postRequest(auth, base_url + "/oauth/token", body, header).then((value) {
+    await ServerApiBase.postRequest(auth, "$base_url/oauth/token", body, header).then((value) {
       accessToken = value['access_token'];
     });
     return accessToken;
   }
 
   static Future getSimStatus(String accessToken, String iccid) async {
-    final auth = 'Bearer ' + accessToken;
+    final auth = 'Bearer $accessToken';
     const header = Headers.jsonContentType;
     Map<String, dynamic> query = {
       "iccid": iccid,
     };
     var result;
-    await ServerApiBase.getRequest(auth, base_url + "/get_sim", query, header).then((value) {
+    await ServerApiBase.getRequest(auth, "$base_url/get_sim", query, header).then((value) {
       result = value;
     });
 
@@ -76,7 +76,7 @@ class SimApiCaller {
     var result;
 
     try {
-      final response = await ServerApiBase.putRequestWithQuery(auth, base_url + "/set_data_limit", query, header);
+      final response = await ServerApiBase.putRequestWithQuery(auth, "$base_url/set_data_limit", query, header);
       result = response.data;
     } catch (e) {
       // Handle error
@@ -87,13 +87,13 @@ class SimApiCaller {
   }
 
   static Future activateSim(String accessToken, String iccid) async {
-    final auth = 'Bearer ' + accessToken;
+    final auth = 'Bearer $accessToken';
     const header = Headers.jsonContentType;
     Map<String, dynamic> query = {
       "iccid": iccid,
     };
     var result;
-    await ServerApiBase.putRequestWithQuery(auth, base_url + "/activate", query, header).then((value) {
+    await ServerApiBase.putRequestWithQuery(auth, "$base_url/activate", query, header).then((value) {
       result = value;
     });
 
@@ -101,13 +101,13 @@ class SimApiCaller {
   }
 
   static Future deactivateSim(String accessToken, String iccid) async {
-    final auth = 'Bearer ' + accessToken;
+    final auth = 'Bearer $accessToken';
     const header = Headers.jsonContentType;
     Map<String, dynamic> query = {
       "iccid": iccid,
     };
     var result;
-    await ServerApiBase.putRequestWithQuery(auth, base_url + "/deactivate", query, header).then((value) {
+    await ServerApiBase.putRequestWithQuery(auth, "$base_url/deactivate", query, header).then((value) {
       result = value;
     });
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 ///Animation page for ripple pulse
 
 class RipplePulseAnimation extends StatefulWidget{
-  const RipplePulseAnimation({ Key? key }) : super(key: key);
+  const RipplePulseAnimation({ super.key });
   @override
   _RipplePulseAnimationState createState() => _RipplePulseAnimationState();
 }

@@ -4,31 +4,24 @@ import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/function.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/home_element/setting.dart';
-import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/firmware_provider.dart';
 import '../../../api/provider/notification_provider.dart';
 import '../../../api/provider/setting_provider.dart';
-import '../../../api/sheet.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
-import '../../../widgets/evie_single_button_dialog.dart';
 
 class BikeSettingContainer extends StatefulWidget {
   final BikeSettingModel bikeSettingModel;
-  const BikeSettingContainer({Key? key, required this.bikeSettingModel}) : super(key: key);
+  const BikeSettingContainer({super.key, required this.bikeSettingModel});
 
   @override
   State<BikeSettingContainer> createState() => _BikeSettingContainerState();
@@ -56,7 +49,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> with Widget
     super.initState();
     _notificationProvider = context.read<NotificationProvider>();
     _notificationProvider.checkNotificationPermission();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -69,7 +62,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> with Widget
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -296,7 +289,7 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> with Widget
                             ],
                           ),
                           Text(
-                            _bikeProvider.rfidList.length.toString() + " " + label!,
+                            "${_bikeProvider.rfidList.length} ${label!}",
                             style: EvieTextStyles.body18.copyWith(color: EvieColors.lightBlack),
                           )
                         ],
@@ -1040,8 +1033,8 @@ class _BikeSettingContainerState extends State<BikeSettingContainer> with Widget
               onTap: () {
                 //_settingProvider.changeSheetElement(SheetList.userManual);
                 const url = 'https://eviebikes.com/pages/downloads';
-                final Uri _url = Uri.parse(url);
-                launch(_url);
+                final Uri url0 = Uri.parse(url);
+                launch(url0);
               },
               child: Container(
                 child: Padding(

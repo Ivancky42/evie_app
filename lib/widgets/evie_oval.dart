@@ -1,5 +1,5 @@
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 
 import '../api/colours.dart';
@@ -10,10 +10,10 @@ class EvieOvalGray extends StatefulWidget {
   final String buttonText;
   final VoidCallback? onPressed;
 
-  const EvieOvalGray({Key? key,
+  const EvieOvalGray({super.key,
     required this.buttonText,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   _EvieOvalGrayState createState() => _EvieOvalGrayState();
@@ -59,10 +59,10 @@ class EvieOvalGrayLocation extends StatefulWidget {
   final String buttonText;
   final VoidCallback? onPressed;
 
-  const EvieOvalGrayLocation({Key? key,
+  const EvieOvalGrayLocation({super.key,
     required this.buttonText,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   _EvieOvalGrayLocationState createState() => _EvieOvalGrayLocationState();
@@ -113,9 +113,9 @@ class _EvieOvalGrayLocationState extends State<EvieOvalGrayLocation> {
 class EvieOvalBlack extends StatefulWidget {
   final String buttonText;
 
-  const EvieOvalBlack({Key? key,
+  const EvieOvalBlack({super.key,
     required this.buttonText,
-  }) : super(key: key);
+  });
 
   @override
   _EvieOvalBlackState createState() => _EvieOvalBlackState();

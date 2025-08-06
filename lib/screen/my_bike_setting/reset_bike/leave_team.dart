@@ -1,21 +1,18 @@
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/enumerate.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie_appbar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../api/dialog.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/setting_provider.dart';
-import '../../../api/sheet.dart';
 import '../../../widgets/evie_button.dart';
 
 class LeaveTeam extends StatefulWidget{
-  const LeaveTeam({Key?key}) : super(key:key);
+  const LeaveTeam({super.key});
   @override
   _LeaveTeamState createState() => _LeaveTeamState();
 }

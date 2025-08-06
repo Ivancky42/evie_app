@@ -3,44 +3,44 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-extension Sizer on num {
+extension CustomSizer on num {
 
-  double get h => Platform.isAndroid ? this / 844 * SizerUtil.height : this / 928.4 * SizerUtil.height;
+  double get ch => Platform.isAndroid ? this / 844 * 100.h : this / 928.4 * 100.h;
 
   ///Calculate for bottom navigation bar padding size.
-  double get sh => Platform.isAndroid ? this / 844 * SizerUtil.height : this / 600 * SizerUtil.height;
+  double get sh => Platform.isAndroid ? this / 844 * 100.h : this / 600 * 100.h;
 
   /// Calculates the width depending on the device's screen size
   ///
-  /// Eg: 20.w -> will take 20% of the screen's width
-  double get w => Platform.isAndroid ? this / 390 *  SizerUtil.width : this / 429 *  SizerUtil.width;
+  /// Eg: 20.cw -> will take 20% of the screen's width
+  double get cw => Platform.isAndroid ? this / 390 * 100.w : this / 429 * 100.w;
 
-  // double get h => this / 928.4 * SizerUtil.height;
+  // double get ch => this / 928.4 * 100.h;
   //
   // /// Calculates the width depending on the device's screen size
   // ///
-  // /// Eg: 20.w -> will take 20% of the screen's width
-  // double get w => this / 429 *  SizerUtil.width;
+  // /// Eg: 20.cw -> will take 20% of the screen's width
+  // double get cw => this / 429 * 100.w;
 
-  //double get sp => this * SizerUtil.height / 811.6;
-  //double get sp => this * SizerUtil.height / 900.6;
-  double get sp => this * SizerUtil.height / 855.8;
+  //double get sp => this * 100.h / 811.6;
+  //double get sp => this * 100.h / 900.6;
+  double get sp => this * 100.h / 855.8;
 
-  ///double get mp => this * SizerUtil.height / 27000;
+  ///double get mp => this * 100.h / 27000;
 
-  //double get mp => (this / 110)  * SizerUtil.height / SizerUtil.width;
-  double get mp => this * 7.66 /((300 / 928.4 * SizerUtil.height) + 100);
+  //double get mp => (this / 110)  * 100.h / 100.w;
+  double get mp => this * 7.66 /((300 / 928.4 * 100.h) + 100);
 
-  double get width => this * SizerUtil.width;
-  double get height => this * SizerUtil.height;
+  double get width => this * 100.w;
+  double get height => this * 100.h;
 }
 
 getScreenHeight(){
-  return Platform.isAndroid ? SizerUtil.height / 844 * SizerUtil.height : SizerUtil.height / 928.4 * SizerUtil.height;
+  return Platform.isAndroid ? 100.h / 844 * 100.h : 100.h / 928.4 * 100.h;
 }
 
 getScreenWidth(){
-  return Platform.isAndroid ? SizerUtil.width / 390 *  SizerUtil.width : SizerUtil.width / 429 *  SizerUtil.width;
+  return Platform.isAndroid ? 100.w / 390 * 100.w : 100.w / 429 * 100.w;
 }
 ///MediaQuery.of(context).size.height,
 ///// Full screen width and height

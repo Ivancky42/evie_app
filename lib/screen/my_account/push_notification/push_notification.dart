@@ -1,10 +1,7 @@
 import 'dart:collection';
-import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -18,15 +15,13 @@ import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/snackbar.dart';
 import '../../../widgets/evie_appbar.dart';
-import '../../../widgets/evie_divider.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../../../widgets/evie_switch.dart';
-import '../my_account_widget.dart';
 
 
 
 class PushNotification extends StatefulWidget{
-  const PushNotification({ Key? key }) : super(key: key);
+  const PushNotification({ super.key });
   @override
   _PushNotificationState createState() => _PushNotificationState();
 }
@@ -49,7 +44,7 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
     super.initState();
     _notificationProvider = context.read<NotificationProvider>();
     _notificationProvider.checkNotificationPermission();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -62,7 +57,7 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -151,7 +146,7 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
                         }
                         else {
                           SmartDialog.show(
-                              widget: EvieSingleButtonDialog(
+                              builder: (_) => EvieSingleButtonDialog(
                                   title: "Error",
                                   content: "Try again",
                                   rightContent: "OK",
@@ -197,7 +192,7 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
                           }
                           else {
                             SmartDialog.show(
-                                widget: EvieSingleButtonDialog(
+                                builder: (_) => EvieSingleButtonDialog(
                                     title: "Error",
                                     content: "Try again",
                                     rightContent: "OK",
@@ -244,7 +239,7 @@ class _PushNotificationState extends State<PushNotification> with WidgetsBinding
                           }
                           else {
                             SmartDialog.show(
-                                widget: EvieSingleButtonDialog(
+                                builder: (_) => EvieSingleButtonDialog(
                                     title: "Error",
                                     content: "Try again",
                                     rightContent: "OK",

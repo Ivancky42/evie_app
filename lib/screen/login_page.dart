@@ -1,15 +1,12 @@
-import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/screen/welcome_page.dart';
 import 'package:evie_test/widgets/evie_appbar.dart';
 import 'package:evie_test/widgets/evie_textform.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,12 +18,9 @@ import '../api/colours.dart';
 import '../api/dialog.dart';
 import '../api/fonts.dart';
 import '../api/navigator.dart';
-import '../api/provider/notification_provider.dart';
-import '../widgets/evie_double_button_dialog.dart';
-import '../widgets/evie_single_button_dialog.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+  const SignIn({super.key});
 
   @override
   _SignInState createState() => _SignInState();
@@ -48,7 +42,7 @@ class _SignInState extends State<SignIn> {
 }
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({super.key});
 
   @override
   _LoginScreenState createState() => _LoginScreenState();

@@ -1,16 +1,14 @@
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:get/state_manager.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
 import '../../api/fonts.dart';
 import '../../api/navigator.dart';
-import '../../api/snackbar.dart';
 
 class AcceptingInvitation extends StatefulWidget {
   final String deviceIMEI;
@@ -18,7 +16,7 @@ class AcceptingInvitation extends StatefulWidget {
   final String notificationId;
   final String palName;
   final String teamName;
-  const AcceptingInvitation({Key? key, required this.deviceIMEI, required this.currentUid, required this.notificationId, required this.palName, required this.teamName}) : super(key: key);
+  const AcceptingInvitation({super.key, required this.deviceIMEI, required this.currentUid, required this.notificationId, required this.palName, required this.teamName});
 
   @override
   State<AcceptingInvitation> createState() => _AcceptingInvitationState();
@@ -37,11 +35,11 @@ class _AcceptingInvitationState extends State<AcceptingInvitation> {
     fetchData(_bikeProvider, _notificationProvider);
   }
 
-  Future<void> fetchData(_bikeProvider, _notificationProvider) async {
-    final result = await _bikeProvider.listenAcceptInvitation(widget.deviceIMEI, widget.currentUid);
+  Future<void> fetchData(bikeProvider, notificationProvider) async {
+    final result = await bikeProvider.listenAcceptInvitation(widget.deviceIMEI, widget.currentUid);
     if (result == 'Success') {
-      _bikeProvider.changeBikeUsingIMEI(widget.deviceIMEI!);
-      _notificationProvider.updateUserNotificationSharedBikeStatus(widget.notificationId);
+      bikeProvider.changeBikeUsingIMEI(widget.deviceIMEI);
+      notificationProvider.updateUserNotificationSharedBikeStatus(widget.notificationId);
       // for (var element in _bikeProvider.userBikeNotificationList) {
       //   await _notificationProvider.subscribeToTopic("${widget.deviceIMEI!}$element");
       // }

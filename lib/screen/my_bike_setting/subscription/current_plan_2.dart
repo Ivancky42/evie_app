@@ -1,31 +1,19 @@
-import 'dart:async';
-import 'dart:io';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/bluetooth/modelResult.dart';
-import 'package:evie_test/screen/my_account/my_account_widget.dart';
+import 'package:sizer/sizer.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:evie_test/widgets/evie_button.dart';
 
-import '../../../api/colours.dart';
 import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/function.dart';
-import '../../../api/length.dart';
-import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
-import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
-import '../../../widgets/evie_divider.dart';
 
 class CurrentPlan2 extends StatefulWidget {
-  const CurrentPlan2({Key? key}) : super(key: key);
+  const CurrentPlan2({super.key});
 
   @override
   _CurrentPlan2State createState() => _CurrentPlan2State();
@@ -97,8 +85,8 @@ class _CurrentPlan2State extends State<CurrentPlan2> {
                                       height: 48.w,
                                     ),
                                     Container(
-                                      child: SvgPicture.asset("assets/icons/yellow_dot.svg"),
                                       color: Colors.transparent,
+                                      child: SvgPicture.asset("assets/icons/yellow_dot.svg"),
                                     )
                                   ],
                                 ),
@@ -110,7 +98,7 @@ class _CurrentPlan2State extends State<CurrentPlan2> {
                                       style: EvieTextStyles.h2,
                                     ),
                                     Text(
-                                      "Expiring in ${calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.expiredAt!.toDate())} Days (" + "${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().year}" + ")",
+                                      "Expiring in ${calculateDateDifferenceFromNow(_bikeProvider.currentBikePlanModel!.expiredAt!.toDate())} Days (" "${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().year}" ")",
                                       style: EvieTextStyles.caption,
                                     )
                                   ],
@@ -159,8 +147,8 @@ class _CurrentPlan2State extends State<CurrentPlan2> {
                                       height: 48.w,
                                     ),
                                     Container(
-                                      child: SvgPicture.asset("assets/icons/green_dot.svg"),
                                       color: Colors.transparent,
+                                      child: SvgPicture.asset("assets/icons/green_dot.svg"),
                                     )
                                   ],
                                 ),
@@ -243,7 +231,7 @@ class _CurrentPlan2State extends State<CurrentPlan2> {
                       ),
                     ),
                     SizedBox(height: 19.h,),
-                    Container(
+                    SizedBox(
                         width: double.infinity,
                         height: 172.h,
                       child : Opacity(
@@ -277,8 +265,8 @@ class _CurrentPlan2State extends State<CurrentPlan2> {
                                       height: 48.w,
                                     ),
                                     Container(
-                                      child: SvgPicture.asset("assets/icons/grey_dot.svg"),
                                       color: Colors.transparent,
+                                      child: SvgPicture.asset("assets/icons/grey_dot.svg"),
                                     )
                                   ],
                                 ),
@@ -290,7 +278,7 @@ class _CurrentPlan2State extends State<CurrentPlan2> {
                                       style: EvieTextStyles.h2,
                                     ),
                                     Text(
-                                      "Expired in " + "${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().year}",
+                                      "Expired in " "${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().day} ${monthsInYear[_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().year}",
                                       style: EvieTextStyles.caption,
                                     )
                                   ],

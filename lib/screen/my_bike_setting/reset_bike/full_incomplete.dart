@@ -1,4 +1,4 @@
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,7 +14,7 @@ import '../../../api/provider/setting_provider.dart';
 import '../../../widgets/evie_button.dart';
 
 class FullIncomplete extends StatefulWidget{
-  const FullIncomplete({Key?key}) : super(key:key);
+  const FullIncomplete({super.key});
   @override
   _FullIncompleteState createState() => _FullIncompleteState();
 }

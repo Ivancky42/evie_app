@@ -2,7 +2,6 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
@@ -93,10 +92,10 @@ class SettingProvider with ChangeNotifier {
               Version minVersion = Version.parse(minRequiredVersion!);
               Version curVersion = Version.parse(currentVersion!);
               int hello = curVersion.compareTo(minVersion);
-              if (curVersion!.compareTo(minVersion) < 0) {
+              if (curVersion.compareTo(minVersion) < 0) {
                 // Show a dialog or take appropriate action for an update required
                 SmartDialog.show(
-                  widget: EvieTwoButtonDialog(
+                  builder: (_) => EvieTwoButtonDialog(
                       title: Text(obj['title'],
                         style:EvieTextStyles.h2,
                         textAlign: TextAlign.center,
@@ -114,13 +113,13 @@ class SettingProvider with ChangeNotifier {
                       onPressedUp: () async {
                         if (Platform.isAndroid) {
                           final url = obj['andLink'];
-                          final Uri _url = Uri.parse(url);
-                          launch(_url);
+                          final Uri url0 = Uri.parse(url);
+                          launch(url0);
                         }
                         else if (Platform.isIOS) {
                           final url = obj['iosLink'];
-                          final Uri _url = Uri.parse(url);
-                          launch(_url);
+                          final Uri url0 = Uri.parse(url);
+                          launch(url0);
                         }
                         //SmartDialog.dismiss();
                       },
@@ -128,7 +127,6 @@ class SettingProvider with ChangeNotifier {
                         SmartDialog.dismiss();
                       }),
                   backDismiss: !obj['isForce'],
-                  clickBgDismissTemp: !obj['isForce'],
                   tag: 'app_update'
                 );
               }

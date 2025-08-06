@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/seekay/Documents/sdk/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/seekay/Documents/beno/Evie-Flutter-App/packages/month_picker_dialog/example"
+export "FLUTTER_ROOT=/Users/ivan/Documents/flutter"
+export "FLUTTER_APPLICATION_PATH=/Users/ivan/Documents/EVIE new/Evie-Flutter-App/packages/month_picker_dialog/example"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"

@@ -2,7 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,7 +20,7 @@ import '../../../api/toast.dart';
 import '../../../widgets/evie_appbar.dart';
 
 class AddPlan extends StatefulWidget {
-  const AddPlan({Key? key}) : super(key: key);
+  const AddPlan({super.key});
 
   @override
   State<AddPlan> createState() => _AddPlanState();
@@ -209,7 +209,7 @@ class _AddPlanState extends State<AddPlan> {
                                 style: EvieTextStyles.body18,
                               ),
                               SizedBox(height: 4.h,),
-                              Container(
+                              SizedBox(
                                 width: 318.w,
                                 child: Text(
                                   "Want to upgrade directly through app? Choose this option.",

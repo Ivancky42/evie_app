@@ -1,30 +1,22 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_divider.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lottie/lottie.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
-import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../api/colours.dart';
-import '../../../../api/length.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/provider/bluetooth_provider.dart';
 import '../../../../api/provider/location_provider.dart';
 
 class DeactivateTheftAlert extends StatefulWidget {
-  DeactivateTheftAlert({
-    Key? key,
+  const DeactivateTheftAlert({
+    super.key,
 
-  }) : super(key: key);
+  });
 
   @override
   State<DeactivateTheftAlert> createState() => _DeactivateTheftAlertState();
@@ -83,7 +75,7 @@ class _DeactivateTheftAlertState extends State<DeactivateTheftAlert> {
                               "assets/icons/info.svg",
                             ),
                             SizedBox(width: 12.w),
-                            Container(
+                            SizedBox(
                               width: 263.w,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -124,7 +116,7 @@ class _DeactivateTheftAlertState extends State<DeactivateTheftAlert> {
                     Navigator.pop(context);
                     showDeactivateTheftDialog(context, _bikeProvider);
                   },
-                  child: Container(
+                  child: SizedBox(
                     //color: EvieColors.red,
                     height: 130.h,
                     child: Padding(
@@ -139,7 +131,7 @@ class _DeactivateTheftAlertState extends State<DeactivateTheftAlert> {
                                 "assets/icons/alert_black.svg",
                               ),
                               SizedBox(width: 12.w),
-                              Container(
+                              SizedBox(
                                 width: 263.w,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,

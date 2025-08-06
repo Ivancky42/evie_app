@@ -1,14 +1,10 @@
 import 'dart:io';
 
-import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/user_home_page/bike_container.dart';
+import 'package:sizer/sizer.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +15,7 @@ import '../../my_account/my_account_widget.dart';
 
 
 class SwitchBikeImage extends StatefulWidget {
-  const SwitchBikeImage({Key? key}) : super(key: key);
+  const SwitchBikeImage({super.key});
 
   @override
   State<SwitchBikeImage> createState() => _SwitchBikeImageState();
@@ -29,7 +25,7 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
   @override
   Widget build(BuildContext context) {
 
-    BikeProvider _bikeProvider =
+    BikeProvider bikeProvider =
     Provider.of<BikeProvider>(context);
 
     return Wrap(
@@ -54,11 +50,11 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
               ChangeImageContainer(
                 onPress: () async {
                   final result = await pickImage(
-                      _bikeProvider.currentBikeModel!.deviceIMEI!,
-                      _bikeProvider);
+                      bikeProvider.currentBikeModel!.deviceIMEI!,
+                      bikeProvider);
                   if (result == false) {
                     SmartDialog.show(
-                        widget: EvieSingleButtonDialog(
+                        builder: (_) => EvieSingleButtonDialog(
                             title: "Error",
                             content: "Please try again",
                             rightContent: "OK",
@@ -79,11 +75,11 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
               ChangeImageContainer(
                 onPress: () async {
                   final result = await snapImage(
-                      _bikeProvider.currentBikeModel!.deviceIMEI!,
-                      _bikeProvider);
+                      bikeProvider.currentBikeModel!.deviceIMEI!,
+                      bikeProvider);
                   if (result == false) {
                     SmartDialog.show(
-                        widget: EvieSingleButtonDialog(
+                        builder: (_) => EvieSingleButtonDialog(
                             title: "Error",
                             content: "Please try again",
                             rightContent: "OK",
@@ -103,11 +99,11 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
               ChangeImageContainer(
                 onPress: () async {
                   final result = await deleteImage(
-                      _bikeProvider.currentBikeModel!.deviceIMEI!,
-                      _bikeProvider);
+                      bikeProvider.currentBikeModel!.deviceIMEI!,
+                      bikeProvider);
                   if (result == false) {
                     SmartDialog.show(
-                        widget: EvieSingleButtonDialog(
+                        builder: (_) => EvieSingleButtonDialog(
                             title: "Error",
                             content: "Please try again",
                             rightContent: "OK",
@@ -136,8 +132,8 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
   //Image picker from phone gallery
   Future pickImage(
       String deviceIMEI, BikeProvider bikeProvider) async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if(image != null){
       try {
@@ -145,10 +141,10 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
         showCustomLightLoading('Loading...', false);
         var picName = deviceIMEI;
         Reference ref =
-        FirebaseStorage.instance.ref().child("BikePic/" + picName);
+        FirebaseStorage.instance.ref().child("BikePic/$picName");
 
         //Upload to firebase storage
-        await ref.putFile(File(image!.path));
+        await ref.putFile(File(image.path));
 
         ref.getDownloadURL().then((value) {
           bikeProvider.updateUserBikeImage(value);
@@ -169,19 +165,19 @@ class _SwitchBikeImageState extends State<SwitchBikeImage> {
   //Image picker from camera
   Future snapImage(
       String deviceIMEI, BikeProvider bikeProvider) async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
 
     if(image != null){
       try {
         ///From widget function, show loading dialog screen
         showCustomLightLoading('Loading...', false);
-        var picName = deviceIMEI!;
+        var picName = deviceIMEI;
         Reference ref =
-        FirebaseStorage.instance.ref().child("BikePic/" + picName);
+        FirebaseStorage.instance.ref().child("BikePic/$picName");
 
         //Upload to firebase storage
-        await ref.putFile(File(image!.path));
+        await ref.putFile(File(image.path));
 
         ref.getDownloadURL().then((value) {
           bikeProvider.updateUserBikeImage(value);

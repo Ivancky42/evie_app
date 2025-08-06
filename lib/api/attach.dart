@@ -1,7 +1,6 @@
 import 'package:evie_test/api/provider/bike_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,7 +9,6 @@ import '../widgets/evie_button.dart';
 import '../widgets/evie_checkbox.dart';
 import '../widgets/evie_double_button_dialog.dart';
 import '../widgets/evie_radio_button.dart';
-import '../widgets/evie_switch.dart';
 import 'colours.dart';
 import 'dialog.dart';
 import 'fonts.dart';
@@ -35,7 +33,7 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
   SmartDialog.show(
       backDismiss: false,
       keepSingle: true,
-      widget: StatefulBuilder(
+      builder: (context) => StatefulBuilder(
       builder: (context, setState){
         return  EvieDoubleButtonDialogFilter(
             title: Row(
@@ -66,7 +64,7 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     height: 70.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,7 +85,7 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
                     ),
                   ),
                   const EvieDivider(),
-                  Container(
+                  SizedBox(
                     height: 70.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -108,7 +106,7 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
                     ),
                   ),
                   const EvieDivider(),
-                  Container(
+                  SizedBox(
                     height: 70.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,7 +127,7 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
                     ),
                   ),
                   const EvieDivider(),
-                  Container(
+                  SizedBox(
                     height: 70.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -150,7 +148,7 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
                     ),
                   ),
                  const EvieDivider(),
-                  Container(
+                  SizedBox(
                     height: 70.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -209,16 +207,16 @@ showFilterTreatStatus(BuildContext context, BikeProvider bikeProvider, bool isPi
 
 
 showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPickedDateExpand , setState){
-  int _selectedRadio = -1;
+  int selectedRadio = -1;
 
   if (bikeProvider.threatFilterDate == ThreatFilterDate.today){
-    _selectedRadio = 0;
+    selectedRadio = 0;
   }else if(bikeProvider.threatFilterDate == ThreatFilterDate.yesterday){
-    _selectedRadio = 1;
+    selectedRadio = 1;
   }else if(bikeProvider.threatFilterDate == ThreatFilterDate.last7days){
-    _selectedRadio = 2;
+    selectedRadio = 2;
   }else if(bikeProvider.threatFilterDate == ThreatFilterDate.custom){
-    _selectedRadio = 3;
+    selectedRadio = 3;
   }
 
   ///all, today, yesterday, last7days, custom
@@ -230,7 +228,7 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
   SmartDialog.show(
       useSystem: true,
       backDismiss: false,
-      widget: StatefulBuilder(
+      builder: (context) => StatefulBuilder(
           builder: (context, setState){
             return  EvieDoubleButtonDialogFilter(
                 title: Row(
@@ -239,7 +237,7 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                     Text("Filter by date", style: EvieTextStyles.headlineB),
                     TextButton(onPressed: (){
                       setState(() {
-                        _selectedRadio = -1;
+                        selectedRadio = -1;
                         pickedDate = ThreatFilterDate.today;
                         pickedDate1 != null ? pickedDate1 = null : -1;
                         pickedDate2 != null ? pickedDate2 = null : -1;
@@ -259,10 +257,10 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                       EvieRadioButton(
                           text: "Today",
                           value: 0,
-                          groupValue: _selectedRadio,
+                          groupValue: selectedRadio,
                           onChanged: (value){
                             setState(() {
-                              _selectedRadio = value;
+                              selectedRadio = value;
                               pickedDate = ThreatFilterDate.today;
                               pickedDate1 != null ? pickedDate1 = null : -1;
                               pickedDate2 != null ? pickedDate2 = null : -1;
@@ -273,10 +271,10 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                       EvieRadioButton(
                           text: "Yesterday",
                           value: 1,
-                          groupValue: _selectedRadio,
+                          groupValue: selectedRadio,
                           onChanged: (value){
                             setState(() {
-                              _selectedRadio = value;
+                              selectedRadio = value;
                               pickedDate =ThreatFilterDate.yesterday;
                               pickedDate1 != null ? pickedDate1 = null : -1;
                               pickedDate2 != null ? pickedDate2 = null : -1;
@@ -287,11 +285,11 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                       EvieRadioButton(
                           text: "Last 7 days",
                           value: 2,
-                          groupValue: _selectedRadio,
+                          groupValue: selectedRadio,
                           onChanged: (value){
 
                             setState(() {
-                              _selectedRadio = value;
+                              selectedRadio = value;
                               pickedDate = ThreatFilterDate.last7days;
                               pickedDate1 != null ? pickedDate1 = null : -1;
                               pickedDate2 != null ? pickedDate2 = null : -1;
@@ -302,16 +300,16 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                       EvieRadioButton(
                           text: "Custom Date",
                           value: 3,
-                          groupValue: _selectedRadio,
+                          groupValue: selectedRadio,
                           onChanged: (value){
                             setState(() {
-                              _selectedRadio = value;
+                              selectedRadio = value;
                               pickedDate = ThreatFilterDate.custom;
                             });
                           }),
 
                       Visibility(
-                        visible: _selectedRadio == 3,
+                        visible: selectedRadio == 3,
                         child: Padding(
                           padding: EdgeInsets.only(top: 0, bottom: 12.h),
                           child: Row(
@@ -321,7 +319,7 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                                 width: 155.w,
                                 height: 48.h,
                                 onPressed: () async {
-                                  if(_selectedRadio == 3){
+                                  if(selectedRadio == 3){
                                     var range = await showDateRangePicker(
                                       context: context,
                                       initialDateRange: pickedDateRange,
@@ -336,7 +334,7 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                                               onSurface: Colors.black, // Adjust text color on body
                                               onSecondary: Colors.white,
                                               secondary: EvieColors.primaryColor,
-                                              background: EvieColors.primaryColor,
+                                              surface: EvieColors.primaryColor,
                                             ),
                                             datePickerTheme: const DatePickerThemeData(
                                               rangePickerHeaderBackgroundColor: EvieColors.primaryColor,
@@ -408,7 +406,7 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                                 width: 155.w,
                                 height: 48.h,
                                 onPressed: () async {
-                                  if(_selectedRadio == 3){
+                                  if(selectedRadio == 3){
 
                                     var range = await showDateRangePicker(
                                       context: context,
@@ -424,7 +422,7 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                                               onSurface: Colors.black, // Adjust text color on body
                                               onSecondary: Colors.white,
                                               secondary: EvieColors.primaryColor,
-                                              background: EvieColors.primaryColor,
+                                              surface: EvieColors.primaryColor,
                                             ),
                                             datePickerTheme: const DatePickerThemeData(
                                               rangePickerHeaderBackgroundColor: EvieColors.primaryColor,
@@ -432,7 +430,7 @@ showFilterTreatDate(BuildContext context, BikeProvider bikeProvider, bool isPick
                                               rangePickerBackgroundColor: Colors.white,
                                             ),
                                           ),
-                                          child: Container(
+                                          child: SizedBox(
                                             width: 300.w,
                                             child: child!,
                                           ),

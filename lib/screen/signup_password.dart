@@ -1,5 +1,5 @@
 import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/screen/signup_page.dart';
 import 'package:evie_test/widgets/evie_checkbox.dart';
 import 'package:evie_test/widgets/evie_textform.dart';
@@ -18,7 +18,6 @@ import '../api/fonts.dart';
 import '../api/function.dart';
 import '../api/length.dart';
 import '../api/navigator.dart';
-import '../api/provider/auth_provider.dart';
 import '../widgets/evie_appbar.dart';
 import '../widgets/evie_single_button_dialog.dart';
 
@@ -29,7 +28,7 @@ class SignUpPassword extends StatefulWidget {
   final String name;
   final String email;
 
-  const SignUpPassword(this.name, this.email, {Key? key}) : super(key: key);
+  const SignUpPassword(this.name, this.email, {super.key});
 
   @override
   _SignUpPasswordState createState() => _SignUpPasswordState();
@@ -46,7 +45,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
 
   //For user input password visibility true/false
   bool _isObscure = true;
-  bool _isObscure2 = true;
+  final bool _isObscure2 = true;
   bool isCheckTermsCondition = false;
   bool _isPasswordValid = false;
   final FocusNode _nameFocusNode = FocusNode();
@@ -229,8 +228,8 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                                                 recognizer: TapGestureRecognizer()
                                                   ..onTap = () {
                                                     const url = 'https://eviebikes.com/policies/terms-of-service';
-                                                    final Uri _url = Uri.parse(url);
-                                                    launch(_url);
+                                                    final Uri url0 = Uri.parse(url);
+                                                    launch(url0);
                                                   },
                                               ),
                                               TextSpan(
@@ -246,8 +245,8 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                                                 recognizer: TapGestureRecognizer()
                                                   ..onTap = () {
                                                     const url = 'https://eviebikes.com/policies/privacy-policy';
-                                                    final Uri _url = Uri.parse(url);
-                                                    launch(_url);
+                                                    final Uri url0 = Uri.parse(url);
+                                                    launch(url0);
                                                   },
                                               ),
                                             ],
@@ -259,10 +258,6 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                             SizedBox(height: 12.h,),
                             EvieButton(
                               width: double.infinity,
-                              child: Text(
-                                "Create Account",
-                                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                              ),
                               ///conditions for button to be active
                               onPressed: isCheckTermsCondition == true && _passwordController.text.length >= 8 && containsLettersAndNumbers(_passwordController.text) ? () async {
                                 if (_formKey.currentState!.validate()) {
@@ -298,7 +293,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                                   }
                                   else if (result == 'email-already-in-use') {
                                     SmartDialog.show(
-                                      widget: EvieSingleButtonDialog(
+                                      builder: (_) => EvieSingleButtonDialog(
                                           title: "Error",
                                           content: 'The email address is already in use by another account.',
                                           rightContent: "Login Now",
@@ -310,7 +305,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                                   }
                                   else {
                                     SmartDialog.show(
-                                      widget: EvieSingleButtonDialogOld(
+                                      builder: (_) => EvieSingleButtonDialogOld(
                                           title: "Error",
                                           content: "Try again",
                                           rightContent: "Ok",
@@ -326,7 +321,11 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                                   }
                                 }
                                 ///null to disable button when conditions are not met
-                              } : null
+                              } : null,
+                              child: Text(
+                                "Create Account",
+                                style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                              )
                             ),
                           ],
                         )

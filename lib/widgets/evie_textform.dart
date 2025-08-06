@@ -1,6 +1,6 @@
 
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -25,7 +25,7 @@ class EvieTextFormField extends StatefulWidget {
   final MaskTextInputFormatter? maskTextInputFormatter;
 
   const EvieTextFormField({
-    Key? key,
+    super.key,
 
     required this.controller,
     this.obscureText,
@@ -39,7 +39,7 @@ class EvieTextFormField extends StatefulWidget {
     this.enabled,
     this.maskTextInputFormatter,
 
-  }) : super(key: key);
+  });
 
   @override
   State<EvieTextFormField> createState() => _EvieTextFormFieldState();
@@ -192,11 +192,11 @@ class EvieButton_TextForm_Constant extends StatelessWidget {
   final String hintText;
 
   const EvieButton_TextForm_Constant({
-    Key? key,
+    super.key,
     required this.width,
     required this.height,
     required this.hintText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

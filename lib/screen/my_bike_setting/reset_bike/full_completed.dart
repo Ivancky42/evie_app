@@ -1,11 +1,9 @@
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../api/colours.dart';
-import '../../../api/dialog.dart';
-import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/navigator.dart';
@@ -13,7 +11,7 @@ import '../../../api/provider/bike_provider.dart';
 import '../../../widgets/evie_button.dart';
 
 class FullCompleted extends StatefulWidget{
-  const FullCompleted ({Key?key}) : super(key:key);
+  const FullCompleted ({super.key});
   @override
   _FullCompletedState createState() => _FullCompletedState();
 }

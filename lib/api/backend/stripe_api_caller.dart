@@ -13,7 +13,7 @@ class StripeApiCaller {
   ///$plans > $prices[0]id ---> priceId /// price_1Lp0yCBjvoM881zMsahs6rkP
   ///$users > user.stripeId ----> customerId /// cus_MWhzvDMk1TI57G
   static Future redirectToCheckout(String deviceIMEI, String planId, String priceId, String customerId) async {
-    final auth = 'Bearer ' + secretKey;
+    final auth = 'Bearer $secretKey';
     const header = Headers.formUrlEncodedContentType;
     final body = {
       'line_items': [
@@ -26,7 +26,7 @@ class StripeApiCaller {
       'success_url': 'https://evie-126a6.web.app/success.html',
       'cancel_url': 'https://evie-126a6.web.app/cancel.html',
       "customer" : customerId,
-      "client_reference_id": deviceIMEI + "," + planId + "," + "EV-Secure",
+      "client_reference_id": "$deviceIMEI,$planId,EV-Secure",
     };
 
     var sessionId;
@@ -44,7 +44,7 @@ class StripeApiCaller {
   }
 
   static Future<String> createStripeCustomer(String email) async {
-    final auth = 'Bearer ' + secretKey;
+    final auth = 'Bearer $secretKey';
     const header = Headers.formUrlEncodedContentType;
 
     final body = {

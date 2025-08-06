@@ -1,4 +1,4 @@
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'dart:io';
 
 class EvieLength {

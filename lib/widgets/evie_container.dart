@@ -1,4 +1,4 @@
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -11,13 +11,13 @@ class BikePageContainer extends StatelessWidget {
   final String trailingImage;
 
   const BikePageContainer({
-    Key? key,
+    super.key,
     this.subtitle,
     this.contents,
     this.content,
     required this.onPress,
     required this.trailingImage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class BikePageContainer extends StatelessWidget {
       return GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: onPress,
-        child: Container(
+        child: SizedBox(
           height: 62.h,
           child: Padding(
             padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
@@ -59,7 +59,7 @@ class BikePageContainer extends StatelessWidget {
       return GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: onPress,
-        child: Container(
+        child: SizedBox(
           height: 44.h,
           child: Padding(
             padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
@@ -90,9 +90,9 @@ class PlanPageElementRow extends StatelessWidget {
   final String content;
 
   const PlanPageElementRow({
-    Key? key,
+    super.key,
     required this.content,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

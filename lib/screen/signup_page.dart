@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/screen/input_name.dart';
-import 'package:evie_test/widgets/evie_checkbox.dart';
 import 'package:evie_test/widgets/evie_textform.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +14,6 @@ import '../api/length.dart';
 import '../api/navigator.dart';
 import '../api/provider/auth_provider.dart' as EvieAuthProvider;
 import '../widgets/evie_appbar.dart';
-import '../widgets/evie_single_button_dialog.dart';
 
 ///Firebase auth
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -24,7 +21,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 class SignUp extends StatefulWidget {
   final String name;
 
-  const SignUp(this.name, {Key? key}) : super(key: key);
+  const SignUp(this.name, {super.key});
 
   @override
   _SignUpState createState() => _SignUpState();

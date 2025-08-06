@@ -1,33 +1,21 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_divider.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lottie/lottie.dart';
-import 'package:paginate_firestore/bloc/pagination_listeners.dart';
-import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../api/colours.dart';
-import '../../../../api/length.dart';
 import '../../../../api/provider/bike_provider.dart';
-import '../../../../api/provider/bluetooth_provider.dart';
-import '../../../../api/provider/location_provider.dart';
-import '../../api/provider/notification_provider.dart';
-import '../../api/snackbar.dart';
 import '../../api/toast.dart';
 
 class RemoveAllPals extends StatefulWidget {
-  RemoveAllPals({
-    Key? key,
+  const RemoveAllPals({
+    super.key,
 
-  }) : super(key: key);
+  });
 
   @override
   State<RemoveAllPals> createState() => _RemoveAllPalsState();
@@ -71,7 +59,7 @@ class _RemoveAllPalsState extends State<RemoveAllPals> {
                 padding: EdgeInsets.only(
                   left: 8.w,
                 ),
-                child: Container(
+                child: SizedBox(
                   width: 36.w,
                   height: 36.w,
                   child: Center(

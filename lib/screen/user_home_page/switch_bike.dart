@@ -1,22 +1,17 @@
 import 'dart:collection';
 
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/screen/user_home_page/bike_container.dart';
 import 'package:evie_test/widgets/evie_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../api/colours.dart';
 import '../../api/model/bike_model.dart';
 import '../../api/navigator.dart';
 import '../../api/provider/bike_provider.dart';
 
 class SwitchBike extends StatefulWidget {
-  const SwitchBike({Key? key}) : super(key: key);
+  const SwitchBike({super.key});
 
   @override
   State<SwitchBike> createState() => _SwitchBikeState();
@@ -28,8 +23,8 @@ class _SwitchBikeState extends State<SwitchBike> {
 
   @override
   Widget build(BuildContext context) {
-    BikeProvider _bikeProvider = Provider.of<BikeProvider>(context);
-    currentUserBikeDetails = _bikeProvider.userBikeDetails;
+    BikeProvider bikeProvider = Provider.of<BikeProvider>(context);
+    currentUserBikeDetails = bikeProvider.userBikeDetails;
 
     return Wrap(
       children: [
@@ -57,10 +52,10 @@ class _SwitchBikeState extends State<SwitchBike> {
                 padding: const EdgeInsets.all(0),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: _bikeProvider.userBikeDetails.length,
+                itemCount: bikeProvider.userBikeDetails.length,
                 itemBuilder: (context, index) {
 
-                  return BikeContainer(bikeModel: _bikeProvider.userBikeDetails.values.elementAt(index), bikesPlan: _bikeProvider.bikesPlan,);
+                  return BikeContainer(bikeModel: bikeProvider.userBikeDetails.values.elementAt(index), bikesPlan: bikeProvider.bikesPlan,);
                 },
               ),
 
@@ -69,7 +64,7 @@ class _SwitchBikeState extends State<SwitchBike> {
                 padding:  EdgeInsets.fromLTRB(16.w, 22.h, 16.w, 39.h),
                 child: EvieButton(
                     onPressed: (){
-                      _bikeProvider.setIsAddBike(true);
+                      bikeProvider.setIsAddBike(true);
                       changeToTurnOnQRScannerScreen(context);
                     },
                     child: Text(

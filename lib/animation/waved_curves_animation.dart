@@ -1,13 +1,11 @@
-import 'package:evie_test/api/length.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:get/utils.dart';
 
-import '../api/colours.dart';
 
 //set this class to home of material app in main.dart
 class WavedCurvesAnimation extends StatefulWidget{
+  const WavedCurvesAnimation({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _MyAnimatedWavesCurves();
@@ -82,7 +80,7 @@ class _MyAnimatedWavesCurves extends State<WavedCurvesAnimation> with SingleTick
               Positioned( //helps to position widget where ever we want
                 top:0, //position at the top
                 left: animationTop.value, //value of left from animation controller
-                child: Container(
+                child: SizedBox(
                   width: 600.w,
                   child: Image.asset("assets/images/battery_wave.png", height: 180.h),
                 )
@@ -91,7 +89,7 @@ class _MyAnimatedWavesCurves extends State<WavedCurvesAnimation> with SingleTick
               Positioned( //helps to position widget where ever we want
                 top:0, //position at the top
                 right: animationBottom.value, //value of left from animation controller
-                child: Container(
+                child: SizedBox(
                   width: 600.w,
                   child: Image.asset("assets/images/battery_wave.png", height: 180.h),
                 )
@@ -106,7 +104,7 @@ class _MyAnimatedWavesCurves extends State<WavedCurvesAnimation> with SingleTick
 class MyWaveClipper2 extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    var path = new Path();
+    var path = Path();
     path.lineTo(0.0, 40.0);
     path.lineTo(0.0, size.height);
     path.lineTo(size.width, size.height);
@@ -145,7 +143,7 @@ class MyWaveClipper2 extends CustomClipper<Path> {
 class MyWaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    var path = new Path();
+    var path = Path();
     path.lineTo(0.0, 40.0);
     path.lineTo(0.0, size.height);
     path.lineTo(size.width, size.height);

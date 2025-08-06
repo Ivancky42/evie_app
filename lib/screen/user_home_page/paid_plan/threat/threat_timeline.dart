@@ -1,16 +1,12 @@
 
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
@@ -24,17 +20,13 @@ import '../../../../api/function.dart';
 import '../../../../api/model/threat_routes_model.dart';
 import '../../../../api/navigator.dart';
 import '../../../../api/provider/bike_provider.dart';
-import '../../../../api/provider/bluetooth_provider.dart';
 import '../../../../api/provider/location_provider.dart';
-import '../../../../widgets/evie_radio_button.dart';
-import '../../../../widgets/evie_single_button_dialog.dart';
-import '../../../../widgets/evie_switch.dart';
 import '../home_element/location.dart';
 import '../home_element/threat_unlocking_system.dart';
 
 class ThreatTimeLine extends StatefulWidget {
 
-  const ThreatTimeLine({Key? key,}) : super(key: key);
+  const ThreatTimeLine({super.key,});
 
   @override
   State<ThreatTimeLine> createState() => _ThreatTimeLineState();
@@ -51,7 +43,7 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
   final double _initFabHeight = 120.0;
   double _fabHeight = 0;
   double _panelHeightOpen = 244.h;
-  double _panelHeightClosed = 95.h;
+  final double _panelHeightClosed = 95.h;
   late final ScrollController scrollController;
   late final PanelController panelController;
 
@@ -75,6 +67,7 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
         color: EvieColors.grayishWhite,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
       ),
+      height: 750.h,
       child: Stack(
         children: [
           Column(
@@ -182,7 +175,7 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
                                 if (threatRoutesModel.geopoint?.latitude != 0 &&
                                     threatRoutesModel.geopoint?.longitude !=
                                         0) {
-                                  return Container(
+                                  return SizedBox(
                                     width: 22.5.w,
                                     height: 20.h,
                                     //color: Colors.green,
@@ -304,7 +297,7 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ForceDraggableWidget(
-                        child: Container(
+                        child: SizedBox(
                           width: 100,
                           height: 40,
                           child: Column(
@@ -384,7 +377,6 @@ class _ThreatTimeLineState extends State<ThreatTimeLine> {
           ),
         ],
       ),
-      height: 750.h,
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,7 +16,7 @@ import '../../api/provider/bike_provider.dart';
 import '../../api/provider/location_provider.dart';
 import '../../api/provider/notification_provider.dart';
 import '../../api/provider/setting_provider.dart';
-import '../../bluetooth/modelResult.dart';
+import '../../bluetooth/modelResult.dart' as bluetooth;
 import '../../widgets/actionable_bar.dart';
 import '../../widgets/evie_button.dart';
 
@@ -31,14 +31,14 @@ class HomePageWidget_StatusBar extends StatefulWidget{
   LocationProvider? locationProvider;
 
   HomePageWidget_StatusBar({
-    Key? key,
+    super.key,
     required this.currentDangerState,
     this.lastSeen,
     this.location,
     this.minutesAgo,
     this.selectedGeopoint,
     this.locationProvider,
-  }) : super(key: key);
+  });
 
   @override
   State<HomePageWidget_StatusBar> createState() => _HomePageWidget_StatusBarState();
@@ -164,14 +164,14 @@ getSecurityImageWidget(bool isLocked) {
 }
 
 
-getSecurityImageWidgetBluetooth(LockState isLocked, String status) {
+getSecurityImageWidgetBluetooth(bluetooth.LockState isLocked, String status) {
   switch (isLocked) {
-    case LockState.lock:
+    case bluetooth.LockState.lock:
       if (status == "safe") {
         return "assets/buttons/bike_security_lock_and_secure.svg";
       }
       break;
-    case LockState.unlock:
+    case bluetooth.LockState.unlock:
       if (status == "safe") {
         return "assets/buttons/bike_security_unlock.svg";
       }

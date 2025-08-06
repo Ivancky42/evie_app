@@ -1,6 +1,6 @@
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 
 import '../../../../api/colours.dart';
 import '../../../../api/dialog.dart';
-import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
 import '../../../../api/function.dart';
 import '../../../../api/provider/bike_provider.dart';
@@ -22,9 +21,9 @@ import '../../home_page_widget.dart';
 
 class Battery extends StatefulWidget {
   final bool isShow;
-  Battery({
-    Key? key, required this.isShow
-  }) : super(key: key);
+  const Battery({
+    super.key, required this.isShow
+  });
 
   @override
   State<Battery> createState() => _BatteryState();
@@ -106,7 +105,7 @@ class _BatteryState extends State<Battery> {
                       Padding(
                           padding: EdgeInsets.only(left: 0.w, right: 15.w),
                           child: Text(
-                            "$estimatedDistance",
+                            estimatedDistance,
                             style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
                           ),
                         ),

@@ -48,7 +48,7 @@ class PlanProvider extends ChangeNotifier {
             case DocumentChangeType.added:
               Map<String, dynamic>? obj = docChange.doc.data();
               if (obj!['active'] == true && obj['stripe_metadata_feature'] == 'EV-Secure') {
-                availablePlanList.putIfAbsent(docChange.doc.id, () => PlanModel.fromJson(obj!, docChange.doc.id));
+                availablePlanList.putIfAbsent(docChange.doc.id, () => PlanModel.fromJson(obj, docChange.doc.id));
               }
               notifyListeners();
               break;
@@ -59,7 +59,7 @@ class PlanProvider extends ChangeNotifier {
             case DocumentChangeType.modified:
               Map<String, dynamic>? obj = docChange.doc.data();
               if (obj!['active'] == true && obj['stripe_metadata_feature'] == 'EV-Secure') {
-                availablePlanList.putIfAbsent(docChange.doc.id, () => PlanModel.fromJson(obj!, docChange.doc.id));
+                availablePlanList.putIfAbsent(docChange.doc.id, () => PlanModel.fromJson(obj, docChange.doc.id));
               }
               else {
                 availablePlanList.removeWhere((key, value) => key == docChange.doc.id);
@@ -105,7 +105,7 @@ class PlanProvider extends ChangeNotifier {
                 case DocumentChangeType.added:
                   Map<String, dynamic>? obj = docChange.doc.data();
                   if (obj!['active'] == true) {
-                    priceList.putIfAbsent(docChange.doc.id, () => PriceModel.fromJson(obj!, docChange.doc.id));
+                    priceList.putIfAbsent(docChange.doc.id, () => PriceModel.fromJson(obj, docChange.doc.id));
                   }
                   notifyListeners();
                   break;
@@ -119,7 +119,7 @@ class PlanProvider extends ChangeNotifier {
                   //priceList.update(docChange.doc.id, (value) => PriceModel.fromJson(obj!, docChange.doc.id));
 
                   if (obj!['active'] == true) {
-                    priceList.putIfAbsent(docChange.doc.id, () => PriceModel.fromJson(obj!, docChange.doc.id));
+                    priceList.putIfAbsent(docChange.doc.id, () => PriceModel.fromJson(obj, docChange.doc.id));
                   }
                   else {
                     priceList.removeWhere((key, value) => key == docChange.doc.id);
@@ -157,7 +157,7 @@ class PlanProvider extends ChangeNotifier {
     return StripeApiCaller.createStripeCustomer(currentUserModel!.email).then((customerId) {
       return FirebaseFirestore.instance.collection("users").doc(currentUserModel!.uid).update({
         'stripeId': customerId,
-        'stripeLink': 'https://dashboard.stripe.com/customers/' + customerId,
+        'stripeLink': 'https://dashboard.stripe.com/customers/$customerId',
       }).then((value) {
         return 'success';
       });
@@ -168,7 +168,7 @@ class PlanProvider extends ChangeNotifier {
       return FirebaseFirestore.instance.collection("codes").where('code', isEqualTo: code).get().then((querySnapshot) {
         if (querySnapshot.docs.isNotEmpty) {
           String docId = querySnapshot.docs[0].id;
-          Map<String, dynamic> data = querySnapshot.docs[0].data() as Map<String, dynamic>;
+          Map<String, dynamic> data = querySnapshot.docs[0].data();
           print('Document Data: $data');
           int orderId = data['orderId'];
           String sentEmail = data['sentEmail'];

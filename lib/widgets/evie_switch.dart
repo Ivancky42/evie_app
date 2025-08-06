@@ -1,10 +1,8 @@
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 import '../api/colours.dart';
-import 'evie_textform.dart';
 
 ///Cupertino switch widget
 class EvieSwitch extends StatelessWidget {
@@ -17,7 +15,7 @@ class EvieSwitch extends StatelessWidget {
   final double? height;
 
   const EvieSwitch({
-    Key? key,
+    super.key,
     required this.onChanged,
     this.title,
     this.text,
@@ -25,7 +23,7 @@ class EvieSwitch extends StatelessWidget {
     required this.thumbColor,
     this.activeColor,
     this.height,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +60,10 @@ class EvieSwitch extends StatelessWidget {
             padding: EdgeInsets.only(left: 8.w),
             child: CupertinoSwitch(
               value: value,
-              activeColor:  activeColor ?? EvieColors.primaryColor,
+              activeTrackColor:  activeColor ?? EvieColors.primaryColor,
               thumbColor: thumbColor,
               //trackColor: const Color(0xff6A51CA).withOpacity(0.5),
-              trackColor: EvieColors.lightGrayishCyan,
+              inactiveTrackColor: EvieColors.lightGrayishCyan,
               onChanged: onChanged,
             ),
           ),

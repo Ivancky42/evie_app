@@ -1,17 +1,11 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/model/user_bike_model.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_button.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +13,6 @@ import 'package:provider/provider.dart';
 import '../../api/colours.dart';
 import '../../api/function.dart';
 import '../../api/model/bike_model.dart';
-import '../../api/navigator.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../api/provider/bluetooth_provider.dart';
 import '../../bluetooth/modelResult.dart';
@@ -27,7 +20,7 @@ import '../../bluetooth/modelResult.dart';
 class BikeContainer extends StatefulWidget {
   final BikeModel bikeModel;
   final LinkedHashMap bikesPlan;
-  const BikeContainer({Key? key, required this.bikeModel, required this.bikesPlan}) : super(key: key);
+  const BikeContainer({super.key, required this.bikeModel, required this.bikesPlan});
 
   @override
   State<BikeContainer> createState() => _BikeContainerState();
@@ -42,16 +35,16 @@ class _BikeContainerState extends State<BikeContainer> {
   @override
   Widget build(BuildContext context) {
 
-    BikeProvider _bikeProvider = Provider.of<BikeProvider>(context);
-    BluetoothProvider _bluetoothProvider = Provider.of<BluetoothProvider>(context);
-    NotificationProvider _notificationProvider = Provider.of<NotificationProvider>(context);
+    BikeProvider bikeProvider = Provider.of<BikeProvider>(context);
+    BluetoothProvider bluetoothProvider = Provider.of<BluetoothProvider>(context);
+    NotificationProvider notificationProvider = Provider.of<NotificationProvider>(context);
 
     /// get bluetooth connection state and lock unlock to detect isConnected
-    deviceConnectResult = _bluetoothProvider.deviceConnectResult;
+    deviceConnectResult = bluetoothProvider.deviceConnectResult;
 
     ///Handle all data if bool isDeviceConnected is true
     if (deviceConnectResult == DeviceConnectResult.connected) {
-      if (_bluetoothProvider.currentBikeModel?.deviceIMEI == widget.bikeModel.deviceIMEI) {
+      if (bluetoothProvider.currentBikeModel?.deviceIMEI == widget.bikeModel.deviceIMEI) {
         setState(() {
           isSpecificDeviceConnected = true;
         });
@@ -74,21 +67,21 @@ class _BikeContainerState extends State<BikeContainer> {
         onTap: () async {
 
           /// if target pressed device imei != current device imei
-          if(widget.bikeModel.deviceIMEI != _bikeProvider.currentBikeModel!.deviceIMEI){
+          if(widget.bikeModel.deviceIMEI != bikeProvider.currentBikeModel!.deviceIMEI){
             if( deviceConnectResult == DeviceConnectResult.connecting ||
                 deviceConnectResult == DeviceConnectResult.scanning ||
                 deviceConnectResult == DeviceConnectResult.connected ||
                 deviceConnectResult == DeviceConnectResult.partialConnected||
                 deviceConnectResult == DeviceConnectResult.disconnecting){
-              await _bluetoothProvider.stopScan();
+              await bluetoothProvider.stopScan();
               //await _bluetoothProvider.connectSubscription?.cancel();
-              await _bluetoothProvider.disconnectDevice();
-              _bluetoothProvider.switchBikeDetected();
-              _bluetoothProvider.startScanTimer?.cancel();
-              await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
+              await bluetoothProvider.disconnectDevice();
+              bluetoothProvider.switchBikeDetected();
+              bluetoothProvider.startScanTimer?.cancel();
+              await bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
               Navigator.pop(context);
             }else{
-               await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
+               await bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
                Navigator.pop(context);
             }
           }
@@ -107,8 +100,8 @@ class _BikeContainerState extends State<BikeContainer> {
                 blurRadius: 8.0.w,
               ),
             ],
-            border: _bikeProvider.currentBikeModel != null ?
-                widget.bikeModel.deviceIMEI == _bikeProvider.currentBikeModel!.deviceIMEI ?
+            border: bikeProvider.currentBikeModel != null ?
+                widget.bikeModel.deviceIMEI == bikeProvider.currentBikeModel!.deviceIMEI ?
                 Border.all(
                   color: EvieColors.primaryColor,
                   width: 2,
@@ -130,7 +123,7 @@ class _BikeContainerState extends State<BikeContainer> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: getCurrentBikeStatusColour(deviceConnectResult == DeviceConnectResult.connected, widget.bikeModel, _bikeProvider,_bluetoothProvider),
+                          color: getCurrentBikeStatusColour(deviceConnectResult == DeviceConnectResult.connected, widget.bikeModel, bikeProvider,bluetoothProvider),
                           width: 2.5.w,
                         ),
                       ),
@@ -160,7 +153,7 @@ class _BikeContainerState extends State<BikeContainer> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
+                            SizedBox(
                               width: 180.w,
                               child: Row(
                                 children: [
@@ -174,7 +167,7 @@ class _BikeContainerState extends State<BikeContainer> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                  getCurrentBikeStatusTag(widget.bikeModel, _bikeProvider, _bluetoothProvider)
+                                  getCurrentBikeStatusTag(widget.bikeModel, bikeProvider, bluetoothProvider)
                                 ],
                               ),
                             ),
@@ -190,7 +183,7 @@ class _BikeContainerState extends State<BikeContainer> {
                                       Container(
                                         color: Colors.transparent,
                                         child: SvgPicture.asset(
-                                          getCurrentBikeStatusIcon(widget.bikeModel, widget.bikesPlan, _bluetoothProvider),
+                                          getCurrentBikeStatusIcon(widget.bikeModel, widget.bikesPlan, bluetoothProvider),
                                           height: 24.h,
                                           width: 24.w,
                                         ),
@@ -201,8 +194,8 @@ class _BikeContainerState extends State<BikeContainer> {
                                         color: Colors.transparent,
                                         child: Padding(
                                           padding: EdgeInsets.only(top: 0),
-                                          child: Text(getCurrentBikeStatusString(widget.bikeModel, _bikeProvider,_bluetoothProvider),
-                                            style: EvieTextStyles.body18.copyWith(color: getCurrentBikeStatusColourText(deviceConnectResult == DeviceConnectResult.connected, widget.bikeModel, _bikeProvider,_bluetoothProvider),
+                                          child: Text(getCurrentBikeStatusString(widget.bikeModel, bikeProvider,bluetoothProvider),
+                                            style: EvieTextStyles.body18.copyWith(color: getCurrentBikeStatusColourText(deviceConnectResult == DeviceConnectResult.connected, widget.bikeModel, bikeProvider,bluetoothProvider),
                                             ),
                                             softWrap: true,
                                             overflow:  TextOverflow.ellipsis,
@@ -226,29 +219,29 @@ class _BikeContainerState extends State<BikeContainer> {
                       iconSize: 45.w,
                       onPressed: () async {
                         if(!isSpecificDeviceConnected){
-                          if(widget.bikeModel.deviceIMEI == _bikeProvider.currentBikeModel!.deviceIMEI){
-                            checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
-                            _notificationProvider.compareActionableBarTime();
+                          if(widget.bikeModel.deviceIMEI == bikeProvider.currentBikeModel!.deviceIMEI){
+                            checkBleStatusAndConnectDevice(bluetoothProvider, bikeProvider);
+                            notificationProvider.compareActionableBarTime();
                             Navigator.pop(context);
 
                           }
                           else{
-                            await _bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
+                            await bikeProvider.changeBikeUsingIMEI(widget.bikeModel.deviceIMEI!);
                             StreamSubscription? subscription;
-                            subscription = _bikeProvider.switchBike().listen((result) {
+                            subscription = bikeProvider.switchBike().listen((result) {
                               if(result == SwitchBikeResult.success){
                                 ///set auto connect flag on bluetooth provider,
                                 ///once bluetooth provider received new current bike model,
                                 ///it will connect follow by the flag.
-                                _bluetoothProvider.setAutoConnect();
+                                bluetoothProvider.setAutoConnect();
                                 subscription?.cancel();
-                                _notificationProvider.compareActionableBarTime();
+                                notificationProvider.compareActionableBarTime();
                                 Navigator.pop(context);
                               }
                               else if(result == SwitchBikeResult.failure){
                                 subscription?.cancel();
                                 SmartDialog.show(
-                                    widget: EvieSingleButtonDialog(
+                                    builder: (_) => EvieSingleButtonDialog(
                                         title: "Error",
                                         content: "Unable to switch bike, Please try again.",
                                         rightContent: "Retry",
@@ -260,7 +253,7 @@ class _BikeContainerState extends State<BikeContainer> {
                           }
                         }
                         else{
-                          await _bluetoothProvider.disconnectDevice();
+                          await bluetoothProvider.disconnectDevice();
                         }
                       },
                       icon: isSpecificDeviceConnected ?

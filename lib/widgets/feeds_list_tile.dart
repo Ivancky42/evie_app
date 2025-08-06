@@ -1,5 +1,5 @@
 
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -18,7 +18,7 @@ class FeedsListTile extends StatelessWidget {
   final VoidCallback onPressRight;
 
   const FeedsListTile({
-    Key? key,
+    super.key,
     required this.image,
     required this.title,
     required this.subtitle,
@@ -26,7 +26,7 @@ class FeedsListTile extends StatelessWidget {
     required this.date,
     this.onPressLeft,
     required this.onPressRight,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +69,7 @@ class FeedsListTile extends StatelessWidget {
                     child: EvieButton_ReversedColor(
                       width: double.infinity,
                       height: 36.h,
+                      onPressed: onPressLeft,
                       child: Text(
                         "Learn More",
                         style: TextStyle(
@@ -77,7 +78,6 @@ class FeedsListTile extends StatelessWidget {
                             fontWeight: FontWeight.w700
                         ),
                       ),
-                      onPressed: onPressLeft,
                     ),
                   ),
                 )
@@ -89,6 +89,7 @@ class FeedsListTile extends StatelessWidget {
                     padding: EdgeInsets.only(left: 4.w),
                     child: EvieButton(
                         height: 36.h,
+                        onPressed: onPressRight,
                         child: Text(
                           "Track My Bike",
                           style: TextStyle(
@@ -97,7 +98,6 @@ class FeedsListTile extends StatelessWidget {
                               fontWeight: FontWeight.w700
                           ),
                         ),
-                        onPressed: onPressRight,
                     ),
                   ),
                 ),

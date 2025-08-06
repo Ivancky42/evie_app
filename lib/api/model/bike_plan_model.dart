@@ -25,7 +25,7 @@ class BikePlanModel {
     return BikePlanModel(
       planId: json['eventId'] ?? '',
       name: json['name'] ?? '',
-      product: json['product'] ?? null,
+      product: json['product'],
       startAt: timestampFromJson(json['startAt']) ?? Timestamp.fromDate(DateTime.now().subtract(Duration(days: 365))),
       expiredAt: timestampFromJson(json['expiredAt']) ??  Timestamp.fromDate(DateTime.now().subtract(Duration(days: 365))),
       created: timestampFromJson(json['created']),

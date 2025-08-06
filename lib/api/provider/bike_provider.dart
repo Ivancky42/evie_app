@@ -2,20 +2,14 @@ import 'dart:async';
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/enumerate.dart';
-import 'package:evie_test/api/provider/notification_provider.dart';
-import 'package:evie_test/api/provider/ride_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../filter.dart';
 import '../function.dart';
 import '../model/bike_model.dart';
 import '../model/bike_plan_model.dart';
 import '../model/bike_user_model.dart';
-import '../model/location_model.dart';
 import '../model/plan_model.dart';
 import '../model/rfid_model.dart';
 import '../model/theft_history_model.dart';
@@ -285,7 +279,7 @@ class BikeProvider extends ChangeNotifier {
         notifyListeners();
 
       });
-    } on Exception catch (exception) {
+    } on Exception {
       //debugPrint(exception.toString());
     } catch (_) {
       return;
@@ -333,7 +327,7 @@ class BikeProvider extends ChangeNotifier {
               else {
                 currentBikeModel = null;
               }
-            } on Exception catch (exception) {
+            } on Exception {
               switchBikeResult = SwitchBikeResult.failure;
               switchBikeResultListener.add(switchBikeResult);
               //debugPrint(exception.toString());
@@ -1211,7 +1205,7 @@ class BikeProvider extends ChangeNotifier {
               case DocumentChangeType.added:
                 Map<String, dynamic>? obj = docChange.doc.data();
                 BikePlanModel bikePlanModel = BikePlanModel.fromJson(obj!);
-                final result = calculateDateDifferenceFromNow(bikePlanModel!.expiredAt!.toDate());
+                final result = calculateDateDifferenceFromNow(bikePlanModel.expiredAt!.toDate());
                 if (result < 0) {
                   bikesPlan.update(deviceIMEI, (value) => false, ifAbsent: () => false);
                 }
@@ -1227,7 +1221,7 @@ class BikeProvider extends ChangeNotifier {
               case DocumentChangeType.modified:
                 Map<String, dynamic>? obj = docChange.doc.data();
                 BikePlanModel bikePlanModel = BikePlanModel.fromJson(obj!);
-                final result = calculateDateDifferenceFromNow(bikePlanModel!.expiredAt!.toDate());
+                final result = calculateDateDifferenceFromNow(bikePlanModel.expiredAt!.toDate());
                 if (result < 0) {
                   bikesPlan.update(deviceIMEI, (value) => false, ifAbsent: () => false);
                 }

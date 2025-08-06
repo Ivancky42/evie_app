@@ -2,21 +2,18 @@ import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/sizer.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
-import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../api/colours.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../api/dialog.dart';
-import '../api/provider/bike_provider.dart';
 import 'evie_button.dart';
+import 'package:sizer/sizer.dart';
+
 
 
 ///Single button dialog
@@ -36,14 +33,14 @@ class EvieSingleButtonDialog extends StatelessWidget{
   final Widget? lottie;
 
   const EvieSingleButtonDialog({
-    Key? key,
+    super.key,
     //required this.buttonNumber,
     required this.title,
     this.content,
     this.widget,
     required this.rightContent,
     required this.onPressedRight, this.isReversed, this.havePic, this.svgpicture, this.customButton, this.middleContent, this.onPressedMiddle, this.lottie,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -87,18 +84,18 @@ class EvieSingleButtonDialog extends StatelessWidget{
                     padding: EdgeInsets.only(top: 240.h),
                     child: Column(
                       children: [
-                        Container(
+                        SizedBox(
                           width: 325.w,
                           child: Padding(
                             padding:  EdgeInsets.only(bottom: 16.h),
-                            child: Text(title!,
+                            child: Text(title,
                               style:EvieTextStyles.h2,
                               textAlign: TextAlign.center,
                             ),
                           ),
                         ),
 
-                        content != null ? Container(
+                        content != null ? SizedBox(
                           width: 326.w,
                           child: Text(
                             content ?? "" ,
@@ -119,11 +116,11 @@ class EvieSingleButtonDialog extends StatelessWidget{
                                 customButton ?? EvieButton(
                                     width: double.infinity,
                                     height: 48.h,
+                                    onPressed: onPressedRight,
                                     child: Text(
                                       middleContent ?? "Ok",
                                       style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                                    ),
-                                    onPressed: onPressedRight
+                                    )
                                 ),
                               ),
                             ],
@@ -196,20 +193,20 @@ class EvieSingleButtonDialog extends StatelessWidget{
                       EvieButton(
                           width: double.infinity,
                           height: 48.h,
+                          onPressed: onPressedRight,
                           child: Text(
                             rightContent,
                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                          ),
-                          onPressed: onPressedRight
+                          )
                       ) :
                       EvieButton_ReversedColor(
                           width: double.infinity,
                           height: 48.h,
+                          onPressed: onPressedRight,
                           child: Text(
                             rightContent,
                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
-                          ),
-                          onPressed: onPressedRight
+                          )
                       )
                     ),
                   ],
@@ -240,14 +237,14 @@ class EvieSingleButtonDialogOld extends StatelessWidget{
   final Widget? lottie;
 
   const EvieSingleButtonDialogOld({
-    Key? key,
+    super.key,
     //required this.buttonNumber,
     required this.title,
     this.content,
     this.widget,
     required this.rightContent,
     required this.onPressedRight, this.isReversed, this.havePic, this.svgpicture, this.customButton, this.middleContent, this.onPressedMiddle, this.lottie,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -309,20 +306,20 @@ class EvieSingleButtonDialogOld extends StatelessWidget{
                         EvieButton(
                             width: double.infinity,
                             height: 48.h,
+                            onPressed: onPressedRight,
                             child: Text(
                               rightContent,
                               style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                            ),
-                            onPressed: onPressedRight
+                            )
                         ) :
                         EvieButton_ReversedColor(
                             width: double.infinity,
                             height: 48.h,
+                            onPressed: onPressedRight,
                             child: Text(
                               rightContent,
                               style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
-                            ),
-                            onPressed: onPressedRight
+                            )
                         )
                     ),
                   ],
@@ -349,14 +346,14 @@ class EvieSingleButtonDialogCupertino extends StatelessWidget{
   final VoidCallback onPressedRight;
 
   const EvieSingleButtonDialogCupertino({
-    Key? key,
+    super.key,
     //required this.buttonNumber,
     required this.title,
     required this.content,
     this.image,
     required this.rightContent,
     required this.onPressedRight
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -410,7 +407,7 @@ class EvieOneButtonDialog extends StatelessWidget{
   final Widget? customButton;
 
   const EvieOneButtonDialog({
-    Key? key,
+    super.key,
     this.title,
     this.content,
     this.widget,
@@ -419,7 +416,7 @@ class EvieOneButtonDialog extends StatelessWidget{
     this.middleContent,
     this.onPressedMiddle,
     this.customButton,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -460,7 +457,7 @@ class EvieOneButtonDialog extends StatelessWidget{
                 ),
               ),
 
-              title != null ?  Container(
+              title != null ?  SizedBox(
                 width: 325.w,
                 child: Padding(
                   padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
@@ -471,7 +468,7 @@ class EvieOneButtonDialog extends StatelessWidget{
                 ),
               ) : SizedBox.shrink(),
 
-              content != null ? Container(
+              content != null ? SizedBox(
                 width: 326.w,
                 child: Text(
                   content ?? "" ,
@@ -492,11 +489,11 @@ class EvieOneButtonDialog extends StatelessWidget{
                       customButton ?? EvieButton(
                           width: double.infinity,
                           height: 48.h,
+                          onPressed: onPressedMiddle,
                           child: Text(
                             middleContent ?? "Ok",
                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                          ),
-                          onPressed: onPressedMiddle
+                          )
                       ),
                     ),
                   ],
@@ -510,7 +507,7 @@ class EvieOneButtonDialog extends StatelessWidget{
 }
 
 class EvieClubDialog extends StatefulWidget {
-  const EvieClubDialog({Key? key, }) : super(key: key);
+  const EvieClubDialog({super.key, });
 
   @override
   State<EvieClubDialog> createState() => _EvieClubDialogState();
@@ -540,7 +537,7 @@ class _EvieClubDialogState extends State<EvieClubDialog> {
             )
         ),
 
-        Container(
+        SizedBox(
           width: 325.w,
           child: Padding(
             padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
@@ -551,7 +548,7 @@ class _EvieClubDialogState extends State<EvieClubDialog> {
           ),
         ),
 
-        Container(
+        SizedBox(
           width: 326.w,
           child: Text(
             "Your experience is about to get a whole lot richer! Brace yourself for an immersive experience filled with exclusive features with EV-Secure. \n\n Thank you for choosing to join us at the EV-Secure. We’re honored to have you with us!" ,
@@ -595,7 +592,7 @@ class _EvieClubDialogState extends State<EvieClubDialog> {
                 "assets/images/sync.svg",),
             ),
 
-            Container(
+            SizedBox(
               width: 325.w,
               child: Padding(
                 padding:  EdgeInsets.only(bottom: 24.h, top: 31.76.h),
@@ -767,7 +764,7 @@ class _EvieClubDialogState extends State<EvieClubDialog> {
                 "assets/images/master_your_ride.svg",),
             ),
 
-            Container(
+            SizedBox(
               width: 325.w,
               child: Padding(
                 padding:  EdgeInsets.only(bottom: 24.h, top: 31.76.h),
@@ -1052,7 +1049,7 @@ class _EvieClubDialogState extends State<EvieClubDialog> {
 class WelcomeJoinTeam extends StatefulWidget {
   final String palName;
   final String teamName;
-  const WelcomeJoinTeam({Key? key, required this.palName, required this.teamName, }) : super(key: key);
+  const WelcomeJoinTeam({super.key, required this.palName, required this.teamName, });
 
   @override
   State<WelcomeJoinTeam> createState() => _WelcomeJoinTeamState();
@@ -1082,18 +1079,18 @@ class _WelcomeJoinTeamState extends State<WelcomeJoinTeam> {
             )
         ),
 
-        Container(
+        SizedBox(
           width: 325.w,
           child: Padding(
             padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
-            child: Text('Welcome ' + widget.palName + ', to ' + widget.teamName  ,
+            child: Text('Welcome ${widget.palName}, to ${widget.teamName}'  ,
               style:EvieTextStyles.h2,
               textAlign: TextAlign.center,
             ),
           ),
         ),
 
-        Container(
+        SizedBox(
           width: 326.w,
           child: Text(
             "Are you ready for an adventure? Perks of being a PedalPal include having access to exclusive features such as GPS Tracking, Security Alerts, Ride History and more!" ,
@@ -1137,7 +1134,7 @@ class _WelcomeJoinTeamState extends State<WelcomeJoinTeam> {
               "assets/images/sync.svg",),
           ),
 
-          Container(
+          SizedBox(
             width: 325.w,
             child: Padding(
               padding:  EdgeInsets.only(bottom: 24.h, top: 31.76.h),
@@ -1309,7 +1306,7 @@ class _WelcomeJoinTeamState extends State<WelcomeJoinTeam> {
               "assets/images/master_your_ride.svg",),
           ),
 
-          Container(
+          SizedBox(
             width: 325.w,
             child: Padding(
               padding:  EdgeInsets.only(bottom: 24.h, top: 31.76.h),
@@ -1591,7 +1588,7 @@ class _WelcomeJoinTeamState extends State<WelcomeJoinTeam> {
 }
 
 class Evie4OneButtonDialog extends StatefulWidget {
-  const Evie4OneButtonDialog({Key? key}) : super(key: key);
+  const Evie4OneButtonDialog({super.key});
 
   @override
   State<Evie4OneButtonDialog> createState() => _Evie4OneButtonDialogState();
@@ -1615,7 +1612,7 @@ class _Evie4OneButtonDialogState extends State<Evie4OneButtonDialog> {
               "assets/images/sync.svg",),
           ),
 
-          Container(
+          SizedBox(
             width: 325.w,
             child: Padding(
               padding:  EdgeInsets.only(bottom: 24.h, top: 31.76.h),
@@ -1702,7 +1699,7 @@ class _Evie4OneButtonDialogState extends State<Evie4OneButtonDialog> {
               "assets/images/master_your_ride.svg",),
           ),
 
-          Container(
+          SizedBox(
             width: 325.w,
             child: Padding(
               padding:  EdgeInsets.only(bottom: 24.h, top: 31.76.h),
@@ -1964,7 +1961,7 @@ class _Evie4OneButtonDialogState extends State<Evie4OneButtonDialog> {
 
 
 class FeedFirstDialog extends StatefulWidget {
-  const FeedFirstDialog({Key? key}) : super(key: key);
+  const FeedFirstDialog({super.key});
 
   @override
   State<FeedFirstDialog> createState() => _FeedFirstDialogState();
@@ -1985,7 +1982,7 @@ class _FeedFirstDialogState extends State<FeedFirstDialog> {
               "assets/images/feed.svg",),
           ),
 
-          Container(
+          SizedBox(
             width: 325.w,
             child: Padding(
               padding:  EdgeInsets.only(bottom: 24.h, top: 31.76.h),
@@ -2190,7 +2187,7 @@ class EvieOneDialog extends StatelessWidget{
   final VoidCallback onPressedMiddle;
 
   const EvieOneDialog({
-    Key? key,
+    super.key,
     required this.title,
     this.content1,
     this.content2,
@@ -2199,7 +2196,7 @@ class EvieOneDialog extends StatelessWidget{
     this.svgpicture,
     required this.middleContent,
     required this.onPressedMiddle
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -2223,7 +2220,7 @@ class EvieOneDialog extends StatelessWidget{
             mainAxisSize: MainAxisSize.min,
             children: [
               svgpicture ?? Container(),
-              Container(
+              SizedBox(
                 width: 325.w,
                 child: Padding(
                   padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
@@ -2234,7 +2231,7 @@ class EvieOneDialog extends StatelessWidget{
                 ),
               ),
 
-              Container(
+              SizedBox(
                 width: 326.w,
                 child: RichText(
                   textAlign: TextAlign.center,
@@ -2269,11 +2266,11 @@ class EvieOneDialog extends StatelessWidget{
                       EvieButton(
                           width: double.infinity,
                           height: 48.h,
+                          onPressed: onPressedMiddle,
                           child: Text(
                             middleContent,
                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                          ),
-                          onPressed: onPressedMiddle
+                          )
                       ),
                     ),
                   ],
@@ -2298,7 +2295,7 @@ class Evie2IconBatchOneButtonDialog extends StatelessWidget{
   final VoidCallback onPressedMiddle;
 
   const Evie2IconBatchOneButtonDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.miniTitle1,
     required this.miniTitle2,
@@ -2307,7 +2304,7 @@ class Evie2IconBatchOneButtonDialog extends StatelessWidget{
     this.svgpicture,
     required this.middleContent,
     required this.onPressedMiddle
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -2338,7 +2335,7 @@ class Evie2IconBatchOneButtonDialog extends StatelessWidget{
                   width: 239.w,),
               ),
 
-              Container(
+              SizedBox(
                 width: 325.w,
                 child: Padding(
                   padding:  EdgeInsets.only(bottom: 8.h, top: 31.76.h),
@@ -2446,11 +2443,11 @@ class Evie2IconBatchOneButtonDialog extends StatelessWidget{
                     EvieButton(
                         width: double.infinity,
                         height: 48.h,
+                        onPressed: onPressedMiddle,
                         child: Text(
                           middleContent,
                           style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                        ),
-                        onPressed: onPressedMiddle
+                        )
                     ),
                   ),
                 ],
@@ -2464,7 +2461,7 @@ class Evie2IconBatchOneButtonDialog extends StatelessWidget{
 }
 
 class ThanksStickingToEVSecure extends StatefulWidget {
-  const ThanksStickingToEVSecure({Key? key, }) : super(key: key);
+  const ThanksStickingToEVSecure({super.key, });
 
   @override
   State<ThanksStickingToEVSecure> createState() => _ThanksStickingToEVSecureState();
@@ -2491,7 +2488,7 @@ class _ThanksStickingToEVSecureState extends State<ThanksStickingToEVSecure> {
             )
         ),
 
-        Container(
+        SizedBox(
           width: 325.w,
           child: Padding(
             padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
@@ -2502,7 +2499,7 @@ class _ThanksStickingToEVSecureState extends State<ThanksStickingToEVSecure> {
           ),
         ),
 
-        Container(
+        SizedBox(
           width: 326.w,
           child: Text(
             "Your security matters. Your trust fuels our commitment. Grateful for your support in riding secure journeys." ,

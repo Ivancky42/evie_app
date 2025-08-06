@@ -2,25 +2,19 @@ import 'dart:async';
 
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/enumerate.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_appbar.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../../../api/dialog.dart';
-import '../../../api/fonts.dart';
-import '../../../api/length.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/setting_provider.dart';
-import '../../../widgets/evie_button.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 
 class BikeEraseLeave extends StatefulWidget{
-  const BikeEraseLeave({Key?key}) : super(key:key);
+  const BikeEraseLeave({super.key});
   @override
   _BikeEraseLeaveState createState() => _BikeEraseLeaveState();
 }
@@ -53,13 +47,13 @@ class _BikeEraseLeaveState extends State<BikeEraseLeave>{
         } else if(uploadStatus == UploadFirestoreResult.failed) {
           SmartDialog.dismiss();
           SmartDialog.show(
-              widget: EvieSingleButtonDialogOld(
+              builder: (_) => EvieSingleButtonDialogOld(
                   title: "Not success",
                   content: "Try again",
                   rightContent: "Close",
                   onPressedRight: ()=>SmartDialog.dismiss()
               ));
-        }else{};
+        }else{}
       });
     });
   }

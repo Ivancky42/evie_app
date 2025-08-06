@@ -1,7 +1,7 @@
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +10,7 @@ import '../../../api/colours.dart';
 import '../../../api/fonts.dart';
 
 class RevokingAccount extends StatefulWidget {
-  const RevokingAccount({Key? key}) : super(key: key);
+  const RevokingAccount({super.key});
 
   @override
   State<RevokingAccount> createState() => _RevokingAccountState();
@@ -61,7 +61,7 @@ class _RevokingAccountState extends State<RevokingAccount> {
                 ),
                 Align(
                   alignment: Alignment.center,
-                  child: Container(
+                  child: SizedBox(
                     height: 155.h,
                     width: 252.h,
                     child: Lottie.asset(

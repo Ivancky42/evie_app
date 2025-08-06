@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,17 +8,16 @@ import 'package:flutter_svg/svg.dart';
 
 import '../api/colours.dart';
 import '../api/fonts.dart';
-import '../api/provider/setting_provider.dart';
 
 class EvieAppbar_Back extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onPressed;
   final bool? enabled;
 
   const EvieAppbar_Back({
-    Key? key,
+    super.key,
     required this.onPressed,
     this.enabled,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +44,11 @@ class PageAppbar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onPressed;
 
   const PageAppbar({
-    Key? key,
+    super.key,
     this.enable,
     required this.title,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   // @override
   // Widget build(BuildContext context) {
@@ -97,8 +96,8 @@ class PageAppbar extends StatelessWidget implements PreferredSizeWidget {
 class EmptyAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   const EmptyAppbar({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

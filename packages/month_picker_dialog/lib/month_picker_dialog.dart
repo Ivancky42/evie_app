@@ -225,7 +225,7 @@ class _MonthPickerDialogState extends State<_MonthPickerDialog> {
     );
 
     return Theme(
-      data: widget.controller.theme.copyWith(dialogBackgroundColor: Colors.transparent),
+      data: widget.controller.theme.copyWith(dialogTheme: DialogThemeData(backgroundColor: Colors.transparent)),
       child: Dialog(
         child: Builder(
           builder: (BuildContext context) {

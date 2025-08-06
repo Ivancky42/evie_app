@@ -1,5 +1,5 @@
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -18,7 +18,7 @@ class EvieCard extends StatelessWidget {
   final VoidCallback? onInfoPress;
 
   const EvieCard({
-    Key? key,
+    super.key,
     this.child,
     this.height,
     this.width,
@@ -28,7 +28,7 @@ class EvieCard extends StatelessWidget {
     this.decoration,
     this.padding, this.showInfo, this.onInfoPress,
 
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +38,18 @@ class EvieCard extends StatelessWidget {
       child: Container(
         width: width ?? 168.w,
         height: height ?? 168.h,
+        decoration: decoration ?? BoxDecoration(
+          color: color ?? EvieColors.dividerWhite,
+          borderRadius: BorderRadius.circular(10.w),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF7A7A79).withOpacity(0.15), // Hex color with opacity
+              offset: Offset(0, 8), // X and Y offset
+              blurRadius: 16, // Blur radius
+              spreadRadius: 0, // Spread radius
+            ),
+          ],
+        ),
         child: title != null ?
         Stack(
           children: [
@@ -69,18 +81,6 @@ class EvieCard extends StatelessWidget {
           ],
         ) :
         child,
-        decoration: decoration ?? BoxDecoration(
-          color: color ?? EvieColors.dividerWhite,
-          borderRadius: BorderRadius.circular(10.w),
-          boxShadow: [
-            BoxShadow(
-              color: Color(0xFF7A7A79).withOpacity(0.15), // Hex color with opacity
-              offset: Offset(0, 8), // X and Y offset
-              blurRadius: 16, // Blur radius
-              spreadRadius: 0, // Spread radius
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -99,7 +99,7 @@ class EvieCard3 extends StatelessWidget {
   final VoidCallback? onInfoPress;
 
   const EvieCard3({
-    Key? key,
+    super.key,
     this.child,
     this.height,
     this.width,
@@ -109,7 +109,7 @@ class EvieCard3 extends StatelessWidget {
     this.decoration,
     this.padding, this.showInfo, this.onInfoPress,
 
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +119,17 @@ class EvieCard3 extends StatelessWidget {
       child: Container(
         width: width ?? 168.w,
         height: height ?? 168.h,
+        decoration: decoration ?? BoxDecoration(
+          color: Color(0xFFF4F4F4),
+          borderRadius: BorderRadius.circular(10.w),
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromRGBO(122, 122, 121, 0.45),
+              offset: Offset(0, 6),
+              blurRadius: 16,
+            ),
+          ],
+        ),
         child: title != null ?
         Stack(
           children: [
@@ -150,17 +161,6 @@ class EvieCard3 extends StatelessWidget {
           ],
         ) :
         child,
-        decoration: decoration ?? BoxDecoration(
-          color: Color(0xFFF4F4F4),
-          borderRadius: BorderRadius.circular(10.w),
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromRGBO(122, 122, 121, 0.45),
-              offset: Offset(0, 6),
-              blurRadius: 16,
-            ),
-          ],
-        ),
       ),
     );
   }

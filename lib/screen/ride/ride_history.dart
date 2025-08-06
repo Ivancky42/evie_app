@@ -1,13 +1,12 @@
-import 'dart:ui';
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/provider/ride_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/screen/ride/ride_history_data2.dart';
 import 'package:flutter/material.dart';
 import '../../api/fonts.dart';
 
 class RideHistory extends StatefulWidget {
-  const RideHistory({Key? key}) : super(key: key);
+  const RideHistory({super.key});
 
   @override
   _RideHistoryState createState() => _RideHistoryState();
@@ -76,7 +75,7 @@ class _RideHistoryState extends State<RideHistory> with SingleTickerProviderStat
                             borderRadius: const BorderRadius.all(Radius.circular(30)
                             )
                         ),
-                        child: Container(
+                        child: SizedBox(
                           height: 40.h,
                           child: TabBar(
                             controller: _tabController,
@@ -88,7 +87,7 @@ class _RideHistoryState extends State<RideHistory> with SingleTickerProviderStat
                             indicatorSize: TabBarIndicatorSize.tab,
                             tabs: [
                               Tab(
-                                child: Container(
+                                child: SizedBox(
                                   //width: double.infinity,
                                   height: double.infinity,
                                   //color: Colors.red,
@@ -107,7 +106,7 @@ class _RideHistoryState extends State<RideHistory> with SingleTickerProviderStat
                                 ),
                               ),
                               Tab(
-                                child: Container(
+                                child: SizedBox(
                                   width: double.infinity,
                                   height: double.infinity,
                                   child: Column(
@@ -125,7 +124,7 @@ class _RideHistoryState extends State<RideHistory> with SingleTickerProviderStat
                                 ),
                               ),
                               Tab(
-                                child: Container(
+                                child: SizedBox(
                                   width: double.infinity,
                                   height: double.infinity,
                                   child: Column(
@@ -143,7 +142,7 @@ class _RideHistoryState extends State<RideHistory> with SingleTickerProviderStat
                                 ),
                               ),
                               Tab(
-                                child: Container(
+                                child: SizedBox(
                                   width: double.infinity,
                                   height: double.infinity,
                                   child: Column(

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -20,8 +19,8 @@ class ServerApiBase {
 
   static Future getRequest(String auth, String url, Map<String, dynamic> query, String headers) async {
     try {
-      bool _hasConnection = await checkInternetConnection();
-      if (!_hasConnection) {
+      bool hasConnection = await checkInternetConnection();
+      if (!hasConnection) {
         showServerErrorMsg('No internet connection');
         return "No internet connection";
       }
@@ -36,7 +35,7 @@ class ServerApiBase {
           ),
         );
         return result.data;
-      } on DioError catch (e, s) {
+      } on DioException catch (e) {
         var errorMessage = e.response?.data['error_description'];
         showServerErrorMsg(errorMessage);
         return errorMessage;
@@ -61,8 +60,8 @@ class ServerApiBase {
 
   static Future postRequest(String auth, String url, Map<dynamic, dynamic> body, String headers) async {
     try {
-      bool _hasConnection = await checkInternetConnection();
-      if (!_hasConnection) {
+      bool hasConnection = await checkInternetConnection();
+      if (!hasConnection) {
         showServerErrorMsg('No internet connection');
         return "No internet connection";
       }
@@ -77,7 +76,7 @@ class ServerApiBase {
           ),
         );
         return result.data;
-      } on DioError catch (e, s) {
+      } on DioException catch (e) {
         if (e.response?.data["error"]['message'] != null) {
           String errorMessage = e.response?.data["error"]['message'];
           return errorMessage;
@@ -109,8 +108,8 @@ class ServerApiBase {
   static Future putRequestWithQuery(String auth, String url, Map<String, dynamic> query, String headers) async {
 
     try {
-      bool _hasConnection = await checkInternetConnection();
-      if (!_hasConnection) {
+      bool hasConnection = await checkInternetConnection();
+      if (!hasConnection) {
         showServerErrorMsg('No internet connection');
         return "No internet connection";
       }
@@ -125,7 +124,7 @@ class ServerApiBase {
           ),
         );
         return result.data;
-      } on DioError catch (e, s) {
+      } on DioException catch (e) {
         var errorMessage = e.response?.data['error_description'];
         showServerErrorMsg(errorMessage);
         return errorMessage;
@@ -150,8 +149,8 @@ class ServerApiBase {
 
   static Future deleteRequest(String auth, String url, Map<dynamic, dynamic> body) async {
     try {
-      bool _hasConnection = await checkInternetConnection();
-      if (!_hasConnection) {
+      bool hasConnection = await checkInternetConnection();
+      if (!hasConnection) {
         showServerErrorMsg('No internet connection');
         return "No internet connection";
       }
@@ -166,9 +165,9 @@ class ServerApiBase {
           ),
         );
         return result.data;
-      } on DioError catch (e, s) {
+      } on DioException catch (e) {
         print(e.response);
-        throw e;
+        rethrow;
       }
 
     } on TimeoutException catch (err) {

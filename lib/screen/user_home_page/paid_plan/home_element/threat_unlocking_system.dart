@@ -1,34 +1,25 @@
-import 'dart:async';
 
-import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/navigator.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../../../../api/colours.dart';
 import '../../../../api/dialog.dart';
 import '../../../../api/fonts.dart';
-import '../../../../api/function.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/provider/bluetooth_provider.dart';
-import '../../../../api/snackbar.dart';
 import '../../../../bluetooth/modelResult.dart';
 import '../../../../widgets/evie_card.dart';
-import '../../../../widgets/evie_single_button_dialog.dart';
 
-import 'package:lottie/lottie.dart' as lottie;
 
 class ThreatUnlockingSystem extends StatefulWidget {
   String page;
   ThreatUnlockingSystem({
     required this.page,
-    Key? key
-  }) : super(key: key);
+    super.key
+  });
 
   @override
   State<ThreatUnlockingSystem> createState() => _ThreatUnlockingSystemState();
@@ -93,10 +84,10 @@ class _ThreatUnlockingSystemState extends State<ThreatUnlockingSystem> {
                       width: 96.w,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          padding: MaterialStateProperty.all(EdgeInsets.zero),
-                          backgroundColor: MaterialStateProperty.all(EvieColors.transparent),
-                          shadowColor: MaterialStateProperty.all(EvieColors.transparent),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          padding: WidgetStateProperty.all(EdgeInsets.zero),
+                          backgroundColor: WidgetStateProperty.all(EvieColors.transparent),
+                          shadowColor: WidgetStateProperty.all(EvieColors.transparent),
+                          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50.w), // Adjust the border radius as needed
                             ),

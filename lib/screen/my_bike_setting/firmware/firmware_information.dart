@@ -1,38 +1,27 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/home_element/setting.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/text_column.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../api/colours.dart';
-import '../../../api/length.dart';
-import '../../../api/navigator.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/firmware_provider.dart';
-import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_button.dart';
-import 'package:lottie/lottie.dart' as lottie;
 
 import 'package:intl/intl.dart';
 
@@ -40,7 +29,7 @@ import 'package:intl/intl.dart';
 ///User profile page with user account information
 
 class FirmwareInformation extends StatefulWidget {
-  const FirmwareInformation({Key? key}) : super(key: key);
+  const FirmwareInformation({super.key});
 
   @override
   _FirmwareInformationState createState() => _FirmwareInformationState();
@@ -278,7 +267,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                                               ),
 
                                               Text(
-                                                  (_bluetoothProvider.fwUpgradeProgress * 100).toStringAsFixed(0) + "%",
+                                                  "${(_bluetoothProvider.fwUpgradeProgress * 100).toStringAsFixed(0)}%",
                                                   style: EvieTextStyles.body12.copyWith(color: EvieColors.mediumBlack)
                                               ),
                                             ],
@@ -352,7 +341,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                                       child: Padding(
                                         padding: EdgeInsets.fromLTRB(8.w,0, 40.w, 0),
                                         child: Html(
-                                          data:  isExpanded ? _firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "<br>") ?? '' : _firmwareProvider.latestFirmwareModel?.desc.replaceAll("\\n", "<br>").substring(0, 155) ?? '',
+                                          data:  isExpanded ? _firmwareProvider.latestFirmwareModel?.desc.replaceAll("\\n", "<br>") ?? '' : _firmwareProvider.latestFirmwareModel?.desc.replaceAll("\\n", "<br>").substring(0, 155) ?? '',
                                           style: {
                                             "p": Style(
                                                 fontSize: FontSize(18.sp), // Set the font size for paragraphs
@@ -463,7 +452,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                                           ),
 
                                           Text(
-                                              (_bluetoothProvider.fwUpgradeProgress * 100).toStringAsFixed(0) + "%",
+                                              "${(_bluetoothProvider.fwUpgradeProgress * 100).toStringAsFixed(0)}%",
                                               style: EvieTextStyles.body12.copyWith(color: EvieColors.mediumBlack)
                                           ),
                                         ],
@@ -505,7 +494,7 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
                                   child: Padding(
                                     padding: EdgeInsets.fromLTRB(8.w,0, 40.w, 0),
                                     child: Html(
-                                      data:  isExpanded ? _firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "<br>") ?? '' : _firmwareProvider.latestFirmwareModel?.desc.replaceAll("\\n", "<br>").substring(0, 155) ?? '',
+                                      data:  isExpanded ? _firmwareProvider.latestFirmwareModel?.desc.replaceAll("\\n", "<br>") ?? '' : _firmwareProvider.latestFirmwareModel?.desc.replaceAll("\\n", "<br>").substring(0, 155) ?? '',
                                       style: {
                                         "p": Style(
                                             fontSize: FontSize(18.sp), // Set the font size for paragraphs
@@ -663,9 +652,9 @@ class _FirmwareInformationState extends State<FirmwareInformation> {
     m = ((value - h * 3600)) ~/ 60;
     s = value - (h * 3600) - (m * 60);
 
-    String hourLeft = h.toString().length < 2 ? "0" + h.toString() : h.toString();
-    String minuteLeft = m.toString().length < 2 ? "0" + m.toString() : m.toString();
-    String secondsLeft = s.toString().length < 2 ? "0" + s.toString() : s.toString();
+    String hourLeft = h.toString().length < 2 ? "0$h" : h.toString();
+    String minuteLeft = m.toString().length < 2 ? "0$m" : m.toString();
+    String secondsLeft = s.toString().length < 2 ? "0$s" : s.toString();
 
     String result = "$hourLeft:$minuteLeft:$secondsLeft";
 

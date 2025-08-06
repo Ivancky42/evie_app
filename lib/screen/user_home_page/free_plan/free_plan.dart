@@ -1,16 +1,13 @@
-import 'dart:async';
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie-unlocking-button.dart';
 import 'package:evie_test/widgets/evie_card.dart';
 
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +17,6 @@ import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/sheet.dart';
-import '../../../api/snackbar.dart' as SnackBar;
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../paid_plan/home_element/actionable_bar.dart';
@@ -28,7 +24,7 @@ import '../paid_plan/home_element/battery.dart';
 import '../switch_bike.dart';
 
 class FreePlan extends StatefulWidget {
-  const FreePlan({Key? key}) : super(key: key);
+  const FreePlan({super.key});
 
   @override
   _FreePlanState createState() => _FreePlanState();
@@ -181,7 +177,7 @@ class _FreePlanState extends State<FreePlan> {
                                                             padding: EdgeInsets.only(left: 2),
                                                             child: Row(
                                                               children: [
-                                                                Container(
+                                                                SizedBox(
                                                                   width: 230.w,
                                                                   child: Text(
                                                                     _bikeProvider.currentBikeModel?.deviceName ?? "loading",
@@ -311,7 +307,7 @@ class _FreePlanState extends State<FreePlan> {
                                              children: [
                                                Padding(
                                                  padding: EdgeInsets.only(top: 0.h, left: 185.w, right: 15.w),
-                                                 child: Container(
+                                                 child: SizedBox(
                                                    width: 180.h,
                                                    child: Text("Your bike will never be out of sight.",
                                                        style: EvieTextStyles.target_reference_headlineB),
@@ -459,7 +455,7 @@ class _FreePlanState extends State<FreePlan> {
 
                               Padding(
                                 padding: EdgeInsets.fromLTRB(19.w, 0.h, 19.w, 16.w),
-                                child: Container(
+                                child: SizedBox(
                                   height: 232.h,
                                   child: EvieCard(
                                     onPress: (){
@@ -493,7 +489,7 @@ class _FreePlanState extends State<FreePlan> {
                                               children: [
                                                 Padding(
                                                   padding: EdgeInsets.only(top: 0.h, left: 185.w, right: 15.w),
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     width: 180.h,
                                                     child: Text("Your bike will never be out of sight.",
                                                         style: EvieTextStyles.target_reference_headlineB),

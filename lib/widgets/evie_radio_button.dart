@@ -1,9 +1,7 @@
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import '../api/colours.dart';
-import 'evie_textform.dart';
 
 ///Radio button
 class EvieRadioButton extends StatelessWidget {
@@ -14,16 +12,16 @@ class EvieRadioButton extends StatelessWidget {
 
 
   const EvieRadioButton({
-    Key? key,
+    super.key,
     this.text,
     required this.value,
     required this.groupValue,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 70.h,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -34,9 +32,9 @@ class EvieRadioButton extends StatelessWidget {
           Transform.scale(
             scale: 1.4, // Adjust the scale factor as needed
             child: Radio(
-              fillColor: MaterialStateColor.resolveWith(
+              fillColor: WidgetStateColor.resolveWith(
                       (states) {
-                    if (states.contains(MaterialState.selected)) {
+                    if (states.contains(WidgetState.selected)) {
                       return EvieColors.primaryColor; // color of the checkbox when it's checked
                     } else {
                       return EvieColors.lightGrayishCyan; // color of the checkbox when it's unchecked

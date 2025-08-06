@@ -2,7 +2,7 @@ import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/ride_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +22,7 @@ class RecentActivity extends StatefulWidget{
   final RideFormat format;
   final RideDataType rideDataType;
   final bool isDataEmpty;
-  const RecentActivity(this.format, this.isDataEmpty, this.rideDataType, { Key? key }) : super(key: key);
+  const RecentActivity(this.format, this.isDataEmpty, this.rideDataType, { super.key });
   @override
   _RecentActivityState createState() => _RecentActivityState();
 }
@@ -105,7 +105,7 @@ class _RecentActivityState extends State<RecentActivity> {
                     //Navigator.pop(context);
                     showRideHistorySheet(context, _rideProvider.currentTripHistoryLists.keys.elementAt(index), tripList[index]);
                   },
-                  child: Container(
+                  child: SizedBox(
                     height: 77.h,
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
@@ -145,7 +145,7 @@ class _RecentActivityState extends State<RecentActivity> {
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: "${thousandFormatting(tripList[index].carbonPrint!)}",
+                                      text: thousandFormatting(tripList[index].carbonPrint!),
                                       style: EvieTextStyles.body14.copyWith(color: EvieColors.lightBlack, fontFamily: 'Avenir', fontWeight: FontWeight.w400, height: EvieTextStyles.lineHeight)
                                     ),
                                     TextSpan(

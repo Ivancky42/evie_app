@@ -2,33 +2,27 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evie_test/api/function.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 
 import 'package:evie_test/widgets/custom_search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import '../../../api/backend/debouncer.dart';
-import '../../../api/backend/sim_api_caller.dart';
 import '../../../api/colours.dart';
 import '../../../api/dialog.dart';
 import '../../../api/fonts.dart';
 import '../../../api/snackbar.dart';
-import '../../../bluetooth/modelResult.dart';
-import '../../../widgets/evie_appbar.dart';
 import '../switch_profile_image.dart';
 import 'account_container.dart';
 import 'account_model.dart';
 import 'account_search_container.dart';
 
 class MyAccount extends StatefulWidget {
-  const MyAccount( {Key? key}) : super(key: key);
+  const MyAccount( {super.key});
 
   @override
   _MyAccountState createState() => _MyAccountState();
@@ -39,8 +33,8 @@ class _MyAccountState extends State<MyAccount> {
   late CurrentUserProvider _currentUserProvider;
 
   List<AccountModel> accountList = [];
-  List<AccountModel> _searchFirstResult = [];
-  LinkedHashMap<String, AccountModel> _searchSecondResult = LinkedHashMap<String, AccountModel>();
+  final List<AccountModel> _searchFirstResult = [];
+  final LinkedHashMap<String, AccountModel> _searchSecondResult = LinkedHashMap<String, AccountModel>();
 
   bool _isSearching = false;
   bool isFirstTimeConnected = false;
@@ -197,7 +191,7 @@ class _MyAccountState extends State<MyAccount> {
                   },
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 96.h,
                 child: Row(
                   children: [
@@ -283,7 +277,7 @@ class _MyAccountState extends State<MyAccount> {
                             physics: BouncingScrollPhysics(),
                             child: Column(
                               children: [
-                                ...accountList.map((e) => AccountContainer(accountModel: e)).toList(),
+                                ...accountList.map((e) => AccountContainer(accountModel: e)),
                               ],
                             ),
                           )
@@ -295,7 +289,7 @@ class _MyAccountState extends State<MyAccount> {
                                 children: [
                                   ..._searchFirstResult.map((e) =>
                                       AccountContainer(accountModel: e))
-                                      .toList(),
+                                      ,
                                   secondSearchResult(),
                                 ],
                               ),

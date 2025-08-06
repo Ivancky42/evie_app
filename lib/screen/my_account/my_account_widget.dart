@@ -1,5 +1,5 @@
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -11,18 +11,18 @@ class AccountPageContainer extends StatelessWidget {
   final String trailingImage;
 
   const AccountPageContainer({
-    Key? key,
+    super.key,
     required this.content,
     required this.onPress,
     required this.trailingImage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: onPress,
-      child: Container(
+      child: SizedBox(
         height: 54.h,
         child: Padding(
           padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
@@ -51,9 +51,9 @@ class AccountPageDivider extends StatelessWidget {
   final double? height;
 
   const AccountPageDivider({
-    Key? key,
+    super.key,
     this.height,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -77,16 +77,16 @@ class EditProfileContainer extends StatelessWidget {
   final String? trailingImage;
 
   const EditProfileContainer({
-    Key? key,
+    super.key,
     required this.subtitle,
     required this.content,
     this.onPress,
     this.trailingImage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 59.h,
       child: Padding(
         padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 0.h),
@@ -136,11 +136,11 @@ class ChangeImageContainer extends StatelessWidget {
   final String content;
 
   const ChangeImageContainer({
-    Key? key,
+    super.key,
     required this.onPress,
     required this.image,
     required this.content,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +149,7 @@ class ChangeImageContainer extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: onPress,
-        child: Container(
+        child: SizedBox(
           height: 52.h,
           child:  Row(
             children: [

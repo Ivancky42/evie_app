@@ -1,12 +1,8 @@
-import 'dart:io';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/my_account/my_account_widget.dart';
+import 'package:sizer/sizer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
@@ -18,14 +14,12 @@ import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/function.dart';
 import '../../../api/length.dart';
-import '../../../api/navigator.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/setting_provider.dart';
-import '../../../api/sheet.dart';
 import '../../../bluetooth/modelResult.dart';
 
 class EVAddFailed extends StatefulWidget {
-  const EVAddFailed({Key? key}) : super(key: key);
+  const EVAddFailed({super.key});
 
   @override
   _EVAddFailedState createState() => _EVAddFailedState();
@@ -153,8 +147,8 @@ class _EVAddFailedState extends State<EVAddFailed> {
                       width: double.infinity,
                       onPressed: (){
                         const url = 'https://support.eviebikes.com/en-US';
-                        final Uri _url = Uri.parse(url);
-                        launch(_url);
+                        final Uri url0 = Uri.parse(url);
+                        launch(url0);
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

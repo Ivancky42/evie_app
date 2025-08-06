@@ -1,32 +1,25 @@
-import 'dart:io';
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:evie_test/widgets/evie_button.dart';
-import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 import '../../../api/colours.dart';
 import '../../../api/dialog.dart';
 import '../../../api/enumerate.dart';
 import '../../../api/length.dart';
-import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../api/provider/setting_provider.dart';
-import '../../../api/sheet.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
 
 
 
 class EVKey extends StatefulWidget {
-  const EVKey({Key? key}) : super(key: key);
+  const EVKey({super.key});
 
   @override
   _EVKeyState createState() => _EVKeyState();

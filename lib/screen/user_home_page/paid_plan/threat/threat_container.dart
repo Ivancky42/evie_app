@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:action_slider/action_slider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -18,14 +18,14 @@ import '../../../../api/navigator.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/provider/bluetooth_provider.dart';
 import '../../../../api/snackbar.dart';
-import '../../../../bluetooth/modelResult.dart';
+import '../../../../bluetooth/modelResult.dart' as bluetooth;
 import '../../../../widgets/evie_button.dart';
 import '../../../../widgets/evie_double_button_dialog.dart';
 import '../../../../widgets/evie_slider_button.dart';
 
 class ThreatContainer extends StatefulWidget {
   final BuildContext context;
-  const ThreatContainer({Key? key, required this.context}) : super(key: key);
+  const ThreatContainer({super.key, required this.context});
 
   @override
   State<ThreatContainer> createState() => _ThreatContainerState();
@@ -49,11 +49,11 @@ class _ThreatContainerState extends State<ThreatContainer> {
 
     Future.delayed(Duration.zero).then((value) {
       if (_bluetoothProvider.deviceConnectResult == null ||
-          _bluetoothProvider.deviceConnectResult == DeviceConnectResult.disconnected ||
-          _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanError ||
-          _bluetoothProvider.deviceConnectResult == DeviceConnectResult.connectError ||
-          _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanTimeout ||
-          _bluetoothProvider.deviceConnectResult == DeviceConnectResult.deviceFound
+          _bluetoothProvider.deviceConnectResult == bluetooth.DeviceConnectResult.disconnected ||
+          _bluetoothProvider.deviceConnectResult == bluetooth.DeviceConnectResult.scanError ||
+          _bluetoothProvider.deviceConnectResult == bluetooth.DeviceConnectResult.connectError ||
+          _bluetoothProvider.deviceConnectResult == bluetooth.DeviceConnectResult.scanTimeout ||
+          _bluetoothProvider.deviceConnectResult == bluetooth.DeviceConnectResult.deviceFound
       ) {
         _bluetoothProvider.startScanRSSI();
       }
@@ -79,9 +79,9 @@ class _ThreatContainerState extends State<ThreatContainer> {
     }
 
     switch (_bluetoothProvider.deviceConnectResult) {
-      case DeviceConnectResult.scanning:
-      case DeviceConnectResult.disconnected:
-      case DeviceConnectResult.scanError:
+      case bluetooth.DeviceConnectResult.scanning:
+      case bluetooth.DeviceConnectResult.disconnected:
+      case bluetooth.DeviceConnectResult.scanError:
       case null:
       // Code to execute when deviceConnectResult is scanning
         return Column(
@@ -129,7 +129,7 @@ class _ThreatContainerState extends State<ThreatContainer> {
           ],
         );
 
-      case DeviceConnectResult.scanTimeout:
+      case bluetooth.DeviceConnectResult.scanTimeout:
       // Code to execute when deviceConnectResult is scanTimeout
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -217,7 +217,7 @@ class _ThreatContainerState extends State<ThreatContainer> {
           ],
         );
 
-      case DeviceConnectResult.deviceFound:
+      case bluetooth.DeviceConnectResult.deviceFound:
       // Code to execute when deviceConnectResult is deviceFound
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -305,8 +305,8 @@ class _ThreatContainerState extends State<ThreatContainer> {
           ],
         );
 
-      case DeviceConnectResult.connecting:
-      case DeviceConnectResult.partialConnected:
+      case bluetooth.DeviceConnectResult.connecting:
+      case bluetooth.DeviceConnectResult.partialConnected:
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -382,8 +382,8 @@ class _ThreatContainerState extends State<ThreatContainer> {
           ],
         );
 
-      case DeviceConnectResult.connected:
-        return Container(
+      case bluetooth.DeviceConnectResult.connected:
+        return SizedBox(
           //color: Colors.black,
           height: 600.h,
           child: Column(
@@ -553,7 +553,7 @@ class _ThreatContainerState extends State<ThreatContainer> {
                         StreamSubscription? subscription;
 
                         subscription = _bluetoothProvider.cableUnlock().listen((unlockResult) {
-                          if (unlockResult.lockState == LockState.unlock) {
+                          if (unlockResult.lockState == bluetooth.LockState.unlock) {
                             subscription?.cancel();
                             ///Change to page
                             changeToThreatBikeRecovered(widget.context);

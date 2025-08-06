@@ -1,12 +1,10 @@
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import 'package:flutter/material.dart';
-import 'package:get/utils.dart';
 
 
 import '../api/colours.dart';
 import '../api/fonts.dart';
-import '../api/navigator.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/provider/notification_provider.dart';
 
@@ -21,7 +19,7 @@ class EvieActionableBar extends StatelessWidget {
   final Color? backgroundColor;
 
   const EvieActionableBar({
-    Key? key,
+    super.key,
     this.icon,
     required this.title,
     required this.text,
@@ -30,7 +28,7 @@ class EvieActionableBar extends StatelessWidget {
     this.height,
     this.backgroundColor,
 
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +85,7 @@ class EvieActionableBarOld extends StatelessWidget {
   final Color? backgroundColor;
 
   const EvieActionableBarOld({
-    Key? key,
+    super.key,
     required this.title,
     required this.text,
     required this.buttonLeft,
@@ -96,7 +94,7 @@ class EvieActionableBarOld extends StatelessWidget {
     this.height,
     this.backgroundColor,
 
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +111,7 @@ class EvieActionableBarOld extends StatelessWidget {
                      Row(
                        children: [
                          Expanded(
-                           child: Container(
+                           child: SizedBox(
                                height: 36.h,
                                child: buttonLeft),
                          ),
@@ -121,7 +119,7 @@ class EvieActionableBarOld extends StatelessWidget {
                          SizedBox(width: 8.w,),
 
                          Expanded(
-                           child: Container(
+                           child: SizedBox(
                                height: 36.h,
                                child: buttonRight),
                          ),
@@ -145,7 +143,7 @@ Widget stackActionableBar(context, BikeProvider bikeProvider, NotificationProvid
   ///Remind me 24 hours later, remind me tomorrow, remind me next week, etc
 
   return Visibility(
-    visible: bikeProvider.rfidList.length == 0 && notificationProvider.isTimeArrive,
+    visible: bikeProvider.rfidList.isEmpty && notificationProvider.isTimeArrive,
     child: EvieActionableBarOld(
         title: "Register EV-Key",
         text: "Add an EV-Key to unlock your bike without using the app.",

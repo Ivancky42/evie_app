@@ -2,18 +2,14 @@ import 'dart:io';
 
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/navigator.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../api/colours.dart';
 import '../api/dialog.dart';
-import '../api/length.dart';
 import '../api/provider/auth_provider.dart';
 import '../api/provider/bike_provider.dart';
 import '../api/provider/current_user_provider.dart';
@@ -21,7 +17,7 @@ import '../widgets/evie_button.dart';
 import '../widgets/evie_single_button_dialog.dart';
 
 class Welcome extends StatefulWidget {
-  const Welcome({Key? key}) : super(key: key);
+  const Welcome({super.key});
 
   @override
   _WelcomeState createState() => _WelcomeState();
@@ -164,7 +160,7 @@ class _WelcomeState extends State<Welcome> {
                                   }
                                   else if (result.containsKey(SignInStatus.error)) {
                                     SmartDialog.show(
-                                        widget: EvieSingleButtonDialog(
+                                        builder: (_) => EvieSingleButtonDialog(
                                             title: "Error",
                                             content: result[SignInStatus.error],
                                             rightContent: "Retry",
@@ -174,7 +170,7 @@ class _WelcomeState extends State<Welcome> {
                                   }
                                   else if (result.containsKey(SignInStatus.failed)) {
                                     SmartDialog.show(
-                                        widget: EvieSingleButtonDialog(
+                                        builder: (_) => EvieSingleButtonDialog(
                                             title: "Error",
                                             content: result[SignInStatus.failed],
                                             rightContent: "Retry",
@@ -221,7 +217,7 @@ class _WelcomeState extends State<Welcome> {
                               }
                               else if (loginStatus.containsKey(SignInStatus.error)) {
                                 SmartDialog.show(
-                                    widget: EvieSingleButtonDialog(
+                                    builder: (_) => EvieSingleButtonDialog(
                                         title: "Error",
                                         content: loginStatus[SignInStatus.error],
                                         rightContent: "Retry",
@@ -231,7 +227,7 @@ class _WelcomeState extends State<Welcome> {
                               }
                               else if (loginStatus.containsKey(SignInStatus.failed)) {
                                 SmartDialog.show(
-                                    widget: EvieSingleButtonDialog(
+                                    builder: (_) => EvieSingleButtonDialog(
                                         title: "Error",
                                         content: loginStatus[SignInStatus.failed],
                                         rightContent: "Retry",
@@ -276,7 +272,7 @@ class _WelcomeState extends State<Welcome> {
                               }
                               else if (result.containsKey(SignInStatus.error)) {
                                     SmartDialog.show(
-                                        widget: EvieSingleButtonDialog(
+                                        builder: (_) => EvieSingleButtonDialog(
                                             title: "Error",
                                             content: result[SignInStatus.error],
                                             rightContent: "Retry",
@@ -286,7 +282,7 @@ class _WelcomeState extends State<Welcome> {
                               }
                               else if (result.containsKey(SignInStatus.failed)) {
                                 SmartDialog.show(
-                                    widget: EvieSingleButtonDialog(
+                                    builder: (_) => EvieSingleButtonDialog(
                                         title: "Error",
                                         content: result[SignInStatus.failed],
                                         rightContent: "Retry",
@@ -296,7 +292,7 @@ class _WelcomeState extends State<Welcome> {
                               }
                             });
                           }),
-                      Container(
+                      SizedBox(
                         width: double.infinity,
                         child: RawMaterialButton(
                           elevation: 0.0,

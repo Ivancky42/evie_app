@@ -1,33 +1,22 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/function.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/my_bike_setting/bike_setting/switch_bike_image.dart';
+import 'package:sizer/sizer.dart';
 
 import 'package:evie_test/widgets/custom_search_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../../api/backend/debouncer.dart';
 import '../../../api/colours.dart';
-import '../../../api/dialog.dart';
 import '../../../api/fonts.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
-import '../../../api/provider/notification_provider.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
-import '../../../widgets/evie_appbar.dart';
-import '../../../widgets/evie_double_button_dialog.dart';
-import '../../my_account/switch_profile_image.dart';
 import 'bike_setting_container.dart';
 import 'bike_setting_model.dart';
 import 'bike_setting_search_container.dart';
@@ -36,7 +25,7 @@ import 'package:lottie/lottie.dart' as lottie;
 
 class BikeSetting extends StatefulWidget {
   String? source;
-  BikeSetting({this.source, Key? key}) : super(key: key);
+  BikeSetting({this.source, super.key});
 
   @override
   _BikeSettingState createState() => _BikeSettingState();
@@ -52,8 +41,8 @@ class _BikeSettingState extends State<BikeSetting> {
 
   Widget? buttonImage;
   List<BikeSettingModel> bikeSettingList = [];
-  List<BikeSettingModel> _searchFirstResult = [];
-  LinkedHashMap<String, BikeSettingModel> _searchSecondResult = LinkedHashMap<String, BikeSettingModel>();
+  final List<BikeSettingModel> _searchFirstResult = [];
+  final LinkedHashMap<String, BikeSettingModel> _searchSecondResult = LinkedHashMap<String, BikeSettingModel>();
 
   bool _isSearching = false;
   bool isFirstTimeConnected = false;
@@ -371,16 +360,10 @@ class _BikeSettingState extends State<BikeSetting> {
                             _bikeProvider.currentBikeModel?.macAddr ?
                     Padding(
                       padding: EdgeInsets.only(right: 0),
-                      child: Container(
+                      child: SizedBox(
                         // width: 148.w,
                         height: 40.h,
                         child: OutlinedButton(
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                buttonImage!,
-                              ]
-                          ),
                           onPressed: () async {
                             await _bluetoothProvider.stopScan();
                             await _bluetoothProvider.disconnectDevice();
@@ -392,21 +375,21 @@ class _BikeSettingState extends State<BikeSetting> {
                             elevation: 0.0,
                             backgroundColor: EvieColors.primaryColor,
                           ),
-                        ),
-                      ),
-                    )
-                        : Padding(
-                      padding: EdgeInsets.only(right: 0),
-                      child: Container(
-                        // width:90.w,
-                        height: 40.h,
-                        child: ElevatedButton(
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 buttonImage!,
                               ]
                           ),
+                        ),
+                      ),
+                    )
+                        : Padding(
+                      padding: EdgeInsets.only(right: 0),
+                      child: SizedBox(
+                        // width:90.w,
+                        height: 40.h,
+                        child: ElevatedButton(
                           onPressed: () async {
                             checkBleStatusAndConnectDevice(
                                 _bluetoothProvider, _bikeProvider);
@@ -415,6 +398,12 @@ class _BikeSettingState extends State<BikeSetting> {
                             shape: CircleBorder(),
                             elevation: 0.0,
                             backgroundColor: EvieColors.pastelPurple,
+                          ),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                buttonImage!,
+                              ]
                           ),
                         ),
                       ),
@@ -448,7 +437,7 @@ class _BikeSettingState extends State<BikeSetting> {
                               physics: BouncingScrollPhysics(),
                               child: Column(
                                 children: [
-                                  ...bikeSettingList.map((e) => BikeSettingContainer(bikeSettingModel: e)).toList(),
+                                  ...bikeSettingList.map((e) => BikeSettingContainer(bikeSettingModel: e)),
                                   Container(
                                     color: Colors.transparent,
                                     height: 43.h,
@@ -465,7 +454,7 @@ class _BikeSettingState extends State<BikeSetting> {
                             children: [
                               ..._searchFirstResult.map((e) =>
                                   BikeSettingContainer(bikeSettingModel: e))
-                                  .toList(),
+                                  ,
                               secondSearchResult(),
                             ],
                           ),

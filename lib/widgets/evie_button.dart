@@ -1,8 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/utils.dart';
 
 
 import '../api/colours.dart';
@@ -17,13 +15,13 @@ class EvieButton extends StatelessWidget {
   final Color? backgroundColor;
 
   const EvieButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.child,
     this.width,
     this.height,
     this.backgroundColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +30,6 @@ class EvieButton extends StatelessWidget {
       width: width ?? double.infinity,
       padding: EdgeInsets.all(2.w),
       child: ElevatedButton(
-        child: child,
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
@@ -43,6 +40,7 @@ class EvieButton extends StatelessWidget {
                 : EvieColors.primaryColor.withOpacity(0.3),
             disabledBackgroundColor: EvieColors.primaryColor.withOpacity(0.3),
         ),
+        child: child,
       ),
     );
   }
@@ -58,21 +56,20 @@ class EvieButton_ReversedColor extends StatelessWidget {
   final Color? backgroundColor;
 
   const EvieButton_ReversedColor({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.child,
     this.width,
     this.height,
     this.backgroundColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         height: height ?? 48.h,
         width: width ?? double.infinity,
         child: ElevatedButton(
-          child: child,
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
@@ -81,6 +78,7 @@ class EvieButton_ReversedColor extends StatelessWidget {
             backgroundColor: EvieColors.lightGrayishCyan,
 
           ),
+          child: child,
         )
     );
   }
@@ -96,20 +94,24 @@ class EvieButton_DropDown extends StatelessWidget {
   final String text;
 
   const EvieButton_DropDown({
-    Key? key,
+    super.key,
     this.width,
     this.height,
     this.backgroundColor,
     required this.onChanged,
     required this.items,
     required this.text,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
         height: height ?? 48.h,
         width: width ?? double.infinity,
+      decoration: BoxDecoration(
+        color: backgroundColor ?? EvieColors.lightGrayishCyan,
+          borderRadius:  BorderRadius.all(Radius.circular(10.w)),
+      ),
         child: Padding(
           padding:  EdgeInsets.only(left: 16.w, right:16.w),
           child: DropdownButtonHideUnderline(
@@ -153,17 +155,13 @@ class EvieButton_DropDown extends StatelessWidget {
           //   hint: Text(text, style: TextStyle(color: EvieColors.primaryColor, fontSize: 17.sp, fontWeight: FontWeight.w500),),
           // ),
         ),
-      decoration: BoxDecoration(
-        color: backgroundColor ?? EvieColors.lightGrayishCyan,
-          borderRadius:  BorderRadius.all(Radius.circular(10.w)),
-      ),
     );
   }
 
   List<DropdownMenuItem<String>> addDividersAfterItems(List<String> items) {
-    List<DropdownMenuItem<String>> _menuItems = [];
+    List<DropdownMenuItem<String>> menuItems = [];
     for (var item in items) {
-      _menuItems.addAll(
+      menuItems.addAll(
         [
           DropdownMenuItem<String>(
             value: item,
@@ -185,7 +183,7 @@ class EvieButton_DropDown extends StatelessWidget {
         ],
       );
     }
-    return _menuItems;
+    return menuItems;
   }
 }
 
@@ -199,22 +197,21 @@ class EvieButton_PickDate extends StatelessWidget {
   final bool? showColour;
 
   const EvieButton_PickDate({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.child,
     this.width,
     this.height,
     this.backgroundColor,
     this.showColour = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         height: height ?? 32.h,
         width: width ?? double.infinity,
         child: ElevatedButton(
-          child: child,
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
@@ -223,6 +220,7 @@ class EvieButton_PickDate extends StatelessWidget {
             padding: EdgeInsets.zero,
             backgroundColor: showColour == true ? EvieColors.lightGrayishCyan : EvieColors.transparent,
           ),
+          child: child,
         ),
     );
   }
@@ -236,27 +234,22 @@ class EvieButton_Square extends StatelessWidget {
   final Widget child;
 
   const EvieButton_Square({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.width,
     required this.height,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: height,
       width: width,
-      child: Container(
+      child: SizedBox(
         width: width,
         child: ElevatedButton(
           onPressed: onPressed,
-
-          child: Padding(
-            padding: EdgeInsets.all(0.0),
-            child: child,
-          ),
           //label: const Text(''),
           style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
@@ -265,6 +258,11 @@ class EvieButton_Square extends StatelessWidget {
               textStyle: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold)),
+
+          child: Padding(
+            padding: EdgeInsets.all(0.0),
+            child: child,
+          ),
         ),
       ),
     );

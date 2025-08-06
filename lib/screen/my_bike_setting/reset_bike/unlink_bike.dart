@@ -1,8 +1,7 @@
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/enumerate.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie_appbar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +13,7 @@ import '../../../api/provider/setting_provider.dart';
 import '../../../widgets/evie_button.dart';
 
 class UnlinkBike extends StatefulWidget{
-  const UnlinkBike({Key?key}) : super(key:key);
+  const UnlinkBike({super.key});
   @override
   _UnlinkBikeState createState() => _UnlinkBikeState();
 }

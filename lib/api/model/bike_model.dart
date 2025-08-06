@@ -6,7 +6,6 @@ import 'package:evie_test/api/model/pending_activate_evsecure_model.dart';
 import 'package:evie_test/api/model/plan_model.dart';
 import 'package:evie_test/api/model/simcard_model.dart';
 import 'package:evie_test/api/model/trip_history_model.dart';
-import 'package:evie_test/screen/user_home_page/battery_details.dart';
 
 import 'battery_model.dart';
 import 'bike_plan_model.dart';
@@ -102,7 +101,7 @@ class BikeModel {
   factory BikeModel.fromJson(Map json) {
     return BikeModel(
       batteryPercent: json['batteryPercent']?? 0,
-      bleKey: json['bleKey']?? null,
+      bleKey: json['bleKey'],
       bleName: json['bleName']?? '',
       created:    timestampFromJson(json['created']),
       deviceIMEI: json['deviceIMEI']?? '',

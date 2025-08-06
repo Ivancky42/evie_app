@@ -1,8 +1,7 @@
-import 'dart:async';
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +19,7 @@ import '../../widgets/evie_progress_indicator.dart';
 class CongratsBikeAdded extends StatefulWidget {
 
   final String? bikeName;
-  const CongratsBikeAdded(this.bikeName,{Key? key}) : super(key: key);
+  const CongratsBikeAdded(this.bikeName,{super.key});
 
   @override
   _CongratsBikeAddedState createState() => _CongratsBikeAddedState();

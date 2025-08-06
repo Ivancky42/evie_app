@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:app_settings/app_settings.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/function.dart';
@@ -11,53 +9,41 @@ import 'package:evie_test/api/model/pedal_pals_model.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/provider/firmware_provider.dart';
 import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sheet.dart';
-import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/api/snackbar.dart';
 import 'package:evie_test/api/toast.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/threat/threat_bike_recovered.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/threat/threat_dialog.dart';
-import 'package:evie_test/test/widget_test.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import 'package:evie_test/widgets/evie_radio_button.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import '../widgets/evie_checkbox.dart';
 import '../widgets/evie_divider.dart';
 import '../widgets/evie_double_button_dialog.dart';
-import '../widgets/evie_progress_indicator.dart';
 import '../widgets/evie_single_button_dialog.dart';
-import '../widgets/evie_slider_button.dart';
-import '../widgets/evie_switch.dart';
 import '../widgets/evie_textform.dart';
 import 'colours.dart';
 import 'model/bike_user_model.dart';
 import 'model/rfid_model.dart';
 import 'model/user_model.dart';
 import 'navigator.dart';
+import 'package:sizer/sizer.dart';
+
 
 showQuitApp(){
   SmartDialog.show(
-      widget: EvieDoubleButtonDialog(
+      builder: (context) => EvieDoubleButtonDialog(
           title: "Close this app?",
           childContent: Text("Are you sure you want to close this App?", style: EvieTextStyles.body18,),
           leftContent: "No",
@@ -72,7 +58,7 @@ showQuitApp(){
 
 showCannotClose(BuildContext context) {
   SmartDialog.show(
-      widget: EvieOneDialog(
+      builder: (context) => EvieOneDialog(
           title: "Stay with Us",
           content1: "We're handling the progress for you. It won't take long. Please stay on this page until we're done. Your understanding is valued!",
           middleContent: "Understood",
@@ -84,7 +70,7 @@ showCannotClose(BuildContext context) {
 
 showWhereToFindQRCode(){
   SmartDialog.show(
-      widget: EvieSingleButtonDialogOld(
+      builder: (context) => EvieSingleButtonDialogOld(
           title: "Where to find QR Code?",
           widget:  SvgPicture.asset(
               "assets/images/allow_camera.svg",
@@ -97,7 +83,7 @@ showWhereToFindQRCode(){
 
 showWhereToFindCodes(){
   SmartDialog.show(
-      widget: EvieSingleButtonDialogOld(
+      builder: (context) => EvieSingleButtonDialogOld(
           title: "Where to find these?",
           widget:  SvgPicture.asset(
             "assets/images/where_to_find_these.svg",
@@ -108,10 +94,9 @@ showWhereToFindCodes(){
   );
 }
 
-showBackToLogin(context, BikeProvider _bikeProvider, AuthProvider _authProvider){
+showBackToLogin(context, BikeProvider bikeProvider, AuthProvider authProvider){
   SmartDialog.show(
-      widget:
-      EvieDoubleButtonDialog(
+      builder: (context) => EvieDoubleButtonDialog(
           title: "Back to Login Page?",
           childContent: Text("Are you sure you want to sign out and back to login page?", style: EvieTextStyles.body18),
           leftContent: "No",
@@ -120,7 +105,7 @@ showBackToLogin(context, BikeProvider _bikeProvider, AuthProvider _authProvider)
           onPressedRight: () async {
             SmartDialog.dismiss();
             showCustomLightLoading();
-            await _authProvider.signOut(context).then((result) async {
+            await authProvider.signOut(context).then((result) async {
               if(result == true){
                 SmartDialog.dismiss(status: SmartStatus.loading);
                 changeToWelcomeScreen(context);
@@ -151,7 +136,7 @@ showAddBikeNameSuccess(context, BikeProvider bikeProvider, bikeNameController){
   SmartDialog.dismiss();
   SmartDialog.show(
       keepSingle: true,
-      widget: EvieSingleButtonDialogOld
+      builder: (context) => EvieSingleButtonDialogOld
         (title: "Success",
           content: "Update successful",
           rightContent: "Ok",
@@ -172,7 +157,7 @@ showAddBikeNameFailed(){
   SmartDialog.dismiss();
   SmartDialog.show(
       keepSingle: true,
-      widget: EvieSingleButtonDialog
+      builder: (context) => EvieSingleButtonDialog
         (title: "Not Success",
           content: "An error occur, try again",
           rightContent: "Retry",
@@ -183,7 +168,7 @@ showFailed(){
   SmartDialog.dismiss();
   SmartDialog.show(
       keepSingle: true,
-      widget: EvieSingleButtonDialog
+      builder: (context) => EvieSingleButtonDialog
         (title: "Not Success",
           content: "An error occur, try again",
           rightContent: "Retry",
@@ -194,7 +179,7 @@ showBluetoothNotTurnOn() {
   SmartDialog.dismiss();
   SmartDialog.show(
       keepSingle: true,
-      widget: EvieSingleButtonDialog(
+      builder: (context) => EvieSingleButtonDialog(
           title: "Bluetooth Error",
           content: "Uh-oh! Bluetooth is off. Turn it on for connection.",
           rightContent: "OK",
@@ -207,7 +192,7 @@ showNoInternetConnection() {
   SmartDialog.dismiss();
   SmartDialog.show(
       keepSingle: true,
-      widget: EvieSingleButtonDialog(
+      builder: (context) => EvieSingleButtonDialog(
           title: "No Internet Connection",
           content: "Uh-oh! No internet connection. Please enable your mobile data or connect with wifi to perform next action.",
           rightContent: "OK",
@@ -221,7 +206,7 @@ showBluetoothNotSupport() {
   SmartDialog.show(
       keepSingle:
       true,
-      widget: EvieSingleButtonDialog(
+      builder: (context) => EvieSingleButtonDialog(
           title: "Error",
           content: "Bluetooth Unsupported",
           rightContent: "OK",
@@ -253,7 +238,7 @@ showBluetoothNotAuthorized() {
   //         }));
 
   SmartDialog.show(
-      widget: EvieTwoButtonDialog(
+      builder: (context) => EvieTwoButtonDialog(
           title: Text("Bluetooth Required",
             style:EvieTextStyles.h2,
             textAlign: TextAlign.center,
@@ -286,7 +271,7 @@ showBluetoothNotAuthorized() {
 showLocationServiceDisable() {
   SmartDialog.dismiss();
   SmartDialog.show(
-      widget: EvieTwoButtonDialog(
+      builder: (context) => EvieTwoButtonDialog(
           title: Text("Location Services Disabled",
             style:EvieTextStyles.h2,
             textAlign: TextAlign.center,
@@ -322,7 +307,7 @@ showCameraDisable() {
   SmartDialog.show(
       keepSingle:
       true,
-      widget: EvieSingleButtonDialogOld(
+      builder: (context) => EvieSingleButtonDialogOld(
           title: "Disable",
           content: "Camera is disabled, please enable your camera service in settings",
           rightContent: "OK",
@@ -337,7 +322,7 @@ showNotificationNotAuthorized() {
   SmartDialog.show(
       keepSingle:
       true,
-      widget: EvieSingleButtonDialogOld(
+      builder: (context) => EvieSingleButtonDialogOld(
           title: "Error",
           content: "Notification permission is off, turn on notification permission in setting",
           rightContent: "OK",
@@ -348,33 +333,33 @@ showNotificationNotAuthorized() {
           }));
 }
 
-showEditBikeNameDialog(_formKey, _bikeNameController, BikeProvider _bikeProvider) {
+showEditBikeNameDialog(formKey, bikeNameController, BikeProvider bikeProvider) {
   bool isFirst = true;
 
-  _bikeNameController = TextEditingController(text: _bikeProvider.currentBikeModel?.deviceName);
+  bikeNameController = TextEditingController(text: bikeProvider.currentBikeModel?.deviceName);
 
-  FocusNode _nameFocusNode = FocusNode();
-  _nameFocusNode.requestFocus();
+  FocusNode nameFocusNode = FocusNode();
+  nameFocusNode.requestFocus();
 
-  _bikeNameController.addListener(() {
-    if (_bikeNameController.selection.baseOffset != _bikeNameController.selection.extentOffset) {
+  bikeNameController.addListener(() {
+    if (bikeNameController.selection.baseOffset != bikeNameController.selection.extentOffset) {
       // Text is selected
       //print('Text selected: ${_nameController.text.substring(_nameController.selection.baseOffset, _nameController.selection.extentOffset)}');
     } else {
       // Cursor is moved
       if (isFirst) {
         isFirst = false;
-        _bikeNameController.selection = TextSelection(
-            baseOffset: 0, extentOffset: _bikeNameController.text.length);
+        bikeNameController.selection = TextSelection(
+            baseOffset: 0, extentOffset: bikeNameController.text.length);
       }
     }
   });
 
   SmartDialog.show(
-      widget: Builder(
+      builder: (context) => Builder(
         builder: (BuildContext context) {
           return Form(
-            key: _formKey,
+            key: formKey,
             child: EvieDoubleButtonDialog(
                 title: "Name Your Bike",
                 childContent: Container(
@@ -393,11 +378,11 @@ showEditBikeNameDialog(_formKey, _bikeNameController, BikeProvider _bikeProvider
                       Padding(
                         padding:  EdgeInsets.fromLTRB(0.h, 6.h, 0.h, 8.h),
                         child: EvieTextFormField(
-                          controller: _bikeNameController,
-                          focusNode: _nameFocusNode,
+                          controller: bikeNameController,
+                          focusNode: nameFocusNode,
                           obscureText: false,
                           keyboardType: TextInputType.name,
-                          hintText: _bikeProvider.currentBikeModel?.deviceName ?? "Bike Name",
+                          hintText: bikeProvider.currentBikeModel?.deviceName ?? "Bike Name",
                           labelText: "Bike Name",
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -418,12 +403,12 @@ showEditBikeNameDialog(_formKey, _bikeNameController, BikeProvider _bikeProvider
                 rightContent: "Save",
                 onPressedLeft: (){SmartDialog.dismiss();},
                 onPressedRight: (){
-                  if (_formKey.currentState!.validate()) {
+                  if (formKey.currentState!.validate()) {
 
                     ///For keyboard un focus
                     FocusManager.instance.primaryFocus?.unfocus();
 
-                    _bikeProvider.updateBikeName(_bikeNameController.text.trim()).then((result){
+                    bikeProvider.updateBikeName(bikeNameController.text.trim()).then((result){
                       SmartDialog.dismiss();
                       if(result == true){
                         showEditBikeNameSuccess(context);
@@ -443,7 +428,7 @@ showEditBikeNameDialog(_formKey, _bikeNameController, BikeProvider _bikeProvider
 showUpdateSuccessDialog() {
   SmartDialog.show(
       keepSingle: true,
-      widget: EvieSingleButtonDialogOld
+      builder: (context) => EvieSingleButtonDialogOld
         (title: "Success",
           content: "Update successful",
           rightContent: "Ok",
@@ -455,7 +440,7 @@ showUpdateSuccessDialog() {
 showUpdateFailedDialog() {
   SmartDialog.show(
       keepSingle: true,
-      widget: EvieSingleButtonDialog
+      builder: (context) => EvieSingleButtonDialog
         (title: "Not Success",
           content: "An error occur, try again.",
           rightContent: "Retry",
@@ -467,12 +452,12 @@ Future<String> showDeleteShareBikeUser(BikeUserModel bikeUserModel, UserModel? u
     "result" : 'none'
   });
   await SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Remove Pal",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
         ),
-        childContent: Text("Are you sure you would like to remove " + userModel!.name! + " from " + pedalPalsModel.name! + "?",
+        childContent: Text("Are you sure you would like to remove ${userModel!.name!} from ${pedalPalsModel.name!}?",
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
@@ -502,12 +487,12 @@ Future<String> showDeleteShareBikeUser(BikeUserModel bikeUserModel, UserModel? u
 Future<String> showRemoveAllPals(BuildContext context, String teamName) async {
   String result = 'none';
   await SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Remove All PedalPals?",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
         ),
-        childContent: Text("Are you sure you would like to remove all PedalPals from " + teamName + "?",
+        childContent: Text("Are you sure you would like to remove all PedalPals from $teamName?",
           textAlign: TextAlign.center,
           style: EvieTextStyles.body18,),
         svgpicture: SvgPicture.asset(
@@ -529,7 +514,7 @@ Future<String> showRemoveAllPals(BuildContext context, String teamName) async {
 
 showDeleteNotificationSuccess(){
   SmartDialog.show(
-      widget: EvieSingleButtonDialogOld(
+      builder: (context) => EvieSingleButtonDialogOld(
           title: "Deleted",
           content: "Notification deleted",
           rightContent: "OK",
@@ -539,7 +524,7 @@ showDeleteNotificationSuccess(){
 
 showDeleteNotificationFailed(){
   SmartDialog.show(
-      widget: EvieSingleButtonDialog(
+      builder: (context) => EvieSingleButtonDialog(
           title: "Failed",
           content: "Try again.",
           rightContent: "OK",
@@ -549,7 +534,7 @@ showDeleteNotificationFailed(){
 
 showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscription? stream, BluetoothProvider bluetoothProvider, SettingProvider settingProvider){
   SmartDialog.show(
-      widget:   EvieDoubleButtonDialog(
+      builder: (context) => EvieDoubleButtonDialog(
           title: "Better bike software update",
           childContent: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -631,7 +616,7 @@ showFirmwareUpdate(context, FirmwareProvider firmwareProvider, StreamSubscriptio
 //           }));
 // }
 
-showFirmwareUpdateQuit(context, StreamSubscription? stream, _settingProvider, BluetoothProvider _bluetoothProvider) async {
+showFirmwareUpdateQuit(context, StreamSubscription? stream, settingProvider, BluetoothProvider bluetoothProvider) async {
   await showDialog<void>(
       context: context,
       builder: (BuildContext context) =>
@@ -655,16 +640,16 @@ showFirmwareUpdateQuit(context, StreamSubscription? stream, _settingProvider, Bl
               onPressedDown: () {
                 ///Dismiss dialog here
                 stream?.cancel();
-                _bluetoothProvider.disconnectDevice();
+                bluetoothProvider.disconnectDevice();
                 Navigator.of(context).pop();
-                _settingProvider.changeSheetElement(SheetList.bikeSetting);
+                settingProvider.changeSheetElement(SheetList.bikeSetting);
               })
   );
 }
 
 showNoSelectDate(){
   SmartDialog.show(
-      widget: EvieSingleButtonDialog(
+      builder: (context) => EvieSingleButtonDialog(
           title: "Please select the date.",
           content: "Date not selected.",
           rightContent: "Ok",
@@ -674,7 +659,7 @@ showNoSelectDate(){
 }
 
 showResetBike(BuildContext context, BikeProvider bikeProvider){
-  SmartDialog.show(widget: EvieDoubleButtonDialog(
+  SmartDialog.show(builder: (context) => EvieDoubleButtonDialog(
       title: "Reset biker",
       childContent: Text("Are you sure you want to reset bike?"),
       leftContent: "Cancel",
@@ -687,7 +672,7 @@ showResetBike(BuildContext context, BikeProvider bikeProvider){
 
        if(result == true){
          SmartDialog.dismiss();
-         SmartDialog.show(widget: EvieSingleButtonDialogOld(
+         SmartDialog.show(builder: (context) => EvieSingleButtonDialogOld(
              title: "Success",
              content: "Bike reset",
              rightContent: "Ok",
@@ -696,7 +681,7 @@ showResetBike(BuildContext context, BikeProvider bikeProvider){
              changeToUserHomePageScreen(context);}));
        }else{
          SmartDialog.dismiss();
-         SmartDialog.show(widget: EvieSingleButtonDialogOld(
+         SmartDialog.show(builder: (context) => EvieSingleButtonDialogOld(
              title: "Failed",
              content: "Try again",
              rightContent: "Ok",
@@ -707,7 +692,7 @@ showResetBike(BuildContext context, BikeProvider bikeProvider){
 }
 
 showErrorChangeDetectionSensitivity(){
-  SmartDialog.show(widget: EvieSingleButtonDialog(
+  SmartDialog.show(builder: (context) => EvieSingleButtonDialog(
       title: "Error",
       content: "Error update motion sensitivity",
       rightContent: "Retry",
@@ -717,7 +702,7 @@ showErrorChangeDetectionSensitivity(){
 
 showEVKeyExistAndUploadToFirestore(BuildContext context, String rfidNumber){
   SmartDialog.show(
-      widget: EvieSingleButtonDialogOld(
+      builder: (context) => EvieSingleButtonDialogOld(
           title: "Success",
           content: "Card data already existed.",
           rightContent: "OK",
@@ -730,7 +715,7 @@ showEVKeyExistAndUploadToFirestore(BuildContext context, String rfidNumber){
 
 showAddEVKeyNameSuccess(BuildContext context){
   SmartDialog.show(
-      widget:EvieSingleButtonDialogOld(
+      builder: (context) => EvieSingleButtonDialogOld(
           title: "Success",
           content: "Name uploaded",
           rightContent: "OK",
@@ -741,7 +726,7 @@ showAddEVKeyNameSuccess(BuildContext context){
 
 showDeleteEVKeyFailed(BuildContext context, String error){
   SmartDialog.show(
-      widget: EvieSingleButtonDialog(
+      builder: (context) => EvieSingleButtonDialog(
           title: "Error deleting EV-Card",
           content: error,
           rightContent: "OK",
@@ -750,9 +735,9 @@ showDeleteEVKeyFailed(BuildContext context, String error){
           }));
 }
 
-showRemoveEVKeyDialog (BuildContext context, RFIDModel rfidModel, BikeProvider _bikeProvider, BluetoothProvider _bluetoothProvider){
+showRemoveEVKeyDialog (BuildContext context, RFIDModel rfidModel, BikeProvider bikeProvider, BluetoothProvider bluetoothProvider){
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Remove EV-Key",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
@@ -771,21 +756,21 @@ showRemoveEVKeyDialog (BuildContext context, RFIDModel rfidModel, BikeProvider _
           //SmartDialog.showLoading(msg: "Removing EV Key....");
           showCustomLightLoading("Removing EV Key....");
           StreamSubscription? deleteRFIDStream;
-          deleteRFIDStream = _bluetoothProvider
+          deleteRFIDStream = bluetoothProvider
               .deleteRFID(rfidModel.rfidID!)
               .listen((deleteRFIDStatus) {
 
             if (deleteRFIDStatus.result == CommandResult.success) {
               deleteRFIDStream?.cancel();
-              final result = _bikeProvider.deleteRFIDFirestore(rfidModel.rfidID!);
-              _bikeProvider.removeRFIDByID(rfidModel.rfidID!);
+              final result = bikeProvider.deleteRFIDFirestore(rfidModel.rfidID!);
+              bikeProvider.removeRFIDByID(rfidModel.rfidID!);
               showTextToast("${rfidModel.rfidName} have been removed from your EV-Key list.");
               SmartDialog.dismiss(status: SmartStatus.loading);
             }
             else {
               deleteRFIDStream?.cancel();
-              final result = _bikeProvider.deleteRFIDFirestore(rfidModel.rfidID!);
-              _bikeProvider.removeRFIDByID(rfidModel.rfidID!);
+              final result = bikeProvider.deleteRFIDFirestore(rfidModel.rfidID!);
+              bikeProvider.removeRFIDByID(rfidModel.rfidID!);
               showTextToast("${rfidModel.rfidName} have been removed from your EV-Key list.");
               SmartDialog.dismiss(status: SmartStatus.loading);
             }
@@ -801,9 +786,9 @@ showRemoveEVKeyDialog (BuildContext context, RFIDModel rfidModel, BikeProvider _
   );
 }
 
-showRemoveAllEVKeyDialog (BuildContext context, BikeProvider  _bikeProvider, BluetoothProvider _bluetoothProvider, SettingProvider _settingProvider){
+showRemoveAllEVKeyDialog (BuildContext context, BikeProvider  bikeProvider, BluetoothProvider bluetoothProvider, SettingProvider settingProvider){
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Remove All EV-Key?",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
@@ -820,12 +805,12 @@ showRemoveAllEVKeyDialog (BuildContext context, BikeProvider  _bikeProvider, Blu
           SmartDialog.dismiss();
           showCustomLightLoading("Removing all EV-Key....");
           // Explicitly declare the type of the list
-          List<String> keysToDelete = _bikeProvider.rfidList.keys.cast<String>().toList();
+          List<String> keysToDelete = bikeProvider.rfidList.keys.cast<String>().toList();
 
           await Future.forEach(keysToDelete, (String key) async {
-            _bluetoothProvider.deleteRFID(key);
-            await _bikeProvider.deleteRFIDFirestore(key);
-            _bikeProvider.removeRFIDByID(key);
+            bluetoothProvider.deleteRFID(key);
+            await bikeProvider.deleteRFIDFirestore(key);
+            bikeProvider.removeRFIDByID(key);
             await Future.delayed(Duration(seconds: 1));
           });
 
@@ -841,18 +826,18 @@ showRemoveAllEVKeyDialog (BuildContext context, BikeProvider  _bikeProvider, Blu
 
 showMeasurementUnit(SettingProvider settingProvider, context){
 
-  int _selectedRadio = 0;
+  int selectedRadio = 0;
 
   if(settingProvider.currentMeasurementSetting == MeasurementSetting.metricSystem){
-    _selectedRadio = 0;
+    selectedRadio = 0;
   }else if(settingProvider.currentMeasurementSetting == MeasurementSetting.imperialSystem){
-    _selectedRadio = 1;
+    selectedRadio = 1;
   }else{
-    _selectedRadio = 0;
+    selectedRadio = 0;
   }
   SmartDialog.show(
       keepSingle: true,
-      widget: EvieSingleButtonDialogOld(
+      builder: (context) => EvieSingleButtonDialogOld(
         isReversed: true,
           title: "Measurement Unit",
          widget: Column(
@@ -860,7 +845,7 @@ showMeasurementUnit(SettingProvider settingProvider, context){
              EvieRadioButton(
                  text: "Metric System (meters)",
                  value: 0,
-                 groupValue: _selectedRadio,
+                 groupValue: selectedRadio,
                  onChanged: (value){
                    settingProvider.changeMeasurement(MeasurementSetting.metricSystem);
                    showUpdateMetric(context, "Metric System.");
@@ -872,7 +857,7 @@ showMeasurementUnit(SettingProvider settingProvider, context){
              EvieRadioButton(
                  text: "Imperial System (miles)",
                  value: 1,
-                 groupValue: _selectedRadio,
+                 groupValue: selectedRadio,
                  onChanged: (value){
                    settingProvider.changeMeasurement(MeasurementSetting.imperialSystem);
                    showUpdateMetric(context, "Imperial System.");
@@ -890,7 +875,7 @@ showMeasurementUnit(SettingProvider settingProvider, context){
 ///Email resent
 showEvieResendDialog(BuildContext context, String email) {
   SmartDialog.show(
-    widget: EvieOneDialog(
+    builder: (context) => EvieOneDialog(
         title: "Email Re-Sent",
         content1: "We've re-sent email to ",
         content2: ". Remember to check your spam folder too!",
@@ -904,7 +889,7 @@ showEvieResendDialog(BuildContext context, String email) {
 
 showGPSNotFound() {
   SmartDialog.show(
-      widget: EvieOneDialog(
+      builder: (context) => EvieOneDialog(
           title: "Oops! We missed capturing GPS data",
           content1: "It’s possible that the bike was in a location with weak satellite signals, like inside a building, a tunnel, or under some thick trees. Don’t worry, we’ll get the next one!",
           middleContent: "Done",
@@ -916,7 +901,7 @@ showGPSNotFound() {
 
 showMissingGPSDataDialog(BuildContext context) {
   SmartDialog.show(
-      widget: EvieOneDialog(
+      builder: (context) => EvieOneDialog(
           title: "Oops! We missed capturing GPS data",
           content1: "It’s possible that the bike was in a location with weak satellite signals, like inside a building, a tunnel, or under some thick trees. Don’t worry, we’ll get the next one!",
           middleContent: "Done",
@@ -928,7 +913,7 @@ showMissingGPSDataDialog(BuildContext context) {
 
 showBatteryInfoDialog(BuildContext context) {
   SmartDialog.show(
-      widget: EvieOneDialog(
+      builder: (context) => EvieOneDialog(
           title: "Battery info",
           content1: "Battery information is based on the last time your device was connected to your bike, and may not reflect real-time data. ",
           middleContent: "Done",
@@ -940,7 +925,7 @@ showBatteryInfoDialog(BuildContext context) {
 
 showTeamNotAvailableDialog(BuildContext context) {
   SmartDialog.show(
-      widget: EvieOneDialog(
+      builder: (context) => EvieOneDialog(
           title: "Team Unavailable",
           content1: "Oops! The team no longer exists. It may have been disbanded or removed.",
           middleContent: "Done",
@@ -952,7 +937,7 @@ showTeamNotAvailableDialog(BuildContext context) {
 
 showErrorLoginDialog (BuildContext context){
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("User Not Found",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
@@ -979,7 +964,7 @@ showErrorLoginDialog (BuildContext context){
 
 showWrongPasswordDialog(BuildContext context){
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Invalid Password",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
@@ -1006,7 +991,7 @@ showWrongPasswordDialog(BuildContext context){
 
 showWhatToDoDialog(BuildContext context) {
   SmartDialog.show(
-    widget: Dialog(
+    builder: (context) => Dialog(
         insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -1034,7 +1019,7 @@ showWhatToDoDialog(BuildContext context) {
                   ),
               ),
 
-              Container(
+              SizedBox(
                 width: 325.w,
                 child: Padding(
                   padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
@@ -1176,7 +1161,7 @@ showWhatToDoDialog(BuildContext context) {
 
 showLookingForYourBikeDialog(BuildContext context) {
   SmartDialog.show(
-      widget: Dialog(
+      builder: (context) => Dialog(
           insetPadding: EdgeInsets.only(left: 15.w, right: 17.w),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -1204,7 +1189,7 @@ showLookingForYourBikeDialog(BuildContext context) {
                   ),
                 ),
 
-                Container(
+                SizedBox(
                   width: 325.w,
                   child: Padding(
                     padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
@@ -1256,9 +1241,9 @@ showLookingForYourBikeDialog(BuildContext context) {
   );
 }
 
-showDeactivateTheftDialog (BuildContext context, BikeProvider _bikeProvider){
+showDeactivateTheftDialog (BuildContext context, BikeProvider bikeProvider){
   SmartDialog.show(
-    widget: Builder(
+    builder: (context) => Builder(
       builder: (BuildContext buildContext) {
         return EvieTwoButtonDialog(
             title: Text("Dismiss Theft Alert?",
@@ -1277,7 +1262,7 @@ showDeactivateTheftDialog (BuildContext context, BikeProvider _bikeProvider){
               SmartDialog.dismiss();
             },
             onPressedDown: () {
-              _bikeProvider.updateBikeStatus('safe');
+              bikeProvider.updateBikeStatus('safe');
               showTheftDismiss(buildContext);
               SmartDialog.dismiss();
             });
@@ -1289,7 +1274,7 @@ showDeactivateTheftDialog (BuildContext context, BikeProvider _bikeProvider){
 ///Exit Registration
 showEvieExitRegistrationDialog(BuildContext context) {
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
       title: Text(
         "Exit Registration?",
         style: EvieTextStyles.h2,
@@ -1318,7 +1303,7 @@ showEvieExitRegistrationDialog(BuildContext context) {
 ///permission to open settings to enable camera
 showEvieCameraSettingDialog(BuildContext context) {
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
       title: Text(
         "Enable Camera",
         style: EvieTextStyles.h2,
@@ -1345,7 +1330,7 @@ showEvieCameraSettingDialog(BuildContext context) {
 
 showEvieFindQRDialog(BuildContext context){
   SmartDialog.show(
-      widget: EvieOneButtonDialog(
+      builder: (context) => EvieOneButtonDialog(
           title: "Where to find the QR Code?",
           content: "The QR code can be found on the back of your ownership card.",
           middleContent: "Done",
@@ -1363,7 +1348,7 @@ showEvieFindQRDialog(BuildContext context){
 ///where to find serial number and validation key
 showEvieFindSerialDialog(BuildContext context){
   SmartDialog.show(
-      widget: EvieOneButtonDialog(
+      builder: (context) => EvieOneButtonDialog(
           title: "Where to Find These?",
           content: "The Serial Number and Validation Key can be found on the back of your ownership card.",
           middleContent: "Done",
@@ -1377,15 +1362,15 @@ showEvieFindSerialDialog(BuildContext context){
 showSyncRideThrive3(){
   /// icon not yet altered
   SmartDialog.show(
-    widget: Evie4OneButtonDialog(),
+    builder: (context) => Evie4OneButtonDialog(),
   );
 }
 
 ///Allow location permission to access Orbital Anti_Theft
 ///icon paddings need to be altered
-showEvieAllowOrbitalDialog(LocationProvider _locationProvider){
+showEvieAllowOrbitalDialog(LocationProvider locationProvider){
   SmartDialog.show(
-      widget:Evie2IconBatchOneButtonDialog(
+      builder: (context) => Evie2IconBatchOneButtonDialog(
           title: "Secure your ride",
           miniTitle1: "Orbital Anti-theft",
           miniTitle2: "GPS Tracking",
@@ -1399,7 +1384,7 @@ showEvieAllowOrbitalDialog(LocationProvider _locationProvider){
             }else if(await Permission.location.isPermanentlyDenied || await Permission.location.isDenied){
               //OpenSettings.openLocationSourceSetting();
             }
-            _locationProvider.checkLocationPermissionStatus();
+            locationProvider.checkLocationPermissionStatus();
             SmartDialog.dismiss();
           }));
 }
@@ -1407,7 +1392,7 @@ showEvieAllowOrbitalDialog(LocationProvider _locationProvider){
 ///Exit Orbital Anti-Theft
 showEvieExitOrbitalDialog(BuildContext context) {
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
       title: Text(
         "Exit EV-Secure?",
         style: EvieTextStyles.h2,
@@ -1433,9 +1418,9 @@ showEvieExitOrbitalDialog(BuildContext context) {
 }
 
 ///to fully reset the bike
-showFullResetDialog (BuildContext context ,SettingProvider _settingProvider){
+showFullResetDialog (BuildContext context ,SettingProvider settingProvider){
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Fully Reset Your Bike?",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
@@ -1454,7 +1439,7 @@ showFullResetDialog (BuildContext context ,SettingProvider _settingProvider){
           SmartDialog.dismiss();
           // Navigator.of(context, rootNavigator: true).pop();
           // showBikeEraseSheet(context);
-          _settingProvider.changeSheetElement(SheetList.bikeEraseReset);
+          settingProvider.changeSheetElement(SheetList.bikeEraseReset);
         },
         onPressedDown: () {
           SmartDialog.dismiss();
@@ -1466,29 +1451,29 @@ showWelcomeToEVClub (BuildContext context){
   /// icon not yet altered
   SmartDialog.show(
       keepSingle: true,
-      widget: EvieClubDialog()
+      builder: (context) => EvieClubDialog()
   );
 }
 
 showThankyouDialog(BuildContext context) {
   SmartDialog.show(
     keepSingle: true,
-    widget: ThanksStickingToEVSecure()
+    builder: (context) => ThanksStickingToEVSecure()
   );
 }
 
 showWelcomeToJoinTeam(BuildContext context, String palName, String teamName) {
   SmartDialog.show(
     keepSingle: true,
-    widget: WelcomeJoinTeam(palName: palName, teamName: teamName,)
+    builder: (context) => WelcomeJoinTeam(palName: palName, teamName: teamName,)
   );
 }
 
 
 ///to unlink the bike
-showUnlinkBikeDialog (BuildContext context, SettingProvider _settingProvider){
+showUnlinkBikeDialog (BuildContext context, SettingProvider settingProvider){
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Unlink Your Bike?",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
@@ -1505,7 +1490,7 @@ showUnlinkBikeDialog (BuildContext context, SettingProvider _settingProvider){
           SmartDialog.dismiss();
           // Navigator.of(context, rootNavigator: true).pop();
           // showBikeEraseSheet(context);
-          _settingProvider.changeSheetElement(SheetList.bikeEraseUnlink);
+          settingProvider.changeSheetElement(SheetList.bikeEraseUnlink);
         },
         onPressedDown: () {
           SmartDialog.dismiss();
@@ -1516,7 +1501,7 @@ showUnlinkBikeDialog (BuildContext context, SettingProvider _settingProvider){
 
 
 ///connect bike to bluetooth before full reset
-showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothProvider,BikeProvider _bikeProvider){
+showConnectBluetoothDialog (BuildContext context, BluetoothProvider bluetoothProvider,BikeProvider bikeProvider){
   Widget? buttonImage = Text(
     'Connect Bike',
     style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
@@ -1525,21 +1510,20 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
   Widget? animation = Lottie.asset('assets/images/connect-to-bike.json', repeat: true, animate: false);
 
   Future.delayed(Duration.zero).then((value) {
-    _bikeProvider.blockConnectingToast(true);
+    bikeProvider.blockConnectingToast(true);
   });
 
   SmartDialog.show(
     keepSingle: true,
     backDismiss: false,
-    clickBgDismissTemp: false,
-    widget:  Consumer<BluetoothProvider>(
+    builder: (context) => Consumer<BluetoothProvider>(
         builder: (context, bluetoothProvider, child) {
           return StatefulBuilder(
               builder: (context, setState) {
                 ///Set button image
-                if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected &&
-                    _bluetoothProvider.currentConnectedDevice ==
-                        _bikeProvider.currentBikeModel?.macAddr) {
+                if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected &&
+                    bluetoothProvider.currentConnectedDevice ==
+                        bikeProvider.currentBikeModel?.macAddr) {
                   buttonImage = SvgPicture.asset(
                     "assets/buttons/ble_button_connect.svg",
                     width: 52.w,
@@ -1547,12 +1531,12 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                   );
                   animation = Lottie.asset('assets/images/connect-to-bike.json', repeat: true, animate: false);
                   Future.delayed(Duration.zero).then((value) {
-                    _bikeProvider.blockConnectingToast(false);
+                    bikeProvider.blockConnectingToast(false);
                   });
                   SmartDialog.dismiss();
-                }  else if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
-                    _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
-                    _bluetoothProvider.deviceConnectResult == DeviceConnectResult.partialConnected) {
+                }  else if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
+                    bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
+                    bluetoothProvider.deviceConnectResult == DeviceConnectResult.partialConnected) {
                   animation = Lottie.asset('assets/images/connect-to-bike.json', repeat: true, animate: true);
                   buttonImage =
                       Row(
@@ -1569,17 +1553,17 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                         ],
                       );
                 }
-                else if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.disconnected) {
+                else if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.disconnected) {
                   buttonImage = Text('Connect Bike', style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),);
                   animation = Lottie.asset('assets/images/connect-to-bike.json', repeat: true, animate: false);
                   Future.delayed(Duration.zero).then((value) {
-                    _bikeProvider.blockConnectingToast(false);
+                    bikeProvider.blockConnectingToast(false);
                   });
                   SmartDialog.dismiss();
                 }
-                else if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanTimeout) {
+                else if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanTimeout) {
                   animation = Lottie.asset('assets/images/connect-to-bike.json', repeat: true, animate: false);
-                  _bikeProvider.blockConnectingToast(false);
+                  bikeProvider.blockConnectingToast(false);
                   SmartDialog.dismiss();
                 }
                 else {
@@ -1606,39 +1590,39 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
                       child: animation
                     ),
                     customButtonUp: EvieButton(
-                        backgroundColor: _bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
-                            _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
-                            _bluetoothProvider.deviceConnectResult == DeviceConnectResult.partialConnected ? EvieColors.primaryColor.withOpacity(0.3) : EvieColors.primaryColor,
+                        backgroundColor: bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
+                            bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
+                            bluetoothProvider.deviceConnectResult == DeviceConnectResult.partialConnected ? EvieColors.primaryColor.withOpacity(0.3) : EvieColors.primaryColor,
                         width: double.infinity,
                         height: 48.h,
                         child: buttonImage!,
 
                         onPressed: (){
-                          if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected &&
-                              _bluetoothProvider.currentConnectedDevice ==
-                                  _bikeProvider.currentBikeModel?.macAddr){
+                          if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected &&
+                              bluetoothProvider.currentConnectedDevice ==
+                                  bikeProvider.currentBikeModel?.macAddr){
 
                           }else{
-                            _bluetoothProvider.bleScanSub?.cancel();
-                            checkBleStatusAndConnectDevice(_bluetoothProvider, _bikeProvider);
+                            bluetoothProvider.bleScanSub?.cancel();
+                            checkBleStatusAndConnectDevice(bluetoothProvider, bikeProvider);
                           }
                         }
                     ),
 
                     downContent: "Cancel",
                     onPressedDown: () async {
-                      if (_bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
-                          _bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
-                          _bluetoothProvider.deviceConnectResult == DeviceConnectResult.partialConnected) {
+                      if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connecting ||
+                          bluetoothProvider.deviceConnectResult == DeviceConnectResult.scanning ||
+                          bluetoothProvider.deviceConnectResult == DeviceConnectResult.partialConnected) {
 
-                        await _bluetoothProvider.stopScan();
-                        await _bluetoothProvider.connectSubscription?.cancel();
-                        await _bluetoothProvider.disconnectDevice();
-                        _bluetoothProvider.switchBikeDetected();
-                        _bluetoothProvider.startScanTimer?.cancel();
+                        await bluetoothProvider.stopScan();
+                        await bluetoothProvider.connectSubscription?.cancel();
+                        await bluetoothProvider.disconnectDevice();
+                        bluetoothProvider.switchBikeDetected();
+                        bluetoothProvider.startScanTimer?.cancel();
                       }
                       Future.delayed(Duration.zero).then((value) {
-                        _bikeProvider.blockConnectingToast(false);
+                        bikeProvider.blockConnectingToast(false);
                       });
                       SmartDialog.dismiss();
                     });
@@ -1650,12 +1634,11 @@ showConnectBluetoothDialog (BuildContext context, BluetoothProvider _bluetoothPr
   );
 }
 
-showResetPasswordDialog(BuildContext context, AuthProvider _authProvider){
+showResetPasswordDialog(BuildContext context, AuthProvider authProvider){
   SmartDialog.show(
     keepSingle: true,
     backDismiss: false,
-    clickBgDismissTemp: false,
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Lost Your Password?",
           style: EvieTextStyles.h2,
           textAlign: TextAlign.center,
@@ -1678,7 +1661,7 @@ showResetPasswordDialog(BuildContext context, AuthProvider _authProvider){
             onPressed: () async {
               SmartDialog.dismiss();
               showCustomLightLoading();
-              await _authProvider.resetPassword(_authProvider.getEmail);
+              await authProvider.resetPassword(authProvider.getEmail);
               SmartDialog.dismiss(status: SmartStatus.loading);
               changeToCheckYourEmail(context);
             }
@@ -1690,12 +1673,11 @@ showResetPasswordDialog(BuildContext context, AuthProvider _authProvider){
   );
 }
 
-showLogoutDialog(BuildContext context, AuthProvider _authProvider){
+showLogoutDialog(BuildContext context, AuthProvider authProvider){
   SmartDialog.show(
     keepSingle: true,
     backDismiss: false,
-    clickBgDismissTemp: false,
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Log Out",
           style: EvieTextStyles.h2,
           textAlign: TextAlign.center,
@@ -1719,7 +1701,7 @@ showLogoutDialog(BuildContext context, AuthProvider _authProvider){
               SmartDialog.dismiss();
               showCustomLightLoading();
               try {
-                await _authProvider.signOut(context).then((result) async {
+                await authProvider.signOut(context).then((result) async {
                   if (result == true) {
                     SmartDialog.dismiss();
                     changeToWelcomeScreen(context);
@@ -1742,12 +1724,11 @@ showLogoutDialog(BuildContext context, AuthProvider _authProvider){
   );
 }
 
-showRevokeAccountDialog(BuildContext context, AuthProvider _authProvider){
+showRevokeAccountDialog(BuildContext context, AuthProvider authProvider){
   SmartDialog.show(
     keepSingle: true,
     backDismiss: false,
-    clickBgDismissTemp: false,
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Revoke Account",
           style: EvieTextStyles.h2,
           textAlign: TextAlign.center,
@@ -1789,16 +1770,15 @@ showRevokeAccountDialog(BuildContext context, AuthProvider _authProvider){
 showThreatDialog(BuildContext context) {
   SmartDialog.show(
     //keepSingle: true,
-    clickBgDismissTemp: false,
     backDismiss: false,
-    widget: ThreatDialog(contextS: context,),
+    builder: (context) => ThreatDialog(contextS: context,),
     tag: 'threat'
   );
 }
 
-showDontConnectBike (BuildContext context ,BikeProvider _bikeProvider,  BluetoothProvider _bluetoothProvider){
+showDontConnectBike (BuildContext context ,BikeProvider bikeProvider,  BluetoothProvider bluetoothProvider){
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Don't Connect Bike?",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
@@ -1832,18 +1812,18 @@ showDontConnectBike (BuildContext context ,BikeProvider _bikeProvider,  Bluetoot
             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
           ),
           onPressed: () async {
-            await _bluetoothProvider.stopScan();
-            await _bluetoothProvider.disconnectDevice();
-            _bluetoothProvider.bleScanSub?.cancel();
-            _bluetoothProvider.startScanTimer?.cancel();
-            _bluetoothProvider.scanResultStream.add(BLEScanResult.unknown);
-            _bluetoothProvider.scanResult = BLEScanResult.unknown;
+            await bluetoothProvider.stopScan();
+            await bluetoothProvider.disconnectDevice();
+            bluetoothProvider.bleScanSub?.cancel();
+            bluetoothProvider.startScanTimer?.cancel();
+            bluetoothProvider.scanResultStream.add(BLEScanResult.unknown);
+            bluetoothProvider.scanResult = BLEScanResult.unknown;
 
-            _bluetoothProvider.stopScanTimer();
+            bluetoothProvider.stopScanTimer();
 
-            _bluetoothProvider.bleStatusSubscription?.cancel();
-            _bluetoothProvider.bleScanSub?.cancel();
-            _bluetoothProvider.deviceRssi = 0;
+            bluetoothProvider.bleStatusSubscription?.cancel();
+            bluetoothProvider.bleScanSub?.cancel();
+            bluetoothProvider.deviceRssi = 0;
             SmartDialog.dismiss();
             SmartDialog.dismiss();
           },
@@ -1853,9 +1833,9 @@ showDontConnectBike (BuildContext context ,BikeProvider _bikeProvider,  Bluetoot
 }
 
 
-showNoLockExit (BuildContext context ,BikeProvider _bikeProvider,  BluetoothProvider _bluetoothProvider){
+showNoLockExit (BuildContext context ,BikeProvider bikeProvider,  BluetoothProvider bluetoothProvider){
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Exit Bike Unlock?",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
@@ -1890,27 +1870,27 @@ showNoLockExit (BuildContext context ,BikeProvider _bikeProvider,  BluetoothProv
                 style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
               ),
               onPressed: () async {
-                await _bluetoothProvider.stopScan();
-                await _bluetoothProvider.disconnectDevice();
-                _bluetoothProvider.bleScanSub?.cancel();
-                _bluetoothProvider.startScanTimer?.cancel();
-                _bluetoothProvider.scanResultStream.add(BLEScanResult.unknown);
-                _bluetoothProvider.scanResult = BLEScanResult.unknown;
+                await bluetoothProvider.stopScan();
+                await bluetoothProvider.disconnectDevice();
+                bluetoothProvider.bleScanSub?.cancel();
+                bluetoothProvider.startScanTimer?.cancel();
+                bluetoothProvider.scanResultStream.add(BLEScanResult.unknown);
+                bluetoothProvider.scanResult = BLEScanResult.unknown;
 
-                _bluetoothProvider.stopScanTimer();
+                bluetoothProvider.stopScanTimer();
 
-                _bluetoothProvider.bleStatusSubscription?.cancel();
-                _bluetoothProvider.bleScanSub?.cancel();
-                _bluetoothProvider.deviceRssi = 0;
+                bluetoothProvider.bleStatusSubscription?.cancel();
+                bluetoothProvider.bleScanSub?.cancel();
+                bluetoothProvider.deviceRssi = 0;
                 SmartDialog.dismiss(status: SmartStatus.allDialog);
               }),
         ),
   ));
 }
 
-showClearFeed(NotificationProvider _notificationProvider){
+showClearFeed(NotificationProvider notificationProvider){
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Clear all Feeds?",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
@@ -1938,7 +1918,7 @@ showClearFeed(NotificationProvider _notificationProvider){
           //     showDeleteNotificationFailed();
           //   }
           // }
-          await _notificationProvider.deleteAllNotification();
+          await notificationProvider.deleteAllNotification();
           SmartDialog.dismiss(status: SmartStatus.loading);
           // Dismiss the SmartDialog after the loop finishes
 
@@ -1949,7 +1929,7 @@ showClearFeed(NotificationProvider _notificationProvider){
 showCustomLightLoading([String? msg, bool? backDismiss]) {
   SmartDialog.showLoading(
       backDismiss: backDismiss ?? true,
-      widget: Center(
+      builder: (context) => Center(
         child: Container(
           //width: 120,
           height: 120,
@@ -1961,7 +1941,7 @@ showCustomLightLoading([String? msg, bool? backDismiss]) {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
+              SizedBox(
                 width: 80,
                 height: 80,
                 child: Lottie.asset(
@@ -1993,7 +1973,7 @@ showCustomLightLoading([String? msg, bool? backDismiss]) {
 
 showSoftwareUpdate(BuildContext context, FirmwareProvider firmwareProvider, StreamSubscription? stream, BluetoothProvider bluetoothProvider, SettingProvider settingProvider) {
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Better Bike Software Update",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
@@ -2046,7 +2026,7 @@ showSoftwareUpdate(BuildContext context, FirmwareProvider firmwareProvider, Stre
 
 showBetaSoftwareUpdate(BuildContext context, FirmwareProvider firmwareProvider, StreamSubscription? stream, BluetoothProvider bluetoothProvider, SettingProvider settingProvider) {
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Better Bike Software Update",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
@@ -2097,9 +2077,9 @@ showBetaSoftwareUpdate(BuildContext context, FirmwareProvider firmwareProvider, 
   );
 }
 
-showOffMotionSensitivity (BuildContext context, BikeProvider _bikeProvider, value, BluetoothProvider _bluetoothProvider){
+showOffMotionSensitivity (BuildContext context, BikeProvider bikeProvider, value, BluetoothProvider bluetoothProvider){
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
         title: Text("Off Motion Sensitivity?",
           style:EvieTextStyles.h2,
           textAlign: TextAlign.center,
@@ -2114,21 +2094,21 @@ showOffMotionSensitivity (BuildContext context, BikeProvider _bikeProvider, valu
         downContent: "Stay Enabled",
         onPressedUp: () async {
           showCustomLightLoading('Changing...');
-          final uploadResult = await _bikeProvider
+          final uploadResult = await bikeProvider
               .updateMotionSensitivity(value!,
-              _bikeProvider.currentBikeModel?.movementSetting
+              bikeProvider.currentBikeModel?.movementSetting
                   ?.sensitivity.toString() ??
                   MovementSensitivity.medium.toString());
           if (uploadResult == true) {
             StreamSubscription? subscription;
             subscription =
-                _bluetoothProvider.changeMovementSetting(
+                bluetoothProvider.changeMovementSetting(
                     value,
-                    _bikeProvider.currentBikeModel
+                    bikeProvider.currentBikeModel
                         ?.movementSetting?.sensitivity ==
                         "low"
                         ? MovementSensitivity.low
-                        : _bikeProvider.currentBikeModel
+                        : bikeProvider.currentBikeModel
                         ?.movementSetting?.sensitivity ==
                         "medium"
                         ? MovementSensitivity.medium
@@ -2143,7 +2123,7 @@ showOffMotionSensitivity (BuildContext context, BikeProvider _bikeProvider, valu
                     SmartDialog.dismiss();
                     subscription?.cancel();
                     SmartDialog.show(
-                        widget: EvieSingleButtonDialog(
+                        builder: (context) => EvieSingleButtonDialog(
                             title: "Error",
                             content: "Error occurred when changing motion sensitivity level.",
                             rightContent: "Retry",
@@ -2153,7 +2133,7 @@ showOffMotionSensitivity (BuildContext context, BikeProvider _bikeProvider, valu
                   }
                 });
           } else {
-            SmartDialog.show(widget: EvieSingleButtonDialog(
+            SmartDialog.show(builder: (context) => EvieSingleButtonDialog(
                 title: "Error",
                 content: "Error occurred when changing motion sensitivity level.",
                 rightContent: "Ok",
@@ -2171,7 +2151,7 @@ showOffMotionSensitivity (BuildContext context, BikeProvider _bikeProvider, valu
 
 showWhereToFindEVSecureCode(BuildContext context) {
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
       title: Text(
         "Where do I Find My EV-Secure code?",
         style: EvieTextStyles.h2,
@@ -2200,7 +2180,7 @@ showInvalidEVSecureCode() {
   SmartDialog.dismiss();
   SmartDialog.show(
       keepSingle: true,
-      widget: EvieSingleButtonDialog(
+      builder: (context) => EvieSingleButtonDialog(
           title: "Oops! Invalid EV-Secure Code",
           content: "Uh-oh! We couldn't find your EV-Secure Code. Double-check your digits and give it another shot.",
           rightContent: "Retry",
@@ -2213,7 +2193,7 @@ showInvalidEVSecureCode() {
 
 showCodeRedeemedDialog(BuildContext context) {
   SmartDialog.show(
-    widget: EvieTwoButtonDialog(
+    builder: (context) => EvieTwoButtonDialog(
       title: Text(
         "EV-Secure Code Activated",
         style: EvieTextStyles.h2,
@@ -2239,8 +2219,8 @@ showCodeRedeemedDialog(BuildContext context) {
           width: double.infinity,
           onPressed: (){
             const url = 'https://support.eviebikes.com/en-US';
-            final Uri _url = Uri.parse(url);
-            launch(_url);
+            final Uri url0 = Uri.parse(url);
+            launch(url0);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

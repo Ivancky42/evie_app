@@ -1,5 +1,4 @@
-import 'package:evie_test/api/sizer.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,13 +14,13 @@ class PageAppbarWithBadge extends StatelessWidget implements PreferredSizeWidget
   final VoidCallback? onPressedAction;
 
   const PageAppbarWithBadge({
-    Key? key,
+    super.key,
     this.enable,
     required this.title,
     required this.onPressedLeading,
     this.onPressedAction,
     this.withAction,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +30,10 @@ class PageAppbarWithBadge extends StatelessWidget implements PreferredSizeWidget
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         leading: GestureDetector(
           onTap: onPressedLeading,
-          child: Container(
-            child: SvgPicture.asset("assets/buttons/back_big.svg"),
+          child: SizedBox(
             width: 36.w,
             height: 36.w,
+            child: SvgPicture.asset("assets/buttons/back_big.svg"),
           )
         ),
         centerTitle: true,
@@ -47,12 +46,12 @@ class PageAppbarWithBadge extends StatelessWidget implements PreferredSizeWidget
                   title, style: EvieTextStyles.h2.copyWith(color: EvieColors.mediumBlack),
                 ),
                 SizedBox(width: 4,),
-                Container(
+                SizedBox(
+                  width: 30.w,
+                  height: 30.h,
                   child: SvgPicture.asset(
                     "assets/icons/batch_tick.svg",
                   ),
-                  width: 30.w,
-                  height: 30.h,
                 )
               ],
             ),
@@ -68,7 +67,7 @@ class PageAppbarWithBadge extends StatelessWidget implements PreferredSizeWidget
                   "assets/buttons/more.svg", width: 36.w, height: 36.w,
                 ),
               )
-          ) : Container(width: 36.w, height: 36.w) : Container(width: 36.w, height: 36.w)
+          ) : SizedBox(width: 36.w, height: 36.w) : SizedBox(width: 36.w, height: 36.w)
         ],
       ),
     ) : Container();
@@ -87,13 +86,13 @@ class PageAppbarWithoutBadge extends StatelessWidget implements PreferredSizeWid
   final VoidCallback? onPressedAction;
 
   const PageAppbarWithoutBadge({
-    Key? key,
+    super.key,
     this.enable,
     required this.title,
     required this.onPressedLeading,
     this.onPressedAction,
     this.withAction,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -103,10 +102,10 @@ class PageAppbarWithoutBadge extends StatelessWidget implements PreferredSizeWid
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         leading: GestureDetector(
             onTap: onPressedLeading,
-            child: Container(
-              child: SvgPicture.asset("assets/buttons/back_big.svg"),
+            child: SizedBox(
               width: 36.w,
               height: 36.w,
+              child: SvgPicture.asset("assets/buttons/back_big.svg"),
             )
         ),
         centerTitle: true,
@@ -132,7 +131,7 @@ class PageAppbarWithoutBadge extends StatelessWidget implements PreferredSizeWid
                   "assets/buttons/more.svg", width: 36.w, height: 36.w,
                 ),
               )
-          ) : Container(width: 36.w, height: 36.w) : Container(width: 36.w, height: 36.w)
+          ) : SizedBox(width: 36.w, height: 36.w) : SizedBox(width: 36.w, height: 36.w)
         ],
       ),
     ) : Container();

@@ -14,7 +14,7 @@ class EvieNotificationDialog extends StatelessWidget{
   final VoidCallback? onPressedRight;
 
   const EvieNotificationDialog({
-    Key? key,
+    super.key,
     //required this.buttonNumber,
     required this.title,
     required this.content,
@@ -23,13 +23,13 @@ class EvieNotificationDialog extends StatelessWidget{
     required this.rightContent,
     this.onPressedLeft,
     this.onPressedRight
-  }) : super(key: key);
+  });
 
 
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (BuildContext context, Orientation orientation, DeviceType deviceType) {
+    return Sizer(builder: (context, orientation, deviceType) {
       return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -37,6 +37,13 @@ class EvieNotificationDialog extends StatelessWidget{
           elevation: 0.0,
           //backgroundColor: EvieColors.transparent,
           child: Container(
+            padding: const EdgeInsets.only(
+              left: 20,
+              top: 20,
+              right: 20,
+              bottom: 20,
+            ),
+            margin: const EdgeInsets.only(top: 45),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -122,13 +129,6 @@ class EvieNotificationDialog extends StatelessWidget{
                 ),
               ],
             ),
-            padding: const EdgeInsets.only(
-              left: 20,
-              top: 20,
-              right: 20,
-              bottom: 20,
-            ),
-            margin: const EdgeInsets.only(top: 45),
             //  decoration: BoxDecoration(
             //    boxShadow: const [
             //      BoxShadow(

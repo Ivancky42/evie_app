@@ -1,6 +1,6 @@
 import 'dart:collection';
 import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:flutter/material.dart';
@@ -12,15 +12,13 @@ import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
 import '../../../api/model/bike_user_model.dart';
-import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/setting_provider.dart';
-import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 
 
 class PedalPals extends StatefulWidget{
-  const PedalPals({ Key? key }) : super(key: key);
+  const PedalPals({ super.key });
   @override
   _PedalPalsState createState() => _PedalPalsState();
 }

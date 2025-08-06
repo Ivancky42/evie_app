@@ -1,22 +1,19 @@
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../api/colours.dart';
 import '../../api/fonts.dart';
 import '../../api/function.dart';
-import '../../api/length.dart';
 import '../../api/navigator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../api/provider/auth_provider.dart';
 
 class BeforeYouStart extends StatefulWidget {
-  const BeforeYouStart({Key? key}) : super(key: key);
+  const BeforeYouStart({super.key});
 
   @override
   _BeforeYouStartState createState() => _BeforeYouStartState();
@@ -63,8 +60,8 @@ class _BeforeYouStartState extends State<BeforeYouStart> {
                             GestureDetector(
                               onTap: (){
                                 const url = 'https://support.eviebikes.com/en-US/how-to-assemble-evie-s1-and-t1-174422';
-                                final Uri _url = Uri.parse(url);
-                                launch(_url);
+                                final Uri url0 = Uri.parse(url);
+                                launch(url0);
                               },
                               child: Padding(
                                 padding: EdgeInsets.only(left: 20.w),

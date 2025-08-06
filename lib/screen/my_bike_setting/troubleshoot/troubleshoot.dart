@@ -1,7 +1,7 @@
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -18,7 +18,7 @@ import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_appbar.dart';
 
 class TroubleshootScreen extends StatefulWidget {
-  const TroubleshootScreen({Key? key}) : super(key: key);
+  const TroubleshootScreen({super.key});
 
   @override
   State<TroubleshootScreen> createState() => _TroubleshootScreenState();
@@ -129,8 +129,8 @@ class _TroubleshootScreenState extends State<TroubleshootScreen> {
                   GestureDetector(
                     onTap: () {
                       const url = 'https://support.eviebikes.com/en-US';
-                      final Uri _url = Uri.parse(url);
-                      launch(_url);
+                      final Uri url0 = Uri.parse(url);
+                      launch(url0);
                     },
                     child: Container(
                       color: Colors.transparent,
@@ -150,7 +150,7 @@ class _TroubleshootScreenState extends State<TroubleshootScreen> {
                                       style: EvieTextStyles.body18,
                                     ),
                                     SizedBox(height: 4.h,),
-                                    Container(
+                                    SizedBox(
                                       width: 300.w,
                                       child: Text(
                                         "Need more information? Explore our FAQ pages and self-help articles.",

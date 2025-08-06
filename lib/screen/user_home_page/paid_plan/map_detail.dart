@@ -9,7 +9,7 @@ import 'package:image/image.dart' as IMG;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -44,7 +44,7 @@ class MyPointAnnotationClickListener extends OnPointAnnotationClickListener {
 }
 
 class MapDetails extends StatefulWidget {
-  MapDetails({Key? key}) : super(key: key);
+  const MapDetails({super.key});
 
   @override
   State<MapDetails> createState() => _MapDetailsState();
@@ -183,6 +183,7 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(16), topRight: Radius.circular(16)),
       ),
+      height: 750.h,
       child: Stack(
         children: [
           Column(
@@ -243,10 +244,10 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
                             .toJson(),
                         zoom: 16,
                       ),
-                      gestureRecognizers: [
+                      gestureRecognizers: {
                         Factory<OneSequenceGestureRecognizer>(
                                 () => EagerGestureRecognizer())
-                      ].toSet(),
+                      },
                     ),
 
                     _locationProvider.hasLocationPermission == true ?
@@ -263,7 +264,7 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
                                 alignment: Alignment.bottomRight,
                                 child: Padding(
                                     padding: EdgeInsets.only(right: 8.h),
-                                    child: Container(
+                                    child: SizedBox(
                                       //color: Colors.red,
                                       width: 64.w,
                                       height: 64.w,
@@ -381,7 +382,6 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
 
         ],
       ),
-      height: 750.h,
     );
   }
 
@@ -435,7 +435,7 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
                   _locationProvider.locationModel?.geopoint!.latitude ?? 0))
               .toJson(),
           image: list,
-          iconSize: Platform.isAndroid ? 38.mp : 16.mp,
+          iconSize: Platform.isAndroid ? 38.0 : 16.0,
         ));
 
         ///Add danger threat
@@ -468,7 +468,7 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
               .toJson(),
           image: list,
           //iconImage: "assets/icons/security/safe_lock_3x.png",
-          iconSize: Platform.isAndroid ? 38.mp : 16.mp,
+          iconSize: Platform.isAndroid ? 38.0 : 16.0,
         ));
       }
       pointAnnotationManager.setIconAllowOverlap(false);
@@ -488,7 +488,7 @@ class _MapDetailsState extends State<MapDetails> with WidgetsBindingObserver{
           layer = await mapboxMap?.style.getLayer("puck");
         }
 
-        var location = (layer as LocationIndicatorLayer)?.location;
+        var location = (layer as LocationIndicatorLayer).location;
         userPosition = Position(location![1]!, location[0]!);
         num? latitude = userPosition[1];
         num? longitude = userPosition[0];

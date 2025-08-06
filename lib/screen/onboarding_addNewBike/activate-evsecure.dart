@@ -5,7 +5,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/api/provider/auth_provider.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
@@ -26,7 +26,7 @@ import '../../widgets/evie_textform.dart';
 
 class ActivateEVSecureScreen extends StatefulWidget {
   final String bikeName;
-  const ActivateEVSecureScreen({Key? key, required this.bikeName}) : super(key: key);
+  const ActivateEVSecureScreen({super.key, required this.bikeName});
 
   @override
   _ActivateEVSecureScreenState createState() => _ActivateEVSecureScreenState();
@@ -66,7 +66,7 @@ class _ActivateEVSecureScreenState extends State<ActivateEVSecureScreen> {
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
     _bikeProvider = Provider.of<BikeProvider>(context);
 
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     return WillPopScope(
       onWillPop: () async {
@@ -77,7 +77,7 @@ class _ActivateEVSecureScreenState extends State<ActivateEVSecureScreen> {
         body: Stack(
           children: [
             Form(
-              key: _formKey,
+              key: formKey,
               child:Padding(
                 padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                 child: Column(
@@ -96,7 +96,7 @@ class _ActivateEVSecureScreenState extends State<ActivateEVSecureScreen> {
                     SizedBox(
                       height: 1.h,
                     ),
-                    Text("Did you purchase EV-Secure together with " + widget.bikeName + "? Enter your EV-Secure code to activate.",
+                    Text("Did you purchase EV-Secure together with ${widget.bikeName}? Enter your EV-Secure code to activate.",
                       style: EvieTextStyles.body18,),
 
                     SizedBox(
@@ -149,12 +149,8 @@ class _ActivateEVSecureScreenState extends State<ActivateEVSecureScreen> {
                 EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.buttonWord_ButtonBottom),
                 child: EvieButton(
                     width: double.infinity,
-                    child: Text(
-                      "Activate EV-Secure",
-                      style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                    ),
                     onPressed: enabled ? () async {
-                      if (_formKey.currentState!.validate()) {
+                      if (formKey.currentState!.validate()) {
                         bool isConnected = false;
                         var connectivityResult = await (Connectivity()
                             .checkConnectivity());
@@ -218,9 +214,9 @@ class _ActivateEVSecureScreenState extends State<ActivateEVSecureScreen> {
                                   "orderId": orderId.toString(),
                                 };
 
-                                String base_url = 'https://us-central1-evie-126a6.cloudfunctions.net/shopify_evsecure/activateEVSecure';
+                                String baseUrl = 'https://us-central1-evie-126a6.cloudfunctions.net/shopify_evsecure/activateEVSecure';
                                 ServerApiBase.postRequest(
-                                    auth, base_url, body, header).then((value) {
+                                    auth, baseUrl, body, header).then((value) {
                                   SmartDialog.dismiss(
                                       status: SmartStatus.loading);
                                   FirebaseFirestore.instance.collection("codes")
@@ -245,7 +241,11 @@ class _ActivateEVSecureScreenState extends State<ActivateEVSecureScreen> {
                           }
                         }
                       }
-                    } : null
+                    } : null,
+                    child: Text(
+                      "Activate EV-Secure",
+                      style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                    )
                 ),
               ),
             ),
@@ -266,10 +266,10 @@ class _ActivateEVSecureScreenState extends State<ActivateEVSecureScreen> {
                       if(_bikeProvider.isAddBike == true){
                         _bikeProvider.setIsAddBike(false);
                         ///TODO : change to activate EV-Secure Screen.
-                        changeToCongratsBikeAdded(context, "EVIE " + _bikeProvider.currentBikeModel!.model!);
+                        changeToCongratsBikeAdded(context, "EVIE ${_bikeProvider.currentBikeModel!.model!}");
                       }else{
                         // changeToTurnOnNotificationsScreen(context);
-                        changeToCongratsBikeAdded(context, "EVIE " + _bikeProvider.currentBikeModel!.model!);
+                        changeToCongratsBikeAdded(context, "EVIE ${_bikeProvider.currentBikeModel!.model!}");
                       }
                     },
                   ),

@@ -1,13 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_button.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
@@ -21,13 +15,11 @@ import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/provider/bluetooth_provider.dart';
 import '../../../../api/provider/location_provider.dart';
 import '../../../../api/provider/setting_provider.dart';
-import '../../../../widgets/evie_radio_button.dart';
-import '../../../../widgets/evie_switch.dart';
 
 class ThreatHistory extends StatefulWidget {
 
 
-  ThreatHistory({Key? key}) : super(key: key);
+  const ThreatHistory({super.key});
 
   @override
   State<ThreatHistory> createState() => _ThreatHistoryState();
@@ -59,6 +51,7 @@ class _ThreatHistoryState extends State<ThreatHistory> {
         color: EvieColors.grayishWhite,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
       ),
+      height: 750.h,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -108,15 +101,6 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                       width: 46.w,
                       padding: EdgeInsets.zero,
                       child: ElevatedButton(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "x",
-                              style: EvieTextStyles.ctaSmall.copyWith(color: EvieColors.darkGrayish),
-                            ),
-                          ],
-                        ),
                         onPressed: () async {
                           _bikeProvider.applyThreatFilterDate(ThreatFilterDate.all, DateTime.now(), DateTime.now());
 
@@ -132,6 +116,15 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                           backgroundColor: EvieColors.transparent,
 
                         ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "x",
+                              style: EvieTextStyles.ctaSmall.copyWith(color: EvieColors.darkGrayish),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -143,6 +136,20 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                     width: 110.w,
                     padding: EdgeInsets.zero,
                     child: ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          isPickedStatusExpand = true;
+                        });
+                      showFilterTreatStatus(context, _bikeProvider, isPickedStatusExpand ,setState);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            side:  _bikeProvider.threatFilterArray.length == 4 ? BorderSide(color: EvieColors.darkGray, width: 1.0.w) : BorderSide(color: EvieColors.transparent,width: 0)),
+                        elevation: 0.0,
+                        backgroundColor: _bikeProvider.threatFilterArray.length == 4 ? EvieColors.transparent : EvieColors.lightGrayish,
+
+                      ),
                       child: _bikeProvider.threatFilterArray.length == 4 ?
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -169,20 +176,6 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                           ),
                         ],
                       ),
-                      onPressed: () async {
-                        setState(() {
-                          isPickedStatusExpand = true;
-                        });
-                      showFilterTreatStatus(context, _bikeProvider, isPickedStatusExpand ,setState);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            side:  _bikeProvider.threatFilterArray.length == 4 ? BorderSide(color: EvieColors.darkGray, width: 1.0.w) : BorderSide(color: EvieColors.transparent,width: 0)),
-                        elevation: 0.0,
-                        backgroundColor: _bikeProvider.threatFilterArray.length == 4 ? EvieColors.transparent : EvieColors.lightGrayish,
-
-                      ),
                     ),
                   ),
                 ),
@@ -193,18 +186,6 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                     width: 90.w,
                     padding: EdgeInsets.zero,
                     child: ElevatedButton(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Date",
-                            style: EvieTextStyles.ctaSmall.copyWith(color: _bikeProvider.threatFilterDate == ThreatFilterDate.all ? EvieColors.darkGray : EvieColors.dividerWhite),
-                          ),
-                          SvgPicture.asset(
-                            _bikeProvider.threatFilterDate == ThreatFilterDate.all ? "assets/buttons/down_mini_bold.svg" : "assets/buttons/down_mini_bold_white.svg",
-                          ),
-                        ],
-                      ),
                       onPressed: () async {
                         setState(() {
                           isPickedDateExpand = true;
@@ -219,6 +200,18 @@ class _ThreatHistoryState extends State<ThreatHistory> {
                         backgroundColor: _bikeProvider.threatFilterDate == ThreatFilterDate.all ? EvieColors.transparent : EvieColors.lightGrayish,
 
                       ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Date",
+                            style: EvieTextStyles.ctaSmall.copyWith(color: _bikeProvider.threatFilterDate == ThreatFilterDate.all ? EvieColors.darkGray : EvieColors.dividerWhite),
+                          ),
+                          SvgPicture.asset(
+                            _bikeProvider.threatFilterDate == ThreatFilterDate.all ? "assets/buttons/down_mini_bold.svg" : "assets/buttons/down_mini_bold_white.svg",
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -231,7 +224,7 @@ class _ThreatHistoryState extends State<ThreatHistory> {
             alignment: Alignment.bottomCenter,
             child: Wrap(
               children: [
-                Container(
+                SizedBox(
                   height:576.h,
                   child: Scrollbar(
                     thumbVisibility: true,
@@ -560,7 +553,6 @@ class _ThreatHistoryState extends State<ThreatHistory> {
           ),
         ],
       ),
-      height: 750.h,
     );
   }
 

@@ -10,7 +10,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../dialog.dart';
 import '../model/location_model.dart';
 import '../model/threat_routes_model.dart';
 
@@ -156,10 +155,10 @@ class LocationProvider extends ChangeNotifier {
 
           holder = placeMarks[0];
           currentPlaceMark = Placemark(
-            name : holder?.name?.replaceAll("NO HOUSE NUMBER, ", ""),
+            name : holder.name?.replaceAll("NO HOUSE NUMBER, ", ""),
           );
 
-          currentPlaceMarkString = (holder.name!.replaceAll("NO HOUSE NUMBER, ", "").toString() == "" ? holder.name.toString() : holder.name.toString() + ', ') + holder.thoroughfare.toString();
+          currentPlaceMarkString = (holder.name!.replaceAll("NO HOUSE NUMBER, ", "").toString() == "" ? holder.name.toString() : '${holder.name}, ') + holder.thoroughfare.toString();
         }
         else {
           for (var element in placeMarks) {
@@ -199,8 +198,8 @@ class LocationProvider extends ChangeNotifier {
           placeMark = placeMarks[0];
 
           placeMarkRenamed = Placemark(
-            name : placeMark?.name?.replaceAll("NO HOUSE NUMBER, ", ""),
-            thoroughfare: placeMark?.thoroughfare,
+            name : placeMark.name?.replaceAll("NO HOUSE NUMBER, ", ""),
+            thoroughfare: placeMark.thoroughfare,
           );
         }
         else {
@@ -241,7 +240,7 @@ class LocationProvider extends ChangeNotifier {
             placeMarkRenamed = (placeMark.name!
                 .replaceAll("NO HOUSE NUMBER, ", "").toString() == ""
                 ? placeMark.name.toString()
-                : placeMark.name.toString() + ', ') +
+                : '${placeMark.name}, ') +
                 placeMark.thoroughfare.toString();
           }
           else {
@@ -284,7 +283,7 @@ class LocationProvider extends ChangeNotifier {
             placeMarkRenamed = (placeMark.name!
                 .replaceAll("NO HOUSE NUMBER, ", "").toString() == ""
                 ? placeMark.name.toString()
-                : placeMark.name.toString() + ', ') +
+                : '${placeMark.name}, ') +
                 placeMark.thoroughfare.toString();
             checkPlaceMarkRenamed = placeMarkRenamed;
           }
@@ -349,13 +348,13 @@ class LocationProvider extends ChangeNotifier {
     selectedPointAnnotation = pointAnnotation;
     //print(pointAnnotation.geometry!['coordinates'].toString());
 
-    Object? coordinatesList = pointAnnotation.geometry!['coordinates'];
-
-    List<double> doublesList = (coordinatesList as List).map((coord) => coord as double).toList();
-    double longitude = doublesList[0];
-    double latitude = doublesList[1];
-    selectedAnnotationGeopoint = GeoPoint(latitude, longitude);
-    getPlaceMarks(latitude, longitude);
+    if (pointAnnotation.geometry != null) {
+      var coordinates = pointAnnotation.geometry!['coordinates'] as List;
+      double longitude = coordinates[0].toDouble();
+      double latitude = coordinates[1].toDouble();
+      selectedAnnotationGeopoint = GeoPoint(latitude, longitude);
+      getPlaceMarks(latitude, longitude);
+    }
     notifyListeners();
   }
 

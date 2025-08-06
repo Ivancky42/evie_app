@@ -1,4 +1,4 @@
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -11,12 +11,12 @@ class EvieProgressIndicator extends StatelessWidget {
   final EdgeInsetsGeometry;
 
   const EvieProgressIndicator({
-    Key? key,
+    super.key,
     required this.currentPageNumber,
     required this.totalSteps,
     this.EdgeInsetsGeometry,
 
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

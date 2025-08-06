@@ -1,7 +1,6 @@
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter/material.dart';
@@ -12,15 +11,13 @@ import 'package:evie_test/widgets/evie_button.dart';
 import '../../../api/colours.dart';
 import '../../../api/enumerate.dart';
 import '../../../api/length.dart';
-import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../widgets/evie_progress_indicator.dart';
 import '../../../widgets/evie_textform.dart';
-import '../../my_account/my_account_widget.dart';
 
 
 class CreateTeam extends StatefulWidget{
-  const CreateTeam({ Key? key }) : super(key: key);
+  const CreateTeam({ super.key });
   @override
   _CreateTeamState createState() => _CreateTeamState();
 }
@@ -119,7 +116,7 @@ class _CreateTeamState extends State<CreateTeam> {
                             }else{
                               SmartDialog.show(
                                   backDismiss: false,
-                                  widget: EvieSingleButtonDialog(
+                                  builder: (_) => EvieSingleButtonDialog(
                                       title: "Failed to create team",
                                       content: "Please try again.",
                                       rightContent: "Retry",
@@ -151,7 +148,7 @@ class _CreateTeamState extends State<CreateTeam> {
                         }else{
                           SmartDialog.show(
                               backDismiss: false,
-                              widget: EvieSingleButtonDialog(
+                              builder: (_) => EvieSingleButtonDialog(
                                   title: "Failed to create team",
                                   content: "Please try again.",
                                   rightContent: "Retry",

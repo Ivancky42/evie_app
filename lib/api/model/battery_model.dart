@@ -16,8 +16,8 @@ class BatteryModel {
 
   factory BatteryModel.fromJson(Map json) {
     return BatteryModel(
-      percentage: json['percentage'] ?? null,
-      model: json['model'] ?? null,
+      percentage: json['percentage'],
+      model: json['model'],
       lastUpdated: timestampFromJson(json['lastUpdated']),
     );
   }

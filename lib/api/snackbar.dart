@@ -2,65 +2,62 @@ import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/sheet.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../bluetooth/modelResult.dart';
 import 'colours.dart';
 import 'enumerate.dart';
-import 'model/bike_model.dart';
 
 showConnectionStatusToast(
-    BluetoothProvider _bluetoothProvider,
+    BluetoothProvider bluetoothProvider,
     bool isFirstTimeConnected,
     context,
-    ScaffoldMessengerState _navigator
+    ScaffoldMessengerState navigator
     ) {
-    DeviceConnectResult? deviceConnectResult = _bluetoothProvider.deviceConnectResult;
+    DeviceConnectResult? deviceConnectResult = bluetoothProvider.deviceConnectResult;
     switch(deviceConnectResult) {
       case DeviceConnectResult.scanning:
         Future.delayed(Duration.zero).then((value) {
-          _navigator.removeCurrentSnackBar();
+          navigator.removeCurrentSnackBar();
           return showConnectingToast(context);
         });
         break;
       case DeviceConnectResult.scanTimeout:
         Future.delayed(Duration.zero).then((value) {
-          _navigator.removeCurrentSnackBar();
-          _bluetoothProvider.clearDeviceConnectStatus();
+          navigator.removeCurrentSnackBar();
+          bluetoothProvider.clearDeviceConnectStatus();
           return showScanTimeoutToast(context);
         });
         break;
       case DeviceConnectResult.scanError:
         Future.delayed(Duration.zero).then((value) {
-          _navigator.removeCurrentSnackBar();
-          _bluetoothProvider.clearDeviceConnectStatus();
+          navigator.removeCurrentSnackBar();
+          bluetoothProvider.clearDeviceConnectStatus();
           return showScanErrorToast(context);
         });
         break;
       case DeviceConnectResult.connected:
         if (!isFirstTimeConnected) {
           Future.delayed(Duration.zero).then((value) {
-            _navigator.removeCurrentSnackBar();
+            navigator.removeCurrentSnackBar();
             return showConnectedToast(context);
           });
         }
         break;
       case DeviceConnectResult.disconnected:
         Future.delayed(Duration.zero).then((value) {
-          _navigator.removeCurrentSnackBar();
-          _bluetoothProvider.clearDeviceConnectStatus();
+          navigator.removeCurrentSnackBar();
+          bluetoothProvider.clearDeviceConnectStatus();
           return showDisconnectedToast(context);
         });
         break;
       case DeviceConnectResult.connectError:
         Future.delayed(Duration.zero).then((value) {
-          _navigator.removeCurrentSnackBar();
-          _bluetoothProvider.clearDeviceConnectStatus();
+          navigator.removeCurrentSnackBar();
+          bluetoothProvider.clearDeviceConnectStatus();
           return showConnectErrorToast(context);
         });
         break;
@@ -75,7 +72,7 @@ showConnectionStatusToast(
         break;
       case DeviceConnectResult.switchBike:
         Future.delayed(Duration.zero).then((value) {
-          _navigator.removeCurrentSnackBar();
+          navigator.removeCurrentSnackBar();
         });
         break;
       case null:
@@ -390,7 +387,7 @@ showUpgradePlanToast(context, SettingProvider settingProvider,[bool? isPop]){
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Container(
+              SizedBox(
                 width: double.infinity,
                 child: Text(
                   "Limited access. Upgrade your plan to access this feature.",
@@ -448,7 +445,7 @@ showControlAdmissionToast(context) {
           scrollDirection: Axis.horizontal,
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 width: 300.w,
                 child: Text(
                   "Limited access. Upgrade your plan to access this feature.",
@@ -485,7 +482,7 @@ showOnlyForProToast(context) {
             children: [
               Image.asset("assets/icons/connect_failed.png", width: 16.w, height: 16.h,),
               SizedBox(width: 4.w,),
-              Container(
+              SizedBox(
                 width: 300.w,
                 child: Text(
                   "This feature only available for pro plan user. You can upgrade your plan in setting page.",
@@ -520,7 +517,7 @@ showAccNoPermissionToast(context) {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: 315.w,
                 child: Text(
                   "Sorry pal, you don't have permission to manage this setting.",
@@ -555,7 +552,7 @@ showNoPermissionForEVSecureToast(context) {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: 315.w,
                 child: Text(
                   "Sorry pal, you don't have permission to perform the upgrade.",
@@ -588,7 +585,7 @@ showResentEmailFailedToast(context) {
         },
         child: Row(
           children: [
-            Container(
+            SizedBox(
               width: 300.w,
               child: Text(
                 "You may request to resend email in another 30 seconds.",
@@ -724,10 +721,10 @@ showEVRemovedToast(context, String keyName) {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: 300.w,
                 child: Text(
-                  "${keyName} have been removed from your EV-Key list.",
+                  "$keyName have been removed from your EV-Key list.",
                   style: EvieTextStyles.toast,
                 ),
               )
@@ -960,7 +957,7 @@ showPermissionNeededForEVSecure(context) {
   );
 }
 
-showTroubleshootLock(context, SettingProvider _settingProvider) {
+showTroubleshootLock(context, SettingProvider settingProvider) {
   ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
@@ -974,7 +971,7 @@ showTroubleshootLock(context, SettingProvider _settingProvider) {
       content: GestureDetector(
           onTap: () {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            _settingProvider.changeSheetElement(SheetList.troubleshoot);
+            settingProvider.changeSheetElement(SheetList.troubleshoot);
             showSheetNavigate(context);
           },
           child: Column(
@@ -1609,9 +1606,9 @@ showEVSecureActivated(context) {
   );
 }
 
-hideCurrentSnackBar(ScaffoldMessengerState _navigator) {
+hideCurrentSnackBar(ScaffoldMessengerState navigator) {
   Future.delayed(Duration.zero).then((value) {
-    _navigator.removeCurrentSnackBar();
+    navigator.removeCurrentSnackBar();
   });
 }
 

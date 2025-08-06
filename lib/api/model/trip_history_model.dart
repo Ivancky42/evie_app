@@ -46,7 +46,7 @@ class TripHistoryModel {
       endBattery: json['endBattery'] ?? 0,
 
       startTrip: fromJsonGeoPoint(json['startTrip'] as GeoPoint) ?? const GeoPoint(0, 0),
-      endTrip: fromJsonGeoPoint(json['endTrip'] ?? const GeoPoint(0, 0) as GeoPoint) ?? const GeoPoint(0, 0),
+      endTrip: fromJsonGeoPoint(json['endTrip'] ?? const GeoPoint(0, 0)) ?? const GeoPoint(0, 0),
 
       startTime: timestampFromJson(json['startTime']),
       endTime: timestampFromJson(json['endTime']),

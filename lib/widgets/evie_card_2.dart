@@ -1,7 +1,6 @@
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../api/colours.dart';
 
@@ -12,20 +11,20 @@ class EvieCard2 extends StatelessWidget {
   final Decoration? decoration;
 
   const EvieCard2({
-    Key? key,
+    super.key,
     this.child,
     this.onPress,
     this.color,
     this.decoration,
 
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       //behavior: HitTestBehavior.opaque,
       onTap: onPress,
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         height: double.infinity,
         child: Column(

@@ -2,18 +2,14 @@ import 'dart:async';
 
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 
-import 'package:evie_test/widgets/evie_appbar.dart';
-import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../api/colours.dart';
@@ -22,11 +18,10 @@ import '../../api/fonts.dart';
 import '../../api/length.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../widgets/evie_button.dart';
-import '../../widgets/evie_double_button_dialog.dart';
 import '../../widgets/page_widget/qr_scanner_overlay.dart';
 
 class QRScanning extends StatefulWidget {
-  const QRScanning({Key? key}) : super(key: key);
+  const QRScanning({super.key});
 
   @override
   _QRScanningState createState() => _QRScanningState();

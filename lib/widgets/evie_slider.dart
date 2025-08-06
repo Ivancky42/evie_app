@@ -14,7 +14,7 @@ class EvieSlider extends StatelessWidget {
 
 
   const EvieSlider({
-    Key? key,
+    super.key,
     required this.onChanged,
     this.onChangedEnd,
     required this.value,
@@ -22,7 +22,7 @@ class EvieSlider extends StatelessWidget {
     required this.label,
     required this.min,
 
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

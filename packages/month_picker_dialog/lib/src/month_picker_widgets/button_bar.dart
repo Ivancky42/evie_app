@@ -12,7 +12,7 @@ class PickerButtonBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final MaterialLocalizations localizations =
         MaterialLocalizations.of(context);
-    return ButtonBar(
+    return OverflowBar(
       children: <Widget>[
         TextButton(
           onPressed: () => controller.cancelFunction(context),

@@ -11,9 +11,9 @@ class AppTheme{
     fontFamily: 'Avenir',
     textTheme: const TextTheme(
       //This is for text field user input setting
-      subtitle1: TextStyle(color: Colors.black),
-      bodyText1: TextStyle(),
-      bodyText2: TextStyle(),
+      titleMedium: TextStyle(color: Colors.black),
+      bodyLarge: TextStyle(),
+      bodyMedium: TextStyle(),
     ).apply(
       bodyColor: Colors.black,
       displayColor: Colors.black,
@@ -50,7 +50,7 @@ class AppTheme{
       backgroundColor: EvieColors.transparent,
     ),
 
-    dialogTheme: DialogTheme(
+    dialogTheme: DialogThemeData(
       backgroundColor: const Color(0xffF2F2F2).withOpacity(0.9),
     ),
   //  brightness: Brightness.dark,
@@ -69,9 +69,9 @@ class AppTheme{
     //Default font colour
     textTheme: const TextTheme(
       //This is for text field user input setting
-      subtitle1: TextStyle(color: Colors.white),
-      bodyText1: TextStyle(),
-      bodyText2: TextStyle(),
+      titleMedium: TextStyle(color: Colors.white),
+      bodyLarge: TextStyle(),
+      bodyMedium: TextStyle(),
     ).apply(
       bodyColor: Colors.white,
       displayColor: Colors.white,
@@ -110,7 +110,7 @@ class AppTheme{
       backgroundColor: Color(0xff0F191D),
     ),
 
-    dialogTheme: DialogTheme(
+    dialogTheme: DialogThemeData(
       backgroundColor: const Color(0xff1E1E1E).withOpacity(0.85),
     ),
 

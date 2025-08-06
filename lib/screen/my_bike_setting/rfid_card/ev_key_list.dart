@@ -4,8 +4,7 @@ import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/model/rfid_model.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/my_account/my_account_widget.dart';
+import 'package:sizer/sizer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -19,18 +18,15 @@ import '../../../api/colours.dart';
 import '../../../api/dialog.dart';
 import '../../../api/enumerate.dart';
 import '../../../api/length.dart';
-import '../../../api/navigator.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../api/snackbar.dart';
 import '../../../bluetooth/modelResult.dart';
-import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_appbar_badge.dart';
-import '../../../widgets/evie_single_button_dialog.dart';
 import '../../../widgets/evie_textform.dart';
 
 class EVKeyList extends StatefulWidget {
-  const EVKeyList({Key? key}) : super(key: key);
+  const EVKeyList({super.key});
 
   @override
   _EVKeyListState createState() => _EVKeyListState();
@@ -53,8 +49,8 @@ class _EVKeyListState extends State<EVKeyList> {
     _settingProvider = Provider.of<SettingProvider>(context);
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
 
-    final TextEditingController _rfidNameController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
+    final TextEditingController rfidNameController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
 
     if (_bikeProvider.rfidList.isEmpty) {
       Future.delayed(Duration.zero).then((value) {
@@ -121,7 +117,7 @@ class _EVKeyListState extends State<EVKeyList> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       //color: Colors.red,
                                       height: 64.h,
                                       child: Padding(
@@ -148,10 +144,23 @@ class _EVKeyListState extends State<EVKeyList> {
 
                                               ],
                                             ),
-                                            isManageList ? Container(
+                                            isManageList ? SizedBox(
                                               width: 107.w,
                                               height: 43.h,
                                               child: ElevatedButton(
+                                                onPressed: () {
+                                                  ///Remove all rfid key
+                                                  //deleteSingleFRFID(index);
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                      BorderRadius.circular(20.w)),
+                                                  elevation: 0.0,
+                                                  backgroundColor: EvieColors.primaryColor,
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 14.h, vertical: 14.h),
+                                                ),
                                                 child: Row(
                                                   mainAxisAlignment:
                                                   MainAxisAlignment.center,
@@ -167,47 +176,34 @@ class _EVKeyListState extends State<EVKeyList> {
                                                     ),
                                                   ],
                                                 ),
-                                                onPressed: () {
-                                                  ///Remove all rfid key
-                                                  //deleteSingleFRFID(index);
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                      BorderRadius.circular(20.w)),
-                                                  elevation: 0.0,
-                                                  backgroundColor: EvieColors.primaryColor,
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 14.h, vertical: 14.h),
-                                                ),
                                               ),
                                             ) :
                                             IconButton(
                                               onPressed: () {
-                                                FocusNode _nameFocusNode = FocusNode();
-                                                _nameFocusNode.requestFocus();
+                                                FocusNode nameFocusNode = FocusNode();
+                                                nameFocusNode.requestFocus();
 
                                                 bool isFirst = true;
 
-                                                _rfidNameController.text = _bikeProvider.rfidList.values.elementAt(index).rfidName ?? '';
+                                                rfidNameController.text = _bikeProvider.rfidList.values.elementAt(index).rfidName ?? '';
 
-                                                _rfidNameController.addListener(() {
-                                                  if (_rfidNameController.selection.baseOffset != _rfidNameController.selection.extentOffset) {
+                                                rfidNameController.addListener(() {
+                                                  if (rfidNameController.selection.baseOffset != rfidNameController.selection.extentOffset) {
                                                     // Text is selected
                                                     //print('Text selected: ${_nameController.text.substring(_nameController.selection.baseOffset, _nameController.selection.extentOffset)}');
                                                   } else {
                                                     // Cursor is moved
                                                     if (isFirst) {
                                                       isFirst = false;
-                                                      _rfidNameController.selection = TextSelection(
-                                                          baseOffset: 0, extentOffset: _rfidNameController.text.length);
+                                                      rfidNameController.selection = TextSelection(
+                                                          baseOffset: 0, extentOffset: rfidNameController.text.length);
                                                     }
                                                   }
                                                 });
 
                                                 SmartDialog.show(
-                                                    widget: Form(
-                                                      key: _formKey,
+                                                    builder: (_) => Form(
+                                                      key: formKey,
                                                       child: EvieDoubleButtonDialog(
                                                           title: "Name Your EV-Key",
                                                           childContent: Container(
@@ -224,10 +220,10 @@ class _EVKeyListState extends State<EVKeyList> {
                                                                       0.h, 12.h, 0.h, 8.h),
                                                                   child: EvieTextFormField(
                                                                     controller:
-                                                                    _rfidNameController,
+                                                                    rfidNameController,
                                                                     obscureText: false,
                                                                     keyboardType: TextInputType.name,
-                                                                    focusNode: _nameFocusNode,
+                                                                    focusNode: nameFocusNode,
                                                                     hintText: "EV-Key 1 (pre-select texts)",
                                                                     labelText: "EV-Key Label",
                                                                     validator: (value) {
@@ -251,7 +247,7 @@ class _EVKeyListState extends State<EVKeyList> {
                                                             SmartDialog.dismiss();
                                                           },
                                                           onPressedRight: () async {
-                                                            if (_formKey.currentState!.validate()) {
+                                                            if (formKey.currentState!.validate()) {
 
                                                               ///For keyboard un focus
                                                               FocusManager.instance.primaryFocus?.unfocus();
@@ -259,7 +255,7 @@ class _EVKeyListState extends State<EVKeyList> {
                                                               SmartDialog.dismiss();
                                                               final result = await _bikeProvider.updateRFIDCardName(
                                                                   _bikeProvider.rfidList.keys.elementAt(index),
-                                                                  _rfidNameController.text.trim());
+                                                                  rfidNameController.text.trim());
 
                                                               result == true ?
                                                               showSuccessUpdateEVKey(context)

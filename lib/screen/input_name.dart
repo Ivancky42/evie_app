@@ -1,6 +1,6 @@
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/navigator.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/screen/welcome_page.dart';
 import 'package:evie_test/widgets/evie_textform.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ import '../widgets/evie_appbar.dart';
 import '../widgets/evie_button.dart';
 
 class InputName extends StatefulWidget {
-  const InputName({Key? key}) : super(key: key);
+  const InputName({super.key});
 
   @override
   _InputNameState createState() => _InputNameState();

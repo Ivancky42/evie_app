@@ -1,22 +1,20 @@
 import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/length.dart';
-import '../../../api/navigator.dart';
 import '../../../api/provider/setting_provider.dart';
 
 
 
 class FirmwareUpdateCompleted extends StatefulWidget{
-  const FirmwareUpdateCompleted({ Key? key }) : super(key: key);
+  const FirmwareUpdateCompleted({ super.key });
   @override
   _FirmwareUpdateCompletedState createState() => _FirmwareUpdateCompletedState();
 }

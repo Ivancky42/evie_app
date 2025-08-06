@@ -1,24 +1,15 @@
-import 'dart:async';
-import 'dart:io';
-import 'dart:ui';
-import 'package:evie_test/api/backend/sim_api_caller.dart';
 import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/bluetooth/modelResult.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/screen/trip_history/trip_history_data.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../../api/dialog.dart';
 import '../../api/fonts.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../api/provider/trip_provider.dart';
-import '../../widgets/evie_appbar.dart';
 
 class TripHistory extends StatefulWidget {
-  const TripHistory({Key? key}) : super(key: key);
+  const TripHistory({super.key});
 
   @override
   _TripHistoryState createState() => _TripHistoryState();
@@ -74,7 +65,7 @@ class _TripHistoryState extends State<TripHistory> {
                                   color: EvieColors.lightGrayishCyan,
                                 ),
                                 borderRadius: const BorderRadius.all(Radius.circular(30))),
-                            child: Container(
+                            child: SizedBox(
                               height: 40.h,
                               child: TabBar(
 
@@ -103,7 +94,7 @@ class _TripHistoryState extends State<TripHistory> {
                                     ),
                                   ),
                                   Tab(
-                                    child: Container(
+                                    child: SizedBox(
                                       height: double.infinity,
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
@@ -117,7 +108,7 @@ class _TripHistoryState extends State<TripHistory> {
                                     ),
                                   ),
                                   Tab(
-                                    child: Container(
+                                    child: SizedBox(
                                       height: double.infinity,
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
@@ -131,7 +122,7 @@ class _TripHistoryState extends State<TripHistory> {
                                     ),
                                   ),
                                   Tab(
-                                    child: Container(
+                                    child: SizedBox(
                                       height: double.infinity,
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,

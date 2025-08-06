@@ -15,7 +15,7 @@ class Mapbox_Widget extends StatefulWidget {
   double? zoom;
 
   Mapbox_Widget({
-    Key? key,
+    super.key,
     required this.accessToken,
     // required this.onMapCreated,
     //required this.onStyleLoadedCallback,
@@ -27,7 +27,7 @@ class Mapbox_Widget extends StatefulWidget {
     this.isInteract,
     this.zoom,
 
-  }) : super(key: key);
+  });
 
   @override
   _Mapbox_WidgetState createState() => _Mapbox_WidgetState();
@@ -41,9 +41,11 @@ class _Mapbox_WidgetState extends State<Mapbox_Widget> {
     return FlutterMap(
       mapController: widget.mapController,
       options: MapOptions(
-        interactiveFlags: widget.isInteract == false ? InteractiveFlag.none : InteractiveFlag.pinchZoom | InteractiveFlag.drag ,
-        zoom: widget.zoom ?? 16,
-        center: LatLng(
+        interactionOptions: InteractionOptions(
+          flags: widget.isInteract == false ? InteractiveFlag.none : InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+        ),
+        initialZoom: widget.zoom ?? 16,
+        initialCenter: LatLng(
             widget.latitude,
             widget.longitude),
       ),

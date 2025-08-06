@@ -1,7 +1,5 @@
-import 'dart:collection';
 import 'dart:io';
-import 'package:evie_test/api/sheet.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:flutter/material.dart';
@@ -13,7 +11,6 @@ import '../../../api/colours.dart';
 import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/length.dart';
-import '../../../api/navigator.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../api/provider/bike_provider.dart';
@@ -21,7 +18,7 @@ import '../../../api/provider/setting_provider.dart';
 
 
 class UserNotFound extends StatefulWidget{
-  const UserNotFound({ Key? key }) : super(key: key);
+  const UserNotFound({ super.key });
   @override
   _UserNotFoundState createState() => _UserNotFoundState();
 }
@@ -127,7 +124,7 @@ class _UserNotFoundState extends State<UserNotFound> {
                         else if (index == 1) {
                           return Padding(
                             padding: EdgeInsets.fromLTRB(24.w, 22.h, 32.w, 0),
-                            child: Container(
+                            child: SizedBox(
                               width: 263.w,
                               child:
                               RichText(
@@ -150,7 +147,7 @@ class _UserNotFoundState extends State<UserNotFound> {
                         else if (index == 2) {
                           return Padding(
                             padding: EdgeInsets.fromLTRB(24.w, 22.h, 32.w, 0),
-                            child: Container(
+                            child: SizedBox(
                               width: 263.w,
                               child: RichText(
                                 text: TextSpan(
@@ -169,6 +166,7 @@ class _UserNotFoundState extends State<UserNotFound> {
                             ),
                           );
                         }
+                        return null;
                       },
                     ),
                   ),

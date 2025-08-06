@@ -2,37 +2,22 @@ import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/provider/bluetooth_provider.dart';
-import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/screen/my_account/account/account_model.dart';
-import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
-import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart' as url;
 
-import '../../../api/enumerate.dart';
 import '../../../api/function.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
-import '../../../api/provider/current_user_provider.dart';
-import '../../../api/provider/firmware_provider.dart';
 import '../../../api/provider/notification_provider.dart';
-import '../../../api/provider/plan_provider.dart';
-import '../../../api/provider/ride_provider.dart';
 import '../../../bluetooth/modelResult.dart';
-import '../../../main.dart';
 
 class AccountContainer extends StatefulWidget {
   final AccountModel accountModel;
-  const AccountContainer({Key? key, required this.accountModel}) : super(key: key);
+  const AccountContainer({super.key, required this.accountModel});
 
   @override
   State<AccountContainer> createState() => _AccountContainerState();
@@ -71,7 +56,7 @@ class _AccountContainerState extends State<AccountContainer> {
               onTap: () {
                 changeToEditProfile(context);
               },
-              child: Container(
+              child: SizedBox(
                 height: 54.h,
                 child: Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
@@ -123,7 +108,7 @@ class _AccountContainerState extends State<AccountContainer> {
               onTap: () {
                 changeToPushNotification(context);
               },
-              child: Container(
+              child: SizedBox(
                 height: 54.h,
                 child: Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
@@ -168,7 +153,7 @@ class _AccountContainerState extends State<AccountContainer> {
               onTap: () {
                 changeToDisplaySetting(context);
               },
-              child: Container(
+              child: SizedBox(
                 height: 54.h,
                 child: Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
@@ -218,10 +203,10 @@ class _AccountContainerState extends State<AccountContainer> {
               behavior: HitTestBehavior.translucent,
               onTap: () {
                 const url = 'https://support.eviebikes.com/en-US';
-                final Uri _url = Uri.parse(url);
-                launch(_url);
+                final Uri url0 = Uri.parse(url);
+                launch(url0);
               },
-              child: Container(
+              child: SizedBox(
                 height: 54.h,
                 child: Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
@@ -265,10 +250,10 @@ class _AccountContainerState extends State<AccountContainer> {
               behavior: HitTestBehavior.translucent,
               onTap: () {
                 const url = 'https://eviebikes.com/policies/privacy-policy';
-                final Uri _url = Uri.parse(url);
-                launch(_url);
+                final Uri url0 = Uri.parse(url);
+                launch(url0);
               },
-              child: Container(
+              child: SizedBox(
                 height: 54.h,
                 child: Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
@@ -312,10 +297,10 @@ class _AccountContainerState extends State<AccountContainer> {
               behavior: HitTestBehavior.translucent,
               onTap: () {
                 const url = 'https://eviebikes.com/policies/terms-of-service';
-                final Uri _url = Uri.parse(url);
-                launch(_url);
+                final Uri url0 = Uri.parse(url);
+                launch(url0);
               },
-              child: Container(
+              child: SizedBox(
                 height: 54.h,
                 child: Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
@@ -354,14 +339,10 @@ class _AccountContainerState extends State<AccountContainer> {
             Padding(
               padding: EdgeInsets.only(
                   left: 16.w, right: 16.w, top: 24.h, bottom: 8.h),
-              child: Container(
+              child: SizedBox(
                 height: 48.h,
                 width: double.infinity,
                 child: ElevatedButton(
-                  child: Text(
-                    "Logout",
-                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
-                  ),
                   onPressed: () async {
                     showLogoutDialog(context, _authProvider);
                   },
@@ -372,20 +353,20 @@ class _AccountContainerState extends State<AccountContainer> {
                     elevation: 0.0,
                     backgroundColor: EvieColors.transparent,
                   ),
+                  child: Text(
+                    "Logout",
+                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
+                  ),
                 ),
               ),
             ),
             Padding(
               padding: EdgeInsets.only(
                   left: 16.w, right: 16.w, top: 0.h, bottom: 18.h),
-              child: Container(
+              child: SizedBox(
                 height: 48.h,
                 width: double.infinity,
                 child: ElevatedButton(
-                  child: Text(
-                    "Revoke Account",
-                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
-                  ),
                   onPressed: ()  async {
                     changeToRevokeAccount(context);
                   },
@@ -396,6 +377,10 @@ class _AccountContainerState extends State<AccountContainer> {
                     elevation: 0.0,
                     backgroundColor: EvieColors.transparent,
 
+                  ),
+                  child: Text(
+                    "Revoke Account",
+                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.darkGrayish),
                   ),
                 ),
               ),

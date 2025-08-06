@@ -1,32 +1,24 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:evie_test/api/model/bike_model.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
 import 'package:evie_test/api/provider/ride_provider.dart';
-import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/provider/shared_pref_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 // import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twitter_login/twitter_login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../../widgets/evie_single_button_dialog.dart';
 import '../model/user_model.dart';
-import '../navigator.dart';
 import 'bike_provider.dart';
 import 'bluetooth_provider.dart';
 import 'firmware_provider.dart';
@@ -154,10 +146,10 @@ class AuthProvider extends ChangeNotifier {
   Future login(String email, String password) async {
     //User Provider
     try {
-      UserCredential _authResult = await _auth.signInWithEmailAndPassword(
+      UserCredential authResult = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
 
-      final user = _authResult.user;
+      final user = authResult.user;
 
       if (user != null && user.emailVerified == true) {
         _uid = user.uid;
@@ -229,7 +221,7 @@ class AuthProvider extends ChangeNotifier {
     if (result) {
       ///random return either 'dark or light'
       final theme = Random().nextBool() ? 'dark' : 'light';
-      return 'defaultProfile/' + theme + '-' + name[0].toLowerCase() + '.png';
+      return 'defaultProfile/$theme-${name[0].toLowerCase()}.png';
     }
     else {
       return 'defaultProfile/rider.png';
@@ -765,28 +757,28 @@ class AuthProvider extends ChangeNotifier {
 
   ///User sign out
   Future signOut(BuildContext context) async {
-    final _currentUserProvider = context.read<CurrentUserProvider>();
-    final _bikeProvider = context.read<BikeProvider>();
-    final _bluetoothProvider = context.read<BluetoothProvider>();
-    final _firmwareProvider = context.read<FirmwareProvider>();
-    final _locationProvider = context.read<LocationProvider>();
-    final _notificationProvider = context.read<NotificationProvider>();
-    final _planProvider = context.read<PlanProvider>();
-    final _rideProvider = context.read<RideProvider>();
-    final _sharedPrefProvider = context.read<SharedPreferenceProvider>();
+    final currentUserProvider = context.read<CurrentUserProvider>();
+    final bikeProvider = context.read<BikeProvider>();
+    final bluetoothProvider = context.read<BluetoothProvider>();
+    final firmwareProvider = context.read<FirmwareProvider>();
+    final locationProvider = context.read<LocationProvider>();
+    final notificationProvider = context.read<NotificationProvider>();
+    final planProvider = context.read<PlanProvider>();
+    final rideProvider = context.read<RideProvider>();
+    final sharedPrefProvider = context.read<SharedPreferenceProvider>();
 
 
-    await _notificationProvider.clear(_uid!);
+    await notificationProvider.clear(_uid!);
 
     await _auth.signOut();
-    await _currentUserProvider.clear();
-    await _bikeProvider.clear();
-    await _bluetoothProvider.disconnectDevice();
-    await _firmwareProvider.clear();
-    await _locationProvider.clear();
-    await _planProvider.clear();
-    await _rideProvider.clear();
-    await _sharedPrefProvider.clear();
+    await currentUserProvider.clear();
+    await bikeProvider.clear();
+    await bluetoothProvider.disconnectDevice();
+    await firmwareProvider.clear();
+    await locationProvider.clear();
+    await planProvider.clear();
+    await rideProvider.clear();
+    await sharedPrefProvider.clear();
 
     if(userChangeSubscription != null){
       userChangeSubscription?.cancel();

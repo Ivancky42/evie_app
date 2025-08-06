@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:sizer/sizer.dart';
 import '../api/navigator.dart';
 import '../api/provider/auth_provider.dart';
-import '../widgets/evie_single_button_dialog.dart';
 
 ///User change password screen
 
 class UserChangePassword extends StatefulWidget{
-  const UserChangePassword({ Key? key }) : super(key: key);
+  const UserChangePassword({ super.key });
   @override
   _UserChangePasswordState createState() => _UserChangePasswordState();
 }

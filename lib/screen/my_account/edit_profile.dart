@@ -1,22 +1,15 @@
-import 'dart:io';
 import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/screen/my_account/switch_profile_image.dart';
-import 'package:evie_test/widgets/evie_single_button_dialog.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evie_test/widgets/widgets.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
-import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../api/colours.dart';
 import '../../api/fonts.dart';
@@ -28,7 +21,7 @@ import '../../widgets/evie_textform.dart';
 ///User profile page with user account information
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({Key? key}) : super(key: key);
+  const EditProfile({super.key});
 
   @override
   _EditProfileState createState() => _EditProfileState();
@@ -75,13 +68,13 @@ class _EditProfileState extends State<EditProfile> {
     _authProvider = Provider.of<AuthProvider>(context);
 
     //final TextEditingController _nameController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
-    bool _isEmail = false;
+    bool isEmail = false;
     if(_currentUserProvider.currentUserModel!.credentialProvider == "email"){
-      _isEmail = true;
+      isEmail = true;
     }else {
-      _isEmail = false;
+      isEmail = false;
     }
 
     return Scaffold(
@@ -95,7 +88,7 @@ class _EditProfileState extends State<EditProfile> {
         body: Column(
           children: [
             Center(
-              child: Container(
+              child: SizedBox(
                 height: 96.h,
                 child: Padding(
                     padding:
@@ -158,12 +151,12 @@ class _EditProfileState extends State<EditProfile> {
                       isFirst = true;
                     });
 
-                    FocusNode _nameFocusNode = FocusNode();
-                    _nameFocusNode.requestFocus();
+                    FocusNode nameFocusNode = FocusNode();
+                    nameFocusNode.requestFocus();
 
                     SmartDialog.show(
-                        widget: Form(
-                          key: _formKey,
+                        builder: (_) => Form(
+                          key: formKey,
                           child: EvieDoubleButtonDialog(
                               title: "Your Name",
                               childContent: Container(
@@ -177,7 +170,7 @@ class _EditProfileState extends State<EditProfile> {
                                         controller: _nameController,
                                         obscureText: false,
                                         keyboardType: TextInputType.name,
-                                        focusNode: _nameFocusNode,
+                                        focusNode: nameFocusNode,
                                         hintText: "Your first name or nickname",
                                         labelText: "Your Name",
                                         validator: (value) {
@@ -199,7 +192,7 @@ class _EditProfileState extends State<EditProfile> {
                                 SmartDialog.dismiss();
                                 },
                               onPressedRight: () async {
-                                if (_formKey.currentState!.validate()) {
+                                if (formKey.currentState!.validate()) {
                                   SmartDialog.dismiss();
                                   final result = await _currentUserProvider.updateUserName(_nameController.text.trim());
                                   result == true ?
@@ -324,7 +317,7 @@ class _EditProfileState extends State<EditProfile> {
               ],
             ),
 
-            _isEmail ?
+            isEmail ?
             Column(
               children: [
                 GestureDetector(

@@ -1,6 +1,5 @@
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,19 +10,16 @@ import 'package:provider/provider.dart';
 import '../../../../api/colours.dart';
 import '../../../../api/dialog.dart';
 import '../../../../api/enumerate.dart';
-import '../../../../api/fonts.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/sheet.dart';
 import '../../../../widgets/actionable_bar.dart';
-import '../../../../widgets/evie_card.dart';
-import '../../home_page_widget.dart';
 
 
 class ActionableBarHome extends StatefulWidget {
   final ActionableBarItem actionableBarItem;
-  ActionableBarHome({
-    Key? key, required this.actionableBarItem
-  }) : super(key: key);
+  const ActionableBarHome({
+    super.key, required this.actionableBarItem
+  });
 
   @override
   State<ActionableBarHome> createState() => _ActionableBarHomeState();

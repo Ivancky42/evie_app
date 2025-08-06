@@ -7,6 +7,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
+import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import '../api/backend/stripe_api_caller.dart';
 import '../api/dialog.dart';
 import '../api/function.dart';
@@ -25,12 +27,12 @@ class StripeCheckoutScreen extends StatefulWidget {
   final PriceModel priceModel;
   final BikeModel bikeModel;
 
-  const StripeCheckoutScreen({Key? key,
+  const StripeCheckoutScreen({super.key,
     required this.sessionId,
     required this.planModel,
     required this.priceModel,
     required this.bikeModel,
-  }) : super(key: key);
+  });
 
   @override
   _StripeCheckoutScreenState createState() => _StripeCheckoutScreenState();
@@ -53,38 +55,57 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(
       resizeToAvoidBottomInset: false,
-      body: WebView(
-        initialUrl: initialUrl,
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (webViewController) =>
-        _webViewController = webViewController,
-        onPageFinished: (String url) {
-          if (url == initialUrl) {
-            _redirectToStripe(widget.sessionId);
-          }
-        },
+      body: WebViewWidget(
+        controller: WebViewController()
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..setNavigationDelegate(
+            NavigationDelegate(
+              onPageFinished: (String url) {
+                if (url == initialUrl) {
+                  _redirectToStripe(widget.sessionId);
+                }
+              },
+              onNavigationRequest: (NavigationRequest request) {
+                if (request.url.startsWith('https://evie-126a6.web.app/success.html')) {
+                  changeToUserHomePageScreen(context);
+                  if (_bikeProvider.isPlanSubscript == true) {
+                    showThankyouDialog(context);
+                  }
+                  else {
+                    showWelcomeToEVClub(context);
+                  }
+                } else if (request.url.startsWith('https://evie-126a6.web.app/cancel.html')) {
+                  Navigator.pop(context);
+                }
+                return NavigationDecision.navigate;
+              },
+            ),
+          )
+          ..loadRequest(Uri.parse(initialUrl)),
 
-        navigationDelegate: (NavigationRequest request) {
-          if (request.url.startsWith('https://evie-126a6.web.app/success.html')) {
-            // _notificationProvider.showNotification(FlutterLocalNotificationsPlugin(),
-            //     'You’ve Upgraded to EV-Secure!',
-            //     'You’ve subscribed to EV-Secure! Now you can enjoy exclusive EV+ perks until '
-            //         '${monthsInYear[_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().day}, ${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().year}');
-            changeToUserHomePageScreen(context);
-            if (_bikeProvider.isPlanSubscript == true) {
-              showThankyouDialog(context);
-            }
-            else {
-              showWelcomeToEVClub(context);
-            }
-          } else if (request.url.startsWith('https://evie-126a6.web.app/cancel.html')) {
-            // SmartDialog.show(widget:
-            // EvieSingleButtonDialog(title: 'Operation failed', content: 'User cancelled the action', rightContent: 'BACK', onPressedRight: () {SmartDialog.dismiss();},));
-            //changeToUserHomePageScreen(context);
-            Navigator.pop(context);
-          }
-          return NavigationDecision.navigate;
-        },
+
+
+        // navigationDelegate: (NavigationRequest request) {
+        //   if (request.url.startsWith('https://evie-126a6.web.app/success.html')) {
+        //     // _notificationProvider.showNotification(FlutterLocalNotificationsPlugin(),
+        //     //     'You’ve Upgraded to EV-Secure!',
+        //     //     'You’ve subscribed to EV-Secure! Now you can enjoy exclusive EV+ perks until '
+        //     //         '${monthsInYear[_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().month]} ${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().day}, ${_bikeProvider.currentBikePlanModel!.expiredAt?.toDate().year}');
+        //     changeToUserHomePageScreen(context);
+        //     if (_bikeProvider.isPlanSubscript == true) {
+        //       showThankyouDialog(context);
+        //     }
+        //     else {
+        //       showWelcomeToEVClub(context);
+        //     }
+        //   } else if (request.url.startsWith('https://evie-126a6.web.app/cancel.html')) {
+        //     // SmartDialog.show(widget:
+        //     // EvieSingleButtonDialog(title: 'Operation failed', content: 'User cancelled the action', rightContent: 'BACK', onPressedRight: () {SmartDialog.dismiss();},));
+        //     //changeToUserHomePageScreen(context);
+        //     Navigator.pop(context);
+        //   }
+        //   return NavigationDecision.navigate;
+        // },
       ),
     ));
   }
@@ -93,7 +114,7 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
 
   Future<void> _redirectToStripe(String sessionId) async {
     final redirectToCheckoutJs = '''
-    var stripe = Stripe(\'$apiKey\');
+    var stripe = Stripe('$apiKey');
         
     stripe.redirectToCheckout({
       sessionId: '$sessionId'
@@ -103,7 +124,7 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
     ''';
 
     try {
-      await _webViewController.runJavascript(redirectToCheckoutJs);
+      await _webViewController.runJavaScript(redirectToCheckoutJs);
     } on PlatformException catch (e) {
       if (!e.details.contains(
           'JavaScript execution returned a result of an unsupported type')) {

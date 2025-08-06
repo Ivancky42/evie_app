@@ -1,33 +1,25 @@
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../api/backend/stripe_api_caller.dart';
 import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
 import '../../../../api/function.dart';
-import '../../../../api/length.dart';
-import '../../../../api/model/plan_model.dart';
 import '../../../../api/model/price_model.dart';
-import '../../../../api/navigator.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/provider/setting_provider.dart';
-import '../../../../api/sheet.dart';
 import '../../../../api/snackbar.dart';
-import '../../../../api/toast.dart';
 import '../../../../widgets/evie_appbar.dart';
 import '../../../../widgets/evie_button.dart';
-import '../../../../widgets/evie_container.dart';
 
 class ProPlan2 extends StatefulWidget{
-  const ProPlan2({Key? key}) : super(key: key);
+  const ProPlan2({super.key});
 
   @override
   State<ProPlan2> createState() => _ProPlan2State();

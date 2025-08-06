@@ -15,7 +15,6 @@ import 'package:evie_test/screen/user_change_password.dart';
 import 'package:evie_test/screen/verify_email.dart';
 import 'package:evie_test/screen/welcome_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -46,6 +45,7 @@ import 'firebase_options.dart';
 ///Main function execution
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
   clearCache();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -91,6 +91,8 @@ Future main() async {
       provisional: false,
       sound: true,
     );
+
+    
   }
 
 
@@ -108,7 +110,7 @@ Future<void> clearCache() async {
     if (cacheDir.existsSync()) {
       cacheDir.deleteSync(recursive: true);
     }
-  } catch (e, s) {
+  } catch (e) {
     //Sentry.captureException(e, stackTrace: s);
     print('Error clearing cache: $e');
   }
@@ -118,7 +120,7 @@ Future<void> clearCache() async {
 class AppProviders extends StatelessWidget {
   final Widget child;
 
-  const AppProviders({Key? key, required this.child}) : super(key: key);
+  const AppProviders({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -224,22 +226,22 @@ class AppProviders extends StatelessWidget {
 
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    AuthProvider _authProvider = Provider.of<AuthProvider>(context);
-    SettingProvider _settingProvider = Provider.of<SettingProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    SettingProvider settingProvider = Provider.of<SettingProvider>(context);
     //_settingProvider.init();
 
     // // Call the version check when the app starts
     // WidgetsBinding.instance?.addPostFrameCallback((_) => checkAppVersion(context, _settingProvider.minRequiredVersion));
 
     decideMainPage() {
-      if (_authProvider.isLogin == true) {
-        if (_authProvider.isEmailVerified == true) {
-          if (_authProvider.isFirstLogin == false) {
+      if (authProvider.isLogin == true) {
+        if (authProvider.isEmailVerified == true) {
+          if (authProvider.isFirstLogin == false) {
             return '/';
           } else {
             return '/letsGo';
@@ -265,7 +267,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           builder: (context, child) {
             return MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
               child: FlutterSmartDialog.init()(
                 context,
                 child,
@@ -273,7 +275,7 @@ class MyApp extends StatelessWidget {
             );
           },
           title: 'Evie Bike',
-          themeMode: _settingProvider.currentThemeMode,
+          themeMode: settingProvider.currentThemeMode,
 
           //Light theme data
           // theme: ThemeData(

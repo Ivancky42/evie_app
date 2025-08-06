@@ -1,23 +1,19 @@
 
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 import 'package:provider/provider.dart';
 
-import '../../../api/colours.dart';
 import '../../../api/enumerate.dart';
 import '../../../api/length.dart';
-import '../../../api/navigator.dart';
 import '../../../api/provider/setting_provider.dart';
 
 
 
 class FirmwareUpdateFailed extends StatefulWidget{
-  const FirmwareUpdateFailed({ Key? key }) : super(key: key);
+  const FirmwareUpdateFailed({ super.key });
   @override
   _FirmwareUpdateFailedState createState() => _FirmwareUpdateFailedState();
 }

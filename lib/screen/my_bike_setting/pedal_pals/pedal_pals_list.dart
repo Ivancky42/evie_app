@@ -6,9 +6,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/api/toast.dart';
-import 'package:evie_test/screen/my_account/my_account_widget.dart';
 import 'package:evie_test/widgets/evie_appbar_badge.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
 
@@ -16,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/evie_button.dart';
@@ -28,12 +26,10 @@ import '../../../api/function.dart';
 import '../../../api/length.dart';
 import '../../../api/model/bike_user_model.dart';
 import '../../../api/model/user_model.dart';
-import '../../../api/navigator.dart';
 import '../../../api/provider/current_user_provider.dart';
 import '../../../api/provider/setting_provider.dart';
 import '../../../api/sheet.dart';
 import '../../../api/snackbar.dart';
-import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
 import '../../../widgets/evie_textform.dart';
 
@@ -42,7 +38,7 @@ import '../../../widgets/evie_textform.dart';
 
 class PedalPalsList extends StatefulWidget {
   final String deviceIMEI;
-  const PedalPalsList({Key? key, required this.deviceIMEI}) : super(key: key);
+  const PedalPalsList({super.key, required this.deviceIMEI});
 
   @override
   _PedalPalsListState createState() => _PedalPalsListState();
@@ -123,8 +119,8 @@ class _PedalPalsListState extends State<PedalPalsList> {
                           behavior: HitTestBehavior.translucent,
                           onTap: (){
 
-                            FocusNode _nameFocusNode = FocusNode();
-                            _nameFocusNode.requestFocus();
+                            FocusNode nameFocusNode = FocusNode();
+                            nameFocusNode.requestFocus();
 
                             bool isFirst = true;
 
@@ -145,7 +141,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                             });
 
                             SmartDialog.show(
-                                widget: Form(
+                                builder: (_) => Form(
                                   key: _formKey,
                                   child: EvieDoubleButtonDialog(
                                       title: "Team Name",
@@ -162,7 +158,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                                 keyboardType: TextInputType.name,
                                                 hintText: "Create an epic team name",
                                                 labelText: "Team Name",
-                                                focusNode: _nameFocusNode,
+                                                focusNode: nameFocusNode,
                                                 validator: (value) {
                                                   if (value == null || value.isEmpty) {
                                                     return 'Please enter your name';
@@ -269,7 +265,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
 
                                   if (resulted == "action") {
                                     //SmartDialog.showLoading(msg:"Removing " + name + " ....");
-                                    showCustomLightLoading("Removing " + name + " ....");
+                                    showCustomLightLoading("Removing $name ....");
                                     StreamSubscription? currentSubscription;
                                     ///Cancel user invitation
                                     if(status == "pending"){
@@ -288,7 +284,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                             SmartDialog.dismiss();
                                             currentSubscription?.cancel();
                                             SmartDialog.show(
-                                                widget: EvieSingleButtonDialogOld(
+                                                builder: (_) => EvieSingleButtonDialogOld(
                                                     title: "Not success",
                                                     content: "Try again",
                                                     rightContent: "Close",
@@ -303,7 +299,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                           SmartDialog.dismiss();
                                           currentSubscription?.cancel();
                                           SmartDialog.show(
-                                              widget: EvieSingleButtonDialogOld(
+                                              builder: (_) => EvieSingleButtonDialogOld(
                                                   title: "Unable to remove user",
                                                   content: "Please try again later",
                                                   rightContent: "Close",
@@ -327,7 +323,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                           SmartDialog.dismiss();
                                           currentSubscription?.cancel();
                                           SmartDialog.show(
-                                              widget: EvieSingleButtonDialogOld(
+                                              builder: (_) => EvieSingleButtonDialogOld(
                                                   title: "Not success",
                                                   content: "Try again",
                                                   rightContent: "Close",
@@ -377,7 +373,7 @@ class _PedalPalsListState extends State<PedalPalsList> {
                                 ],
                               ),
                               subtitle: Text(
-                                  checkUid(_bikeProvider.bikeUserList.values.elementAt(index), _bikeProvider.bikeUserDetails) != null ? checkUid(_bikeProvider.bikeUserList.values.elementAt(index), _bikeProvider.bikeUserDetails)!.email! : '',
+                                  checkUid(_bikeProvider.bikeUserList.values.elementAt(index), _bikeProvider.bikeUserDetails) != null ? checkUid(_bikeProvider.bikeUserList.values.elementAt(index), _bikeProvider.bikeUserDetails)!.email : '',
                                   style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGrayish)),
 
                               trailing: isOwner == true && isManageList && _bikeProvider.bikeUserList.keys.elementAt(index) == _currentUserProvider.currentUserModel!.uid ?
@@ -412,10 +408,6 @@ class _PedalPalsListState extends State<PedalPalsList> {
                         child: EvieButton(
                           width: double.infinity,
                           height: 48.h,
-                          child: Text(
-                              "Invite PedalPal",
-                              style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
-                          ),
                           backgroundColor: _bikeProvider.bikeUserList.length < 5 ? EvieColors.primaryColor : EvieColors.primaryColor.withOpacity(0.3),
                           onPressed: () {
                             ///Check if bike already have 5 user
@@ -424,7 +416,11 @@ class _PedalPalsListState extends State<PedalPalsList> {
                             }else{
                               showExceedLimit(context);
                             }
-                          }
+                          },
+                          child: Text(
+                              "Invite PedalPal",
+                              style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite)
+                          )
                         ),
                       ),
                     ),

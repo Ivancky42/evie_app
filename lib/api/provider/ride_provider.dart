@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:core';
-import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/bike_model.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import '../enumerate.dart';
 import '../function.dart';
 import '../model/trip_history_model.dart';
@@ -116,7 +114,7 @@ class RideProvider extends ChangeNotifier {
     tripHistorySubscription?.cancel();
     if(currentBikeModel != null){
       currentTripHistoryLists.clear();
-      tripHistorySubscription = await FirebaseFirestore.instance
+      tripHistorySubscription = FirebaseFirestore.instance
           .collection(bikesCollection)
           .doc(currentBikeModel!.deviceIMEI)
           .collection(tripHistoryCollection)
@@ -135,7 +133,7 @@ class RideProvider extends ChangeNotifier {
 
                   }
                   else {
-                    currentTripHistoryLists.putIfAbsent(docChange.doc.id, () => TripHistoryModel.fromJson(obj!));
+                    currentTripHistoryLists.putIfAbsent(docChange.doc.id, () => TripHistoryModel.fromJson(obj));
                     notifyListeners();
                   }
                 }
@@ -153,7 +151,7 @@ class RideProvider extends ChangeNotifier {
                   else {
                     currentTripHistoryLists.update(
                         docChange.doc.id, (value) =>
-                        TripHistoryModel.fromJson(obj!));
+                        TripHistoryModel.fromJson(obj));
                     notifyListeners();
                   }
                 }
@@ -508,7 +506,7 @@ class RideProvider extends ChangeNotifier {
         int daysOfCurrentMonth = DateTime(pickedDate.year, pickedDate.month + 1, 0).day;
         for(int i = 1; i <= daysOfCurrentMonth; i ++){
           //chartData.add((ChartData(pickedDate.add(Duration(days: i)), 0)));
-          monthTimeChartData.add((ChartData(DateTime(pickedDate!.year, pickedDate!.month, i), 0)));
+          monthTimeChartData.add((ChartData(DateTime(pickedDate.year, pickedDate.month, i), 0)));
         }
 
         for (var trip in monthRideHistoryList) {
@@ -541,7 +539,7 @@ class RideProvider extends ChangeNotifier {
         await getYearRideHistory(pickedDate.year);
 
         for(int i = 1; i <= 12; i ++){
-          yearTimeChartData.add((ChartData(DateTime(pickedDate!.year, i, 1), 0)));
+          yearTimeChartData.add((ChartData(DateTime(pickedDate.year, i, 1), 0)));
         }
 
         for (var trip in yearRideHistoryList) {

@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/bike_model.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/api/sheet.dart';
@@ -33,14 +33,14 @@ import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/provider/bluetooth_provider.dart';
 import '../../../../api/provider/current_user_provider.dart';
 import '../../../../api/provider/setting_provider.dart';
-import '../../../../bluetooth/modelResult.dart';
+import '../../../../bluetooth/modelResult.dart' as bluetooth;
 import '../../../../widgets/evie_card.dart';
 import '../../../../widgets/evie_card_2.dart';
 
 class OrbitalAntiTheft extends StatefulWidget  {
-  OrbitalAntiTheft({
-    Key? key
-  }) : super(key: key);
+  const OrbitalAntiTheft({
+    super.key
+  });
 
   @override
   State<OrbitalAntiTheft> createState() => _OrbitalAntiTheftState();
@@ -57,7 +57,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
   String? locationStatus;
   bool? isConnected;
   bool? isLocked;
-  DeviceConnectResult? deviceConnectResult;
+  bluetooth.DeviceConnectResult? deviceConnectResult;
 
   var options = <PointAnnotationOptions>[];
   MapboxMap? mapboxMap;
@@ -111,7 +111,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
     deviceConnectResult = _bluetoothProvider.deviceConnectResult;
     locationListener();
 
-    List<Widget> _widgets = [
+    List<Widget> widgets = [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -223,8 +223,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                 children: [
                   //SvgPicture.asset(getCurrentBikeStatusIcon(_bikeProvider.currentBikeModel!, _bikeProvider, _bluetoothProvider),),
                     _bikeProvider.currentBikeModel?.location?.status == 'safe' && _bikeProvider.currentBikeModel?.location?.isConnected == true ?
-                    _bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected ?
-                    Selector<BluetoothProvider, LockState?>(
+                    _bluetoothProvider.deviceConnectResult == bluetooth.DeviceConnectResult.connected ?
+                    Selector<BluetoothProvider, bluetooth.LockState?>(
                       selector: (context, bluetoothProvider) => bluetoothProvider.cableLockState?.lockState,
                       builder: (context, lockState, child) {
                         return Column(
@@ -414,7 +414,7 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                     children: [
                       Expanded(
                         child: CarouselSlider(
-                          items: _widgets,
+                          items: widgets,
                           options: CarouselOptions(
                             padEnds: false,
                             height: double.infinity,
@@ -437,8 +437,8 @@ class _OrbitalAntiTheftState extends State<OrbitalAntiTheft> with SingleTickerPr
                         padding: EdgeInsets.only(bottom: 9.h, right:25.w, top: 6.h),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: _widgets.map((item) {
-                            int index = _widgets.indexOf(item);
+                          children: widgets.map((item) {
+                            int index = widgets.indexOf(item);
                             bool isCurrentIndex = _currentIndex == index;
                             //  double horizontalMargin = index == 0 ? 0.0 : 6.0;
                             double horizontalMargin = index == 0 ? 6.0 : 0.0;

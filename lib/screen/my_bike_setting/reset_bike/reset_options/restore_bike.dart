@@ -1,12 +1,7 @@
-import 'dart:collection';
-import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/enumerate.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/home_element/setting.dart';
+import 'package:sizer/sizer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +15,7 @@ import '../../../../widgets/evie_button.dart';
 
 
 class RestoreBike extends StatefulWidget{
-  const RestoreBike({ Key? key }) : super(key: key);
+  const RestoreBike({ super.key });
   @override
   _RestoreBikeState createState() => _RestoreBikeState();
 }

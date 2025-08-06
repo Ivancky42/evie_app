@@ -1,11 +1,9 @@
 
-import 'dart:async';
 
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
@@ -13,18 +11,14 @@ import '../../api/colours.dart';
 import '../../api/dialog.dart';
 import '../../api/fonts.dart';
 import '../../api/navigator.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../api/provider/bike_provider.dart';
-import '../../api/provider/bluetooth_provider.dart';
-import '../../widgets/evie_progress_indicator.dart';
-import '../../widgets/evie_single_button_dialog.dart';
 import '../../widgets/evie_text_input_formatter.dart';
 import '../../widgets/evie_textform.dart';
 
 class QRAddManually extends StatefulWidget {
-  const QRAddManually({Key? key}) : super(key: key);
+  const QRAddManually({super.key});
 
   @override
   _QRAddManuallyState createState() => _QRAddManuallyState();

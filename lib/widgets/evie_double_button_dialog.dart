@@ -1,5 +1,5 @@
 import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -20,7 +20,7 @@ class EvieDoubleButtonDialog extends StatelessWidget{
   final VoidCallback onPressedRight;
 
   const EvieDoubleButtonDialog({
-    Key? key,
+    super.key,
     //required this.buttonNumber,
     required this.title,
     required this.childContent,
@@ -28,7 +28,7 @@ class EvieDoubleButtonDialog extends StatelessWidget{
     required this.rightContent,
     required this.onPressedLeft,
     required this.onPressedRight
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -74,11 +74,11 @@ class EvieDoubleButtonDialog extends StatelessWidget{
                           child: EvieButton_ReversedColor(
                             width: double.infinity,
                             height: 48.h,
+                            onPressed: onPressedLeft,
                             child: Text(
                               leftContent,
                               style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
                             ),
-                            onPressed: onPressedLeft,
                           ),
                         ),
                       ),
@@ -90,11 +90,11 @@ class EvieDoubleButtonDialog extends StatelessWidget{
                         child: EvieButton(
                           width: double.infinity,
                           height: 48.h,
+                          onPressed: onPressedRight,
                           child: Text(
                             rightContent,
                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                          ),
-                          onPressed: onPressedRight
+                          )
                         ),
                       ),
       ),
@@ -125,7 +125,7 @@ class EvieDoubleButtonDialogCupertino extends StatelessWidget{
   final VoidCallback onPressedRight;
 
   const EvieDoubleButtonDialogCupertino({
-    Key? key,
+    super.key,
     //required this.buttonNumber,
     required this.title,
     required this.content,
@@ -134,7 +134,7 @@ class EvieDoubleButtonDialogCupertino extends StatelessWidget{
     required this.rightContent,
     required this.onPressedLeft,
     required this.onPressedRight
-  }) : super(key: key);
+  });
 
 
 
@@ -201,7 +201,7 @@ class EvieDoubleButtonDialogFilter extends StatelessWidget{
   final VoidCallback onPressedRight;
 
   const EvieDoubleButtonDialogFilter({
-    Key? key,
+    super.key,
     //required this.buttonNumber,
     required this.title,
     required this.childContent,
@@ -209,7 +209,7 @@ class EvieDoubleButtonDialogFilter extends StatelessWidget{
     required this.rightContent,
     required this.onPressedLeft,
     required this.onPressedRight
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -257,11 +257,11 @@ class EvieDoubleButtonDialogFilter extends StatelessWidget{
                         child: EvieButton_ReversedColor(
                           width: double.infinity,
                           height: 48.h,
+                          onPressed: onPressedLeft,
                           child: Text(
                             leftContent,
                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
                           ),
-                          onPressed: onPressedLeft,
                         ),
                       ),
                     ),
@@ -273,11 +273,11 @@ class EvieDoubleButtonDialogFilter extends StatelessWidget{
                         child: EvieButton(
                             width: double.infinity,
                             height: 48.h,
+                            onPressed: onPressedRight,
                             child: Text(
                               rightContent,
                               style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                            ),
-                            onPressed: onPressedRight
+                            )
                         ),
                       ),
                     ),
@@ -309,7 +309,7 @@ class EvieTwoButtonDialog extends StatelessWidget{
 
 
   const EvieTwoButtonDialog({
-    Key? key,
+    super.key,
     this.title,
     this.havePic,
     required this.childContent,
@@ -321,7 +321,7 @@ class EvieTwoButtonDialog extends StatelessWidget{
     this.customButtonUp,
     this.customButtonDown, this.lottie,
 
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -367,7 +367,7 @@ class EvieTwoButtonDialog extends StatelessWidget{
                   child: lottie,
               ) : Container(),
 
-              Container(
+              SizedBox(
                 width: 325.w,
                 child: Padding(
                   padding:  EdgeInsets.only(bottom: 16.h, top: 24.h),
@@ -390,11 +390,11 @@ class EvieTwoButtonDialog extends StatelessWidget{
                         child: customButtonUp ?? EvieButton(
                             width: double.infinity,
                             height: 48.h,
+                            onPressed: onPressedUp,
                             child: Text(
                               upContent ?? '',
                               style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                            ),
-                            onPressed: onPressedUp
+                            )
                         ),
                       ),
                     ),
@@ -406,11 +406,11 @@ class EvieTwoButtonDialog extends StatelessWidget{
                         child: customButtonDown ?? EvieButton_ReversedColor(
                           width: double.infinity,
                           height: 48.h,
+                          onPressed: onPressedDown,
                           child: Text(
                             downContent ?? '',
                             style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
                           ),
-                          onPressed: onPressedDown,
                         ),
                       ),
                     ),
@@ -440,7 +440,7 @@ class EvieConnectingDialog extends StatelessWidget{
 
 
   const EvieConnectingDialog({
-    Key? key,
+    super.key,
     this.title,
     this.havePic,
     required this.childContent,
@@ -452,7 +452,7 @@ class EvieConnectingDialog extends StatelessWidget{
     this.customButtonUp,
     this.customButtonDown, this.lottie,
 
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -487,7 +487,7 @@ class EvieConnectingDialog extends StatelessWidget{
                     padding: EdgeInsets.only(top: 250.h),
                     child: Column(
                       children: [
-                        Container(
+                        SizedBox(
                           width: 325.w,
                           child: Padding(
                             padding:  EdgeInsets.only(bottom: 16.h),
@@ -510,11 +510,11 @@ class EvieConnectingDialog extends StatelessWidget{
                                   child: customButtonUp ?? EvieButton(
                                       width: double.infinity,
                                       height: 48.h,
+                                      onPressed: onPressedUp,
                                       child: Text(
                                         upContent ?? '',
                                         style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                                      ),
-                                      onPressed: onPressedUp
+                                      )
                                   ),
                                 ),
                               ),
@@ -526,11 +526,11 @@ class EvieConnectingDialog extends StatelessWidget{
                                   child: customButtonDown ?? EvieButton_ReversedColor(
                                     width: double.infinity,
                                     height: 48.h,
+                                    onPressed: onPressedDown,
                                     child: Text(
                                       downContent ?? '',
                                       style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.primaryColor),
                                     ),
-                                    onPressed: onPressedDown,
                                   ),
                                 ),
                               ),

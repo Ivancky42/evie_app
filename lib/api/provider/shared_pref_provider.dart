@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:convert';
 
 import 'package:evie_test/api/model/bike_model.dart';
 import 'package:evie_test/api/model/notification_setting_model.dart';
@@ -8,7 +7,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/user_bike_model.dart';
 
 class SharedPreferenceProvider with ChangeNotifier {
   Future <SharedPreferences> sharedPreferences = SharedPreferences.getInstance();
@@ -137,7 +135,7 @@ class SharedPreferenceProvider with ChangeNotifier {
     if (notificationSettings != null) {
       if (currentNotificationSettings != notificationSettings) {
         if (currentNotificationSettings?.general != notificationSettings.general) {
-          if (notificationSettings?.general == true) {
+          if (notificationSettings.general == true) {
             await subscribeToTopic(generalTopic);
           }
           else {
@@ -146,7 +144,7 @@ class SharedPreferenceProvider with ChangeNotifier {
         }
 
         if (currentNotificationSettings?.promo != notificationSettings.promo) {
-          if (notificationSettings?.promo == true) {
+          if (notificationSettings.promo == true) {
             await subscribeToTopic(promoTopic);
           }
           else {
@@ -155,7 +153,7 @@ class SharedPreferenceProvider with ChangeNotifier {
         }
 
         if (currentNotificationSettings?.firmwareUpdate != notificationSettings.firmwareUpdate) {
-          if (notificationSettings?.firmwareUpdate == true) {
+          if (notificationSettings.firmwareUpdate == true) {
             await subscribeToTopic(firmwareUpdateTopic);
           }
           else {

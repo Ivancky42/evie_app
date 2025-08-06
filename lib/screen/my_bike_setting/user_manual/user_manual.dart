@@ -1,36 +1,18 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:evie_test/api/dialog.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/screen/my_account/my_account_widget.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:evie_test/widgets/text_column.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
 
-import '../../../api/colours.dart';
 import '../../../api/enumerate.dart';
-import '../../../api/function.dart';
-import '../../../api/length.dart';
-import '../../../api/navigator.dart';
-import '../../../api/provider/bluetooth_provider.dart';
-import '../../../api/provider/firmware_provider.dart';
-import '../../../api/provider/trip_provider.dart';
-import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
-import '../../../widgets/evie_button.dart';
 
 class UserManual extends StatefulWidget {
-  const UserManual({Key? key}) : super(key: key);
+  const UserManual({super.key});
 
   @override
   _UserManualState createState() => _UserManualState();

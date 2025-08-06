@@ -2,23 +2,17 @@ import 'dart:collection';
 import 'dart:convert';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/shared_pref_provider.dart';
-import 'package:evie_test/api/sizer.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/screen/user_home_page/add_new_bike/add_new_bike.dart';
 import 'package:evie_test/screen/user_home_page/bike_loading.dart';
 import 'package:evie_test/screen/user_home_page/free_plan/free_plan.dart';
 import 'package:evie_test/screen/user_home_page/paid_plan/paid_plan.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/paid_plan.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
-import '../api/colours.dart';
 import '../api/dialog.dart';
 import '../api/provider/auth_provider.dart';
 import '../api/provider/bike_provider.dart';
@@ -31,7 +25,7 @@ import '../widgets/evie_appbar.dart';
 
 ///Default user home page if login is true(display bicycle info)
 class UserHomeGeneralV2 extends StatefulWidget {
-  const UserHomeGeneralV2({Key? key}) : super(key: key);
+  const UserHomeGeneralV2({super.key});
 
   @override
   _UserHomeGeneralV2State createState() => _UserHomeGeneralV2State();
@@ -196,10 +190,10 @@ class _UserHomeGeneralV2State extends State<UserHomeGeneralV2> {
     super.initState();
   }
 
-  Future<void> fetchData(_authProvider, _currentUserProvider, context) async {
-    final result = await _currentUserProvider.checkUserAccount(_authProvider.getUid);
+  Future<void> fetchData(authProvider, currentUserProvider, context) async {
+    final result = await currentUserProvider.checkUserAccount(authProvider.getUid);
     if (result == 'INVALID_USER') {
-      await _authProvider.signOut(context);
+      await authProvider.signOut(context);
       changeToWelcomeScreen(context);
     }
     else if (result == 'VALID_USER'){
@@ -208,8 +202,8 @@ class _UserHomeGeneralV2State extends State<UserHomeGeneralV2> {
       });
     }
     else if (result == 'MISSING_DATA_USER') {
-      await _authProvider.restoreUserData(context);
-      fetchData(_authProvider, _currentUserProvider, context);
+      await authProvider.restoreUserData(context);
+      fetchData(authProvider, currentUserProvider, context);
     }
   }
 

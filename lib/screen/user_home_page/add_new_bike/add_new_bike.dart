@@ -1,43 +1,27 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math' as math;
-import 'dart:ui';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/user_home_page/free_plan/mapbox_widget.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:get/utils.dart';
 import 'package:location/location.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../../../api/dialog.dart';
-import '../../../api/model/location_model.dart';
 import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/location_provider.dart';
 import '../../../bluetooth/modelResult.dart';
 import '../../../widgets/evie_button.dart';
-import '../../../widgets/evie_double_button_dialog.dart';
-import '../../../widgets/evie_single_button_dialog.dart';
-import '../home_page_widget.dart';
-import '../paid_plan/paid_plan.dart';
-import 'bottom_sheet_widget.dart';
 
 class AddNewBike extends StatefulWidget {
-  const AddNewBike({Key? key}) : super(key: key);
+  const AddNewBike({super.key});
 
   @override
   _AddNewBikeState createState() => _AddNewBikeState();

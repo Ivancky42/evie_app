@@ -1,21 +1,17 @@
 
 import 'package:evie_test/api/navigator.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import 'package:step_progress_indicator/step_progress_indicator.dart';
-import '../../animation/ripple_pulse_animation.dart';
 import '../../api/colours.dart';
 import '../../api/fonts.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../widgets/evie_progress_indicator.dart';
 
 class BikeConnectSuccess extends StatefulWidget {
-  const BikeConnectSuccess({Key? key}) : super(key: key);
+  const BikeConnectSuccess({super.key});
 
   @override
   _BikeConnectSuccessState createState() => _BikeConnectSuccessState();
@@ -80,7 +76,7 @@ class _BikeConnectSuccessState extends State<BikeConnectSuccess> {
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(32.w, 0.h, 32.w, 4.h),
                         child: Text(
-                          "EVIE " + _bikeProvider.currentBikeModel!.model!.toUpperCase(),
+                          "EVIE ${_bikeProvider.currentBikeModel!.model!.toUpperCase()}",
                           style:  EvieTextStyles.body20,
                         ),
                       ),

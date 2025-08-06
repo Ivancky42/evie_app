@@ -1,28 +1,19 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dio/dio.dart';
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import 'package:step_progress_indicator/step_progress_indicator.dart';
-import '../../animation/ripple_pulse_animation.dart';
-import '../../api/backend/server_api_base.dart';
-import '../../api/colours.dart';
 import '../../api/fonts.dart';
-import '../../api/model/bike_model.dart';
 import '../../api/provider/bike_provider.dart';
 import '../../widgets/evie_progress_indicator.dart';
 
 class BikeRegistering extends StatefulWidget {
   final bool isSuccess;
   final String? registeringDeviceIMEI;
-  const BikeRegistering({Key? key, required this.isSuccess, this.registeringDeviceIMEI}) : super(key: key);
+  const BikeRegistering({super.key, required this.isSuccess, this.registeringDeviceIMEI});
 
   @override
   _BikeRegisteringState createState() => _BikeRegisteringState();

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/bluetooth/modelResult.dart';
+import 'package:sizer/sizer.dart';
+import 'package:evie_test/bluetooth/modelResult.dart' as bluetooth;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
@@ -17,7 +17,7 @@ import '../api/snackbar.dart';
 import 'evie_single_button_dialog.dart';
 
 class UnlockingButton extends StatefulWidget {
-  const UnlockingButton({Key? key}) : super(key: key);
+  const UnlockingButton({super.key});
 
   @override
   State<UnlockingButton> createState() => _UnlockingButtonState();
@@ -28,8 +28,8 @@ class _UnlockingButtonState extends State<UnlockingButton> {
   late BluetoothProvider bluetoothProvider;
   late BikeProvider bikeProvider;
   late SettingProvider settingProvider;
-  DeviceConnectResult? deviceConnectResult;
-  CableLockResult? cableLockState;
+  bluetooth.DeviceConnectResult? deviceConnectResult;
+  bluetooth.CableLockResult? cableLockState;
   StreamSubscription? unlockSub;
   Widget? buttonImage;
   int unlockCount = 0;
@@ -67,17 +67,17 @@ class _UnlockingButtonState extends State<UnlockingButton> {
         child:
         ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(cableLockState
-                ?.lockState == LockState.unlock ? EvieColors.softPurple : EvieColors.primaryColor,),
-            shape: MaterialStateProperty.all<CircleBorder>(
+            backgroundColor: WidgetStateProperty.all(cableLockState
+                ?.lockState == bluetooth.LockState.unlock ? EvieColors.softPurple : EvieColors.primaryColor,),
+            shape: WidgetStateProperty.all<CircleBorder>(
               CircleBorder(),
             ),
-            elevation: MaterialStateProperty.all(0),
-            padding: MaterialStateProperty.all(EdgeInsets.zero), // This removes padding
+            elevation: WidgetStateProperty.all(0),
+            padding: WidgetStateProperty.all(EdgeInsets.zero), // This removes padding
           ),
           onPressed:() {
-            if (deviceConnectResult == DeviceConnectResult.connected && bluetoothProvider.currentConnectedDevice == bikeProvider.currentBikeModel?.macAddr) {
-              if (cableLockState?.lockState == LockState.lock) {
+            if (deviceConnectResult == bluetooth.DeviceConnectResult.connected && bluetoothProvider.currentConnectedDevice == bikeProvider.currentBikeModel?.macAddr) {
+              if (cableLockState?.lockState == bluetooth.LockState.lock) {
                 setState(() {
                   unlockCount = 0;
                 });
@@ -88,7 +88,7 @@ class _UnlockingButtonState extends State<UnlockingButton> {
                     }, onError: (error) {
                       unlockSub?.cancel();
                       SmartDialog.show(
-                          widget: EvieSingleButtonDialog(
+                          builder: (_) => EvieSingleButtonDialog(
                               title: "Error",
                               content: "Unable to unlock bike, Please place the phone near to the bike and try again.",
                               rightContent: "Retry",
@@ -125,14 +125,14 @@ class _UnlockingButtonState extends State<UnlockingButton> {
         SizedBox(
           height: 12.h,
         ),
-        if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning) ...{
+        if (deviceConnectResult == bluetooth.DeviceConnectResult.connecting || deviceConnectResult == bluetooth.DeviceConnectResult.scanning) ...{
           Text(
             "Connecting bike",
             style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
           ),
         }
-        else if (deviceConnectResult == DeviceConnectResult.connected) ...{
-          cableLockState?.lockState == LockState.lock ?
+        else if (deviceConnectResult == bluetooth.DeviceConnectResult.connected) ...{
+          cableLockState?.lockState == bluetooth.LockState.lock ?
           Text(
           "Tap to unlock bike",
           style: EvieTextStyles.body14.copyWith(color: EvieColors.darkGray),
@@ -153,8 +153,8 @@ class _UnlockingButtonState extends State<UnlockingButton> {
   }
 
   void setButtonImage() {
-    if (deviceConnectResult == DeviceConnectResult.connected && bluetoothProvider.currentConnectedDevice == bikeProvider.currentBikeModel?.macAddr) {
-      if (cableLockState?.lockState == LockState.unlock) {
+    if (deviceConnectResult == bluetooth.DeviceConnectResult.connected && bluetoothProvider.currentConnectedDevice == bikeProvider.currentBikeModel?.macAddr) {
+      if (cableLockState?.lockState == bluetooth.LockState.unlock) {
         if(bluetoothProvider.isUnlocking == true){
           Future.delayed(Duration.zero, () {
             bluetoothProvider.setIsUnlocking(false);
@@ -172,12 +172,12 @@ class _UnlockingButtonState extends State<UnlockingButton> {
       else if(bluetoothProvider.isUnlocking){
         buttonImage = Container(
           color: Colors.transparent,
-          child: lottie.Lottie.asset('assets/animations/unlock_button.json', repeat: false),
           width: 600,
           height: 300,
+          child: lottie.Lottie.asset('assets/animations/unlock_button.json', repeat: false),
         );
       }
-      else if (cableLockState?.lockState == LockState.lock) {
+      else if (cableLockState?.lockState == bluetooth.LockState.lock) {
 
         buttonImage = SvgPicture.asset(
           "assets/buttons/lock_lock.svg",
@@ -185,17 +185,17 @@ class _UnlockingButtonState extends State<UnlockingButton> {
           height: 52.w,);
       }
     }
-    else if (cableLockState?.lockState == LockState.unknown) {
+    else if (cableLockState?.lockState == bluetooth.LockState.unknown) {
       buttonImage =  lottie.Lottie.asset('assets/animations/loading_button.json', repeat: true);
     }
-    else if (deviceConnectResult == DeviceConnectResult.connecting || deviceConnectResult == DeviceConnectResult.scanning || deviceConnectResult == DeviceConnectResult.partialConnected) {
+    else if (deviceConnectResult == bluetooth.DeviceConnectResult.connecting || deviceConnectResult == bluetooth.DeviceConnectResult.scanning || deviceConnectResult == bluetooth.DeviceConnectResult.partialConnected) {
       buttonImage =  Container(
         padding: EdgeInsets.all(8),
         //color: Colors.red,
         child: lottie.Lottie.asset('assets/animations/loading_button.json', repeat: true),
       );
     }
-    else if (deviceConnectResult == DeviceConnectResult.disconnected) {
+    else if (deviceConnectResult == bluetooth.DeviceConnectResult.disconnected) {
       buttonImage = SvgPicture.asset(
         "assets/buttons/bluetooth_not_connected.svg",
         width: 52.w,

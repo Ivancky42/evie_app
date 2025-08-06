@@ -1,9 +1,7 @@
-import 'package:evie_test/api/sizer.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 
 import '../api/colours.dart';
-import 'evie_textform.dart';
 
 ///Cupertino switch widget
 class EvieCheckBox extends StatelessWidget {
@@ -11,11 +9,11 @@ class EvieCheckBox extends StatelessWidget {
   final bool value;
 
   const EvieCheckBox({
-    Key? key,
+    super.key,
     required this.onChanged,
     required this.value,
 
-  }) : super(key: key);
+  });
 
 
   @override
@@ -27,8 +25,8 @@ class EvieCheckBox extends StatelessWidget {
         child: Checkbox(
           value: value,
           activeColor: EvieColors.primaryColor,
-          fillColor:  MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-            if (states.contains(MaterialState.selected)) {
+          fillColor:  WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+            if (states.contains(WidgetState.selected)) {
               return EvieColors.primaryColor; // color of the checkbox when it's checked
             } else {
               return EvieColors.lightGrayishCyan; // color of the checkbox when it's unchecked
@@ -39,9 +37,9 @@ class EvieCheckBox extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5.w),
           ),
-          side: MaterialStateBorderSide.resolveWith(
+          side: WidgetStateBorderSide.resolveWith(
                 (states) {
-              if (states.contains(MaterialState.selected)) {
+              if (states.contains(WidgetState.selected)) {
                 return BorderSide(width: 1, color: EvieColors.primaryColor); // color of the checkbox when it's checked
               } else {
                 return BorderSide(color: EvieColors.lightGrayishCyan); // color of the checkbox when it's unchecked

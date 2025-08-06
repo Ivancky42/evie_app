@@ -4,8 +4,8 @@ import 'dart:ui';
 import 'package:evie_test/api/backend/sim_api_caller.dart';
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/bluetooth/modelResult.dart';
+import 'package:sizer/sizer.dart';
+import 'package:evie_test/bluetooth/modelResult.dart' as bluetooth;
 import 'package:evie_test/widgets/widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +31,7 @@ import '../widgets/evie_single_button_dialog.dart';
 import '../widgets/evie_textform.dart';
 
 class TestBle extends StatefulWidget {
-  const TestBle({Key? key}) : super(key: key);
+  const TestBle({super.key});
 
   @override
   _TestBleState createState() => _TestBleState();
@@ -108,7 +108,7 @@ class _TestBleState extends State<TestBle> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Bluetooth Status : " + bluetoothProvider.bleStatus.toString(),
+                  "Bluetooth Status : ${bluetoothProvider.bleStatus}",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -120,7 +120,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Text(
-                  "MAC Address : " + (connectionStateUpdate?.deviceId ?? "No Device"),
+                  "MAC Address : ${connectionStateUpdate?.deviceId ?? "No Device"}",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -132,7 +132,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Text(
-                  "DEVICE IMEI : " + (bluetoothProvider.iotInfoModel?.deviceIMEI ?? "No Device IMEI"),
+                  "DEVICE IMEI : ${bluetoothProvider.iotInfoModel?.deviceIMEI ?? "No Device IMEI"}",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -144,7 +144,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Text(
-                  "QR Code : " + (bluetoothProvider.iotInfoModel?.qrCode ?? "No QR Code"),
+                  "QR Code : ${bluetoothProvider.iotInfoModel?.qrCode ?? "No QR Code"}",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -156,7 +156,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Text(
-                  "IP Address : " + (bluetoothProvider.iotInfoModel?.ipAddress ?? "No IP Address"),
+                  "IP Address : ${bluetoothProvider.iotInfoModel?.ipAddress ?? "No IP Address"}",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -164,19 +164,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Text(
-                  "Firmware Version : " + (bluetoothProvider.iotInfoModel?.firmwareVer ?? ""),
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
-                ),
-
-                SizedBox(
-                  height: 2,
-                ),
-
-                Text(
-                  "Com Key Value : " + (bluetoothProvider.requestComKeyResult != null ? bluetoothProvider.requestComKeyResult!.communicationKey.toString() : "No Communication Key"),
+                  "Firmware Version : ${bluetoothProvider.iotInfoModel?.firmwareVer ?? ""}",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -188,7 +176,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Text(
-                  "Battery Level : " + (bluetoothProvider.bikeInfoResult != null ? bluetoothProvider.bikeInfoResult!.batteryLevel! + "%" : "Not detected"),
+                  "Com Key Value : ${bluetoothProvider.requestComKeyResult != null ? bluetoothProvider.requestComKeyResult!.communicationKey.toString() : "No Communication Key"}",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -200,7 +188,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Text(
-                  "Current Speed : " + (bluetoothProvider.bikeInfoResult != null ? bluetoothProvider.bikeInfoResult!.speed! + " km/h" : "Not detected"),
+                  "Battery Level : ${bluetoothProvider.bikeInfoResult != null ? "${bluetoothProvider.bikeInfoResult!.batteryLevel!}%" : "Not detected"}",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -212,7 +200,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Text(
-                  "Single Riding Mileage : " + (bluetoothProvider.bikeInfoResult != null ? bluetoothProvider.bikeInfoResult!.singleRidingMileage! + " m" : "Not detected"),
+                  "Current Speed : ${bluetoothProvider.bikeInfoResult != null ? "${bluetoothProvider.bikeInfoResult!.speed!} km/h" : "Not detected"}",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -224,7 +212,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Text(
-                  "Estimate Remaining Mileage : " + (bluetoothProvider.bikeInfoResult != null ? bluetoothProvider.bikeInfoResult!.remainingMileage! + " m" : "Not detected"),
+                  "Single Riding Mileage : ${bluetoothProvider.bikeInfoResult != null ? "${bluetoothProvider.bikeInfoResult!.singleRidingMileage!} m" : "Not detected"}",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -236,7 +224,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Text(
-                  "Lock Status : " + (bluetoothProvider.cableLockState?.lockState != null ? bluetoothProvider.cableLockState!.lockState == LockState.lock ? "LOCK" : bluetoothProvider.cableLockState!.lockState == LockState.unlock ? "UNLOCK" : "UNKNOWN": "UNKNOWN"),
+                  "Estimate Remaining Mileage : ${bluetoothProvider.bikeInfoResult != null ? "${bluetoothProvider.bikeInfoResult!.remainingMileage!} m" : "Not detected"}",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -248,7 +236,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Text(
-                  "Connection status : " + connectionStatus,
+                  "Lock Status : ${bluetoothProvider.cableLockState?.lockState != null ? bluetoothProvider.cableLockState!.lockState == bluetooth.LockState.lock ? "LOCK" : bluetoothProvider.cableLockState!.lockState == bluetooth.LockState.unlock ? "UNLOCK" : "UNKNOWN": "UNKNOWN"}",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -260,7 +248,7 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Text(
-                  "Failed status : " + (bluetoothProvider.errorPromptResult?.errorMessage.name ?? ""),
+                  "Connection status : $connectionStatus",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -272,7 +260,19 @@ class _TestBleState extends State<TestBle> {
                 ),
 
                 Text(
-                  "Query RFID : " + (bluetoothProvider.queryRFIDCardResult?.rfidNumber ?? ""),
+                  "Failed status : ${bluetoothProvider.errorPromptResult?.errorMessage.name ?? ""}",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                ),
+
+                SizedBox(
+                  height: 2,
+                ),
+
+                Text(
+                  "Query RFID : ${bluetoothProvider.queryRFIDCardResult?.rfidNumber ?? ""}",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -287,7 +287,7 @@ class _TestBleState extends State<TestBle> {
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: EvieButton(
                     onPressed: () async {
-                      if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.partialConnected || bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
+                      if (bluetoothProvider.deviceConnectResult == bluetooth.DeviceConnectResult.partialConnected || bluetoothProvider.deviceConnectResult == bluetooth.DeviceConnectResult.connected) {
                         await bluetoothProvider.disconnectDevice();
                         await bluetoothProvider.stopScan();
                         await connectSubscription?.cancel();
@@ -299,64 +299,64 @@ class _TestBleState extends State<TestBle> {
                         connectSubscription = bluetoothProvider.startScanAndConnect().listen((deviceConnectStatus) {
                           //print(deviceConnectStatus.name);
                           switch (deviceConnectStatus) {
-                            case DeviceConnectResult.scanning:
+                            case bluetooth.DeviceConnectResult.scanning:
                             // TODO: Handle this case.
                               setState(() {
                                 connectionStatus = deviceConnectStatus.name.toString();
                               });
                               break;
-                            case DeviceConnectResult.scanTimeout:
+                            case bluetooth.DeviceConnectResult.scanTimeout:
                             // TODO: Handle this case.
                               setState(() {
                                 connectionStatus = deviceConnectStatus.name.toString();
                               });
                               break;
-                            case DeviceConnectResult.scanError:
+                            case bluetooth.DeviceConnectResult.scanError:
                             // TODO: Handle this case.
                               setState(() {
                                 connectionStatus = deviceConnectStatus.name.toString();
                               });
                               break;
-                            case DeviceConnectResult.connecting:
+                            case bluetooth.DeviceConnectResult.connecting:
                             // TODO: Handle this case.
                               setState(() {
                                 connectionStatus = deviceConnectStatus.name.toString();
                               });
                               break;
-                            case DeviceConnectResult.partialConnected:
+                            case bluetooth.DeviceConnectResult.partialConnected:
                             // TODO: Handle this case.
                               setState(() {
                                 connectionStatus = deviceConnectStatus.name.toString();
                               });
                               break;
-                            case DeviceConnectResult.connected:
+                            case bluetooth.DeviceConnectResult.connected:
                             // TODO: Handle this case.
                               setState(() {
                                 connectionStatus = deviceConnectStatus.name.toString();
                               });
                               connectSubscription?.cancel();
                               break;
-                            case DeviceConnectResult.disconnecting:
+                            case bluetooth.DeviceConnectResult.disconnecting:
                             // TODO: Handle this case.
                               setState(() {
                                 connectionStatus = deviceConnectStatus.name.toString();
                               });
                               break;
-                            case DeviceConnectResult.disconnected:
+                            case bluetooth.DeviceConnectResult.disconnected:
                             // TODO: Handle this case.
                               setState(() {
                                 connectionStatus = deviceConnectStatus.name.toString();
                               });
                               break;
-                            case DeviceConnectResult.connectError:
+                            case bluetooth.DeviceConnectResult.connectError:
                             // TODO: Handle this case.
                               setState(() {
                                 connectionStatus = deviceConnectStatus.name.toString();
                               });
                               break;
-                            case DeviceConnectResult.deviceFound:
+                            case bluetooth.DeviceConnectResult.deviceFound:
                               // TODO: Handle this case.
-                            case DeviceConnectResult.switchBike:
+                            case bluetooth.DeviceConnectResult.switchBike:
                               // TODO: Handle this case.
                           }
                         });
@@ -383,7 +383,7 @@ class _TestBleState extends State<TestBle> {
                       if (bluetoothProvider.bleStatus == BleStatus.ready) {
                         StreamSubscription? subscription;
                         subscription = bluetoothProvider.cableUnlock().listen((cableLockResult) {
-                          if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+                          if (bluetoothProvider.cableLockState?.lockState == bluetooth.LockState.unlock) {
                             SmartDialog.dismiss(status: SmartStatus.loading);
                             subscription?.cancel();
                           }
@@ -415,7 +415,7 @@ class _TestBleState extends State<TestBle> {
                       SmartDialog.showLoading(msg: "Get cable lock status...");
                       if (bluetoothProvider.bleStatus == BleStatus.ready) {
                         bluetoothProvider.getCableLockStatus().listen((cableLockResult) {
-                          if (cableLockResult.lockState == LockState.lock) {
+                          if (cableLockResult.lockState == bluetooth.LockState.lock) {
 
                           }
                           else {
@@ -467,7 +467,7 @@ class _TestBleState extends State<TestBle> {
                   child: EvieButton(
                     onPressed: () {
                       SmartDialog.show(
-                          widget: Form(
+                          builder: (_) => Form(
                             key: _formKey,
                             child: EvieDoubleButtonDialog(
                                 title: "Update",
@@ -510,13 +510,13 @@ class _TestBleState extends State<TestBle> {
                                     if (bluetoothProvider.bleStatus == BleStatus.ready) {
                                       if (bluetoothProvider.connectionStateUpdate?.connectionState == DeviceConnectionState.connected) {
                                         if (_qrCodeController.text != "QRCODE:" && _ipAddressController.text != "IP:") {
-                                          bluetoothProvider.updateIotData(_qrCodeController.text.trim() + "," + _ipAddressController.text.trim() + ",");
+                                          bluetoothProvider.updateIotData("${_qrCodeController.text.trim()},${_ipAddressController.text.trim()},");
                                         }
                                         else if (_ipAddressController.text != "IP:") {
-                                          bluetoothProvider.updateIotData(_ipAddressController.text.trim() + ",");
+                                          bluetoothProvider.updateIotData("${_ipAddressController.text.trim()},");
                                         }
                                         else if (_qrCodeController.text != "QRCODE:") {
-                                          bluetoothProvider.updateIotData(_qrCodeController.text.trim() + ",");
+                                          bluetoothProvider.updateIotData("${_qrCodeController.text.trim()},");
                                         }
 
                                         SmartDialog.dismiss();
@@ -601,7 +601,7 @@ class _TestBleState extends State<TestBle> {
                           animationDuration: 0,
                           percent: bluetoothProvider.fwUpgradeProgress,
                           center: Text(
-                            (bluetoothProvider.fwUpgradeProgress * 100).toStringAsFixed(0) + "%",
+                            "${(bluetoothProvider.fwUpgradeProgress * 100).toStringAsFixed(0)}%",
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -622,7 +622,7 @@ class _TestBleState extends State<TestBle> {
                       SmartDialog.showLoading(msg: "register RFID....");
                       bluetoothProvider.addRFID().listen((addRFIDStatus) {
                         SmartDialog.dismiss(status: SmartStatus.loading);
-                        if (addRFIDStatus.addRFIDState == AddRFIDState.startReadCard) {
+                        if (addRFIDStatus.addRFIDState == bluetooth.AddRFIDState.startReadCard) {
                           /// Successfully Changed BLE Key
                         }
                         else {
@@ -656,7 +656,7 @@ class _TestBleState extends State<TestBle> {
                             deleteRFIDStatus) {
                           SmartDialog.dismiss(status: SmartStatus.loading);
                           if (deleteRFIDStatus.result ==
-                              CommandResult.success) {}
+                              bluetooth.CommandResult.success) {}
                           else {}
                         }, onError: (error) {
                           SmartDialog.dismiss(status: SmartStatus.loading);
@@ -664,7 +664,7 @@ class _TestBleState extends State<TestBle> {
                         });
                       }
                       else {
-                        SmartDialog.show(widget: Text("No Query RFID available", style: TextStyle(color: Colors.black),));
+                        SmartDialog.show(builder: (_) => Text("No Query RFID available", style: TextStyle(color: Colors.black),));
                       }
                     },
 
@@ -807,7 +807,7 @@ class _TestBleState extends State<TestBle> {
                       subscription = bluetoothProvider.changeBleKey().listen((changeBleKeyResult) {
                         SmartDialog.dismiss(status: SmartStatus.loading);
                         subscription?.cancel();
-                        if (changeBleKeyResult.result == CommandResult.success) {
+                        if (changeBleKeyResult.result == bluetooth.CommandResult.success) {
                           /// Successfully Changed BLE Key
                           /// Remember update this BLE KEY to firestore ### very important.
                           changeBleKeyResult.bleKey;
@@ -840,7 +840,7 @@ class _TestBleState extends State<TestBle> {
                       SmartDialog.showLoading(msg: "Changing BLE Name....");
                       bluetoothProvider.changeBleName().listen((changeBleNameResult) {
                         SmartDialog.dismiss(status: SmartStatus.loading);
-                        if (changeBleNameResult.result == CommandResult.success) {
+                        if (changeBleNameResult.result == bluetooth.CommandResult.success) {
                           /// Successfully Changed BLE Key
                         }
                         else {
@@ -868,9 +868,9 @@ class _TestBleState extends State<TestBle> {
                   child: EvieButton(
                     onPressed: () {
                       SmartDialog.showLoading(msg: "Changing Movement Setting....");
-                      bluetoothProvider.changeMovementSetting(true, MovementSensitivity.low).listen((changeBleNameResult) {
+                      bluetoothProvider.changeMovementSetting(true, bluetooth.MovementSensitivity.low).listen((changeBleNameResult) {
                         SmartDialog.dismiss(status: SmartStatus.loading);
-                        if (changeBleNameResult.result == CommandResult.success) {
+                        if (changeBleNameResult.result == bluetooth.CommandResult.success) {
                           /// Successfully Changed BLE Key
                         }
                         else {
@@ -898,9 +898,9 @@ class _TestBleState extends State<TestBle> {
                   child: EvieButton(
                     onPressed: () {
                       SmartDialog.showLoading(msg: "Changing Movement Setting....");
-                      bluetoothProvider.changeMovementSetting(false, MovementSensitivity.low).listen((changeBleNameResult) {
+                      bluetoothProvider.changeMovementSetting(false, bluetooth.MovementSensitivity.low).listen((changeBleNameResult) {
                         SmartDialog.dismiss(status: SmartStatus.loading);
-                        if (changeBleNameResult.result == CommandResult.success) {
+                        if (changeBleNameResult.result == bluetooth.CommandResult.success) {
                           /// Successfully Changed BLE Key
                         }
                         else {
@@ -930,7 +930,7 @@ class _TestBleState extends State<TestBle> {
                       SmartDialog.showLoading(msg: "Factory Reset....");
                       bluetoothProvider.factoryReset().listen((changeBleNameResult) {
                         SmartDialog.dismiss(status: SmartStatus.loading);
-                        if (changeBleNameResult.result == CommandResult.success) {
+                        if (changeBleNameResult.result == bluetooth.CommandResult.success) {
                           /// Successfully Changed BLE Key
                         }
                         else {
@@ -1110,7 +1110,7 @@ class _TestBleState extends State<TestBle> {
                     subscription = bluetoothProvider.cableUnlock().listen((unlockResult) {
                       SmartDialog.dismiss(status: SmartStatus.loading);
                       subscription?.cancel();
-                      if (unlockResult.result == CommandResult.success) {
+                      if (unlockResult.result == bluetooth.CommandResult.success) {
                         //print("unlock success");
                       }
                       else {
@@ -1136,7 +1136,7 @@ class _TestBleState extends State<TestBle> {
                   ),
                   onPressed: () {
                     SmartDialog.show(
-                        widget: EvieDoubleButtonDialogCupertino(
+                        builder: (_) => EvieDoubleButtonDialogCupertino(
                           //buttonNumber: "2",
                             title: "Delete bike",
                             content:
@@ -1156,7 +1156,7 @@ class _TestBleState extends State<TestBle> {
                                         .trim());
                                 if (result == true) {
                                   SmartDialog.show(
-                                      widget:
+                                      builder: (_) =>
                                       EvieSingleButtonDialogCupertino(
                                           title: "Success",
                                           content:
@@ -1167,7 +1167,7 @@ class _TestBleState extends State<TestBle> {
                                           }));
                                 } else {
                                   SmartDialog.show(
-                                      widget:
+                                      builder: (_) =>
                                       EvieSingleButtonDialogCupertino(
                                           title: "Error",
                                           content:
@@ -1215,7 +1215,7 @@ class _TestBleState extends State<TestBle> {
 
                       width: double.infinity,
                       child: Text(
-                        "Checkout plan : " + planModel.name.toString(),
+                        "Checkout plan : ${planModel.name}",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12.0,

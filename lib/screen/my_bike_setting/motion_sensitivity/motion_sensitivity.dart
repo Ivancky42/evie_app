@@ -1,11 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:evie_test/api/function.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/bluetooth/modelResult.dart';
-import 'package:evie_test/screen/my_account/my_account_widget.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -18,17 +15,11 @@ import '../../../api/colours.dart';
 import '../../../api/dialog.dart';
 import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
-import '../../../api/length.dart';
-import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
-import '../../../api/sheet.dart';
 import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_divider.dart';
 import '../../../widgets/evie_single_button_dialog.dart';
-import '../../../widgets/evie_switch.dart';
-import '../../../widgets/evie_textform.dart';
-import '../../user_home_page/user_home_page.dart';
 
 // import 'package:evie_test/screen/my_bike_setting/motion_sensitivity/detection_sensitivity.dart';
 // import 'package:evie_test/screen/my_bike_setting/sheet_navigator.dart';
@@ -37,7 +28,7 @@ import '../../user_home_page/user_home_page.dart';
 ///User profile page with user account information
 
 class MotionSensitivity extends StatefulWidget {
-  const MotionSensitivity({Key? key}) : super(key: key);
+  const MotionSensitivity({super.key});
 
   @override
   _MotionSensitivityState createState() => _MotionSensitivityState();
@@ -86,12 +77,12 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
+              SizedBox(
                 height: 82.h,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                   Container(
+                   SizedBox(
                      width: 280.w,
                      child:  Column(
                        crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,14 +104,14 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                       padding: EdgeInsets.only(left: 8.w),
                       child: CupertinoSwitch(
                         value: _bikeProvider.currentBikeModel!.movementSetting?.enabled ?? false,
-                        activeColor:  EvieColors.primaryColor,
+                        activeTrackColor:  EvieColors.primaryColor,
                         thumbColor: _thumbColor,
-                        trackColor: EvieColors.lightGrayishCyan,
+                        inactiveTrackColor: EvieColors.lightGrayishCyan,
                         onChanged: (value) async {
                           if (value) {
                             showCustomLightLoading('Changing...');
                             final uploadResult = await _bikeProvider
-                                .updateMotionSensitivity(value!,
+                                .updateMotionSensitivity(value,
                                 _bikeProvider.currentBikeModel?.movementSetting
                                     ?.sensitivity.toString() ??
                                     MovementSensitivity.medium.toString());
@@ -149,7 +140,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                                           status: SmartStatus.loading);
                                       subscription?.cancel();
                                       SmartDialog.show(
-                                          widget: EvieSingleButtonDialog(
+                                          builder: (_) => EvieSingleButtonDialog(
                                               title: "Error",
                                               content: "Error occurred when changing motion sensitivity level.",
                                               rightContent: "Retry",
@@ -159,7 +150,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                                     }
                                   });
                             } else {
-                              SmartDialog.show(widget: EvieSingleButtonDialog(
+                              SmartDialog.show(builder: (_) => EvieSingleButtonDialog(
                                   title: "Error",
                                   content: "Error occurred when changing motion sensitivity level.",
                                   rightContent: "Ok",
@@ -169,7 +160,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                             }
                           }
                           else {
-                            showOffMotionSensitivity(context, _bikeProvider, value!, _bluetoothProvider);
+                            showOffMotionSensitivity(context, _bikeProvider, value, _bluetoothProvider);
                           }
                       },
                       ),
@@ -187,7 +178,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                   onTap: (){
                     _settingProvider.changeSheetElement(SheetList.detectionSensitivity);
                   },
-                  child: Container(
+                  child: SizedBox(
                     height: 54.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -223,7 +214,7 @@ class _MotionSensitivityState extends State<MotionSensitivity> {
                     behavior: HitTestBehavior.translucent,
                     onTap: (){
                     },
-                    child: Container(
+                    child: SizedBox(
                       height: 54.h,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

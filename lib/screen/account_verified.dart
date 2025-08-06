@@ -1,13 +1,8 @@
-import 'dart:async';
 
 import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/welcome_page.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../api/colours.dart';
@@ -16,12 +11,10 @@ import '../api/fonts.dart';
 import '../api/length.dart';
 import '../api/navigator.dart';
 import '../widgets/evie_appbar.dart';
-import '../widgets/evie_double_button_dialog.dart';
-import '../widgets/widgets.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 class AccountVerified extends StatefulWidget {
-  const AccountVerified({Key? key}) : super(key: key);
+  const AccountVerified({super.key});
 
   @override
   _AccountVerifiedState createState() => _AccountVerifiedState();
@@ -61,7 +54,7 @@ class _AccountVerifiedState extends State<AccountVerified> {
                         height: 1.h,
                       ),
                       Text(
-                        "Awesome " + _userProvider.currentUserModel!.name.toString() + "! You're ready to go. Let's start by registering your bike so you can have a smooth and seamless riding experience.",
+                        "Awesome ${_userProvider.currentUserModel!.name}! You're ready to go. Let's start by registering your bike so you can have a smooth and seamless riding experience.",
                         style: EvieTextStyles.body18,
                       ),
                     ],

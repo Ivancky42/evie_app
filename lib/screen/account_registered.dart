@@ -1,4 +1,4 @@
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +14,7 @@ import '../widgets/evie_appbar.dart';
 import '../widgets/evie_button.dart';
 
 class AccountRegistered extends StatefulWidget {
-  const AccountRegistered({Key? key}) : super(key: key);
+  const AccountRegistered({super.key});
 
   @override
   State<AccountRegistered> createState() => _AccountRegisteredState();

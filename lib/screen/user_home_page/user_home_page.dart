@@ -1,15 +1,11 @@
-import 'dart:io';
 
 import 'package:evie_test/api/length.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/screen/user_home_general.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../../api/colours.dart';
-import '../../test/test.dart';
 import '../feeds/feeds.dart';
 import '../my_account/account/my_account.dart';
 import '../user_home_general_v2.dart';
@@ -17,7 +13,7 @@ import '../user_home_general_v2.dart';
 
 class UserHomePage extends StatefulWidget {
   final int? currentIndex;
-  const UserHomePage(this.currentIndex, {Key? key}) : super(key: key);
+  const UserHomePage(this.currentIndex, {super.key});
 
   @override
   _UserHomePageState createState() => _UserHomePageState();
@@ -87,7 +83,7 @@ class _UserHomePageState extends State<UserHomePage> {
                         padding: EdgeInsets.only(top: 0),
                         child: Column(
                           children: [
-                            Container(
+                            SizedBox(
                               width: 40.w,
                               //color: Colors.red,
                               child: SvgPicture.asset(
@@ -149,7 +145,7 @@ class _UserHomePageState extends State<UserHomePage> {
                         padding: EdgeInsets.only(top: 0),
                         child: Column(
                           children: [
-                            Container(
+                            SizedBox(
                               width: 40.w,
                               //color: Colors.red,
                               child: SvgPicture.asset(
@@ -174,7 +170,7 @@ class _UserHomePageState extends State<UserHomePage> {
                         padding: EdgeInsets.only(top: 0),
                         child: Column(
                           children: [
-                            Container(
+                            SizedBox(
                               width: 40.w,
                               //color: Colors.red,
                               child: SvgPicture.asset(
@@ -221,7 +217,7 @@ class _UserHomePageState extends State<UserHomePage> {
                         padding: EdgeInsets.only(top: 0),
                         child: Column(
                           children: [
-                            Container(
+                            SizedBox(
                               width: 40.w,
                               //color: Colors.red,
                               child: SvgPicture.asset(

@@ -1,4 +1,4 @@
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -12,10 +12,10 @@ import '../../../../widgets/evie_oval.dart';
 
 class Rides extends StatefulWidget {
 
-  Rides({
+  const Rides({
 
-    Key? key
-  }) : super(key: key);
+    super.key
+  });
 
   @override
   State<Rides> createState() => _RidesState();

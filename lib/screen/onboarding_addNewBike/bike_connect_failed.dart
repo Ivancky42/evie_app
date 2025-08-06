@@ -1,13 +1,10 @@
 import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import 'package:step_progress_indicator/step_progress_indicator.dart';
-import '../../animation/ripple_pulse_animation.dart';
 import '../../api/colours.dart';
 import '../../api/fonts.dart';
 import '../../api/function.dart';
@@ -17,7 +14,7 @@ import '../../widgets/evie_button.dart';
 import '../../widgets/evie_progress_indicator.dart';
 
 class BikeConnectFailed extends StatefulWidget {
-  const BikeConnectFailed({Key? key}) : super(key: key);
+  const BikeConnectFailed({super.key});
 
   @override
   _BikeConnectFailedState createState() => _BikeConnectFailedState();
@@ -85,7 +82,7 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
         ),
         Padding(
           padding: EdgeInsets.fromLTRB(19.w, 356.h, 19.w, 288.h),
-          child: Container(
+          child: SizedBox(
             height: 220.h,
             width: 352.18.w,
             child: Stack(
@@ -130,8 +127,8 @@ class _BikeConnectFailedState extends State<BikeConnectFailed> {
                     width: double.infinity,
                     onPressed: (){
                       const url = 'https://support.eviebikes.com/en-US';
-                      final Uri _url = Uri.parse(url);
-                      launch(_url);
+                      final Uri url0 = Uri.parse(url);
+                      launch(url0);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

@@ -1,48 +1,21 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evie_test/api/model/bike_model.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/api/navigator.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/api/provider/location_provider.dart';
-import 'package:evie_test/api/sheet.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/home_element/orbital_list_container.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/utils.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 import '../../../../api/colours.dart';
-import '../../../../api/dialog.dart';
-import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
-import '../../../../api/function.dart';
-import '../../../../api/model/event_model.dart';
-import '../../../../api/model/location_model.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/provider/bluetooth_provider.dart';
-import '../../../../api/provider/current_user_provider.dart';
 import '../../../../api/provider/setting_provider.dart';
-import '../../../../bluetooth/modelResult.dart';
-import '../../../../widgets/evie_card.dart';
 import '../../../../widgets/evie_card_2.dart';
 
 class LoadingMap extends StatefulWidget  {
-  LoadingMap({
-    Key? key
-  }) : super(key: key);
+  const LoadingMap({
+    super.key
+  });
 
   @override
   State<LoadingMap> createState() => _LoadingMapState();
@@ -88,12 +61,12 @@ class _LoadingMapState extends State<LoadingMap> {
     _locationProvider = Provider.of<LocationProvider>(context);
     _settingProvider = Provider.of<SettingProvider>(context);
 
-    List<Widget> _widgets = [
+    List<Widget> widgets = [
       Row(
         children: [
           Padding(
             padding: EdgeInsets.only(left: 23.w,),
-            child: Container(
+            child: SizedBox(
               width: 150.w,
               child: Lottie.asset('assets/animations/loading-bike-status.json'),
             ),
@@ -148,7 +121,7 @@ class _LoadingMapState extends State<LoadingMap> {
                       children: [
                         Expanded(
                           child: CarouselSlider(
-                            items: _widgets,
+                            items: widgets,
                             options: CarouselOptions(
                               padEnds: false,
                               height: double.infinity,
@@ -171,8 +144,8 @@ class _LoadingMapState extends State<LoadingMap> {
                           padding: EdgeInsets.only(bottom: 9.h, right:25.w, top: 0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: _widgets.map((item) {
-                              int index = _widgets.indexOf(item);
+                            children: widgets.map((item) {
+                              int index = widgets.indexOf(item);
                               bool isCurrentIndex = _currentIndex == index;
                               //  double horizontalMargin = index == 0 ? 0.0 : 6.0;
                               double horizontalMargin = index == 0 ? 6.0 : 0.0;

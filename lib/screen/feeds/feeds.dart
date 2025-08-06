@@ -5,12 +5,11 @@ import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
@@ -29,14 +28,13 @@ import '../../api/navigator.dart';
 import '../../api/provider/setting_provider.dart';
 import '../../api/provider/shared_pref_provider.dart';
 import '../../api/sheet.dart';
-import '../../api/snackbar.dart';
 import '../../bluetooth/modelResult.dart';
 import '../../widgets/evie_single_button_dialog.dart';
 
 ///User profile page with user account information
 
 class Feeds extends StatefulWidget {
-  const Feeds({Key? key}) : super(key: key);
+  const Feeds({super.key});
 
   @override
   _FeedsState createState() => _FeedsState();
@@ -66,7 +64,7 @@ class _FeedsState extends State<Feeds> {
       _sharedPreferenceProvider.setIsFirstFeedRequest('done');
       Future.delayed(Duration.zero).then((value) {
         SmartDialog.show(
-          widget: FeedFirstDialog(),
+          builder: (_) => FeedFirstDialog(),
         );
       });
     }
@@ -93,7 +91,7 @@ class _FeedsState extends State<Feeds> {
       Future.delayed(Duration.zero).then((value) {
         SmartDialog.show(
           keepSingle: true,
-          widget: FeedFirstDialog(),
+          builder: (_) => FeedFirstDialog(),
         );
       });
     }
@@ -235,7 +233,7 @@ class _FeedsState extends State<Feeds> {
                                           Align(
                                             alignment: AlignmentDirectional.centerStart,
                                             child: Text(
-                                                "${notificationModel.body!}",
+                                                notificationModel.body!,
                                                 style: EvieTextStyles.body16.copyWith(fontWeight: FontWeight.w500, color: EvieColors.darkGrayishCyan)
                                             ),
                                           ),
@@ -247,12 +245,12 @@ class _FeedsState extends State<Feeds> {
                                                 onPressed: () {
                                                   decline(index);
                                                 },
+                                                height: 40.h,
+                                                width: 180.w,
                                                 child: Text(
                                                   "Decline",
                                                   style: EvieTextStyles.body18.copyWith(color: EvieColors.primaryColor, fontWeight: FontWeight.w800),
                                                 ),
-                                                height: 40.h,
-                                                width: 180.w,
                                               ),
                                               EvieButton(
                                                 onPressed: () async {
@@ -267,12 +265,12 @@ class _FeedsState extends State<Feeds> {
                                                         changeToAcceptingInvitationScreen(context, notificationModel.deviceIMEI!, _currentUserProvider.currentUserModel!.uid, _notificationProvider.notificationList.keys.elementAt(index), _currentUserProvider.currentUserModel?.name, bikeModel.pedalPalsModel?.name);
                                                   });
                                                 },
+                                                height: 40.h,
+                                                width: 180.w,
                                                 child: Text(
                                                   "Accept",
                                                   style: EvieTextStyles.body18.copyWith(color: EvieColors.grayishWhite, fontWeight: FontWeight.w800),
                                                 ),
-                                                height: 40.h,
-                                                width: 180.w,
                                               ),
                                             ],
                                           ),
@@ -338,7 +336,7 @@ class _FeedsState extends State<Feeds> {
                                           Align(
                                             alignment: AlignmentDirectional.centerStart,
                                             child: Text(
-                                              "${notificationModel.body!}",
+                                              notificationModel.body!,
                                               style: EvieTextStyles.body16.copyWith(fontWeight: FontWeight.w500, color: EvieColors.darkGrayishCyan),
                                             ),
                                           ),
@@ -357,12 +355,12 @@ class _FeedsState extends State<Feeds> {
                                                   }
 
                                                 },
+                                                height: 40.h,
+                                                width: 170.w,
                                                 child: Text(
                                                   "See My Team",
                                                   style: EvieTextStyles.body18.copyWith(color: EvieColors.grayishWhite, fontWeight: FontWeight.w800),
                                                 ),
-                                                height: 40.h,
-                                                width: 170.w,
                                               ),
                                             ],
                                           ),
@@ -428,7 +426,7 @@ class _FeedsState extends State<Feeds> {
                                             Align(
                                               alignment: AlignmentDirectional.centerStart,
                                               child: Text(
-                                                  "${notificationModel.body!}",
+                                                  notificationModel.body!,
                                                   style: EvieTextStyles.body16.copyWith(fontWeight: FontWeight.w500, color: EvieColors.darkGrayishCyan)
                                               ),
                                             ),
@@ -456,12 +454,12 @@ class _FeedsState extends State<Feeds> {
                                                         showSheetNavigate(context);
                                                       }
                                                     },
+                                                    height: 40.h,
+                                                    width: 159.w,
                                                     child: Text(
                                                       "Update Now",
                                                       style: EvieTextStyles.body18.copyWith(color: EvieColors.grayishWhite, fontWeight: FontWeight.w800),
-                                                    ),
-                                                    height: 40.h,
-                                                    width: 159.w
+                                                    )
                                                 ),
                                               ],
                                             )
@@ -527,7 +525,7 @@ class _FeedsState extends State<Feeds> {
                                             Align(
                                               alignment: AlignmentDirectional.centerStart,
                                               child: Text(
-                                                "${notificationModel.body!}",
+                                                notificationModel.body!,
                                                 style: EvieTextStyles.body16.copyWith(fontWeight: FontWeight.w500, color: EvieColors.darkGrayishCyan),
                                               ),
                                             ),
@@ -545,12 +543,12 @@ class _FeedsState extends State<Feeds> {
                                                         throw Exception('Could not launch $url');
                                                       }
                                                     },
+                                                    height: 40.h,
+                                                    width: 159.w,
                                                     child: Text(
                                                       "Find Out More",
                                                       style: EvieTextStyles.body18.copyWith(color: EvieColors.grayishWhite, fontWeight: FontWeight.w800),
-                                                    ),
-                                                    height: 40.h,
-                                                    width: 159.w),
+                                                    )),
                                               ],
                                             ),
                                           ],
@@ -615,7 +613,7 @@ class _FeedsState extends State<Feeds> {
                                             Align(
                                               alignment: AlignmentDirectional.centerStart,
                                               child: Text(
-                                                  "${notificationModel.body!}",
+                                                  notificationModel.body!,
                                                   style: EvieTextStyles.body16.copyWith(fontWeight: FontWeight.w500, color: EvieColors.darkGrayishCyan)
                                               ),
                                             ),
@@ -651,7 +649,7 @@ class _FeedsState extends State<Feeds> {
 
   decline(int index){
     SmartDialog.show(
-        widget: EvieDoubleButtonDialog(
+        builder: (_) => EvieDoubleButtonDialog(
           title: "Are you sure you want to decline?",
           childContent: Text('Are you sure you want to decline?'),
           leftContent: 'Cancel', onPressedLeft: () { SmartDialog.dismiss(); },
@@ -668,7 +666,7 @@ class _FeedsState extends State<Feeds> {
                 SmartDialog.dismiss(status: SmartStatus.loading);
                 SmartDialog.show(
                     keepSingle: true,
-                    widget: EvieSingleButtonDialogOld(
+                    builder: (_) => EvieSingleButtonDialogOld(
                         title: "Success",
                         content: "You declined the invitation",
                         rightContent: "Close",
@@ -678,7 +676,7 @@ class _FeedsState extends State<Feeds> {
               } else if(cancelStatus == UploadFirestoreResult.failed) {
                 SmartDialog.dismiss();
                 SmartDialog.show(
-                    widget: EvieSingleButtonDialogOld(
+                    builder: (_) => EvieSingleButtonDialogOld(
                         title: "Not success",
                         content: "Try again",
                         rightContent: "Close",

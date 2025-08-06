@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/screen/user_home_page/switch_bike.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../api/colours.dart';
-import '../../../bluetooth/modelResult.dart';
+import '../../../bluetooth/modelResult.dart' as bluetooth;
 
 class Bike_Name_Row extends StatelessWidget {
   String bikeName;
@@ -18,12 +18,12 @@ class Bike_Name_Row extends StatelessWidget {
   bool? isDeviceConnected;
 
   Bike_Name_Row({
-    Key? key,
+    super.key,
     required this.bikeName,
     required this.distanceBetween,
     required this.currentBikeStatusImage,
     required this.isDeviceConnected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -76,21 +76,21 @@ class Bike_Name_Row extends StatelessWidget {
 
 class Bike_Status_Row extends StatelessWidget {
   String currentSecurityIcon;
-  LockState isLocked;
+  bluetooth.LockState isLocked;
   String currentBatteryIcon;
   String connectText;
   Widget child;
   String estKm;
 
   Bike_Status_Row({
-    Key? key,
+    super.key,
     required this.currentSecurityIcon,
     required this.isLocked,
     required this.currentBatteryIcon,
     required this.connectText,
     required this.child,
     required this.estKm,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +109,7 @@ class Bike_Status_Row extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     width: Platform.isAndroid ? 135.w : 150.w,
                     child: child,
                   )
@@ -136,13 +136,13 @@ class Bike_Status_Row extends StatelessWidget {
               ),
               if (estKm == "") ...{
                 Text(
-                  "${connectText} %",
+                  "$connectText %",
                   style: EvieTextStyles.headlineB,
                 ),
               } else ...{
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text(
-                    "${connectText} %",
+                    "$connectText %",
                     style: EvieTextStyles.headlineB,
                   ),
                   Text(

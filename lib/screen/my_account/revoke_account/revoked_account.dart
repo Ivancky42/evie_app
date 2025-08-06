@@ -1,15 +1,12 @@
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 
 import '../../../api/colours.dart';
 import '../../../api/fonts.dart';
 import '../../../api/navigator.dart';
-import '../../../api/provider/auth_provider.dart';
 
 class RevokedAccount extends StatefulWidget {
-  const RevokedAccount({Key? key}) : super(key: key);
+  const RevokedAccount({super.key});
 
   @override
   State<RevokedAccount> createState() => _RevokedAccountState();

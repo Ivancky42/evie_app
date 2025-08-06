@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/shared_pref_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:evie_test/widgets/evie_double_button_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -45,7 +45,7 @@ import '../home_element/threat_unlocking_system.dart';
 
 class ThreatMap extends StatefulWidget {
   final bool? triggerConnect;
-  const ThreatMap(this.triggerConnect, {Key? key}) : super(key: key);
+  const ThreatMap(this.triggerConnect, {super.key});
 
   @override
   State<ThreatMap> createState() => _ThreatMapState();
@@ -84,7 +84,7 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
   final double _initFabHeight = 300;
   double _fabHeight = 0;
   double _panelHeightOpen = 244.h;
-  double _panelHeightClosed = 95.h;
+  final double _panelHeightClosed = 95.h;
   late final ScrollController scrollController;
   late final PanelController panelController;
 
@@ -219,6 +219,7 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
         color: EvieColors.grayishWhite,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
       ),
+      height: 750.h,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -278,10 +279,10 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
                             .toJson(),
                         zoom: 16,
                       ),
-                      gestureRecognizers: [
+                      gestureRecognizers: {
                         Factory<OneSequenceGestureRecognizer>(
                                 () => EagerGestureRecognizer())
-                      ].toSet(),
+                      },
                     ),
 
                     SlidingUpPanel(
@@ -296,7 +297,7 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ForceDraggableWidget(
-                              child: Container(
+                              child: SizedBox(
                                 width: 100,
                                 height: 40,
                                 child: Column(
@@ -378,7 +379,7 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
                         onTap: () async {
                           showWhatToDoDialog(context);
                         },
-                        child: Container(
+                        child: SizedBox(
                           width: 42.w,
                           height: 42.w,
                           child: SvgPicture.asset(
@@ -408,7 +409,7 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
                             _locationProvider.checkLocationPermissionStatus();
                           }
                         },
-                        child: Container(
+                        child: SizedBox(
                             width: 64.w,
                             height: 64.w,
                             child: SvgPicture.asset(
@@ -427,6 +428,18 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
                           showGPSNotFound();
                         },
                         child: Container(
+                          decoration: BoxDecoration(
+                            color: EvieColors.thumbColorTrue,
+                            borderRadius: BorderRadius.circular(10.w),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color(0xFF7A7A79).withOpacity(0.15), // Hex color with opacity
+                                offset: Offset(0, 8), // X and Y offset
+                                blurRadius: 16, // Blur radius
+                                spreadRadius: 0, // Spread radius
+                              ),
+                            ],
+                          ),
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 10.h),
                             child: Row(
@@ -443,18 +456,6 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
                               ],
                             ),
                           ),
-                          decoration: BoxDecoration(
-                            color: EvieColors.thumbColorTrue,
-                            borderRadius: BorderRadius.circular(10.w),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xFF7A7A79).withOpacity(0.15), // Hex color with opacity
-                                offset: Offset(0, 8), // X and Y offset
-                                blurRadius: 16, // Blur radius
-                                spreadRadius: 0, // Spread radius
-                              ),
-                            ],
-                          ),
                         ),
                       )
                     ) : Container(),
@@ -463,7 +464,6 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
           ),
        ]
       ),
-      height: 750.h,
     );
   }
 
@@ -526,7 +526,7 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
                 _locationProvider.locationModel?.geopoint!.latitude ?? 0))
             .toJson(),
         image: dangerMain,
-        iconSize: Platform.isAndroid ? 38.mp : 16.mp,
+        iconSize: Platform.isAndroid ? 38.0 : 16.0,
       ));
 
       ///Load and add 7 image
@@ -594,7 +594,7 @@ class _ThreatMapState extends State<ThreatMap> with WidgetsBindingObserver{
       layer = await mapboxMap?.style.getLayer("puck");
     }
 
-    var location = (layer as LocationIndicatorLayer)?.location;
+    var location = (layer as LocationIndicatorLayer).location;
     userPosition = Position(location![1]!, location[0]!);
     num? latitude = userPosition[1];
     num? longitude = userPosition[0];

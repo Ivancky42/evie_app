@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,7 +24,7 @@ import '../../../widgets/text_column.dart';
 import '../../my_account/my_account_widget.dart';
 
 class BetaFirmwareInformation extends StatefulWidget {
-  const BetaFirmwareInformation({Key? key}) : super(key: key);
+  const BetaFirmwareInformation({super.key});
 
   @override
   State<BetaFirmwareInformation> createState() => _BetaFirmwareInformationState();
@@ -189,7 +189,7 @@ class _BetaFirmwareInformationState extends State<BetaFirmwareInformation> {
                                               ),
 
                                               Text(
-                                                  (_bluetoothProvider.fwUpgradeProgress * 100).toStringAsFixed(0) + "%",
+                                                  "${(_bluetoothProvider.fwUpgradeProgress * 100).toStringAsFixed(0)}%",
                                                   style: EvieTextStyles.body12.copyWith(color: EvieColors.mediumBlack)
                                               ),
                                             ],
@@ -263,7 +263,7 @@ class _BetaFirmwareInformationState extends State<BetaFirmwareInformation> {
                                       child: Padding(
                                         padding: EdgeInsets.fromLTRB(8.w,0, 40.w, 0),
                                         child: Html(
-                                          data:  isExpanded ? _firmwareProvider.latestFirmwareModel?.desc?.replaceAll("\\n", "<br>") ?? '' : _firmwareProvider.latestFirmwareModel?.desc.replaceAll("\\n", "<br>").substring(0, 155) ?? '',
+                                          data:  isExpanded ? _firmwareProvider.latestFirmwareModel?.desc.replaceAll("\\n", "<br>") ?? '' : _firmwareProvider.latestFirmwareModel?.desc.replaceAll("\\n", "<br>").substring(0, 155) ?? '',
                                           style: {
                                             "p": Style(
                                                 fontSize: FontSize(18.sp), // Set the font size for paragraphs
@@ -405,9 +405,9 @@ class _BetaFirmwareInformationState extends State<BetaFirmwareInformation> {
     m = ((value - h * 3600)) ~/ 60;
     s = value - (h * 3600) - (m * 60);
 
-    String hourLeft = h.toString().length < 2 ? "0" + h.toString() : h.toString();
-    String minuteLeft = m.toString().length < 2 ? "0" + m.toString() : m.toString();
-    String secondsLeft = s.toString().length < 2 ? "0" + s.toString() : s.toString();
+    String hourLeft = h.toString().length < 2 ? "0$h" : h.toString();
+    String minuteLeft = m.toString().length < 2 ? "0$m" : m.toString();
+    String secondsLeft = s.toString().length < 2 ? "0$s" : s.toString();
 
     String result = "$hourLeft:$minuteLeft:$secondsLeft";
 

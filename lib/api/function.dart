@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:io';
 import 'dart:math';
-import 'dart:ui';
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
@@ -12,14 +10,8 @@ import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/api/provider/notification_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/bluetooth/modelResult.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:evie_test/bluetooth/modelResult.dart' as bluetooth;
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -27,16 +19,17 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../widgets/evie_double_button_dialog.dart';
-import '../widgets/evie_single_button_dialog.dart';
+// import '../widgets/evie_double_button_dialog.dart';
+// import '../widgets/evie_single_button_dialog.dart';
 import 'colours.dart';
 import 'enumerate.dart';
-import 'fonts.dart';
 import 'model/bike_model.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:sizer/sizer.dart';
 
-checkBleStatusAndConnectDevice(BluetoothProvider _bluetoothProvider, BikeProvider _bikeProvider) async {
-  BleStatus? bleStatus = _bluetoothProvider.bleStatus;
+
+checkBleStatusAndConnectDevice(BluetoothProvider bluetoothProvider, BikeProvider bikeProvider) async {
+  BleStatus? bleStatus = bluetoothProvider.bleStatus;
   switch (bleStatus) {
     case BleStatus.poweredOff:
       showBluetoothNotTurnOn();
@@ -76,26 +69,26 @@ checkBleStatusAndConnectDevice(BluetoothProvider _bluetoothProvider, BikeProvide
       showLocationServiceDisable();
       break;
     case BleStatus.ready:
-      connectDevice(_bluetoothProvider, _bikeProvider);
+      connectDevice(bluetoothProvider, bikeProvider);
       break;
     default:
       break;
   }
 }
 
-connectDevice(BluetoothProvider _bluetoothProvider, BikeProvider _bikeProvider) async {
-  DeviceConnectResult? deviceConnectResult = _bluetoothProvider.deviceConnectResult;
+connectDevice(BluetoothProvider bluetoothProvider, BikeProvider bikeProvider) async {
+  bluetooth.DeviceConnectResult? deviceConnectResult = bluetoothProvider.deviceConnectResult;
   if (deviceConnectResult == null
-      || deviceConnectResult == DeviceConnectResult.disconnected
-      || deviceConnectResult == DeviceConnectResult.scanTimeout
-      || deviceConnectResult == DeviceConnectResult.connectError
-      || deviceConnectResult == DeviceConnectResult.scanError
-      || _bluetoothProvider.currentConnectedDevice != _bikeProvider.currentBikeModel?.macAddr
+              || deviceConnectResult == bluetooth.DeviceConnectResult.disconnected
+        || deviceConnectResult == bluetooth.DeviceConnectResult.scanTimeout
+        || deviceConnectResult == bluetooth.DeviceConnectResult.connectError
+        || deviceConnectResult == bluetooth.DeviceConnectResult.scanError
+      || bluetoothProvider.currentConnectedDevice != bikeProvider.currentBikeModel?.macAddr
   )
   {
-    await _bluetoothProvider.disconnectDevice();
-    await _bluetoothProvider.stopScan();
-    _bluetoothProvider.startScanAndConnect();
+    await bluetoothProvider.disconnectDevice();
+    await bluetoothProvider.stopScan();
+    bluetoothProvider.startScanAndConnect();
   }
 }
 
@@ -430,12 +423,12 @@ class ShareBikeLeave extends StatefulWidget {
   final int index;
 
   const ShareBikeLeave({
-    Key? key,
+    super.key,
     required this.bikeProvider,
     required this.settingProvider,
     required this.index,
 
-  }) : super(key: key);
+  });
 
   @override
   State<ShareBikeLeave> createState() => _ShareBikeLeaveState();
@@ -449,16 +442,10 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
 
     _notificationProvider = Provider.of<NotificationProvider>(context);
 
-    return Container(
+    return SizedBox(
       width: 82.w,
       height: 35.h,
       child: ElevatedButton(
-        child:    Text(
-          "Leave",
-          style: TextStyle(
-              fontSize: 12.sp,
-              color: EvieColors.primaryColor),
-        ),
         onPressed: (){
 
           ///Change sheet instead of showing dialog
@@ -470,6 +457,12 @@ class _ShareBikeLeaveState extends State<ShareBikeLeave> {
               BorderRadius.circular(20.w)),
           elevation: 0.0,
           backgroundColor: EvieColors.lightGrayishCyan,
+        ),
+        child:    Text(
+          "Leave",
+          style: TextStyle(
+              fontSize: 12.sp,
+              color: EvieColors.primaryColor),
         ),
       ),
     );
@@ -492,17 +485,17 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, LinkedHashMap bikesPlan, Bluetooth
 
   if (bikesPlan[bikeModel.deviceIMEI] != null) {
     if (bikesPlan[bikeModel.deviceIMEI]) {
-      if (bikeModel?.location?.isConnected == false) {
+      if (bikeModel.location?.isConnected == false) {
         return "assets/buttons/bike_security_offline.svg";
       }
       else {
-        switch (bikeModel?.location?.status) {
+        switch (bikeModel.location?.status) {
           case 'safe':
             {
-              if (bluetoothProvider.deviceConnectResult ==
-                  DeviceConnectResult.connected) {
-                if (bluetoothProvider.cableLockState?.lockState ==
-                    LockState.unlock) {
+                          if (bluetoothProvider.deviceConnectResult ==
+                bluetooth.DeviceConnectResult.connected) {
+                                  if (bluetoothProvider.cableLockState?.lockState ==
+                      bluetooth.LockState.unlock) {
                   return "assets/buttons/bike_security_unlock_black.svg";
                 }
                 else {
@@ -510,7 +503,7 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, LinkedHashMap bikesPlan, Bluetooth
                 }
               }
               else {
-                if (bikeModel?.isLocked == false) {
+                if (bikeModel.isLocked == false) {
                   return "assets/buttons/bike_security_unlock_black.svg";
                 } else {
                   return "assets/buttons/bike_security_lock_and_secure_black.svg";
@@ -532,10 +525,10 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, LinkedHashMap bikesPlan, Bluetooth
       }
     }
     else {
-      if (bluetoothProvider.deviceConnectResult ==
-          DeviceConnectResult.connected &&
-          bluetoothProvider.currentConnectedDevice == bikeModel?.macAddr) {
-        if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+              if (bluetoothProvider.deviceConnectResult ==
+            bluetooth.DeviceConnectResult.connected &&
+            bluetoothProvider.currentConnectedDevice == bikeModel.macAddr) {
+          if (bluetoothProvider.cableLockState?.lockState == bluetooth.LockState.unlock) {
           return "assets/buttons/bike_security_unlock_black.svg";
         }
         else {
@@ -552,8 +545,8 @@ getCurrentBikeStatusIcon(BikeModel bikeModel, LinkedHashMap bikesPlan, Bluetooth
   }
 }
 
-getCurrentBikeStatusIcon2(LockState? lockState) {
-  if (lockState == LockState.unlock) {
+getCurrentBikeStatusIcon2(bluetooth.LockState? lockState) {
+  if (lockState == bluetooth.LockState.unlock) {
     return "assets/buttons/bike_security_unlock_black.svg";
   } else {
     return "assets/buttons/bike_security_lock_and_secure_black.svg";
@@ -569,8 +562,8 @@ getCurrentBikeStatusString(BikeModel bikeModel, BikeProvider bikeProvider, Bluet
       switch (bikeModel.location?.status) {
         case 'safe':
           {
-            if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
-              if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+            if (bluetoothProvider.deviceConnectResult == bluetooth.DeviceConnectResult.connected) {
+              if (bluetoothProvider.cableLockState?.lockState == bluetooth.LockState.unlock) {
                 return "Unlocked";
               } else {
                 return "Locked & Secured";
@@ -598,8 +591,8 @@ getCurrentBikeStatusString(BikeModel bikeModel, BikeProvider bikeProvider, Bluet
     }
   }
   else {
-    if(bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected && bluetoothProvider.currentConnectedDevice == bikeModel.macAddr) {
-      if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+    if(bluetoothProvider.deviceConnectResult == bluetooth.DeviceConnectResult.connected && bluetoothProvider.currentConnectedDevice == bikeModel.macAddr) {
+      if (bluetoothProvider.cableLockState?.lockState == bluetooth.LockState.unlock) {
         return "Unlocked";
       }
       else {
@@ -617,18 +610,18 @@ getCurrentBikeStatusString3(BikeProvider bikeProvider, BluetoothProvider bluetoo
     return "Connection Lost";
   }
   else {
-    if (bluetoothProvider.deviceConnectResult == DeviceConnectResult.connected) {
+    if (bluetoothProvider.deviceConnectResult == bluetooth.DeviceConnectResult.connected) {
       ///Bike connected with bluetooth
       switch (bikeProvider.currentBikeModel?.location?.status) {
         case 'safe':
-          if (bluetoothProvider.cableLockState?.lockState == LockState.unlock && bikeProvider.currentBikeModel?.isLocked == false) {
+          if (bluetoothProvider.cableLockState?.lockState == bluetooth.LockState.unlock && bikeProvider.currentBikeModel?.isLocked == false) {
             return "Unlocked";
           }
-          else if (bluetoothProvider.cableLockState?.lockState == LockState.lock && bikeProvider.currentBikeModel?.isLocked == true) {
+          else if (bluetoothProvider.cableLockState?.lockState == bluetooth.LockState.lock && bikeProvider.currentBikeModel?.isLocked == true) {
             return "Locked & Secured";
           }
           else {
-            if (bluetoothProvider.cableLockState?.lockState == LockState.unlock) {
+            if (bluetoothProvider.cableLockState?.lockState == bluetooth.LockState.unlock) {
               return "Unlocked";
             }
             else {
@@ -673,11 +666,11 @@ getCurrentBikeStatusString3(BikeProvider bikeProvider, BluetoothProvider bluetoo
   }
 }
 
-getCurrentBikeStatusString4(LockState? lockState) {
-  if (lockState == LockState.unlock) {
+getCurrentBikeStatusString4(bluetooth.LockState? lockState) {
+  if (lockState == bluetooth.LockState.unlock) {
     return "Unlocked";
   }
-  else if (lockState == LockState.lock){
+  else if (lockState == bluetooth.LockState.lock){
     return "Locked & Secured";
   }
 }
@@ -813,7 +806,7 @@ pointBounce3(MapboxMap? mapboxMap, LocationProvider locationProvider, userPositi
 
   if (mapboxMap != null) {
     if (Platform.isIOS) {
-      final CameraOptions cameraOpt = await mapboxMap!
+      final CameraOptions cameraOpt = await mapboxMap
           .cameraForCoordinateBounds(
         CoordinateBounds(
           northeast: Point(
@@ -833,13 +826,14 @@ pointBounce3(MapboxMap? mapboxMap, LocationProvider locationProvider, userPositi
         ),
         null,
         null,
+     
       );
 
       mapboxMap.flyTo(
           cameraOpt, MapAnimationOptions(duration: 1000, startDelay: 0));
     }
     else {
-      final CameraOptions cameraOpt = await mapboxMap!
+      final CameraOptions cameraOpt = await mapboxMap
           .cameraForCoordinateBounds(
         CoordinateBounds(
           northeast: Point(
@@ -859,6 +853,7 @@ pointBounce3(MapboxMap? mapboxMap, LocationProvider locationProvider, userPositi
         ),
         null,
         null,
+      
       );
 
       mapboxMap.flyTo(
@@ -887,9 +882,9 @@ returnBorderColour(LocationProvider locationProvider){
   }
 }
 
-Future<void> launch(Uri _url) async {
-  if (!await launchUrl(_url)) {
-    throw Exception('Could not launch $_url');
+Future<void> launch(Uri url) async {
+  if (!await launchUrl(url)) {
+    throw Exception('Could not launch $url');
   }
 }
 

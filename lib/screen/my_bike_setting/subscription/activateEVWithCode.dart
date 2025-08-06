@@ -7,40 +7,32 @@ import 'package:dio/dio.dart';
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:evie_test/api/provider/plan_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
-import '../../../../api/backend/stripe_api_caller.dart';
 import '../../../../api/enumerate.dart';
 import '../../../../api/fonts.dart';
-import '../../../../api/function.dart';
 import '../../../../api/length.dart';
-import '../../../../api/model/plan_model.dart';
 import '../../../../api/model/price_model.dart';
 import '../../../../api/navigator.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/provider/setting_provider.dart';
-import '../../../../api/sheet.dart';
 import '../../../../api/toast.dart';
-import '../../../../widgets/evie_appbar.dart';
 import '../../../../widgets/evie_button.dart';
-import '../../../../widgets/evie_container.dart';
 import '../../../api/backend/server_api_base.dart';
 import '../../../api/dialog.dart';
 import '../../../api/provider/auth_provider.dart';
-import '../../../api/snackbar.dart';
 import '../../../widgets/evie_textform.dart';
 import '../../onboarding_addNewBike/activate-evsecure.dart';
 
 class ActivateEVWithCode extends StatefulWidget{
   final BuildContext bContext;
-  const ActivateEVWithCode({Key? key, required this.bContext}) : super(key: key);
+  const ActivateEVWithCode({super.key, required this.bContext});
 
   @override
   State<ActivateEVWithCode> createState() => _ActivateEVWithCodeState();
@@ -83,7 +75,7 @@ class _ActivateEVWithCodeState extends State<ActivateEVWithCode> {
     _settingProvider = Provider.of<SettingProvider>(context);
     _currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     return WillPopScope(
       onWillPop: () async {
@@ -123,7 +115,7 @@ class _ActivateEVWithCodeState extends State<ActivateEVWithCode> {
                         ),
                       ),
                       Form(
-                        key: _formKey,
+                        key: formKey,
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
                           child: EvieTextFormField(
@@ -153,12 +145,8 @@ class _ActivateEVWithCodeState extends State<ActivateEVWithCode> {
                     padding: EdgeInsets.only(left: 16.w, right: 16.w),
                     child: EvieButton(
                         width: double.infinity,
-                        child: Text(
-                          "Activate EV-Secure",
-                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                        ),
                         onPressed: enabled ? () async {
-                          if (_formKey.currentState!.validate()) {
+                          if (formKey.currentState!.validate()) {
                             bool isConnected = false;
                             var connectivityResult = await (Connectivity().checkConnectivity());
                             if (connectivityResult == ConnectivityResult.mobile) {
@@ -234,9 +222,9 @@ class _ActivateEVWithCodeState extends State<ActivateEVWithCode> {
                                       "orderId": orderId.toString(),
                                     };
 
-                                    String base_url = 'https://us-central1-evie-126a6.cloudfunctions.net/shopify_evsecure/activateEVSecure';
+                                    String baseUrl = 'https://us-central1-evie-126a6.cloudfunctions.net/shopify_evsecure/activateEVSecure';
                                     ServerApiBase.postRequest(
-                                        auth, base_url, body, header).then((
+                                        auth, baseUrl, body, header).then((
                                         value) {
                                       SmartDialog.dismiss(
                                           status: SmartStatus.loading);
@@ -272,6 +260,10 @@ class _ActivateEVWithCodeState extends State<ActivateEVWithCode> {
                             }
                           }
                         } : null,
+                        child: Text(
+                          "Activate EV-Secure",
+                          style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                        ),
                     )
                   )
                 ]

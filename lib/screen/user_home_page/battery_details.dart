@@ -1,27 +1,15 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
-import 'package:evie_test/widgets/evie_double_button_dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:lottie/lottie.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
-import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 
 import '../../../api/colours.dart';
-import '../../../api/function.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
-import '../../../api/provider/location_provider.dart';
-import '../../../widgets/evie_radio_button.dart';
-import '../../../widgets/evie_switch.dart';
 import '../../animation/waved_curves_animation.dart';
 import '../../api/length.dart';
 import '../../bluetooth/modelResult.dart';
@@ -30,10 +18,10 @@ import 'home_page_widget.dart';
 class BatteryDetails extends StatefulWidget {
 
 
-  BatteryDetails({
-    Key? key,
+  const BatteryDetails({
+    super.key,
 
-  }) : super(key: key);
+  });
 
   @override
   State<BatteryDetails> createState() => _BatteryDetailsState();
@@ -93,12 +81,12 @@ class _BatteryDetailsState extends State<BatteryDetails> {
               SizedBox(height: 30.h,),
               Stack(
                 children: [
-                  Container(
+                  SizedBox(
                     height: 220.h,
                     width: double.infinity,
                     child: WavedCurvesAnimation(),
                   ),
-                  Container(
+                  SizedBox(
                     height: EvieLength.battery_curved_bottom - 35.h,
                     //color: Colors.green,
                     child: Padding(

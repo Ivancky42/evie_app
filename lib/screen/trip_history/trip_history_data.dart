@@ -1,23 +1,16 @@
-import 'dart:math';
 
 import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/model/trip_history_model.dart';
-import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/provider/trip_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/screen/trip_history/recent_activity.dart';
 import 'package:evie_test/screen/trip_history/year_status.dart';
-import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../api/enumerate.dart';
 import '../../api/fonts.dart';
@@ -28,7 +21,7 @@ import '../../widgets/evie_oval.dart';
 
 class TripHistoryData extends StatefulWidget{
   final TripFormat format;
-  const TripHistoryData(this.format,{ Key? key }) : super(key: key);
+  const TripHistoryData(this.format,{ super.key });
   @override
   _TripHistoryDataState createState() => _TripHistoryDataState();
 }

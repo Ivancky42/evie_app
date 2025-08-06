@@ -1,16 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/bike_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:path_provider/path_provider.dart';
-import '../../widgets/evie_single_button_dialog.dart';
 import '../model/firmware_model.dart';
 import '../model/user_model.dart';
 
@@ -175,7 +170,7 @@ class FirmwareProvider extends ChangeNotifier {
    Future<File> downloadFile(Reference ref) async {
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/${ref.name}');
-    if (file.existsSync()) { print("file exist");await file.delete();};
+    if (file.existsSync()) { print("file exist");await file.delete();}
     await ref.writeToFile(file);
     return file;
   }

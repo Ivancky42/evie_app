@@ -1,6 +1,6 @@
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/provider/ride_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +11,7 @@ import '../../api/provider/setting_provider.dart';
 
 class YearStatus extends StatefulWidget{
   final DateTime pickedData;
-  const YearStatus(this.pickedData,{ Key? key }) : super(key: key);
+  const YearStatus(this.pickedData,{ super.key });
   @override
   _YearStatusState createState() => _YearStatusState();
 }
@@ -48,7 +48,7 @@ class _YearStatusState extends State<YearStatus> {
           ),
         ),
 
-        Container(
+        SizedBox(
           height: 77.h,
           child: Padding(
             padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
@@ -75,7 +75,7 @@ class _YearStatusState extends State<YearStatus> {
           child: EvieDivider(),
         ),
 
-        Container(
+        SizedBox(
           height: 77.h,
           child: Padding(
             padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
@@ -103,7 +103,7 @@ class _YearStatusState extends State<YearStatus> {
           child: EvieDivider(),
         ),
 
-        Container(
+        SizedBox(
           height: 77.h,
           child: Padding(
             padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
@@ -131,7 +131,7 @@ class _YearStatusState extends State<YearStatus> {
 
         // Average Speed per Ride = Total Distance / Total Time per Ride
         // Total Time = End Time - Start Time
-        Container(
+        SizedBox(
           height: 77.h,
           child: Padding(
             padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),
@@ -161,7 +161,7 @@ class _YearStatusState extends State<YearStatus> {
 
         // Average Duration = Total Time / Number of Rides
         // Total Time = End Time - Start Time
-        Container(
+        SizedBox(
           height: 77.h,
           child: Padding(
             padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),

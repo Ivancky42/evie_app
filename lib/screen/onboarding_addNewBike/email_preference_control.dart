@@ -1,20 +1,17 @@
 import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 
 
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import '../../api/length.dart';
-import '../../api/navigator.dart';
 
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../widgets/evie_switch.dart';
 
 class EmailPreferenceControl extends StatefulWidget {
-  const EmailPreferenceControl({Key? key}) : super(key: key);
+  const EmailPreferenceControl({super.key});
 
   @override
   _EmailPreferenceControlState createState() => _EmailPreferenceControlState();

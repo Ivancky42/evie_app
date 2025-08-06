@@ -1,7 +1,6 @@
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../api/colours.dart';
@@ -10,7 +9,7 @@ class CustomSearchController extends StatelessWidget {
   final TextEditingController searchController;
   final Function(String) onChanged;
   final Widget? suffixIcon;
-  const CustomSearchController({Key? key, required this.searchController, required this.onChanged, this.suffixIcon}) : super(key: key);
+  const CustomSearchController({super.key, required this.searchController, required this.onChanged, this.suffixIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +19,7 @@ class CustomSearchController extends StatelessWidget {
           primary: EvieColors.primaryColor,
         ),
       ),
-      child: Container(
+      child: SizedBox(
         height: 40.h,
         child: TextFormField(
           controller: searchController,
@@ -38,7 +37,7 @@ class CustomSearchController extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(color: EvieColors.primaryColor)),
-            prefixIcon: Container(
+            prefixIcon: SizedBox(
               width: 50.w,
               height: 50.w,
               child: Padding(

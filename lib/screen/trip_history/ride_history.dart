@@ -1,42 +1,33 @@
 import 'dart:collection';
 import 'dart:math';
-import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/trip_history_model.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/provider/trip_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_oval.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_svg/svg.dart';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
 import '../../../api/fonts.dart';
-import '../../../api/length.dart';
 import '../../../api/model/bike_user_model.dart';
-import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
-import '../../../widgets/evie_appbar.dart';
 import '../../api/enumerate.dart';
 import '../../api/function.dart';
-import '../user_home_page/add_new_bike/mapbox_widget.dart';
 import 'package:latlong2/latlong.dart';
 
 
 class RideHistory extends StatefulWidget{
   final String tripId;
   final TripHistoryModel currentTripHistoryList;
-  const RideHistory(this.tripId, this.currentTripHistoryList, { Key? key }) : super(key: key);
+  const RideHistory(this.tripId, this.currentTripHistoryList, { super.key });
   @override
   _RideHistoryState createState() => _RideHistoryState();
 }
@@ -230,10 +221,10 @@ class _RideHistoryState extends State<RideHistory> {
                           .toJson(),
                       zoom: 12,
                     ),
-                    gestureRecognizers: [
+                    gestureRecognizers: {
                       Factory<OneSequenceGestureRecognizer>(
                               () => EagerGestureRecognizer())
-                    ].toSet(),
+                    },
                   ),
                 ),
               ],
@@ -310,7 +301,7 @@ class _RideHistoryState extends State<RideHistory> {
           startAddress = widget.currentTripHistoryList.startAddress;
         });
       }else{
-        final snapshot = await _locationProvider.returnPlaceMarks(trip!.latitude, trip!.longitude);
+        final snapshot = await _locationProvider.returnPlaceMarks(trip!.latitude, trip.longitude);
 
         if(snapshot != null){
           _tripProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, tripId, "startAddress",  snapshot.name.toString());
@@ -326,7 +317,7 @@ class _RideHistoryState extends State<RideHistory> {
         });
 
       }else{
-        final snapshot = await _locationProvider.returnPlaceMarks(trip!.latitude, trip!.longitude);
+        final snapshot = await _locationProvider.returnPlaceMarks(trip!.latitude, trip.longitude);
 
         if(snapshot != null){
           _tripProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, tripId, "endAddress",  snapshot.name.toString());

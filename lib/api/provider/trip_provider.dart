@@ -1,15 +1,11 @@
 import 'dart:async';
 import 'dart:collection';
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/bike_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get/utils.dart';
 import '../function.dart';
 import '../model/trip_history_model.dart';
-import 'bike_provider.dart';
 
 enum TripFormat{
   day,
@@ -74,10 +70,10 @@ class TripProvider extends ChangeNotifier {
             .orderBy("startTime", descending: true)
             .get().then((value) {
               if(value.docs.isNotEmpty){
-                value.docs.forEach((element) {
+                for (var element in value.docs) {
                   Map<String, dynamic>? obj = element.data();
                   currentTripHistoryLists.putIfAbsent(element.id, () => TripHistoryModel.fromJson(obj));
-                });
+                }
               }else{
                 currentTripHistoryLists.clear();
               }

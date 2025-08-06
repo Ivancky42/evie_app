@@ -1,12 +1,11 @@
 import 'dart:collection';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/model/trip_history_model.dart';
 import 'package:evie_test/api/provider/location_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
@@ -31,7 +30,7 @@ import '../../widgets/evie_appbar.dart';
 class RideDetail extends StatefulWidget{
   final String tripId;
   final TripHistoryModel currentTripHistoryList;
-  const RideDetail(this.tripId, this.currentTripHistoryList, { Key? key }) : super(key: key);
+  const RideDetail(this.tripId, this.currentTripHistoryList, { super.key });
   @override
   _RideDetailState createState() => _RideDetailState();
 }
@@ -309,10 +308,10 @@ class _RideDetailState extends State<RideDetail> {
                               .toJson(),
                           zoom: 12,
                         ),
-                        gestureRecognizers: [
+                        gestureRecognizers: {
                           Factory<OneSequenceGestureRecognizer>(
                                   () => EagerGestureRecognizer())
-                        ].toSet(),
+                        },
                       ),
                       isEndTripMissing || isStartTripMissing ?
                       Padding(
@@ -390,7 +389,7 @@ class _RideDetailState extends State<RideDetail> {
                     widget.currentTripHistoryList.startTrip?.latitude ?? 0))
                 .toJson(),
             image: list,
-            iconSize: Platform.isAndroid ? 38.mp : 16.mp,
+            iconSize: Platform.isAndroid ? 38.0 : 16.0,
             textField: startAddress ?? "loading",
             textOffset: [0.0, 2.4],
             textColor: Colors.black.value,
@@ -406,7 +405,7 @@ class _RideDetailState extends State<RideDetail> {
                   widget.currentTripHistoryList.endTrip?.latitude ?? 0,))
                 .toJson(),
             image: list2,
-            iconSize: Platform.isAndroid ? 38.mp : 16.mp,
+            iconSize: Platform.isAndroid ? 38.0 : 16.0,
             textField: endAddress ?? "loading",
             textOffset: [0.0, 2],
             textColor: Colors.black.value,
@@ -438,7 +437,7 @@ class _RideDetailState extends State<RideDetail> {
         });
       }
       else{
-        final snapshot = await _locationProvider.returnPlaceMarksString(trip!.latitude, trip!.longitude);
+        final snapshot = await _locationProvider.returnPlaceMarksString(trip!.latitude, trip.longitude);
         if(snapshot != null){
           _rideProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, tripId, "startAddress",  snapshot.toString());
           setState(() {
@@ -455,7 +454,7 @@ class _RideDetailState extends State<RideDetail> {
         });
 
       }else{
-        final snapshot = await _locationProvider.returnPlaceMarksString(trip!.latitude, trip!.longitude);
+        final snapshot = await _locationProvider.returnPlaceMarksString(trip!.latitude, trip.longitude);
 
         if(snapshot != null){
           _rideProvider.uploadPlaceMarkAddressToFirestore(_bikeProvider.currentBikeModel!.deviceIMEI!, tripId, "endAddress",  snapshot.toString());
@@ -519,6 +518,7 @@ class _RideDetailState extends State<RideDetail> {
           ),
           null,
           null,
+  
         );
 
         mapboxMap?.flyTo(

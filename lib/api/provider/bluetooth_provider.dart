@@ -12,11 +12,9 @@ import 'package:hex/hex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../bluetooth/modelResult.dart';
 
-import '../../widgets/evie_single_button_dialog.dart';
 import '../dialog.dart';
 import '../enumerate.dart';
 import '../model/bike_model.dart';
-import 'bike_provider.dart';
 import 'firmware_provider.dart';
 
 enum NotifyDataState {
@@ -137,7 +135,7 @@ class BluetoothProvider extends ChangeNotifier {
   StreamController.broadcast();
 
 
-  /** Scan RSSI **/
+  /// Scan RSSI *
   StreamController<BLEScanResult> scanResultStream = StreamController.broadcast();
   StreamSubscription? bleScanSub;
   BLEScanResult? scanResult;
@@ -210,7 +208,7 @@ class BluetoothProvider extends ChangeNotifier {
   startScanCountTimer() {
     startScanTimer?.cancel();
     startScanTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
-      print("Scan RSSI Timer: " + timer.tick.toString() + "s");
+      print("Scan RSSI Timer: ${timer.tick}s");
       if (timer.tick == 10) {
         await stopScan();
         scanSubscription?.cancel();
@@ -262,7 +260,7 @@ class BluetoothProvider extends ChangeNotifier {
           deviceConnectStream.add(DeviceConnectResult.deviceFound);
           discoverDevice = discoveredDevice;
           deviceRssi = discoverDevice!.rssi.abs();
-          realRssi = discoveredDevice!.rssi.abs();
+          realRssi = discoveredDevice.rssi.abs();
           deviceRssi = 1 + (((deviceRssi - 60) * (99))/40).toInt();
 
           if (deviceRssi <= 0) {
@@ -704,7 +702,7 @@ class BluetoothProvider extends ChangeNotifier {
 
   void printLog(String title, String log) {
     if (kDebugMode) {
-      print(DateTime.now().toString() + " " + title + " : " + log);
+      print("${DateTime.now()} $title : $log");
     }
   }
 

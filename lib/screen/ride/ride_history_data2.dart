@@ -1,6 +1,6 @@
 import 'package:evie_test/api/colours.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/screen/ride/recent_activity.dart';
 import 'package:evie_test/screen/ride/year_status.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../api/enumerate.dart';
 import '../../api/fonts.dart';
@@ -20,7 +19,7 @@ import '../../widgets/evie_oval.dart';
 
 class RideHistoryData2 extends StatefulWidget{
   final RideFormat format;
-  const RideHistoryData2(this.format,{ Key? key }) : super(key: key);
+  const RideHistoryData2(this.format,{ super.key });
   @override
   _RideHistoryData2State createState() => _RideHistoryData2State();
 }
@@ -197,7 +196,7 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                                   onSurface: Colors.black, // Adjust text color on body
                                   onSecondary: Colors.white,
                                   secondary: EvieColors.primaryColor,
-                                  background: EvieColors.primaryColor,
+                                  surface: EvieColors.primaryColor,
                                 ),
                                 datePickerTheme: const DatePickerThemeData(
                                   headerBackgroundColor: EvieColors.primaryColor,
@@ -471,7 +470,7 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                       // borderColor: Colors.black87,
                       decimalPlaces: 2,
                       canShowMarker: false,
-                      format: 'point.x : point.y' + _rideProvider.rideDataUnit,
+                      format: 'point.x : point.y${_rideProvider.rideDataUnit}',
                     ),
                   ) :
                   TrackballBehavior(
@@ -479,7 +478,7 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
                     enable: true,
                     activationMode: ActivationMode.singleTap,
                     tooltipSettings: InteractiveTooltip(
-                      format: 'point.x : point.y' + _rideProvider.rideDataUnit,
+                      format: 'point.x : point.y${_rideProvider.rideDataUnit}',
                       decimalPlaces: 2,
                       canShowMarker: false,
                     ),
@@ -574,16 +573,14 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
   }
 
   String formatDay(DateTime date) {
-    return "${weekdayNameFull[date!.weekday]}, ${monthsInYear[date!.month]} ${date!.day} ${date!.year}";
+    return "${weekdayNameFull[date.weekday]}, ${monthsInYear[date.month]} ${date.day} ${date.year}";
   }
 
   String formatWeek(DateTime date) {
     DateTime monday = date.subtract(Duration(days: date.weekday - 1));
     DateTime sunday = date.add(Duration(days: DateTime.daysPerWeek - date.weekday));
 
-    String formattedWeek = DateFormat('MMM d').format(monday) +
-        '-' +
-        DateFormat('MMM d, yyyy').format(sunday);
+    String formattedWeek = '${DateFormat('MMM d').format(monday)}-${DateFormat('MMM d, yyyy').format(sunday)}';
 
     return formattedWeek;
   }
@@ -686,6 +683,7 @@ class _RideHistoryData2State extends State<RideHistoryData2> {
         return maximunValue;
       }
     }
+    return null;
   }
 
 }

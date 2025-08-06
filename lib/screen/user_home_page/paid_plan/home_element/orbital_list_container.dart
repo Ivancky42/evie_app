@@ -1,6 +1,6 @@
 import 'package:evie_test/api/model/event_model.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +12,7 @@ import '../../../../api/provider/location_provider.dart';
 
 class OrbitalListContainer extends StatefulWidget {
   final EventModel eventModel;
-  const OrbitalListContainer({Key? key, required this.eventModel}) : super(key: key);
+  const OrbitalListContainer({super.key, required this.eventModel});
 
   @override
   State<OrbitalListContainer> createState() => _OrbitalListContainerState();
@@ -60,6 +60,7 @@ class _OrbitalListContainerState extends State<OrbitalListContainer> {
         tempAddress = address!;
       });
     }
+    return null;
   }
 
   @override

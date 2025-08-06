@@ -1,7 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/enumerate.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -13,9 +12,9 @@ import '../../../../api/sheet.dart';
 import '../../../../widgets/evie_card.dart';
 
 class Setting extends StatefulWidget {
-  Setting({
-    Key? key
-  }) : super(key: key);
+  const Setting({
+    super.key
+  });
 
   @override
   State<Setting> createState() => _SettingState();

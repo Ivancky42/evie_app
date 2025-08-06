@@ -1,11 +1,9 @@
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class SvgIconData extends IconData {
-  const SvgIconData(int codePoint, String fontFamily, String svgPathData)
-      : super(codePoint, fontFamily: fontFamily, fontPackage: null);
+  const SvgIconData(super.codePoint, String fontFamily, String svgPathData)
+      : super(fontFamily: fontFamily, fontPackage: null);
 
   static Future<SvgIconData> load(String svgPath, int codePoint) async {
     final svgContent = await rootBundle.loadString(svgPath);

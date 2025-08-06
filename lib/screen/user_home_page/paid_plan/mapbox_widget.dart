@@ -1,4 +1,3 @@
-import 'package:evie_test/api/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -14,7 +13,7 @@ class Mapbox_Widget extends StatefulWidget {
   List<Marker> markers;
 
   Mapbox_Widget({
-    Key? key,
+    super.key,
     required this.accessToken,
    required this.onMapReady,
     //required this.onStyleLoadedCallback,
@@ -24,7 +23,7 @@ class Mapbox_Widget extends StatefulWidget {
    this.mapController,
     required this.markers,
 
-  }) : super(key: key);
+  });
 
   @override
   _Mapbox_WidgetState createState() => _Mapbox_WidgetState();
@@ -39,10 +38,11 @@ class _Mapbox_WidgetState extends State<Mapbox_Widget> {
       mapController: widget.mapController,
       options: MapOptions(
  //       onMapReady: widget.onMapReady,
-        interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
-
-        zoom: 16,
-        center: LatLng(
+        interactionOptions: InteractionOptions(
+          flags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+        ),
+        initialZoom: 16,
+        initialCenter: LatLng(
                widget.latitude,
                 widget.longitude),
       ),

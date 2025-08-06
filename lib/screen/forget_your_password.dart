@@ -1,15 +1,12 @@
 import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:flutter_svg/svg.dart';
 import '../api/colours.dart';
 import '../api/fonts.dart';
 import '../api/length.dart';
 import '../api/navigator.dart';
 import '../widgets/evie_appbar.dart';
 import '../widgets/evie_textform.dart';
-import '../widgets/widgets.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import 'login_page.dart';
@@ -18,7 +15,7 @@ import 'login_page.dart';
 /// >>>> Try to remember it this time <<<<
 
 class ForgetYourPassword extends StatefulWidget {
-  const ForgetYourPassword({Key? key}) : super(key: key);
+  const ForgetYourPassword({super.key});
 
   @override
   _ForgetYourPasswordState createState() => _ForgetYourPasswordState();
@@ -34,7 +31,7 @@ class _ForgetYourPasswordState extends State<ForgetYourPassword> {
 }
 
 class ForgetYourPasswordScreen extends StatefulWidget {
-  const ForgetYourPasswordScreen({Key? key}) : super(key: key);
+  const ForgetYourPasswordScreen({super.key});
 
   @override
   _ForgetYourPasswordScreenState createState() =>

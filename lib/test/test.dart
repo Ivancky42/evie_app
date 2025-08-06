@@ -1,29 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:evie_test/api/dialog.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_single_button_dialog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:get/utils.dart';
-import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
-import '../../api/fonts.dart';
-import '../../api/length.dart';
-import '../../api/navigator.dart';
 
-import 'package:evie_test/widgets/evie_button.dart';
 
-import '../../api/provider/bike_provider.dart';
-import '../../widgets/evie_progress_indicator.dart';
-import '../../widgets/evie_textform.dart';
 
 
 class Test extends StatefulWidget {
-  const Test({Key? key}) : super(key: key);
+  const Test({super.key});
   @override
   State<Test> createState() => _TestState();
 }
@@ -31,7 +15,7 @@ class _TestState extends State<Test>  {
 
 
   int _currentIndex = 0;
-  List<Widget> _widgets = [
+  final List<Widget> _widgets = [
     Container(
     child: Text("1"),
   ), Container(
@@ -87,7 +71,7 @@ class _TestState extends State<Test>  {
 
 
 class BorderPaint extends StatefulWidget {
-  const BorderPaint({Key? key}) : super(key: key);
+  const BorderPaint({super.key});
 
   @override
   _BorderPaintState createState() => _BorderPaintState();
@@ -159,39 +143,39 @@ class BorderPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    double _sh = size.height; // For path shortage
-    double _sw = size.width;  // For path shortage
-    double _line = 30.0;  // Length of the animated line
-    double _c1 = controller * 2;
-    double _c2 = controller >= 0.5 ? (controller - 0.5) * 2 : 0;
+    double sh = size.height; // For path shortage
+    double sw = size.width;  // For path shortage
+    double line = 30.0;  // Length of the animated line
+    double c1 = controller * 2;
+    double c2 = controller >= 0.5 ? (controller - 0.5) * 2 : 0;
 
     Paint paint = Paint()
       ..color = Colors.white
       ..strokeWidth = 3
       ..style = PaintingStyle.stroke;
 
-    Path _top = Path()
-      ..moveTo(_sw * _c1 > _sw ? _sw : _sw * _c1, 0)
-      ..lineTo(_sw * _c1 + _line >= _sw ? _sw : _sw * _c1 + _line, 0);
+    Path top = Path()
+      ..moveTo(sw * c1 > sw ? sw : sw * c1, 0)
+      ..lineTo(sw * c1 + line >= sw ? sw : sw * c1 + line, 0);
 
-    Path _right = Path()
-      ..moveTo(_sw, _sh * _c2)
-      ..lineTo(_sw, _sh * _c2 + _line > _sh ? _sh : _sw * _c1 + _line >= _sw ? _sw * _c1 + _line - _sw : _sh * _c2);
-
-
-    Path _bottom = Path()
-      ..moveTo(_sw - (_sw * _c1 > _sw ? _sw : _sw * _c1), _sh)
-      ..lineTo(_sw - (_sw * _c1 + _line >= _sw ? _sw : _sw * _c1 + _line), _sh);
-
-    Path _left = Path()
-      ..moveTo(0, _sh * (1 - _c2))
-      ..lineTo(0, _sh * (1 - _c2) - _line < 0 ? 0 : _sh * (1 - _c2) - _line);
+    Path right = Path()
+      ..moveTo(sw, sh * c2)
+      ..lineTo(sw, sh * c2 + line > sh ? sh : sw * c1 + line >= sw ? sw * c1 + line - sw : sh * c2);
 
 
-    canvas.drawPath(_left, paint);
-    canvas.drawPath(_top, paint);
-    canvas.drawPath(_bottom, paint);
-    canvas.drawPath(_right, paint);
+    Path bottom = Path()
+      ..moveTo(sw - (sw * c1 > sw ? sw : sw * c1), sh)
+      ..lineTo(sw - (sw * c1 + line >= sw ? sw : sw * c1 + line), sh);
+
+    Path left = Path()
+      ..moveTo(0, sh * (1 - c2))
+      ..lineTo(0, sh * (1 - c2) - line < 0 ? 0 : sh * (1 - c2) - line);
+
+
+    canvas.drawPath(left, paint);
+    canvas.drawPath(top, paint);
+    canvas.drawPath(bottom, paint);
+    canvas.drawPath(right, paint);
   }
 
   @override
@@ -207,7 +191,7 @@ class BorderPainter extends CustomPainter {
 
 
 class AnimatedGradientBorder extends StatefulWidget {
-  const AnimatedGradientBorder({Key? key}) : super(key: key);
+  const AnimatedGradientBorder({super.key});
   @override
   State<Test> createState() => _TestState();
 }
@@ -218,7 +202,7 @@ class _AnimatedGradientBorderState extends State<Test> with SingleTickerProvider
     // TODO: implement initState
     super.initState();
     _animationController = AnimationController(vsync: this,duration: Duration(milliseconds: 3000));
-    _animationController..addStatusListener((status) {
+    _animationController.addStatusListener((status) {
       if(status == AnimationStatus.completed) _animationController.forward(from: 0);
     });
     _animationController.addListener(() {

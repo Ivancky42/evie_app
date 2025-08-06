@@ -1,13 +1,10 @@
-import 'dart:math';
 
 import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/model/trip_history_model.dart';
-import 'package:evie_test/api/navigator.dart';
 import 'package:evie_test/api/provider/bike_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
 import 'package:evie_test/api/provider/trip_provider.dart';
 
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,14 +17,12 @@ import '../../api/enumerate.dart';
 import '../../api/fonts.dart';
 import '../../api/function.dart';
 import '../../api/sheet.dart';
-import '../../widgets/evie_button.dart';
-import '../../widgets/evie_oval.dart';
 
 
 class RecentActivity extends StatefulWidget{
   final TripFormat format;
   final bool isDataEmpty;
-  const RecentActivity(this.format, this.isDataEmpty, { Key? key }) : super(key: key);
+  const RecentActivity(this.format, this.isDataEmpty, { super.key });
   @override
   _RecentActivityState createState() => _RecentActivityState();
 }
@@ -98,7 +93,7 @@ class _RecentActivityState extends State<RecentActivity> {
                       //Navigator.pop(context);
                       showRideHistorySheet(context, _tripProvider.currentTripHistoryLists.keys.elementAt(index), _tripProvider.currentTripHistoryLists.values.elementAt(index));
                     },
-                    child: Container(
+                    child: SizedBox(
                       height: 77.h,
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 0.h),

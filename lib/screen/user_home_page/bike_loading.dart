@@ -1,4 +1,4 @@
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -6,7 +6,7 @@ import '../../api/colours.dart';
 import '../../api/fonts.dart';
 
 class BikeLoading extends StatefulWidget {
-  const BikeLoading({Key? key}) : super(key: key);
+  const BikeLoading({super.key});
 
   @override
   State<BikeLoading> createState() => _BikeLoadingState();

@@ -1,15 +1,8 @@
 import 'package:evie_test/api/colours.dart';
-import 'package:evie_test/api/dialog.dart';
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_model.dart';
-import 'package:evie_test/widgets/evie_divider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/bluetooth_provider.dart';
 import '../../../bluetooth/modelResult.dart';
@@ -19,7 +12,7 @@ class AccountSearchContainer extends StatefulWidget {
   final String searchResult;
   final String currentSearchString;
   final AccountModel accountModel;
-  const AccountSearchContainer({Key? key, required this.accountModel, required this.searchResult, required this.currentSearchString}) : super(key: key);
+  const AccountSearchContainer({super.key, required this.accountModel, required this.searchResult, required this.currentSearchString});
 
   @override
   State<AccountSearchContainer> createState() => _AccountSearchContainerState();

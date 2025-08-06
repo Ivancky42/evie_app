@@ -1,23 +1,12 @@
-import 'dart:async';
-import 'dart:collection';
-import 'dart:io';
 import 'package:evie_test/api/fonts.dart';
 import 'package:evie_test/api/model/bike_model.dart';
 import 'package:evie_test/api/model/bike_plan_model.dart';
-import 'package:evie_test/api/model/user_model.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/bluetooth/modelResult.dart';
-import 'package:evie_test/screen/my_account/my_account_widget.dart';
+import 'package:sizer/sizer.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:evie_test/widgets/evie_button.dart';
 
 import '../../../api/colours.dart';
@@ -32,7 +21,7 @@ import '../../../widgets/evie_appbar.dart';
 
 
 class MyGarage extends StatefulWidget {
-  const MyGarage({Key? key}) : super(key: key);
+  const MyGarage({super.key});
 
   @override
   _MyGarageState createState() => _MyGarageState();
@@ -157,7 +146,7 @@ class _MyGarageState extends State<MyGarage> {
     bool isPlanSubscript = false;
 
     if(userBikePlan != null){
-      final result = calculateDateDifferenceFromNow(userBikePlan!.expiredAt!.toDate());
+      final result = calculateDateDifferenceFromNow(userBikePlan.expiredAt!.toDate());
       if(result < 0){
         isPlanSubscript = false;
       }else{
@@ -273,26 +262,10 @@ class _MyGarageState extends State<MyGarage> {
                             ],
                           ),
                     SizedBox(height: 15.h,),
-                    Container(
+                    SizedBox(
                         height: 48.h,
                         width: double.infinity,
                         child: ElevatedButton(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-
-                              SvgPicture.asset(
-                                "assets/icons/setting.svg",
-                                height:24.h,
-                                color: EvieColors.primaryColor,
-                              ),
-                              Text(
-                                "Bike Setting",
-                                style: EvieTextStyles.ctaBig.copyWith(color:EvieColors.primaryColor),
-                              ),
-                            ],
-                          ),
-
                           style: ElevatedButton.styleFrom(
                               side: const BorderSide(
                           width: 1.5,
@@ -307,7 +280,22 @@ class _MyGarageState extends State<MyGarage> {
                           onPressed: () async {
                             await _bikeProvider.changeBikeUsingIMEI(userBikeList.deviceIMEI);
                             showBikeSettingSheet(context, 'MyGarage');
-                          }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+
+                              SvgPicture.asset(
+                                "assets/icons/setting.svg",
+                                height:24.h,
+                                color: EvieColors.primaryColor,
+                              ),
+                              Text(
+                                "Bike Setting",
+                                style: EvieTextStyles.ctaBig.copyWith(color:EvieColors.primaryColor),
+                              ),
+                            ],
+                          )
                         )
                     ),
                           SizedBox(height: 15.h),

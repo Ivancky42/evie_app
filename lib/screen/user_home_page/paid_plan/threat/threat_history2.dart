@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/fonts.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
@@ -17,13 +16,12 @@ import '../../../../api/provider/bluetooth_provider.dart';
 import '../../../../api/provider/location_provider.dart';
 import '../../../../api/provider/setting_provider.dart';
 import '../home_element/orbital_list_container.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 
 class ThreatHistory2 extends StatefulWidget {
 
 
-  ThreatHistory2({Key? key}) : super(key: key);
+  const ThreatHistory2({super.key});
 
   @override
   State<ThreatHistory2> createState() => _ThreatHistory2State();
@@ -45,7 +43,7 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
   static const _pageSize = 10;
 
   List<EventModel> eventList = [];
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   bool isScrolling = false;
 
   @override
@@ -91,7 +89,7 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
         mainAxisSize: MainAxisSize.min,
         children: [
           isScrolling ?
-          Container(
+          SizedBox(
           height: 48.h,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -121,7 +119,7 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
               ],
             ),
           ) :
-          Container(
+          SizedBox(
             height: 48.h,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -178,9 +176,23 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 12.w, right: 12.w),
-                  child: Container(
+                  child: SizedBox(
                     height: 33.h,
                     child: ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          isPickedStatusExpand = true;
+                        });
+                        showFilterTreatStatus(context, _bikeProvider, isPickedStatusExpand ,setState);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            side:  _bikeProvider.threatFilterArray.isNotEmpty ? BorderSide(color: EvieColors.darkGray, width: 1.0.w) : BorderSide(color: EvieColors.transparent,width: 0)),
+                        elevation: 0.0,
+                        backgroundColor: _bikeProvider.threatFilterArray.length == 5 ? EvieColors.transparent : EvieColors.progressBarGrey,
+                        padding: EdgeInsets.only(left: 12.w, right: 12.w, bottom: 0),
+                      ),
                       child: _bikeProvider.threatFilterArray.length == 5 ?
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -214,26 +226,12 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                         children: [
                           Text(
                             "${_bikeProvider.threatFilterArray.length} Statuses",
-                            style: EvieTextStyles.ctaSmall.copyWith(color: _bikeProvider.threatFilterArray.length >= 1 ? EvieColors.darkGray : EvieColors.dividerWhite),
+                            style: EvieTextStyles.ctaSmall.copyWith(color: _bikeProvider.threatFilterArray.isNotEmpty ? EvieColors.darkGray : EvieColors.dividerWhite),
                           ),
                           SvgPicture.asset(
                             "assets/buttons/up-mini.svg",
                           ),
                         ],
-                      ),
-                      onPressed: () async {
-                        setState(() {
-                          isPickedStatusExpand = true;
-                        });
-                        showFilterTreatStatus(context, _bikeProvider, isPickedStatusExpand ,setState);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            side:  _bikeProvider.threatFilterArray.length >= 1 ? BorderSide(color: EvieColors.darkGray, width: 1.0.w) : BorderSide(color: EvieColors.transparent,width: 0)),
-                        elevation: 0.0,
-                        backgroundColor: _bikeProvider.threatFilterArray.length == 5 ? EvieColors.transparent : EvieColors.progressBarGrey,
-                        padding: EdgeInsets.only(left: 12.w, right: 12.w, bottom: 0),
                       ),
                     ),
                   ),
@@ -244,19 +242,6 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                     height: 33.h,
                     padding: EdgeInsets.zero,
                     child: ElevatedButton(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Date",
-                            style: EvieTextStyles.ctaSmall.copyWith(color: _bikeProvider.threatFilterDate == ThreatFilterDate.all ? EvieColors.darkGray : EvieColors.darkGray),
-                          ),
-                          SizedBox(width: 4.w,),
-                          SvgPicture.asset(
-                            _bikeProvider.threatFilterDate == ThreatFilterDate.all ? "assets/buttons/down_mini_bold.svg" : "assets/buttons/up-mini.svg",
-                          ),
-                        ],
-                      ),
                       onPressed: () async {
                         setState(() {
                           isPickedDateExpand = true;
@@ -270,6 +255,19 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                         elevation: 0.0,
                         backgroundColor: _bikeProvider.threatFilterDate == ThreatFilterDate.all ? EvieColors.transparent : EvieColors.progressBarGrey,
                         padding: EdgeInsets.only(left: 12.w, right: 12.w, bottom: 0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Date",
+                            style: EvieTextStyles.ctaSmall.copyWith(color: _bikeProvider.threatFilterDate == ThreatFilterDate.all ? EvieColors.darkGray : EvieColors.darkGray),
+                          ),
+                          SizedBox(width: 4.w,),
+                          SvgPicture.asset(
+                            _bikeProvider.threatFilterDate == ThreatFilterDate.all ? "assets/buttons/down_mini_bold.svg" : "assets/buttons/up-mini.svg",
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -385,7 +383,7 @@ class _ThreatHistory2State extends State<ThreatHistory2> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(height: 177.h,),
-                            Container(
+                            SizedBox(
                               width: 200.w,
                               height: 181.h,
                               child: SvgPicture.asset("assets/images/ev-secure.svg",),

@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evie_test/api/provider/bluetooth_provider.dart';
 import 'package:evie_test/api/provider/setting_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:provider/provider.dart';
@@ -15,17 +14,14 @@ import '../../../../api/fonts.dart';
 import '../../../../api/function.dart';
 import '../../../../api/provider/bike_provider.dart';
 import '../../../../api/provider/location_provider.dart';
-import '../../../../api/sheet.dart';
-import '../../../../bluetooth/modelResult.dart';
 import '../../../../widgets/evie_card.dart';
 import '../../../../widgets/evie_oval.dart';
-import '../../home_page_widget.dart';
 
 
 class Location extends StatefulWidget {
-  Location({
-    Key? key
-  }) : super(key: key);
+  const Location({
+    super.key
+  });
 
   @override
   State<Location> createState() => _LocationState();
@@ -66,7 +62,7 @@ class _LocationState extends State<Location> {
         ],
       ),
       actions: <Widget>[
-        Container(
+        SizedBox(
           height: availableMaps.length * 72.h,
           child: ListView.builder(
             scrollDirection: Axis.vertical,
@@ -75,17 +71,11 @@ class _LocationState extends State<Location> {
               return Column(
                 children: [
                   CupertinoActionSheetAction(
-                    child: Container(
-                      child: Text(
-                        availableMaps[index].mapName,
-                        style: TextStyle(fontSize: 20.sp, color: EvieColors.blue, fontWeight: FontWeight.w400),
-                      ),
-                    ),
                     isDefaultAction: true,
                     onPressed: () {
                       if (selectedGeopoint != null) {
                         MapLauncher.showDirections(
-                          mapType: availableMaps![index].mapType,
+                          mapType: availableMaps[index].mapType,
                           destination: Coords(
                             selectedGeopoint!.latitude,
                             selectedGeopoint!.longitude,
@@ -93,7 +83,7 @@ class _LocationState extends State<Location> {
                         );
                       } else {
                         MapLauncher.showDirections(
-                          mapType: availableMaps![index].mapType,
+                          mapType: availableMaps[index].mapType,
                           destination: Coords(
                             _bikeProvider.currentBikeModel!.location!.geopoint!.latitude,
                             _bikeProvider.currentBikeModel!.location!.geopoint!.longitude,
@@ -101,6 +91,12 @@ class _LocationState extends State<Location> {
                         );
                       }
                     },
+                    child: Container(
+                      child: Text(
+                        availableMaps[index].mapName,
+                        style: TextStyle(fontSize: 20.sp, color: EvieColors.blue, fontWeight: FontWeight.w400),
+                      ),
+                    ),
                   ),
                   Divider(), // Add a divider between items
                 ],
@@ -143,6 +139,7 @@ class _LocationState extends State<Location> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
+                  padding: EdgeInsets.only(top: 16.h),
                   child: EvieOvalGrayLocation(
                     buttonText: isLocation ? 'Location' : 'Distance',
                     onPressed: () {
@@ -151,7 +148,6 @@ class _LocationState extends State<Location> {
                       });
                     },
                   ),
-                  padding: EdgeInsets.only(top: 16.h),
                 ),
 
                 Column(

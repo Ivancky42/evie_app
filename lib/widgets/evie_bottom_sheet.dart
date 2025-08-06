@@ -1,19 +1,15 @@
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/action_list/clear_feed.dart';
 import 'package:evie_test/widgets/action_list/deactivate_theft_alert.dart';
 import 'package:evie_test/widgets/action_list/remove_all_pals.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/colours.dart';
-import '../../api/navigator.dart';
-import '../../api/provider/bike_provider.dart';
 import '../api/enumerate.dart';
 import '../api/provider/setting_provider.dart';
 import 'action_list/remove_all_keys.dart';
-import 'evie_double_button_dialog.dart';
 
 class EvieBottomSheet extends StatefulWidget {
   final Widget? widget;
@@ -135,7 +131,7 @@ class _EvieBottomSheet extends State<EvieBottomSheet> {
 
 class EvieBottomSheetAction extends StatefulWidget {
   final List<ActionList> lists;
-  EvieBottomSheetAction({super.key, required this.lists});
+  const EvieBottomSheetAction({super.key, required this.lists});
 
   @override
   State<EvieBottomSheetAction> createState() => _EvieBottomSheetAction();

@@ -1,15 +1,11 @@
 import 'dart:collection';
-import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evie_test/api/dialog.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
+import 'package:sizer/sizer.dart';
 import 'package:evie_test/widgets/evie_appbar_badge.dart';
 import 'package:evie_test/widgets/evie_single_button_dialog.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -17,21 +13,17 @@ import '../../../api/colours.dart';
 import '../../../api/enumerate.dart';
 import '../../../api/fonts.dart';
 import '../../../api/model/bike_user_model.dart';
-import '../../../api/navigator.dart';
 import '../../../api/provider/bike_provider.dart';
 import '../../../api/provider/notification_provider.dart';
 import '../../../api/provider/setting_provider.dart';
-import '../../../api/sheet.dart';
 import '../../../api/snackbar.dart';
-import '../../../widgets/evie_appbar.dart';
 import '../../../widgets/evie_divider.dart';
 import '../../../widgets/evie_switch.dart';
-import '../../my_account/my_account_widget.dart';
 
 
 
 class BikeStatusAlert extends StatefulWidget{
-  const BikeStatusAlert({ Key? key }) : super(key: key);
+  const BikeStatusAlert({ super.key });
   @override
   _BikeStatusAlertState createState() => _BikeStatusAlertState();
 }
@@ -54,7 +46,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> with WidgetsBindingOb
     super.initState();
     _notificationProvider = context.read<NotificationProvider>();
     _notificationProvider.checkNotificationPermission();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -67,7 +59,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> with WidgetsBindingOb
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -174,7 +166,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> with WidgetsBindingOb
                               }
                               else {
                                 SmartDialog.show(
-                                    widget: EvieSingleButtonDialog(
+                                    builder: (_) => EvieSingleButtonDialog(
                                         title: "Error",
                                         content: "Try again",
                                         rightContent: "OK",
@@ -219,7 +211,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> with WidgetsBindingOb
                             }
                             else {
                               SmartDialog.show(
-                                  widget: EvieSingleButtonDialog(
+                                  builder: (_) => EvieSingleButtonDialog(
                                       title: "Error",
                                       content: "Try again",
                                       rightContent: "OK",
@@ -309,7 +301,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> with WidgetsBindingOb
                               }
                               else {
                                 SmartDialog.show(
-                                    widget: EvieSingleButtonDialog(
+                                    builder: (_) => EvieSingleButtonDialog(
                                         title: "Error",
                                         content: "Try again",
                                         rightContent: "OK",
@@ -351,7 +343,7 @@ class _BikeStatusAlertState extends State<BikeStatusAlert> with WidgetsBindingOb
                                 SmartDialog.dismiss();
                               } else {
                                 SmartDialog.show(
-                                    widget: EvieSingleButtonDialog(
+                                    builder: (_) => EvieSingleButtonDialog(
                                         title: "Error",
                                         content: "Try again",
                                         rightContent: "OK",

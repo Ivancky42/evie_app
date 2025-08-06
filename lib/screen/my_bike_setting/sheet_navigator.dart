@@ -25,7 +25,6 @@ import 'package:evie_test/screen/my_bike_setting/reset_bike/leave_unsuccessful.d
 import 'package:evie_test/screen/my_bike_setting/reset_bike/reset_bike.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/reset_bike2.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/unlink_bike.dart';
-import 'package:evie_test/screen/my_bike_setting/reset_bike/restore_bike.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/restore_completed.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/restore_incomplete.dart';
 import 'package:evie_test/screen/my_bike_setting/reset_bike/forget_incomplete.dart';
@@ -36,26 +35,17 @@ import 'package:evie_test/screen/my_bike_setting/rfid_card/name_ev.dart';
 import 'package:evie_test/screen/my_bike_setting/rfid_card/register_ev_key.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/activateEVWithCode.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/add_plan.dart';
-import 'package:evie_test/screen/my_bike_setting/subscription/current_plan.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/current_plan_2.dart';
-import 'package:evie_test/screen/my_bike_setting/subscription/pro_plan/pro_plan.dart';
-import 'package:evie_test/screen/my_bike_setting/subscription/current_plan.dart';
 import 'package:evie_test/screen/my_bike_setting/subscription/pro_plan/pro_plan2.dart';
 import 'package:evie_test/screen/my_bike_setting/troubleshoot/troubleshoot.dart';
 import 'package:evie_test/screen/my_bike_setting/user_manual/user_manual.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/threat/threat_history.dart';
-import 'package:evie_test/screen/user_home_page/paid_plan/threat/threat_map.dart';
-import 'package:evie_test/widgets/evie_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:evie_test/screen/my_bike_setting/bike_setting/bike_setting_container.dart';
 
 
-import '../../api/colours.dart';
 import '../../api/enumerate.dart';
-import '../../api/navigator.dart';
 import '../../api/provider/setting_provider.dart';
 import '../user_home_page/paid_plan/map_detail.dart';
 import '../user_home_page/paid_plan/threat/threat_history2.dart';
@@ -70,7 +60,7 @@ class SheetNavigator extends StatefulWidget {
    const SheetNavigator(
       this.source,
       this.stringPassing,
-      {Key? key, this.context}) : super(key: key);
+      {super.key, this.context});
 
   @override
   State<SheetNavigator> createState() => _SheetNavigatorState();
@@ -101,7 +91,7 @@ class _SheetNavigatorState extends State<SheetNavigator> {
       case SheetList.evAddFailed:
         return EVAddFailed();
       case SheetList.nameEv:
-        return Container(
+        return SizedBox(
           height: double.infinity,
           //color: Colors.yellow,
           child: NameEV(),

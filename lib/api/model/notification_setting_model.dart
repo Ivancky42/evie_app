@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 class NotificationSettingModel {
   bool? connectionLost;

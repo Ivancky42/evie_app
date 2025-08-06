@@ -1,8 +1,4 @@
-import 'package:evie_test/api/dialog.dart';
-import 'package:evie_test/api/provider/auth_provider.dart';
-import 'package:evie_test/api/sizer.dart';
-import 'package:evie_test/widgets/evie_single_button_dialog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:evie_test/api/provider/current_user_provider.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +17,7 @@ import '../../widgets/evie_progress_indicator.dart';
 import '../../widgets/evie_textform.dart';
 
 class NameBike extends StatefulWidget {
-  const NameBike({Key? key}) : super(key: key);
+  const NameBike({super.key});
 
   @override
   _NameBikeState createState() => _NameBikeState();
@@ -63,7 +59,7 @@ class _NameBikeState extends State<NameBike> {
 
     hasPlan = _bikeProvider.currentBikePlanModel != null ? true : false;
 
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     return WillPopScope(
       onWillPop: () async {
@@ -74,7 +70,7 @@ class _NameBikeState extends State<NameBike> {
         body: Stack(
           children: [
             Form(
-              key: _formKey,
+              key: formKey,
               child:Padding(
                 padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                 child: Column(
@@ -129,12 +125,8 @@ class _NameBikeState extends State<NameBike> {
                 EdgeInsets.only(left: 16.0, right: 16, bottom: EvieLength.buttonWord_ButtonBottom),
                 child: EvieButton(
                   width: double.infinity,
-                  child: Text(
-                    "Save",
-                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
-                  ),
                   onPressed: enabled ? () async {
-                    if (_formKey.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
 
                       setState(() {
                         enabled = false;
@@ -171,7 +163,11 @@ class _NameBikeState extends State<NameBike> {
                         }
                       });
                     }
-                  } : null
+                  } : null,
+                  child: Text(
+                    "Save",
+                    style: EvieTextStyles.ctaBig.copyWith(color: EvieColors.grayishWhite),
+                  )
                 ),
               ),
             ),
@@ -183,16 +179,11 @@ class _NameBikeState extends State<NameBike> {
                 child: SizedBox(
                   width: double.infinity,
                   child: TextButton(
-                    child: Text(
-                      "Can't think of any name now",
-                      softWrap: false,
-                      style: EvieTextStyles.body18_underline,
-                    ),
                     onPressed: enabled ? () {
                       setState(() {
                         enabled = false;
                       });
-                      _bikeProvider.updateBikeName("EVIE " + _bikeProvider.currentBikeModel!.model!).then((result){
+                      _bikeProvider.updateBikeName("EVIE ${_bikeProvider.currentBikeModel!.model!}").then((result){
                         if(result == true){
                           /// if(bikeProvider.isAddBike == true) logic inside dialog
                           showSucccessUpdateBikeName(context);
@@ -225,6 +216,11 @@ class _NameBikeState extends State<NameBike> {
                         }
                       });
                     } : null,
+                    child: Text(
+                      "Can't think of any name now",
+                      softWrap: false,
+                      style: EvieTextStyles.body18_underline,
+                    ),
                   ),
                 ),
               ),

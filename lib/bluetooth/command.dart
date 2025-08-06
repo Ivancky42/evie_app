@@ -47,7 +47,7 @@ class BluetoothCommand {
   /// Report
   static const int errorPromptInstruction = 0x10; /// 4.5.2
 
-  BluetoothCommand._() {}
+  BluetoothCommand._();
 
   List<int> getComKey(String deviceKey) {
     int dataSize = 8;
@@ -579,16 +579,16 @@ class BluetoothCommand {
   }
 
   String getRandomString(int length) {
-    const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    Random _rnd = Random();
+    const chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random rnd = Random();
     return String.fromCharCodes(Iterable.generate(
-        length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+        length, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
   }
 
   String randomHexString(int length) {
     StringBuffer sb = StringBuffer();
     for (var i = 0; i < length; i++) {
-      sb.write("0" + random.nextInt(16).toRadixString(16));
+      sb.write("0${random.nextInt(16).toRadixString(16)}");
     }
     //print(sb.toString());
     return sb.toString();
